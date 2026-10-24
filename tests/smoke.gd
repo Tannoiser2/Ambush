@@ -1,5 +1,6 @@
 extends SceneTree
 const Game = preload("res://scripts/game.gd")
+const Damage = preload("res://scripts/damage.gd")
 func _initialize() -> void:
  var g = Game.new()
  g.new_game(123)
@@ -22,6 +23,12 @@ func _initialize() -> void:
  assert(migrated.state.minefields.is_empty())
  assert(Game.check_success(0,-5))
  assert(not Game.check_success(9,20))
+ assert(Damage.grenade_indoors(9,false) == "K")
+ assert(Damage.grenade_indoors(8,false) == "I")
+ assert(Damage.grenade_indoors(6,false) == "W")
+ assert(Damage.grenade_indoors(3,false) == "W")
+ assert(Damage.grenade_indoors(3,true) == "P")
+ assert(Damage.grenade_indoors(0,false) == "P")
  var card = g.mission.conditions["1"]
  assert(card.hexes.size() == 475)
  assert(card.events.size() == 19)
@@ -91,9 +98,30 @@ func _initialize() -> void:
  assert("V6" in mine.state.minefields)
  assert(mine.state.blocked == "")
  mine.state.squad[0].hex = "U6"
- mine.forced_rolls = [9]
+ mine.forced_rolls = [9, 9]
  assert(mine.dispatch({"type":"move","soldier":"A","hex":"V6"}).ok)
- assert(mine.state.blocked != "")
+ assert(mine.soldier("A").status == "killed")
+ assert(mine.state.blocked == "")
+ var wounded = Game.new()
+ wounded.new_game(61)
+ wounded.state.condition = 4
+ wounded.state.squad[0].hex = "U6"
+ wounded.forced_rolls = [9, 6]
+ assert(wounded.dispatch({"type":"move","soldier":"A","hex":"V6"}).ok)
+ assert(wounded.soldier("A").wounded)
+ assert(wounded.soldier("A").stance == "prone")
+ assert(wounded.soldier("A").mp == 2)
+ var mine_group = Game.new()
+ mine_group.new_game(62)
+ mine_group.state.condition = 4
+ mine_group.state.squad[0].hex = "U6"
+ mine_group.state.squad[1].hex = "U6"
+ mine_group.forced_rolls = [9, 0, 0]
+ assert(mine_group.dispatch({"type":"move_group","soldier":"A","group":["A","B"],"hex":"V6"}).ok)
+ assert(mine_group.soldier("A").status == "active")
+ assert(mine_group.soldier("B").status == "active")
+ assert(mine_group.forced_rolls.is_empty())
+ assert(mine_group.state.blocked == "")
  var group_game = Game.new()
  group_game.new_game(19)
  group_game.state.squad[0].hex="A1"

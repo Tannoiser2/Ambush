@@ -1,10 +1,11 @@
 class_name AmbushGame
 extends RefCounted
-## All state transitions occur here. UI and network submit the same commands.
+## All solo-play state transitions occur here; the UI submits commands.
 ## Unimplemented source instructions stop resolution; they never become "no event".
 signal changed
 const VERSION := 1
 const Hex = preload("res://scripts/hex_grid.gd")
+const Damage = preload("res://scripts/damage.gd")
 var mission: Dictionary
 var paragraphs: Dictionary
 var state: Dictionary = {}
@@ -222,7 +223,7 @@ func run_ops(ops: Array) -> void:
 				if not state.items.has(state.context_hex): state.items[state.context_hex] = []
 				if op.item not in state.items[state.context_hex]: state.items[state.context_hex].append(op.item)
 			"rescue_target":
-				if soldier("K").is_empty(): state.squad.append({"id":"K","name":"Ferito da soccorrere","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"2 caricatori mitra · 1 granata","clips":2,"grenades":1,"commander":false})
+				if soldier("K").is_empty(): state.squad.append({"id":"K","name":"Ferito da soccorrere","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"2 caricatori mitra · 1 granata","clips":2,"grenades":1,"commander":false,"wounded":false})
 			"encounter":
 				for s in op.sightings: register_sighting(s)
 				for enemy in op.enemies:
@@ -269,8 +270,36 @@ func check_minefield(hex_id: String) -> void:
 		var success := check_success(roll, int(u.pc))
 		log_line("MINA · " + u.name, "D10: %d · percezione %d → %s." % [roll, u.pc, "EVITATA" if success else "ESPLOSA"], "dice")
 		if not success:
-			stop_resolution("Mina esplosa in %s contro %s: danni da granata al chiuso ancora da implementare." % [hex_id, u.name])
-			return
+			var damage_roll := d10()
+			var result := Damage.grenade_indoors(damage_roll, u.stance == "prone")
+			log_line("DANNI · " + u.name, "Granata al chiuso · D10: %d → %s." % [damage_roll, result], "dice")
+			apply_soldier_damage(u, result)
+			if state.blocked != "": return
+
+func apply_soldier_damage(u: Dictionary, result: String) -> void:
+	match result:
+		"P":
+			# Panic from damage during Operations has no effect (rules 13/1).
+			log_line("PANICO", u.name + ": nessun effetto durante le Operazioni.", "check")
+		"W":
+			if u.wounded:
+				u.status = "incapacitated"
+				log_line("INCAPACITATO", u.name + " subisce una seconda ferita.")
+			else:
+				u.wounded = true
+				u.stance = "prone"
+				u.mp = 2
+				log_line("FERITO", u.name + " cade prono; movimento ridotto a 2.")
+				if u.extra != "": stop_resolution(u.name + ": occorre scegliere l’equipaggiamento da lasciare dopo la ferita.")
+		"I":
+			u.status = "incapacitated"
+			u.stance = "prone"
+			log_line("INCAPACITATO", u.name + " non può più agire.")
+		"K":
+			u.status = "killed"
+			log_line("CADUTO", u.name + " è stato ucciso.")
+		_:
+			stop_resolution("Risultato di danno sconosciuto: " + result)
 
 func register_sighting(id: String) -> void:
 	if id not in state.sightings:
@@ -298,7 +327,7 @@ func objective_status() -> Array[Dictionary]:
 
 func snapshot() -> Dictionary:
 	var result := state.duplicate(true)
-	result.rng = str(rng.state) # decimal string preserves int64 through JSON/Firebase
+	result.rng = str(rng.state) # decimal string preserves int64 through JSON saves
 	return result
 
 func restore(candidate: Variant) -> bool:
@@ -309,6 +338,8 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("evasive_removals"): candidate.evasive_removals = {}
 	if not candidate.has("ban_evasive_return"): candidate.ban_evasive_return = false
 	if not candidate.has("minefields"): candidate.minefields = []
+	for unit in candidate.get("squad", []):
+		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
 	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields"]:
 		if not candidate.get(key) is Array: return false
 	for key in ["items", "landmarks", "evasive_removals"]:
@@ -327,6 +358,7 @@ func restore(candidate: Variant) -> bool:
 			if not unit.get(key) is String: return false
 		for key in ["pc","initiative","ws","clips","grenades"]:
 			if not unit.get(key) is float and not unit.get(key) is int: return false
+		if not unit.get("wounded") is bool: return false
 		if unit.id in ids or unit.id not in ["A","B","C","D","E","F","G","H","K"]: return false
 		ids.append(unit.id)
 		if unit.hex != "" and not Hex.valid(unit.hex): return false

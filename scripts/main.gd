@@ -125,11 +125,14 @@ func refresh() -> void:
 		var id: String=u.id
 		var location: String=u.hex if u.hex!="" else "RISERVA"
 		if u.status=="exited":location="RITIRATO"
+		elif u.status=="killed":location="CADUTO"
+		elif u.status=="incapacitated":location+=" · INCAPACITATO"
+		elif u.wounded:location+=" · FERITO"
 		var b:=button("%s   %s   ·   %s" % [id,u.name,location],func(): selected=id;refresh())
 		b.toggle_mode=true;b.button_pressed=id==selected;b.alignment=HORIZONTAL_ALIGNMENT_LEFT;b.custom_minimum_size.y=31
 		b.add_theme_font_size_override("font_size",16);roster.add_child(b)
 	var u:=game.soldier(selected)
-	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra]
+	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra,"\nFERITO · movimento 2" if u.wounded else ""]
 	for i in stances.size():stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
@@ -189,6 +192,6 @@ func confirm_new() -> void:
 func show_briefing() -> void:
 	var popup:=AcceptDialog.new();popup.title="Ordine di operazione · Missione 1";popup.ok_button_text="Torna alla carta";add_child(popup)
 	var text:=rich();text.custom_minimum_size=Vector2(600,440);text.scroll_following=false;popup.add_child(text)
-	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
+	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni del combattimento e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 

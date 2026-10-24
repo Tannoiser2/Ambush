@@ -29,7 +29,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "B",
@@ -46,7 +47,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "C",
@@ -63,7 +65,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "D",
@@ -80,7 +83,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "E",
@@ -97,7 +101,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "F",
@@ -114,7 +119,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "G",
@@ -131,7 +137,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     },
     {
       "id": "H",
@@ -148,7 +155,8 @@
       "mp": 4,
       "hex": "",
       "stance": "standing",
-      "status": "active"
+      "status": "active",
+      "wounded": false
     }
   ],
   "conditions": {

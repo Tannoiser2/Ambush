@@ -73,7 +73,7 @@ func _draw() -> void:
 			var pos := map_position(hex_id)+offset
 			var token_rect := Rect2(pos-Vector2(10,11),Vector2(20,22))
 			draw_rect(Rect2(token_rect.position+Vector2(1,2),token_rect.size),Color(0,0,0,0.3))
-			draw_rect(token_rect,Color("8b4e39") if u.status=="incapacitated" else Color("344d39"))
+			draw_rect(token_rect,Color("8b4e39") if u.status=="incapacitated" else Color("6d5932") if u.wounded else Color("344d39"))
 			draw_rect(token_rect,Color("e5c47e") if u.id==selected else Color("d6d3bd"),false,2.0 if u.id==selected else 1.0)
 			draw_string(font,pos+Vector2(-5,5),u.id,HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("fff7d9"))
 			if u.stance == "prone": draw_line(pos+Vector2(-7,8),pos+Vector2(7,8),Color("f5dfa8"),2)
