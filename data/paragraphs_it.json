@@ -1458,8 +1458,7 @@
         "id": "s0"
       },
       {
-        "op": "unsupported",
-        "reason": "Soccorso del pilota: comando del giocatore e azioni dei Round ancora da implementare."
+        "op": "pilot_found"
       }
     ],
     "source": {
@@ -1473,8 +1472,7 @@
     "it": "Ottieni 2 PV. Il pilota combatterà con la squadra: usa la carta americana 05. Non perdi PV se in seguito diventa incapacitato o muore. Ottieni altri 2 PV se è ancora attivo alla fine della missione.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Carta del pilota e calcolo dei PV alla fine della missione ancora da implementare."
+        "op": "pilot_rescued"
       }
     ],
     "source": {

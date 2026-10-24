@@ -13,6 +13,7 @@ var drag_target := ""
 var roster: VBoxContainer
 var drag_options: VBoxContainer
 var exit_drag_button: Button
+var pilot_button: Button
 var diary: RichTextLabel
 var objectives: RichTextLabel
 var details: RichTextLabel
@@ -113,6 +114,8 @@ func build_ui() -> void:
 	drag_options=VBoxContainer.new();left.add_child(drag_options)
 	exit_drag_button=button("Evacua con il ferito",func(): send_command({"type":"exit_drag","soldier":selected,"casualty":drag_target}))
 	exit_drag_button.visible=false;left.add_child(exit_drag_button)
+	pilot_button=button("Soccorri il pilota",func(): send_command({"type":"rescue_pilot","soldier":selected}))
+	pilot_button.visible=false;left.add_child(pilot_button)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
@@ -163,6 +166,7 @@ func refresh() -> void:
 			drag_options.add_child(drag_button)
 	if drag_target != "" and (not eligible or game.soldier(drag_target).hex != u.hex):drag_target=""
 	exit_drag_button.visible=drag_target != "" and Hex.is_entry(u.hex)
+	pilot_button.visible=game.state.pilot_found and game.state.landmarks.has("R15") and game.soldier("J").is_empty() and u.status=="active" and not u.wounded and u.hex=="R15" and game.state.blocked==""
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
 	progress_label.text="%d / 13 PV" % game.net_vp()
@@ -226,6 +230,6 @@ func confirm_new() -> void:
 func show_briefing() -> void:
 	var popup:=AcceptDialog.new();popup.title="Ordine di operazione · Missione 1";popup.ok_button_text="Torna alla carta";add_child(popup)
 	var text:=rich();text.custom_minimum_size=Vector2(600,440);text.scroll_following=false;popup.add_child(text)
-	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, soccorso dei feriti, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni del combattimento e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Per soccorrere un ferito, seleziona un fante in piedi con uno spazio di trasporto libero nello stesso esagono e premi «Trascina». Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
+	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, soccorso dei feriti, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni del combattimento e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Per soccorrere un ferito, seleziona un fante in piedi con uno spazio di trasporto libero nello stesso esagono e premi «Trascina». Se trovi il pilota in R15, seleziona un soldato non ferito e premi «Soccorri il pilota». Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 

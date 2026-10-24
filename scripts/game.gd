@@ -26,7 +26,7 @@ func new_game(seed_value: int = 0) -> void:
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "vp": 0,
 		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
-		"pending_ops": [], "pending_hex_check": "",
+		"pending_ops": [], "pending_hex_check": "", "pilot_found": false,
 		"log": [], "blocked": "", "context_hex": "", "last_paragraph": "", "history": [],
 		"trigger_soldier": "", "rng": str(rng.state)}
 	log_line("ORDINE DI OPERAZIONE", "Entrate da A1–J1. Seleziona un soldato, poi un esagono del margine nord.", "briefing")
@@ -66,6 +66,9 @@ func validate_command(command: Dictionary) -> String:
 	var u := soldier(str(command.get("soldier", "")))
 	if u.is_empty() or u.status != "active": return "Seleziona un soldato attivo."
 	match command.get("type", ""):
+		"rescue_pilot":
+			if not state.pilot_found or not state.landmarks.has("R15") or not soldier("J").is_empty(): return "Il pilota non può essere soccorso qui."
+			if u.hex != "R15" or u.wounded: return "Serve un soldato non ferito in R15."
 		"drag", "exit_drag":
 			var casualty := soldier(str(command.get("casualty", "")))
 			if casualty.is_empty() or casualty.id == u.id or casualty.status not in ["incapacitated", "killed"]: return "Seleziona un soldato inattivo da trasportare."
@@ -108,6 +111,12 @@ func dispatch(command: Dictionary) -> Dictionary:
 	var u := soldier(command.soldier)
 	_steps = 0
 	match command.type:
+		"rescue_pilot":
+			state.context_hex = "R15"
+			state.trigger_soldier = u.id
+			log_line("SOCCORSO DEL PILOTA", u.name + " libera il pilota; esegui un controllo Evento.", "check")
+			read_reference("EVENT")
+			if state.blocked == "" and state.phase == "operations": resolve("454")
 		"drop_port":
 			var index := int(command.index)
 			var item: String = u.port_boxes[index]
@@ -309,6 +318,12 @@ func run_ops(ops: Array) -> void:
 				kill_hex(op.hex)
 			"kill_hex": kill_hex(op.hex)
 			"remove_landmark": state.landmarks.erase(op.hex)
+			"pilot_found": state.pilot_found = true
+			"pilot_rescued":
+				if soldier("J").is_empty():
+					state.squad.append({"id":"J","name":"Pilota britannico","hex":"R15","status":"active","stance":"prone","pc":5,"initiative":2,"ws":-1,"driving":2,"mp":2,"weapon":"Pistola","extra":"","port_boxes":["",""],"clips":1,"grenades":0,"commander":false,"wounded":true})
+					state.vp += 2
+					log_line("SOCCORSO", "Pilota salvato: +2 PV. Il suo valore finale dipenderà dalla sopravvivenza.", "check")
 			"artillery":
 				var a := d10(); var b := d10()
 				var col := mini(a,b)*10+maxi(a,b)
@@ -416,7 +431,9 @@ func net_vp() -> int:
 	for u in state.squad:
 		if u.id in ["A","B","C","D","E","F","G","H"] and u.status in ["incapacitated", "killed"]:
 			losses += 2
-	return int(state.vp) - losses
+	var pilot := soldier("J")
+	var pilot_bonus := 2 if state.phase == "ended" and not pilot.is_empty() and pilot.status in ["active", "exited"] else 0
+	return int(state.vp) - losses + pilot_bonus
 
 func snapshot() -> Dictionary:
 	var result := state.duplicate(true)
@@ -434,6 +451,7 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("pending_drop"): candidate.pending_drop = ""
 	if not candidate.has("pending_ops"): candidate.pending_ops = []
 	if not candidate.has("pending_hex_check"): candidate.pending_hex_check = ""
+	if not candidate.has("pilot_found"): candidate.pilot_found = false
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
 		if unit is Dictionary and not unit.has("port_boxes"):
@@ -444,6 +462,7 @@ func restore(candidate: Variant) -> bool:
 	for key in ["items", "landmarks", "evasive_removals"]:
 		if not candidate.get(key) is Dictionary: return false
 	if not candidate.get("ban_evasive_return") is bool: return false
+	if not candidate.get("pilot_found") is bool: return false
 	for key in ["rng", "blocked", "context_hex", "last_paragraph", "trigger_soldier", "phase", "pending_drop", "pending_hex_check"]:
 		if not candidate.get(key) is String: return false
 	if not candidate.rng.is_valid_int(): return false
@@ -461,7 +480,7 @@ func restore(candidate: Variant) -> bool:
 		if not unit.get("port_boxes") is Array or unit.port_boxes.size() != 2: return false
 		for item in unit.port_boxes:
 			if not item is String: return false
-		if unit.id in ids or unit.id not in ["A","B","C","D","E","F","G","H","K"]: return false
+		if unit.id in ids or unit.id not in ["A","B","C","D","E","F","G","H","J","K"]: return false
 		ids.append(unit.id)
 		if unit.hex != "" and not Hex.valid(unit.hex): return false
 		if unit.status not in ["active","exited","evacuated","incapacitated","killed"]: return false

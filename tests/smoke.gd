@@ -174,6 +174,21 @@ func _initialize() -> void:
  survivor.forced_rolls = [0]
  assert(survivor.dispatch({"type":"drag","soldier":"B","casualty":"K","hex":"H10"}).ok)
  assert(survivor.soldier("K").status == "killed")
+ var pilot = Game.new()
+ pilot.new_game(67)
+ pilot.state.squad[0].hex = "R15"
+ pilot.state.landmarks["R15"] = {"name":"Typhoon abbattuto","entry_paragraph":"349"}
+ pilot.state.context_hex = "R15"
+ pilot.resolve("349")
+ assert(pilot.state.pilot_found)
+ pilot.forced_rolls = [2, 3]
+ assert(pilot.dispatch({"type":"rescue_pilot","soldier":"A"}).ok)
+ assert(pilot.soldier("J").hex == "R15")
+ assert(pilot.soldier("J").wounded)
+ assert(pilot.state.vp == 2)
+ assert(pilot.net_vp() == 2)
+ pilot.state.phase = "ended"
+ assert(pilot.net_vp() == 4)
  var group_game = Game.new()
  group_game.new_game(19)
  group_game.state.squad[0].hex="A1"
