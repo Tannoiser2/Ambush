@@ -14,5 +14,11 @@ func _initialize() -> void:
  assert(restored.soldier("A").hex == "A1")
  assert(Game.check_success(0,-5))
  assert(not Game.check_success(9,20))
+ var card = g.mission.conditions["1"]
+ assert(card.hexes.size() == 475)
+ assert(card.events.size() == 19)
+ assert(card.hexes["A1"] == "EVENT")
+ assert(card.hexes["A2"] == "EVENT")
+ assert(card.hexes["G10"] == "s3:328")
  print("SMOKE OK")
  quit()

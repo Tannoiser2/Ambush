@@ -121,7 +121,7 @@ func read_reference(reference: String) -> void:
 		log_line("EVENTO · 2D10", "%d + %d = %d. Consultazione automatica della carta condizione." % [a, b, a+b], "dice")
 		var ref: String = mission.conditions[str(state.condition)].events[str(a+b)]
 		read_reference(ref)
-		if state.context_hex not in state.event_markers: state.event_markers.append(state.context_hex)
+		if state.phase == "operations" and state.context_hex not in state.event_markers: state.event_markers.append(state.context_hex)
 		return
 	if reference.contains(":"):
 		var parts := reference.split(":")
