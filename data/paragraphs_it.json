@@ -1449,6 +1449,40 @@
     },
     "status": "reviewed_translation"
   },
+  "349": {
+    "id": "349",
+    "it": "[s0] Il soldato vede un pilota ferito nell’abitacolo. «Sta per esplodere! Mi dai una mano?». Spostando un montante piegato il pilota può uscire. Nei Round servono due azioni di un soldato non ferito; durante le Operazioni il soldato dichiara il soccorso ed effettua un controllo Evento. Se il pilota viene liberato, leggi 454.",
+    "ops": [
+      {
+        "op": "sighting",
+        "id": "s0"
+      },
+      {
+        "op": "unsupported",
+        "reason": "Soccorso del pilota: comando del giocatore e azioni dei Round ancora da implementare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "454": {
+    "id": "454",
+    "it": "Ottieni 2 PV. Il pilota combatterà con la squadra: usa la carta americana 05. Ottieni altri 2 PV se è ancora attivo alla fine della missione; se diventa incapacitato o muore, perdi 2 PV.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Carta del pilota e calcolo dei PV alla fine della missione ancora da implementare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
   "453": {
     "id": "453",
     "it": "[s9] Un caccia britannico Typhoon, avvolto dal fumo, precipita in R15. Colloca il relitto fumante: ogni soldato nell’esagono muore. Se un americano entra in R15 mentre il relitto è presente, leggi 349.",

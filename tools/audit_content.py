@@ -14,6 +14,7 @@ for card in mission['conditions'].values():
 def visit(obj):
     if isinstance(obj,dict):
         if obj.get('op')=='goto':refs.add(obj['id'])
+        if obj.get('op')=='crash':refs.add(obj['entry_paragraph'])
         for value in obj.values():visit(value)
     elif isinstance(obj,list):
         for value in obj:visit(value)
