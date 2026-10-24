@@ -1,0 +1,18 @@
+extends SceneTree
+const Game = preload("res://scripts/game.gd")
+func _initialize() -> void:
+ var g = Game.new()
+ g.new_game(123)
+ assert(g.state.condition == 1)
+ assert(g.dispatch({"type":"move","soldier":"A","hex":"A1"}).ok)
+ assert(g.soldier("A").hex == "A1")
+ assert(g.state.blocked == "")
+ assert(not g.dispatch({"type":"move","soldier":"A","hex":"T8"}).ok)
+ var snap = g.snapshot()
+ var restored = Game.new()
+ assert(restored.restore(JSON.parse_string(JSON.stringify(snap))))
+ assert(restored.soldier("A").hex == "A1")
+ assert(Game.check_success(0,-5))
+ assert(not Game.check_success(9,20))
+ print("SMOKE OK")
+ quit()

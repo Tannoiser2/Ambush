@@ -1,0 +1,9 @@
+.godot/
+*.ttsmod
+*.pdf
+*.PDF
+tmp/
+build/
+.DS_Store
+.env*
+firebase/config.local.json

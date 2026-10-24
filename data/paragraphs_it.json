@@ -1,0 +1,1952 @@
+{
+  "007": {
+    "id": "007",
+    "it": "Deve essere stato il vento.",
+    "ops": [],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "010": {
+    "id": "010",
+    "it": "Falso allarme.",
+    "ops": [],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "013": {
+    "id": "013",
+    "it": "È soltanto la tua immaginazione.",
+    "ops": [],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "024": {
+    "id": "024",
+    "it": "Colloca un segnalino Evento. Effettua un controllo di percezione (−1). Se riesce, leggi il paragrafo 013.",
+    "ops": [
+      {
+        "op": "event_marker"
+      },
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "013"
+          }
+        ],
+        "failure": []
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "025": {
+    "id": "025",
+    "it": "Colloca un segnalino Evento. Effettua un controllo di percezione (−1). Se riesce, leggi il paragrafo 007.",
+    "ops": [
+      {
+        "op": "event_marker"
+      },
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "007"
+          }
+        ],
+        "failure": []
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "020": {
+    "id": "020",
+    "it": "Un soldato subisce il fuoco di un tiratore nascosto. Non iniziano i Round. Risolvi un tiro mirato a corta distanza: fucile a otturatore, abilità di tiro 0.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Fuoco da tiratore nascosto: tabella armi, modificatori del terreno e danni ancora da verificare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "023": {
+    "id": "023",
+    "it": "Un soldato subisce il fuoco di un tiratore nascosto. Non iniziano i Round. Risolvi un tiro mirato a corta distanza: fucile a otturatore con mirino telescopico, abilità di tiro 0.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Fuoco da tiratore nascosto: tabella armi, modificatori del terreno e danni ancora da verificare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "011": {
+    "id": "011",
+    "it": "Possibile colpo di artiglieria casuale. Per ciascuna coppia di dadi, la cifra minore indica le decine. Il primo risultato deve essere al massimo 25, il secondo al massimo 19: i due risultati determinano colonna e riga colpite. Altrimenti il colpo cade fuori mappa. Nell’esagono colpito tutti i soldati muoiono e i veicoli sono distrutti; colloca un cratere, oppure macerie se contiene un edificio.",
+    "ops": [
+      {
+        "op": "artillery"
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "012": {
+    "id": "012",
+    "it": "Se un soldato americano porta granate, una esplode accidentalmente. Scegli casualmente il portatore: solo lui effettua un controllo di percezione. Se riesce può lanciarla in un esagono adiacente libero; altrimenti l’esplosione colpisce tutti nel suo esagono e il portatore è considerato al chiuso.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Granata difettosa: danni e scelta di un esagono adiacente libero da implementare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "026": {
+    "id": "026",
+    "it": "Il soldato con la percezione più alta tra quelli che possono vedere U9 effettua un controllo di percezione. Se riesce, leggi 007.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la linea di vista verificata verso U9."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "029": {
+    "id": "029",
+    "it": "Se questo evento è stato provocato dall’ingresso in un bosco o in terreno accidentato, il soldato ha spaventato degli uccelli che si alzano in volo.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la classificazione verificata del terreno per questo evento."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "179": {
+    "id": "179",
+    "it": "Controllo di attivazione (+2). Se riesce, leggi 288; altrimenti leggi 310.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "288"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "310"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 5
+    },
+    "status": "reviewed_translation"
+  },
+  "181": {
+    "id": "181",
+    "it": "Tira un dado. 0–5: controllo di attivazione (+3), se riesce leggi 020. 6–8: nessun effetto. 9: controllo di percezione (−1), se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 5,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 3,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "020"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 6,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -1,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "289"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "182": {
+    "id": "182",
+    "it": "Controllo di attivazione (+1). Se riesce, leggi 291; altrimenti leggi 313.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "291"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "313"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "184": {
+    "id": "184",
+    "it": "Tira un dado. 0–4: se s2 non è avvenuto, controllo di attivazione (+3), se riesce leggi 020. 5–8: se s3 non è avvenuto, controllo di percezione; se riesce leggi 293. 9: se s2 non è avvenuto, controllo di percezione; se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 4,
+            "ops": [
+              {
+                "op": "if",
+                "condition": {
+                  "kind": "sighting",
+                  "id": "s2"
+                },
+                "yes": [],
+                "no": [
+                  {
+                    "op": "check",
+                    "kind": "activation",
+                    "modifier": 3,
+                    "success": [
+                      {
+                        "op": "goto",
+                        "id": "020"
+                      }
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "min": 5,
+            "max": 8,
+            "ops": [
+              {
+                "op": "if",
+                "condition": {
+                  "kind": "sighting",
+                  "id": "s3"
+                },
+                "yes": [],
+                "no": [
+                  {
+                    "op": "check",
+                    "kind": "pc",
+                    "modifier": 0,
+                    "success": [
+                      {
+                        "op": "goto",
+                        "id": "293"
+                      }
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "if",
+                "condition": {
+                  "kind": "sighting",
+                  "id": "s2"
+                },
+                "yes": [],
+                "no": [
+                  {
+                    "op": "check",
+                    "kind": "pc",
+                    "modifier": 0,
+                    "success": [
+                      {
+                        "op": "goto",
+                        "id": "289"
+                      }
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "185": {
+    "id": "185",
+    "it": "Controllo di attivazione (+1). Se riesce, leggi 294. Altrimenti effettua un controllo di percezione: se riesce, leggi 316.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "294"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": 0,
+            "success": [
+              {
+                "op": "goto",
+                "id": "316"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "186": {
+    "id": "186",
+    "it": "Tira un dado. 0–2: controllo di attivazione, se riesce leggi 288. 3–8: nessun effetto. 9: controllo di percezione (−1), se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 2,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 0,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "288"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 3,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -1,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "289"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "188": {
+    "id": "188",
+    "it": "Controllo di percezione. Se riesce, leggi 333; altrimenti leggi 297.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": 0,
+        "success": [
+          {
+            "op": "goto",
+            "id": "333"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "297"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "189": {
+    "id": "189",
+    "it": "Controllo di attivazione (+2). Se riesce, leggi 334. Altrimenti controllo di percezione (−2): se riesce, leggi 298.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "334"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -2,
+            "success": [
+              {
+                "op": "goto",
+                "id": "298"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "190": {
+    "id": "190",
+    "it": "Controllo di attivazione (+2). Se riesce, leggi 324. Altrimenti controllo di percezione (−2): se riesce, leggi 289.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "324"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -2,
+            "success": [
+              {
+                "op": "goto",
+                "id": "289"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "191": {
+    "id": "191",
+    "it": "Tira un dado. 0–3: controllo di attivazione, se riesce leggi 288. 4–8: se s3 non è avvenuto, controllo di percezione (−1), se riesce leggi 293. 9: controllo di percezione, se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 0,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "288"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": [
+              {
+                "op": "if",
+                "condition": {
+                  "kind": "sighting",
+                  "id": "s3"
+                },
+                "yes": [],
+                "no": [
+                  {
+                    "op": "check",
+                    "kind": "pc",
+                    "modifier": -1,
+                    "success": [
+                      {
+                        "op": "goto",
+                        "id": "293"
+                      }
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": 0,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "289"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "288": {
+    "id": "288",
+    "it": "Controllo di percezione (−2). Se riesce, leggi 324; altrimenti leggi 180.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "324"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "180"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 7
+    },
+    "status": "reviewed_translation"
+  },
+  "290": {
+    "id": "290",
+    "it": "Controllo di attivazione (+2). Se riesce, leggi 297. Altrimenti controllo di percezione (−2): se riesce, leggi 333.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "297"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -2,
+            "success": [
+              {
+                "op": "goto",
+                "id": "333"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 7
+    },
+    "status": "reviewed_translation"
+  },
+  "291": {
+    "id": "291",
+    "it": "Controllo di percezione (−2). Se riesce, leggi 321; altrimenti leggi 183.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "321"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "183"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "292": {
+    "id": "292",
+    "it": "Se s3 è avvenuto, leggi 314. Altrimenti colloca un segnalino Evento ed effettua un controllo di percezione (−1): se riesce, leggi 314.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s3"
+        },
+        "yes": [
+          {
+            "op": "goto",
+            "id": "314"
+          }
+        ],
+        "no": [
+          {
+            "op": "event_marker"
+          },
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -1,
+            "success": [
+              {
+                "op": "goto",
+                "id": "314"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "293": {
+    "id": "293",
+    "it": "Il soldato nota una figura in uniforme da combattimento americana distesa accanto a un albero nell’esagono G10.",
+    "ops": [],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "295": {
+    "id": "295",
+    "it": "Controllo di attivazione (+1). Se riesce, leggi 183. Altrimenti controllo di percezione (−2): se riesce, leggi 312.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "183"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -2,
+            "success": [
+              {
+                "op": "goto",
+                "id": "312"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "296": {
+    "id": "296",
+    "it": "Se s5 è avvenuto, leggi 182. Altrimenti effettua un controllo di attivazione: se riesce leggi 294, se fallisce leggi 316.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s5"
+        },
+        "yes": [
+          {
+            "op": "goto",
+            "id": "182"
+          }
+        ],
+        "no": [
+          {
+            "op": "check",
+            "kind": "activation",
+            "modifier": 0,
+            "success": [
+              {
+                "op": "goto",
+                "id": "294"
+              }
+            ],
+            "failure": [
+              {
+                "op": "goto",
+                "id": "316"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "299": {
+    "id": "299",
+    "it": "Tira un dado. 0–3: controllo di attivazione (+1), se riesce leggi 288. 4–8: nessun effetto. 9: controllo di percezione, se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 1,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "288"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": 0,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "289"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "310": {
+    "id": "310",
+    "it": "Controllo di percezione. Se riesce, leggi 289; altrimenti leggi 324.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": 0,
+        "success": [
+          {
+            "op": "goto",
+            "id": "289"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "324"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "311": {
+    "id": "311",
+    "it": "Tira un dado. 0–3: controllo di attivazione (+2), se riesce leggi 023. 4–8: nessun effetto. 9: controllo di percezione (−1), se riesce leggi 312.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "023"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -1,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "312"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "313": {
+    "id": "313",
+    "it": "Controllo di percezione. Se riesce, leggi 312; altrimenti leggi 327.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": 0,
+        "success": [
+          {
+            "op": "goto",
+            "id": "312"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "327"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "314": {
+    "id": "314",
+    "it": "[s4] Il soldato nota un riflesso metallico e trova in questo esagono un mitra intatto, senza munizioni.",
+    "ops": [
+      {
+        "op": "sighting",
+        "id": "s4"
+      },
+      {
+        "op": "item",
+        "item": "Mitra senza munizioni"
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "315": {
+    "id": "315",
+    "it": "Tira un dado. 0–8: nessun effetto, colloca un segnalino Evento. 9: controllo di percezione (−2), se riesce leggi 312.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 8,
+            "ops": [
+              {
+                "op": "event_marker"
+              }
+            ]
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "312"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "317": {
+    "id": "317",
+    "it": "Controllo di attivazione (+1). Se riesce, leggi 331; altrimenti leggi 187.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "331"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "187"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "318": {
+    "id": "318",
+    "it": "Controllo di attivazione (+1). Se riesce, leggi 332; altrimenti leggi 188.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "332"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "188"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "321": {
+    "id": "321",
+    "it": "Il soldato con la percezione più alta tra quelli che vedono Q10 effettua un controllo di percezione. Se riesce, leggi 004.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la linea di vista verificata verso Q10."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "325": {
+    "id": "325",
+    "it": "Tira un dado. 0–3: controllo di attivazione (+2), se riesce leggi 023. 4–8: nessun effetto. 9: controllo di percezione (−2), se riesce leggi 289.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "023"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "289"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "326": {
+    "id": "326",
+    "it": "Tira un dado. 0–3: controllo di attivazione (+1), se riesce leggi 297. 4–8: nessun effetto. 9: controllo di percezione (+2), se riesce leggi 333.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 1,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "297"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": 2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "333"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "328": {
+    "id": "328",
+    "it": "[s3] Il soldato trova un ferito della squadra caduta nell’imboscata questa mattina. Ha due caricatori per mitra e una granata. Riesce a parlare: ha lasciato il mitra circa venti metri più avanti, in I11. Colloca il soldato americano K in G10, incapacitato. Se lo porti al sicuro e sopravvive fino alla fine della missione, ottieni 3 PV.",
+    "ops": [
+      {
+        "op": "sighting",
+        "id": "s3"
+      },
+      {
+        "op": "rescue_target"
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "329": {
+    "id": "329",
+    "it": "Colloca un segnalino Evento. Controllo di percezione (−2): se riesce, leggi 007.",
+    "ops": [
+      {
+        "op": "event_marker"
+      },
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "007"
+          }
+        ],
+        "failure": []
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "330": {
+    "id": "330",
+    "it": "Controllo di attivazione (+3). Se riesce, leggi 294. Altrimenti controllo di percezione: se riesce, leggi 316.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 3,
+        "success": [
+          {
+            "op": "goto",
+            "id": "294"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": 0,
+            "success": [
+              {
+                "op": "goto",
+                "id": "316"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "332": {
+    "id": "332",
+    "it": "Controllo di percezione (−2). Se riesce, leggi 297; altrimenti leggi 319.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": -2,
+        "success": [
+          {
+            "op": "goto",
+            "id": "297"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "319"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "335": {
+    "id": "335",
+    "it": "Controllo di attivazione (+3). Se riesce, leggi 183. Altrimenti controllo di percezione (−2): se riesce, leggi 312.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": 3,
+        "success": [
+          {
+            "op": "goto",
+            "id": "183"
+          }
+        ],
+        "failure": [
+          {
+            "op": "check",
+            "kind": "pc",
+            "modifier": -2,
+            "success": [
+              {
+                "op": "goto",
+                "id": "312"
+              }
+            ],
+            "failure": []
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "348": {
+    "id": "348",
+    "it": "Lontano a est del campo di battaglia, i tuoi soldati vedono dei Typhoon picchiare sulle posizioni tedesche. Le esplosioni della contraerea circondano gli aerei britannici.",
+    "ops": [],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "453": {
+    "id": "453",
+    "it": "[s9] Un caccia britannico Typhoon, avvolto dal fumo, precipita in R15. Colloca il relitto fumante: ogni soldato nell’esagono muore. Se un americano entra in R15 mentre il relitto è presente, leggi 349.",
+    "ops": [
+      {
+        "op": "sighting",
+        "id": "s9"
+      },
+      {
+        "op": "crash",
+        "hex": "R15",
+        "entry_paragraph": "349"
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 11
+    },
+    "status": "reviewed_translation"
+  },
+  "600": {
+    "id": "600",
+    "it": "Controllo di percezione. Se riesce, leggi 293; altrimenti colloca un segnalino Evento.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "pc",
+        "modifier": 0,
+        "success": [
+          {
+            "op": "goto",
+            "id": "293"
+          }
+        ],
+        "failure": [
+          {
+            "op": "event_marker"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 14
+    },
+    "status": "reviewed_translation"
+  },
+  "180": {
+    "id": "180",
+    "it": "[s1] Attiva il tedesco 9 in K13, il tedesco 15 in K13. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 3. I tedeschi appena attivati ricevono 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s1"
+        ],
+        "enemies": [
+          {
+            "id": "9",
+            "hex": "K13",
+            "stance": "crouching"
+          },
+          {
+            "id": "15",
+            "hex": "K13",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 5
+    },
+    "status": "reviewed_translation"
+  },
+  "183": {
+    "id": "183",
+    "it": "[s2] Attiva il tedesco 25 in M7. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 3. Il tedesco 25 riceve 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "187": {
+    "id": "187",
+    "it": "[s2, s5, s6] Attiva il tedesco 34 in M5, il tedesco 25 in M7, il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio americano. Passa alla Condizione 3.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2",
+          "s5",
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "crouching"
+          },
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "crouching"
+          },
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "us",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "289": {
+    "id": "289",
+    "it": "[s1] Attiva il tedesco 9 in K13, il tedesco 15 in K13. In piedi. Iniziano i Round. Vantaggio americano. Passa alla Condizione 3. Il soldato che ha superato il controllo è consapevole. Tutti gli americani consapevoli che non cedono al panico ricevono 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s1"
+        ],
+        "enemies": [
+          {
+            "id": "9",
+            "hex": "K13",
+            "stance": "standing"
+          },
+          {
+            "id": "15",
+            "hex": "K13",
+            "stance": "standing"
+          }
+        ],
+        "advantage": "us",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 7
+    },
+    "status": "reviewed_translation"
+  },
+  "294": {
+    "id": "294",
+    "it": "[s2, s5] Attiva il tedesco 25 in M7, il tedesco 34 in M5. In piedi. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 3.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2",
+          "s5"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "standing"
+          },
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "standing"
+          }
+        ],
+        "advantage": "de",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "297": {
+    "id": "297",
+    "it": "[s6] Attiva il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 2.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "298": {
+    "id": "298",
+    "it": "[s5, s6] Attiva il tedesco 34 in M5, il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio americano. Passa alla Condizione 2.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s5",
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "crouching"
+          },
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "us",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "312": {
+    "id": "312",
+    "it": "[s2] Attiva il tedesco 25 in M7. In piedi. Iniziano i Round. Vantaggio americano. Passa alla Condizione 3. Il soldato che ha superato il controllo è consapevole. Tutti gli americani consapevoli che non cedono al panico ricevono 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "standing"
+          }
+        ],
+        "advantage": "us",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "316": {
+    "id": "316",
+    "it": "[s2, s5] Attiva il tedesco 25 in M7, il tedesco 34 in M5. Accovacciati. Iniziano i Round. Vantaggio americano. Passa alla Condizione 3. Se il soldato ha appena superato un controllo di percezione, è automaticamente consapevole.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2",
+          "s5"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "crouching"
+          },
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "us",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "319": {
+    "id": "319",
+    "it": "[s6] Attiva il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 2. Il tedesco 53 riceve 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "324": {
+    "id": "324",
+    "it": "[s1] Attiva il tedesco 9 in K13, il tedesco 15 in K13. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 3.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s1"
+        ],
+        "enemies": [
+          {
+            "id": "9",
+            "hex": "K13",
+            "stance": "crouching"
+          },
+          {
+            "id": "15",
+            "hex": "K13",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "327": {
+    "id": "327",
+    "it": "[s2] Attiva il tedesco 25 in M7. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 3.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "331": {
+    "id": "331",
+    "it": "[s2, s5, s6] Attiva il tedesco 25 in M7, il tedesco 34 in M5, il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 2. Il tedesco 34 riceve 2 turni; gli altri tirano normalmente.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s2",
+          "s5",
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "25",
+            "hex": "M7",
+            "stance": "crouching"
+          },
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "crouching"
+          },
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "333": {
+    "id": "333",
+    "it": "[s6] Attiva il tedesco 53 in O4. In piedi. Iniziano i Round. Vantaggio americano. Passa alla Condizione 2. Il soldato che ha superato il controllo è consapevole. Tutti gli americani consapevoli che non cedono al panico ricevono 2 turni in questo Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "standing"
+          }
+        ],
+        "advantage": "us",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  },
+  "334": {
+    "id": "334",
+    "it": "[s5, s6] Attiva il tedesco 34 in M5, il tedesco 53 in O4. Accovacciati. Iniziano i Round. Vantaggio tedesco. Passa alla Condizione 2.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s5",
+          "s6"
+        ],
+        "enemies": [
+          {
+            "id": "34",
+            "hex": "M5",
+            "stance": "crouching"
+          },
+          {
+            "id": "53",
+            "hex": "O4",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "de",
+        "condition": 2
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 8
+    },
+    "status": "reviewed_translation"
+  }
+}
