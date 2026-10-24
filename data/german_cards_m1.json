@@ -1,0 +1,443 @@
+{
+  "status": "visually_verified_tts_cards",
+  "source": "Original German soldier card sheet in local TTS archive; mission 1 cards",
+  "cards": {
+    "1": {
+      "letter": "Q",
+      "role": "Soldato",
+      "activation_vp": 1,
+      "conditional_vp": 0,
+      "weapons": [
+        "Mitra"
+      ],
+      "initiative": 1,
+      "pc": 2,
+      "ws": -1,
+      "mpa": 3,
+      "columns": {
+        "2": [
+          808,
+          824,
+          802,
+          800
+        ],
+        "3": [
+          808,
+          824,
+          802,
+          800
+        ],
+        "4": [
+          920,
+          803,
+          809,
+          813
+        ],
+        "A": [
+          808,
+          824,
+          802,
+          800
+        ],
+        "S": [
+          813,
+          816,
+          802,
+          839
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          8,
+          9
+        ]
+      ]
+    },
+    "9": {
+      "letter": "R",
+      "role": "Soldato",
+      "activation_vp": 1,
+      "conditional_vp": 0,
+      "weapons": [
+        "Fucile a otturatore con ottica"
+      ],
+      "initiative": 2,
+      "pc": 3,
+      "ws": 0,
+      "mpa": 4,
+      "columns": {
+        "3": [
+          801,
+          915,
+          800,
+          825
+        ],
+        "4": [
+          916,
+          800,
+          809,
+          916
+        ],
+        "S": [
+          839,
+          971,
+          816,
+          813
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9
+        ]
+      ]
+    },
+    "15": {
+      "letter": "L",
+      "role": "Cecchino",
+      "activation_vp": 1,
+      "conditional_vp": 0,
+      "weapons": [
+        "Fucile a otturatore con ottica",
+        "Granata"
+      ],
+      "initiative": 3,
+      "pc": 5,
+      "ws": 0,
+      "mpa": 4,
+      "columns": {
+        "3": [
+          802,
+          808,
+          915,
+          800
+        ],
+        "4": [
+          915,
+          917,
+          800,
+          809
+        ],
+        "S": [
+          833,
+          833,
+          971,
+          816
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9
+        ]
+      ]
+    },
+    "25": {
+      "letter": "N",
+      "role": "Cecchino",
+      "activation_vp": 2,
+      "conditional_vp": 0,
+      "weapons": [
+        "Fucile a otturatore con ottica",
+        "Pistola Luger"
+      ],
+      "initiative": 4,
+      "pc": 7,
+      "ws": 1,
+      "mpa": 4,
+      "columns": {
+        "2": [
+          802,
+          829,
+          808,
+          801
+        ],
+        "3": [
+          802,
+          829,
+          808,
+          801
+        ],
+        "4": [
+          800,
+          919,
+          919,
+          918
+        ],
+        "B": [
+          829,
+          808,
+          801,
+          801
+        ],
+        "S": [
+          816,
+          971,
+          802,
+          839
+        ]
+      },
+      "roll_groups": [
+        [
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4,
+          5
+        ],
+        [
+          6,
+          7,
+          8,
+          9
+        ]
+      ]
+    },
+    "34": {
+      "letter": "X",
+      "role": "Ufficiale",
+      "activation_vp": 1,
+      "conditional_vp": 2,
+      "conditional_vp_if": "captured",
+      "weapons": [
+        "Mitra",
+        "Pistola Luger"
+      ],
+      "initiative": 4,
+      "pc": 6,
+      "ws": 1,
+      "mpa": 4,
+      "columns": {
+        "2": [
+          965,
+          835,
+          802,
+          829
+        ],
+        "3": [
+          808,
+          914,
+          913,
+          835
+        ],
+        "4": [
+          804,
+          805,
+          836,
+          837
+        ],
+        "B": [
+          831,
+          829,
+          808,
+          832
+        ],
+        "S": [
+          971,
+          816,
+          839,
+          813
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          7,
+          8,
+          9
+        ]
+      ],
+      "on_killed_captured_incapacitated_condition": 4
+    },
+    "53": {
+      "letter": "S",
+      "role": "Soldato",
+      "activation_vp": 1,
+      "conditional_vp": 0,
+      "weapons": [
+        "Fucile a otturatore",
+        "Granata"
+      ],
+      "initiative": 2,
+      "pc": 4,
+      "ws": 0,
+      "mpa": 4,
+      "columns": {
+        "2": [
+          808,
+          802,
+          800,
+          829
+        ],
+        "3": [
+          808,
+          802,
+          800,
+          829
+        ],
+        "4": [
+          838,
+          919,
+          838,
+          800
+        ],
+        "B": [
+          802,
+          801,
+          829,
+          808
+        ],
+        "S": [
+          839,
+          833,
+          971,
+          816
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          7
+        ],
+        [
+          8,
+          9
+        ]
+      ]
+    },
+    "81": {
+      "letter": "P",
+      "role": "Soldato",
+      "activation_vp": 1,
+      "conditional_vp": 0,
+      "weapons": [
+        "Fucile a otturatore"
+      ],
+      "initiative": 1,
+      "pc": 1,
+      "ws": -2,
+      "mpa": 3,
+      "columns": {
+        "2": [
+          800,
+          801,
+          808,
+          801
+        ],
+        "3": [
+          800,
+          801,
+          808,
+          801
+        ],
+        "4": [
+          813,
+          920,
+          809,
+          825
+        ],
+        "A": [
+          800,
+          801,
+          808,
+          802
+        ],
+        "S": [
+          816,
+          839,
+          813,
+          800
+        ]
+      },
+      "roll_groups": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          8,
+          9
+        ]
+      ]
+    }
+  }
+}

@@ -8,6 +8,7 @@ const Hex = preload("res://scripts/hex_grid.gd")
 const Damage = preload("res://scripts/damage.gd")
 var mission: Dictionary
 var paragraphs: Dictionary
+var german_cards: Dictionary
 var state: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
@@ -18,6 +19,17 @@ var _entry_soldiers: Array = []
 func _init() -> void:
 	mission = JSON.parse_string(FileAccess.get_file_as_string("res://data/mission_01.json"))
 	paragraphs = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragraphs_it.json"))
+	german_cards = JSON.parse_string(FileAccess.get_file_as_string("res://data/german_cards_m1.json")).cards
+
+func german_action_reference(card_id: String, condition: int, roll: int, special: String = "") -> int:
+	var card: Dictionary = german_cards.get(card_id, {})
+	if card.is_empty() or roll < 0 or roll > 9: return -1
+	var column := special if special != "" else str(condition)
+	if not card.columns.has(column): return -1
+	for index in range(card.roll_groups.size()):
+		for die in card.roll_groups[index]:
+			if roll == int(die): return int(card.columns[column][index])
+	return -1
 
 func new_game(seed_value: int = 0) -> void:
 	if seed_value == 0: rng.randomize()
@@ -307,7 +319,17 @@ func run_ops(ops: Array) -> void:
 					var exists := false
 					for current in state.enemies:
 						if current.id == enemy.id: exists = true
-					if not exists: state.enemies.append(enemy.duplicate(true))
+					if not exists:
+						var card: Dictionary = german_cards.get(str(enemy.id), {})
+						if card.is_empty():
+							stop_resolution("Scheda tedesca %s non verificata." % enemy.id); return
+						var active_enemy: Dictionary = enemy.duplicate(true)
+						for key in ["letter", "role", "initiative", "pc", "ws", "mpa", "weapons", "activation_vp", "conditional_vp"]:
+							active_enemy[key] = card[key]
+						active_enemy.status = "active"
+						state.enemies.append(active_enemy)
+						state.vp += int(card.activation_vp)
+						log_line("ATTIVAZIONE TEDESCA", "GE %s (%s): +%d PV all'attivazione." % [enemy.id, card.letter, card.activation_vp], "check")
 				state.phase = "rounds"
 				state.advantage = op.advantage
 				state.condition = maxi(state.condition, int(op.condition))
