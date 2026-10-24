@@ -24,6 +24,9 @@ func _ready() -> void:
 	build_ui()
 	game.changed.connect(refresh)
 	game.new_game()
+	if FileAccess.file_exists(SAVE_PATH):
+		var saved = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+		if game.restore(saved): notice="Partita precedente ripristinata automaticamente."
 	refresh()
 	if "--capture" in OS.get_cmdline_user_args():
 		await get_tree().process_frame
