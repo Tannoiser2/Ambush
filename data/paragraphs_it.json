@@ -2595,5 +2595,536 @@
       "page": 12
     },
     "status": "reviewed_translation"
+  },
+  "001": {
+    "id": "001",
+    "it": "Campo minato! Esegui la procedura del campo minato.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Procedura del campo minato ancora da implementare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "030": {
+    "id": "030",
+    "it": "Il soldato con la percezione più alta tra quelli che vedono D17 effettua un controllo di percezione. Se riesce, leggi 013.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la linea di vista verificata verso D17."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "195": {
+    "id": "195",
+    "it": "Se il soldato è sul ponte, leggi 190; se è sotto il ponte, leggi 186.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Il livello sopra/sotto il ponte non è ancora modellato."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "198": {
+    "id": "198",
+    "it": "Se s5 e s6 sono avvenuti, nessun evento. Se solo s5 è avvenuto, leggi 318. Se solo s6 è avvenuto, leggi 603. Altrimenti leggi 189.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s5"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "goto",
+                "id": "318"
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [
+              {
+                "op": "goto",
+                "id": "603"
+              }
+            ],
+            "no": [
+              {
+                "op": "goto",
+                "id": "189"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "199": {
+    "id": "199",
+    "it": "Se s2 e s6 sono avvenuti, nessun evento. Se solo s2 è avvenuto, leggi 318. Se solo s6 è avvenuto, leggi 335. Altrimenti leggi 318.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s2"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "goto",
+                "id": "318"
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [
+              {
+                "op": "goto",
+                "id": "335"
+              }
+            ],
+            "no": [
+              {
+                "op": "goto",
+                "id": "318"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 6
+    },
+    "status": "reviewed_translation"
+  },
+  "343": {
+    "id": "343",
+    "it": "Se s2 e s5 sono avvenuti, nessun evento. Se solo s2 è avvenuto, leggi 603. Se solo s5 è avvenuto, leggi 182. Altrimenti leggi 330.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s2"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s5"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "goto",
+                "id": "603"
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s5"
+            },
+            "yes": [
+              {
+                "op": "goto",
+                "id": "182"
+              }
+            ],
+            "no": [
+              {
+                "op": "goto",
+                "id": "330"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "344": {
+    "id": "344",
+    "it": "Se s2 e s5 sono avvenuti, nessun evento. Se solo s2 è avvenuto, leggi 192. Se solo s5 è avvenuto, leggi 335. Altrimenti leggi 330.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s2"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s5"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "goto",
+                "id": "192"
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s5"
+            },
+            "yes": [
+              {
+                "op": "goto",
+                "id": "335"
+              }
+            ],
+            "no": [
+              {
+                "op": "goto",
+                "id": "330"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "345": {
+    "id": "345",
+    "it": "Campo minato! Esegui la procedura del campo minato. Poi, se s6 non è avvenuto, controllo di attivazione (+1): se riesce, leggi 297.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Procedura del campo minato ancora da implementare."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "351": {
+    "id": "351",
+    "it": "[s5] Attiva il tedesco 34 in M6, accovacciato. Iniziano i Round.",
+    "ops": [
+      {
+        "op": "encounter",
+        "sightings": [
+          "s5"
+        ],
+        "enemies": [
+          {
+            "id": "34",
+            "hex": "M6",
+            "stance": "crouching"
+          }
+        ],
+        "advantage": "unknown",
+        "condition": 3
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "450": {
+    "id": "450",
+    "it": "Tutti gli americani che vedono M10 effettuano un controllo di percezione (−2). Se almeno uno riesce, leggi 606; se tutti falliscono, leggi 197. Se non ci sono controlli, nessun evento.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la linea di vista verificata verso M10 e il controllo di più soldati."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "455": {
+    "id": "455",
+    "it": "Tutti gli americani che vedono M5 effettuano un controllo di percezione (−2). Se almeno uno riesce, leggi 602; se tutti falliscono, leggi 338. Se non ci sono controlli, nessun evento.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Serve la linea di vista verificata verso M5 e il controllo di più soldati."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "456": {
+    "id": "456",
+    "it": "Controllo di attivazione (−1). Se riesce, leggi 337; altrimenti leggi 194.",
+    "ops": [
+      {
+        "op": "check",
+        "kind": "activation",
+        "modifier": -1,
+        "success": [
+          {
+            "op": "goto",
+            "id": "337"
+          }
+        ],
+        "failure": [
+          {
+            "op": "goto",
+            "id": "194"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "607": {
+    "id": "607",
+    "it": "Tira un dado. 0–3: controllo di attivazione, se riesce leggi 291. 4–8: nessun effetto. 9: controllo di percezione (−2), se riesce leggi 312.",
+    "ops": [
+      {
+        "op": "die",
+        "branches": [
+          {
+            "min": 0,
+            "max": 3,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "activation",
+                "modifier": 0,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "291"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "ops": []
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "ops": [
+              {
+                "op": "check",
+                "kind": "pc",
+                "modifier": -2,
+                "success": [
+                  {
+                    "op": "goto",
+                    "id": "312"
+                  }
+                ],
+                "failure": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "608": {
+    "id": "608",
+    "it": "Se s2 e s6 sono avvenuti, nessun evento. Se solo s2 è avvenuto, leggi 290 in terreno aperto, oppure 326 altrove. Se s2 non è avvenuto, leggi 182.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s2"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "unsupported",
+                "reason": "Classificazione del terreno ancora da verificare per 608."
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "goto",
+            "id": "182"
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "609": {
+    "id": "609",
+    "it": "Se s5 e s6 sono avvenuti, nessun evento. Se solo s5 è avvenuto, leggi 290. Se solo s6 è avvenuto, leggi 192. Altrimenti leggi 189.",
+    "ops": [
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s5"
+        },
+        "yes": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [],
+            "no": [
+              {
+                "op": "goto",
+                "id": "290"
+              }
+            ]
+          }
+        ],
+        "no": [
+          {
+            "op": "if",
+            "condition": {
+              "kind": "sighting",
+              "id": "s6"
+            },
+            "yes": [
+              {
+                "op": "goto",
+                "id": "192"
+              }
+            ],
+            "no": [
+              {
+                "op": "goto",
+                "id": "189"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "613": {
+    "id": "613",
+    "it": "[s0] Richiede s9. Le fiamme divampano in R15: il Typhoon abbattuto brucia rapidamente. Ogni soldato in R15 viene ucciso; rimuovi il relitto.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Verificare il requisito di avvistamento e lo stato del relitto prima della risoluzione."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
   }
 }

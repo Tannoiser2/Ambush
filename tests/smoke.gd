@@ -36,5 +36,9 @@ func _initialize() -> void:
  var prior_log = encounter.state.log.size()
  encounter.read_reference("s3:328")
  assert(encounter.state.log.size() == prior_log + 1)
+ var third = g.mission.conditions["3"]
+ assert(third.hexes.size() == 475)
+ assert(third.events.size() == 19)
+ assert(third.hexes["G10"] == "s3:328")
  print("SMOKE OK")
  quit()
