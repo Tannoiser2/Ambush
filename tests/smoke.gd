@@ -9,6 +9,11 @@ func _initialize() -> void:
  assert(g.german_action_reference("34", 4, 7) == 837)
  assert(g.german_action_reference("25", 3, 2, "S") == 971)
  assert(g.german_action_reference("9", 2, 0) == -1)
+ for german_card in g.german_cards.values():
+  for column in german_card.columns.values():
+   for reference in column:
+    assert(g.german_action_text(int(reference)) != "")
+ assert(g.german_action_text(830) != "")
  var activation = Game.new()
  activation.new_game(31)
  activation.resolve("297")

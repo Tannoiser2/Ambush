@@ -9,6 +9,7 @@ const Damage = preload("res://scripts/damage.gd")
 var mission: Dictionary
 var paragraphs: Dictionary
 var german_cards: Dictionary
+var german_actions: Dictionary
 var state: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
@@ -20,6 +21,7 @@ func _init() -> void:
 	mission = JSON.parse_string(FileAccess.get_file_as_string("res://data/mission_01.json"))
 	paragraphs = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragraphs_it.json"))
 	german_cards = JSON.parse_string(FileAccess.get_file_as_string("res://data/german_cards_m1.json")).cards
+	german_actions = JSON.parse_string(FileAccess.get_file_as_string("res://data/german_actions_it.json")).actions
 
 func german_action_reference(card_id: String, condition: int, roll: int, special: String = "") -> int:
 	var card: Dictionary = german_cards.get(card_id, {})
@@ -30,6 +32,9 @@ func german_action_reference(card_id: String, condition: int, roll: int, special
 		for die in card.roll_groups[index]:
 			if roll == int(die): return int(card.columns[column][index])
 	return -1
+
+func german_action_text(reference: int) -> String:
+	return str(german_actions.get(str(reference), ""))
 
 func new_game(seed_value: int = 0) -> void:
 	if seed_value == 0: rng.randomize()
