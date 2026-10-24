@@ -6,6 +6,7 @@ signal changed
 const VERSION := 1
 const Hex = preload("res://scripts/hex_grid.gd")
 const Damage = preload("res://scripts/damage.gd")
+const FireRules = preload("res://scripts/fire_rules.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
 const MapATerrain = preload("res://scripts/map_a_terrain.gd")
 var mission: Dictionary
@@ -13,6 +14,7 @@ var paragraphs: Dictionary
 var german_cards: Dictionary
 var german_actions: Dictionary
 var map_terrain := MapATerrain.new()
+var fire_rules := FireRules.new()
 var state: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
@@ -42,6 +44,37 @@ func map_los(a: String, b: String) -> Dictionary:
 
 func map_terrain_at(hex_id: String) -> Dictionary:
 	return map_terrain.terrain(hex_id,state.get("terrain_overrides",{}))
+
+func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> Dictionary:
+	# Planning aid only. Terrain is still image-derived, so this must never
+	# spend ammunition, roll damage or authorize an action in a Round.
+	var shooter := soldier(shooter_id)
+	var target: Dictionary = {}
+	for enemy in state.get("enemies", []):
+		if str(enemy.id) == enemy_id and enemy.get("status", "active") == "active":
+			target = enemy
+			break
+	if shooter.is_empty() or target.is_empty() or shooter.get("status", "") != "active":
+		return {"status":"unavailable", "reason":"Tiratore o bersaglio non attivo."}
+	if str(shooter.get("hex", "")) == "" or str(target.get("hex", "")) == "":
+		return {"status":"unavailable", "reason":"Il tiratore o il bersaglio è fuori mappa."}
+	var distance: int = Hex.distance(str(shooter.hex),str(target.hex))
+	var los: Dictionary = map_los(str(shooter.hex),str(target.hex))
+	if los.status != "clear":
+		return {"status":str(los.status), "distance":distance, "reason":str(los.reason)}
+	var terrain: Dictionary = map_terrain_at(str(target.hex))
+	var kind: String = str(terrain.get("terrain", ""))
+	var fire_terrain := {"clear":"open", "road":"open", "stream":"open",
+		"cover":"cover", "brush":"brush", "rough":"rough", "rubble":"rubble", "woods":"woods"}
+	if not fire_terrain.has(kind):
+		return {"status":"unknown", "distance":distance, "reason":"Modificatore dell'edificio o del terreno non verificato."}
+	var chance: int = fire_rules.hit_chance(str(shooter.get("weapon", "")),distance,
+		int(shooter.get("ws",0)),str(fire_terrain[kind]),str(target.get("stance", "")),
+		snap,bool(shooter.get("wounded",false)))
+	if chance < 0:
+		return {"status":"unavailable", "distance":distance, "reason":"Arma, portata o postura non compatibile con il tiro."}
+	return {"status":"estimated", "distance":distance, "chance":chance,
+		"reason":"LOS e terreno sono preliminari; tiro non ancora eseguibile."}
 
 func first_round_visibility() -> Dictionary:
 	if state.get("phase", "") != "rounds": return {}

@@ -209,6 +209,13 @@ func show_hover(id: String) -> void:
 	for enemy in game.state.enemies:
 		if enemy.hex == id:
 			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d  ·  %s" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0), enemy.get("status", "active")]
+			if game.state.phase == "rounds" and enemy.get("status", "active") == "active":
+				var shot: Dictionary = game.fire_preview(selected,str(enemy.id))
+				if shot.status == "estimated":
+					hover_label.text += "  ·  tiro mirato stimato: %d/10 (D10 0–%d)" % [int(shot.chance)+1,int(shot.chance)]
+				else:
+					hover_label.text += "  ·  tiro: %s" % {"blocked":"LOS ostruita", "unknown":"da verificare", "unavailable":"non disponibile"}.get(str(shot.status),"da verificare")
+				hover_label.tooltip_text = str(shot.reason)
 
 func move_to_hex(hex_id: String) -> void:
 	if drag_target != "":

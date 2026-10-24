@@ -10,6 +10,8 @@ Questa **non è una missione completa**: combattimento interattivo, soccorso del
 
 Le attivazioni che si verificano mentre sono già in corso i Round registrano il nuovo tedesco e gli eventuali PV senza riavviare il primo Round né modificare vantaggio e consapevolezza già determinati. La collocazione del rinforzo sulla pista resta sospesa finché non sarà implementata la sequenza dei Round (regola 6/6).
 
+Quando il cursore è sopra un tedesco attivo durante i Round, la scheda mostra un'anteprima del tiro mirato del soldato selezionato: LOS preliminare, motivo di un eventuale blocco e probabilità stimata dalla tabella dell'arma, distanza, abilità, terreno, postura e ferita. È un ausilio di pianificazione: non tira dadi, non consuma munizioni e non risolve il combattimento. Edifici e terreni senza modificatore verificato restano indeterminati.
+
 ## Verifica
 
 `godot --headless --path . --script tests/smoke.gd`

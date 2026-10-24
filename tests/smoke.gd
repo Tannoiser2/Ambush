@@ -33,6 +33,13 @@ func _initialize() -> void:
  assert(officer.state.round_setup.advantage == "de")
  officer.soldier("A").hex = "M5"
  assert(officer.first_round_visibility()["A"] == "clear")
+ var preview: Dictionary = officer.fire_preview("A","34")
+ assert(preview.status == "estimated")
+ assert(preview.distance == 0)
+ assert(preview.chance >= 0 and preview.chance <= 8)
+ assert(officer.fire_preview("A","missing").status == "unavailable")
+ officer.soldier("A").hex = "A1"
+ assert(officer.fire_preview("A","34").status in ["blocked","unknown"])
  officer.soldier("A").hex = ""
  var officer_awareness = officer.prepare_awareness_phase({},["A"],{"A":0})
  assert(officer_awareness["A"])
