@@ -223,6 +223,21 @@ func stop_resolution(reason: String) -> void:
 	state.blocked = reason
 	log_line("LIMITE DELLA VERSIONE DI SVILUPPO", reason + " La partita è conservata; nessuna scelta viene risolta arbitrariamente.", "blocked")
 
+func objective_status() -> Array[Dictionary]:
+	var active_hexes: Array[String] = []
+	for u in state.squad:
+		if u.status == "active" and u.hex != "": active_hexes.append(u.hex)
+	var t8 := "T8" in active_hexes
+	var central := "K13" in active_hexes and "L13" in active_hexes
+	var no_enemies: bool = state.enemies.is_empty()
+	return [
+		{"title":"Edificio T8", "met":t8, "known":true},
+		{"title":"Edifici K13 e L13", "met":central, "known":true},
+		{"title":"Nessun tedesco attivo", "met":no_enemies, "known":true},
+		{"title":"Altura sud-est con vista su tutta la strada", "met":false, "known":false},
+		{"title":"Almeno 13 punti vittoria", "met":int(state.vp)>=13, "known":true},
+	]
+
 func snapshot() -> Dictionary:
 	var result := state.duplicate(true)
 	result.rng = str(rng.state) # decimal string preserves int64 through JSON/Firebase

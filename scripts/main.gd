@@ -9,6 +9,7 @@ var board: AmbushBoard
 var selected := "A"
 var roster: VBoxContainer
 var diary: RichTextLabel
+var objectives: RichTextLabel
 var details: RichTextLabel
 var status_label: Label
 var phase_label: Label
@@ -105,6 +106,7 @@ func build_ui() -> void:
 	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14);center.add_child(hover_label)
 	var right_panel:=PanelContainer.new();right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
 	var right:=box(right_panel);right.add_child(label("DIARIO OPERATIVO",22,true));right.add_child(label("PARAGRAFI · DADI · CONDIZIONI",12))
+	objectives=rich();objectives.custom_minimum_size.y=154;objectives.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;right.add_child(objectives)
 	diary=rich();diary.custom_minimum_size.x=310;right.add_child(diary)
 	var footer:=box(root,false)
 	status_label=label("",15);status_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;footer.add_child(status_label)
@@ -131,6 +133,10 @@ func refresh() -> void:
 	for entry in game.state.log:
 		var color: String={"paragraph":"e7c884","dice":"a8c49b","check":"93b9b0","blocked":"e5a18b","briefing":"e7c884"}.get(entry.kind,"b4bba5")
 		lines.append("[color=#%s][b]%s[/b][/color]\n%s\n" % [color,escape_bbcode(entry.title),escape_bbcode(entry.text)])
+	var objective_lines: Array[String]=["[b][color=#e7c884]OBIETTIVI DI MISSIONE[/color][/b]"]
+	for item in game.objective_status():
+		objective_lines.append(("[color=#9bc897]✓[/color] " if item.met else "[color=#d4b474]○[/color] " if item.known else "[color=#b7a795]?[/color] ")+item.title)
+	objectives.text="\n".join(objective_lines)
 	diary.text="\n".join(lines)
 	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
 	board.selected=selected;board.queue_redraw()
