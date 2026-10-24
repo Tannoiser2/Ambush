@@ -81,6 +81,9 @@ func prepare_round_track(awareness: Dictionary, us_die: int, german_die: int) ->
 		state.round_setup.get("german_two_turns", []) if first_round else [],
 		bool(state.round_setup.get("us_two_turns", false)) if first_round else false)
 
+func prepare_action_sequence(awareness: Dictionary, us_die: int, german_die: int) -> Dictionary:
+	return RoundRules.start_action_sequence(prepare_round_track(awareness, us_die, german_die))
+
 func new_game(seed_value: int = 0) -> void:
 	if seed_value == 0: rng.randomize()
 	else: rng.seed = seed_value

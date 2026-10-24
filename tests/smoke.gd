@@ -37,6 +37,9 @@ func _initialize() -> void:
  var officer_track = officer.prepare_round_track({"A":true},2,9)
  assert(officer_track.advantage == "de")
  assert(officer_track.german["34"].turns == 2)
+ var officer_sequence = officer.prepare_action_sequence({"A":true},2,9)
+ assert(not officer_sequence.is_empty())
+ assert(officer_sequence.bucket_index == 0)
  assert(officer.german_turn_reference("34",0) == 965)
  officer.state.enemies[0].special_reaction = "B"
  assert(officer.german_turn_reference("34",0) == 831)
