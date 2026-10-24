@@ -25,5 +25,16 @@ func _initialize() -> void:
  assert(second.events.size() == 19)
  assert(second.hexes["G10"] == "s3:328")
  assert(second.hexes["M3"] == "s5:192")
+ var encounter = Game.new()
+ encounter.new_game(77)
+ encounter.state.squad[0].hex = "G10"
+ encounter.state.context_hex = "G10"
+ encounter.state.trigger_soldier = "A"
+ encounter.read_reference("s3:328")
+ assert("s3" in encounter.state.sightings)
+ assert(encounter.soldier("K").hex == "G10")
+ var prior_log = encounter.state.log.size()
+ encounter.read_reference("s3:328")
+ assert(encounter.state.log.size() == prior_log + 1)
  print("SMOKE OK")
  quit()

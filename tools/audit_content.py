@@ -23,5 +23,5 @@ while refs-seen:
 missing=refs-paragraphs.keys()
 print(f'Carte verificate: {len(mission["conditions"])} / 4 nella missione 1')
 print(f'Paragrafi italiani rivisti: {len(paragraphs)}; candidati OCR inglesi: {len(source)}')
-print(f'Riferimenti raggiungibili dalla Condizione 1: {len(refs)}; mancanti: {sorted(missing)}')
+print(f'Riferimenti raggiungibili dalle condizioni verificate: {len(refs)}; mancanti: {sorted(missing)}')
 assert not missing
