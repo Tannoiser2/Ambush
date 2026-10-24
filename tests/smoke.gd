@@ -208,6 +208,13 @@ func _initialize() -> void:
  var shell_loaded = Game.new()
  assert(shell_loaded.restore(JSON.parse_string(JSON.stringify(shell_save))))
  assert(shell_loaded.map_terrain_at("K13").terrain == "rubble")
+ var far_shell = Game.new()
+ far_shell.new_game(83)
+ far_shell.soldier("A").hex = "A1"
+ far_shell.forced_rolls = [9,9]
+ far_shell.resolve("011")
+ assert(far_shell.soldier("A").status == "active")
+ assert(far_shell.state.terrain_overrides.is_empty())
  var wounded = Game.new()
  wounded.new_game(61)
  wounded.state.condition = 4
