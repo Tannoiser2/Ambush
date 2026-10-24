@@ -55,13 +55,22 @@ func validate_command(command: Dictionary) -> String:
 	var u := soldier(str(command.get("soldier", "")))
 	if u.is_empty() or u.status != "active": return "Seleziona un soldato attivo."
 	match command.get("type", ""):
-		"move":
+		"move", "move_group":
 			var target := str(command.get("hex", ""))
 			if not Hex.valid(target): return "Esagono non valido."
 			if u.stance == "prone": return "Un soldato prono non può muoversi: cambia postura."
 			if u.hex == "":
 				if not Hex.is_entry(target): return "L’ingresso è consentito solo da A1 a J1."
 			elif Hex.distance(u.hex, target) != 1: return "Durante le Operazioni muovi un esagono alla volta."
+			if command.type == "move_group":
+				var ids: Array = command.get("group", [])
+				if ids.is_empty() or u.id not in ids: return "Gruppo non valido."
+				var unique: Array = []
+				for id in ids:
+					if id in unique: return "Un soldato compare due volte nel gruppo."
+					unique.append(id)
+					var member := soldier(str(id))
+					if member.is_empty() or member.status != "active" or member.hex != u.hex or member.stance != u.stance: return "I soldati del gruppo devono essere attivi, nello stesso esagono e con la stessa postura."
 		"stance":
 			if command.get("stance", "") not in ["standing", "crouching", "prone"]: return "Postura non valida."
 		"exit":
@@ -81,6 +90,16 @@ func dispatch(command: Dictionary) -> Dictionary:
 			state.context_hex = command.hex
 			state.trigger_soldier = u.id
 			log_line("MOVIMENTO · " + u.id, "%s entra in %s." % [u.name, u.hex])
+			check_hex(command.hex)
+		"move_group":
+			var names: Array[String] = []
+			for id in command.group:
+				var member := soldier(str(id))
+				member.hex = command.hex
+				names.append(member.name)
+			state.context_hex = command.hex
+			state.trigger_soldier = u.id
+			log_line("MOVIMENTO DI GRUPPO", ", ".join(names) + " entrano in " + command.hex + ".")
 			check_hex(command.hex)
 		"stance":
 			u.stance = command.stance

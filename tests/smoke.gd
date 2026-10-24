@@ -40,5 +40,16 @@ func _initialize() -> void:
  assert(third.hexes.size() == 475)
  assert(third.events.size() == 19)
  assert(third.hexes["G10"] == "s3:328")
+ var group_game = Game.new()
+ group_game.new_game(19)
+ group_game.state.squad[0].hex="A1"
+ group_game.state.squad[1].hex="A1"
+ var before = group_game.state.history.size()
+ var result = group_game.dispatch({"type":"move_group","soldier":"A","group":["A","B"],"hex":"B1"})
+ assert(result.ok)
+ assert(group_game.soldier("A").hex == "B1")
+ assert(group_game.soldier("B").hex == "B1")
+ assert(group_game.state.history.size() <= before + 1)
+ assert(not group_game.dispatch({"type":"move_group","soldier":"A","group":["A","B"],"hex":"T8"}).ok)
  print("SMOKE OK")
  quit()

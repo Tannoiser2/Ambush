@@ -7,6 +7,7 @@ const SAVE_PATH := "user://ambush_mission_01.json"
 var game := Game.new()
 var board: AmbushBoard
 var selected := "A"
+var move_as_group := false
 var roster: VBoxContainer
 var diary: RichTextLabel
 var objectives: RichTextLabel
@@ -90,9 +91,10 @@ func build_ui() -> void:
 	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new))
 	var body:=box(root,false);body.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var left_panel:=PanelContainer.new();left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
-	var left:=box(left_panel);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Seleziona un soldato · A–H",14))
-	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",5);left.add_child(roster)
-	details=rich();details.custom_minimum_size.y=115;left.add_child(details)
+	var left:=box(left_panel);left.add_theme_constant_override("separation",6);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Seleziona un soldato · A–H",14))
+	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",3);left.add_child(roster)
+	details=rich();details.custom_minimum_size.y=88;details.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;left.add_child(details)
+	left.add_child(button("Gruppo: attiva/disattiva",func(): move_as_group = not move_as_group; refresh()))
 	left.add_child(label("POSTURA",13))
 	var stance_row:=box(left,false);stance_row.add_theme_constant_override("separation",4)
 	for pair in [["In piedi","standing"],["Basso","crouching"],["Prono","prone"]]:
@@ -104,7 +106,7 @@ func build_ui() -> void:
 	var stretch:=Control.new();stretch.size_flags_horizontal=Control.SIZE_EXPAND_FILL;mapbar.add_child(stretch)
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
-	board.hex_clicked.connect(func(id): send_command({"type":"move","soldier":selected,"hex":id}))
+	board.hex_clicked.connect(func(id): move_to_hex(id))
 	board.hover_changed.connect(func(id): hover_label.text="ESAGONO "+id if id!="" else "Rotella: zoom · tasto destro: sposta la carta")
 	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14);center.add_child(hover_label)
 	var right_panel:=PanelContainer.new();right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
@@ -113,7 +115,7 @@ func build_ui() -> void:
 	diary=rich();diary.custom_minimum_size.x=310;right.add_child(diary)
 	var footer:=box(root,false)
 	status_label=label("",15);status_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;footer.add_child(status_label)
-	root.add_child(label("VERSIONE DI SVILUPPO 0.1 · Operazioni e Condizione 1. Il combattimento è ancora in costruzione.",13))
+	root.add_child(label("VERSIONE DI SVILUPPO 0.2 · Operazioni e Condizioni 1–3. Il combattimento è ancora in costruzione.",13))
 
 func refresh() -> void:
 	if not is_instance_valid(roster) or game.state.is_empty():return
@@ -124,7 +126,7 @@ func refresh() -> void:
 		var location: String=u.hex if u.hex!="" else "RISERVA"
 		if u.status=="exited":location="RITIRATO"
 		var b:=button("%s   %s   ·   %s" % [id,u.name,location],func(): selected=id;refresh())
-		b.toggle_mode=true;b.button_pressed=id==selected;b.alignment=HORIZONTAL_ALIGNMENT_LEFT;b.custom_minimum_size.y=39
+		b.toggle_mode=true;b.button_pressed=id==selected;b.alignment=HORIZONTAL_ALIGNMENT_LEFT;b.custom_minimum_size.y=31
 		b.add_theme_font_size_override("font_size",16);roster.add_child(b)
 	var u:=game.soldier(selected)
 	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra]
@@ -141,11 +143,21 @@ func refresh() -> void:
 		objective_lines.append(("[color=#9bc897]✓[/color] " if item.met else "[color=#d4b474]○[/color] " if item.known else "[color=#b7a795]?[/color] ")+item.title)
 	objectives.text="\n".join(objective_lines)
 	diary.text="\n".join(lines)
-	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
+	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s%s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."," Gruppo attivo." if move_as_group else ""])
 	board.selected=selected;board.queue_redraw()
 
 func escape_bbcode(value: String) -> String:
 	return value.replace("[","[lb]")
+
+func move_to_hex(hex_id: String) -> void:
+	if move_as_group:
+		var leader := game.soldier(selected)
+		var ids: Array[String] = []
+		for unit in game.state.squad:
+			if unit.status == "active" and unit.hex == leader.hex and unit.stance == leader.stance: ids.append(unit.id)
+		send_command({"type":"move_group","soldier":selected,"group":ids,"hex":hex_id})
+	else:
+		send_command({"type":"move","soldier":selected,"hex":hex_id})
 
 func send_command(command: Dictionary) -> void:
 	notice=""
@@ -177,6 +189,6 @@ func confirm_new() -> void:
 func show_briefing() -> void:
 	var popup:=AcceptDialog.new();popup.title="Ordine di operazione · Missione 1";popup.ok_button_text="Torna alla carta";add_child(popup)
 	var text:=rich();text.custom_minimum_size=Vector2(600,440);text.scroll_following=false;popup.add_child(text)
-	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento in Operazioni, posture, tabella della Condizione 1, controlli e catene di paragrafi supportati. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
+	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, carte delle Condizioni 1–3, controlli e catene di paragrafi supportati. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 
