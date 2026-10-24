@@ -147,7 +147,7 @@ func new_game(seed_value: int = 0) -> void:
 	else: rng.seed = seed_value
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
-		"round_setup": {},
+		"round_setup": {}, "round_awareness": {}, "round_track": {},
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "terrain_overrides": {}, "vp": 0,
 		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
 		"pending_ops": [], "pending_hex_check": "", "pilot_found": false,
@@ -179,6 +179,16 @@ func best_observer(hex_id: String) -> Dictionary:
 	return best
 
 func validate_command(command: Dictionary) -> String:
+	if command.get("type", "") == "begin_round":
+		if state.phase != "rounds" or not state.get("round_track",{}).is_empty(): return "Nessun Round da preparare."
+		if state.blocked != "" and not str(state.blocked).begins_with("Contatto nemico registrato"): return "La risoluzione è sospesa per un'altra regola."
+		return ""
+	if command.get("type", "") == "round_pass":
+		if state.phase != "rounds" or state.get("round_track",{}).is_empty(): return "Nessun turno americano in corso."
+		if state.blocked != "": return "La risoluzione è sospesa."
+		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+		if bucket.is_empty() or bucket.side != "us" or str(command.get("soldier", "")) not in bucket.ids: return "Questo soldato non ha un turno disponibile."
+		return ""
 	if command.get("type", "") == "drop_port":
 		if state.pending_drop == "": return "Nessun equipaggiamento da lasciare."
 		if str(command.get("soldier", "")) != state.pending_drop: return "La scelta riguarda un altro soldato."
@@ -232,6 +242,17 @@ func validate_command(command: Dictionary) -> String:
 func dispatch(command: Dictionary) -> Dictionary:
 	var error := validate_command(command)
 	if error != "": return {"ok": false, "error": error}
+	if command.type == "begin_round":
+		return begin_round()
+	if command.type == "round_pass":
+		var id: String = str(command.soldier)
+		RoundRules.spend_turn(state.round_track,"us",id)
+		log_line("TURNO PASSATO", "Il soldato %s non esegue azioni." % id, "check")
+		check_round_bucket()
+		state.revision += 1
+		state.rng = str(rng.state)
+		changed.emit()
+		return {"ok": true}
 	var u := soldier(command.soldier)
 	_steps = 0
 	_pc_success_soldier = ""
@@ -317,6 +338,47 @@ func dispatch(command: Dictionary) -> Dictionary:
 	state.rng = str(rng.state)
 	changed.emit()
 	return {"ok": true}
+
+func begin_round() -> Dictionary:
+	var number: int = int(state.round_setup.get("number",1))
+	var visibility: Dictionary = first_round_visibility() if number == 1 else {}
+	var visible_ids: Array = []
+	if number == 1:
+		for id in visibility:
+			if visibility[id] == "unknown": return {"ok":false,"error":"La LOS del soldato %s è indeterminata: il Round non può decidere la consapevolezza automaticamente." % id}
+			if visibility[id] == "clear": visible_ids.append(id)
+	var previous: Dictionary = state.get("round_awareness",{})
+	var rolls: Dictionary = {}
+	for unit in state.squad:
+		if unit.status != "active": continue
+		if number >= 3 or bool(previous.get(unit.id,false)) or (number == 1 and unit.id not in visible_ids): continue
+		if unit.id == str(state.round_setup.get("auto_aware_soldier","")): continue
+		rolls[unit.id] = d10()
+		log_line("CONSAPEVOLEZZA · " + str(unit.id), "D10: %d · PC %d." % [rolls[unit.id],unit.pc], "dice")
+	var awareness: Dictionary = prepare_awareness_phase(previous,visible_ids,rolls)
+	if awareness.is_empty(): return {"ok":false,"error":"Consapevolezza non determinabile."}
+	state.round_awareness = awareness
+	var us_die := d10()
+	var german_die := d10()
+	var track: Dictionary = prepare_action_sequence(awareness,us_die,german_die)
+	if track.is_empty(): return {"ok":false,"error":"Pista dei Round non determinabile."}
+	state.round_track = track
+	state.blocked = ""
+	log_line("ROUND %d · INIZIATIVA" % number,"US %d · tedeschi %d · vantaggio %s." % [us_die,german_die,"USA" if track.advantage == "us" else "tedesco"],"dice")
+	check_round_bucket()
+	state.revision += 1
+	state.rng = str(rng.state)
+	changed.emit()
+	return {"ok":true}
+
+func check_round_bucket() -> void:
+	var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+	if bucket.is_empty():
+		stop_resolution("Il Round è concluso; fase Evento del Round successivo ancora da collegare.")
+	elif bucket.side == "de":
+		stop_resolution("Turno tedesco %s: esecuzione automatica del paragrafo d'azione ancora da implementare." % ", ".join(bucket.ids))
+	else:
+		log_line("TURNO AMERICANO", "Casella %d turno/i: %s. Seleziona un soldato e scegli un'azione." % [bucket.turns,", ".join(bucket.ids)],"check")
 
 func finish_if_withdrawn() -> void:
 	for unit in state.squad:
@@ -659,6 +721,8 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("pending_hex_check"): candidate.pending_hex_check = ""
 	if not candidate.has("pilot_found"): candidate.pilot_found = false
 	if not candidate.has("round_setup"): candidate.round_setup = {}
+	if not candidate.has("round_awareness"): candidate.round_awareness = {}
+	if not candidate.has("round_track"): candidate.round_track = {}
 	if not candidate.has("terrain_overrides"): candidate.terrain_overrides = {}
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
@@ -667,7 +731,7 @@ func restore(candidate: Variant) -> bool:
 			unit.port_boxes = [unit.weapon, item2]
 	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields", "pending_ops"]:
 		if not candidate.get(key) is Array: return false
-	for key in ["items", "landmarks", "evasive_removals", "terrain_overrides"]:
+	for key in ["items", "landmarks", "evasive_removals", "terrain_overrides", "round_awareness", "round_track"]:
 		if not candidate.get(key) is Dictionary: return false
 	for hex_id in candidate.terrain_overrides:
 		if not Hex.valid(str(hex_id)) or candidate.terrain_overrides[hex_id] not in ["crater","rubble"]: return false

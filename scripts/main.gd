@@ -2,6 +2,7 @@ extends Control
 const Game = preload("res://scripts/game.gd")
 const Board = preload("res://scripts/board.gd")
 const Hex = preload("res://scripts/hex_grid.gd")
+const RoundRules = preload("res://scripts/round_rules.gd")
 const BODY_FONT = preload("res://assets/fonts/Barlow-Regular.ttf")
 const TITLE_FONT = preload("res://assets/fonts/SpecialElite-Regular.ttf")
 const SAVE_PATH := "user://ambush_mission_01.json"
@@ -14,6 +15,8 @@ var roster: VBoxContainer
 var drag_options: VBoxContainer
 var exit_drag_button: Button
 var pilot_button: Button
+var begin_round_button: Button
+var pass_button: Button
 var diary: RichTextLabel
 var objectives: RichTextLabel
 var details: RichTextLabel
@@ -116,6 +119,10 @@ func build_ui() -> void:
 	exit_drag_button.visible=false;left.add_child(exit_drag_button)
 	pilot_button=button("Soccorri il pilota",func(): send_command({"type":"rescue_pilot","soldier":selected}))
 	pilot_button.visible=false;left.add_child(pilot_button)
+	begin_round_button=button("Prepara il Round",func(): send_command({"type":"begin_round"}))
+	begin_round_button.visible=false;left.add_child(begin_round_button)
+	pass_button=button("Passa il turno",func(): send_command({"type":"round_pass","soldier":selected}))
+	pass_button.visible=false;left.add_child(pass_button)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
@@ -152,7 +159,9 @@ func refresh() -> void:
 		b.add_theme_font_size_override("font_size",16);roster.add_child(b)
 	var u:=game.soldier(selected)
 	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra,"\nFERITO · movimento 2" if u.wounded else ""]
-	for i in stances.size():stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
+	for i in stances.size():
+		stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
+		stances[i].disabled=game.state.phase!="operations"
 	var pending: String = game.state.pending_drop
 	var pending_unit: Dictionary = game.soldier(pending) if pending != "" else {}
 	for i in drop_buttons.size():
@@ -170,6 +179,11 @@ func refresh() -> void:
 	if drag_target != "" and (not eligible or game.soldier(drag_target).hex != u.hex):drag_target=""
 	exit_drag_button.visible=drag_target != "" and Hex.is_entry(u.hex)
 	pilot_button.visible=game.state.pilot_found and game.state.landmarks.has("R15") and game.soldier("J").is_empty() and u.status=="active" and not u.wounded and u.hex=="R15" and game.state.blocked==""
+	begin_round_button.visible=game.state.phase=="rounds" and game.state.get("round_track",{}).is_empty() and str(game.state.blocked).begins_with("Contatto nemico registrato")
+	pass_button.visible=false
+	if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty():
+		var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)
+		pass_button.visible=not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
 	progress_label.text="%d / 13 PV" % game.net_vp()
@@ -218,6 +232,10 @@ func show_hover(id: String) -> void:
 				hover_label.tooltip_text = str(shot.reason)
 
 func move_to_hex(hex_id: String) -> void:
+	if game.state.phase != "operations":
+		notice="Il movimento nei Round richiede ancora i costi di terreno verificati."
+		refresh()
+		return
 	if drag_target != "":
 		send_command({"type":"drag","soldier":selected,"casualty":drag_target,"hex":hex_id})
 	elif move_as_group:

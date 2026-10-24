@@ -38,7 +38,7 @@ func _draw() -> void:
 	draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color(0.94,0.93,0.85))
 	if game == null or game.state.is_empty(): return
 	var chosen := game.soldier(selected)
-	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
+	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "" and game.state.phase == "operations":
 		for col in 25:
 			for row in range(1,20):
 				var id := String.chr(65+col)+str(row)

@@ -12,6 +12,8 @@ Le attivazioni che si verificano mentre sono già in corso i Round registrano il
 
 Quando il cursore è sopra un tedesco attivo durante i Round, la scheda mostra un'anteprima del tiro mirato del soldato selezionato: LOS preliminare, motivo di un eventuale blocco e probabilità stimata dalla tabella dell'arma, distanza, abilità, terreno, postura e ferita. È un ausilio di pianificazione: non tira dadi, non consuma munizioni e non risolve il combattimento. Edifici e terreni senza modificatore verificato restano indeterminati.
 
+Il pulsante «Prepara il Round» ora esegue i controlli di consapevolezza del primo Round quando la LOS è determinabile, tira i dadi d'iniziativa, applica vantaggio, panico, comando e turni speciali, e salva la pista dei turni. Il giocatore può passare un turno americano disponibile; il motore si ferma al primo turno tedesco, la cui azione non è ancora automatizzata. Se una LOS necessaria è indeterminata, la preparazione si ferma prima dei tiri. Movimento e fuoco dei Round, eventi dal secondo Round in poi e conclusione dei Round restano da implementare.
+
 ## Verifica
 
 `godot --headless --path . --script tests/smoke.gd`
