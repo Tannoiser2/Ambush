@@ -5,7 +5,7 @@ Red hex-coded Round references are deliberately kept separate for later rules wo
 import json,pathlib
 root=pathlib.Path(__file__).resolve().parents[1]
 source=json.loads((root/'data/source/condition_candidates.json').read_text())['4']
-card={'status':'black_references_transcribed_visual_review','source':'m1_c4.png + sleeve.png','hexes':source['hexes'].copy(),'events':source['events'].copy(),'round_overrides_status':'not_yet_transcribed'}
+card={'status':'black_references_transcribed_visual_review','source':'m1_c4.png + sleeve.png','hexes':source['hexes'].copy(),'events':source['events'].copy()}
 fix='''
 M1=s6:290 R2=s8:604 S3=s8:604 T3=s8:604
 N4=s6:318 O4=EVENT Q4=s2:335 U4=NONE V4=EVENT RE4=s0:613
@@ -31,6 +31,21 @@ for item in fix.split():
 remaining=[(kind,k,v) for kind in ('hexes','events') for k,v in card[kind].items() if v.startswith('?') or v=='']
 if remaining:raise ValueError(f'Unreviewed cells: {remaining}')
 assert len(card['hexes'])==475 and len(card['events'])==19
+# Red entries are German Movement References (rules 2/2 and 6/8), not
+# Operations paragraph checks. The base card leaves all other slots blank.
+red='''
+S3=T3 T3=U4 O6=O7 X6=457 N9=O10 P9=P9 Q9=Q10 U9=616
+M15=N15 N15=O16 O15=O16 N18=N19 Q18=Q19
+N4=N5 O4=N4 U4=V4 W4=W5
+M7=N7 N7=O8 O7=O8 X7=Y7 Y7=EXIT
+M10=N9 O10=P10 P10=352 R10=R10 S10=S10 T10=T9
+K13=L13 L13=614 N16=N17 O16=350 P16=O17
+N19=EXIT Q19=EXIT R2=S3 M5=N5 N5=O6 W5=X5 X5=X6
+O8=O9 M11=M15 N11=N14 O11=O15 N14=N18 Q14=Q18
+'''
+card['round_overrides']={a:b for a,b in (item.split('=',1) for item in red.split())}
+assert len(card['round_overrides'])==46
+card['round_overrides_status']='transcribed_visual_review_not_yet_used'
 path=root/'data/mission_01.json';mission=json.loads(path.read_text());mission['conditions']['4']=card
 path.write_text(json.dumps(mission,ensure_ascii=False,indent=2)+'\n')
 print('Condition 4 reviewed:',len(card['hexes']),'black hex references and',len(card['events']),'events')

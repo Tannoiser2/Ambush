@@ -45,7 +45,47 @@ func _initialize() -> void:
  assert(fourth.events.size() == 19)
  assert(fourth.hexes["T8"] == "027")
  assert(fourth.events["7"] == "s5:611")
- assert(fourth.round_overrides_status == "not_yet_transcribed")
+ assert(fourth.round_overrides.size() == 46)
+ assert(fourth.round_overrides["Y7"] == "EXIT")
+ assert(fourth.round_overrides["X6"] == "457")
+ assert(fourth.round_overrides_status == "transcribed_visual_review_not_yet_used")
+ var evasive = Game.new()
+ evasive.new_game(44)
+ evasive.state.context_hex = "T8"
+ evasive.resolve("027")
+ assert(evasive.state.ban_evasive_return)
+ assert(evasive.state.blocked == "")
+ evasive.resolve("346")
+ assert(evasive.state.blocked == "")
+ evasive.state.evasive_removals["34"] = 1
+ evasive.resolve("346")
+ assert(evasive.state.last_paragraph == "611")
+ assert(evasive.state.blocked != "")
+ var wreck = Game.new()
+ wreck.new_game(50)
+ wreck.state.squad[0].hex = "R15"
+ wreck.state.context_hex = "R15"
+ wreck.resolve("613")
+ assert(wreck.soldier("A").status == "active")
+ assert("s0" not in wreck.state.sightings)
+ wreck.resolve("453")
+ assert(wreck.soldier("A").status == "killed")
+ assert(wreck.state.landmarks.has("R15"))
+ wreck.resolve("613")
+ assert("s0" in wreck.state.sightings)
+ assert(not wreck.state.landmarks.has("R15"))
+ var mine = Game.new()
+ mine.new_game(60)
+ mine.state.condition = 4
+ mine.state.squad[0].hex = "U6"
+ mine.forced_rolls = [0]
+ assert(mine.dispatch({"type":"move","soldier":"A","hex":"V6"}).ok)
+ assert("V6" in mine.state.minefields)
+ assert(mine.state.blocked == "")
+ mine.state.squad[0].hex = "U6"
+ mine.forced_rolls = [9]
+ assert(mine.dispatch({"type":"move","soldier":"A","hex":"V6"}).ok)
+ assert(mine.state.blocked != "")
  var group_game = Game.new()
  group_game.new_game(19)
  group_game.state.squad[0].hex="A1"

@@ -2133,8 +2133,34 @@
     "it": "Campo minato! Risolvi la procedura del campo minato. Poi, se s2 non è ancora avvenuto, effettua un controllo di attivazione (+1): se riesce, leggi 291; altrimenti leggi 313.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Procedura del campo minato ancora da implementare."
+        "op": "minefield"
+      },
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s2"
+        },
+        "yes": [],
+        "no": [
+          {
+            "op": "check",
+            "kind": "activation",
+            "modifier": 1,
+            "success": [
+              {
+                "op": "goto",
+                "id": "291"
+              }
+            ],
+            "failure": [
+              {
+                "op": "goto",
+                "id": "313"
+              }
+            ]
+          }
+        ]
       }
     ],
     "source": {
@@ -2601,8 +2627,7 @@
     "it": "Campo minato! Esegui la procedura del campo minato.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Procedura del campo minato ancora da implementare."
+        "op": "minefield"
       }
     ],
     "source": {
@@ -2866,8 +2891,29 @@
     "it": "Campo minato! Esegui la procedura del campo minato. Poi, se s6 non è avvenuto, controllo di attivazione (+1): se riesce, leggi 297.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Procedura del campo minato ancora da implementare."
+        "op": "minefield"
+      },
+      {
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s6"
+        },
+        "yes": [],
+        "no": [
+          {
+            "op": "check",
+            "kind": "activation",
+            "modifier": 1,
+            "success": [
+              {
+                "op": "goto",
+                "id": "297"
+              }
+            ],
+            "failure": []
+          }
+        ]
       }
     ],
     "source": {
@@ -3117,8 +3163,26 @@
     "it": "[s0] Richiede s9. Le fiamme divampano in R15: il Typhoon abbattuto brucia rapidamente. Ogni soldato in R15 viene ucciso; rimuovi il relitto.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Verificare il requisito di avvistamento e lo stato del relitto prima della risoluzione."
+        "op": "if",
+        "condition": {
+          "kind": "sighting",
+          "id": "s9"
+        },
+        "yes": [
+          {
+            "op": "sighting",
+            "id": "s0"
+          },
+          {
+            "op": "kill_hex",
+            "hex": "R15"
+          },
+          {
+            "op": "remove_landmark",
+            "hex": "R15"
+          }
+        ],
+        "no": []
       }
     ],
     "source": {
@@ -3132,8 +3196,7 @@
     "it": "Qualsiasi soldato tedesco rimosso dal gioco con un movimento evasivo non può rientrare in gioco per il resto della missione. Questa istruzione prevale su qualsiasi successivo riferimento contrario.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "La rimozione per movimento evasivo non è ancora registrata."
+        "op": "ban_evasive_return"
       }
     ],
     "source": {
@@ -3147,8 +3210,18 @@
     "it": "Se il tedesco 34 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 611.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Occorre lo storico del movimento evasivo del tedesco 34."
+        "op": "if",
+        "condition": {
+          "kind": "enemy_evaded",
+          "id": "34"
+        },
+        "yes": [
+          {
+            "op": "goto",
+            "id": "611"
+          }
+        ],
+        "no": []
       }
     ],
     "source": {
@@ -3177,8 +3250,18 @@
     "it": "Se il tedesco 53 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 452.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Occorre lo storico del movimento evasivo del tedesco 53."
+        "op": "if",
+        "condition": {
+          "kind": "enemy_evaded",
+          "id": "53"
+        },
+        "yes": [
+          {
+            "op": "goto",
+            "id": "452"
+          }
+        ],
+        "no": []
       }
     ],
     "source": {
@@ -3207,8 +3290,18 @@
     "it": "Se il tedesco 25 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 347.",
     "ops": [
       {
-        "op": "unsupported",
-        "reason": "Occorre lo storico del movimento evasivo del tedesco 25."
+        "op": "if",
+        "condition": {
+          "kind": "enemy_evaded",
+          "id": "25"
+        },
+        "yes": [
+          {
+            "op": "goto",
+            "id": "347"
+          }
+        ],
+        "no": []
       }
     ],
     "source": {
@@ -3239,6 +3332,81 @@
       {
         "op": "unsupported",
         "reason": "Occorrono la linea di vista verso Q11 e X7 e la Reazione speciale A."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "350": {
+    "id": "350",
+    "it": "Se un soldato americano attivo è visibile a est della colonna O, il tedesco entra in N16. Altrimenti entra in P16.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Movimento tedesco: occorre la linea di vista a est della colonna O."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "352": {
+    "id": "352",
+    "it": "Il tedesco entra in Q11 e applica la Reazione speciale A.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Movimento tedesco e Reazione speciale A non ancora implementati."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "457": {
+    "id": "457",
+    "it": "Il tedesco entra in X7 e applica la Reazione speciale A.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Movimento tedesco e Reazione speciale A non ancora implementati."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "614": {
+    "id": "614",
+    "it": "Se un soldato americano attivo è visibile dalla porta, il tedesco entra in M14. Altrimenti entra in L14.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Movimento tedesco: occorre la linea di vista dalla porta."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "616": {
+    "id": "616",
+    "it": "Il tedesco entra in T8 e applica la Reazione speciale B.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Movimento tedesco e Reazione speciale B non ancora implementati."
       }
     ],
     "source": {

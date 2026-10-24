@@ -11,6 +11,8 @@ var state: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
 var _steps := 0
+var _minefield_checked_entry := false
+var _entry_soldiers: Array = []
 
 func _init() -> void:
 	mission = JSON.parse_string(FileAccess.get_file_as_string("res://data/mission_01.json"))
@@ -22,6 +24,7 @@ func new_game(seed_value: int = 0) -> void:
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "vp": 0,
+		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [],
 		"log": [], "blocked": "", "context_hex": "", "last_paragraph": "", "history": [],
 		"trigger_soldier": "", "rng": str(rng.state)}
 	log_line("ORDINE DI OPERAZIONE", "Entrate da A1–J1. Seleziona un soldato, poi un esagono del margine nord.", "briefing")
@@ -87,12 +90,14 @@ func dispatch(command: Dictionary) -> Dictionary:
 	match command.type:
 		"move":
 			u.hex = command.hex
+			_entry_soldiers = [u.id]
 			state.context_hex = command.hex
 			state.trigger_soldier = u.id
 			log_line("MOVIMENTO · " + u.id, "%s entra in %s." % [u.name, u.hex])
 			check_hex(command.hex)
 		"move_group":
 			var names: Array[String] = []
+			_entry_soldiers = command.group.duplicate()
 			for id in command.group:
 				var member := soldier(str(id))
 				member.hex = command.hex
@@ -120,6 +125,11 @@ func dispatch(command: Dictionary) -> Dictionary:
 	return {"ok": true}
 
 func check_hex(hex_id: String) -> void:
+	_minefield_checked_entry = false
+	if hex_id in state.minefields:
+		check_minefield(hex_id)
+		_minefield_checked_entry = true
+		if state.blocked != "": return
 	if hex_id in state.event_markers:
 		log_line("CONTROLLO AUTOMATICO", hex_id + ": segnalino Evento presente; nessun nuovo controllo in questa Condizione.", "check")
 		return
@@ -187,10 +197,26 @@ func run_ops(ops: Array) -> void:
 					if roll >= branch.min and roll <= branch.max:
 						run_ops(branch.ops); break
 			"if":
-				if op.condition.kind != "sighting": stop_resolution("Condizione non implementata."); return
-				var success: bool = op.condition.id in state.sightings
-				log_line("CONTROLLO AUTOMATICO", "%s %s avvenuto." % [op.condition.id, "è già" if success else "non è ancora"], "check")
+				var success := false
+				match op.condition.kind:
+					"sighting":
+						success = op.condition.id in state.sightings
+						log_line("CONTROLLO AUTOMATICO", "%s %s avvenuto." % [op.condition.id, "è già" if success else "non è ancora"], "check")
+					"enemy_evaded":
+						success = int(state.evasive_removals.get(op.condition.id, 0)) > 0
+						log_line("CONTROLLO AUTOMATICO", "Tedesco %s %s rimosso per movimento evasivo." % [op.condition.id, "già" if success else "mai"], "check")
+					_:
+						stop_resolution("Condizione non implementata."); return
 				run_ops(op.yes if success else op.no)
+			"ban_evasive_return":
+				state.ban_evasive_return = true
+				log_line("REGOLA ATTIVA", "I tedeschi già rimossi con movimento evasivo non possono rientrare.", "check")
+			"minefield":
+				if state.context_hex not in state.minefields:
+					state.minefields.append(state.context_hex)
+					log_line("CAMPO MINATO", "Segnalino permanente in " + state.context_hex + ".", "check")
+				if not _minefield_checked_entry: check_minefield(state.context_hex)
+				_minefield_checked_entry = true
 			"sighting": register_sighting(op.id)
 			"item":
 				if not state.items.has(state.context_hex): state.items[state.context_hex] = []
@@ -212,6 +238,8 @@ func run_ops(ops: Array) -> void:
 			"crash":
 				state.landmarks[op.hex] = {"name":"Typhoon abbattuto","entry_paragraph":op.entry_paragraph}
 				kill_hex(op.hex)
+			"kill_hex": kill_hex(op.hex)
+			"remove_landmark": state.landmarks.erase(op.hex)
 			"artillery":
 				var a := d10(); var b := d10()
 				var col := mini(a,b)*10+maxi(a,b)
@@ -232,6 +260,17 @@ func kill_hex(hex_id: String) -> void:
 		if u.hex == hex_id and u.status in ["active", "incapacitated"]:
 			u.status = "killed"
 			log_line("CADUTO", u.name + " è stato ucciso in " + hex_id + ".")
+
+func check_minefield(hex_id: String) -> void:
+	for id in _entry_soldiers:
+		var u := soldier(str(id))
+		if u.is_empty() or u.hex != hex_id or u.status != "active": continue
+		var roll := d10()
+		var success := check_success(roll, int(u.pc))
+		log_line("MINA · " + u.name, "D10: %d · percezione %d → %s." % [roll, u.pc, "EVITATA" if success else "ESPLOSA"], "dice")
+		if not success:
+			stop_resolution("Mina esplosa in %s contro %s: danni da granata al chiuso ancora da implementare." % [hex_id, u.name])
+			return
 
 func register_sighting(id: String) -> void:
 	if id not in state.sightings:
@@ -265,10 +304,16 @@ func snapshot() -> Dictionary:
 func restore(candidate: Variant) -> bool:
 	if not candidate is Dictionary: return false
 	if candidate.get("version") != VERSION or candidate.get("mission") != "base_01": return false
-	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history"]:
+	# Saves created before the evasive-movement state was added are still valid.
+	candidate = candidate.duplicate(true)
+	if not candidate.has("evasive_removals"): candidate.evasive_removals = {}
+	if not candidate.has("ban_evasive_return"): candidate.ban_evasive_return = false
+	if not candidate.has("minefields"): candidate.minefields = []
+	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields"]:
 		if not candidate.get(key) is Array: return false
-	for key in ["items", "landmarks"]:
+	for key in ["items", "landmarks", "evasive_removals"]:
 		if not candidate.get(key) is Dictionary: return false
+	if not candidate.get("ban_evasive_return") is bool: return false
 	for key in ["rng", "blocked", "context_hex", "last_paragraph", "trigger_soldier", "phase"]:
 		if not candidate.get(key) is String: return false
 	if not candidate.rng.is_valid_int(): return false
