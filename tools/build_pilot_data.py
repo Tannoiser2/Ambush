@@ -149,4 +149,7 @@ add('608','Se s2 e s6 sono avvenuti, nessun evento. Se solo s2 è avvenuto, legg
 add('609','Se s5 e s6 sono avvenuti, nessun evento. Se solo s5 è avvenuto, leggi 290. Se solo s6 è avvenuto, leggi 192. Altrimenti leggi 189.',[sight('s5',[sight('s6',[],[go('290')])],[sight('s6',[go('192')],[go('189')])])],12)
 add('613','[s0] Richiede s9. Le fiamme divampano in R15: il Typhoon abbattuto brucia rapidamente. Ogni soldato in R15 viene ucciso; rimuovi il relitto.',[block('Verificare il requisito di avvistamento e lo stato del relitto prima della risoluzione.')],12)
 dump('paragraphs_it.json',P)
+import runpy
+runpy.run_path(str(ROOT/'tools/build_condition2.py'))
+runpy.run_path(str(ROOT/'tools/build_condition3.py'))
 print(len(P),'reviewed Italian paragraphs;',len(hexes),'hex lookups;',len(events),'event lookups')
