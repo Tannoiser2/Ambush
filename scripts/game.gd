@@ -6,6 +6,7 @@ signal changed
 const VERSION := 1
 const Hex = preload("res://scripts/hex_grid.gd")
 const Damage = preload("res://scripts/damage.gd")
+const RoundRules = preload("res://scripts/round_rules.gd")
 var mission: Dictionary
 var paragraphs: Dictionary
 var german_cards: Dictionary
@@ -35,6 +36,15 @@ func german_action_reference(card_id: String, condition: int, roll: int, special
 
 func german_action_text(reference: int) -> String:
 	return str(german_actions.get(str(reference), ""))
+
+func us_in_command(id: String) -> bool:
+	var unit := soldier(id)
+	return not unit.is_empty() and RoundRules.in_command(unit, state.get("squad", []))
+
+func action_round_turns(id: String, roll: int) -> Dictionary:
+	var unit := soldier(id)
+	if unit.is_empty(): return {}
+	return RoundRules.turn_result(int(unit.initiative), roll, true, us_in_command(id), bool(unit.wounded))
 
 func new_game(seed_value: int = 0) -> void:
 	if seed_value == 0: rng.randomize()

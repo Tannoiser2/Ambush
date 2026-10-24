@@ -23,6 +23,8 @@ func _initialize() -> void:
  assert(activation.state.vp == 1)
  assert(g.dispatch({"type":"move","soldier":"A","hex":"A1"}).ok)
  assert(g.soldier("A").hex == "A1")
+ assert(not g.us_in_command("A"))
+ assert(g.action_round_turns("A",2).panic)
  assert(g.state.blocked == "")
  assert(not g.dispatch({"type":"move","soldier":"A","hex":"T8"}).ok)
  var snap = g.snapshot()
