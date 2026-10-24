@@ -1550,7 +1550,11 @@
           }
         ],
         "advantage": "de",
-        "condition": 3
+        "condition": 3,
+        "first_round_german_two_turns": [
+          "9",
+          "15"
+        ]
       }
     ],
     "source": {
@@ -1576,7 +1580,10 @@
           }
         ],
         "advantage": "de",
-        "condition": 3
+        "condition": 3,
+        "first_round_german_two_turns": [
+          "25"
+        ]
       }
     ],
     "source": {
@@ -1645,7 +1652,9 @@
           }
         ],
         "advantage": "us",
-        "condition": 3
+        "condition": 3,
+        "first_round_us_two_turns": true,
+        "trigger_aware_if_pc": true
       }
     ],
     "source": {
@@ -1761,7 +1770,9 @@
           }
         ],
         "advantage": "us",
-        "condition": 3
+        "condition": 3,
+        "first_round_us_two_turns": true,
+        "trigger_aware_if_pc": true
       }
     ],
     "source": {
@@ -1793,7 +1804,8 @@
           }
         ],
         "advantage": "us",
-        "condition": 3
+        "condition": 3,
+        "trigger_aware_if_pc": true
       }
     ],
     "source": {
@@ -1819,7 +1831,10 @@
           }
         ],
         "advantage": "de",
-        "condition": 2
+        "condition": 2,
+        "first_round_german_two_turns": [
+          "53"
+        ]
       }
     ],
     "source": {
@@ -1914,7 +1929,10 @@
           }
         ],
         "advantage": "de",
-        "condition": 2
+        "condition": 2,
+        "first_round_german_two_turns": [
+          "34"
+        ]
       }
     ],
     "source": {
@@ -1940,7 +1958,9 @@
           }
         ],
         "advantage": "us",
-        "condition": 2
+        "condition": 2,
+        "first_round_us_two_turns": true,
+        "trigger_aware_if_pc": true
       }
     ],
     "source": {
@@ -2217,7 +2237,7 @@
             "stance": "crouching"
           }
         ],
-        "advantage": "unknown",
+        "advantage": "roll",
         "condition": 2
       }
     ],
@@ -2593,7 +2613,10 @@
           }
         ],
         "advantage": "de",
-        "condition": 2
+        "condition": 2,
+        "first_round_german_two_turns": [
+          "34"
+        ]
       }
     ],
     "source": {
@@ -2645,7 +2668,8 @@
           }
         ],
         "advantage": "us",
-        "condition": 2
+        "condition": 2,
+        "trigger_aware_if_pc": true
       }
     ],
     "source": {
@@ -2970,7 +2994,7 @@
             "stance": "crouching"
           }
         ],
-        "advantage": "unknown",
+        "advantage": "roll",
         "condition": 3
       }
     ],

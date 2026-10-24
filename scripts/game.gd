@@ -17,6 +17,7 @@ var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
 var _steps := 0
 var _minefield_checked_entry := false
 var _entry_soldiers: Array = []
+var _pc_success_soldier := ""
 
 func _init() -> void:
 	mission = JSON.parse_string(FileAccess.get_file_as_string("res://data/mission_01.json"))
@@ -72,6 +73,7 @@ func new_game(seed_value: int = 0) -> void:
 	else: rng.seed = seed_value
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
+		"round_setup": {},
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "vp": 0,
 		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
 		"pending_ops": [], "pending_hex_check": "", "pilot_found": false,
@@ -158,6 +160,7 @@ func dispatch(command: Dictionary) -> Dictionary:
 	if error != "": return {"ok": false, "error": error}
 	var u := soldier(command.soldier)
 	_steps = 0
+	_pc_success_soldier = ""
 	match command.type:
 		"rescue_pilot":
 			state.context_hex = "R15"
@@ -313,6 +316,7 @@ func run_ops(ops: Array) -> void:
 				var target := base + int(op.modifier)
 				var roll := d10()
 				var success := check_success(roll, target)
+				if op.kind == "pc": _pc_success_soldier = str(u.id) if success else ""
 				var label := "PERCEZIONE · " + str(u.get("name", "")) if op.kind == "pc" else "ATTIVAZIONE"
 				log_line(label, "D10: %d · soglia %d (%d%+d) → %s. 0 riesce sempre; 9 fallisce sempre." % [roll, target, base, int(op.modifier), "RIUSCITO" if success else "FALLITO"], "dice")
 				run_ops(op.success if success else op.failure)
@@ -371,9 +375,17 @@ func run_ops(ops: Array) -> void:
 						log_line("ATTIVAZIONE TEDESCA", "GE %s (%s): +%d PV all'attivazione." % [enemy.id, card.letter, card.activation_vp], "check")
 				state.phase = "rounds"
 				state.advantage = op.advantage
+				state.round_setup = {"number":1, "advantage":op.advantage,
+					"german_two_turns":op.get("first_round_german_two_turns", []),
+					"us_two_turns":bool(op.get("first_round_us_two_turns", false)),
+					"auto_aware_soldier":_pc_success_soldier if bool(op.get("trigger_aware_if_pc", false)) else ""}
 				state.condition = maxi(state.condition, int(op.condition))
 				state.event_markers.clear()
-				stop_resolution("Contatto nemico registrato. Round di combattimento, carte nemiche e nuova Condizione sono ancora in implementazione.")
+				if not state.round_setup.german_two_turns.is_empty():
+					log_line("PRIMO ROUND", "GE %s: due turni assegnati dal paragrafo." % ", ".join(state.round_setup.german_two_turns), "check")
+				if state.round_setup.us_two_turns:
+					log_line("PRIMO ROUND", "Tutti gli americani consapevoli che non vanno nel panico ricevono due turni.", "check")
+				stop_resolution("Contatto nemico registrato. La sequenza di combattimento dei Round non è ancora eseguita.")
 			"crash":
 				state.landmarks[op.hex] = {"name":"Typhoon abbattuto","entry_paragraph":op.entry_paragraph}
 				kill_hex(op.hex)
@@ -544,6 +556,7 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("pending_ops"): candidate.pending_ops = []
 	if not candidate.has("pending_hex_check"): candidate.pending_hex_check = ""
 	if not candidate.has("pilot_found"): candidate.pilot_found = false
+	if not candidate.has("round_setup"): candidate.round_setup = {}
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
 		if unit is Dictionary and not unit.has("port_boxes"):
@@ -553,6 +566,7 @@ func restore(candidate: Variant) -> bool:
 		if not candidate.get(key) is Array: return false
 	for key in ["items", "landmarks", "evasive_removals"]:
 		if not candidate.get(key) is Dictionary: return false
+	if not candidate.round_setup is Dictionary: return false
 	if not candidate.get("ban_evasive_return") is bool: return false
 	if not candidate.get("pilot_found") is bool: return false
 	for key in ["rng", "blocked", "context_hex", "last_paragraph", "trigger_soldier", "phase", "pending_drop", "pending_hex_check"]:
