@@ -195,8 +195,8 @@ func show_hover(id: String) -> void:
 		return
 	hover_label.text = "ESAGONO " + id
 	hover_label.tooltip_text = "Classificazione del terreno ancora in revisione."
-	var terrain: Dictionary = game.map_terrain.terrain(id)
-	var terrain_names := {"clear":"aperto","woods":"bosco","brush":"macchia","cover":"copertura","road":"strada","stream":"corso d'acqua","stone_building":"edificio in pietra","wood_building":"edificio in legno"}
+	var terrain: Dictionary = game.map_terrain_at(id)
+	var terrain_names := {"clear":"aperto","woods":"bosco","brush":"macchia","cover":"copertura","road":"strada","stream":"corso d'acqua","stone_building":"edificio in pietra","wood_building":"edificio in legno","crater":"cratere","rubble":"macerie"}
 	if not terrain.is_empty():
 		hover_label.text += "  ·  terreno stimato: " + str(terrain_names.get(str(terrain.terrain),"da verificare"))
 		hover_label.text += "  ·  quota " + (str(terrain.elevation) if terrain.elevation != null else "?")

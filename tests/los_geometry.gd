@@ -13,6 +13,7 @@ func _initialize() -> void:
  assert(map.los("T13","T14").status == "blocked")
  assert(map.los("P6","Q6").status == "clear")
  assert(map.los("A1","C2").status == "clear")
+ assert(map.los("A1","C2",{"B1":"rubble"}).status == "blocked")
  assert(map.los("C1","E1").status == "unknown")
  assert(map.los("C3","E3").status == "blocked")
  assert(map.los("E3","C3").status == "blocked")

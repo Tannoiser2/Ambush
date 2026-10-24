@@ -38,7 +38,10 @@ func german_action_reference(card_id: String, condition: int, roll: int, special
 	return -1
 
 func map_los(a: String, b: String) -> Dictionary:
-	return map_terrain.los(a,b)
+	return map_terrain.los(a,b,state.get("terrain_overrides",{}))
+
+func map_terrain_at(hex_id: String) -> Dictionary:
+	return map_terrain.terrain(hex_id,state.get("terrain_overrides",{}))
 
 func german_action_text(reference: int) -> String:
 	return str(german_actions.get(str(reference), ""))
@@ -95,7 +98,7 @@ func new_game(seed_value: int = 0) -> void:
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
 		"round_setup": {},
-		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "vp": 0,
+		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "terrain_overrides": {}, "vp": 0,
 		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
 		"pending_ops": [], "pending_hex_check": "", "pilot_found": false,
 		"log": [], "blocked": "", "context_hex": "", "last_paragraph": "", "history": [],
@@ -429,8 +432,12 @@ func run_ops(ops: Array) -> void:
 				log_line("ARTIGLIERIA · RIGA", "Dadi %d, %d → %02d." % [a,b,row], "dice")
 				if row > 19 or row == 0:
 					log_line("ARTIGLIERIA", "Esplosione fuori mappa."); continue
-				# Terrain destruction requires a reviewed terrain model. Preserve the rolls.
-				stop_resolution("Artiglieria in %s%d: distruzione del terreno e danni da verificare." % [String.chr(64+col),row])
+				var impact_hex := String.chr(64+col) + str(row)
+				var original_terrain: String = str(map_terrain.terrain(impact_hex).get("terrain", ""))
+				var result_terrain := "rubble" if original_terrain.ends_with("_building") else "crater"
+				state.terrain_overrides[impact_hex] = result_terrain
+				log_line("IMPATTO D'ARTIGLIERIA", "%s: %s." % [impact_hex,"macerie" if result_terrain == "rubble" else "cratere"], "check")
+				kill_hex(impact_hex)
 			_: stop_resolution("Istruzione non riconosciuta: " + str(op.op))
 		if state.blocked != "" and state.pending_drop != "":
 			state.pending_ops.append_array(ops.slice(i+1))
@@ -441,6 +448,11 @@ func kill_hex(hex_id: String) -> void:
 		if u.hex == hex_id and u.status in ["active", "incapacitated"]:
 			u.status = "killed"
 			log_line("CADUTO", u.name + " è stato ucciso in " + hex_id + ".")
+	for enemy in state.enemies:
+		if str(enemy.get("hex", "")) != hex_id or enemy.get("status", "active") not in ["active","incapacitated","captured"]: continue
+		if enemy.get("status", "active") == "active": apply_enemy_damage(str(enemy.id),"K")
+		else: enemy.status = "killed"
+		log_line("TEDESCO CADUTO", "GE %s è stato ucciso in %s." % [enemy.id,hex_id])
 
 func check_minefield(hex_id: String) -> void:
 	for id in _entry_soldiers:
@@ -578,6 +590,7 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("pending_hex_check"): candidate.pending_hex_check = ""
 	if not candidate.has("pilot_found"): candidate.pilot_found = false
 	if not candidate.has("round_setup"): candidate.round_setup = {}
+	if not candidate.has("terrain_overrides"): candidate.terrain_overrides = {}
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
 		if unit is Dictionary and not unit.has("port_boxes"):
@@ -585,8 +598,10 @@ func restore(candidate: Variant) -> bool:
 			unit.port_boxes = [unit.weapon, item2]
 	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields", "pending_ops"]:
 		if not candidate.get(key) is Array: return false
-	for key in ["items", "landmarks", "evasive_removals"]:
+	for key in ["items", "landmarks", "evasive_removals", "terrain_overrides"]:
 		if not candidate.get(key) is Dictionary: return false
+	for hex_id in candidate.terrain_overrides:
+		if not Hex.valid(str(hex_id)) or candidate.terrain_overrides[hex_id] not in ["crater","rubble"]: return false
 	if not candidate.round_setup is Dictionary: return false
 	if not candidate.get("ban_evasive_return") is bool: return false
 	if not candidate.get("pilot_found") is bool: return false

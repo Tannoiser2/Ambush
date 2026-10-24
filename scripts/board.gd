@@ -54,6 +54,11 @@ func _draw() -> void:
 		var pos := map_position(id)+Vector2(13,-12)
 		draw_rect(Rect2(pos-Vector2(8,8),Vector2(17,17)),Color("a58a50"))
 		draw_string(font,pos+Vector2(-5,5),"M",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("1f241d"))
+	for id in game.state.get("terrain_overrides",{}):
+		var pos := map_position(id)+Vector2(-16,13)
+		var rubble: bool = game.state.terrain_overrides[id] == "rubble"
+		draw_rect(Rect2(pos-Vector2(11,9),Vector2(22,18)),Color("665348") if rubble else Color("715c3c"))
+		draw_string(font,pos+Vector2(-9,5),"MA" if rubble else "CR",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("f4deb7"))
 	for id in game.state.landmarks:
 		var pos := map_position(id)+Vector2(-15,-13)
 		draw_circle(pos,10,Color("5a493b"))
