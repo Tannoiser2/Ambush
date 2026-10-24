@@ -80,7 +80,7 @@ func _draw() -> void:
 	for enemy in game.state.enemies:
 		var pos := map_position(enemy.hex)
 		draw_circle(pos,12,Color("743c30"))
-		draw_string(font,pos+Vector2(-8,5),enemy.id,HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("fff0d7"))
+		draw_string(font,pos+Vector2(-5,5),str(enemy.get("letter", enemy.id)),HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("fff0d7"))
 	if hovered != "":
 		var points := polygon_at(hovered);points.append(points[0])
 		draw_polyline(points,Color("f5c76a"),2,true)

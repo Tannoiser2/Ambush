@@ -123,7 +123,7 @@ func build_ui() -> void:
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(func(id): move_to_hex(id))
-	board.hover_changed.connect(func(id): hover_label.text="ESAGONO "+id if id!="" else "Rotella: zoom · tasto destro: sposta la carta")
+	board.hover_changed.connect(show_hover)
 	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14);center.add_child(hover_label)
 	var right_panel:=PanelContainer.new();right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
 	var right:=box(right_panel);right.add_child(label("DIARIO OPERATIVO",22,true));right.add_child(label("PARAGRAFI · DADI · CONDIZIONI",12))
@@ -184,6 +184,15 @@ func refresh() -> void:
 
 func escape_bbcode(value: String) -> String:
 	return value.replace("[","[lb]")
+
+func show_hover(id: String) -> void:
+	if id == "":
+		hover_label.text = "Rotella: zoom · tasto destro: sposta la carta"
+		return
+	hover_label.text = "ESAGONO " + id
+	for enemy in game.state.enemies:
+		if enemy.hex == id:
+			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0)]
 
 func move_to_hex(hex_id: String) -> void:
 	if drag_target != "":
