@@ -1,0 +1,53 @@
+name: Publish Godot Web to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7 and export templates
+        run: |
+          curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot/releases/download/4.7-stable/Godot_v4.7-stable_linux.x86_64.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot-bin
+          chmod +x /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64
+          curl -fL --retry 3 -o /tmp/templates.tpz https://github.com/godotengine/godot/releases/download/4.7-stable/Godot_v4.7-stable_export_templates.tpz
+          unzip -q /tmp/templates.tpz -d /tmp/godot-templates
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.7.stable"
+          cp /tmp/godot-templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.stable/"
+      - name: Verify gameplay rules
+        run: |
+          for test in tests/*.gd; do
+            /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script "$test"
+          done
+          python3 tools/audit_content.py
+      - name: Export Web build
+        run: |
+          mkdir -p build/web
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --export-release Web build/web/index.html
+          touch build/web/.nojekyll
+          test -s build/web/index.html
+          test -s build/web/index.pck
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: build/web
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
