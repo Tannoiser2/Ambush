@@ -79,7 +79,7 @@ func _draw() -> void:
 			if u.stance == "prone": draw_line(pos+Vector2(-7,8),pos+Vector2(7,8),Color("f5dfa8"),2)
 	for enemy in game.state.enemies:
 		var pos := map_position(enemy.hex)
-		draw_circle(pos,12,Color("743c30"))
+		draw_circle(pos,12,Color("743c30") if enemy.get("status", "active") == "active" else Color("565a55"))
 		draw_string(font,pos+Vector2(-5,5),str(enemy.get("letter", enemy.id)),HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("fff0d7"))
 	if hovered != "":
 		var points := polygon_at(hovered);points.append(points[0])

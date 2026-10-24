@@ -342,6 +342,8 @@ func run_ops(ops: Array) -> void:
 						for key in ["letter", "role", "initiative", "pc", "ws", "mpa", "weapons", "activation_vp", "conditional_vp"]:
 							active_enemy[key] = card[key]
 						active_enemy.status = "active"
+						active_enemy.wounded = false
+						active_enemy.panicked = false
 						state.enemies.append(active_enemy)
 						state.vp += int(card.activation_vp)
 						log_line("ATTIVAZIONE TEDESCA", "GE %s (%s): +%d PV all'attivazione." % [enemy.id, card.letter, card.activation_vp], "check")
@@ -442,6 +444,35 @@ func register_sighting(id: String) -> void:
 		state.sightings.append(id)
 		log_line("AVVISTAMENTO " + id.to_upper(), "Registrato. Le condizioni future terranno conto di questo evento.", "check")
 
+func apply_enemy_damage(id: String, result: String) -> void:
+	for enemy in state.enemies:
+		if str(enemy.id) != id: continue
+		if enemy.get("status", "active") not in ["active"]: return
+		match result:
+			"P":
+				if state.phase == "rounds": enemy.panicked = true
+			"W":
+				if bool(enemy.get("wounded", false)):
+					enemy.status = "incapacitated"
+				else:
+					enemy.wounded = true
+					enemy.stance = "prone"
+					enemy.mpa = 2
+			"I": enemy.status = "incapacitated"; enemy.stance = "prone"
+			"K": enemy.status = "killed"
+			"C":
+				enemy.status = "captured"
+				var card: Dictionary = german_cards.get(id, {})
+				if card.get("conditional_vp_if", "") == "captured":
+					state.vp += int(card.conditional_vp)
+					log_line("CATTURA", "GE %s catturato: +%d PV." % [id, card.conditional_vp], "check")
+			_: stop_resolution("Danno tedesco sconosciuto: " + result); return
+		if id == "34" and enemy.status in ["killed", "captured", "incapacitated"] and int(state.condition) < 4:
+			state.condition = 4
+			state.event_markers.clear()
+			log_line("CONDIZIONE 4", "GE 34 non è più attivo: entra in vigore la Condizione 4.", "check")
+		return
+
 func stop_resolution(reason: String) -> void:
 	state.blocked = reason
 	log_line("LIMITE DELLA VERSIONE DI SVILUPPO", reason + " La partita è conservata; nessuna scelta viene risolta arbitrariamente.", "blocked")
@@ -454,7 +485,9 @@ func objective_status() -> Array[Dictionary]:
 		if u.status in ["active", "incapacitated"] and u.hex != "": present_hexes.append(u.hex)
 	var t8 := "T8" in active_hexes
 	var central := "K13" in present_hexes and "L13" in present_hexes
-	var no_enemies: bool = state.enemies.is_empty()
+	var no_enemies := true
+	for enemy in state.enemies:
+		if enemy.get("status", "active") == "active": no_enemies = false
 	return [
 		{"title":"Edificio T8", "met":t8, "known":true},
 		{"title":"Edifici K13 e L13", "met":central, "known":true},

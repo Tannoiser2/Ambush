@@ -192,7 +192,7 @@ func show_hover(id: String) -> void:
 	hover_label.text = "ESAGONO " + id
 	for enemy in game.state.enemies:
 		if enemy.hex == id:
-			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0)]
+			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d  ·  %s" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0), enemy.get("status", "active")]
 
 func move_to_hex(hex_id: String) -> void:
 	if drag_target != "":
