@@ -3126,5 +3126,125 @@
       "page": 12
     },
     "status": "reviewed_translation"
+  },
+  "027": {
+    "id": "027",
+    "it": "Qualsiasi soldato tedesco rimosso dal gioco con un movimento evasivo non può rientrare in gioco per il resto della missione. Questa istruzione prevale su qualsiasi successivo riferimento contrario.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "La rimozione per movimento evasivo non è ancora registrata."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 2
+    },
+    "status": "reviewed_translation"
+  },
+  "346": {
+    "id": "346",
+    "it": "Se il tedesco 34 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 611.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorre lo storico del movimento evasivo del tedesco 34."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "347": {
+    "id": "347",
+    "it": "Se un soldato americano vede T8, attiva il tedesco 25 in quell’esagono, accovacciato. Iniziano i Round. Applica la Reazione speciale B al tedesco 25.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorrono la linea di vista verso T8 e la Reazione speciale B."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "451": {
+    "id": "451",
+    "it": "Se il tedesco 53 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 452.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorre lo storico del movimento evasivo del tedesco 53."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "452": {
+    "id": "452",
+    "it": "Se un soldato americano attivo vede T8, attiva il tedesco 53 in quell’esagono, accovacciato. Applica la Reazione speciale B al tedesco 53.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorrono la linea di vista verso T8 e la Reazione speciale B."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 9
+    },
+    "status": "reviewed_translation"
+  },
+  "610": {
+    "id": "610",
+    "it": "Se il tedesco 25 è stato rimosso una volta dal gioco con un movimento evasivo, leggi 347.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorre lo storico del movimento evasivo del tedesco 25."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "611": {
+    "id": "611",
+    "it": "Se un soldato americano attivo vede T8, attiva il tedesco 34 in quell’esagono, accovacciato. Iniziano i Round. Applica la Reazione speciale B al tedesco 34. Passa alla Condizione 4.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorrono la linea di vista verso T8 e la Reazione speciale B."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
+  },
+  "612": {
+    "id": "612",
+    "it": "Se un soldato americano attivo vede Q11, attiva i tedeschi L e 81 in quell’esagono, accovacciati. Iniziano i Round. Applica la Reazione speciale A a entrambi. Se nessuno vede Q11 ma un soldato vede X7, attivali in X7.",
+    "ops": [
+      {
+        "op": "unsupported",
+        "reason": "Occorrono la linea di vista verso Q11 e X7 e la Reazione speciale A."
+      }
+    ],
+    "source": {
+      "book": "Ambush! Paragraph Book",
+      "page": 12
+    },
+    "status": "reviewed_translation"
   }
 }

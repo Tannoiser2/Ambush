@@ -40,6 +40,12 @@ func _initialize() -> void:
  assert(third.hexes.size() == 475)
  assert(third.events.size() == 19)
  assert(third.hexes["G10"] == "s3:328")
+ var fourth = g.mission.conditions["4"]
+ assert(fourth.hexes.size() == 475)
+ assert(fourth.events.size() == 19)
+ assert(fourth.hexes["T8"] == "027")
+ assert(fourth.events["7"] == "s5:611")
+ assert(fourth.round_overrides_status == "not_yet_transcribed")
  var group_game = Game.new()
  group_game.new_game(19)
  group_game.state.squad[0].hex="A1"

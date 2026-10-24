@@ -115,7 +115,7 @@ func build_ui() -> void:
 	diary=rich();diary.custom_minimum_size.x=310;right.add_child(diary)
 	var footer:=box(root,false)
 	status_label=label("",15);status_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;footer.add_child(status_label)
-	root.add_child(label("VERSIONE DI SVILUPPO 0.2 · Operazioni e Condizioni 1–3. Il combattimento è ancora in costruzione.",13))
+	root.add_child(label("VERSIONE DI SVILUPPO 0.3 · Operazioni e Condizioni 1–4. Il combattimento è ancora in costruzione.",13))
 
 func refresh() -> void:
 	if not is_instance_valid(roster) or game.state.is_empty():return
