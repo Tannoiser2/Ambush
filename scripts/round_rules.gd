@@ -12,7 +12,8 @@ static func in_command(unit: Dictionary, squad: Array) -> bool:
 	var rating := 0
 	for other in squad:
 		if other.get("status", "") != "active": continue
-		var same_hex: bool = unit.get("hex", "") != "" and other.get("hex", "") == unit.get("hex", "")
+		# Rule 6/10 treats all off-map US soldiers as occupying one hex for command.
+		var same_hex: bool = other.get("hex", "") == unit.get("hex", "")
 		var nearby: bool = unit.get("hex", "") != "" and other.get("hex", "") != "" and Hex.distance(str(unit.hex), str(other.hex)) <= 2
 		if same_hex or (nearby and (bool(unit.get("commander", false)) or bool(other.get("commander", false)))):
 			rating += int(other.get("initiative", 0))

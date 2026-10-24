@@ -26,6 +26,21 @@ func _initialize() -> void:
  officer.resolve("337")
  assert(officer.state.condition == 2)
  assert(officer.state.vp == 1)
+ assert(officer.german_turn_reference("34",0) == 965)
+ officer.state.enemies[0].special_reaction = "B"
+ assert(officer.german_turn_reference("34",0) == 831)
+ officer.soldier("A").hex = "M5"
+ assert(officer.german_action_column("34") == "S")
+ assert(officer.german_turn_reference("34",0) == 971)
+ officer.soldier("A").hex = ""
+ assert(officer.german_turn_references(0)[0].letter == "X")
+ var patrol = Game.new()
+ patrol.new_game(34)
+ patrol.resolve("187")
+ var patrol_actions = patrol.german_turn_references(2)
+ assert(patrol_actions.size() == 3)
+ assert([patrol_actions[0].letter,patrol_actions[1].letter,patrol_actions[2].letter] == ["N","S","X"])
+ assert(patrol_actions[0].reference == 829)
  officer.apply_enemy_damage("34","C")
  assert(officer.state.condition == 4)
  assert(officer.state.vp == 3)

@@ -37,6 +37,27 @@ func german_action_reference(card_id: String, condition: int, roll: int, special
 func german_action_text(reference: int) -> String:
 	return str(german_actions.get(str(reference), ""))
 
+func german_action_column(id: String) -> String:
+	for enemy in state.get("enemies", []):
+		if str(enemy.id) != id or enemy.get("status", "active") != "active": continue
+		for unit in state.squad:
+			if unit.status == "active" and unit.hex != "" and Hex.distance(str(enemy.hex), str(unit.hex)) <= 1:
+				return "S"
+		return str(enemy.get("special_reaction", "")) if enemy.get("special_reaction", "") != "" else str(state.condition)
+	return ""
+
+func german_turn_reference(id: String, action_number: int) -> int:
+	var column := german_action_column(id)
+	return german_action_reference(id, int(state.condition), action_number, column) if column != "" else -1
+
+func german_turn_references(action_number: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for enemy in state.get("enemies", []):
+		if enemy.get("status", "active") != "active": continue
+		result.append({"id":str(enemy.id), "letter":str(enemy.get("letter", "")), "column":german_action_column(str(enemy.id)), "reference":german_turn_reference(str(enemy.id),action_number)})
+	result.sort_custom(func(a: Dictionary,b: Dictionary): return a.letter < b.letter)
+	return result
+
 func us_in_command(id: String) -> bool:
 	var unit := soldier(id)
 	return not unit.is_empty() and RoundRules.in_command(unit, state.get("squad", []))
@@ -344,6 +365,7 @@ func run_ops(ops: Array) -> void:
 						active_enemy.status = "active"
 						active_enemy.wounded = false
 						active_enemy.panicked = false
+						active_enemy.special_reaction = ""
 						state.enemies.append(active_enemy)
 						state.vp += int(card.activation_vp)
 						log_line("ATTIVAZIONE TEDESCA", "GE %s (%s): +%d PV all'attivazione." % [enemy.id, card.letter, card.activation_vp], "check")

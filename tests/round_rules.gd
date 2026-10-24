@@ -20,5 +20,9 @@ func _initialize() -> void:
  assert(Rules.in_command(squad[0],squad))
  assert(Rules.in_command(squad[1],squad))
  assert(not Rules.in_command(squad[2],squad))
+ squad[0].hex = ""
+ squad[1].hex = ""
+ assert(Rules.in_command(squad[0],squad))
+ assert(Rules.in_command(squad[1],squad))
  print("ROUND RULES OK")
  quit()
