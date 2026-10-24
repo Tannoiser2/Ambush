@@ -52,6 +52,19 @@ func _initialize() -> void:
  assert(officer.german_turn_reference("34",0) == 971)
  officer.soldier("A").hex = ""
  assert(officer.german_turn_references(0)[0].letter == "X")
+ # Rule 6/6: another activation during Rounds cannot restart Round 1 or
+ # replace the original advantage/awareness instructions.
+ var reinforcement = Game.new()
+ reinforcement.new_game(37)
+ reinforcement.resolve("337")
+ var original_setup: Dictionary = reinforcement.state.round_setup.duplicate(true)
+ var original_enemy_count: int = reinforcement.state.enemies.size()
+ reinforcement.state.blocked = ""
+ reinforcement.resolve("297")
+ assert(reinforcement.state.enemies.size() == original_enemy_count + 1)
+ assert(reinforcement.state.round_setup == original_setup)
+ assert(reinforcement.state.advantage == "de")
+ assert(reinforcement.state.blocked.contains("collocazione sulla pista"))
  var patrol = Game.new()
  patrol.new_game(34)
  patrol.resolve("187")

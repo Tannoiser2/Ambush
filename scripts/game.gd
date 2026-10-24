@@ -395,6 +395,8 @@ func run_ops(ops: Array) -> void:
 			"rescue_target":
 				if soldier("K").is_empty(): state.squad.append({"id":"K","name":"Ferito da soccorrere","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"2 caricatori mitra · 1 granata","port_boxes":["",""],"clips":2,"grenades":1,"commander":false,"wounded":false})
 			"encounter":
+				var already_in_rounds: bool = state.phase == "rounds"
+				var newly_activated: Array[String] = []
 				for s in op.sightings: register_sighting(s)
 				for enemy in op.enemies:
 					var exists := false
@@ -412,15 +414,22 @@ func run_ops(ops: Array) -> void:
 						active_enemy.panicked = false
 						active_enemy.special_reaction = ""
 						state.enemies.append(active_enemy)
+						newly_activated.append(str(enemy.id))
 						state.vp += int(card.activation_vp)
 						log_line("ATTIVAZIONE TEDESCA", "GE %s (%s): +%d PV all'attivazione." % [enemy.id, card.letter, card.activation_vp], "check")
+				state.condition = maxi(state.condition, int(op.condition))
+				if already_in_rounds:
+					# 6/6 preserves the current track and awareness. Placement on that
+					# track is deliberately deferred until Round actions are implemented.
+					log_line("ATTIVAZIONE DURANTE I ROUND", "GE %s: vantaggio e consapevolezza restano quelli correnti." % ", ".join(newly_activated), "check")
+					stop_resolution("Nuova attivazione nei Round registrata; collocazione sulla pista da verificare.")
+					return
 				state.phase = "rounds"
 				state.advantage = op.advantage
 				state.round_setup = {"number":1, "advantage":op.advantage,
 					"german_two_turns":op.get("first_round_german_two_turns", []),
 					"us_two_turns":bool(op.get("first_round_us_two_turns", false)),
 					"auto_aware_soldier":_pc_success_soldier if bool(op.get("trigger_aware_if_pc", false)) else ""}
-				state.condition = maxi(state.condition, int(op.condition))
 				state.event_markers.clear()
 				if not state.round_setup.german_two_turns.is_empty():
 					log_line("PRIMO ROUND", "GE %s: due turni assegnati dal paragrafo." % ", ".join(state.round_setup.german_two_turns), "check")
