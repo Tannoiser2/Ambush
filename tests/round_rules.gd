@@ -19,6 +19,22 @@ func _initialize() -> void:
  ]
  assert(Rules.in_command(squad[0],squad))
  assert(Rules.in_command(squad[1],squad))
+ var enemies: Array = [
+  {"id":"34","letter":"X","status":"active","initiative":4,"wounded":false},
+  {"id":"25","letter":"N","status":"active","initiative":4,"wounded":false}
+ ]
+ var placed = Rules.assign_turns(squad,enemies,{"A":true,"B":false,"C":true},2,9,"de",["34"],false)
+ assert(placed.advantage == "de")
+ assert(placed.us["A"].turns == 2)
+ assert(placed.us["B"].unaware)
+ assert(placed.german["34"].turns == 2)
+ assert(placed.german["25"].turns == 1)
+ assert(placed.order[0].side == "de" and placed.order[0].ids == ["34"])
+ var tie = Rules.assign_turns(squad,enemies,{"A":true},5,5)
+ assert(tie.advantage == "de")
+ var us_exception = Rules.assign_turns(squad,enemies,{"A":true},3,0,"us",[],true)
+ assert(us_exception.us["A"].turns == 2)
+ assert(us_exception.order[0].side == "us")
  assert(not Rules.in_command(squad[2],squad))
  squad[0].hex = ""
  squad[1].hex = ""

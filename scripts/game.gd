@@ -68,6 +68,14 @@ func action_round_turns(id: String, roll: int) -> Dictionary:
 	if unit.is_empty(): return {}
 	return RoundRules.turn_result(int(unit.initiative), roll, true, us_in_command(id), bool(unit.wounded))
 
+func prepare_round_track(awareness: Dictionary, us_die: int, german_die: int) -> Dictionary:
+	if state.get("phase", "") != "rounds" or state.get("round_setup", {}).is_empty(): return {}
+	var first_round: bool = int(state.round_setup.get("number", 0)) == 1
+	return RoundRules.assign_turns(state.squad,state.enemies,awareness,us_die,german_die,
+		str(state.round_setup.get("advantage", "roll")) if first_round else "roll",
+		state.round_setup.get("german_two_turns", []) if first_round else [],
+		bool(state.round_setup.get("us_two_turns", false)) if first_round else false)
+
 func new_game(seed_value: int = 0) -> void:
 	if seed_value == 0: rng.randomize()
 	else: rng.seed = seed_value

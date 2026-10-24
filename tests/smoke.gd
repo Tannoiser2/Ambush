@@ -30,6 +30,9 @@ func _initialize() -> void:
  assert(officer.state.vp == 1)
  assert(officer.state.round_setup.german_two_turns == ["34"])
  assert(officer.state.round_setup.advantage == "de")
+ var officer_track = officer.prepare_round_track({"A":true},2,9)
+ assert(officer_track.advantage == "de")
+ assert(officer_track.german["34"].turns == 2)
  assert(officer.german_turn_reference("34",0) == 965)
  officer.state.enemies[0].special_reaction = "B"
  assert(officer.german_turn_reference("34",0) == 831)
