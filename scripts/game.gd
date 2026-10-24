@@ -68,6 +68,11 @@ func action_round_turns(id: String, roll: int) -> Dictionary:
 	if unit.is_empty(): return {}
 	return RoundRules.turn_result(int(unit.initiative), roll, true, us_in_command(id), bool(unit.wounded))
 
+func prepare_awareness_phase(previous: Dictionary, visible_ids: Array, rolls: Dictionary) -> Dictionary:
+	if state.get("phase", "") != "rounds" or state.get("round_setup", {}).is_empty(): return {}
+	return RoundRules.awareness_phase(state.squad, previous, int(state.round_setup.number),
+		visible_ids, rolls, str(state.round_setup.get("auto_aware_soldier", "")))
+
 func prepare_round_track(awareness: Dictionary, us_die: int, german_die: int) -> Dictionary:
 	if state.get("phase", "") != "rounds" or state.get("round_setup", {}).is_empty(): return {}
 	var first_round: bool = int(state.round_setup.get("number", 0)) == 1

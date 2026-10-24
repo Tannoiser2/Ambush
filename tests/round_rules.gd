@@ -40,5 +40,16 @@ func _initialize() -> void:
  squad[1].hex = ""
  assert(Rules.in_command(squad[0],squad))
  assert(Rules.in_command(squad[1],squad))
+ squad[0].pc = 4
+ squad[1].pc = 3
+ squad[2].pc = 2
+ assert(Rules.awareness_phase(squad,{},1,["A"],{"A":4}) == {"A":true,"B":false,"C":false})
+ assert(Rules.awareness_phase(squad,{},1,["A"],{"A":9},"B") == {"A":false,"B":true,"C":false})
+ assert(Rules.awareness_phase(squad,{},1,["A"],{"A":0})["A"])
+ assert(Rules.awareness_phase(squad,{},1,["A"],{}) == {})
+ assert(Rules.awareness_phase(squad,{"A":true},2,[],{"B":3,"C":9}) == {"A":true,"B":true,"C":false})
+ assert(Rules.awareness_phase(squad,{},3,[],{}) == {"A":true,"B":true,"C":true})
+ squad[2].status = "killed"
+ assert(not Rules.awareness_phase(squad,{},3,[],{}).has("C"))
  print("ROUND RULES OK")
  quit()

@@ -29,6 +29,23 @@ static func turn_result(initiative: int, roll: int, is_us: bool, command: bool, 
 	if wounded: turns = mini(turns, 1)
 	return {"turns": turns, "panic": false, "red": roll in RED[initiative]}
 
+static func awareness_phase(squad: Array, previous: Dictionary, round_number: int, visible_ids: Array, rolls: Dictionary, auto_aware_id: String = "") -> Dictionary:
+	if round_number < 1: return {}
+	var result: Dictionary = {}
+	for unit in squad:
+		if unit.get("status", "") != "active": continue
+		var id: String = str(unit.id)
+		if round_number >= 3 or bool(previous.get(id,false)) or id == auto_aware_id:
+			result[id] = true
+		elif round_number == 1 and id not in visible_ids:
+			result[id] = false
+		else:
+			if not rolls.has(id): return {}
+			var roll := int(rolls[id])
+			if roll < 0 or roll > 9: return {}
+			result[id] = roll == 0 or (roll != 9 and roll <= int(unit.pc))
+	return result
+
 static func assign_turns(squad: Array, enemies: Array, awareness: Dictionary, us_die: int, german_die: int, forced_advantage: String = "roll", german_two_turns: Array = [], us_two_turns: bool = false) -> Dictionary:
 	if us_die < 0 or us_die > 9 or german_die < 0 or german_die > 9: return {}
 	if forced_advantage not in ["roll", "us", "de"]: return {}
