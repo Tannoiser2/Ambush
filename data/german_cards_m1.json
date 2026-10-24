@@ -8,7 +8,7 @@
       "activation_vp": 1,
       "conditional_vp": 0,
       "weapons": [
-        "Mitra"
+        "Pistola mitragliatrice"
       ],
       "initiative": 1,
       "pc": 2,
@@ -247,7 +247,7 @@
       "conditional_vp": 2,
       "conditional_vp_if": "captured",
       "weapons": [
-        "Mitra",
+        "Pistola mitragliatrice",
         "Pistola Luger"
       ],
       "initiative": 4,
