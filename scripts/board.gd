@@ -50,6 +50,14 @@ func _draw() -> void:
 	for id in game.state.event_markers:
 		var pos := map_position(id)
 		draw_circle(pos+Vector2(0,9),3,Color("b7954e"))
+	for id in game.state.minefields:
+		var pos := map_position(id)+Vector2(13,-12)
+		draw_rect(Rect2(pos-Vector2(8,8),Vector2(17,17)),Color("a58a50"))
+		draw_string(font,pos+Vector2(-5,5),"M",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("1f241d"))
+	for id in game.state.landmarks:
+		var pos := map_position(id)+Vector2(-15,-13)
+		draw_circle(pos,10,Color("5a493b"))
+		draw_string(font,pos+Vector2(-5,5),"X",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("f1d9a3"))
 	for id in game.state.items:
 		draw_string(font,map_position(id)+Vector2(-5,-12),"+",HORIZONTAL_ALIGNMENT_LEFT,-1,20,Color("6d4f12"))
 	var stacks := {}
