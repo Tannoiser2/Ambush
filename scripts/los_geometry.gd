@@ -29,7 +29,8 @@ static func _path(a: String, b: String, bias: float) -> Array[String]:
   var t := float(i)/steps
   var c := _cube_round(lerpf(ac.x,bc.x,t)+bias,lerpf(ac.y,bc.y,t)+bias,lerpf(ac.z,bc.z,t)-2*bias)
   var id := _id(c)
-  if id != a and id != b and Hex.valid(id): result.append(id)
+  # Keep off-map intermediate hexes: dropping them could create a false clear LOS.
+  if id != a and id != b: result.append(id)
  return result
 
 static func alternative_intervening_hexes(a: String, b: String) -> Array:
@@ -43,8 +44,80 @@ static func clear_at_same_elevation(a: String, b: String, blocking: Dictionary) 
  for path in alternative_intervening_hexes(a,b):
   var path_clear := true
   for id in path:
-   if bool(blocking.get(id,false)):
+   if not Hex.valid(id) or bool(blocking.get(id,false)):
     path_clear = false
     break
   if path_clear: return true
  return false
+
+static func evaluate_map_a(a: String, b: String, hexes: Dictionary, hexsides: Dictionary = {}) -> Dictionary:
+ if not Hex.valid(a) or not Hex.valid(b): return {"status":"unknown","reason":"Esagono non valido."}
+ if not hexes.has(a) or not hexes.has(b): return {"status":"unknown","reason":"Terreno non catalogato."}
+ if a == b: return {"status":"clear","reason":"Stesso esagono."}
+ var possible := alternative_intervening_hexes(a,b)
+ var unknown := false
+ var reasons: Array[String] = []
+ for intervening in possible:
+  var path: Array[String] = [a]
+  path.append_array(intervening)
+  path.append(b)
+  var result := _evaluate_map_a_path(path,hexes,hexsides)
+  if result.status == "clear": return result
+  if result.status == "unknown": unknown = true
+  reasons.append(str(result.reason))
+ return {"status":"unknown" if unknown else "blocked", "reason":" / ".join(reasons)}
+
+static func _hexside_key(a: String, b: String) -> String:
+ return a + "|" + b if a < b else b + "|" + a
+
+static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexsides: Dictionary) -> Dictionary:
+ for id in path:
+  if not hexes.has(id): return {"status":"unknown","reason":"Terreno non catalogato: " + id}
+ var start: Dictionary = hexes[path.front()]
+ var finish: Dictionary = hexes[path.back()]
+ for endpoint in [start,finish]:
+  if str(endpoint.get("terrain", "")).ends_with("_building"):
+   return {"status":"unknown","reason":"Parete/apertura dell'edificio non verificata."}
+ if start.get("elevation") == null or finish.get("elevation") == null:
+  return {"status":"unknown","reason":"Quota dell'esagono di partenza o arrivo non verificata."}
+ var start_level := int(start.elevation)
+ var finish_level := int(finish.elevation)
+ var same_level := start_level == finish_level
+ var lower := mini(start_level,finish_level)
+ var higher := maxi(start_level,finish_level)
+ var unresolved := ""
+ for i in range(1,path.size()-1):
+  var id: String = path[i]
+  var terrain: Dictionary = hexes[id]
+  if terrain.get("elevation") == null:
+   unresolved = "Quota intermedia non verificata: " + id
+   continue
+  var level := int(terrain.elevation)
+  if level > higher:
+   return {"status":"blocked","reason":"Quota superiore in " + id}
+  var kind := str(terrain.get("terrain", ""))
+  if same_level and level >= start_level and kind in ["woods","brush","rough","rubble","wood_building","stone_building"]:
+   return {"status":"blocked","reason":"Terreno bloccante in " + id}
+  if not same_level and kind in ["woods","brush","rough","rubble"]:
+   if (i == 1 and level == start_level) or (i == path.size()-2 and level == finish_level):
+    return {"status":"blocked","reason":"Terreno adiacente alla stessa quota in " + id}
+  if not same_level and kind in ["wood_building","stone_building"] and level >= lower:
+   var distance_low := i if start_level == lower else path.size()-1-i
+   var distance_high := path.size()-1-i if start_level == lower else i
+   if distance_low <= distance_high:
+    return {"status":"blocked","reason":"Edificio vicino alla quota inferiore in " + id}
+ if unresolved != "": return {"status":"unknown","reason":unresolved}
+ for i in range(path.size()-1):
+  var side: String = str(hexsides.get(_hexside_key(path[i],path[i+1]),""))
+  if side == "crest": return {"status":"blocked","reason":"Cresta fra %s e %s." % [path[i],path[i+1]]}
+  if side == "embankment" and not same_level:
+   var side_height := maxi(int(hexes[path[i]].elevation),int(hexes[path[i+1]].elevation))
+   var adjacent_high: bool = path[i] == (path.front() if start_level == higher else path.back()) or path[i+1] == (path.front() if start_level == higher else path.back())
+   if side_height > lower and not adjacent_high:
+    return {"status":"blocked","reason":"Scarpata fra %s e %s." % [path[i],path[i+1]]}
+  if side == "":
+   if bool(hexes[path[i]].get("hexside_review_pending",true)) or bool(hexes[path[i+1]].get("hexside_review_pending",true)):
+    return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
+  elif side not in ["none","embankment"]:
+   return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
+ return {"status":"clear","reason":"Terreno e lati verificati per LOS alla stessa quota."}

@@ -1,7 +1,32 @@
 extends SceneTree
 const Los = preload("res://scripts/los_geometry.gd")
 const Hex = preload("res://scripts/hex_grid.gd")
+const MapA = preload("res://scripts/map_a_terrain.gd")
 func _initialize() -> void:
+ var map := MapA.new()
+ assert(map.data.hexes.size() == 475)
+ assert(map.terrain("D1").terrain == "woods")
+ assert(map.terrain("T8").terrain == "wood_building")
+ assert(map.terrain("J3").terrain == "stream")
+ assert(map.los("A1","C2").status == "clear")
+ assert(map.los("C1","E1").status == "unknown")
+ assert(map.los("C3","E3").status == "blocked")
+ assert(map.los("E3","C3").status == "blocked")
+ assert(map.los("A6","C7").status == "unknown")
+ assert(map.los("K13","L13").status == "unknown")
+ for origin in ["A1","C3","D1","J3","K13","T8","Y19"]:
+  for target in ["A1","C3","D1","J3","K13","T8","Y19"]:
+   assert(map.los(origin,target).status == map.los(target,origin).status)
+ var heights := {"A1":{"terrain":"clear","elevation":1,"hexside_review_pending":false},
+  "B1":{"terrain":"woods","elevation":1,"hexside_review_pending":false},
+  "C2":{"terrain":"clear","elevation":2,"hexside_review_pending":false}}
+ assert(Los.evaluate_map_a("A1","C2",heights).status == "blocked")
+ heights["B1"].terrain = "clear"
+ assert(Los.evaluate_map_a("A1","C2",heights).status == "clear")
+ assert(Los.evaluate_map_a("A1","C2",heights,{"A1|B1":"crest"}).status == "blocked")
+ heights["B1"].elevation = 2
+ assert(Los.evaluate_map_a("A1","C2",heights,{"A1|B1":"embankment"}).status == "blocked")
+ assert(Los.evaluate_map_a("A1","C2",heights,{"B1|C2":"embankment"}).status == "clear")
  assert(Los.alternative_intervening_hexes("A1","A1") == [[]])
  assert(Los.alternative_intervening_hexes("A1","B1") == [[]])
  assert(Los.alternative_intervening_hexes("A1","C2") == [["B1"]])
@@ -15,11 +40,13 @@ func _initialize() -> void:
   for row in range(1,20):
    var a := String.chr(65+col)+str(row)
    for b in ["A1","K10","Y19"]:
+    assert(map.los(a,b).status == map.los(b,a).status)
     var paths = Los.alternative_intervening_hexes(a,b)
     assert(not paths.is_empty())
     for path in paths:
      assert(path.size() <= maxi(0,Hex.distance(a,b)-1))
-     for id in path: assert(Hex.valid(id))
+     for id in path:
+      assert(id.length() >= 2)
     assert(Los.clear_at_same_elevation(a,b,{}) == Los.clear_at_same_elevation(b,a,{}))
  print("LOS GEOMETRY OK")
  quit()

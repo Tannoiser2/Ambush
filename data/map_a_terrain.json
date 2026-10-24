@@ -1,0 +1,2857 @@
+{
+  "map": "A",
+  "status": "partial_los_diagnostic_only",
+  "notes": "Terrain classes are image-derived and spot-checked; yellow elevation and building apertures await hexside review. Never authorize fire from this data alone.",
+  "hexes": {
+    "A1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A5": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "A6": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "A7": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "A8": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A9": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A10": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A12": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A13": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A14": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A15": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A16": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A17": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A18": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "A19": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B3": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B5": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "B6": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "B7": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "B8": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "B9": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B10": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B12": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B13": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B15": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B16": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B17": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B18": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "B19": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "C6": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "C7": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "C8": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "C9": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C10": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C12": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C13": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C14": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C15": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C16": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C17": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C18": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "C19": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D1": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D2": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D4": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D5": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D6": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "D7": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "D8": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "D9": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "D10": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D12": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D13": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D15": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D16": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D17": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D18": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "D19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E6": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "E7": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "E8": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "E9": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "E10": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E12": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E13": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E14": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E15": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E16": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "E19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F3": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F7": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "F8": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "F9": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "F10": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "F11": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F12": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F15": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "F19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G7": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "G8": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "G9": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "G10": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "G11": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G12": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G17": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "G19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H1": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H3": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H6": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H7": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H8": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "H9": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "H10": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "H11": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "H12": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H17": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "H19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I1": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I2": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I3": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I7": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I8": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "I9": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "I10": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "I11": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "I12": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I16": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "I19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J1": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J2": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J3": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J4": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J6": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J7": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J8": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J9": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "J10": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "J11": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "J12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "J13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J18": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "J19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K4": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K5": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K7": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K8": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K9": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "K10": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "K11": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "K12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "K13": {
+      "terrain": "stone_building",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K15": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K16": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "K19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L4": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L5": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L6": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L7": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L8": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L9": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L10": {
+      "terrain": "stream",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "L11": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "L12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "L13": {
+      "terrain": "stone_building",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L17": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "L19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M5": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M6": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M7": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M8": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M9": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M10": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "M11": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "M12": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "M13": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "M19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N4": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N7": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N9": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N10": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N11": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N12": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N13": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N14": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N15": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N16": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N17": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N18": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "N19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O2": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O4": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O6": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O7": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O9": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O10": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O12": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O13": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O14": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O15": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O16": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O17": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O18": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "O19": {
+      "terrain": "stream",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P10": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P11": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P12": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P17": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "P19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q1": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q10": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q11": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q12": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q17": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Q19": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R2": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R10": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R11": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "R12": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R17": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R18": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "R19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S7": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S8": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S10": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S11": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "S12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S13": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S16": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S18": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "S19": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T8": {
+      "terrain": "wood_building",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T10": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "T12": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T16": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T17": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "T19": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U2": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U3": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U4": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U5": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U8": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U9": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U10": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "U12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U16": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U17": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U18": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "U19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V2": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V5": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V8": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V9": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V10": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "V12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V15": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V16": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V17": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "V19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W1": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W2": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W5": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W7": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W8": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W9": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W10": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "W12": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W14": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W15": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W16": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W17": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "W19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X1": {
+      "terrain": "brush",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X2": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X3": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X4": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X5": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X6": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X7": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X8": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X10": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X11": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "X12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X14": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X15": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X16": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X17": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "X19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y1": {
+      "terrain": "woods",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y2": {
+      "terrain": "cover",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y3": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y4": {
+      "terrain": "clear",
+      "elevation": 1,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y5": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y6": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y7": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y8": {
+      "terrain": "road",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y9": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y10": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y11": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": false
+    },
+    "Y12": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y13": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y14": {
+      "terrain": "cover",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y15": {
+      "terrain": "clear",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y16": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y17": {
+      "terrain": "brush",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y18": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    },
+    "Y19": {
+      "terrain": "woods",
+      "elevation": null,
+      "classification": "image_heuristic_with_atlas_spot_checks",
+      "hexside_review_pending": true
+    }
+  }
+}

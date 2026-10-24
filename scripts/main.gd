@@ -124,7 +124,10 @@ func build_ui() -> void:
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(func(id): move_to_hex(id))
 	board.hover_changed.connect(show_hover)
-	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14);center.add_child(hover_label)
+	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14)
+	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	hover_label.custom_minimum_size.y=44
+	center.add_child(hover_label)
 	var right_panel:=PanelContainer.new();right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
 	var right:=box(right_panel);right.add_child(label("DIARIO OPERATIVO",22,true));right.add_child(label("PARAGRAFI · DADI · CONDIZIONI",12))
 	objectives=rich();objectives.custom_minimum_size.y=154;objectives.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;right.add_child(objectives)
@@ -156,7 +159,7 @@ func refresh() -> void:
 		drop_buttons[i].visible = not pending_unit.is_empty() and pending_unit.port_boxes[i] != ""
 		if drop_buttons[i].visible: drop_buttons[i].text = "Lascia: " + pending_unit.port_boxes[i]
 	for child in drag_options.get_children():drag_options.remove_child(child);child.queue_free()
-	var eligible := u.status == "active" and u.stance == "standing" and u.hex != "" and "" in u.port_boxes
+	var eligible: bool = u.status == "active" and u.stance == "standing" and u.hex != "" and "" in u.port_boxes
 	if eligible:
 		for casualty in game.state.squad:
 			if casualty.id == u.id or casualty.hex != u.hex or casualty.status not in ["incapacitated","killed"]:continue
@@ -190,6 +193,16 @@ func show_hover(id: String) -> void:
 		hover_label.text = "Rotella: zoom · tasto destro: sposta la carta"
 		return
 	hover_label.text = "ESAGONO " + id
+	var terrain: Dictionary = game.map_terrain.terrain(id)
+	var terrain_names := {"clear":"aperto","woods":"bosco","brush":"macchia","cover":"copertura","road":"strada","stream":"corso d'acqua","stone_building":"edificio in pietra","wood_building":"edificio in legno"}
+	if not terrain.is_empty():
+		hover_label.text += "  ·  terreno stimato: " + str(terrain_names.get(str(terrain.terrain),"da verificare"))
+		hover_label.text += "  ·  quota " + (str(terrain.elevation) if terrain.elevation != null else "?")
+	var observer: Dictionary = game.soldier(selected)
+	if not observer.is_empty() and observer.hex != "" and observer.hex != id:
+		var los: Dictionary = game.map_los(str(observer.hex),id)
+		var los_names := {"clear":"libera","blocked":"ostruita","unknown":"da verificare"}
+		hover_label.text += "  ·  LOS preliminare da %s: %s" % [observer.hex,los_names.get(str(los.status),"da verificare")]
 	for enemy in game.state.enemies:
 		if enemy.hex == id:
 			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d  ·  %s" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0), enemy.get("status", "active")]

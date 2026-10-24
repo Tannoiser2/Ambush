@@ -7,10 +7,12 @@ const VERSION := 1
 const Hex = preload("res://scripts/hex_grid.gd")
 const Damage = preload("res://scripts/damage.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
+const MapATerrain = preload("res://scripts/map_a_terrain.gd")
 var mission: Dictionary
 var paragraphs: Dictionary
 var german_cards: Dictionary
 var german_actions: Dictionary
+var map_terrain := MapATerrain.new()
 var state: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var forced_rolls: Array = [] # test-only injection, never exposed by UI/network
@@ -34,6 +36,9 @@ func german_action_reference(card_id: String, condition: int, roll: int, special
 		for die in card.roll_groups[index]:
 			if roll == int(die): return int(card.columns[column][index])
 	return -1
+
+func map_los(a: String, b: String) -> Dictionary:
+	return map_terrain.los(a,b)
 
 func german_action_text(reference: int) -> String:
 	return str(german_actions.get(str(reference), ""))
