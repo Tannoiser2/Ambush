@@ -1,6 +1,7 @@
 extends Control
 const Game = preload("res://scripts/game.gd")
 const Board = preload("res://scripts/board.gd")
+const Hex = preload("res://scripts/hex_grid.gd")
 const BODY_FONT = preload("res://assets/fonts/Barlow-Regular.ttf")
 const TITLE_FONT = preload("res://assets/fonts/SpecialElite-Regular.ttf")
 const SAVE_PATH := "user://ambush_mission_01.json"
@@ -8,7 +9,10 @@ var game := Game.new()
 var board: AmbushBoard
 var selected := "A"
 var move_as_group := false
+var drag_target := ""
 var roster: VBoxContainer
+var drag_options: VBoxContainer
+var exit_drag_button: Button
 var diary: RichTextLabel
 var objectives: RichTextLabel
 var details: RichTextLabel
@@ -18,6 +22,7 @@ var condition_label: Label
 var hover_label: Label
 var progress_label: Label
 var stances: Array[Button] = []
+var drop_buttons: Array[Button] = []
 var notice := ""
 
 func _ready() -> void:
@@ -100,6 +105,14 @@ func build_ui() -> void:
 	for pair in [["In piedi","standing"],["Basso","crouching"],["Prono","prone"]]:
 		var value: String=pair[1]
 		var b:=button(pair[0],func(): send_command({"type":"stance","soldier":selected,"stance":value}));b.toggle_mode=true;b.add_theme_font_size_override("font_size",14);stance_row.add_child(b);stances.append(b)
+	for i in 2:
+		var drop_button := button("",Callable(self,"choose_drop").bind(i))
+		drop_button.visible = false
+		left.add_child(drop_button)
+		drop_buttons.append(drop_button)
+	drag_options=VBoxContainer.new();left.add_child(drag_options)
+	exit_drag_button=button("Evacua con il ferito",func(): send_command({"type":"exit_drag","soldier":selected,"casualty":drag_target}))
+	exit_drag_button.visible=false;left.add_child(exit_drag_button)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
@@ -128,15 +141,31 @@ func refresh() -> void:
 		elif u.status=="killed":location="CADUTO"
 		elif u.status=="incapacitated":location+=" · INCAPACITATO"
 		elif u.wounded:location+=" · FERITO"
-		var b:=button("%s   %s   ·   %s" % [id,u.name,location],func(): selected=id;refresh())
+		var b:=button("%s   %s   ·   %s" % [id,u.name,location],func(): selected=id;drag_target="";refresh())
 		b.toggle_mode=true;b.button_pressed=id==selected;b.alignment=HORIZONTAL_ALIGNMENT_LEFT;b.custom_minimum_size.y=31
 		b.add_theme_font_size_override("font_size",16);roster.add_child(b)
 	var u:=game.soldier(selected)
 	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra,"\nFERITO · movimento 2" if u.wounded else ""]
 	for i in stances.size():stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
+	var pending: String = game.state.pending_drop
+	var pending_unit: Dictionary = game.soldier(pending) if pending != "" else {}
+	for i in drop_buttons.size():
+		drop_buttons[i].visible = not pending_unit.is_empty() and pending_unit.port_boxes[i] != ""
+		if drop_buttons[i].visible: drop_buttons[i].text = "Lascia: " + pending_unit.port_boxes[i]
+	for child in drag_options.get_children():drag_options.remove_child(child);child.queue_free()
+	var eligible := u.status == "active" and u.stance == "standing" and u.hex != "" and "" in u.port_boxes
+	if eligible:
+		for casualty in game.state.squad:
+			if casualty.id == u.id or casualty.hex != u.hex or casualty.status not in ["incapacitated","killed"]:continue
+			var casualty_id: String = casualty.id
+			var drag_button:=button("Trascina: " + casualty.name,func():drag_target="" if drag_target==casualty_id else casualty_id;refresh())
+			drag_button.toggle_mode=true;drag_button.button_pressed=drag_target==casualty_id
+			drag_options.add_child(drag_button)
+	if drag_target != "" and (not eligible or game.soldier(drag_target).hex != u.hex):drag_target=""
+	exit_drag_button.visible=drag_target != "" and Hex.is_entry(u.hex)
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
-	progress_label.text="%d / 13 PV" % game.state.vp
+	progress_label.text="%d / 13 PV" % game.net_vp()
 	var lines: Array[String]=[]
 	for entry in game.state.log:
 		var color: String={"paragraph":"e7c884","dice":"a8c49b","check":"93b9b0","blocked":"e5a18b","briefing":"e7c884"}.get(entry.kind,"b4bba5")
@@ -146,14 +175,16 @@ func refresh() -> void:
 		objective_lines.append(("[color=#9bc897]✓[/color] " if item.met else "[color=#d4b474]○[/color] " if item.known else "[color=#b7a795]?[/color] ")+item.title)
 	objectives.text="\n".join(objective_lines)
 	diary.text="\n".join(lines)
-	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s%s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."," Gruppo attivo." if move_as_group else ""])
+	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s%s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."," Trascinamento attivo." if drag_target!="" else " Gruppo attivo." if move_as_group else ""])
 	board.selected=selected;board.queue_redraw()
 
 func escape_bbcode(value: String) -> String:
 	return value.replace("[","[lb]")
 
 func move_to_hex(hex_id: String) -> void:
-	if move_as_group:
+	if drag_target != "":
+		send_command({"type":"drag","soldier":selected,"casualty":drag_target,"hex":hex_id})
+	elif move_as_group:
 		var leader := game.soldier(selected)
 		var ids: Array[String] = []
 		for unit in game.state.squad:
@@ -168,6 +199,9 @@ func send_command(command: Dictionary) -> void:
 	if not result.ok:notice=result.error
 	else:write_save()
 	refresh()
+
+func choose_drop(index: int) -> void:
+	send_command({"type":"drop_port","soldier":game.state.pending_drop,"index":index})
 
 func write_save() -> bool:
 	var temp:=SAVE_PATH+".tmp"
@@ -192,6 +226,6 @@ func confirm_new() -> void:
 func show_briefing() -> void:
 	var popup:=AcceptDialog.new();popup.title="Ordine di operazione · Missione 1";popup.ok_button_text="Torna alla carta";add_child(popup)
 	var text:=rich();text.custom_minimum_size=Vector2(600,440);text.scroll_following=false;popup.add_child(text)
-	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni del combattimento e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
+	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, soccorso dei feriti, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. I campi minati sono segnati sulla carta; se una mina esplode, il calcolo dei danni resta sospeso. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni del combattimento e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Per soccorrere un ferito, seleziona un fante in piedi con uno spazio di trasporto libero nello stesso esagono e premi «Trascina». Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 

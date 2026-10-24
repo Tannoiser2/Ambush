@@ -24,6 +24,10 @@
       "commander": true,
       "weapon": "Fucile automatico",
       "extra": "",
+      "port_boxes": [
+        "Fucile automatico",
+        "Fucile automatico"
+      ],
       "clips": 5,
       "grenades": 1,
       "mp": 4,
@@ -42,6 +46,10 @@
       "commander": false,
       "weapon": "Carabina",
       "extra": "",
+      "port_boxes": [
+        "Carabina",
+        ""
+      ],
       "clips": 5,
       "grenades": 1,
       "mp": 4,
@@ -60,6 +68,10 @@
       "commander": false,
       "weapon": "Carabina",
       "extra": "Bazooka · 2 razzi",
+      "port_boxes": [
+        "Carabina",
+        "Bazooka"
+      ],
       "clips": 3,
       "grenades": 1,
       "mp": 4,
@@ -78,6 +90,10 @@
       "commander": false,
       "weapon": "Carabina",
       "extra": "",
+      "port_boxes": [
+        "Carabina",
+        ""
+      ],
       "clips": 5,
       "grenades": 1,
       "mp": 4,
@@ -96,6 +112,10 @@
       "commander": false,
       "weapon": "Fucile semiautomatico",
       "extra": "",
+      "port_boxes": [
+        "Fucile semiautomatico",
+        ""
+      ],
       "clips": 5,
       "grenades": 1,
       "mp": 4,
@@ -114,6 +134,10 @@
       "commander": false,
       "weapon": "Fucile semiautomatico",
       "extra": "Carica esplosiva",
+      "port_boxes": [
+        "Fucile semiautomatico",
+        "Carica esplosiva"
+      ],
       "clips": 3,
       "grenades": 3,
       "mp": 4,
@@ -132,6 +156,10 @@
       "commander": false,
       "weapon": "Fucile automatico",
       "extra": "",
+      "port_boxes": [
+        "Fucile automatico",
+        "Fucile automatico"
+      ],
       "clips": 5,
       "grenades": 1,
       "mp": 4,
@@ -150,6 +178,10 @@
       "commander": false,
       "weapon": "Fucile semiautomatico",
       "extra": "Carica esplosiva",
+      "port_boxes": [
+        "Fucile semiautomatico",
+        "Carica esplosiva"
+      ],
       "clips": 4,
       "grenades": 2,
       "mp": 4,

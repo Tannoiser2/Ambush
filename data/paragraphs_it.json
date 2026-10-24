@@ -1297,7 +1297,7 @@
   },
   "328": {
     "id": "328",
-    "it": "[s3] Il soldato trova un ferito della squadra caduta nell’imboscata questa mattina. Ha due caricatori per mitra e una granata. Riesce a parlare: ha lasciato il mitra circa venti metri più avanti, in I11. Colloca il soldato americano K in G10, incapacitato. Se lo porti al sicuro e sopravvive fino alla fine della missione, ottieni 3 PV.",
+    "it": "[s3] Il soldato trova un ferito della squadra caduta nell’imboscata questa mattina. Ha due caricatori per mitra e una granata. Riesce a parlare: ha lasciato il mitra circa venti metri più avanti, in I11. Colloca il soldato americano K in G10, incapacitato. Se lo porti al sicuro, in un edificio o fuori dalla mappa secondo il modo in cui termina la missione, e sopravvive fino alla fine, ottieni 3 PV.",
     "ops": [
       {
         "op": "sighting",
@@ -1470,7 +1470,7 @@
   },
   "454": {
     "id": "454",
-    "it": "Ottieni 2 PV. Il pilota combatterà con la squadra: usa la carta americana 05. Ottieni altri 2 PV se è ancora attivo alla fine della missione; se diventa incapacitato o muore, perdi 2 PV.",
+    "it": "Ottieni 2 PV. Il pilota combatterà con la squadra: usa la carta americana 05. Non perdi PV se in seguito diventa incapacitato o muore. Ottieni altri 2 PV se è ancora attivo alla fine della missione.",
     "ops": [
       {
         "op": "unsupported",

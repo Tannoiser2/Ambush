@@ -25,7 +25,8 @@ func new_game(seed_value: int = 0) -> void:
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "vp": 0,
-		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [],
+		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
+		"pending_ops": [], "pending_hex_check": "",
 		"log": [], "blocked": "", "context_hex": "", "last_paragraph": "", "history": [],
 		"trigger_soldier": "", "rng": str(rng.state)}
 	log_line("ORDINE DI OPERAZIONE", "Entrate da A1–J1. Seleziona un soldato, poi un esagono del margine nord.", "briefing")
@@ -54,11 +55,29 @@ func best_observer(hex_id: String) -> Dictionary:
 	return best
 
 func validate_command(command: Dictionary) -> String:
+	if command.get("type", "") == "drop_port":
+		if state.pending_drop == "": return "Nessun equipaggiamento da lasciare."
+		if str(command.get("soldier", "")) != state.pending_drop: return "La scelta riguarda un altro soldato."
+		var index := int(command.get("index", -1))
+		if index not in [0,1] or soldier(state.pending_drop).port_boxes[index] == "": return "Scegli un oggetto trasportato."
+		return ""
 	if not state.blocked.is_empty(): return "Risoluzione sospesa: " + state.blocked
 	if state.phase != "operations": return "Le Operazioni sono sospese."
 	var u := soldier(str(command.get("soldier", "")))
 	if u.is_empty() or u.status != "active": return "Seleziona un soldato attivo."
 	match command.get("type", ""):
+		"drag", "exit_drag":
+			var casualty := soldier(str(command.get("casualty", "")))
+			if casualty.is_empty() or casualty.id == u.id or casualty.status not in ["incapacitated", "killed"]: return "Seleziona un soldato inattivo da trasportare."
+			if u.hex == "" or casualty.hex != u.hex: return "I due soldati devono occupare lo stesso esagono."
+			if u.stance != "standing": return "Il soccorritore deve essere in piedi."
+			if "" not in u.port_boxes: return "Il soccorritore deve avere uno spazio di trasporto libero."
+			if command.type == "drag":
+				var target := str(command.get("hex", ""))
+				if not Hex.valid(target) or Hex.distance(u.hex, target) != 1: return "Trascina il ferito in un esagono adiacente."
+				if target in state.minefields and casualty.status == "incapacitated": return "Il trasporto del ferito in un campo minato richiede una regola ancora da verificare."
+			else:
+				if not Hex.is_entry(u.hex): return "Per evacuare il ferito raggiungi A1–J1."
 		"move", "move_group":
 			var target := str(command.get("hex", ""))
 			if not Hex.valid(target): return "Esagono non valido."
@@ -89,6 +108,24 @@ func dispatch(command: Dictionary) -> Dictionary:
 	var u := soldier(command.soldier)
 	_steps = 0
 	match command.type:
+		"drop_port":
+			var index := int(command.index)
+			var item: String = u.port_boxes[index]
+			if not state.items.has(u.hex): state.items[u.hex] = []
+			state.items[u.hex].append(item)
+			u.port_boxes[index] = ""
+			if index == 0: u.weapon = "Nessuna"
+			else: u.extra = ""
+			state.pending_drop = ""
+			state.blocked = ""
+			log_line("EQUIPAGGIAMENTO", u.name + " lascia " + item + " in " + u.hex + ". La risoluzione riprende.", "check")
+			var resume: Array = state.pending_ops.duplicate(true)
+			state.pending_ops.clear()
+			run_ops(resume)
+			if state.blocked == "" and state.pending_hex_check != "":
+				var resume_hex: String = state.pending_hex_check
+				state.pending_hex_check = ""
+				check_hex(resume_hex, true)
 		"move":
 			u.hex = command.hex
 			_entry_soldiers = [u.id]
@@ -96,6 +133,33 @@ func dispatch(command: Dictionary) -> Dictionary:
 			state.trigger_soldier = u.id
 			log_line("MOVIMENTO · " + u.id, "%s entra in %s." % [u.name, u.hex])
 			check_hex(command.hex)
+		"drag":
+			var casualty := soldier(str(command.casualty))
+			u.hex = command.hex
+			casualty.hex = command.hex
+			_entry_soldiers = [casualty.id, u.id]
+			state.context_hex = command.hex
+			state.trigger_soldier = u.id
+			log_line("TRASCINAMENTO", "%s trascina %s in %s." % [u.name, casualty.name, command.hex])
+			if casualty.status == "incapacitated":
+				var roll := d10()
+				log_line("SOPRAVVIVENZA · " + casualty.name, "D10: %d; con 0 il ferito muore." % roll, "dice")
+				if roll == 0:
+					casualty.status = "killed"
+					log_line("CADUTO", casualty.name + " muore durante il trasporto.")
+			check_hex(command.hex)
+		"exit_drag":
+			var casualty := soldier(str(command.casualty))
+			u.hex = ""
+			u.status = "exited"
+			casualty.hex = ""
+			if casualty.status == "incapacitated":
+				casualty.status = "evacuated"
+				if casualty.id == "K":
+					state.vp += 3
+					log_line("SOCCORSO", "Il soldato K è salvo: +3 PV.", "check")
+			log_line("EVACUAZIONE", u.name + " porta fuori dalla mappa " + casualty.name + ".")
+			finish_if_withdrawn()
 		"move_group":
 			var names: Array[String] = []
 			_entry_soldiers = command.group.duplicate()
@@ -114,23 +178,26 @@ func dispatch(command: Dictionary) -> Dictionary:
 		"exit":
 			u.hex = ""; u.status = "exited"
 			log_line("RITIRATA", u.name + " ha lasciato il campo di battaglia.")
-			var active := false
-			for unit in state.squad:
-				if unit.status == "active": active = true
-			if not active:
-				state.phase = "ended"
-				log_line("MISSIONE TERMINATA", "Ritirata completa. Punti vittoria: %d / 13." % state.vp)
+			finish_if_withdrawn()
 	state.revision += 1
 	state.rng = str(rng.state)
 	changed.emit()
 	return {"ok": true}
 
-func check_hex(hex_id: String) -> void:
-	_minefield_checked_entry = false
-	if hex_id in state.minefields:
+func finish_if_withdrawn() -> void:
+	for unit in state.squad:
+		if unit.status == "active": return
+	state.phase = "ended"
+	log_line("MISSIONE TERMINATA", "Ritirata completa. Punti vittoria: %d / 13." % net_vp())
+
+func check_hex(hex_id: String, skip_minefield := false) -> void:
+	_minefield_checked_entry = skip_minefield
+	if not skip_minefield and hex_id in state.minefields:
 		check_minefield(hex_id)
 		_minefield_checked_entry = true
-		if state.blocked != "": return
+		if state.blocked != "":
+			if state.pending_drop != "": state.pending_hex_check = hex_id
+			return
 	if hex_id in state.event_markers:
 		log_line("CONTROLLO AUTOMATICO", hex_id + ": segnalino Evento presente; nessun nuovo controllo in questa Condizione.", "check")
 		return
@@ -173,8 +240,9 @@ func resolve(id: String) -> void:
 	run_ops(paragraph.ops)
 
 func run_ops(ops: Array) -> void:
-	for op in ops:
+	for i in ops.size():
 		if state.blocked != "": return
+		var op: Dictionary = ops[i]
 		match op.op:
 			"goto": resolve(op.id)
 			"unsupported": stop_resolution(op.reason)
@@ -223,7 +291,7 @@ func run_ops(ops: Array) -> void:
 				if not state.items.has(state.context_hex): state.items[state.context_hex] = []
 				if op.item not in state.items[state.context_hex]: state.items[state.context_hex].append(op.item)
 			"rescue_target":
-				if soldier("K").is_empty(): state.squad.append({"id":"K","name":"Ferito da soccorrere","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"2 caricatori mitra · 1 granata","clips":2,"grenades":1,"commander":false,"wounded":false})
+				if soldier("K").is_empty(): state.squad.append({"id":"K","name":"Ferito da soccorrere","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"2 caricatori mitra · 1 granata","port_boxes":["",""],"clips":2,"grenades":1,"commander":false,"wounded":false})
 			"encounter":
 				for s in op.sightings: register_sighting(s)
 				for enemy in op.enemies:
@@ -255,6 +323,9 @@ func run_ops(ops: Array) -> void:
 				# Terrain destruction requires a reviewed terrain model. Preserve the rolls.
 				stop_resolution("Artiglieria in %s%d: distruzione del terreno e danni da verificare." % [String.chr(64+col),row])
 			_: stop_resolution("Istruzione non riconosciuta: " + str(op.op))
+		if state.blocked != "" and state.pending_drop != "":
+			state.pending_ops.append_array(ops.slice(i+1))
+			return
 
 func kill_hex(hex_id: String) -> void:
 	for u in state.squad:
@@ -265,7 +336,11 @@ func kill_hex(hex_id: String) -> void:
 func check_minefield(hex_id: String) -> void:
 	for id in _entry_soldiers:
 		var u := soldier(str(id))
-		if u.is_empty() or u.hex != hex_id or u.status != "active": continue
+		if u.is_empty() or u.hex != hex_id: continue
+		if u.status == "incapacitated":
+			stop_resolution("Campo minato in %s: verifica del ferito trasportato ancora da implementare." % hex_id)
+			return
+		if u.status != "active": continue
 		var roll := d10()
 		var success := check_success(roll, int(u.pc))
 		log_line("MINA · " + u.name, "D10: %d · percezione %d → %s." % [roll, u.pc, "EVITATA" if success else "ESPLOSA"], "dice")
@@ -290,7 +365,16 @@ func apply_soldier_damage(u: Dictionary, result: String) -> void:
 				u.stance = "prone"
 				u.mp = 2
 				log_line("FERITO", u.name + " cade prono; movimento ridotto a 2.")
-				if u.extra != "": stop_resolution(u.name + ": occorre scegliere l’equipaggiamento da lasciare dopo la ferita.")
+				if u.port_boxes[1] != "":
+					if u.port_boxes[0] == u.port_boxes[1]:
+						if not state.items.has(u.hex): state.items[u.hex] = []
+						state.items[u.hex].append(u.weapon)
+						u.port_boxes = ["", ""]
+						u.weapon = "Nessuna"
+						log_line("EQUIPAGGIAMENTO", u.name + " lascia a terra l’arma che occupava due spazi di trasporto.")
+					else:
+						state.pending_drop = u.id
+						stop_resolution(u.name + ": scegli quale dei due oggetti trasportati lasciare dopo la ferita.")
 		"I":
 			u.status = "incapacitated"
 			u.stance = "prone"
@@ -312,18 +396,27 @@ func stop_resolution(reason: String) -> void:
 
 func objective_status() -> Array[Dictionary]:
 	var active_hexes: Array[String] = []
+	var present_hexes: Array[String] = []
 	for u in state.squad:
 		if u.status == "active" and u.hex != "": active_hexes.append(u.hex)
+		if u.status in ["active", "incapacitated"] and u.hex != "": present_hexes.append(u.hex)
 	var t8 := "T8" in active_hexes
-	var central := "K13" in active_hexes and "L13" in active_hexes
+	var central := "K13" in present_hexes and "L13" in present_hexes
 	var no_enemies: bool = state.enemies.is_empty()
 	return [
 		{"title":"Edificio T8", "met":t8, "known":true},
 		{"title":"Edifici K13 e L13", "met":central, "known":true},
 		{"title":"Nessun tedesco attivo", "met":no_enemies, "known":true},
 		{"title":"Altura sud-est con vista su tutta la strada", "met":false, "known":false},
-		{"title":"Almeno 13 punti vittoria", "met":int(state.vp)>=13, "known":true},
+		{"title":"Almeno 13 punti vittoria", "met":net_vp()>=13, "known":true},
 	]
+
+func net_vp() -> int:
+	var losses := 0
+	for u in state.squad:
+		if u.id in ["A","B","C","D","E","F","G","H"] and u.status in ["incapacitated", "killed"]:
+			losses += 2
+	return int(state.vp) - losses
 
 func snapshot() -> Dictionary:
 	var result := state.duplicate(true)
@@ -338,14 +431,20 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("evasive_removals"): candidate.evasive_removals = {}
 	if not candidate.has("ban_evasive_return"): candidate.ban_evasive_return = false
 	if not candidate.has("minefields"): candidate.minefields = []
+	if not candidate.has("pending_drop"): candidate.pending_drop = ""
+	if not candidate.has("pending_ops"): candidate.pending_ops = []
+	if not candidate.has("pending_hex_check"): candidate.pending_hex_check = ""
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
-	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields"]:
+		if unit is Dictionary and not unit.has("port_boxes"):
+			var item2: String = unit.weapon if unit.id in ["A","G"] else "Bazooka" if unit.id == "C" else "Carica esplosiva" if unit.id in ["F","H"] else ""
+			unit.port_boxes = [unit.weapon, item2]
+	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields", "pending_ops"]:
 		if not candidate.get(key) is Array: return false
 	for key in ["items", "landmarks", "evasive_removals"]:
 		if not candidate.get(key) is Dictionary: return false
 	if not candidate.get("ban_evasive_return") is bool: return false
-	for key in ["rng", "blocked", "context_hex", "last_paragraph", "trigger_soldier", "phase"]:
+	for key in ["rng", "blocked", "context_hex", "last_paragraph", "trigger_soldier", "phase", "pending_drop", "pending_hex_check"]:
 		if not candidate.get(key) is String: return false
 	if not candidate.rng.is_valid_int(): return false
 	if int(candidate.get("condition", 0)) not in [1,2,3,4]: return false
@@ -359,10 +458,13 @@ func restore(candidate: Variant) -> bool:
 		for key in ["pc","initiative","ws","clips","grenades"]:
 			if not unit.get(key) is float and not unit.get(key) is int: return false
 		if not unit.get("wounded") is bool: return false
+		if not unit.get("port_boxes") is Array or unit.port_boxes.size() != 2: return false
+		for item in unit.port_boxes:
+			if not item is String: return false
 		if unit.id in ids or unit.id not in ["A","B","C","D","E","F","G","H","K"]: return false
 		ids.append(unit.id)
 		if unit.hex != "" and not Hex.valid(unit.hex): return false
-		if unit.status not in ["active","exited","incapacitated","killed"]: return false
+		if unit.status not in ["active","exited","evacuated","incapacitated","killed"]: return false
 		if unit.stance not in ["standing","crouching","prone"]: return false
 	for id in ["A","B","C","D","E","F","G","H"]:
 		if id not in ids: return false

@@ -17,10 +17,12 @@ func _initialize() -> void:
  legacy.erase("evasive_removals")
  legacy.erase("ban_evasive_return")
  legacy.erase("minefields")
+ for unit in legacy.squad: unit.erase("port_boxes")
  var migrated = Game.new()
  assert(migrated.restore(legacy))
  assert(migrated.soldier("A").hex == "A1")
  assert(migrated.state.minefields.is_empty())
+ assert(migrated.soldier("A").port_boxes == ["Fucile automatico","Fucile automatico"])
  assert(Game.check_success(0,-5))
  assert(not Game.check_success(9,20))
  assert(Damage.grenade_indoors(9,false) == "K")
@@ -102,6 +104,7 @@ func _initialize() -> void:
  assert(mine.dispatch({"type":"move","soldier":"A","hex":"V6"}).ok)
  assert(mine.soldier("A").status == "killed")
  assert(mine.state.blocked == "")
+ assert(mine.net_vp() == -2)
  var wounded = Game.new()
  wounded.new_game(61)
  wounded.state.condition = 4
@@ -111,6 +114,8 @@ func _initialize() -> void:
  assert(wounded.soldier("A").wounded)
  assert(wounded.soldier("A").stance == "prone")
  assert(wounded.soldier("A").mp == 2)
+ assert(wounded.soldier("A").weapon == "Nessuna")
+ assert(wounded.state.items["V6"].has("Fucile automatico"))
  var mine_group = Game.new()
  mine_group.new_game(62)
  mine_group.state.condition = 4
@@ -122,6 +127,53 @@ func _initialize() -> void:
  assert(mine_group.soldier("B").status == "active")
  assert(mine_group.forced_rolls.is_empty())
  assert(mine_group.state.blocked == "")
+ var port_choice = Game.new()
+ port_choice.new_game(63)
+ port_choice.state.condition = 4
+ port_choice.state.squad[2].hex = "U6"
+ port_choice.forced_rolls = [0]
+ assert(port_choice.dispatch({"type":"move","soldier":"C","hex":"V6"}).ok)
+ port_choice.state.squad[2].hex = "U6"
+ port_choice.forced_rolls = [9, 6]
+ assert(port_choice.dispatch({"type":"move","soldier":"C","hex":"V6"}).ok)
+ assert(port_choice.state.pending_drop == "C")
+ assert(port_choice.state.pending_hex_check == "V6")
+ assert(port_choice.dispatch({"type":"drop_port","soldier":"C","index":1}).ok)
+ assert(port_choice.state.blocked == "")
+ assert(port_choice.state.pending_hex_check == "")
+ assert(port_choice.soldier("C").weapon == "Carabina")
+ assert(port_choice.soldier("C").port_boxes[1] == "")
+ assert(port_choice.state.items["V6"].has("Bazooka"))
+ var continued = Game.new()
+ continued.new_game(64)
+ continued.state.condition = 4
+ continued.state.sightings.append("s2")
+ continued.state.squad[2].hex = "P9"
+ continued.forced_rolls = [9, 5]
+ assert(continued.dispatch({"type":"move","soldier":"C","hex":"Q9"}).ok)
+ assert(continued.state.pending_drop == "C")
+ assert(continued.state.pending_ops.size() == 1)
+ assert(continued.dispatch({"type":"drop_port","soldier":"C","index":1}).ok)
+ assert(continued.state.pending_ops.is_empty())
+ assert(continued.state.blocked == "")
+ var evacuation = Game.new()
+ evacuation.new_game(65)
+ evacuation.state.squad[0].hex = "A1"
+ evacuation.state.squad[1].hex = "A1"
+ evacuation.state.squad[2].hex = "A1"
+ evacuation.state.squad[2].status = "incapacitated"
+ assert(not evacuation.dispatch({"type":"drag","soldier":"A","casualty":"C","hex":"B1"}).ok)
+ assert(evacuation.net_vp() == -2)
+ assert(evacuation.dispatch({"type":"exit_drag","soldier":"B","casualty":"C"}).ok)
+ assert(evacuation.soldier("C").status == "evacuated")
+ assert(evacuation.net_vp() == 0)
+ var survivor = Game.new()
+ survivor.new_game(66)
+ survivor.state.squad[1].hex = "G10"
+ survivor.state.squad.append({"id":"K","name":"Ferito","hex":"G10","status":"incapacitated","stance":"prone","pc":0,"initiative":0,"ws":0,"weapon":"Nessuna","extra":"","port_boxes":["",""],"clips":0,"grenades":0,"commander":false,"wounded":false})
+ survivor.forced_rolls = [0]
+ assert(survivor.dispatch({"type":"drag","soldier":"B","casualty":"K","hex":"H10"}).ok)
+ assert(survivor.soldier("K").status == "killed")
  var group_game = Game.new()
  group_game.new_game(19)
  group_game.state.squad[0].hex="A1"
