@@ -20,5 +20,10 @@ func _initialize() -> void:
  assert(card.hexes["A1"] == "EVENT")
  assert(card.hexes["A2"] == "EVENT")
  assert(card.hexes["G10"] == "s3:328")
+ var second = g.mission.conditions["2"]
+ assert(second.hexes.size() == 475)
+ assert(second.events.size() == 19)
+ assert(second.hexes["G10"] == "s3:328")
+ assert(second.hexes["M3"] == "s5:192")
  print("SMOKE OK")
  quit()
