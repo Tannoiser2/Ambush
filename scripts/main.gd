@@ -1,13 +1,11 @@
 extends Control
 const Game = preload("res://scripts/game.gd")
 const Board = preload("res://scripts/board.gd")
-const Online = preload("res://scripts/online.gd")
 const BODY_FONT = preload("res://assets/fonts/Barlow-Regular.ttf")
 const TITLE_FONT = preload("res://assets/fonts/SpecialElite-Regular.ttf")
 const SAVE_PATH := "user://ambush_mission_01.json"
 var game := Game.new()
 var board: AmbushBoard
-var online: Node
 var selected := "A"
 var roster: VBoxContainer
 var diary: RichTextLabel
@@ -17,20 +15,12 @@ var phase_label: Label
 var condition_label: Label
 var hover_label: Label
 var progress_label: Label
-var net_label: Label
 var stances: Array[Button] = []
-var player_name: LineEdit
-var room_code: LineEdit
-var online_popup: AcceptDialog
-var busy := false
 var notice := ""
 
 func _ready() -> void:
 	build_theme()
 	build_ui()
-	online=Online.new();add_child(online);online.game=game
-	online.updated.connect(refresh)
-	online.failed.connect(func(message): notice=message;refresh())
 	game.changed.connect(refresh)
 	game.new_game()
 	refresh()
@@ -93,7 +83,7 @@ func build_ui() -> void:
 	condition_label=label("CONDIZIONE 1",15);tools.add_child(condition_label)
 	progress_label=label("0 / 13 PV",15);tools.add_child(progress_label)
 	var flexible:=Control.new();flexible.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tools.add_child(flexible)
-	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new));tools.add_child(button("Cooperativa online",show_online))
+	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new))
 	var body:=box(root,false);body.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var left_panel:=PanelContainer.new();left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
 	var left:=box(left_panel);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Seleziona un soldato · A–H",14))
@@ -118,7 +108,6 @@ func build_ui() -> void:
 	diary=rich();diary.custom_minimum_size.x=310;right.add_child(diary)
 	var footer:=box(root,false)
 	status_label=label("",15);status_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;footer.add_child(status_label)
-	net_label=label("SOLITARIO · LOCALE",13);footer.add_child(net_label)
 	root.add_child(label("VERSIONE DI SVILUPPO 0.1 · Operazioni e Condizione 1. Il combattimento è ancora in costruzione.",13))
 
 func refresh() -> void:
@@ -145,23 +134,15 @@ func refresh() -> void:
 	diary.text="\n".join(lines)
 	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
 	board.selected=selected;board.queue_redraw()
-	if online!=null:
-		net_label.text="STANZA %s · %s" % [online.code,"HOST" if online.host else "OSPITE"] if online.active else "SOLITARIO · LOCALE"
 
 func escape_bbcode(value: String) -> String:
 	return value.replace("[","[lb]")
 
 func send_command(command: Dictionary) -> void:
-	if busy:return
 	notice=""
-	if online.active:
-		busy=true
-		await online.submit(command)
-		busy=false
-	else:
-		var result:=game.dispatch(command)
-		if not result.ok:notice=result.error
-		else:write_save()
+	var result:=game.dispatch(command)
+	if not result.ok:notice=result.error
+	else:write_save()
 	refresh()
 
 func write_save() -> bool:
@@ -175,13 +156,11 @@ func save_game() -> void:
 	notice="Partita salvata sul dispositivo." if write_save() else "Salvataggio non riuscito: controlla lo spazio disponibile.";refresh()
 
 func load_game() -> void:
-	if online.active:notice="Esci dalla stanza prima di caricare una partita locale.";refresh();return
 	if not FileAccess.file_exists(SAVE_PATH):notice="Non c’è ancora un salvataggio su questo dispositivo.";refresh();return
 	var data=JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
 	notice="Partita ripristinata." if game.restore(data) else "Salvataggio non valido o di una versione diversa; partita attuale conservata.";refresh()
 
 func confirm_new() -> void:
-	if online.active:notice="Esci dalla stanza prima di avviare una nuova missione.";refresh();return
 	var dialog:=ConfirmationDialog.new();dialog.title="Nuova missione";dialog.dialog_text="Ricominciare Saint-Michaux? Il salvataggio automatico corrente verrà sostituito.";dialog.ok_button_text="Ricomincia";dialog.cancel_button_text="Annulla";add_child(dialog)
 	dialog.confirmed.connect(func():notice="";game.new_game();write_save();dialog.queue_free())
 	dialog.canceled.connect(dialog.queue_free);dialog.popup_centered(Vector2i(480,160))
@@ -192,28 +171,3 @@ func show_briefing() -> void:
 	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento in Operazioni, posture, tabella della Condizione 1, controlli e catene di paragrafi supportati. Al combattimento o a un’istruzione non verificata il motore si ferma e conserva lo stato. Linea di vista, danni e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 
-func show_online() -> void:
-	online_popup=AcceptDialog.new();online_popup.title="Cooperativa · Firebase Ludoteca";online_popup.ok_button_text="Chiudi";add_child(online_popup)
-	var content:=VBoxContainer.new();content.custom_minimum_size=Vector2(490,240);content.add_theme_constant_override("separation",14);online_popup.add_child(content)
-	content.add_child(label("Due giocatori, una squadra. Host: A–D · Ospite: E–H.",17))
-	player_name=LineEdit.new();player_name.placeholder_text="Nome del giocatore";player_name.max_length=30;player_name.text="Comandante";content.add_child(player_name)
-	room_code=LineEdit.new();room_code.placeholder_text="Codice stanza";room_code.max_length=8;content.add_child(room_code)
-	var row:=box(content,false)
-	row.add_child(button("Crea stanza",func(): connect_online(true)))
-	row.add_child(button("Entra",func(): connect_online(false)))
-	row.add_child(button("Disconnetti",func(): online.leave();notice="Disconnesso. Puoi proseguire in locale.";refresh();online_popup.hide()))
-	content.add_child(label("La scheda dell’host deve restare aperta durante la partita.",15))
-	online_popup.popup_centered(Vector2i(540,320))
-
-func connect_online(create: bool) -> void:
-	if busy:return
-	busy=true
-	var name_value:=player_name.text.strip_edges()
-	if name_value=="":name_value="Comandante"
-	notice="Connessione al Firebase della Ludoteca…";refresh()
-	var success: bool=await online.create(name_value) if create else await online.join(name_value,room_code.text.strip_edges().to_upper())
-	busy=false
-	if success:
-		notice="Condividi il codice %s con il secondo giocatore." % online.code
-		online_popup.hide()
-	refresh()
