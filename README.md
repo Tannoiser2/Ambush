@@ -19,3 +19,5 @@ Questa **non è una missione completa**: combattimento interattivo, soccorso del
 `godot --headless --path . --export-release Web build/web/index.html`
 
 La build web è destinata a HTTPS/GitHub Pages e usa l’esportazione senza thread. L’archivio TTS originale resta fuori dal repository. Le immagini e i testi del gioco originale sono da usare nel rispetto dei diritti applicabili.
+
+`python3 tools/extract_map_a_candidates.py` produce in `data/source/map_a_terrain_candidates.json` misure visive di tutti i 475 esagoni della mappa A. Sono soltanto candidati da confrontare con la carta originale: il gioco non li usa per decidere terreno, copertura o linea di vista. Il centro degli edifici K13, L13 e T8, per esempio, sembra terreno libero a un classificatore di pixel.
