@@ -23,6 +23,7 @@ func _initialize() -> void:
  assert(activation.state.vp == 1)
  assert(activation.state.round_setup.number == 1)
  assert(activation.state.round_setup.german_two_turns.is_empty())
+ assert(activation.first_round_visibility()["A"] == "blocked")
  var officer = Game.new()
  officer.new_game(32)
  officer.resolve("337")
@@ -30,6 +31,9 @@ func _initialize() -> void:
  assert(officer.state.vp == 1)
  assert(officer.state.round_setup.german_two_turns == ["34"])
  assert(officer.state.round_setup.advantage == "de")
+ officer.soldier("A").hex = "M5"
+ assert(officer.first_round_visibility()["A"] == "clear")
+ officer.soldier("A").hex = ""
  var officer_awareness = officer.prepare_awareness_phase({},["A"],{"A":0})
  assert(officer_awareness["A"])
  assert(not officer_awareness["B"])

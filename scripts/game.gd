@@ -43,6 +43,23 @@ func map_los(a: String, b: String) -> Dictionary:
 func map_terrain_at(hex_id: String) -> Dictionary:
 	return map_terrain.terrain(hex_id,state.get("terrain_overrides",{}))
 
+func first_round_visibility() -> Dictionary:
+	if state.get("phase", "") != "rounds": return {}
+	var result: Dictionary = {}
+	for unit in state.squad:
+		if unit.status != "active": continue
+		var visibility := "blocked"
+		if unit.hex != "":
+			for enemy in state.enemies:
+				if enemy.get("status", "active") != "active": continue
+				var los: Dictionary = map_los(str(unit.hex),str(enemy.hex))
+				if los.status == "clear":
+					visibility = "clear"
+					break
+				if los.status == "unknown": visibility = "unknown"
+		result[str(unit.id)] = visibility
+	return result
+
 func german_action_text(reference: int) -> String:
 	return str(german_actions.get(str(reference), ""))
 
@@ -409,6 +426,16 @@ func run_ops(ops: Array) -> void:
 					log_line("PRIMO ROUND", "GE %s: due turni assegnati dal paragrafo." % ", ".join(state.round_setup.german_two_turns), "check")
 				if state.round_setup.us_two_turns:
 					log_line("PRIMO ROUND", "Tutti gli americani consapevoli che non vanno nel panico ricevono due turni.", "check")
+				var visibility: Dictionary = first_round_visibility()
+				var certain: Array[String] = []
+				var hidden: Array[String] = []
+				var unresolved: Array[String] = []
+				for id in visibility:
+					match visibility[id]:
+						"clear": certain.append(id)
+						"blocked": hidden.append(id)
+						_: unresolved.append(id)
+				log_line("LOS PRELIMINARE", "Linea libera (stimata): %s · Ostruita/fuori mappa: %s · Da verificare: %s." % [", ".join(certain),", ".join(hidden),", ".join(unresolved)], "check")
 				stop_resolution("Contatto nemico registrato. La sequenza di combattimento dei Round non è ancora eseguita.")
 			"crash":
 				state.landmarks[op.hex] = {"name":"Typhoon abbattuto","entry_paragraph":op.entry_paragraph}
