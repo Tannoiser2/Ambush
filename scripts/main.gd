@@ -191,8 +191,10 @@ func escape_bbcode(value: String) -> String:
 func show_hover(id: String) -> void:
 	if id == "":
 		hover_label.text = "Rotella: zoom · tasto destro: sposta la carta"
+		hover_label.tooltip_text = ""
 		return
 	hover_label.text = "ESAGONO " + id
+	hover_label.tooltip_text = "Classificazione del terreno ancora in revisione."
 	var terrain: Dictionary = game.map_terrain.terrain(id)
 	var terrain_names := {"clear":"aperto","woods":"bosco","brush":"macchia","cover":"copertura","road":"strada","stream":"corso d'acqua","stone_building":"edificio in pietra","wood_building":"edificio in legno"}
 	if not terrain.is_empty():
@@ -203,6 +205,7 @@ func show_hover(id: String) -> void:
 		var los: Dictionary = game.map_los(str(observer.hex),id)
 		var los_names := {"clear":"libera","blocked":"ostruita","unknown":"da verificare"}
 		hover_label.text += "  ·  LOS preliminare da %s: %s" % [observer.hex,los_names.get(str(los.status),"da verificare")]
+		hover_label.tooltip_text = str(los.reason)
 	for enemy in game.state.enemies:
 		if enemy.hex == id:
 			hover_label.text += "  ·  TEDESCO %s / GE %s  ·  %s  ·  IN %d PC %d AT %+d  ·  %s" % [enemy.get("letter", "?"), enemy.id, enemy.get("role", ""), enemy.get("initiative", 0), enemy.get("pc", 0), enemy.get("ws", 0), enemy.get("status", "active")]

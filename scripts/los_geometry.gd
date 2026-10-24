@@ -73,11 +73,21 @@ static func _hexside_key(a: String, b: String) -> String:
 static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexsides: Dictionary) -> Dictionary:
  for id in path:
   if not hexes.has(id): return {"status":"unknown","reason":"Terreno non catalogato: " + id}
+ for i in range(path.size()-1):
+  if str(hexsides.get(_hexside_key(path[i],path[i+1]),"")) == "crest":
+   return {"status":"blocked","reason":"Cresta fra %s e %s." % [path[i],path[i+1]]}
  var start: Dictionary = hexes[path.front()]
  var finish: Dictionary = hexes[path.back()]
  for endpoint in [start,finish]:
   if str(endpoint.get("terrain", "")).ends_with("_building"):
    return {"status":"unknown","reason":"Parete/apertura dell'edificio non verificata."}
+ if path.size() == 2 and Hex.distance(path.front(),path.back()) == 1:
+  var direct_side: String = str(hexsides.get(_hexside_key(path.front(),path.back()),""))
+  if direct_side not in ["","none","embankment"]:
+   return {"status":"unknown","reason":"Lato d'esagono non classificato."}
+  if direct_side == "" and (bool(start.get("hexside_review_pending",true)) or bool(finish.get("hexside_review_pending",true))):
+   return {"status":"unknown","reason":"Lato d'esagono da verificare."}
+  return {"status":"clear","reason":"Esagoni adiacenti senza lato bloccante."}
  if start.get("elevation") == null or finish.get("elevation") == null:
   return {"status":"unknown","reason":"Quota dell'esagono di partenza o arrivo non verificata."}
  var start_level := int(start.elevation)
@@ -109,7 +119,6 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
  if unresolved != "": return {"status":"unknown","reason":unresolved}
  for i in range(path.size()-1):
   var side: String = str(hexsides.get(_hexside_key(path[i],path[i+1]),""))
-  if side == "crest": return {"status":"blocked","reason":"Cresta fra %s e %s." % [path[i],path[i+1]]}
   if side == "embankment" and not same_level:
    var side_height := maxi(int(hexes[path[i]].elevation),int(hexes[path[i+1]].elevation))
    var adjacent_high: bool = path[i] == (path.front() if start_level == higher else path.back()) or path[i+1] == (path.front() if start_level == higher else path.back())
@@ -120,4 +129,4 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
     return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
   elif side not in ["none","embankment"]:
    return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
- return {"status":"clear","reason":"Terreno e lati verificati per LOS alla stessa quota."}
+ return {"status":"clear","reason":"Terreno e lati verificati per questa LOS."}

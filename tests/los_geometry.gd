@@ -8,6 +8,10 @@ func _initialize() -> void:
  assert(map.terrain("D1").terrain == "woods")
  assert(map.terrain("T8").terrain == "wood_building")
  assert(map.terrain("J3").terrain == "stream")
+ assert(map.data.hexsides["T13|T14"] == "crest")
+ assert(map.data.hexsides["R12|S13"] == "embankment")
+ assert(map.los("T13","T14").status == "blocked")
+ assert(map.los("P6","Q6").status == "clear")
  assert(map.los("A1","C2").status == "clear")
  assert(map.los("C1","E1").status == "unknown")
  assert(map.los("C3","E3").status == "blocked")
@@ -27,6 +31,13 @@ func _initialize() -> void:
  heights["B1"].elevation = 2
  assert(Los.evaluate_map_a("A1","C2",heights,{"A1|B1":"embankment"}).status == "blocked")
  assert(Los.evaluate_map_a("A1","C2",heights,{"B1|C2":"embankment"}).status == "clear")
+ var slope := {"A1":{"terrain":"clear","elevation":1,"hexside_review_pending":false},
+  "B1":{"terrain":"woods","elevation":2,"hexside_review_pending":false},
+  "C2":{"terrain":"woods","elevation":2,"hexside_review_pending":false},
+  "D2":{"terrain":"clear","elevation":3,"hexside_review_pending":false}}
+ assert(Los.evaluate_map_a("A1","D2",slope).status == "clear")
+ slope["B1"].terrain = "stone_building"
+ assert(Los.evaluate_map_a("A1","D2",slope).status == "blocked")
  assert(Los.alternative_intervening_hexes("A1","A1") == [[]])
  assert(Los.alternative_intervening_hexes("A1","B1") == [[]])
  assert(Los.alternative_intervening_hexes("A1","C2") == [["B1"]])
