@@ -46,6 +46,12 @@ func _initialize() -> void:
  assert(Los.alternative_intervening_hexes("C3","A3") == [["B3"],["B2"]])
  assert(Los.clear_at_same_elevation("C3","A3",{"B3":true}))
  assert(not Los.clear_at_same_elevation("C3","A3",{"B3":true,"B2":true}))
+ var border := {"A3":{"terrain":"clear","elevation":1,"hexside_review_pending":false},
+  "B2":{"terrain":"clear","elevation":1,"hexside_review_pending":false},
+  "B3":{"terrain":"clear","elevation":1,"hexside_review_pending":false},
+  "C3":{"terrain":"clear","elevation":1,"hexside_review_pending":false}}
+ assert(Los.evaluate_map_a("C3","A3",border).status == "clear")
+ assert(Los.evaluate_map_a("C3","A3",border,{"B2|B3":"crest"}).status == "blocked")
  assert(Los.clear_at_same_elevation("C3","A3",{"B3":true}) == Los.clear_at_same_elevation("A3","C3",{"B3":true}))
  for col in range(25):
   for row in range(1,20):

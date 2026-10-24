@@ -55,6 +55,12 @@ static func evaluate_map_a(a: String, b: String, hexes: Dictionary, hexsides: Di
  if not hexes.has(a) or not hexes.has(b): return {"status":"unknown","reason":"Terreno non catalogato."}
  if a == b: return {"status":"clear","reason":"Stesso esagono."}
  var possible := alternative_intervening_hexes(a,b)
+ if possible.size() == 2:
+  var left: Array = possible[0]
+  var right: Array = possible[1]
+  for i in mini(left.size(),right.size()):
+   if Hex.distance(str(left[i]),str(right[i])) == 1 and str(hexsides.get(_hexside_key(str(left[i]),str(right[i])),"")) == "crest":
+    return {"status":"blocked","reason":"La LOS segue il lato di cresta fra %s e %s." % [left[i],right[i]]}
  var unknown := false
  var reasons: Array[String] = []
  for intervening in possible:
