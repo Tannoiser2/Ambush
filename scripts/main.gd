@@ -14,6 +14,13 @@ var selected_ids: Array[String] = ["A"]
 var drag_target := ""
 var terrain_review_mode := false
 var terrain_button: Button
+var app_header: Control
+var app_tools: Control
+var squad_panel: Control
+var diary_panel: Control
+var page_margin: MarginContainer
+var game_footer: Control
+var version_footer: Control
 var terrain_legend: Label
 var terrain_overlay_controls: HBoxContainer
 var terrain_opacity_slider: HSlider
@@ -112,22 +119,22 @@ func box(parent: Node, vertical:=true) -> BoxContainer:
 
 func build_ui() -> void:
 	var bg:=ColorRect.new();bg.color=Color("141b15");bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);add_child(bg)
-	var margin:=MarginContainer.new();margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var margin:=MarginContainer.new();page_margin=margin;margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left","right","top","bottom"]:margin.add_theme_constant_override("margin_"+side,18)
 	add_child(margin)
 	var root:=box(margin)
-	var header:=box(root,false)
+	var header:=box(root,false);app_header=header
 	var brand:=box(header);brand.add_child(label("AMBUSH!",42,true));brand.add_child(label("VICTORY GAMES  /  EDIZIONE DIGITALE ITALIANA",12))
 	var spacer:=Control.new();spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(spacer)
 	var mission_info:=box(header);mission_info.add_child(label("01  /  SANGUE A SAINT-MICHAUX",23,true));mission_info.add_child(label("NORMANDIA  ·  FINE GIUGNO 1944",14))
-	var tools:=box(root,false)
+	var tools:=box(root,false);app_tools=tools
 	phase_label=label("OPERAZIONI",17,true);tools.add_child(phase_label)
 	condition_label=label("CONDIZIONE 1",15);tools.add_child(condition_label)
 	progress_label=label("0 / 13 PV",15);tools.add_child(progress_label)
 	var flexible:=Control.new();flexible.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tools.add_child(flexible)
 	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new))
 	var body:=box(root,false);body.size_flags_vertical=Control.SIZE_EXPAND_FILL
-	var left_panel:=PanelContainer.new();left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
+	var left_panel:=PanelContainer.new();squad_panel=left_panel;left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
 	var left:=box(left_panel);left.add_theme_constant_override("separation",6);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Pedine selezionate: clic per includere/escludere",13))
 	var roster_scroll:=ScrollContainer.new();roster_scroll.custom_minimum_size.y=210;roster_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;left.add_child(roster_scroll)
 	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",3);roster_scroll.add_child(roster)
@@ -167,7 +174,7 @@ func build_ui() -> void:
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
 	var stretch:=Control.new();stretch.size_flags_horizontal=Control.SIZE_EXPAND_FILL;mapbar.add_child(stretch)
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
-	terrain_button=button("Editor mappa",func(): terrain_review_mode=not terrain_review_mode;refresh())
+	terrain_button=button("Editor a schermo intero",func(): terrain_review_mode=not terrain_review_mode;refresh())
 	terrain_button.toggle_mode=true;mapbar.add_child(terrain_button)
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(handle_map_click)
@@ -210,13 +217,13 @@ func build_ui() -> void:
 	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	hover_label.custom_minimum_size.y=44
 	center.add_child(hover_label)
-	var right_panel:=PanelContainer.new();right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
+	var right_panel:=PanelContainer.new();diary_panel=right_panel;right_panel.custom_minimum_size.x=342;body.add_child(right_panel)
 	var right:=box(right_panel);right.add_child(label("DIARIO OPERATIVO",22,true));right.add_child(label("PARAGRAFI · DADI · CONDIZIONI",12))
 	objectives=rich();objectives.custom_minimum_size.y=154;objectives.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;right.add_child(objectives)
 	diary=rich();diary.custom_minimum_size.x=310;right.add_child(diary)
-	var footer:=box(root,false)
+	var footer:=box(root,false);game_footer=footer
 	status_label=label("",15);status_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;status_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;footer.add_child(status_label)
-	root.add_child(label("VERSIONE DI SVILUPPO 0.3 · Operazioni e Condizioni 1–4. Il combattimento è ancora in costruzione.",13))
+	version_footer=label("VERSIONE DI SVILUPPO 0.3 · Operazioni e Condizioni 1–4. Il combattimento è ancora in costruzione.",13);root.add_child(version_footer)
 
 func refresh() -> void:
 	if not is_instance_valid(roster) or game.state.is_empty():return
@@ -308,12 +315,17 @@ func refresh() -> void:
 	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionati: %s. %s" % [str(selected_ids.size()),", ".join(selected_ids),"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
 	if notice=="" and game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty():
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
-	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode;terrain_overlay_controls.visible=terrain_review_mode
+	terrain_button.button_pressed=terrain_review_mode;terrain_button.text="Torna alla partita" if terrain_review_mode else "Editor a schermo intero"
+	terrain_legend.visible=terrain_review_mode;terrain_overlay_controls.visible=terrain_review_mode
+	app_header.visible=not terrain_review_mode;app_tools.visible=not terrain_review_mode
+	squad_panel.visible=not terrain_review_mode;diary_panel.visible=not terrain_review_mode
+	game_footer.visible=not terrain_review_mode;version_footer.visible=not terrain_review_mode
+	for side in ["left","right","top","bottom"]:page_margin.add_theme_constant_override("margin_"+side,4 if terrain_review_mode else 18)
 	terrain_editor.visible=terrain_review_mode
 	if board.hovered=="":hover_label.text="Rotella: zoom · tasto centrale: sposta carta" if not terrain_review_mode else "Editor mappa · sinistro+trascina: selezione multipla · destro+trascina: sposta carta"
 	selection_label.text=map_selection_summary() if not edit_hexes.is_empty() else "Trascina col sinistro per selezionare · clicca un esagono selezionato per rimuoverlo"
 	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode
-	board.custom_minimum_size.y=225 if terrain_review_mode else 400
+	board.custom_minimum_size.y=0 if terrain_review_mode else 400
 	board.edit_hexes=edit_hexes.duplicate()
 	board.grid_opacity=terrain_opacity_slider.value if is_instance_valid(terrain_opacity_slider) else 0.32
 	board.queue_redraw()
