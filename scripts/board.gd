@@ -12,6 +12,7 @@ var edit_hexes: Array[String] = []
 var edit_side_origin := ""
 var edit_side_direction := 0
 var edit_side_kind := ""
+var grid_opacity := 0.32
 var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
@@ -47,16 +48,17 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("222a22"))
 	scale_factor = minf((size.x-24.0)/7000.0,(size.y-24.0)/6400.0)*zoom
 	rect = Rect2((size-Vector2(7000,6400)*scale_factor)/2.0+pan,Vector2(7000,6400)*scale_factor)
-	if not terrain_review_mode:
-		draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color(0.94,0.93,0.85))
+	draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color.WHITE if terrain_review_mode else Color(0.94,0.93,0.85))
 	if game == null or game.state.is_empty(): return
 	if terrain_review_mode:
 		for hex_id in game.map_terrain.data.hexes:
 			var record: Dictionary=game.map_terrain.data.hexes[hex_id]
 			var reviewed: bool=record.get("classification","")=="manual_visual_review" and record.get("elevation")!=null and not bool(record.get("hexside_review_pending",false))
 			var points:=polygon_at(str(hex_id))
-			draw_colored_polygon(points,Color("315743") if reviewed else Color("8b3c36") if record.get("elevation")==null else Color("897044"))
-			points.append(points[0]);draw_polyline(points,Color("c7c7a5",0.6),1.0,true)
+			var fill:=Color("315743") if reviewed else Color("8b3c36") if record.get("elevation")==null else Color("897044")
+			fill.a=grid_opacity
+			draw_colored_polygon(points,fill)
+			points.append(points[0]);draw_polyline(points,Color("e4dfc8",0.72),1.0,true)
 			var pos:=map_position(str(hex_id))
 			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
 			if hex_id in edit_hexes:

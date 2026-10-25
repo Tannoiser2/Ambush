@@ -14,6 +14,9 @@ var drag_target := ""
 var terrain_review_mode := false
 var terrain_button: Button
 var terrain_legend: Label
+var terrain_overlay_controls: HBoxContainer
+var terrain_opacity_slider: HSlider
+var terrain_opacity_value: Label
 var terrain_editor: HFlowContainer
 var terrain_brush: OptionButton
 var level_brush: OptionButton
@@ -167,6 +170,11 @@ func build_ui() -> void:
 	board.hover_changed.connect(show_hover)
 	terrain_legend=label("VERDE verificato · OCRA stimato · ROSSO quota assente. Seleziona un esagono e una direzione: il lato interessato viene evidenziato in turchese. D porta · W finestra · C cresta · S scarpata.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
+	terrain_overlay_controls=HBoxContainer.new();terrain_overlay_controls.visible=false;terrain_overlay_controls.add_theme_constant_override("separation",8);center.add_child(terrain_overlay_controls)
+	terrain_overlay_controls.add_child(label("Opacità griglia",13))
+	terrain_opacity_slider=HSlider.new();terrain_opacity_slider.min_value=0.05;terrain_opacity_slider.max_value=0.85;terrain_opacity_slider.step=0.05;terrain_opacity_slider.value=0.32;terrain_opacity_slider.custom_minimum_size.x=190;terrain_overlay_controls.add_child(terrain_opacity_slider)
+	terrain_opacity_value=label("32%",13);terrain_overlay_controls.add_child(terrain_opacity_value)
+	terrain_opacity_slider.value_changed.connect(func(value:float):board.grid_opacity=value;terrain_opacity_value.text="%d%%" % roundi(value*100.0);board.queue_redraw())
 	terrain_editor=HFlowContainer.new();terrain_editor.visible=false;terrain_editor.custom_minimum_size.y=84;center.add_child(terrain_editor)
 	selection_label=label("Nessun esagono selezionato",13);terrain_editor.add_child(selection_label)
 	map_save_label=label("Mappa salvata sul dispositivo",12);terrain_editor.add_child(map_save_label)
@@ -291,7 +299,7 @@ func refresh() -> void:
 	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionati: %s. %s" % [str(selected_ids.size()),", ".join(selected_ids),"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
 	if notice=="" and game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty():
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
-	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode
+	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode;terrain_overlay_controls.visible=terrain_review_mode
 	terrain_editor.visible=terrain_review_mode
 	selection_label.text=map_selection_summary() if not edit_hexes.is_empty() else "Clicca gli esagoni da aggiungere · clicca di nuovo per rimuovere"
 	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
@@ -299,6 +307,7 @@ func refresh() -> void:
 	board.edit_side_origin=edit_hexes[0] if not edit_hexes.is_empty() else ""
 	board.edit_side_direction=side_direction.selected if is_instance_valid(side_direction) else 0
 	board.edit_side_kind=str(side_brush.get_item_metadata(side_brush.selected)) if is_instance_valid(side_brush) else ""
+	board.grid_opacity=terrain_opacity_slider.value if is_instance_valid(terrain_opacity_slider) else 0.32
 
 func stack_is_legal() -> bool:
 	var leader: Dictionary=game.soldier(selected)
