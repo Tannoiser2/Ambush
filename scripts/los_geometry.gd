@@ -51,6 +51,13 @@ static func clear_at_same_elevation(a: String, b: String, blocking: Dictionary) 
  return false
 
 static func evaluate_map_a(a: String, b: String, hexes: Dictionary, hexsides: Dictionary = {}) -> Dictionary:
+ var forward: Dictionary=_evaluate_map_a_direction(a,b,hexes,hexsides)
+ var reverse: Dictionary=_evaluate_map_a_direction(b,a,hexes,hexsides)
+ if forward.status!=reverse.status:
+  return {"status":"unknown","reason":"La geometria dei lati richiede revisione per una LOS simmetrica."}
+ return forward
+
+static func _evaluate_map_a_direction(a: String, b: String, hexes: Dictionary, hexsides: Dictionary) -> Dictionary:
  if not Hex.valid(a) or not Hex.valid(b): return {"status":"unknown","reason":"Esagono non valido."}
  if not hexes.has(a) or not hexes.has(b): return {"status":"unknown","reason":"Terreno non catalogato."}
  if a == b: return {"status":"clear","reason":"Stesso esagono."}
@@ -106,6 +113,8 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
   var has_entry: bool=i==0 or _opening(hexsides,path[i],path[i-1])
   var has_exit: bool=i==path.size()-1 or _opening(hexsides,path[i],path[i+1])
   if not has_entry or not has_exit:
+   if i>0 and i<path.size()-1:
+    return {"status":"blocked","reason":"Edificio senza aperture sulla LOS in %s." % path[i]}
    return {"status":"unknown","reason":"Apertura porta/finestra mancante o non verificata nell'edificio %s." % path[i]}
  if start.get("elevation") == null or finish.get("elevation") == null:
   return {"status":"unknown","reason":"Quota dell'esagono di partenza o arrivo non verificata."}
