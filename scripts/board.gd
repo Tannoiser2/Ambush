@@ -11,6 +11,7 @@ var game: AmbushGame
 var selected := "A"
 var selected_ids: Array[String] = ["A"]
 var terrain_review_mode := false
+var active_side_tool := ""
 var edit_hexes: Array[String] = []
 var grid_opacity := 0.32
 var hovered := ""
@@ -63,6 +64,8 @@ func _draw() -> void:
 			var reviewed: bool=record.get("classification","")=="manual_visual_review" and record.get("elevation")!=null and not bool(record.get("hexside_review_pending",false))
 			var points:=polygon_at(str(hex_id))
 			var art_kind:=str(record.get("map_art",record.get("terrain","clear")))
+			var legacy_bridge:=art_kind in ["stone_bridge","wood_bridge"]
+			if legacy_bridge:art_kind=str(record.get("terrain","clear"))
 			if art_kind=="clear":art_kind="clear_%d" % clampi(int(record.get("elevation",1) if record.get("elevation",1)!=null else 1),1,3)
 			var tile:=TerrainArt.texture(art_kind)
 			var tint:=Color(1,1,1,clampf(grid_opacity,0.0,1.0))
@@ -76,9 +79,20 @@ func _draw() -> void:
 					draw_circle(center,symbol_radius,Color(0.34,0.31,0.24,grid_opacity));draw_arc(center,symbol_radius,0.0,TAU,24,Color(0.18,0.17,0.14,grid_opacity),2.0,true)
 				elif art_kind=="rubble":
 					for offset in [Vector2(-0.55,-0.2),Vector2(0.05,-0.55),Vector2(0.42,-0.08),Vector2(-0.28,0.36)]:draw_rect(Rect2(center+offset*symbol_radius,Vector2(0.35,0.25)*symbol_radius),Color(0.72,0.64,0.48,grid_opacity))
+			var overlays: Array=record.get("overlays",[]).duplicate()
+			if legacy_bridge and art_kind not in overlays:overlays.append(str(record.get("map_art")))
+			for overlay_kind in overlays:
+				var overlay_tile:=TerrainArt.overlay_texture(str(overlay_kind))
+				if overlay_tile!=null:draw_polygon(points,PackedColorArray([tint,tint,tint,tint,tint,tint]),uvs,overlay_tile)
 			var status_edge:=Color("668c69",grid_opacity) if reviewed else Color("d16c59",grid_opacity) if record.get("elevation")==null else Color("bd9a4e",grid_opacity)
 			points.append(points[0]);draw_polyline(points,status_edge,1.0,true)
 			var pos:=map_position(str(hex_id))
+			var level_text:=str(record.get("elevation","?")) if record.get("elevation")!=null else "?"
+			var badge_pos:=pos+Vector2(118.0,-158.0)*scale_factor
+			var badge_rect:=Rect2(badge_pos,Vector2(18.0,19.0))
+			draw_rect(badge_rect,Color("18221b",0.94),true)
+			draw_rect(badge_rect,Color("d6c68d",0.9),false,1.0)
+			draw_string(font,badge_pos+Vector2(4.0,15.0),level_text,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("fff1c8"))
 			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
 			if hex_id in edit_hexes:
 				var outline:=polygon_at(str(hex_id));outline.append(outline[0]);draw_polyline(outline,Color("f3d16f"),4.0,true)
@@ -177,6 +191,10 @@ func _gui_input(event: InputEvent) -> void:
 		elif event.button_index == MOUSE_BUTTON_LEFT:
 			if terrain_review_mode:
 				if event.pressed:
+					if active_side_tool!="":
+						var edge:=closest_edge(event.position)
+						if not edge.is_empty():hexside_dropped.emit(str(edge.hex_id),int(edge.direction),active_side_tool)
+						return
 					selecting_hexes=true;drag_selected_hexes.clear();drag_select_start=nearest(event.position);drag_select_moved=false;drag_select_origin=event.position
 				else:
 					selecting_hexes=false
@@ -217,7 +235,7 @@ func closest_edge(point: Vector2) -> Dictionary:
 		if neighbor=="":continue
 		var distance:=point.distance_to((map_position(id)+map_position(neighbor))/2.0)
 		if distance<best_distance:best_distance=distance;best_direction=direction
-	return {"hex_id":id,"direction":best_direction} if best_direction>=0 and best_distance<=maxf(16.0,85.0*scale_factor) else {}
+	return {"hex_id":id,"direction":best_direction} if best_direction>=0 and best_distance<=maxf(18.0,120.0*scale_factor) else {}
 
 func _can_drop_data(at_position: Vector2,data: Variant) -> bool:
 	if not data is Dictionary or not data.has("ambush_hexside"):

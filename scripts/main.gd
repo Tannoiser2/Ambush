@@ -17,6 +17,11 @@ var terrain_button: Button
 var app_header: Control
 var app_tools: Control
 var squad_panel: Control
+var main_body: HBoxContainer
+var squad_title: Label
+var squad_hint: Label
+var squad_controls: Array[Control] = []
+var normal_roster_scroll: ScrollContainer
 var diary_panel: Control
 var page_margin: MarginContainer
 var game_footer: Control
@@ -34,6 +39,8 @@ var feature_selection := ""
 var level_selection := -99
 var feature_buttons: Dictionary = {}
 var level_buttons: Dictionary = {}
+var side_tool_buttons: Dictionary = {}
+var active_side_tool := ""
 var selection_label: Label
 var map_save_label: Label
 var edit_hexes: Array[String] = []
@@ -133,14 +140,15 @@ func build_ui() -> void:
 	progress_label=label("0 / 13 PV",15);tools.add_child(progress_label)
 	var flexible:=Control.new();flexible.size_flags_horizontal=Control.SIZE_EXPAND_FILL;tools.add_child(flexible)
 	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new))
-	var body:=box(root,false);body.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	var body:=box(root,false);main_body=body;body.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var left_panel:=PanelContainer.new();squad_panel=left_panel;left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
-	var left:=box(left_panel);left.add_theme_constant_override("separation",6);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Pedine selezionate: clic per includere/escludere",13))
-	var roster_scroll:=ScrollContainer.new();roster_scroll.custom_minimum_size.y=210;roster_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;left.add_child(roster_scroll)
+	var left:=box(left_panel);left.add_theme_constant_override("separation",6);squad_title=label("LA TUA SQUADRA",19,true);left.add_child(squad_title);squad_hint=label("Pedine selezionate: clic per includere/escludere",13);left.add_child(squad_hint)
+	var roster_scroll:=ScrollContainer.new();normal_roster_scroll=roster_scroll;roster_scroll.custom_minimum_size.y=210;roster_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;left.add_child(roster_scroll)
 	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",3);roster_scroll.add_child(roster)
-	details=rich();details.custom_minimum_size.y=88;details.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;left.add_child(details)
-	left.add_child(label("POSTURA",13))
+	details=rich();details.custom_minimum_size.y=88;details.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;left.add_child(details);squad_controls.append(details)
+	var posture_label:=label("POSTURA",13);left.add_child(posture_label);squad_controls.append(posture_label)
 	var stance_row:=box(left,false);stance_row.add_theme_constant_override("separation",4)
+	squad_controls.append(stance_row)
 	for pair in [["In piedi","standing"],["Basso","crouching"],["Prono","prone"]]:
 		var value: String=pair[1]
 		var b:=button(pair[0],func(): send_command({"type":"round_stance" if game.state.phase=="rounds" else "stance","soldier":selected,"stance":value}));b.toggle_mode=true;b.add_theme_font_size_override("font_size",14);stance_row.add_child(b);stances.append(b)
@@ -148,40 +156,46 @@ func build_ui() -> void:
 		var drop_button := button("",Callable(self,"choose_drop").bind(i))
 		drop_button.visible = false
 		left.add_child(drop_button)
+		squad_controls.append(drop_button)
 		drop_buttons.append(drop_button)
-	left.add_child(label("AZIONI · REGOLE 5/3",13))
+	var action_label:=label("AZIONI · REGOLE 5/3",13);left.add_child(action_label);squad_controls.append(action_label)
 	for pair in [["move","Muovi · clic sulla carta"],["equipment","Equipaggiamento"],["prepare","Prepara arma"],["clear_jam","Disinceppa arma"],["captured","Muovi prigioniero"]]:
 		var action_button := button(pair[1],func(): pass)
 		action_button.alignment=HORIZONTAL_ALIGNMENT_LEFT
 		left.add_child(action_button)
+		squad_controls.append(action_button)
 		action_buttons[pair[0]]=action_button
-	drag_options=VBoxContainer.new();left.add_child(drag_options)
+	drag_options=VBoxContainer.new();left.add_child(drag_options);squad_controls.append(drag_options)
 	exit_drag_button=button("Evacua con il ferito",func(): send_command({"type":"exit_drag","soldier":selected,"casualty":drag_target}))
-	exit_drag_button.visible=false;left.add_child(exit_drag_button)
+	exit_drag_button.visible=false;left.add_child(exit_drag_button);squad_controls.append(exit_drag_button)
 	pilot_button=button("Soccorri il pilota",func(): send_command({"type":"rescue_pilot","soldier":selected}))
-	pilot_button.visible=false;left.add_child(pilot_button)
+	pilot_button.visible=false;left.add_child(pilot_button);squad_controls.append(pilot_button)
 	begin_round_button=button("Prepara il Round",func(): send_command({"type":"begin_round"}))
-	begin_round_button.visible=false;left.add_child(begin_round_button)
+	begin_round_button.visible=false;left.add_child(begin_round_button);squad_controls.append(begin_round_button)
 	next_round_button=button("Round successivo",func(): send_command({"type":"next_round"}))
-	next_round_button.visible=false;left.add_child(next_round_button)
+	next_round_button.visible=false;left.add_child(next_round_button);squad_controls.append(next_round_button)
 	pass_button=button("Passa il turno",func(): send_command({"type":"round_pass","soldier":selected}))
-	pass_button.visible=false;left.add_child(pass_button)
+	pass_button.visible=false;left.add_child(pass_button);squad_controls.append(pass_button)
 	finish_move_button=button("Termina movimento",func(): send_command({"type":"round_move_finish","soldier":selected}))
-	finish_move_button.visible=false;left.add_child(finish_move_button)
+	finish_move_button.visible=false;left.add_child(finish_move_button);squad_controls.append(finish_move_button)
 	fire_options=VBoxContainer.new();left.add_child(fire_options)
-	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
+	squad_controls.append(fire_options)
+	var exit_button:=button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected}));left.add_child(exit_button);squad_controls.append(exit_button)
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
 	var stretch:=Control.new();stretch.size_flags_horizontal=Control.SIZE_EXPAND_FILL;mapbar.add_child(stretch)
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
-	terrain_button=button("Editor a schermo intero",func(): terrain_review_mode=not terrain_review_mode;refresh())
+	terrain_button=button("Editor a schermo intero",func():
+		terrain_review_mode=not terrain_review_mode
+		if terrain_review_mode:board.zoom=maxf(board.zoom,1.25);board.pan=Vector2.ZERO
+		refresh())
 	terrain_button.toggle_mode=true;mapbar.add_child(terrain_button)
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(handle_map_click)
 	board.hex_drag_selected.connect(handle_map_drag_select)
 	board.hexside_dropped.connect(apply_map_side_drop)
 	board.hover_changed.connect(show_hover)
-	terrain_legend=label("Verde verificato · Ocra stimato · Rosso quota da definire. Sinistro+trascina seleziona · Destro+trascina sposta la carta. Trascina C/S/P/F sul lato interessato.",13)
+	terrain_legend=label("Ponti sovrapposti al terreno di base. Verde verificato · Ocra stimato · Rosso quota da definire. Sinistro+trascina seleziona · Destro+trascina sposta. Seleziona C/S/P/F/×, poi clicca un lato.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	terrain_overlay_controls=HBoxContainer.new();terrain_overlay_controls.visible=false;terrain_overlay_controls.add_theme_constant_override("separation",8);center.add_child(terrain_overlay_controls)
 	terrain_overlay_controls.add_child(label("Opacità griglia",13))
@@ -192,15 +206,15 @@ func build_ui() -> void:
 	var map_status_row:=HBoxContainer.new();map_status_row.add_theme_constant_override("separation",8);terrain_editor.add_child(map_status_row)
 	selection_label=label("Nessun esagono selezionato",12);selection_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;selection_label.custom_minimum_size=Vector2(0,18);selection_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map_status_row.add_child(selection_label)
 	map_save_label=label("Salvata sul dispositivo",11);map_save_label.custom_minimum_size.x=128;map_save_label.tooltip_text="Le revisioni della mappa vengono salvate su questo dispositivo.";map_status_row.add_child(map_save_label)
-	terrain_palette=GridContainer.new();terrain_palette.columns=8;terrain_palette.add_theme_constant_override("h_separation",3);terrain_palette.add_theme_constant_override("v_separation",2);terrain_editor.add_child(terrain_palette)
+	terrain_palette=GridContainer.new();terrain_palette.columns=15;terrain_palette.add_theme_constant_override("h_separation",3);terrain_palette.add_theme_constant_override("v_separation",2);terrain_editor.add_child(terrain_palette)
 	var tile_script=load("res://scripts/terrain_palette_button.gd")
 	for item in [["Aperto","clear","clear"],["Bosco","woods","woods"],["Macchia","brush","brush"],["Rocce","rough","rough"],["Fiume","stream","stream"],["Copertura","cover","cover"],["Strada","road","road"],["Terra","road","dirt_road"],["Ponte p.","road","stone_bridge"],["Ponte l.","road","wood_bridge"],["Ferrovia","road","railroad"],["Edif. pietra","stone_building","stone_building"],["Edif. legno","wood_building","wood_building"],["Crateri","crater","crater"],["Macerie","rubble","rubble"]]:
 		var tile_button:=Button.new();tile_button.set_script(tile_script);tile_button.set("terrain_id",item[1]);tile_button.set("caption",item[0]);tile_button.set("tile_texture",TerrainArt.texture(item[2]));tile_button.tooltip_text=item[0];tile_button.toggle_mode=true
 		terrain_palette.add_child(tile_button);terrain_palette_buttons.append(tile_button)
 		tile_button.pressed.connect(select_terrain_brush.bind(str(item[1]),str(item[2]),tile_button))
 	var edit_controls:=HBoxContainer.new();edit_controls.size_flags_horizontal=Control.SIZE_EXPAND_FILL;edit_controls.add_theme_constant_override("separation",4);terrain_editor.add_child(edit_controls)
-	for item in [["Legno","wood"],["Pietra","stone"],["2° piano","second_story"],["Rimuovi","none"]]:
-		var feature_button:=Button.new();feature_button.text=item[0];feature_button.toggle_mode=true;feature_button.custom_minimum_size.x=64;edit_controls.add_child(feature_button);feature_buttons[item[1]]=feature_button
+	for item in [["2° piano","second_story"],["Rimuovi feature","none"]]:
+		var feature_button:=Button.new();feature_button.text=item[0];feature_button.toggle_mode=true;feature_button.custom_minimum_size.x=104 if item[1]=="none" else 84;feature_button.tooltip_text="Rimuove edificio e piano superiore dagli esagoni selezionati" if item[1]=="none" else "Aggiunge un secondo piano agli edifici selezionati";edit_controls.add_child(feature_button);feature_buttons[item[1]]=feature_button
 		feature_button.pressed.connect(select_map_feature.bind(str(item[1])))
 	edit_controls.add_child(label("Quota",11))
 	for level in [1,2,3]:
@@ -209,7 +223,8 @@ func build_ui() -> void:
 	var side_palette:=HBoxContainer.new();side_palette.add_theme_constant_override("separation",4);side_palette.add_child(label("Lati",11));terrain_editor.add_child(side_palette)
 	var marker_script=load("res://scripts/side_marker_button.gd")
 	for marker in [["crest","C",Color("485b4b")],["embankment","S",Color("a56c35")],["door","P",Color("bd7553")],["window","F",Color("4e9db4")],["none","×",Color("555a52")]]:
-		var marker_button:=Button.new();marker_button.set_script(marker_script);marker_button.set("side_kind",marker[0]);marker_button.set("marker_letter",marker[1]);marker_button.set("marker_color",marker[2]);side_palette.add_child(marker_button)
+		var marker_button:=Button.new();marker_button.set_script(marker_script);marker_button.set("side_kind",marker[0]);marker_button.set("marker_letter",marker[1]);marker_button.set("marker_color",marker[2]);marker_button.toggle_mode=true;side_palette.add_child(marker_button);side_tool_buttons[marker[0]]=marker_button
+		marker_button.pressed.connect(select_map_side_tool.bind(str(marker[0])))
 	var apply_map_button:=button("Applica",apply_map_brush);apply_map_button.custom_minimum_size.x=76;side_palette.add_child(apply_map_button)
 	var clear_map_selection:=button("Deseleziona",func():edit_hexes.clear();refresh());clear_map_selection.custom_minimum_size.x=86;side_palette.add_child(clear_map_selection)
 	var save_map_button:=button("Salva",save_map_reviews);save_map_button.custom_minimum_size.x=68;side_palette.add_child(save_map_button)
@@ -318,7 +333,21 @@ func refresh() -> void:
 	terrain_button.button_pressed=terrain_review_mode;terrain_button.text="Torna alla partita" if terrain_review_mode else "Editor a schermo intero"
 	terrain_legend.visible=terrain_review_mode;terrain_overlay_controls.visible=terrain_review_mode
 	app_header.visible=not terrain_review_mode;app_tools.visible=not terrain_review_mode
-	squad_panel.visible=not terrain_review_mode;diary_panel.visible=not terrain_review_mode
+	squad_panel.visible=true;diary_panel.visible=not terrain_review_mode
+	if terrain_review_mode:
+		main_body.move_child(squad_panel,1)
+		squad_panel.custom_minimum_size=Vector2(236,0)
+		squad_title.text="PEDINE"
+		squad_hint.text="Clicca per attivare o disattivare"
+		normal_roster_scroll.custom_minimum_size.y=0
+		for control in squad_controls:control.visible=false
+	else:
+		main_body.move_child(squad_panel,0)
+		squad_panel.custom_minimum_size=Vector2(226,0)
+		squad_title.text="LA TUA SQUADRA"
+		squad_hint.text="Pedine selezionate: clic per includere/escludere"
+		normal_roster_scroll.custom_minimum_size.y=210
+		for control in squad_controls:control.visible=true
 	game_footer.visible=not terrain_review_mode;version_footer.visible=not terrain_review_mode
 	for side in ["left","right","top","bottom"]:page_margin.add_theme_constant_override("margin_"+side,4 if terrain_review_mode else 18)
 	terrain_editor.visible=terrain_review_mode
@@ -430,11 +459,19 @@ func map_selection_summary() -> String:
 	var terrain_text:= ", ".join(terrain_names)
 	var elevation_text:= ", ".join(elevation_names)
 	var building_text:= ", ".join(building_names) if not building_names.is_empty() else "nessun edificio"
+	var overlay_names: Dictionary={"stone_bridge":"ponte in pietra","wood_bridge":"ponte in legno"}
+	var overlays: Dictionary={}
+	for id in edit_hexes:
+		var record: Dictionary=game.map_terrain.data.hexes.get(id,{})
+		for overlay in record.get("overlays",[]):overlays[str(overlay)]=true
+		if str(record.get("map_art","")) in overlay_names:overlays[str(record.map_art)]=true
+	var overlay_text:=""
+	for overlay in overlays:overlay_text+=" · sopra "+str(overlay_names.get(overlay,overlay))
 	var preview_ids:=PackedStringArray()
 	for i in mini(edit_hexes.size(),5):preview_ids.append(edit_hexes[i])
 	var id_text:=", ".join(preview_ids)
 	if edit_hexes.size()>preview_ids.size():id_text+=" +%d" % (edit_hexes.size()-preview_ids.size())
-	return "%d esagoni [%s] · %s · quota %s · %s" % [edit_hexes.size(),id_text,terrain_text,elevation_text,building_text]
+	return "%d esagoni [%s] · %s · quota %s · %s%s" % [edit_hexes.size(),id_text,terrain_text,elevation_text,building_text,overlay_text]
 
 func select_terrain_brush(id: String, art_id: String, active_button: Button) -> void:
 	terrain_brush_selection=id
@@ -450,10 +487,18 @@ func apply_map_side_drop(hex_id: String,direction: int,kind: String) -> void:
 	var other:=neighbor_id(hex_id,direction)
 	if other=="":notice="Il lato selezionato è fuori dalla mappa.";refresh();return
 	var key:=map_edge_key(hex_id,other)
-	game.map_terrain.data.hexsides[key]=kind
+	var current:=str(game.map_terrain.data.hexsides.get(key,""))
+	if kind=="none" or current==kind:game.map_terrain.data.hexsides.erase(key)
+	else:game.map_terrain.data.hexsides[key]=kind
 	save_map_reviews()
-	notice="Indicatore lato %s impostato su %s–%s." % [{"crest":"cresta","embankment":"scarpata","door":"porta","window":"finestra","none":"rimosso"}.get(kind,kind),hex_id,other]
+	notice="Indicatore lato %s su %s–%s." % [{"crest":"cresta","embankment":"scarpata","door":"porta","window":"finestra","none":"rimosso"}.get(kind,kind),hex_id,other]
 	refresh()
+
+func select_map_side_tool(kind: String) -> void:
+	active_side_tool="" if active_side_tool==kind else kind
+	board.active_side_tool=active_side_tool
+	for key in side_tool_buttons:side_tool_buttons[key].button_pressed=(key==active_side_tool)
+	board.queue_redraw()
 
 func select_map_feature(feature: String) -> void:
 	feature_selection="" if feature_selection==feature else feature
@@ -468,10 +513,24 @@ func apply_map_brush() -> void:
 	var terrain: String=terrain_brush_selection
 	for id in edit_hexes:
 		var record: Dictionary=game.map_terrain.data.hexes[id].duplicate(true)
-		if terrain!="":record.terrain=terrain;record.map_art=terrain_brush_art
+		if terrain!="":
+			if terrain_brush_art in ["stone_bridge","wood_bridge"]:
+				var overlays: Array=record.get("overlays",[]).duplicate()
+				if terrain_brush_art not in overlays:overlays.append(terrain_brush_art)
+				record.overlays=overlays
+			else:
+				if str(record.get("map_art","")) in ["stone_bridge","wood_bridge"]:
+					var legacy_overlays: Array=record.get("overlays",[]).duplicate()
+					if record.map_art not in legacy_overlays:legacy_overlays.append(str(record.map_art))
+					record.overlays=legacy_overlays
+				record.terrain=terrain;record.map_art=terrain_brush_art
 		if level_selection!=-99:record.elevation=level_selection
 		if feature_selection!="":
-			if feature_selection=="none":record.erase("building");record.erase("second_story")
+			if feature_selection=="none":
+				record.erase("building");record.erase("second_story");record.erase("overlays")
+				if str(record.get("map_art","")) in ["stone_bridge","wood_bridge"]:record.map_art=str(record.get("terrain","clear"))
+				if record.get("terrain","") in ["stone_building","wood_building"]:
+					record.terrain="clear";record.map_art="clear_%d" % clampi(int(record.get("elevation",1) if record.get("elevation",1)!=null else 1),1,3)
 			elif feature_selection=="second_story":record.second_story=true
 			else:record.building=feature_selection
 		if terrain!="" or level_selection!=-99 or feature_selection!="":record.classification="manual_visual_review"
@@ -486,8 +545,12 @@ func save_map_reviews() -> void:
 	for id in original.hexes:
 		if original.hexes[id]!=source.hexes.get(id,{}):edited_hexes[id]=original.hexes[id]
 	var edited_sides: Dictionary={}
+	for edge in source.hexsides:
+		if original.hexsides.get(edge,"")!=source.hexsides[edge]:edited_sides[edge]=original.hexsides.get(edge,"")
 	for edge in original.hexsides:
-		if original.hexsides[edge]!=source.hexsides.get(edge,""):edited_sides[edge]=original.hexsides[edge]
+		if not source.hexsides.has(edge) and original.hexsides[edge]!="":edited_sides[edge]=original.hexsides[edge]
+	for edge in original.hexsides:
+		if source.hexsides.has(edge) and original.hexsides.get(edge,"")==source.hexsides[edge]:edited_sides.erase(edge)
 	var file:=FileAccess.open(MAP_REVIEW_PATH,FileAccess.WRITE)
 	if file==null:notice="Salvataggio mappa non riuscito.";refresh();return
 	file.store_string(JSON.stringify({"hexes":edited_hexes,"hexsides":edited_sides},"\t"));file.close()
@@ -505,7 +568,9 @@ func load_map_reviews() -> void:
 			if game.map_terrain.data.hexes.has(id) and saved_hexes[id] is Dictionary:game.map_terrain.data.hexes[id]=saved_hexes[id]
 	if saved_sides is Dictionary:
 		for edge in saved_sides:
-			if str(edge).split("|").size()==2 and saved_sides[edge] in ["none","door","window","crest","embankment"]:game.map_terrain.data.hexsides[edge]=saved_sides[edge]
+			if str(edge).split("|").size()!=2:continue
+			if saved_sides[edge]=="":game.map_terrain.data.hexsides.erase(edge)
+			elif saved_sides[edge] in ["door","window","crest","embankment"]:game.map_terrain.data.hexsides[edge]=saved_sides[edge]
 
 func move_to_hex(hex_id: String) -> void:
 	if game.state.phase == "rounds":
