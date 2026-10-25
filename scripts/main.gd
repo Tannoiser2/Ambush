@@ -21,6 +21,7 @@ var feature_brush: OptionButton
 var side_brush: OptionButton
 var side_direction: OptionButton
 var selection_label: Label
+var map_save_label: Label
 var edit_hexes: Array[String] = []
 const MAP_REVIEW_PATH := "user://ambush_map_a_reviews.json"
 var counter_icons: Dictionary = {}
@@ -168,6 +169,7 @@ func build_ui() -> void:
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	terrain_editor=HFlowContainer.new();terrain_editor.visible=false;terrain_editor.custom_minimum_size.y=84;center.add_child(terrain_editor)
 	selection_label=label("Nessun esagono selezionato",13);terrain_editor.add_child(selection_label)
+	map_save_label=label("Mappa salvata sul dispositivo",12);terrain_editor.add_child(map_save_label)
 	terrain_brush=OptionButton.new()
 	for item in [["Lascia invariato",""],["Aperto","clear"],["Bosco","woods"],["Macchia","brush"],["Terreno difficile","rough"],["Copertura","cover"],["Strada","road"],["Ruscello","stream"],["Edificio in legno","wood_building"],["Edificio in pietra","stone_building"],["Ponte in legno","wood_bridge"],["Ponte in pietra","stone_bridge"],["Ferrovia","railroad"],["Crateri","crater"],["Macerie","rubble"]]:terrain_brush.add_item(item[0]);terrain_brush.set_item_metadata(terrain_brush.item_count-1,item[1])
 	terrain_editor.add_child(terrain_brush)
@@ -290,7 +292,7 @@ func refresh() -> void:
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
 	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode
 	terrain_editor.visible=terrain_review_mode
-	selection_label.text="%d esagoni: %s" % [edit_hexes.size(),", ".join(edit_hexes)] if not edit_hexes.is_empty() else "Clicca gli esagoni da modificare"
+	selection_label.text=map_selection_summary() if not edit_hexes.is_empty() else "Clicca gli esagoni da aggiungere · clicca di nuovo per rimuovere"
 	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
 	board.edit_hexes=edit_hexes.duplicate()
 
@@ -370,6 +372,29 @@ func neighbor_id(id: String, direction: int) -> String:
 func map_edge_key(a: String,b: String) -> String:
 	return a+"|"+b if a<b else b+"|"+a
 
+func map_selection_summary() -> String:
+	var terrains: Dictionary={}
+	var elevations: Dictionary={}
+	var buildings: Dictionary={}
+	for id in edit_hexes:
+		var record: Dictionary=game.map_terrain.data.hexes.get(id,{})
+		var terrain:=str(record.get("terrain","?"))
+		var elevation:=str(record.get("elevation","?"))
+		var building:=str(record.get("building",""))
+		terrains[terrain]=int(terrains.get(terrain,0))+1
+		elevations[elevation]=int(elevations.get(elevation,0))+1
+		if building!="":buildings[building]=int(buildings.get(building,0))+1
+	var terrain_names: PackedStringArray=[]
+	var elevation_names: PackedStringArray=[]
+	var building_names: PackedStringArray=[]
+	for key in terrains:terrain_names.append("%s (%d)" % [key,terrains[key]])
+	for key in elevations:elevation_names.append("%s (%d)" % [key,elevations[key]])
+	for key in buildings:building_names.append("%s (%d)" % [key,buildings[key]])
+	var terrain_text:= ", ".join(terrain_names)
+	var elevation_text:= ", ".join(elevation_names)
+	var building_text:= ", ".join(building_names) if not building_names.is_empty() else "nessun edificio"
+	return "%d esagoni [%s] · terreno: %s · quota: %s · %s" % [edit_hexes.size(),", ".join(edit_hexes),terrain_text,elevation_text,building_text]
+
 func apply_map_brush() -> void:
 	if edit_hexes.is_empty():return
 	var terrain: String=str(terrain_brush.get_item_metadata(terrain_brush.selected))
@@ -389,6 +414,7 @@ func apply_map_brush() -> void:
 		if side!="":
 			var other:=neighbor_id(id,side_direction.selected)
 			if other!="":game.map_terrain.data.hexsides[map_edge_key(id,other)]=side
+	save_map_reviews()
 	refresh()
 
 func save_map_reviews() -> void:
@@ -403,15 +429,21 @@ func save_map_reviews() -> void:
 	var file:=FileAccess.open(MAP_REVIEW_PATH,FileAccess.WRITE)
 	if file==null:notice="Salvataggio mappa non riuscito.";refresh();return
 	file.store_string(JSON.stringify({"hexes":edited_hexes,"hexsides":edited_sides},"\t"));file.close()
+	map_save_label.text="Salvata · %d esagoni · %d lati" % [edited_hexes.size(),edited_sides.size()]
 	notice="Revisione mappa salvata sul dispositivo.";refresh()
 
 func load_map_reviews() -> void:
 	if not FileAccess.file_exists(MAP_REVIEW_PATH):return
 	var saved=JSON.parse_string(FileAccess.get_file_as_string(MAP_REVIEW_PATH))
 	if not saved is Dictionary:return
-	for id in saved.get("hexes",{}):
-		if game.map_terrain.data.hexes.has(id):game.map_terrain.data.hexes[id]=saved.hexes[id]
-	for edge in saved.get("hexsides",{}):game.map_terrain.data.hexsides[edge]=saved.hexsides[edge]
+	var saved_hexes: Variant=saved.get("hexes",{})
+	var saved_sides: Variant=saved.get("hexsides",{})
+	if saved_hexes is Dictionary:
+		for id in saved_hexes:
+			if game.map_terrain.data.hexes.has(id) and saved_hexes[id] is Dictionary:game.map_terrain.data.hexes[id]=saved_hexes[id]
+	if saved_sides is Dictionary:
+		for edge in saved_sides:
+			if str(edge).split("|").size()==2 and saved_sides[edge] in ["none","door","window","crest","embankment"]:game.map_terrain.data.hexsides[edge]=saved_sides[edge]
 
 func move_to_hex(hex_id: String) -> void:
 	if game.state.phase == "rounds":
