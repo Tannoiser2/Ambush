@@ -149,6 +149,17 @@ func _initialize() -> void:
  assert(us_move.dispatch({"type":"round_move_finish","soldier":"A"}).ok)
  assert(us_move.state.round_track.us["A"].turns == 1)
  assert(us_move.state.phase == "rounds")
+ var aimed = Game.new()
+ aimed.new_game(42)
+ aimed.soldier("A").hex = "M5"
+ aimed.resolve("187")
+ aimed.forced_rolls = [0,0,9]
+ assert(aimed.dispatch({"type":"begin_round"}).ok)
+ aimed.forced_rolls = [9,9,0,9,9,9]
+ assert(aimed.dispatch({"type":"round_fire","soldier":"A","enemy":"34"}).ok)
+ assert(aimed.state.enemies[0].status == "killed")
+ assert(aimed.soldier("A").clips == 5)
+ assert(aimed.state.round_track.us["A"].turns == 1)
  var surprised = Game.new()
  surprised.new_game(36)
  surprised.resolve("289")

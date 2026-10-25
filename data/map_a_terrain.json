@@ -1398,7 +1398,7 @@
     "M5": {
       "terrain": "woods",
       "elevation": 1,
-      "classification": "image_heuristic_with_atlas_spot_checks",
+      "classification": "manual_visual_review",
       "hexside_review_pending": false
     },
     "M6": {

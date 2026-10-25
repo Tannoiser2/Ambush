@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 source = json.loads((ROOT / "data/source/map_a_terrain_candidates.json").read_text())
 buildings = {"K13": "stone_building", "L13": "stone_building", "T8": "wood_building"}
+combat_reviewed = {"M5": ("woods", 1)}  # Visually checked against original Map A scan.
 terrain_names = {"open_or_building": "clear", "woods": "woods", "brush": "brush",
                  "cover": "cover", "road": "road", "stream": "stream"}
 
@@ -67,6 +68,10 @@ for hex_id, record in source["hexes"].items():
     hexes[hex_id] = {"terrain": terrain, "elevation": elevation,
                      "classification": "image_heuristic_with_atlas_spot_checks",
                      "hexside_review_pending": hex_id in hazard_hexes}
+    if hex_id in combat_reviewed:
+        reviewed_terrain, reviewed_level = combat_reviewed[hex_id]
+        hexes[hex_id].update(terrain=reviewed_terrain, elevation=reviewed_level,
+                              classification="manual_visual_review")
 
 out = {"map": "A", "status": "partial_los_diagnostic_only",
        "notes": "Terrain classes are image-derived and spot-checked; yellow elevation and building apertures await hexside review. Never authorize fire from this data alone.",

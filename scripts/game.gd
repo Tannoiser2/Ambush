@@ -47,8 +47,8 @@ func map_terrain_at(hex_id: String) -> Dictionary:
 	return map_terrain.terrain(hex_id,state.get("terrain_overrides",{}))
 
 func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> Dictionary:
-	# Planning aid only. Terrain is still image-derived, so this must never
-	# spend ammunition, roll damage or authorize an action in a Round.
+	# Read-only planning aid. Action validation separately requires a reviewed
+	# target hex and the narrow firing conditions implemented for this build.
 	var shooter := soldier(shooter_id)
 	var target: Dictionary = {}
 	for enemy in state.get("enemies", []):
@@ -75,7 +75,7 @@ func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> D
 	if chance < 0:
 		return {"status":"unavailable", "distance":distance, "reason":"Arma, portata o postura non compatibile con il tiro."}
 	return {"status":"estimated", "distance":distance, "chance":chance,
-		"reason":"LOS e terreno sono preliminari; tiro non ancora eseguibile."}
+		"reason":"Stima preliminare: verifica i comandi disponibili per questo Round."}
 
 func round_move_cost(shooter_id: String, target_hex: String) -> Dictionary:
 	var unit := soldier(shooter_id)
@@ -178,6 +178,9 @@ func d10() -> int:
 	if not forced_rolls.is_empty(): return int(forced_rolls.pop_front())
 	return rng.randi_range(0, 9)
 
+func d100() -> int:
+	return d10() * 10 + d10()
+
 static func check_success(roll: int, target: int) -> bool:
 	return roll == 0 or (roll != 9 and roll <= target)
 
@@ -228,6 +231,30 @@ func validate_command(command: Dictionary) -> String:
 	if command.get("type", "") == "round_move_finish":
 		if state.phase != "rounds" or state.blocked != "" or state.get("round_movement",{}).is_empty(): return "Nessun movimento da terminare."
 		if str(command.get("soldier","")) != str(state.round_movement.soldier): return "Il movimento appartiene a un altro soldato."
+		return ""
+	if command.get("type", "") == "round_fire":
+		if state.phase != "rounds" or state.blocked != "" or state.get("round_track",{}).is_empty() or not state.get("round_movement",{}).is_empty(): return "Nessun tiro disponibile in questo turno."
+		var id: String = str(command.get("soldier",""))
+		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+		if bucket.is_empty() or bucket.side != "us" or id not in bucket.ids: return "Questo soldato non ha un turno disponibile."
+		var unit := soldier(id)
+		if unit.stance == "prone" or int(unit.get("clips",0)) <= 0 or bool(unit.get("jammed",false)): return "Serve un'arma pronta con munizioni e un soldato in piedi o accovacciato."
+		var enemy_id: String = str(command.get("enemy",""))
+		var target: Dictionary = {}
+		for enemy in state.enemies:
+			if str(enemy.id) == enemy_id and enemy.get("status","active") == "active": target = enemy
+		if target.is_empty(): return "Bersaglio non attivo."
+		if unit.hex == "" or Hex.distance(str(unit.hex),str(target.hex)) > 1: return "Il tiro automatico è verificato soltanto nello stesso esagono o in uno adiacente."
+		for friendly in state.squad:
+			if friendly.status == "active" and friendly.hex == target.hex and unit.hex != target.hex: return "Non si può sparare in un esagono occupato da un americano attivo."
+		var target_count := 0
+		for enemy in state.enemies:
+			if enemy.get("status","active") == "active" and enemy.hex == target.hex: target_count += 1
+		if target_count != 1: return "Il tiro contro bersagli multipli attende la regola 9/2."
+		var terrain: Dictionary = map_terrain_at(str(target.hex))
+		if terrain.get("classification","") != "manual_visual_review": return "Il terreno del bersaglio non è verificato per il combattimento."
+		var preview: Dictionary = fire_preview(id,enemy_id)
+		if preview.status != "estimated": return str(preview.reason)
 		return ""
 	if command.get("type", "") == "drop_port":
 		if state.pending_drop == "": return "Nessun equipaggiamento da lasciare."
@@ -332,6 +359,8 @@ func dispatch(command: Dictionary) -> Dictionary:
 		state.rng = str(rng.state)
 		changed.emit()
 		return {"ok":true}
+	if command.type == "round_fire":
+		return resolve_round_fire(str(command.soldier),str(command.enemy))
 	var u := soldier(command.soldier)
 	_steps = 0
 	_pc_success_soldier = ""
@@ -461,6 +490,40 @@ func finish_round_movement(id: String) -> void:
 	if state.round_track.has("free_stance_used"): state.round_track.free_stance_used.erase(id)
 	log_line("FINE MOVIMENTO · " + id,"Azione terminata dopo %d PM." % spent,"check")
 	check_round_bucket()
+
+func resolve_round_fire(shooter_id: String, enemy_id: String) -> Dictionary:
+	var shooter := soldier(shooter_id)
+	var preview: Dictionary = fire_preview(shooter_id,enemy_id)
+	var jam_roll := d100()
+	if fire_rules.jammed(str(shooter.weapon),jam_roll,false):
+		shooter.jammed = true
+		log_line("ARMA INCEPPATA · " + shooter_id,"Percentile %02d: il tiro non parte." % jam_roll,"dice")
+	else:
+		var hit_roll := d10()
+		var hit: bool = hit_roll == 0 or (hit_roll != 9 and hit_roll <= int(preview.chance))
+		log_line("TIRO MIRATO · " + shooter_id,"GE %s · soglia %d · D10 %d → %s." % [enemy_id,int(preview.chance),hit_roll,"COLPITO" if hit else "MANCATO"],"dice")
+		if hit:
+			var damage_roll := d10()
+			var damage: String = fire_rules.damage(str(shooter.weapon),damage_roll)
+			log_line("DANNO · GE " + enemy_id,"D10 %d → %s." % [damage_roll,damage],"dice")
+			apply_enemy_damage(enemy_id,damage)
+		var ammo_roll := d100()
+		if fire_rules.spent_clip(str(shooter.weapon),ammo_roll): shooter.clips = maxi(0,int(shooter.clips)-1)
+		log_line("MUNIZIONI · " + shooter_id,"Percentile %02d · caricatori rimasti: %d." % [ammo_roll,int(shooter.clips)],"dice")
+	RoundRules.spend_turn(state.round_track,"us",shooter_id)
+	if state.round_track.has("free_stance_used"): state.round_track.free_stance_used.erase(shooter_id)
+	for enemy in state.enemies:
+		if str(enemy.id) == enemy_id and state.round_track.german.has(enemy_id) and (enemy.get("status","active") != "active" or bool(enemy.get("wounded",false)) or bool(enemy.get("panicked",false))):
+			state.round_track.german[enemy_id].turns = 0
+	var active_german := false
+	for enemy in state.enemies:
+		if enemy.get("status","active") == "active": active_german = true
+	if not active_german: finish_round()
+	elif state.blocked == "": check_round_bucket()
+	state.revision += 1
+	state.rng = str(rng.state)
+	changed.emit()
+	return {"ok":true}
 
 func check_round_bucket() -> void:
 	while true:

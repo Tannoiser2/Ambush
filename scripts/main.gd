@@ -19,6 +19,7 @@ var begin_round_button: Button
 var next_round_button: Button
 var pass_button: Button
 var finish_move_button: Button
+var fire_options: VBoxContainer
 var diary: RichTextLabel
 var objectives: RichTextLabel
 var details: RichTextLabel
@@ -129,6 +130,7 @@ func build_ui() -> void:
 	pass_button.visible=false;left.add_child(pass_button)
 	finish_move_button=button("Termina movimento",func(): send_command({"type":"round_move_finish","soldier":selected}))
 	finish_move_button.visible=false;left.add_child(finish_move_button)
+	fire_options=VBoxContainer.new();left.add_child(fire_options)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
@@ -196,6 +198,14 @@ func refresh() -> void:
 	if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty():
 		var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)
 		pass_button.visible=game.state.get("round_movement",{}).is_empty() and not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids
+	for child in fire_options.get_children():fire_options.remove_child(child);child.queue_free()
+	if game.state.phase=="rounds" and game.state.blocked=="":
+		for enemy in game.state.enemies:
+			if enemy.get("status","active")!="active":continue
+			var enemy_id: String=str(enemy.id)
+			var command: Dictionary={"type":"round_fire","soldier":selected,"enemy":enemy_id}
+			if game.validate_command(command)=="":
+				fire_options.add_child(button("Tiro mirato → GE "+enemy_id,func():send_command(command)))
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
 	progress_label.text="%d / 13 PV" % game.net_vp()
@@ -297,6 +307,6 @@ func confirm_new() -> void:
 func show_briefing() -> void:
 	var popup:=AcceptDialog.new();popup.title="Ordine di operazione · Missione 1";popup.ok_button_text="Torna alla carta";add_child(popup)
 	var text:=rich();text.custom_minimum_size=Vector2(600,440);text.scroll_following=false;popup.add_child(text)
-	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, soccorso dei feriti, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. Il motore applica le esplosioni delle mine e registra caratteristiche e PV dei tedeschi attivati. Il combattimento nei Round sospende ancora la partita. Linea di vista, armi e vittoria completa non sono ancora automatizzati.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Per soccorrere un ferito, seleziona un fante in piedi con uno spazio di trasporto libero nello stesso esagono e premi «Trascina». Se trovi il pilota in R15, seleziona un soldato non ferito e premi «Soccorri il pilota». Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
+	text.text="[font_size=28][color=#e7c884]Sangue a Saint-Michaux[/color][/font_size]\n\n"+game.mission.briefing+"\n\n[b]INGRESSO[/b]\nMappa A, margine nord: A1–J1. Il corso d’acqua è un ruscello.\n\n[b]OBIETTIVO ORIGINALE[/b]\nServono 13 PV. Controlla l’edificio T8, gli esagoni K13 e L13 e un’altura a sud-est che permetta di vedere tutti gli esagoni stradali, senza tedeschi attivi sulla mappa: questo finale assegna 4 PV aggiuntivi. In alternativa, ritira tutti i soldati attivi da A1–J1.\n\n[b]STATO DI QUESTA VERSIONE[/b]\nIngresso, movimento singolo o di gruppo in Operazioni, posture, soccorso dei feriti, riferimenti neri delle quattro carte Condizione, controlli e catene di paragrafi supportati. Il motore applica le esplosioni delle mine e registra caratteristiche e PV dei tedeschi attivati. Nei Round sono disponibili iniziativa, postura, movimento americano e un primo tiro mirato verificato in M5. Altre LOS, combattimenti e condizioni di vittoria restano in sviluppo.\n\n[b]COMANDI[/b]\nClicca un soldato, poi un esagono verde. Per soccorrere un ferito, seleziona un fante in piedi con uno spazio di trasporto libero nello stesso esagono e premi «Trascina». Se trovi il pilota in R15, seleziona un soldato non ferito e premi «Soccorri il pilota». Rotella per ingrandire; trascina con il tasto destro per spostare la mappa. Salvataggio automatico dopo ogni azione locale."
 	popup.confirmed.connect(popup.queue_free);popup.canceled.connect(popup.queue_free);popup.popup_centered(Vector2i(650,500))
 
