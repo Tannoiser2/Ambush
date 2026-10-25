@@ -9,6 +9,9 @@ var selected := "A"
 var selected_ids: Array[String] = ["A"]
 var terrain_review_mode := false
 var edit_hexes: Array[String] = []
+var edit_side_origin := ""
+var edit_side_direction := 0
+var edit_side_kind := ""
 var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
@@ -66,6 +69,17 @@ func _draw() -> void:
 			var midpoint: Vector2=(map_position(parts[0])+map_position(parts[1]))/2.0
 			var marker: String={"door":"D","window":"W","crest":"C","embankment":"S"}.get(kind,"?")
 			draw_circle(midpoint,7.0,Color("26382f"));draw_string(font,midpoint+Vector2(-4,4),marker,HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("f4dfae"))
+	if terrain_review_mode and edit_side_origin!="":
+		var directions: Array[Vector3i]=[Vector3i(1,0,-1),Vector3i(1,-1,0),Vector3i(0,-1,1),Vector3i(-1,0,1),Vector3i(-1,1,0),Vector3i(0,1,-1)]
+		var cube: Vector3i=Hex.cube(edit_side_origin)+directions[posmod(edit_side_direction,6)]
+		var row: int=cube.y+(cube.x-(cube.x&1))/2+1
+		var neighbor:=String.chr(65+cube.x)+str(row) if cube.x>=0 and cube.x<25 and row>=1 and row<=19 else ""
+		if neighbor!="":
+			var center_a:=map_position(edit_side_origin);var center_b:=map_position(neighbor)
+			var midpoint: Vector2=(center_a+center_b)/2.0
+			var tangent: Vector2=(center_b-center_a).orthogonal().normalized()*156.0*scale_factor
+			draw_line(midpoint-tangent,midpoint+tangent,Color("5de1cb"),8.0,true)
+			draw_string(font,midpoint+Vector2(7,-8),"%s→%s · %s" % [edit_side_origin,neighbor,edit_side_kind],HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("eaffd7"))
 	var chosen := game.soldier(selected)
 	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
 		var can_round_move := false

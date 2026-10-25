@@ -165,7 +165,7 @@ func build_ui() -> void:
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(handle_map_click)
 	board.hover_changed.connect(show_hover)
-	terrain_legend=label("VERDE verificato · OCRA stimato · ROSSO quota assente. Lati SE, NE, N, NW, SW, S. D porta · W finestra · C cresta · S scarpata.",13)
+	terrain_legend=label("VERDE verificato · OCRA stimato · ROSSO quota assente. Seleziona un esagono e una direzione: il lato interessato viene evidenziato in turchese. D porta · W finestra · C cresta · S scarpata.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	terrain_editor=HFlowContainer.new();terrain_editor.visible=false;terrain_editor.custom_minimum_size.y=84;center.add_child(terrain_editor)
 	selection_label=label("Nessun esagono selezionato",13);terrain_editor.add_child(selection_label)
@@ -184,6 +184,7 @@ func build_ui() -> void:
 	terrain_editor.add_child(side_brush)
 	side_direction=OptionButton.new()
 	for direction_name in ["SE","NE","N","NW","SW","S"]:side_direction.add_item(direction_name)
+	side_direction.item_selected.connect(func(_index:int):refresh())
 	terrain_editor.add_child(side_direction)
 	terrain_editor.add_child(button("Applica a selezione",apply_map_brush))
 	terrain_editor.add_child(button("Salva mappa",save_map_reviews))
@@ -295,6 +296,9 @@ func refresh() -> void:
 	selection_label.text=map_selection_summary() if not edit_hexes.is_empty() else "Clicca gli esagoni da aggiungere · clicca di nuovo per rimuovere"
 	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
 	board.edit_hexes=edit_hexes.duplicate()
+	board.edit_side_origin=edit_hexes[0] if not edit_hexes.is_empty() else ""
+	board.edit_side_direction=side_direction.selected if is_instance_valid(side_direction) else 0
+	board.edit_side_kind=str(side_brush.get_item_metadata(side_brush.selected)) if is_instance_valid(side_brush) else ""
 
 func stack_is_legal() -> bool:
 	var leader: Dictionary=game.soldier(selected)
