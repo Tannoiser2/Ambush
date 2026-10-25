@@ -69,9 +69,13 @@ func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> D
 		"cover":"cover", "brush":"brush", "rough":"rough", "crater":"crater", "rubble":"rubble", "woods":"woods"}
 	if not fire_terrain.has(kind):
 		return {"status":"unknown", "distance":distance, "reason":"Modificatore dell'edificio o del terreno non verificato."}
+	var additional_targets:=0
+	for enemy in state.enemies:
+		if enemy.get("status","active")=="active" and str(enemy.get("hex",""))==str(target.hex):additional_targets+=1
+	additional_targets=maxi(0,additional_targets-1)
 	var chance: int = fire_rules.hit_chance(str(shooter.get("weapon", "")),distance,
 		int(shooter.get("ws",0)),str(fire_terrain[kind]),str(target.get("stance", "")),
-		snap,bool(shooter.get("wounded",false)))
+		snap,bool(shooter.get("wounded",false)),additional_targets)
 	if chance < 0:
 		return {"status":"unavailable", "distance":distance, "reason":"Arma, portata o postura non compatibile con il tiro."}
 	return {"status":"estimated", "distance":distance, "chance":chance,
@@ -244,13 +248,9 @@ func validate_command(command: Dictionary) -> String:
 		for enemy in state.enemies:
 			if str(enemy.id) == enemy_id and enemy.get("status","active") == "active": target = enemy
 		if target.is_empty(): return "Bersaglio non attivo."
-		if unit.hex == "" or Hex.distance(str(unit.hex),str(target.hex)) > 1: return "Il tiro automatico è verificato soltanto nello stesso esagono o in uno adiacente."
+		if unit.hex == "": return "Il tiratore è fuori mappa."
 		for friendly in state.squad:
 			if friendly.status == "active" and friendly.hex == target.hex and unit.hex != target.hex: return "Non si può sparare in un esagono occupato da un americano attivo."
-		var target_count := 0
-		for enemy in state.enemies:
-			if enemy.get("status","active") == "active" and enemy.hex == target.hex: target_count += 1
-		if target_count != 1: return "Il tiro contro bersagli multipli attende la regola 9/2."
 		var terrain: Dictionary = map_terrain_at(str(target.hex))
 		if terrain.get("classification","") != "manual_visual_review": return "Il terreno del bersaglio non è verificato per il combattimento."
 		var preview: Dictionary = fire_preview(id,enemy_id)
@@ -494,6 +494,9 @@ func finish_round_movement(id: String) -> void:
 func resolve_round_fire(shooter_id: String, enemy_id: String) -> Dictionary:
 	var shooter := soldier(shooter_id)
 	var preview: Dictionary = fire_preview(shooter_id,enemy_id)
+	var target_hex: String=""
+	for target_enemy in state.enemies:
+		if str(target_enemy.id)==enemy_id:target_hex=str(target_enemy.hex);break
 	var jam_roll := d100()
 	if fire_rules.jammed(str(shooter.weapon),jam_roll,false):
 		shooter.jammed = true
@@ -507,6 +510,8 @@ func resolve_round_fire(shooter_id: String, enemy_id: String) -> Dictionary:
 			var damage: String = fire_rules.damage(str(shooter.weapon),damage_roll)
 			log_line("DANNO · GE " + enemy_id,"D10 %d → %s." % [damage_roll,damage],"dice")
 			apply_enemy_damage(enemy_id,damage)
+			if bool(fire_rules.weapon(str(shooter.weapon)).get("automatic",false)) and damage_roll>0:
+				resolve_automatic_spray(shooter_id,enemy_id,target_hex,damage_roll)
 		var ammo_roll := d100()
 		if fire_rules.spent_clip(str(shooter.weapon),ammo_roll): shooter.clips = maxi(0,int(shooter.clips)-1)
 		log_line("MUNIZIONI · " + shooter_id,"Percentile %02d · caricatori rimasti: %d." % [ammo_roll,int(shooter.clips)],"dice")
@@ -525,6 +530,24 @@ func resolve_round_fire(shooter_id: String, enemy_id: String) -> Dictionary:
 	changed.emit()
 	return {"ok":true}
 
+func resolve_automatic_spray(shooter_id: String, primary_id: String, target_hex: String, previous_roll: int) -> void:
+	var candidates: Array[Dictionary]=[]
+	var exposure:Dictionary={"standing":2,"crouching":1,"prone":0}
+	for enemy in state.enemies:
+		if str(enemy.id)==primary_id or enemy.get("status","active")!="active" or str(enemy.get("hex",""))!=target_hex:continue
+		candidates.append(enemy)
+	candidates.sort_custom(func(a:Dictionary,b:Dictionary):
+		var ea:=int(exposure.get(str(a.get("stance","prone")),0));var eb:=int(exposure.get(str(b.get("stance","prone")),0))
+		return ea>eb if ea!=eb else rng.randi_range(0,1)==0)
+	var previous:=previous_roll
+	for enemy in candidates:
+		var roll:=d10()
+		if roll>=previous:break
+		var damage:=str(fire_rules.weapon(str(soldier(shooter_id).get("weapon",""))).damage[roll])
+		log_line("FUOCO AUTOMATICO · GE " + str(enemy.id),"Danno D10 %d < %d → %s." % [roll,previous,damage],"dice")
+		apply_enemy_damage(str(enemy.id),damage)
+		previous=roll
+
 func check_round_bucket() -> void:
 	while true:
 		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
@@ -541,15 +564,151 @@ func check_round_bucket() -> void:
 			log_line("NUMERO D'AZIONE TEDESCA", "D10: %d per la casella tedesca corrente." % state.round_track.german_action_number,"dice")
 		var id: String = str(bucket.ids[0])
 		var reference: int = german_turn_reference(id,int(state.round_track.german_action_number))
-		if reference != 800:
-			stop_resolution("GE %s · azione %d: %s Risoluzione automatica ancora da implementare." % [id,reference,german_action_text(reference)])
-			return
+		if not resolve_german_action(id,reference): return
+		var any_active_german:=false
 		for enemy in state.enemies:
-			if str(enemy.id) == id:
-				enemy.stance = "prone"
-				break
-		RoundRules.spend_turn(state.round_track,"de",id)
-		log_line("GE %s · AZIONE 800" % id,"Il tedesco si sdraia prono.","check")
+			if enemy.get("status","active")=="active":any_active_german=true;break
+		if not any_active_german:finish_round();return
+
+func german_targets(enemy: Dictionary) -> Array[Dictionary]:
+	var targets: Array[Dictionary] = []
+	for unit in state.squad:
+		if unit.get("status", "") != "active" or str(unit.get("hex", "")) == "": continue
+		var distance := Hex.distance(str(enemy.hex),str(unit.hex))
+		var los := map_los(str(enemy.hex),str(unit.hex))
+		if los.status == "unknown":
+			stop_resolution("LOS tedesca GE %s→%s non verificata: l'azione non può scegliere un bersaglio automaticamente." % [enemy.id,unit.id])
+			return []
+		if los.status != "clear": continue
+		var terrain := map_terrain_at(str(unit.hex))
+		if terrain.get("classification", "") != "manual_visual_review":
+			stop_resolution("Terreno di %s non verificato per il fuoco tedesco." % unit.hex)
+			return []
+		var kind := str(terrain.get("terrain", ""))
+		var fire_terrain := {"clear":"open","road":"open","stream":"open","cover":"cover","brush":"brush","rough":"rough","crater":"crater","rubble":"rubble","woods":"woods"}
+		if not fire_terrain.has(kind):
+			stop_resolution("Modificatore di fuoco a %s non verificato." % unit.hex)
+			return []
+		var weapons: Array = enemy.get("weapons", [])
+		if weapons.is_empty():
+			stop_resolution("GE %s non ha un'arma verificata." % enemy.id)
+			return []
+		var weapon_name := str(weapons[0])
+		var chance := fire_rules.hit_chance(weapon_name,distance,int(enemy.get("ws",0)),str(fire_terrain[kind]),str(unit.get("stance","prone")))
+		targets.append({"id":str(unit.id),"hex":str(unit.hex),"stance":str(unit.get("stance","prone")),"distance":distance,"chance":chance,"weapon":weapon_name})
+	var exposed_by_hex:Dictionary={"standing":2,"crouching":1,"prone":0}
+	var selected_by_hex:Dictionary={}
+	for target in targets:
+		var key:=str(target.hex)
+		if not selected_by_hex.has(key) or int(exposed_by_hex[target.stance])>int(exposed_by_hex[selected_by_hex[key].stance]):selected_by_hex[key]=target
+		elif int(exposed_by_hex[target.stance])==int(exposed_by_hex[selected_by_hex[key].stance]):
+			if d10()>=5:selected_by_hex[key]=target
+	var result:Array[Dictionary]=[]
+	for key in selected_by_hex:result.append(selected_by_hex[key])
+	return result
+
+func resolve_german_fire(enemy: Dictionary, target: Dictionary, snap := false) -> void:
+	var weapon_name := str(target.weapon)
+	var jam_roll := d100()
+	if fire_rules.jammed(weapon_name,jam_roll,snap):
+		log_line("ARMA TEDESCA INCEPPATA · GE " + str(enemy.id),"Percentile %02d: il tiro non parte." % jam_roll,"dice")
+	else:
+		var hit_roll := d10()
+		var hit := hit_roll == 0 or (hit_roll != 9 and hit_roll <= int(target.chance))
+		log_line("FUOCO TEDESCO · GE %s→%s" % [enemy.id,target.id],"%s · soglia %d · D10 %d → %s." % [weapon_name,int(target.chance),hit_roll,"COLPITO" if hit else "MANCATO"],"dice")
+		if hit:
+			var damage_roll := d10()
+			var result := fire_rules.damage(weapon_name,damage_roll)
+			log_line("DANNO · %s" % target.id,"D10 %d → %s." % [damage_roll,result],"dice")
+			apply_soldier_damage(soldier(str(target.id)),result)
+
+func resolve_german_action(enemy_id: String, reference: int) -> bool:
+	var enemy: Dictionary = {}
+	for candidate in state.enemies:
+		if str(candidate.id) == enemy_id: enemy = candidate; break
+	if enemy.is_empty(): return false
+	var action_reference:=reference
+	var rerolls:=0
+	while action_reference==816 and rerolls<20:
+		rerolls+=1
+		var action_roll:=d10()
+		action_reference=german_turn_reference(enemy_id,action_roll)
+		log_line("REAZIONE DI AUTOCONSERVAZIONE · GE " + enemy_id,"Ignorata; nuovo D10 %d → azione %d." % [action_roll,action_reference],"dice")
+	if action_reference==816 or action_reference<0:
+		stop_resolution("La nuova azione tedesca di GE %s non è determinabile." % enemy_id);return false
+	match action_reference:
+		800:
+			enemy.stance = "prone"
+			log_line("GE %s · AZIONE 800" % enemy_id,"Il tedesco si sdraia prono.","check")
+		801, 802, 824:
+			var free_prone_after:=not bool(enemy.get("wounded",false)) and str(enemy.stance)=="crouching"
+			enemy.stance = "crouching"
+			var targets := german_targets(enemy)
+			if state.blocked != "": return false
+			targets=targets.filter(func(target: Dictionary):return int(target.chance)>=0)
+			if targets.is_empty():
+				log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Nessun bersaglio attivo visibile e raggiungibile; il tedesco resta accovacciato.","check")
+			else:
+				targets.sort_custom(func(a: Dictionary,b: Dictionary):
+					if action_reference == 802: return a.distance < b.distance if a.distance != b.distance else a.chance > b.chance
+					return a.chance > b.chance if a.chance != b.chance else a.distance < b.distance)
+				resolve_german_fire(enemy,targets[0])
+				if state.blocked != "": return false
+				if free_prone_after and not bool(enemy.get("wounded",false)) and not bool(enemy.get("panicked",false)): enemy.stance = "prone"
+				log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Fuoco contro %s; postura finale: %s." % [targets[0].id,"prono" if enemy.stance=="prone" else "accovacciato"],"check")
+		804, 805:
+			var targets := german_targets(enemy)
+			if state.blocked != "": return false
+			if targets.is_empty():
+				enemy.status="removed"
+				log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Nessun americano attivo lo vede: il tedesco lascia la mappa.","check")
+			else:
+				var limit := 3 if action_reference == 804 else 4
+				var in_range: Array[Dictionary]=[]
+				for target in targets:
+					if int(target.distance)<=limit and (action_reference==805 or int(target.chance)>=0):in_range.append(target)
+				if in_range.is_empty():
+					enemy.stance="prone"
+					log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Gli americani lo vedono ma sono oltre la soglia di %d esagoni; si sdraia prono." % limit,"check")
+				elif action_reference == 805:
+					enemy.status="captured"
+					var card: Dictionary=german_cards.get(enemy_id,{})
+					if card.get("conditional_vp_if","")=="captured":state.vp+=int(card.conditional_vp)
+					log_line("RESA · GE " + enemy_id,"Il tedesco si arrende a un americano entro quattro esagoni.","check")
+				else:
+					in_range.sort_custom(func(a: Dictionary,b: Dictionary):return a.chance>b.chance if a.chance!=b.chance else a.distance<b.distance)
+					enemy.stance="crouching";resolve_german_fire(enemy,in_range[0])
+					if state.blocked!="":return false
+					if not bool(enemy.get("wounded",false)) and not bool(enemy.get("panicked",false)):enemy.stance="prone"
+					log_line("GE %s · AZIONE 804" % enemy_id,"Fuoco contro %s entro tre esagoni." % in_range[0].id,"check")
+		808, 829:
+			var free_prone_after:=not bool(enemy.get("wounded",false)) and str(enemy.stance)=="crouching"
+			var targets := german_targets(enemy)
+			if state.blocked != "": return false
+			var visible_count := targets.size()
+			targets=targets.filter(func(target: Dictionary):return int(target.chance)>=0)
+			if action_reference == 808 and visible_count == 0:
+				enemy.stance="crouching";log_line("GE %s · AZIONE 808" % enemy_id,"Nessun bersaglio visibile; si accovaccia.","check")
+			elif action_reference == 808 and visible_count >= 3:
+				enemy.stance="prone";log_line("GE %s · AZIONE 808" % enemy_id,"Tre o più bersagli visibili: si sdraia prono.","check")
+			elif action_reference == 829 and visible_count!=1:
+				enemy.stance="prone";log_line("GE %s · AZIONE 829" % enemy_id,"Il numero di bersagli visibili non è uno; si sdraia prono.","check")
+			elif targets.is_empty():
+				enemy.stance="prone";log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Nessun bersaglio visibile entro la portata dell'arma; si sdraia prono.","check")
+			else:
+				targets.sort_custom(func(a: Dictionary,b: Dictionary): return a.chance > b.chance if a.chance != b.chance else a.distance < b.distance)
+				enemy.stance="crouching";resolve_german_fire(enemy,targets[0])
+				if state.blocked != "": return false
+				if free_prone_after and not bool(enemy.get("wounded",false)) and not bool(enemy.get("panicked",false)):enemy.stance="prone"
+				log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Miglior tiro contro %s." % targets[0].id,"check")
+		_:
+			stop_resolution("GE %s · azione %d: %s Regola non ancora automatizzata; la sequenza è sospesa senza consumare il turno." % [enemy_id,action_reference,german_action_text(action_reference)])
+			return false
+	if state.blocked != "": return false
+	RoundRules.spend_turn(state.round_track,"de",enemy_id)
+	if enemy.get("status","active") != "active" or bool(enemy.get("wounded",false)) or bool(enemy.get("panicked",false)):
+		state.round_track.german[enemy_id].turns=0
+	return true
 
 func finish_round() -> void:
 	for unit in state.squad:
@@ -752,7 +911,7 @@ func run_ops(ops: Array) -> void:
 						"blocked": hidden.append(id)
 						_: unresolved.append(id)
 				log_line("LOS PRELIMINARE", "Linea libera (stimata): %s · Ostruita/fuori mappa: %s · Da verificare: %s." % [", ".join(certain),", ".join(hidden),", ".join(unresolved)], "check")
-				stop_resolution("Contatto nemico registrato. La sequenza di combattimento dei Round non è ancora eseguita.")
+				log_line("CONTATTO NEMICO", "La squadra entra nella sequenza dei Round.", "check")
 			"crash":
 				state.landmarks[op.hex] = {"name":"Typhoon abbattuto","entry_paragraph":op.entry_paragraph}
 				kill_hex(op.hex)
@@ -818,9 +977,14 @@ func check_minefield(hex_id: String) -> void:
 func apply_soldier_damage(u: Dictionary, result: String) -> void:
 	match result:
 		"P":
-			# Panic from damage during Operations has no effect (rules 13/1).
-			log_line("PANICO", u.name + ": nessun effetto durante le Operazioni.", "check")
+			if state.phase == "rounds" and state.round_track.get("us",{}).has(str(u.id)):
+				state.round_track.us[str(u.id)].panic = true
+				state.round_track.us[str(u.id)].turns = 0
+				log_line("PANICO", u.name + " va nel panico; si sdraierà prono a fine Round.", "check")
+			else:
+				log_line("PANICO", u.name + ": nessun effetto durante le Operazioni.", "check")
 		"W":
+			if state.phase=="rounds" and state.round_track.get("us",{}).has(str(u.id)):state.round_track.us[str(u.id)].turns=0
 			if u.wounded:
 				u.status = "incapacitated"
 				log_line("INCAPACITATO", u.name + " subisce una seconda ferita.")
@@ -840,10 +1004,12 @@ func apply_soldier_damage(u: Dictionary, result: String) -> void:
 						state.pending_drop = u.id
 						stop_resolution(u.name + ": scegli quale dei due oggetti trasportati lasciare dopo la ferita.")
 		"I":
+			if state.phase=="rounds" and state.round_track.get("us",{}).has(str(u.id)):state.round_track.us[str(u.id)].turns=0
 			u.status = "incapacitated"
 			u.stance = "prone"
 			log_line("INCAPACITATO", u.name + " non può più agire.")
 		"K":
+			if state.phase=="rounds" and state.round_track.get("us",{}).has(str(u.id)):state.round_track.us[str(u.id)].turns=0
 			u.status = "killed"
 			log_line("CADUTO", u.name + " è stato ucciso.")
 		_:
@@ -860,16 +1026,25 @@ func apply_enemy_damage(id: String, result: String) -> void:
 		if enemy.get("status", "active") not in ["active"]: return
 		match result:
 			"P":
-				if state.phase == "rounds": enemy.panicked = true
+				if state.phase == "rounds":
+					enemy.panicked = true
+					if state.round_track.get("german",{}).has(id):
+						state.round_track.german[id].panic=true
+						state.round_track.german[id].turns=0
 			"W":
+				if state.phase=="rounds" and state.round_track.get("german",{}).has(id):state.round_track.german[id].turns=0
 				if bool(enemy.get("wounded", false)):
 					enemy.status = "incapacitated"
 				else:
 					enemy.wounded = true
 					enemy.stance = "prone"
 					enemy.mpa = 2
-			"I": enemy.status = "incapacitated"; enemy.stance = "prone"
-			"K": enemy.status = "killed"
+			"I":
+				if state.phase=="rounds" and state.round_track.get("german",{}).has(id):state.round_track.german[id].turns=0
+				enemy.status = "incapacitated"; enemy.stance = "prone"
+			"K":
+				if state.phase=="rounds" and state.round_track.get("german",{}).has(id):state.round_track.german[id].turns=0
+				enemy.status = "killed"
 			"C":
 				enemy.status = "captured"
 				var card: Dictionary = german_cards.get(id, {})
