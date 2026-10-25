@@ -18,7 +18,21 @@ func _initialize() -> void:
  assert(game.state.round_track.us.A.panic)
  assert(soldier.stance=="standing")
  assert(game.state.round_track.us.A.turns==0)
+ game.state.round_track.german={}
+ game.state.round_setup={"number":1}
+ game.state.enemies=[]
+ game.finish_round()
+ assert(soldier.stance=="prone" and not soldier.panicked)
+ game.state.phase="rounds"
+ game.state.round_track={"us":{"A":{"turns":1}},"german":{}}
  game.apply_soldier_damage(soldier,"W")
  assert(soldier.wounded and game.state.round_track.us.A.turns==0)
+ game.state.squad=[{"id":"A","status":"active","weapon":"Fucile automatico"}]
+ game.state.enemies=[{"id":"25","status":"active","hex":"M5","stance":"standing","wounded":false},{"id":"34","status":"active","hex":"M5","stance":"crouching","wounded":false}]
+ game.state.round_track={"us":{},"german":{"25":{"turns":1},"34":{"turns":1}}}
+ game.forced_rolls=[1,0]
+ game.resolve_automatic_spray("A","1","M5",5)
+ assert(game.state.enemies[0].wounded)
+ assert(game.state.enemies[1].panicked)
  print("GERMAN ROUND ACTIONS OK")
  quit()

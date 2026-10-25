@@ -471,6 +471,10 @@ func begin_round() -> Dictionary:
 	var track: Dictionary = prepare_action_sequence(awareness,us_die,german_die)
 	if track.is_empty(): return {"ok":false,"error":"Pista dei Round non determinabile."}
 	state.round_track = track
+	for unit in state.squad:
+		unit.panicked=bool(track.get("us",{}).get(str(unit.id),{}).get("panic",false))
+	for enemy in state.enemies:
+		if track.get("german",{}).has(str(enemy.id)):enemy.panicked=bool(track.german[str(enemy.id)].get("panic",false))
 	state.round_movement = {}
 	state.blocked = ""
 	log_line("ROUND %d · INIZIATIVA" % number,"US %d · tedeschi %d · vantaggio %s." % [us_die,german_die,"USA" if track.advantage == "us" else "tedesco"],"dice")
@@ -712,11 +716,13 @@ func resolve_german_action(enemy_id: String, reference: int) -> bool:
 
 func finish_round() -> void:
 	for unit in state.squad:
-		if unit.status == "active" and bool(state.round_track.us.get(str(unit.id),{}).get("panic",false)):
-			unit.stance = "prone"
+		if bool(state.round_track.get("us",{}).get(str(unit.id),{}).get("panic",false)) or bool(unit.get("panicked",false)):
+			if unit.status == "active":unit.stance = "prone"
+			unit.panicked=false
 	for enemy in state.enemies:
-		if enemy.get("status","active") == "active" and bool(state.round_track.german.get(str(enemy.id),{}).get("panic",false)):
-			enemy.stance = "prone"
+		if bool(state.round_track.get("german",{}).get(str(enemy.id),{}).get("panic",false)) or bool(enemy.get("panicked",false)):
+			if enemy.get("status","active") == "active":enemy.stance = "prone"
+			enemy.panicked=false
 	var number: int = int(state.round_setup.number)
 	state.round_movement = {}
 	log_line("FINE ROUND %d" % number,"I soldati in panico si sdraiano proni.","check")
@@ -728,6 +734,7 @@ func finish_round() -> void:
 		state.round_setup = {}
 		state.round_awareness = {}
 		state.round_track = {}
+		state.round_awareness.clear()
 		state.blocked = ""
 		log_line("RITORNO ALLE OPERAZIONI","Nessun tedesco attivo resta sulla mappa.","check")
 	else:
@@ -979,6 +986,7 @@ func apply_soldier_damage(u: Dictionary, result: String) -> void:
 		"P":
 			if state.phase == "rounds" and state.round_track.get("us",{}).has(str(u.id)):
 				state.round_track.us[str(u.id)].panic = true
+				u.panicked=true
 				state.round_track.us[str(u.id)].turns = 0
 				log_line("PANICO", u.name + " va nel panico; si sdraierà prono a fine Round.", "check")
 			else:
