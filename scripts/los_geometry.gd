@@ -76,6 +76,12 @@ static func evaluate_map_a(a: String, b: String, hexes: Dictionary, hexsides: Di
 static func _hexside_key(a: String, b: String) -> String:
  return a + "|" + b if a < b else b + "|" + a
 
+static func _is_building(hex: Dictionary) -> bool:
+ return str(hex.get("terrain","" )).ends_with("_building") or str(hex.get("building","")) in ["wood","stone"]
+
+static func _opening(hexsides: Dictionary,a: String,b: String) -> bool:
+ return str(hexsides.get(_hexside_key(a,b),"")) in ["door","window"]
+
 static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexsides: Dictionary) -> Dictionary:
  for id in path:
   if not hexes.has(id): return {"status":"unknown","reason":"Terreno non catalogato: " + id}
@@ -84,16 +90,23 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
    return {"status":"blocked","reason":"Cresta fra %s e %s." % [path[i],path[i+1]]}
  var start: Dictionary = hexes[path.front()]
  var finish: Dictionary = hexes[path.back()]
- for endpoint in [start,finish]:
-  if str(endpoint.get("terrain", "")).ends_with("_building"):
-   return {"status":"unknown","reason":"Parete/apertura dell'edificio non verificata."}
  if path.size() == 2 and Hex.distance(path.front(),path.back()) == 1:
   var direct_side: String = str(hexsides.get(_hexside_key(path.front(),path.back()),""))
+  if direct_side in ["door","window"]:
+   return {"status":"clear","reason":"Apertura verificata nel lato dell'edificio."}
+  if _is_building(start) or _is_building(finish):
+   return {"status":"unknown","reason":"Parete dell'edificio senza apertura verificata."}
   if direct_side not in ["","none","embankment"]:
    return {"status":"unknown","reason":"Lato d'esagono non classificato."}
   if direct_side == "" and (bool(start.get("hexside_review_pending",true)) or bool(finish.get("hexside_review_pending",true))):
    return {"status":"unknown","reason":"Lato d'esagono da verificare."}
   return {"status":"clear","reason":"Esagoni adiacenti senza lato bloccante."}
+ for i in path.size():
+  if not _is_building(hexes[path[i]]): continue
+  var has_entry: bool=i==0 or _opening(hexsides,path[i],path[i-1])
+  var has_exit: bool=i==path.size()-1 or _opening(hexsides,path[i],path[i+1])
+  if not has_entry or not has_exit:
+   return {"status":"unknown","reason":"Apertura porta/finestra mancante o non verificata nell'edificio %s." % path[i]}
  if start.get("elevation") == null or finish.get("elevation") == null:
   return {"status":"unknown","reason":"Quota dell'esagono di partenza o arrivo non verificata."}
  var start_level := int(start.elevation)
@@ -112,12 +125,14 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
   if level > higher:
    return {"status":"blocked","reason":"Quota superiore in " + id}
   var kind := str(terrain.get("terrain", ""))
-  if same_level and level >= start_level and kind in ["woods","brush","rough","rubble","wood_building","stone_building"]:
+  var building: bool = _is_building(terrain)
+  var building_open: bool=building and _opening(hexsides,path[i-1],id) and _opening(hexsides,id,path[i+1])
+  if same_level and level >= start_level and (kind in ["woods","brush","rough","rubble"] or (kind in ["wood_building","stone_building"] and not building_open)):
    return {"status":"blocked","reason":"Terreno bloccante in " + id}
   if not same_level and kind in ["woods","brush","rough","rubble"]:
    if (i == 1 and level == start_level) or (i == path.size()-2 and level == finish_level):
     return {"status":"blocked","reason":"Terreno adiacente alla stessa quota in " + id}
-  if not same_level and kind in ["wood_building","stone_building"] and level >= lower:
+  if not same_level and building and not building_open and level >= lower:
    var distance_low := i if start_level == lower else path.size()-1-i
    var distance_high := path.size()-1-i if start_level == lower else i
    if distance_low <= distance_high:
@@ -133,6 +148,6 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
   if side == "":
    if bool(hexes[path[i]].get("hexside_review_pending",true)) or bool(hexes[path[i+1]].get("hexside_review_pending",true)):
     return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
-  elif side not in ["none","embankment"]:
+  elif side not in ["none","embankment","door","window"]:
    return {"status":"unknown","reason":"Lato d'esagono da verificare fra %s e %s." % [path[i],path[i+1]]}
  return {"status":"clear","reason":"Terreno e lati verificati per questa LOS."}

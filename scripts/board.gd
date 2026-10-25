@@ -8,6 +8,7 @@ var game: AmbushGame
 var selected := "A"
 var selected_ids: Array[String] = ["A"]
 var terrain_review_mode := false
+var edit_hexes: Array[String] = []
 var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
@@ -55,6 +56,16 @@ func _draw() -> void:
 			points.append(points[0]);draw_polyline(points,Color("c7c7a5",0.6),1.0,true)
 			var pos:=map_position(str(hex_id))
 			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
+			if hex_id in edit_hexes:
+				var outline:=polygon_at(str(hex_id));outline.append(outline[0]);draw_polyline(outline,Color("f3d16f"),4.0,true)
+	for edge in game.map_terrain.data.hexsides:
+		var parts: PackedStringArray=str(edge).split("|")
+		if parts.size()!=2 or (not terrain_review_mode and parts[0] not in selected_ids and parts[1] not in selected_ids):continue
+		var kind: String=str(game.map_terrain.data.hexsides[edge])
+		if kind in ["door","window","crest","embankment"]:
+			var midpoint: Vector2=(map_position(parts[0])+map_position(parts[1]))/2.0
+			var marker: String={"door":"D","window":"W","crest":"C","embankment":"S"}.get(kind,"?")
+			draw_circle(midpoint,7.0,Color("26382f"));draw_string(font,midpoint+Vector2(-4,4),marker,HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("f4dfae"))
 	var chosen := game.soldier(selected)
 	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
 		var can_round_move := false

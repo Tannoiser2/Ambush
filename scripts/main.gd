@@ -14,6 +14,15 @@ var drag_target := ""
 var terrain_review_mode := false
 var terrain_button: Button
 var terrain_legend: Label
+var terrain_editor: HFlowContainer
+var terrain_brush: OptionButton
+var level_brush: OptionButton
+var feature_brush: OptionButton
+var side_brush: OptionButton
+var side_direction: OptionButton
+var selection_label: Label
+var edit_hexes: Array[String] = []
+const MAP_REVIEW_PATH := "user://ambush_map_a_reviews.json"
 var counter_icons: Dictionary = {}
 var action_buttons: Dictionary = {}
 var roster: VBoxContainer
@@ -44,6 +53,7 @@ func _ready() -> void:
 	build_ui()
 	game.changed.connect(refresh)
 	game.new_game()
+	load_map_reviews()
 	if FileAccess.file_exists(SAVE_PATH):
 		var saved = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
 		if game.restore(saved): notice="Partita precedente ripristinata automaticamente."
@@ -152,10 +162,30 @@ func build_ui() -> void:
 	terrain_button=button("Mappa semplificata",func(): terrain_review_mode=not terrain_review_mode;refresh())
 	terrain_button.toggle_mode=true;mapbar.add_child(terrain_button)
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
-	board.hex_clicked.connect(func(id): move_to_hex(id))
+	board.hex_clicked.connect(handle_map_click)
 	board.hover_changed.connect(show_hover)
-	terrain_legend=label("VERDE verificato · OCRA terreno stimato · ROSSO quota assente. Passa il cursore su un esagono per i dettagli.",13)
+	terrain_legend=label("VERDE verificato · OCRA stimato · ROSSO quota assente. Lati SE, NE, N, NW, SW, S. D porta · W finestra · C cresta · S scarpata.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
+	terrain_editor=HFlowContainer.new();terrain_editor.visible=false;terrain_editor.custom_minimum_size.y=84;center.add_child(terrain_editor)
+	selection_label=label("Nessun esagono selezionato",13);terrain_editor.add_child(selection_label)
+	terrain_brush=OptionButton.new()
+	for item in [["Lascia invariato",""],["Aperto","clear"],["Bosco","woods"],["Macchia","brush"],["Terreno difficile","rough"],["Copertura","cover"],["Strada","road"],["Ruscello","stream"],["Edificio in legno","wood_building"],["Edificio in pietra","stone_building"],["Ponte in legno","wood_bridge"],["Ponte in pietra","stone_bridge"],["Ferrovia","railroad"],["Crateri","crater"],["Macerie","rubble"]]:terrain_brush.add_item(item[0]);terrain_brush.set_item_metadata(terrain_brush.item_count-1,item[1])
+	terrain_editor.add_child(terrain_brush)
+	feature_brush=OptionButton.new()
+	for item in [["Edificio invariato",""],["Rimuovi edificio","none"],["Edificio in legno","wood"],["Edificio in pietra","stone"],["Secondo piano","second_story"]]:feature_brush.add_item(item[0]);feature_brush.set_item_metadata(feature_brush.item_count-1,item[1])
+	terrain_editor.add_child(feature_brush)
+	level_brush=OptionButton.new()
+	for item in [["Quota invariata",-99],["Livello 1",1],["Livello 2",2],["Livello 3",3]]:level_brush.add_item(item[0]);level_brush.set_item_metadata(level_brush.item_count-1,item[1])
+	terrain_editor.add_child(level_brush)
+	side_brush=OptionButton.new()
+	for item in [["Lato invariato",""],["Lato normale","none"],["Cresta","crest"],["Scarpata","embankment"],["Porta","door"],["Finestra","window"]]:side_brush.add_item(item[0]);side_brush.set_item_metadata(side_brush.item_count-1,item[1])
+	terrain_editor.add_child(side_brush)
+	side_direction=OptionButton.new()
+	for direction_name in ["SE","NE","N","NW","SW","S"]:side_direction.add_item(direction_name)
+	terrain_editor.add_child(side_direction)
+	terrain_editor.add_child(button("Applica a selezione",apply_map_brush))
+	terrain_editor.add_child(button("Salva mappa",save_map_reviews))
+	terrain_editor.add_child(button("Deseleziona",func():edit_hexes.clear();refresh()))
 	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14)
 	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	hover_label.custom_minimum_size.y=44
@@ -259,7 +289,10 @@ func refresh() -> void:
 	if notice=="" and game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty():
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
 	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode
+	terrain_editor.visible=terrain_review_mode
+	selection_label.text="%d esagoni: %s" % [edit_hexes.size(),", ".join(edit_hexes)] if not edit_hexes.is_empty() else "Clicca gli esagoni da modificare"
 	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
+	board.edit_hexes=edit_hexes.duplicate()
 
 func stack_is_legal() -> bool:
 	var leader: Dictionary=game.soldier(selected)
@@ -296,6 +329,8 @@ func show_hover(id: String) -> void:
 	if not terrain.is_empty():
 		hover_label.text += "  ·  terreno stimato: " + str(terrain_names.get(str(terrain.terrain),"da verificare"))
 		hover_label.text += "  ·  quota " + (str(terrain.elevation) if terrain.elevation != null else "?")
+		if terrain.get("building","")!="":hover_label.text += "  ·  edificio: " + ("legno" if terrain.building=="wood" else "pietra")
+		if bool(terrain.get("second_story",false)):hover_label.text += "  ·  secondo piano"
 		if terrain_review_mode:
 			hover_label.text += "  ·  %s" % ("CLASSE VERIFICATA" if terrain.get("classification","")=="manual_visual_review" else "CLASSE DA VERIFICARE")
 			if terrain.get("elevation")==null:hover_label.text += "  ·  QUOTA DA DEFINIRE"
@@ -316,6 +351,67 @@ func show_hover(id: String) -> void:
 				else:
 					hover_label.text += "  ·  tiro: %s" % {"blocked":"LOS ostruita", "unknown":"da verificare", "unavailable":"non disponibile"}.get(str(shot.status),"da verificare")
 				hover_label.tooltip_text = str(shot.reason)
+
+func handle_map_click(hex_id: String) -> void:
+	if terrain_review_mode:
+		if hex_id in edit_hexes:edit_hexes.erase(hex_id)
+		else:edit_hexes.append(hex_id)
+		edit_hexes.sort()
+		refresh()
+		return
+	move_to_hex(hex_id)
+
+func neighbor_id(id: String, direction: int) -> String:
+	var directions: Array[Vector3i]=[Vector3i(1,0,-1),Vector3i(1,-1,0),Vector3i(0,-1,1),Vector3i(-1,0,1),Vector3i(-1,1,0),Vector3i(0,1,-1)]
+	var cube: Vector3i=Hex.cube(id)+directions[posmod(direction,6)]
+	var row: int=cube.y+(cube.x-(cube.x&1))/2+1
+	return String.chr(65+cube.x)+str(row) if cube.x>=0 and cube.x<25 and row>=1 and row<=19 else ""
+
+func map_edge_key(a: String,b: String) -> String:
+	return a+"|"+b if a<b else b+"|"+a
+
+func apply_map_brush() -> void:
+	if edit_hexes.is_empty():return
+	var terrain: String=str(terrain_brush.get_item_metadata(terrain_brush.selected))
+	var feature: String=str(feature_brush.get_item_metadata(feature_brush.selected))
+	var level: int=int(level_brush.get_item_metadata(level_brush.selected))
+	var side: String=str(side_brush.get_item_metadata(side_brush.selected))
+	for id in edit_hexes:
+		var record: Dictionary=game.map_terrain.data.hexes[id].duplicate(true)
+		if terrain!="":record.terrain=terrain
+		if level!=-99:record.elevation=level
+		if feature!="":
+			if feature=="none":record.erase("building");record.erase("second_story")
+			elif feature=="second_story":record.second_story=true
+			else:record.building=feature
+		if terrain!="" or level!=-99 or feature!="":record.classification="manual_visual_review"
+		game.map_terrain.data.hexes[id]=record
+		if side!="":
+			var other:=neighbor_id(id,side_direction.selected)
+			if other!="":game.map_terrain.data.hexsides[map_edge_key(id,other)]=side
+	refresh()
+
+func save_map_reviews() -> void:
+	var edited_hexes: Dictionary={}
+	var original: Dictionary=game.map_terrain.data
+	var source: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/map_a_terrain.json"))
+	for id in original.hexes:
+		if original.hexes[id]!=source.hexes.get(id,{}):edited_hexes[id]=original.hexes[id]
+	var edited_sides: Dictionary={}
+	for edge in original.hexsides:
+		if original.hexsides[edge]!=source.hexsides.get(edge,""):edited_sides[edge]=original.hexsides[edge]
+	var file:=FileAccess.open(MAP_REVIEW_PATH,FileAccess.WRITE)
+	if file==null:notice="Salvataggio mappa non riuscito.";refresh();return
+	file.store_string(JSON.stringify({"hexes":edited_hexes,"hexsides":edited_sides},"\t"));file.close()
+	notice="Revisione mappa salvata sul dispositivo.";refresh()
+
+func load_map_reviews() -> void:
+	if not FileAccess.file_exists(MAP_REVIEW_PATH):return
+	var saved=JSON.parse_string(FileAccess.get_file_as_string(MAP_REVIEW_PATH))
+	if not saved is Dictionary:return
+	for id in saved.get("hexes",{}):
+		if game.map_terrain.data.hexes.has(id):game.map_terrain.data.hexes[id]=saved.hexes[id]
+	for edge in saved.get("hexsides",{}):game.map_terrain.data.hexsides[edge]=saved.hexsides[edge]
 
 func move_to_hex(hex_id: String) -> void:
 	if game.state.phase == "rounds":

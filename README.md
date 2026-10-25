@@ -34,3 +34,8 @@ La squadra usa le pedine A–H originali del modulo TTS, raggruppate per esagono
 La build web è destinata a HTTPS/GitHub Pages e usa l’esportazione senza thread. L’archivio TTS originale resta fuori dal repository. Le immagini e i testi del gioco originale sono da usare nel rispetto dei diritti applicabili.
 
 `python3 tools/extract_map_a_candidates.py` misura l'immagine originale; `python3 tools/build_map_a_terrain.py` produce `data/map_a_terrain.json` con le classi candidate dei 475 esagoni e le eccezioni visivamente riconosciute per gli edifici K13, L13 e T8. Il classificatore non distingue in modo affidabile le quote gialle 2 e 3 e non rileva tutte le aperture o i lati speciali: la LOS resta diagnostica fuori dai casi di combattimento strettamente verificati. Il centro degli edifici, per esempio, sembra terreno libero a un classificatore di pixel.
+
+
+## Editor mappa
+
+Attiva «Mappa semplificata», clicca uno o più esagoni e assegna separatamente terreno, quota, edificio/secondo piano e tipo di lato. I lati condividono un identificatore non orientato tra i due esagoni; porte e finestre sono marcate D/W e vengono considerate aperture dalla LOS. «Salva mappa» memorizza le revisioni in `user://ambush_map_a_reviews.json`; il file si trova nella cartella dati utente di Godot. La LOS da/attraverso un edificio resta indeterminata finché i lati attraversati non hanno aperture dichiarate.
