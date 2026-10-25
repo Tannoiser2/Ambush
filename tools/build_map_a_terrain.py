@@ -62,19 +62,22 @@ hexes = {}
 for hex_id, record in source["hexes"].items():
     terrain = buildings.get(hex_id, terrain_names[record["guess"]])
     blue = record["background_blue_median"]
-    # Bright white is unambiguous Level 1. Yellow Levels 2/3 are not separated
-    # reliably by JPEG pixels, so do not assign either one yet.
-    elevation = 1 if blue is not None and blue >= 250 else None
+    # Bright white indicates Level 1. Where the image cannot resolve the
+    # yellow levels, use the editor/game default of Level 1 and mark it assumed.
+    elevation_assumed = blue is None or blue < 250
+    elevation = 1
     hexes[hex_id] = {"terrain": terrain, "elevation": elevation,
                      "classification": "image_heuristic_with_atlas_spot_checks",
                      "hexside_review_pending": hex_id in hazard_hexes}
+    if elevation_assumed:
+        hexes[hex_id]["elevation_assumed"] = True
     if hex_id in combat_reviewed:
         reviewed_terrain, reviewed_level = combat_reviewed[hex_id]
         hexes[hex_id].update(terrain=reviewed_terrain, elevation=reviewed_level,
                               classification="manual_visual_review")
 
 out = {"map": "A", "status": "partial_los_diagnostic_only",
-       "notes": "Terrain classes are image-derived and spot-checked; yellow elevation and building apertures await hexside review. Never authorize fire from this data alone.",
+       "notes": "Quote non definite assunte a livello 1 fino alla revisione manuale; classi terreno e lati restano da verificare dove indicato.",
        "hexes": hexes, "hexsides": hexsides}
 path = ROOT / "data/map_a_terrain.json"
 path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n")

@@ -87,7 +87,7 @@ func _draw() -> void:
 			var status_edge:=Color("668c69",grid_opacity) if reviewed else Color("d16c59",grid_opacity) if record.get("elevation")==null else Color("bd9a4e",grid_opacity)
 			points.append(points[0]);draw_polyline(points,status_edge,1.0,true)
 			var pos:=map_position(str(hex_id))
-			var level_text:=str(int(record.get("elevation"))) if record.get("elevation")!=null else "?"
+			var level_text:=str(int(record.get("elevation",1))) if record.get("elevation")!=null else "1"
 			var badge_pos:=pos+Vector2(70.0,-132.0)*scale_factor
 			var badge_rect:=Rect2(badge_pos,Vector2(12.0,13.0))
 			draw_rect(badge_rect,Color("18221b",0.94),true)

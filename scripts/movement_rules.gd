@@ -29,9 +29,9 @@ static func cost(a: String, b: String, stance: String, mpa: int,
     return {"status":"unknown","reason":"Lato d'esagono non ancora verificato."}
   elif side == "crest": points += 1
   elif side == "embankment":
-   if hexes[a].get("elevation") == null or target.get("elevation") == null:
-    return {"status":"unknown","reason":"Quota necessaria per la scarpata non verificata."}
-   if int(target.elevation) > int(hexes[a].elevation): points += 1
+   var from_level := int(hexes[a].get("elevation",1) if hexes[a].get("elevation") != null else 1)
+   var to_level := int(target.get("elevation",1) if target.get("elevation") != null else 1)
+   if to_level > from_level: points += 1
   elif side != "none":
    return {"status":"unknown","reason":"Costo del lato d'esagono non verificato."}
  if stance == "crouching": points = mpa

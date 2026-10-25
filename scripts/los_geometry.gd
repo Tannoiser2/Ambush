@@ -116,10 +116,8 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
    if i>0 and i<path.size()-1:
     return {"status":"blocked","reason":"Edificio senza aperture sulla LOS in %s." % path[i]}
    return {"status":"unknown","reason":"Apertura porta/finestra mancante o non verificata nell'edificio %s." % path[i]}
- if start.get("elevation") == null or finish.get("elevation") == null:
-  return {"status":"unknown","reason":"Quota dell'esagono di partenza o arrivo non verificata."}
- var start_level := int(start.elevation)
- var finish_level := int(finish.elevation)
+ var start_level := int(start.get("elevation",1) if start.get("elevation") != null else 1)
+ var finish_level := int(finish.get("elevation",1) if finish.get("elevation") != null else 1)
  var same_level := start_level == finish_level
  var lower := mini(start_level,finish_level)
  var higher := maxi(start_level,finish_level)
@@ -127,10 +125,7 @@ static func _evaluate_map_a_path(path: Array[String], hexes: Dictionary, hexside
  for i in range(1,path.size()-1):
   var id: String = path[i]
   var terrain: Dictionary = hexes[id]
-  if terrain.get("elevation") == null:
-   unresolved = "Quota intermedia non verificata: " + id
-   continue
-  var level := int(terrain.elevation)
+  var level := int(terrain.get("elevation",1) if terrain.get("elevation") != null else 1)
   if level > higher:
    return {"status":"blocked","reason":"Quota superiore in " + id}
   var kind := str(terrain.get("terrain", ""))

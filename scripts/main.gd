@@ -195,7 +195,7 @@ func build_ui() -> void:
 	board.hex_drag_selected.connect(handle_map_drag_select)
 	board.hexside_dropped.connect(apply_map_side_drop)
 	board.hover_changed.connect(show_hover)
-	terrain_legend=label("Ponti sovrapposti al terreno di base. Verde verificato · Ocra stimato · Rosso quota da definire. Sinistro+trascina seleziona · Destro+trascina sposta. Seleziona C/S/P/F/×, poi clicca un lato.",13)
+	terrain_legend=label("Ponti sovrapposti al terreno di base. Verde verificato · Ocra stimato · Quote mancanti assunte a livello 1. Sinistro+trascina seleziona · Destro+trascina sposta. Seleziona C/S/P/F/×, poi clicca un lato.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	terrain_overlay_controls=HBoxContainer.new();terrain_overlay_controls.visible=false;terrain_overlay_controls.add_theme_constant_override("separation",8);center.add_child(terrain_overlay_controls)
 	terrain_overlay_controls.add_child(label("Opacità griglia",13))
@@ -394,12 +394,12 @@ func show_hover(id: String) -> void:
 	var terrain_names := {"clear":"aperto","woods":"bosco","brush":"macchia","cover":"copertura","road":"strada","stream":"corso d'acqua","stone_building":"edificio in pietra","wood_building":"edificio in legno","crater":"cratere","rubble":"macerie"}
 	if not terrain.is_empty():
 		hover_label.text += "  ·  terreno stimato: " + str(terrain_names.get(str(terrain.terrain),"da verificare"))
-		hover_label.text += "  ·  quota " + (str(terrain.elevation) if terrain.elevation != null else "?")
+		hover_label.text += "  ·  quota " + str(int(terrain.get("elevation",1) if terrain.get("elevation") != null else 1))
 		if terrain.get("building","")!="":hover_label.text += "  ·  edificio: " + ("legno" if terrain.building=="wood" else "pietra")
 		if bool(terrain.get("second_story",false)):hover_label.text += "  ·  secondo piano"
 		if terrain_review_mode:
 			hover_label.text += "  ·  %s" % ("CLASSE VERIFICATA" if terrain.get("classification","")=="manual_visual_review" else "CLASSE DA VERIFICARE")
-			if terrain.get("elevation")==null:hover_label.text += "  ·  QUOTA DA DEFINIRE"
+			if bool(terrain.get("elevation_assumed",false)):hover_label.text += "  ·  QUOTA ASSUNTA: LIVELLO 1"
 			if bool(terrain.get("hexside_review_pending",false)):hover_label.text += "  ·  LATI DA VERIFICARE"
 	var observer: Dictionary = game.soldier(selected)
 	if not observer.is_empty() and observer.hex != "" and observer.hex != id:
@@ -525,7 +525,9 @@ func apply_map_brush() -> void:
 					if record.map_art not in legacy_overlays:legacy_overlays.append(str(record.map_art))
 					record.overlays=legacy_overlays
 				record.terrain=terrain;record.map_art=terrain_brush_art
-		if level_selection!=-99:record.elevation=level_selection
+		if level_selection!=-99:
+			record.elevation=level_selection
+			record.erase("elevation_assumed")
 		if feature_selection!="":
 			if feature_selection=="none":
 				record.erase("building");record.erase("second_story");record.erase("overlays")
