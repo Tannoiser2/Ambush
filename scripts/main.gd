@@ -3,6 +3,7 @@ const Game = preload("res://scripts/game.gd")
 const Board = preload("res://scripts/board.gd")
 const Hex = preload("res://scripts/hex_grid.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
+const TerrainArt = preload("res://scripts/terrain_art.gd")
 const BODY_FONT = preload("res://assets/fonts/Barlow-Regular.ttf")
 const TITLE_FONT = preload("res://assets/fonts/SpecialElite-Regular.ttf")
 const SAVE_PATH := "user://ambush_mission_01.json"
@@ -17,8 +18,11 @@ var terrain_legend: Label
 var terrain_overlay_controls: HBoxContainer
 var terrain_opacity_slider: HSlider
 var terrain_opacity_value: Label
-var terrain_editor: HFlowContainer
-var terrain_brush: OptionButton
+var terrain_editor: VBoxContainer
+var terrain_palette: GridContainer
+var terrain_palette_buttons: Array[Button]=[]
+var terrain_brush_selection := ""
+var terrain_brush_art := ""
 var level_brush: OptionButton
 var feature_brush: OptionButton
 var side_brush: OptionButton
@@ -163,41 +167,52 @@ func build_ui() -> void:
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
 	var stretch:=Control.new();stretch.size_flags_horizontal=Control.SIZE_EXPAND_FILL;mapbar.add_child(stretch)
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
-	terrain_button=button("Mappa semplificata",func(): terrain_review_mode=not terrain_review_mode;refresh())
+	terrain_button=button("Editor mappa",func(): terrain_review_mode=not terrain_review_mode;refresh())
 	terrain_button.toggle_mode=true;mapbar.add_child(terrain_button)
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(handle_map_click)
+	board.hex_drag_selected.connect(handle_map_drag_select)
+	board.hexside_dropped.connect(apply_map_side_drop)
 	board.hover_changed.connect(show_hover)
-	terrain_legend=label("VERDE verificato · OCRA stimato · ROSSO quota assente. Seleziona un esagono e una direzione: il lato interessato viene evidenziato in turchese. D porta · W finestra · C cresta · S scarpata.",13)
+	terrain_legend=label("Verde verificato · Ocra stimato · Rosso quota da definire. Destro+trascina seleziona · C cresta, S scarpata, P porta, F finestra: trascina sui lati.",13)
 	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	terrain_overlay_controls=HBoxContainer.new();terrain_overlay_controls.visible=false;terrain_overlay_controls.add_theme_constant_override("separation",8);center.add_child(terrain_overlay_controls)
 	terrain_overlay_controls.add_child(label("Opacità griglia",13))
 	terrain_opacity_slider=HSlider.new();terrain_opacity_slider.min_value=0.05;terrain_opacity_slider.max_value=0.85;terrain_opacity_slider.step=0.05;terrain_opacity_slider.value=0.32;terrain_opacity_slider.custom_minimum_size.x=190;terrain_overlay_controls.add_child(terrain_opacity_slider)
 	terrain_opacity_value=label("32%",13);terrain_overlay_controls.add_child(terrain_opacity_value)
 	terrain_opacity_slider.value_changed.connect(func(value:float):board.grid_opacity=value;terrain_opacity_value.text="%d%%" % roundi(value*100.0);board.queue_redraw())
-	terrain_editor=HFlowContainer.new();terrain_editor.visible=false;terrain_editor.custom_minimum_size.y=84;center.add_child(terrain_editor)
-	selection_label=label("Nessun esagono selezionato",13);terrain_editor.add_child(selection_label)
-	map_save_label=label("Mappa salvata sul dispositivo",12);terrain_editor.add_child(map_save_label)
-	terrain_brush=OptionButton.new()
-	for item in [["Lascia invariato",""],["Aperto","clear"],["Bosco","woods"],["Macchia","brush"],["Terreno difficile","rough"],["Copertura","cover"],["Strada","road"],["Ruscello","stream"],["Edificio in legno","wood_building"],["Edificio in pietra","stone_building"],["Ponte in legno","wood_bridge"],["Ponte in pietra","stone_bridge"],["Ferrovia","railroad"],["Crateri","crater"],["Macerie","rubble"]]:terrain_brush.add_item(item[0]);terrain_brush.set_item_metadata(terrain_brush.item_count-1,item[1])
-	terrain_editor.add_child(terrain_brush)
+	terrain_editor=VBoxContainer.new();terrain_editor.visible=false;terrain_editor.size_flags_horizontal=Control.SIZE_EXPAND_FILL;terrain_editor.add_theme_constant_override("separation",4);center.add_child(terrain_editor)
+	var map_status_row:=HBoxContainer.new();map_status_row.add_theme_constant_override("separation",8);terrain_editor.add_child(map_status_row)
+	selection_label=label("Nessun esagono selezionato",12);selection_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;selection_label.custom_minimum_size=Vector2(0,18);selection_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map_status_row.add_child(selection_label)
+	map_save_label=label("Salvata sul dispositivo",11);map_save_label.custom_minimum_size.x=128;map_save_label.tooltip_text="Le revisioni della mappa vengono salvate su questo dispositivo.";map_status_row.add_child(map_save_label)
+	terrain_palette=GridContainer.new();terrain_palette.columns=8;terrain_palette.add_theme_constant_override("h_separation",3);terrain_palette.add_theme_constant_override("v_separation",2);terrain_editor.add_child(terrain_palette)
+	var tile_script=load("res://scripts/terrain_palette_button.gd")
+	for item in [["Aperto","clear","clear"],["Bosco","woods","woods"],["Macchia","brush","brush"],["Rocce","rough","rough"],["Fiume","stream","stream"],["Copertura","cover","cover"],["Strada","road","road"],["Terra","road","dirt_road"],["Ponte p.","road","stone_bridge"],["Ponte l.","road","wood_bridge"],["Ferrovia","road","railroad"],["Edif. pietra","stone_building","stone_building"],["Edif. legno","wood_building","wood_building"],["Crateri","crater","crater"],["Macerie","rubble","rubble"]]:
+		var tile_button:=Button.new();tile_button.set_script(tile_script);tile_button.set("terrain_id",item[1]);tile_button.set("caption",item[0]);tile_button.set("tile_texture",TerrainArt.texture(item[2]));tile_button.tooltip_text=item[0];tile_button.toggle_mode=true
+		terrain_palette.add_child(tile_button);terrain_palette_buttons.append(tile_button)
+		tile_button.pressed.connect(select_terrain_brush.bind(str(item[1]),str(item[2]),tile_button))
+	var edit_controls:=HBoxContainer.new();edit_controls.size_flags_horizontal=Control.SIZE_EXPAND_FILL;edit_controls.add_theme_constant_override("separation",4);terrain_editor.add_child(edit_controls)
 	feature_brush=OptionButton.new()
 	for item in [["Edificio invariato",""],["Rimuovi edificio","none"],["Edificio in legno","wood"],["Edificio in pietra","stone"],["Secondo piano","second_story"]]:feature_brush.add_item(item[0]);feature_brush.set_item_metadata(feature_brush.item_count-1,item[1])
-	terrain_editor.add_child(feature_brush)
+	feature_brush.custom_minimum_size.x=128;edit_controls.add_child(feature_brush)
 	level_brush=OptionButton.new()
 	for item in [["Quota invariata",-99],["Livello 1",1],["Livello 2",2],["Livello 3",3]]:level_brush.add_item(item[0]);level_brush.set_item_metadata(level_brush.item_count-1,item[1])
-	terrain_editor.add_child(level_brush)
+	level_brush.custom_minimum_size.x=112;edit_controls.add_child(level_brush)
 	side_brush=OptionButton.new()
 	for item in [["Lato invariato",""],["Lato normale","none"],["Cresta","crest"],["Scarpata","embankment"],["Porta","door"],["Finestra","window"]]:side_brush.add_item(item[0]);side_brush.set_item_metadata(side_brush.item_count-1,item[1])
-	terrain_editor.add_child(side_brush)
+	side_brush.custom_minimum_size.x=112;edit_controls.add_child(side_brush)
 	side_direction=OptionButton.new()
 	for direction_name in ["SE","NE","N","NW","SW","S"]:side_direction.add_item(direction_name)
 	side_direction.item_selected.connect(func(_index:int):refresh())
-	terrain_editor.add_child(side_direction)
-	terrain_editor.add_child(button("Applica a selezione",apply_map_brush))
-	terrain_editor.add_child(button("Salva mappa",save_map_reviews))
-	terrain_editor.add_child(button("Deseleziona",func():edit_hexes.clear();refresh()))
-	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14)
+	side_direction.custom_minimum_size.x=62;edit_controls.add_child(side_direction)
+	var side_palette:=HBoxContainer.new();side_palette.add_theme_constant_override("separation",4);side_palette.add_child(label("Lati",11));terrain_editor.add_child(side_palette)
+	var marker_script=load("res://scripts/side_marker_button.gd")
+	for marker in [["crest","C",Color("485b4b")],["embankment","S",Color("a56c35")],["door","P",Color("bd7553")],["window","F",Color("4e9db4")],["none","×",Color("555a52")]]:
+		var marker_button:=Button.new();marker_button.set_script(marker_script);marker_button.set("side_kind",marker[0]);marker_button.set("marker_letter",marker[1]);marker_button.set("marker_color",marker[2]);side_palette.add_child(marker_button)
+	var apply_map_button:=button("Applica",apply_map_brush);apply_map_button.custom_minimum_size.x=76;side_palette.add_child(apply_map_button)
+	var clear_map_selection:=button("Deseleziona",func():edit_hexes.clear();refresh());clear_map_selection.custom_minimum_size.x=86;side_palette.add_child(clear_map_selection)
+	var save_map_button:=button("Salva",save_map_reviews);save_map_button.custom_minimum_size.x=68;side_palette.add_child(save_map_button)
+	hover_label=label("Rotella: zoom · tasto centrale: sposta la carta",14)
 	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	hover_label.custom_minimum_size.y=44
 	center.add_child(hover_label)
@@ -301,13 +316,16 @@ func refresh() -> void:
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
 	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode;terrain_overlay_controls.visible=terrain_review_mode
 	terrain_editor.visible=terrain_review_mode
+	if board.hovered=="":hover_label.text="Rotella: zoom · tasto centrale: sposta carta" if not terrain_review_mode else "Editor mappa · tasto destro + trascina: selezione multipla"
 	selection_label.text=map_selection_summary() if not edit_hexes.is_empty() else "Clicca gli esagoni da aggiungere · clicca di nuovo per rimuovere"
-	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
+	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode
+	board.custom_minimum_size.y=225 if terrain_review_mode else 400
 	board.edit_hexes=edit_hexes.duplicate()
 	board.edit_side_origin=edit_hexes[0] if not edit_hexes.is_empty() else ""
 	board.edit_side_direction=side_direction.selected if is_instance_valid(side_direction) else 0
 	board.edit_side_kind=str(side_brush.get_item_metadata(side_brush.selected)) if is_instance_valid(side_brush) else ""
 	board.grid_opacity=terrain_opacity_slider.value if is_instance_valid(terrain_opacity_slider) else 0.32
+	board.queue_redraw()
 
 func stack_is_legal() -> bool:
 	var leader: Dictionary=game.soldier(selected)
@@ -334,7 +352,7 @@ func escape_bbcode(value: String) -> String:
 
 func show_hover(id: String) -> void:
 	if id == "":
-		hover_label.text = "Rotella: zoom · tasto destro: sposta la carta"
+		hover_label.text = "Rotella: zoom · tasto centrale: sposta carta" if not terrain_review_mode else "Editor mappa · tasto destro + trascina: selezione multipla"
 		hover_label.tooltip_text = ""
 		return
 	hover_label.text = "ESAGONO " + id
@@ -392,10 +410,13 @@ func map_selection_summary() -> String:
 	for id in edit_hexes:
 		var record: Dictionary=game.map_terrain.data.hexes.get(id,{})
 		var terrain:=str(record.get("terrain","?"))
-		var elevation:=str(record.get("elevation","?"))
+		var elevation:=str(record.get("elevation","?")) if record.get("elevation")!=null else "?"
 		var building:=str(record.get("building",""))
-		terrains[terrain]=int(terrains.get(terrain,0))+1
-		elevations[elevation]=int(elevations.get(elevation,0))+1
+		var terrain_names: Dictionary={"clear":"Aperto","woods":"Bosco","brush":"Macchia","rough":"Rocce","stream":"Ruscello","cover":"Copertura","road":"Strada","wood_building":"Edif. legno","stone_building":"Edif. pietra","crater":"Crateri","rubble":"Macerie"}
+		var terrain_name:=str(terrain_names.get(terrain,terrain))
+		terrains[terrain_name]=int(terrains.get(terrain_name,0))+1
+		var elevation_name: String="Liv. "+elevation if elevation!="?" else "Quota ?"
+		elevations[elevation_name]=int(elevations.get(elevation_name,0))+1
 		if building!="":buildings[building]=int(buildings.get(building,0))+1
 	var terrain_names: PackedStringArray=[]
 	var elevation_names: PackedStringArray=[]
@@ -406,17 +427,40 @@ func map_selection_summary() -> String:
 	var terrain_text:= ", ".join(terrain_names)
 	var elevation_text:= ", ".join(elevation_names)
 	var building_text:= ", ".join(building_names) if not building_names.is_empty() else "nessun edificio"
-	return "%d esagoni [%s] · terreno: %s · quota: %s · %s" % [edit_hexes.size(),", ".join(edit_hexes),terrain_text,elevation_text,building_text]
+	var preview_ids:=PackedStringArray()
+	for i in mini(edit_hexes.size(),5):preview_ids.append(edit_hexes[i])
+	var id_text:=", ".join(preview_ids)
+	if edit_hexes.size()>preview_ids.size():id_text+=" +%d" % (edit_hexes.size()-preview_ids.size())
+	return "%d esagoni [%s] · %s · quota %s · %s" % [edit_hexes.size(),id_text,terrain_text,elevation_text,building_text]
+
+func select_terrain_brush(id: String, art_id: String, active_button: Button) -> void:
+	terrain_brush_selection=id
+	terrain_brush_art=art_id
+	for palette_button in terrain_palette_buttons:palette_button.button_pressed=palette_button==active_button
+	board.queue_redraw()
+
+func handle_map_drag_select(hex_id: String) -> void:
+	if terrain_review_mode and hex_id!="" and hex_id not in edit_hexes:
+		edit_hexes.append(hex_id);edit_hexes.sort();refresh()
+
+func apply_map_side_drop(hex_id: String,direction: int,kind: String) -> void:
+	var other:=neighbor_id(hex_id,direction)
+	if other=="":notice="Il lato selezionato è fuori dalla mappa.";refresh();return
+	var key:=map_edge_key(hex_id,other)
+	game.map_terrain.data.hexsides[key]=kind
+	save_map_reviews()
+	notice="Indicatore lato %s impostato su %s–%s." % [{"crest":"cresta","embankment":"scarpata","door":"porta","window":"finestra","none":"rimosso"}.get(kind,kind),hex_id,other]
+	refresh()
 
 func apply_map_brush() -> void:
 	if edit_hexes.is_empty():return
-	var terrain: String=str(terrain_brush.get_item_metadata(terrain_brush.selected))
+	var terrain: String=terrain_brush_selection
 	var feature: String=str(feature_brush.get_item_metadata(feature_brush.selected))
 	var level: int=int(level_brush.get_item_metadata(level_brush.selected))
 	var side: String=str(side_brush.get_item_metadata(side_brush.selected))
 	for id in edit_hexes:
 		var record: Dictionary=game.map_terrain.data.hexes[id].duplicate(true)
-		if terrain!="":record.terrain=terrain
+		if terrain!="":record.terrain=terrain;record.map_art=terrain_brush_art
 		if level!=-99:record.elevation=level
 		if feature!="":
 			if feature=="none":record.erase("building");record.erase("second_story")
@@ -442,7 +486,7 @@ func save_map_reviews() -> void:
 	var file:=FileAccess.open(MAP_REVIEW_PATH,FileAccess.WRITE)
 	if file==null:notice="Salvataggio mappa non riuscito.";refresh();return
 	file.store_string(JSON.stringify({"hexes":edited_hexes,"hexsides":edited_sides},"\t"));file.close()
-	map_save_label.text="Salvata · %d esagoni · %d lati" % [edited_hexes.size(),edited_sides.size()]
+	map_save_label.text="Salvata · %d e/%d l" % [edited_hexes.size(),edited_sides.size()]
 	notice="Revisione mappa salvata sul dispositivo.";refresh()
 
 func load_map_reviews() -> void:

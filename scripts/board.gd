@@ -2,8 +2,11 @@ class_name AmbushBoard
 extends Control
 signal hex_clicked(id: String)
 signal hover_changed(id: String)
+signal hex_drag_selected(id: String)
+signal hexside_dropped(hex_id: String, direction: int, kind: String)
 const Hex = preload("res://scripts/hex_grid.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
+const TerrainArt = preload("res://scripts/terrain_art.gd")
 var game: AmbushGame
 var selected := "A"
 var selected_ids: Array[String] = ["A"]
@@ -17,6 +20,10 @@ var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
 var dragging := false
+var selecting_hexes := false
+var drag_selected_hexes: Dictionary = {}
+var drag_preview_edge: Dictionary = {}
+var drag_preview_kind := ""
 var texture: Texture2D = preload("res://assets/maps/map_a.jpg")
 var font: Font = preload("res://assets/fonts/Barlow-Regular.ttf")
 var counters: Dictionary = {}
@@ -55,10 +62,22 @@ func _draw() -> void:
 			var record: Dictionary=game.map_terrain.data.hexes[hex_id]
 			var reviewed: bool=record.get("classification","")=="manual_visual_review" and record.get("elevation")!=null and not bool(record.get("hexside_review_pending",false))
 			var points:=polygon_at(str(hex_id))
-			var fill:=Color("315743") if reviewed else Color("8b3c36") if record.get("elevation")==null else Color("897044")
-			fill.a=grid_opacity
-			draw_colored_polygon(points,fill)
-			points.append(points[0]);draw_polyline(points,Color("e4dfc8",0.72),1.0,true)
+			var art_kind:=str(record.get("map_art",record.get("terrain","clear")))
+			if art_kind=="clear":art_kind="clear_%d" % clampi(int(record.get("elevation",1) if record.get("elevation",1)!=null else 1),1,3)
+			var tile:=TerrainArt.texture(art_kind)
+			var tint:=Color(1,1,1,clampf(grid_opacity,0.0,1.0))
+			var uvs:=PackedVector2Array([Vector2(0.25,0),Vector2(0.75,0),Vector2(1,0.5),Vector2(0.75,1),Vector2(0.25,1),Vector2(0,0.5)])
+			if tile!=null:draw_polygon(points,PackedColorArray([tint,tint,tint,tint,tint,tint]),uvs,tile)
+			else:
+				var fill:=Color("315743") if reviewed else Color("8b3c36") if record.get("elevation")==null else Color("897044")
+				fill.a=grid_opacity;draw_colored_polygon(points,fill)
+				var center:=map_position(str(hex_id));var symbol_radius:=92.0*scale_factor
+				if art_kind=="crater":
+					draw_circle(center,symbol_radius,Color(0.34,0.31,0.24,grid_opacity));draw_arc(center,symbol_radius,0.0,TAU,24,Color(0.18,0.17,0.14,grid_opacity),2.0,true)
+				elif art_kind=="rubble":
+					for offset in [Vector2(-0.55,-0.2),Vector2(0.05,-0.55),Vector2(0.42,-0.08),Vector2(-0.28,0.36)]:draw_rect(Rect2(center+offset*symbol_radius,Vector2(0.35,0.25)*symbol_radius),Color(0.72,0.64,0.48,grid_opacity))
+			var status_edge:=Color("668c69",grid_opacity) if reviewed else Color("d16c59",grid_opacity) if record.get("elevation")==null else Color("bd9a4e",grid_opacity)
+			points.append(points[0]);draw_polyline(points,status_edge,1.0,true)
 			var pos:=map_position(str(hex_id))
 			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
 			if hex_id in edit_hexes:
@@ -69,8 +88,17 @@ func _draw() -> void:
 		var kind: String=str(game.map_terrain.data.hexsides[edge])
 		if kind in ["door","window","crest","embankment"]:
 			var midpoint: Vector2=(map_position(parts[0])+map_position(parts[1]))/2.0
-			var marker: String={"door":"D","window":"W","crest":"C","embankment":"S"}.get(kind,"?")
-			draw_circle(midpoint,7.0,Color("26382f"));draw_string(font,midpoint+Vector2(-4,4),marker,HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("f4dfae"))
+			var marker: String={"door":"P","window":"F","crest":"C","embankment":"S"}.get(kind,"?")
+			var marker_color: Color={"door":Color("bd7553"),"window":Color("4e9db4"),"crest":Color("485b4b"),"embankment":Color("a56c35")}.get(kind,Color("26382f"))
+			draw_circle(midpoint,8.0,marker_color);draw_circle(midpoint,8.0,Color("e9dfc1"),false,1.2);draw_string(font,midpoint+Vector2(-4,4),marker,HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color.WHITE)
+	if not drag_preview_edge.is_empty():
+		var preview_id:=str(drag_preview_edge.get("hex_id",""))
+		var preview_neighbor:=neighbor_for_direction(preview_id,int(drag_preview_edge.get("direction",0)))
+		if preview_neighbor!="":
+			var a:=map_position(preview_id);var b:=map_position(preview_neighbor);var midpoint: Vector2=(a+b)/2.0
+			var tangent: Vector2=(b-a).orthogonal().normalized()*150.0*scale_factor
+			var preview_color: Color={"door":Color("ef9977"),"window":Color("62c8df"),"crest":Color("a6c4a1"),"embankment":Color("e7a35b")}.get(drag_preview_kind,Color("eeeecc"))
+			draw_line(midpoint-tangent,midpoint+tangent,preview_color,7.0,true)
 	if terrain_review_mode and edit_side_origin!="":
 		var directions: Array[Vector3i]=[Vector3i(1,0,-1),Vector3i(1,-1,0),Vector3i(0,-1,1),Vector3i(-1,0,1),Vector3i(-1,1,0),Vector3i(0,1,-1)]
 		var cube: Vector3i=Hex.cube(edit_side_origin)+directions[posmod(edit_side_direction,6)]
@@ -155,14 +183,57 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed: zoom_at(event.position,1.15)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed: zoom_at(event.position,1.0/1.15)
-		elif event.button_index in [MOUSE_BUTTON_MIDDLE,MOUSE_BUTTON_RIGHT]: dragging=event.pressed
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if terrain_review_mode:
+				selecting_hexes=event.pressed
+				if event.pressed:drag_selected_hexes.clear();_emit_drag_selection(event.position)
+				else:drag_selected_hexes.clear()
+			else:dragging=event.pressed
+		elif event.button_index == MOUSE_BUTTON_MIDDLE:dragging=event.pressed
 		elif event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var id := nearest(event.position)
 			if id != "": hex_clicked.emit(id)
 	if event is InputEventMouseMotion:
 		if dragging: pan += event.relative; queue_redraw()
+		elif selecting_hexes:_emit_drag_selection(event.position)
 		var id := nearest(event.position)
 		if id != hovered: hovered=id;hover_changed.emit(id);queue_redraw()
+
+func _emit_drag_selection(point: Vector2) -> void:
+	var id:=nearest(point)
+	if id!="" and not drag_selected_hexes.has(id):drag_selected_hexes[id]=true;hex_drag_selected.emit(id);queue_redraw()
+
+func neighbor_for_direction(id: String,direction: int) -> String:
+	var directions: Array[Vector3i]=[Vector3i(1,0,-1),Vector3i(1,-1,0),Vector3i(0,-1,1),Vector3i(-1,0,1),Vector3i(-1,1,0),Vector3i(0,1,-1)]
+	var cube: Vector3i=Hex.cube(id)+directions[posmod(direction,6)]
+	var row: int=cube.y+(cube.x-(cube.x&1))/2+1
+	return String.chr(65+cube.x)+str(row) if cube.x>=0 and cube.x<25 and row>=1 and row<=19 else ""
+
+func closest_edge(point: Vector2) -> Dictionary:
+	var id:=nearest(point)
+	if id=="":return {}
+	var best_distance:=INF
+	var best_direction:=-1
+	for direction in 6:
+		var neighbor:=neighbor_for_direction(id,direction)
+		if neighbor=="":continue
+		var distance:=point.distance_to((map_position(id)+map_position(neighbor))/2.0)
+		if distance<best_distance:best_distance=distance;best_direction=direction
+	return {"hex_id":id,"direction":best_direction} if best_direction>=0 and best_distance<=maxf(16.0,85.0*scale_factor) else {}
+
+func _can_drop_data(at_position: Vector2,data: Variant) -> bool:
+	if not data is Dictionary or not data.has("ambush_hexside"):
+		drag_preview_edge.clear();queue_redraw();return false
+	drag_preview_edge=closest_edge(at_position) if terrain_review_mode else {}
+	drag_preview_kind=str(data.ambush_hexside)
+	queue_redraw()
+	return not drag_preview_edge.is_empty()
+
+func _drop_data(at_position: Vector2,data: Variant) -> void:
+	var edge:=closest_edge(at_position)
+	if not edge.is_empty() and data is Dictionary and data.has("ambush_hexside"):
+		hexside_dropped.emit(str(edge.hex_id),int(edge.direction),str(data.ambush_hexside))
+	drag_preview_edge.clear();queue_redraw()
 
 func nearest(point: Vector2) -> String:
 	var result := "";var best := 180.0*scale_factor
