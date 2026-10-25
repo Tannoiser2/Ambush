@@ -87,12 +87,12 @@ func _draw() -> void:
 			var status_edge:=Color("668c69",grid_opacity) if reviewed else Color("d16c59",grid_opacity) if record.get("elevation")==null else Color("bd9a4e",grid_opacity)
 			points.append(points[0]);draw_polyline(points,status_edge,1.0,true)
 			var pos:=map_position(str(hex_id))
-			var level_text:=str(record.get("elevation","?")) if record.get("elevation")!=null else "?"
-			var badge_pos:=pos+Vector2(118.0,-158.0)*scale_factor
-			var badge_rect:=Rect2(badge_pos,Vector2(18.0,19.0))
+			var level_text:=str(int(record.get("elevation"))) if record.get("elevation")!=null else "?"
+			var badge_pos:=pos+Vector2(70.0,-132.0)*scale_factor
+			var badge_rect:=Rect2(badge_pos,Vector2(12.0,13.0))
 			draw_rect(badge_rect,Color("18221b",0.94),true)
-			draw_rect(badge_rect,Color("d6c68d",0.9),false,1.0)
-			draw_string(font,badge_pos+Vector2(4.0,15.0),level_text,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("fff1c8"))
+			draw_rect(badge_rect,Color("d6c68d",0.9),false,0.8)
+			draw_string(font,badge_pos+Vector2(2.5,10.0),level_text,HORIZONTAL_ALIGNMENT_LEFT,-1,10,Color("fff1c8"))
 			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
 			if hex_id in edit_hexes:
 				var outline:=polygon_at(str(hex_id));outline.append(outline[0]);draw_polyline(outline,Color("f3d16f"),4.0,true)
@@ -101,10 +101,12 @@ func _draw() -> void:
 		if parts.size()!=2 or (not terrain_review_mode and parts[0] not in selected_ids and parts[1] not in selected_ids):continue
 		var kind: String=str(game.map_terrain.data.hexsides[edge])
 		if kind in ["door","window","crest","embankment"]:
-			var midpoint: Vector2=(map_position(parts[0])+map_position(parts[1]))/2.0
-			var marker: String={"door":"P","window":"F","crest":"C","embankment":"S"}.get(kind,"?")
-			var marker_color: Color={"door":Color("bd7553"),"window":Color("4e9db4"),"crest":Color("485b4b"),"embankment":Color("a56c35")}.get(kind,Color("26382f"))
-			draw_circle(midpoint,8.0,marker_color);draw_circle(midpoint,8.0,Color("e9dfc1"),false,1.2);draw_string(font,midpoint+Vector2(-4,4),marker,HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color.WHITE)
+			var first:=map_position(parts[0]);var second:=map_position(parts[1])
+			var midpoint: Vector2=(first+second)/2.0
+			var tangent: Vector2=(second-first).orthogonal().normalized()*90.0*scale_factor
+			var marker_color: Color={"door":Color("bd7553"),"window":Color("4e9db4"),"crest":Color("668a62"),"embankment":Color("c28b46")}.get(kind,Color("26382f"))
+			draw_line(midpoint-tangent,midpoint+tangent,Color("172019",0.9),8.0,true)
+			draw_line(midpoint-tangent,midpoint+tangent,marker_color,5.0,true)
 	if not drag_preview_edge.is_empty():
 		var preview_id:=str(drag_preview_edge.get("hex_id",""))
 		var preview_neighbor:=neighbor_for_direction(preview_id,int(drag_preview_edge.get("direction",0)))
