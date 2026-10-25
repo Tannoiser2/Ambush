@@ -228,6 +228,7 @@ func build_ui() -> void:
 	var apply_map_button:=button("Applica",apply_map_brush);apply_map_button.custom_minimum_size.x=76;side_palette.add_child(apply_map_button)
 	var clear_map_selection:=button("Deseleziona",func():edit_hexes.clear();refresh());clear_map_selection.custom_minimum_size.x=86;side_palette.add_child(clear_map_selection)
 	var save_map_button:=button("Salva",save_map_reviews);save_map_button.custom_minimum_size.x=68;side_palette.add_child(save_map_button)
+	var export_map_button:=button("Esporta mappa",export_map_reviews);export_map_button.custom_minimum_size.x=112;export_map_button.tooltip_text="Scarica tutti i dati mappa correnti, inclusi quelli salvati in questo browser.";side_palette.add_child(export_map_button)
 	hover_label=label("Rotella: zoom · tasto centrale: sposta la carta",14)
 	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	hover_label.custom_minimum_size.y=44
@@ -556,6 +557,17 @@ func save_map_reviews() -> void:
 	file.store_string(JSON.stringify({"hexes":edited_hexes,"hexsides":edited_sides},"\t"));file.close()
 	map_save_label.text="Salvata · %d e/%d l" % [edited_hexes.size(),edited_sides.size()]
 	notice="Revisione mappa salvata sul dispositivo.";refresh()
+
+func export_map_reviews() -> void:
+	var payload:=JSON.stringify(game.map_terrain.data,"\t").to_utf8_buffer()
+	if OS.has_feature("web"):
+		JavaScriptBridge.download_buffer(payload,"ambush_map_a.json","application/json")
+	else:
+		var file:=FileAccess.open("user://ambush_map_a_export.json",FileAccess.WRITE)
+		if file==null:notice="Esportazione della mappa non riuscita.";refresh();return
+		file.store_buffer(payload);file.close()
+		map_save_label.text="Esportata in user://"
+		notice="Esportazione completa della mappa salvata nei dati utente.";refresh()
 
 func load_map_reviews() -> void:
 	if not FileAccess.file_exists(MAP_REVIEW_PATH):return
