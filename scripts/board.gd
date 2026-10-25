@@ -12,15 +12,15 @@ var selected := "A"
 var selected_ids: Array[String] = ["A"]
 var terrain_review_mode := false
 var edit_hexes: Array[String] = []
-var edit_side_origin := ""
-var edit_side_direction := 0
-var edit_side_kind := ""
 var grid_opacity := 0.32
 var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
 var dragging := false
 var selecting_hexes := false
+var drag_select_start := ""
+var drag_select_origin := Vector2.ZERO
+var drag_select_moved := false
 var drag_selected_hexes: Dictionary = {}
 var drag_preview_edge: Dictionary = {}
 var drag_preview_kind := ""
@@ -99,17 +99,6 @@ func _draw() -> void:
 			var tangent: Vector2=(b-a).orthogonal().normalized()*150.0*scale_factor
 			var preview_color: Color={"door":Color("ef9977"),"window":Color("62c8df"),"crest":Color("a6c4a1"),"embankment":Color("e7a35b")}.get(drag_preview_kind,Color("eeeecc"))
 			draw_line(midpoint-tangent,midpoint+tangent,preview_color,7.0,true)
-	if terrain_review_mode and edit_side_origin!="":
-		var directions: Array[Vector3i]=[Vector3i(1,0,-1),Vector3i(1,-1,0),Vector3i(0,-1,1),Vector3i(-1,0,1),Vector3i(-1,1,0),Vector3i(0,1,-1)]
-		var cube: Vector3i=Hex.cube(edit_side_origin)+directions[posmod(edit_side_direction,6)]
-		var row: int=cube.y+(cube.x-(cube.x&1))/2+1
-		var neighbor:=String.chr(65+cube.x)+str(row) if cube.x>=0 and cube.x<25 and row>=1 and row<=19 else ""
-		if neighbor!="":
-			var center_a:=map_position(edit_side_origin);var center_b:=map_position(neighbor)
-			var midpoint: Vector2=(center_a+center_b)/2.0
-			var tangent: Vector2=(center_b-center_a).orthogonal().normalized()*156.0*scale_factor
-			draw_line(midpoint-tangent,midpoint+tangent,Color("5de1cb"),8.0,true)
-			draw_string(font,midpoint+Vector2(7,-8),"%s→%s · %s" % [edit_side_origin,neighbor,edit_side_kind],HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("eaffd7"))
 	var chosen := game.soldier(selected)
 	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
 		var can_round_move := false
@@ -183,24 +172,33 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed: zoom_at(event.position,1.15)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed: zoom_at(event.position,1.0/1.15)
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			if terrain_review_mode:
-				selecting_hexes=event.pressed
-				if event.pressed:drag_selected_hexes.clear();_emit_drag_selection(event.position)
-				else:drag_selected_hexes.clear()
-			else:dragging=event.pressed
+		elif event.button_index == MOUSE_BUTTON_RIGHT: dragging=event.pressed
 		elif event.button_index == MOUSE_BUTTON_MIDDLE:dragging=event.pressed
-		elif event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var id := nearest(event.position)
-			if id != "": hex_clicked.emit(id)
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			if terrain_review_mode:
+				if event.pressed:
+					selecting_hexes=true;drag_selected_hexes.clear();drag_select_start=nearest(event.position);drag_select_moved=false;drag_select_origin=event.position
+				else:
+					selecting_hexes=false
+					if not drag_select_moved and drag_select_start!="":hex_clicked.emit(drag_select_start)
+					drag_selected_hexes.clear()
+			else:
+				if event.pressed:
+					var id := nearest(event.position)
+					if id != "": hex_clicked.emit(id)
 	if event is InputEventMouseMotion:
 		if dragging: pan += event.relative; queue_redraw()
-		elif selecting_hexes:_emit_drag_selection(event.position)
+		elif selecting_hexes and event.position.distance_to(drag_select_origin)>=4.0:
+			drag_select_moved=true
+			if drag_select_start!="":_emit_drag_selection_at_id(drag_select_start)
+			_emit_drag_selection(event.position)
 		var id := nearest(event.position)
 		if id != hovered: hovered=id;hover_changed.emit(id);queue_redraw()
 
 func _emit_drag_selection(point: Vector2) -> void:
-	var id:=nearest(point)
+	_emit_drag_selection_at_id(nearest(point))
+
+func _emit_drag_selection_at_id(id: String) -> void:
 	if id!="" and not drag_selected_hexes.has(id):drag_selected_hexes[id]=true;hex_drag_selected.emit(id);queue_redraw()
 
 func neighbor_for_direction(id: String,direction: int) -> String:
