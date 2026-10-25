@@ -6,16 +6,23 @@ const Hex = preload("res://scripts/hex_grid.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
 var game: AmbushGame
 var selected := "A"
+var selected_ids: Array[String] = ["A"]
+var terrain_review_mode := false
 var hovered := ""
 var zoom := 1.0
 var pan := Vector2.ZERO
 var dragging := false
 var texture: Texture2D = preload("res://assets/maps/map_a.jpg")
 var font: Font = preload("res://assets/fonts/Barlow-Regular.ttf")
+var counters: Dictionary = {}
 var rect := Rect2()
 var scale_factor := 1.0
 
 func _ready() -> void:
+	for id in ["A","B","C","D","E","F","G","H","J","K"]:
+		counters[id]=load("res://assets/counters/us_%s.png" % id)
+	for id in ["L","N","P","Q","R","S","X"]:
+		counters["GE_"+id]=load("res://assets/counters/ge_%s.png" % id)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
 	resized.connect(queue_redraw)
@@ -36,8 +43,18 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("222a22"))
 	scale_factor = minf((size.x-24.0)/7000.0,(size.y-24.0)/6400.0)*zoom
 	rect = Rect2((size-Vector2(7000,6400)*scale_factor)/2.0+pan,Vector2(7000,6400)*scale_factor)
-	draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color(0.94,0.93,0.85))
+	if not terrain_review_mode:
+		draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color(0.94,0.93,0.85))
 	if game == null or game.state.is_empty(): return
+	if terrain_review_mode:
+		for hex_id in game.map_terrain.data.hexes:
+			var record: Dictionary=game.map_terrain.data.hexes[hex_id]
+			var reviewed: bool=record.get("classification","")=="manual_visual_review" and record.get("elevation")!=null and not bool(record.get("hexside_review_pending",false))
+			var points:=polygon_at(str(hex_id))
+			draw_colored_polygon(points,Color("315743") if reviewed else Color("8b3c36") if record.get("elevation")==null else Color("897044"))
+			points.append(points[0]);draw_polyline(points,Color("c7c7a5",0.6),1.0,true)
+			var pos:=map_position(str(hex_id))
+			if zoom>1.2:draw_string(font,pos+Vector2(-9,5),str(hex_id),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color.WHITE)
 	var chosen := game.soldier(selected)
 	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
 		var can_round_move := false
@@ -87,16 +104,19 @@ func _draw() -> void:
 			var u: Dictionary = units[i]
 			var offset := Vector2((i%3- minf(2,units.size()-1)/2.0)*18.0,floori(i/3.0)*18.0)
 			var pos := map_position(hex_id)+offset
-			var token_rect := Rect2(pos-Vector2(10,11),Vector2(20,22))
+			var token_rect := Rect2(pos-Vector2(12,12),Vector2(24,24))
 			draw_rect(Rect2(token_rect.position+Vector2(1,2),token_rect.size),Color(0,0,0,0.3))
-			draw_rect(token_rect,Color("8b4e39") if u.status=="incapacitated" else Color("6d5932") if u.wounded else Color("344d39"))
-			draw_rect(token_rect,Color("e5c47e") if u.id==selected else Color("d6d3bd"),false,2.0 if u.id==selected else 1.0)
-			draw_string(font,pos+Vector2(-5,5),u.id,HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("fff7d9"))
+			if counters.has(str(u.id)):
+				draw_texture_rect(counters[str(u.id)],token_rect,false,Color(0.72,0.64,0.55) if u.status=="incapacitated" else Color(0.8,0.8,0.8) if u.wounded else Color.WHITE)
+			draw_rect(token_rect,Color("e5c47e") if u.id in selected_ids else Color("d6d3bd"),false,2.0 if u.id in selected_ids else 1.0)
 			if u.stance == "prone": draw_line(pos+Vector2(-7,8),pos+Vector2(7,8),Color("f5dfa8"),2)
 	for enemy in game.state.enemies:
 		var pos := map_position(enemy.hex)
-		draw_circle(pos,12,Color("743c30") if enemy.get("status", "active") == "active" else Color("565a55"))
-		draw_string(font,pos+Vector2(-5,5),str(enemy.get("letter", enemy.id)),HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("fff0d7"))
+		var counter_id: String="GE_"+str(enemy.get("letter", ""))
+		if counters.has(counter_id):
+			draw_texture_rect(counters[counter_id],Rect2(pos-Vector2(12,12),Vector2(24,24)),false,Color.WHITE if enemy.get("status","active")=="active" else Color(0.55,0.55,0.55))
+		else:
+			draw_circle(pos,12,Color("743c30") if enemy.get("status", "active") == "active" else Color("565a55"))
 	if hovered != "":
 		var points := polygon_at(hovered);points.append(points[0])
 		draw_polyline(points,Color("f5c76a"),2,true)

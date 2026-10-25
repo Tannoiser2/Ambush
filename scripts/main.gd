@@ -9,8 +9,13 @@ const SAVE_PATH := "user://ambush_mission_01.json"
 var game := Game.new()
 var board: AmbushBoard
 var selected := "A"
-var move_as_group := false
+var selected_ids: Array[String] = ["A"]
 var drag_target := ""
+var terrain_review_mode := false
+var terrain_button: Button
+var terrain_legend: Label
+var counter_icons: Dictionary = {}
+var action_buttons: Dictionary = {}
 var roster: VBoxContainer
 var drag_options: VBoxContainer
 var exit_drag_button: Button
@@ -33,6 +38,8 @@ var drop_buttons: Array[Button] = []
 var notice := ""
 
 func _ready() -> void:
+	for id in ["A","B","C","D","E","F","G","H","J","K"]:
+		counter_icons[id] = load("res://assets/counters/us_%s.png" % id)
 	build_theme()
 	build_ui()
 	game.changed.connect(refresh)
@@ -103,10 +110,10 @@ func build_ui() -> void:
 	tools.add_child(button("Briefing",show_briefing));tools.add_child(button("Salva",save_game));tools.add_child(button("Carica",load_game));tools.add_child(button("Nuova missione",confirm_new))
 	var body:=box(root,false);body.size_flags_vertical=Control.SIZE_EXPAND_FILL
 	var left_panel:=PanelContainer.new();left_panel.custom_minimum_size.x=226;body.add_child(left_panel)
-	var left:=box(left_panel);left.add_theme_constant_override("separation",6);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Seleziona un soldato · A–H",14))
-	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",3);left.add_child(roster)
+	var left:=box(left_panel);left.add_theme_constant_override("separation",6);left.add_child(label("LA TUA SQUADRA",19,true));left.add_child(label("Pedine selezionate: clic per includere/escludere",13))
+	var roster_scroll:=ScrollContainer.new();roster_scroll.custom_minimum_size.y=210;roster_scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL;left.add_child(roster_scroll)
+	roster=VBoxContainer.new();roster.add_theme_constant_override("separation",3);roster_scroll.add_child(roster)
 	details=rich();details.custom_minimum_size.y=88;details.size_flags_vertical=Control.SIZE_SHRINK_BEGIN;left.add_child(details)
-	left.add_child(button("Gruppo: attiva/disattiva",func(): move_as_group = not move_as_group; refresh()))
 	left.add_child(label("POSTURA",13))
 	var stance_row:=box(left,false);stance_row.add_theme_constant_override("separation",4)
 	for pair in [["In piedi","standing"],["Basso","crouching"],["Prono","prone"]]:
@@ -117,6 +124,12 @@ func build_ui() -> void:
 		drop_button.visible = false
 		left.add_child(drop_button)
 		drop_buttons.append(drop_button)
+	left.add_child(label("AZIONI · REGOLE 5/3",13))
+	for pair in [["move","Muovi · clic sulla carta"],["equipment","Equipaggiamento"],["prepare","Prepara arma"],["clear_jam","Disinceppa arma"],["captured","Muovi prigioniero"]]:
+		var action_button := button(pair[1],func(): pass)
+		action_button.alignment=HORIZONTAL_ALIGNMENT_LEFT
+		left.add_child(action_button)
+		action_buttons[pair[0]]=action_button
 	drag_options=VBoxContainer.new();left.add_child(drag_options)
 	exit_drag_button=button("Evacua con il ferito",func(): send_command({"type":"exit_drag","soldier":selected,"casualty":drag_target}))
 	exit_drag_button.visible=false;left.add_child(exit_drag_button)
@@ -136,9 +149,13 @@ func build_ui() -> void:
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
 	var stretch:=Control.new();stretch.size_flags_horizontal=Control.SIZE_EXPAND_FILL;mapbar.add_child(stretch)
 	mapbar.add_child(button("−",func(): board.zoom_at(board.size/2,1/1.2)));mapbar.add_child(button("+",func(): board.zoom_at(board.size/2,1.2)));mapbar.add_child(button("Centra",func(): board.reset_view()))
+	terrain_button=button("Mappa semplificata",func(): terrain_review_mode=not terrain_review_mode;refresh())
+	terrain_button.toggle_mode=true;mapbar.add_child(terrain_button)
 	board=Board.new();board.game=game;board.size_flags_vertical=Control.SIZE_EXPAND_FILL;board.size_flags_horizontal=Control.SIZE_EXPAND_FILL;board.custom_minimum_size=Vector2(430,400);center.add_child(board)
 	board.hex_clicked.connect(func(id): move_to_hex(id))
 	board.hover_changed.connect(show_hover)
+	terrain_legend=label("VERDE verificato · OCRA terreno stimato · ROSSO quota assente. Passa il cursore su un esagono per i dettagli.",13)
+	terrain_legend.visible=false;terrain_legend.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;center.add_child(terrain_legend)
 	hover_label=label("Rotella: zoom · tasto destro: sposta la carta",14)
 	hover_label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	hover_label.custom_minimum_size.y=44
@@ -153,19 +170,39 @@ func build_ui() -> void:
 
 func refresh() -> void:
 	if not is_instance_valid(roster) or game.state.is_empty():return
+	if game.state.phase=="rounds" and selected_ids.size()>1:
+		selected_ids.clear();selected_ids.append(selected)
 	for child in roster.get_children():roster.remove_child(child);child.queue_free()
-	for u in game.state.squad:
-		if u.id=="K":continue
-		var id: String=u.id
-		var location: String=u.hex if u.hex!="" else "RISERVA"
-		if u.status=="exited":location="RITIRATO"
-		elif u.status=="killed":location="CADUTO"
-		elif u.status=="incapacitated":location+=" · INCAPACITATO"
-		elif u.wounded:location+=" · FERITO"
-		var b:=button("%s   %s   ·   %s" % [id,u.name,location],func(): selected=id;drag_target="";refresh())
-		b.toggle_mode=true;b.button_pressed=id==selected;b.alignment=HORIZONTAL_ALIGNMENT_LEFT;b.custom_minimum_size.y=31
-		b.add_theme_font_size_override("font_size",16);roster.add_child(b)
+	var stacks: Dictionary = {}
+	for unit in game.state.squad:
+		var location: String=str(unit.hex) if unit.hex!="" else "RISERVA"
+		if unit.status=="exited":location="RITIRATI"
+		elif unit.status=="killed":location="CADUTI"
+		if not stacks.has(location):stacks[location]=[]
+		stacks[location].append(unit)
+	var locations: Array=stacks.keys()
+	locations.sort()
+	for location in locations:
+		roster.add_child(label("ESAGONO " + str(location) if location not in ["RISERVA","RITIRATI","CADUTI"] else str(location),13))
+		var row:=HFlowContainer.new();row.custom_minimum_size.x=194;row.add_theme_constant_override("h_separation",3);row.add_theme_constant_override("v_separation",3);roster.add_child(row)
+		for unit in stacks[location]:
+			var id: String=str(unit.id)
+			var b:=button("",Callable(self,"toggle_soldier").bind(id))
+			b.icon=counter_icons.get(id)
+			b.expand_icon=true
+			b.icon_alignment=HORIZONTAL_ALIGNMENT_CENTER
+			b.custom_minimum_size=Vector2(42,46)
+			b.toggle_mode=true;b.button_pressed=id in selected_ids
+			b.tooltip_text="%s · %s · %s" % [unit.name,unit.stance,unit.status]
+			row.add_child(b)
+	if game.soldier(selected).is_empty():selected="A";selected_ids=["A"]
 	var u:=game.soldier(selected)
+	action_buttons.move.disabled=game.state.phase!="operations" or game.state.blocked!="" or u.status!="active" or u.stance=="prone" or not stack_is_legal()
+	action_buttons.move.tooltip_text="Seleziona le pedine nello stesso esagono e con la stessa postura, poi clicca un esagono adiacente."
+	for key in ["equipment","prepare","clear_jam","captured"]:
+		action_buttons[key].disabled=true
+		action_buttons[key].tooltip_text="Azione della regola 5/3 non ancora automatizzata."
+	action_buttons.equipment.tooltip_text="Raccogli, posa o scambia equipaggiamento: non ancora automatizzato."
 	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra,"\nFERITO · movimento 2" if u.wounded else ""]
 	for i in stances.size():
 		stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
@@ -215,13 +252,34 @@ func refresh() -> void:
 		lines.append("[color=#%s][b]%s[/b][/color]\n%s\n" % [color,escape_bbcode(entry.title),escape_bbcode(entry.text)])
 	var objective_lines: Array[String]=["[b][color=#e7c884]OBIETTIVI DI MISSIONE[/color][/b]"]
 	for item in game.objective_status():
-		objective_lines.append(("[color=#9bc897]✓[/color] " if item.met else "[color=#d4b474]○[/color] " if item.known else "[color=#b7a795]?[/color] ")+item.title)
+		objective_lines.append(("[color=#9bc897]OK[/color] " if item.met else "[color=#d4b474]--[/color] " if item.known else "[color=#b7a795]??[/color] ")+item.title)
 	objectives.text="\n".join(objective_lines)
 	diary.text="\n".join(lines)
-	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s%s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."," Trascinamento attivo." if drag_target!="" else " Gruppo attivo." if move_as_group else ""])
+	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionati: %s. %s" % [str(selected_ids.size()),", ".join(selected_ids),"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."])
 	if notice=="" and game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty():
 		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
-	board.selected=selected;board.queue_redraw()
+	terrain_button.button_pressed=terrain_review_mode;terrain_legend.visible=terrain_review_mode
+	board.selected=selected;board.selected_ids=selected_ids.duplicate();board.terrain_review_mode=terrain_review_mode;board.queue_redraw()
+
+func stack_is_legal() -> bool:
+	var leader: Dictionary=game.soldier(selected)
+	if leader.is_empty():return false
+	for id in selected_ids:
+		var unit: Dictionary=game.soldier(id)
+		if unit.is_empty() or unit.status!="active" or unit.hex!=leader.hex or unit.stance!=leader.stance:return false
+	return not selected_ids.is_empty()
+
+func toggle_soldier(id: String) -> void:
+	var unit: Dictionary=game.soldier(id)
+	var leader: Dictionary=game.soldier(selected)
+	if id in selected_ids:
+		if selected_ids.size()>1:selected_ids.erase(id);selected=selected_ids[0]
+	else:
+		if leader.is_empty() or unit.status!="active" or leader.status!="active" or unit.hex!=leader.hex or unit.stance!=leader.stance:selected_ids=[id]
+		else:selected_ids.append(id)
+		selected=id
+	drag_target=""
+	refresh()
 
 func escape_bbcode(value: String) -> String:
 	return value.replace("[","[lb]")
@@ -238,6 +296,10 @@ func show_hover(id: String) -> void:
 	if not terrain.is_empty():
 		hover_label.text += "  ·  terreno stimato: " + str(terrain_names.get(str(terrain.terrain),"da verificare"))
 		hover_label.text += "  ·  quota " + (str(terrain.elevation) if terrain.elevation != null else "?")
+		if terrain_review_mode:
+			hover_label.text += "  ·  %s" % ("CLASSE VERIFICATA" if terrain.get("classification","")=="manual_visual_review" else "CLASSE DA VERIFICARE")
+			if terrain.get("elevation")==null:hover_label.text += "  ·  QUOTA DA DEFINIRE"
+			if bool(terrain.get("hexside_review_pending",false)):hover_label.text += "  ·  LATI DA VERIFICARE"
 	var observer: Dictionary = game.soldier(selected)
 	if not observer.is_empty() and observer.hex != "" and observer.hex != id:
 		var los: Dictionary = game.map_los(str(observer.hex),id)
@@ -265,12 +327,8 @@ func move_to_hex(hex_id: String) -> void:
 		return
 	if drag_target != "":
 		send_command({"type":"drag","soldier":selected,"casualty":drag_target,"hex":hex_id})
-	elif move_as_group:
-		var leader := game.soldier(selected)
-		var ids: Array[String] = []
-		for unit in game.state.squad:
-			if unit.status == "active" and unit.hex == leader.hex and unit.stance == leader.stance: ids.append(unit.id)
-		send_command({"type":"move_group","soldier":selected,"group":ids,"hex":hex_id})
+	elif selected_ids.size()>1:
+		send_command({"type":"move_group","soldier":selected,"group":selected_ids.duplicate(),"hex":hex_id})
 	else:
 		send_command({"type":"move","soldier":selected,"hex":hex_id})
 

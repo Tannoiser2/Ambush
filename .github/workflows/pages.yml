@@ -33,6 +33,7 @@ jobs:
           cp /tmp/godot-templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.stable/"
       - name: Verify gameplay rules
         run: |
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --editor --path . --quit
           for test in tests/*.gd; do
             /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script "$test"
           done

@@ -17,6 +17,8 @@ Il movimento dei Round permette ora a un americano con turno disponibile di perc
 
 Durante un turno americano, un soldato non ferito può cambiare postura gratuitamente una volta, poi usare o passare il turno. Il numero d'azione tedesca viene tirato una volta per la casella di turno e il paragrafo 800 («Sdraiati prono») è eseguito automaticamente; gli altri paragrafi interrompono ancora la sequenza mostrando il riferimento e il testo italiano. Alla fine del Round i soldati in panico cadono proni; se non restano tedeschi attivi tornano le Operazioni, altrimenti il pulsante «Round successivo» esegue il controllo Evento (dal secondo Round) e apre la preparazione della nuova pista. Un evento non ancora supportato sospende la risoluzione.
 
+La squadra usa le pedine A–H originali del modulo TTS, raggruppate per esagono; un clic aggiunge o toglie dalla selezione i soldati nello stesso esagono e con la stessa postura. Il clic sulla carta muove solo le pedine selezionate. La carta usa anche le pedine tedesche originali della missione 1. Le azioni della regola 5/3 sono elencate nella barra laterale: il movimento e il trascinamento sono disponibili quando legali; scambio equipaggiamento, preparazione arma, disinceppamento e movimento dei prigionieri sono visibili ma disabilitati finché le rispettive procedure non sono automatizzate. «Mappa semplificata» mostra in verde gli esagoni verificati, in ocra quelli con terreno candidato e in rosso quelli senza quota; il passaggio del cursore indica che cosa va controllato. Questa vista è un elenco visivo delle lacune, non un editor.
+
 ## Verifica
 
 `godot --headless --path . --script tests/smoke.gd`
