@@ -108,7 +108,7 @@ func build_ui() -> void:
 	var stance_row:=box(left,false);stance_row.add_theme_constant_override("separation",4)
 	for pair in [["In piedi","standing"],["Basso","crouching"],["Prono","prone"]]:
 		var value: String=pair[1]
-		var b:=button(pair[0],func(): send_command({"type":"stance","soldier":selected,"stance":value}));b.toggle_mode=true;b.add_theme_font_size_override("font_size",14);stance_row.add_child(b);stances.append(b)
+		var b:=button(pair[0],func(): send_command({"type":"round_stance" if game.state.phase=="rounds" else "stance","soldier":selected,"stance":value}));b.toggle_mode=true;b.add_theme_font_size_override("font_size",14);stance_row.add_child(b);stances.append(b)
 	for i in 2:
 		var drop_button := button("",Callable(self,"choose_drop").bind(i))
 		drop_button.visible = false
@@ -161,7 +161,11 @@ func refresh() -> void:
 	details.text="[color=#d4ba7a]%s[/color]\nIN %d   PC %d   AT %d\n%s\n%d caricatori · %d granate\n%s%s" % ["COMANDANTE" if u.commander else "FANTE",u.initiative,u.pc,u.ws,u.weapon,u.clips,u.grenades,u.extra,"\nFERITO · movimento 2" if u.wounded else ""]
 	for i in stances.size():
 		stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
-		stances[i].disabled=game.state.phase!="operations"
+		var can_change: bool=game.state.phase=="operations"
+		if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty() and not u.wounded:
+			var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)
+			can_change=not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids and not bool(game.state.round_track.get("free_stance_used",{}).get(selected,false))
+		stances[i].disabled=not can_change
 	var pending: String = game.state.pending_drop
 	var pending_unit: Dictionary = game.soldier(pending) if pending != "" else {}
 	for i in drop_buttons.size():

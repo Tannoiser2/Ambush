@@ -189,6 +189,15 @@ func validate_command(command: Dictionary) -> String:
 		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
 		if bucket.is_empty() or bucket.side != "us" or str(command.get("soldier", "")) not in bucket.ids: return "Questo soldato non ha un turno disponibile."
 		return ""
+	if command.get("type", "") == "round_stance":
+		if state.phase != "rounds" or state.get("round_track",{}).is_empty() or state.blocked != "": return "Nessun turno americano in corso."
+		var id: String = str(command.get("soldier", ""))
+		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+		if bucket.is_empty() or bucket.side != "us" or id not in bucket.ids: return "Questo soldato non ha un turno disponibile."
+		if bool(soldier(id).get("wounded",false)): return "Un ferito non riceve il cambio di postura gratuito."
+		if bool(state.round_track.get("free_stance_used",{}).get(id,false)): return "Cambio gratuito già usato in questo turno."
+		if command.get("stance", "") not in ["standing","crouching","prone"] or command.stance == soldier(id).stance: return "Scegli una postura diversa."
+		return ""
 	if command.get("type", "") == "drop_port":
 		if state.pending_drop == "": return "Nessun equipaggiamento da lasciare."
 		if str(command.get("soldier", "")) != state.pending_drop: return "La scelta riguarda un altro soldato."
@@ -247,10 +256,20 @@ func dispatch(command: Dictionary) -> Dictionary:
 	if command.type == "round_pass":
 		var id: String = str(command.soldier)
 		RoundRules.spend_turn(state.round_track,"us",id)
+		if state.round_track.has("free_stance_used"): state.round_track.free_stance_used.erase(id)
 		log_line("TURNO PASSATO", "Il soldato %s non esegue azioni." % id, "check")
 		check_round_bucket()
 		state.revision += 1
 		state.rng = str(rng.state)
+		changed.emit()
+		return {"ok": true}
+	if command.type == "round_stance":
+		var id: String = str(command.soldier)
+		if not state.round_track.has("free_stance_used"): state.round_track.free_stance_used = {}
+		state.round_track.free_stance_used[id] = true
+		soldier(id).stance = str(command.stance)
+		log_line("CAMBIO GRATUITO · " + id, "Nuova postura: " + str(command.stance) + ".", "check")
+		state.revision += 1
 		changed.emit()
 		return {"ok": true}
 	var u := soldier(command.soldier)
@@ -372,13 +391,30 @@ func begin_round() -> Dictionary:
 	return {"ok":true}
 
 func check_round_bucket() -> void:
-	var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
-	if bucket.is_empty():
-		stop_resolution("Il Round è concluso; fase Evento del Round successivo ancora da collegare.")
-	elif bucket.side == "de":
-		stop_resolution("Turno tedesco %s: esecuzione automatica del paragrafo d'azione ancora da implementare." % ", ".join(bucket.ids))
-	else:
-		log_line("TURNO AMERICANO", "Casella %d turno/i: %s. Seleziona un soldato e scegli un'azione." % [bucket.turns,", ".join(bucket.ids)],"check")
+	while true:
+		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+		if bucket.is_empty():
+			stop_resolution("Il Round è concluso; fase Evento del Round successivo ancora da collegare.")
+			return
+		if bucket.side == "us":
+			log_line("TURNO AMERICANO", "Casella %d turno/i: %s. Seleziona un soldato e scegli un'azione." % [bucket.turns,", ".join(bucket.ids)],"check")
+			return
+		var index: int = int(state.round_track.bucket_index)
+		if int(state.round_track.get("german_bucket_index",-1)) != index:
+			state.round_track.german_bucket_index = index
+			state.round_track.german_action_number = d10()
+			log_line("NUMERO D'AZIONE TEDESCA", "D10: %d per la casella tedesca corrente." % state.round_track.german_action_number,"dice")
+		var id: String = str(bucket.ids[0])
+		var reference: int = german_turn_reference(id,int(state.round_track.german_action_number))
+		if reference != 800:
+			stop_resolution("GE %s · azione %d: %s Risoluzione automatica ancora da implementare." % [id,reference,german_action_text(reference)])
+			return
+		for enemy in state.enemies:
+			if str(enemy.id) == id:
+				enemy.stance = "prone"
+				break
+		RoundRules.spend_turn(state.round_track,"de",id)
+		log_line("GE %s · AZIONE 800" % id,"Il tedesco si sdraia prono.","check")
 
 func finish_if_withdrawn() -> void:
 	for unit in state.squad:
