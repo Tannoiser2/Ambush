@@ -640,6 +640,28 @@ func resolve_german_action(enemy_id: String, reference: int) -> bool:
 		log_line("REAZIONE DI AUTOCONSERVAZIONE · GE " + enemy_id,"Ignorata; nuovo D10 %d → azione %d." % [action_roll,action_reference],"dice")
 	if action_reference==816 or action_reference<0:
 		stop_resolution("La nuova azione tedesca di GE %s non è determinabile." % enemy_id);return false
+	if action_reference in [813,839,971]:
+		var visible:=german_visible_soldiers(enemy)
+		if state.blocked!="":return false
+		var same_hex:Array[Dictionary]=[]
+		for unit in visible:
+			if str(unit.hex)==str(enemy.hex):same_hex.append(unit)
+		if action_reference==813:
+			if visible.size()>2:
+				surrender_enemy(enemy,visible)
+				return spend_german_action(enemy_id)
+			action_reference=802
+		elif action_reference==839:
+			if not same_hex.is_empty():stop_resolution("GE %s deve assaltare un americano nello stesso esagono (regola 11) ancora da automatizzare." % enemy_id);return false
+			action_reference=802
+		else:
+			if same_hex.size()>=3:
+				surrender_enemy(enemy,same_hex)
+				return spend_german_action(enemy_id)
+			if same_hex.size()>0:stop_resolution("Assalto di GE %s contro %d americano/i (regola 11) ancora da automatizzare." % [enemy_id,same_hex.size()]);return false
+			enemy.stance="prone"
+			log_line("GE %s · AZIONE 971" % enemy_id,"Nessun americano attivo nello stesso esagono; si sdraia prono.","check")
+			return spend_german_action(enemy_id)
 	match action_reference:
 		800:
 			enemy.stance = "prone"
@@ -675,10 +697,8 @@ func resolve_german_action(enemy_id: String, reference: int) -> bool:
 					enemy.stance="prone"
 					log_line("GE %s · AZIONE %d" % [enemy_id,action_reference],"Gli americani lo vedono ma sono oltre la soglia di %d esagoni; si sdraia prono." % limit,"check")
 				elif action_reference == 805:
-					enemy.status="captured"
-					var card: Dictionary=german_cards.get(enemy_id,{})
-					if card.get("conditional_vp_if","")=="captured":state.vp+=int(card.conditional_vp)
-					log_line("RESA · GE " + enemy_id,"Il tedesco si arrende a un americano entro quattro esagoni.","check")
+					surrender_enemy(enemy,in_range)
+
 				else:
 					in_range.sort_custom(func(a: Dictionary,b: Dictionary):return a.chance>b.chance if a.chance!=b.chance else a.distance<b.distance)
 					enemy.stance="crouching";resolve_german_fire(enemy,in_range[0])
@@ -708,11 +728,38 @@ func resolve_german_action(enemy_id: String, reference: int) -> bool:
 		_:
 			stop_resolution("GE %s · azione %d: %s Regola non ancora automatizzata; la sequenza è sospesa senza consumare il turno." % [enemy_id,action_reference,german_action_text(action_reference)])
 			return false
-	if state.blocked != "": return false
+	return spend_german_action(enemy_id)
+
+func spend_german_action(enemy_id:String)->bool:
+	if state.blocked!="":return false
 	RoundRules.spend_turn(state.round_track,"de",enemy_id)
-	if enemy.get("status","active") != "active" or bool(enemy.get("wounded",false)) or bool(enemy.get("panicked",false)):
-		state.round_track.german[enemy_id].turns=0
+	var enemy:Dictionary={}
+	for candidate in state.enemies:
+		if str(candidate.id)==enemy_id:enemy=candidate;break
+	if state.round_track.get("german",{}).has(enemy_id) and (enemy.get("status","active")!="active" or bool(enemy.get("wounded",false)) or bool(enemy.get("panicked",false))):state.round_track.german[enemy_id].turns=0
 	return true
+
+func german_visible_soldiers(enemy:Dictionary)->Array[Dictionary]:
+	var result:Array[Dictionary]=[]
+	for unit in state.squad:
+		if unit.get("status","")!="active" or str(unit.get("hex",""))=="":continue
+		var los:=map_los(str(enemy.hex),str(unit.hex))
+		if los.status=="unknown":stop_resolution("LOS tedesca GE %s→%s non verificata." % [enemy.id,unit.id]);return []
+		if los.status=="clear":result.append(unit)
+	return result
+
+func surrender_enemy(enemy:Dictionary,visible:Array[Dictionary])->void:
+	var immediate:=false
+	for unit in visible:
+		if str(unit.hex)==str(enemy.hex):immediate=true;break
+	if immediate:
+		enemy.status="captured";enemy.stance="prone"
+		var card:Dictionary=german_cards.get(str(enemy.id),{})
+		if card.get("conditional_vp_if","")=="captured":state.vp+=int(card.conditional_vp)
+		log_line("RESA · GE " + str(enemy.id),"Si arrende nello stesso esagono di un americano ed è catturato.","check")
+	else:
+		enemy.status="inactive"
+		log_line("RESA · GE " + str(enemy.id),"Si arrende; resta inattivo finché un americano non entra nel suo esagono.","check")
 
 func finish_round() -> void:
 	for unit in state.squad:
@@ -760,6 +807,12 @@ func finish_if_withdrawn() -> void:
 	log_line("MISSIONE TERMINATA", "Ritirata completa. Punti vittoria: %d / 13." % net_vp())
 
 func check_hex(hex_id: String, skip_minefield := false) -> void:
+	for enemy in state.enemies:
+		if enemy.get("status","")=="inactive" and str(enemy.get("hex",""))==hex_id:
+			enemy.status="captured";enemy.stance="prone"
+			var card:Dictionary=german_cards.get(str(enemy.id),{})
+			if card.get("conditional_vp_if","")=="captured":state.vp+=int(card.conditional_vp)
+			log_line("CATTURA · GE " + str(enemy.id),"Resa accettata entrando in " + hex_id + ".","check")
 	_minefield_checked_entry = skip_minefield
 	if not skip_minefield and hex_id in state.minefields:
 		check_minefield(hex_id)

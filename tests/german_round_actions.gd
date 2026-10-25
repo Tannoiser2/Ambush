@@ -34,5 +34,8 @@ func _initialize() -> void:
  game.resolve_automatic_spray("A","1","M5",5)
  assert(game.state.enemies[0].wounded)
  assert(game.state.enemies[1].panicked)
+ var surrender_target={"id":"B","hex":"M5"}
+ game.surrender_enemy(game.state.enemies[0],[surrender_target])
+ assert(game.state.enemies[0].status=="captured")
  print("GERMAN ROUND ACTIONS OK")
  quit()
