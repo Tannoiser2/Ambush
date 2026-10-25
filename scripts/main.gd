@@ -16,6 +16,7 @@ var drag_options: VBoxContainer
 var exit_drag_button: Button
 var pilot_button: Button
 var begin_round_button: Button
+var next_round_button: Button
 var pass_button: Button
 var diary: RichTextLabel
 var objectives: RichTextLabel
@@ -121,6 +122,8 @@ func build_ui() -> void:
 	pilot_button.visible=false;left.add_child(pilot_button)
 	begin_round_button=button("Prepara il Round",func(): send_command({"type":"begin_round"}))
 	begin_round_button.visible=false;left.add_child(begin_round_button)
+	next_round_button=button("Round successivo",func(): send_command({"type":"next_round"}))
+	next_round_button.visible=false;left.add_child(next_round_button)
 	pass_button=button("Passa il turno",func(): send_command({"type":"round_pass","soldier":selected}))
 	pass_button.visible=false;left.add_child(pass_button)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
@@ -183,7 +186,8 @@ func refresh() -> void:
 	if drag_target != "" and (not eligible or game.soldier(drag_target).hex != u.hex):drag_target=""
 	exit_drag_button.visible=drag_target != "" and Hex.is_entry(u.hex)
 	pilot_button.visible=game.state.pilot_found and game.state.landmarks.has("R15") and game.soldier("J").is_empty() and u.status=="active" and not u.wounded and u.hex=="R15" and game.state.blocked==""
-	begin_round_button.visible=game.state.phase=="rounds" and game.state.get("round_track",{}).is_empty() and str(game.state.blocked).begins_with("Contatto nemico registrato")
+	begin_round_button.visible=game.state.phase=="rounds" and game.state.get("round_track",{}).is_empty() and (game.state.blocked=="" or str(game.state.blocked).begins_with("Contatto nemico registrato"))
+	next_round_button.visible=game.state.phase=="rounds" and str(game.state.blocked).begins_with("Round %d concluso" % game.state.round_setup.get("number",0))
 	pass_button.visible=false
 	if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty():
 		var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)

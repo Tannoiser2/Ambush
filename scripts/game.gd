@@ -183,6 +183,9 @@ func validate_command(command: Dictionary) -> String:
 		if state.phase != "rounds" or not state.get("round_track",{}).is_empty(): return "Nessun Round da preparare."
 		if state.blocked != "" and not str(state.blocked).begins_with("Contatto nemico registrato"): return "La risoluzione è sospesa per un'altra regola."
 		return ""
+	if command.get("type", "") == "next_round":
+		if state.phase != "rounds" or not str(state.blocked).begins_with("Round %d concluso" % state.round_setup.get("number",0)): return "Il Round corrente non è ancora concluso."
+		return ""
 	if command.get("type", "") == "round_pass":
 		if state.phase != "rounds" or state.get("round_track",{}).is_empty(): return "Nessun turno americano in corso."
 		if state.blocked != "": return "La risoluzione è sospesa."
@@ -253,6 +256,8 @@ func dispatch(command: Dictionary) -> Dictionary:
 	if error != "": return {"ok": false, "error": error}
 	if command.type == "begin_round":
 		return begin_round()
+	if command.type == "next_round":
+		return next_round()
 	if command.type == "round_pass":
 		var id: String = str(command.soldier)
 		RoundRules.spend_turn(state.round_track,"us",id)
@@ -394,7 +399,7 @@ func check_round_bucket() -> void:
 	while true:
 		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
 		if bucket.is_empty():
-			stop_resolution("Il Round è concluso; fase Evento del Round successivo ancora da collegare.")
+			finish_round()
 			return
 		if bucket.side == "us":
 			log_line("TURNO AMERICANO", "Casella %d turno/i: %s. Seleziona un soldato e scegli un'azione." % [bucket.turns,", ".join(bucket.ids)],"check")
@@ -415,6 +420,40 @@ func check_round_bucket() -> void:
 				break
 		RoundRules.spend_turn(state.round_track,"de",id)
 		log_line("GE %s · AZIONE 800" % id,"Il tedesco si sdraia prono.","check")
+
+func finish_round() -> void:
+	for unit in state.squad:
+		if unit.status == "active" and bool(state.round_track.us.get(str(unit.id),{}).get("panic",false)):
+			unit.stance = "prone"
+	for enemy in state.enemies:
+		if enemy.get("status","active") == "active" and bool(state.round_track.german.get(str(enemy.id),{}).get("panic",false)):
+			enemy.stance = "prone"
+	var number: int = int(state.round_setup.number)
+	log_line("FINE ROUND %d" % number,"I soldati in panico si sdraiano proni.","check")
+	var active_german := false
+	for enemy in state.enemies:
+		if enemy.get("status","active") == "active": active_german = true
+	if not active_german:
+		state.phase = "operations"
+		state.round_setup = {}
+		state.round_awareness = {}
+		state.round_track = {}
+		state.blocked = ""
+		log_line("RITORNO ALLE OPERAZIONI","Nessun tedesco attivo resta sulla mappa.","check")
+	else:
+		stop_resolution("Round %d concluso. Avvia il Round successivo." % number)
+
+func next_round() -> Dictionary:
+	state.blocked = ""
+	state.round_track = {}
+	state.round_setup.number = int(state.round_setup.number) + 1
+	log_line("ROUND %d · EVENTO" % state.round_setup.number,"Controllo Evento con 2D10 prima della fase Azione.","check")
+	_steps = 0
+	read_reference("EVENT")
+	state.revision += 1
+	state.rng = str(rng.state)
+	changed.emit()
+	return {"ok":true}
 
 func finish_if_withdrawn() -> void:
 	for unit in state.squad:
