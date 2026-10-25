@@ -7,6 +7,7 @@ const VERSION := 1
 const Hex = preload("res://scripts/hex_grid.gd")
 const Damage = preload("res://scripts/damage.gd")
 const FireRules = preload("res://scripts/fire_rules.gd")
+const MovementRules = preload("res://scripts/movement_rules.gd")
 const RoundRules = preload("res://scripts/round_rules.gd")
 const MapATerrain = preload("res://scripts/map_a_terrain.gd")
 var mission: Dictionary
@@ -65,7 +66,7 @@ func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> D
 	var terrain: Dictionary = map_terrain_at(str(target.hex))
 	var kind: String = str(terrain.get("terrain", ""))
 	var fire_terrain := {"clear":"open", "road":"open", "stream":"open",
-		"cover":"cover", "brush":"brush", "rough":"rough", "rubble":"rubble", "woods":"woods"}
+		"cover":"cover", "brush":"brush", "rough":"rough", "crater":"crater", "rubble":"rubble", "woods":"woods"}
 	if not fire_terrain.has(kind):
 		return {"status":"unknown", "distance":distance, "reason":"Modificatore dell'edificio o del terreno non verificato."}
 	var chance: int = fire_rules.hit_chance(str(shooter.get("weapon", "")),distance,
@@ -75,6 +76,14 @@ func fire_preview(shooter_id: String, enemy_id: String, snap: bool = false) -> D
 		return {"status":"unavailable", "distance":distance, "reason":"Arma, portata o postura non compatibile con il tiro."}
 	return {"status":"estimated", "distance":distance, "chance":chance,
 		"reason":"LOS e terreno sono preliminari; tiro non ancora eseguibile."}
+
+func round_move_cost(shooter_id: String, target_hex: String) -> Dictionary:
+	var unit := soldier(shooter_id)
+	if unit.is_empty(): return {"status":"invalid","reason":"Soldato sconosciuto."}
+	var hexes: Dictionary = map_terrain.data.hexes.duplicate(true)
+	for id in state.get("terrain_overrides",{}):
+		if hexes.has(id): hexes[id].terrain = str(state.terrain_overrides[id])
+	return MovementRules.cost(str(unit.hex),target_hex,str(unit.stance),int(unit.get("mp",4)),hexes,map_terrain.data.hexsides)
 
 func first_round_visibility() -> Dictionary:
 	if state.get("phase", "") != "rounds": return {}
@@ -147,7 +156,7 @@ func new_game(seed_value: int = 0) -> void:
 	else: rng.seed = seed_value
 	state = {"version": VERSION, "mission": "base_01", "revision": 0, "condition": 1,
 		"phase": "operations", "squad": mission.squad.duplicate(true), "enemies": [],
-		"round_setup": {}, "round_awareness": {}, "round_track": {},
+		"round_setup": {}, "round_awareness": {}, "round_track": {}, "round_movement": {},
 		"sightings": [], "event_markers": [], "items": {}, "landmarks": {}, "terrain_overrides": {}, "vp": 0,
 		"evasive_removals": {}, "ban_evasive_return": false, "minefields": [], "pending_drop": "",
 		"pending_ops": [], "pending_hex_check": "", "pilot_found": false,
@@ -189,17 +198,36 @@ func validate_command(command: Dictionary) -> String:
 	if command.get("type", "") == "round_pass":
 		if state.phase != "rounds" or state.get("round_track",{}).is_empty(): return "Nessun turno americano in corso."
 		if state.blocked != "": return "La risoluzione è sospesa."
+		if not state.get("round_movement",{}).is_empty(): return "Termina prima l'azione di movimento."
 		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
 		if bucket.is_empty() or bucket.side != "us" or str(command.get("soldier", "")) not in bucket.ids: return "Questo soldato non ha un turno disponibile."
 		return ""
 	if command.get("type", "") == "round_stance":
 		if state.phase != "rounds" or state.get("round_track",{}).is_empty() or state.blocked != "": return "Nessun turno americano in corso."
+		if not state.get("round_movement",{}).is_empty(): return "Termina prima l'azione di movimento."
 		var id: String = str(command.get("soldier", ""))
 		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
 		if bucket.is_empty() or bucket.side != "us" or id not in bucket.ids: return "Questo soldato non ha un turno disponibile."
 		if bool(soldier(id).get("wounded",false)): return "Un ferito non riceve il cambio di postura gratuito."
 		if bool(state.round_track.get("free_stance_used",{}).get(id,false)): return "Cambio gratuito già usato in questo turno."
 		if command.get("stance", "") not in ["standing","crouching","prone"] or command.stance == soldier(id).stance: return "Scegli una postura diversa."
+		return ""
+	if command.get("type", "") == "round_move":
+		if state.phase != "rounds" or state.get("round_track",{}).is_empty() or state.blocked != "": return "Nessun turno americano in corso."
+		var id: String = str(command.get("soldier", ""))
+		var bucket: Dictionary = RoundRules.current_turn_bucket(state.round_track)
+		if bucket.is_empty() or bucket.side != "us" or id not in bucket.ids: return "Questo soldato non ha un turno disponibile."
+		var unit := soldier(id)
+		var target: String = str(command.get("hex", ""))
+		if not state.get("round_movement",{}).is_empty() and str(state.round_movement.soldier) != id: return "Completa il movimento del soldato già in azione."
+		if unit.hex == "" and (int(state.round_setup.number) == 1 or not Hex.is_entry(target)): return "L'ingresso durante i Round è consentito dal secondo Round in A1–J1."
+		var movement: Dictionary = round_move_cost(id,target)
+		if movement.status != "legal": return str(movement.reason)
+		if int(state.get("round_movement",{}).get("spent",0)) + int(movement.points) > int(unit.get("mp",4)): return "Punti movimento residui insufficienti."
+		return ""
+	if command.get("type", "") == "round_move_finish":
+		if state.phase != "rounds" or state.blocked != "" or state.get("round_movement",{}).is_empty(): return "Nessun movimento da terminare."
+		if str(command.get("soldier","")) != str(state.round_movement.soldier): return "Il movimento appartiene a un altro soldato."
 		return ""
 	if command.get("type", "") == "drop_port":
 		if state.pending_drop == "": return "Nessun equipaggiamento da lasciare."
@@ -277,6 +305,33 @@ func dispatch(command: Dictionary) -> Dictionary:
 		state.revision += 1
 		changed.emit()
 		return {"ok": true}
+	if command.type == "round_move":
+		var id: String = str(command.soldier)
+		var unit := soldier(id)
+		var movement: Dictionary = round_move_cost(id,str(command.hex))
+		unit.hex = str(command.hex)
+		state.context_hex = unit.hex
+		state.trigger_soldier = id
+		_entry_soldiers = [id]
+		var spent: int = int(state.get("round_movement",{}).get("spent",0)) + int(movement.points)
+		state.round_movement = {"soldier":id,"spent":spent}
+		log_line("MOVIMENTO · " + id,"Entra in %s: %d/%d PM spesi." % [unit.hex,spent,int(unit.get("mp",4))],"check")
+		_steps = 0
+		check_hex(unit.hex)
+		var enemy_here := false
+		for enemy in state.enemies:
+			if enemy.get("status","active") == "active" and str(enemy.hex) == unit.hex: enemy_here = true
+		if state.blocked == "" and (spent >= int(unit.get("mp",4)) or enemy_here or unit.status != "active" or bool(unit.get("wounded",false))): finish_round_movement(id)
+		state.revision += 1
+		state.rng = str(rng.state)
+		changed.emit()
+		return {"ok": true}
+	if command.type == "round_move_finish":
+		finish_round_movement(str(command.soldier))
+		state.revision += 1
+		state.rng = str(rng.state)
+		changed.emit()
+		return {"ok":true}
 	var u := soldier(command.soldier)
 	_steps = 0
 	_pc_success_soldier = ""
@@ -387,6 +442,7 @@ func begin_round() -> Dictionary:
 	var track: Dictionary = prepare_action_sequence(awareness,us_die,german_die)
 	if track.is_empty(): return {"ok":false,"error":"Pista dei Round non determinabile."}
 	state.round_track = track
+	state.round_movement = {}
 	state.blocked = ""
 	log_line("ROUND %d · INIZIATIVA" % number,"US %d · tedeschi %d · vantaggio %s." % [us_die,german_die,"USA" if track.advantage == "us" else "tedesco"],"dice")
 	check_round_bucket()
@@ -394,6 +450,17 @@ func begin_round() -> Dictionary:
 	state.rng = str(rng.state)
 	changed.emit()
 	return {"ok":true}
+
+func finish_round_movement(id: String) -> void:
+	var spent: int = int(state.round_movement.get("spent",0))
+	state.round_movement = {}
+	RoundRules.spend_turn(state.round_track,"us",id)
+	var unit := soldier(id)
+	if unit.get("status","") != "active" or bool(unit.get("wounded",false)):
+		state.round_track.us[id].turns = 0
+	if state.round_track.has("free_stance_used"): state.round_track.free_stance_used.erase(id)
+	log_line("FINE MOVIMENTO · " + id,"Azione terminata dopo %d PM." % spent,"check")
+	check_round_bucket()
 
 func check_round_bucket() -> void:
 	while true:
@@ -429,6 +496,7 @@ func finish_round() -> void:
 		if enemy.get("status","active") == "active" and bool(state.round_track.german.get(str(enemy.id),{}).get("panic",false)):
 			enemy.stance = "prone"
 	var number: int = int(state.round_setup.number)
+	state.round_movement = {}
 	log_line("FINE ROUND %d" % number,"I soldati in panico si sdraiano proni.","check")
 	var active_german := false
 	for enemy in state.enemies:
@@ -446,6 +514,7 @@ func finish_round() -> void:
 func next_round() -> Dictionary:
 	state.blocked = ""
 	state.round_track = {}
+	state.round_movement = {}
 	state.round_setup.number = int(state.round_setup.number) + 1
 	log_line("ROUND %d · EVENTO" % state.round_setup.number,"Controllo Evento con 2D10 prima della fase Azione.","check")
 	_steps = 0
@@ -478,7 +547,12 @@ func check_hex(hex_id: String, skip_minefield := false) -> void:
 	var condition: Dictionary = mission.conditions.get(str(state.condition), {})
 	if condition.is_empty():
 		stop_resolution("Carta della Condizione %d non ancora verificata." % state.condition); return
-	read_reference(str(condition.hexes.get(hex_id, "UNVERIFIED")))
+	var reference: String = str(condition.hexes.get(hex_id, "UNVERIFIED"))
+	if state.phase == "rounds" and reference == "EVENT":
+		state.event_markers.append(hex_id)
+		log_line("EVENTO RINVIATO", "In %s si colloca il segnalino senza tirare durante il movimento nel Round." % hex_id,"check")
+		return
+	read_reference(reference)
 
 func read_reference(reference: String) -> void:
 	if reference == "NONE":
@@ -798,6 +872,7 @@ func restore(candidate: Variant) -> bool:
 	if not candidate.has("round_setup"): candidate.round_setup = {}
 	if not candidate.has("round_awareness"): candidate.round_awareness = {}
 	if not candidate.has("round_track"): candidate.round_track = {}
+	if not candidate.has("round_movement"): candidate.round_movement = {}
 	if not candidate.has("terrain_overrides"): candidate.terrain_overrides = {}
 	for unit in candidate.get("squad", []):
 		if unit is Dictionary and not unit.has("wounded"): unit.wounded = false
@@ -806,7 +881,7 @@ func restore(candidate: Variant) -> bool:
 			unit.port_boxes = [unit.weapon, item2]
 	for key in ["squad", "enemies", "log", "sightings", "event_markers", "history", "minefields", "pending_ops"]:
 		if not candidate.get(key) is Array: return false
-	for key in ["items", "landmarks", "evasive_removals", "terrain_overrides", "round_awareness", "round_track"]:
+	for key in ["items", "landmarks", "evasive_removals", "terrain_overrides", "round_awareness", "round_track", "round_movement"]:
 		if not candidate.get(key) is Dictionary: return false
 	for hex_id in candidate.terrain_overrides:
 		if not Hex.valid(str(hex_id)) or candidate.terrain_overrides[hex_id] not in ["crater","rubble"]: return false

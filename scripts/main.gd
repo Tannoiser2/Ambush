@@ -18,6 +18,7 @@ var pilot_button: Button
 var begin_round_button: Button
 var next_round_button: Button
 var pass_button: Button
+var finish_move_button: Button
 var diary: RichTextLabel
 var objectives: RichTextLabel
 var details: RichTextLabel
@@ -126,6 +127,8 @@ func build_ui() -> void:
 	next_round_button.visible=false;left.add_child(next_round_button)
 	pass_button=button("Passa il turno",func(): send_command({"type":"round_pass","soldier":selected}))
 	pass_button.visible=false;left.add_child(pass_button)
+	finish_move_button=button("Termina movimento",func(): send_command({"type":"round_move_finish","soldier":selected}))
+	finish_move_button.visible=false;left.add_child(finish_move_button)
 	left.add_child(button("Ritira dal margine nord",func(): send_command({"type":"exit","soldier":selected})))
 	var center:=box(body);center.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	var mapbar:=box(center,false);mapbar.add_child(label("CARTA A  /  SETTORE SAINT-MICHAUX",14))
@@ -165,7 +168,7 @@ func refresh() -> void:
 	for i in stances.size():
 		stances[i].button_pressed=u.stance==["standing","crouching","prone"][i]
 		var can_change: bool=game.state.phase=="operations"
-		if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty() and not u.wounded:
+		if game.state.phase=="rounds" and game.state.blocked=="" and game.state.get("round_movement",{}).is_empty() and not game.state.get("round_track",{}).is_empty() and not u.wounded:
 			var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)
 			can_change=not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids and not bool(game.state.round_track.get("free_stance_used",{}).get(selected,false))
 		stances[i].disabled=not can_change
@@ -189,9 +192,10 @@ func refresh() -> void:
 	begin_round_button.visible=game.state.phase=="rounds" and game.state.get("round_track",{}).is_empty() and (game.state.blocked=="" or str(game.state.blocked).begins_with("Contatto nemico registrato"))
 	next_round_button.visible=game.state.phase=="rounds" and str(game.state.blocked).begins_with("Round %d concluso" % game.state.round_setup.get("number",0))
 	pass_button.visible=false
+	finish_move_button.visible=game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty() and str(game.state.round_movement.soldier)==selected
 	if game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_track",{}).is_empty():
 		var bucket: Dictionary=RoundRules.current_turn_bucket(game.state.round_track)
-		pass_button.visible=not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids
+		pass_button.visible=game.state.get("round_movement",{}).is_empty() and not bucket.is_empty() and bucket.side=="us" and selected in bucket.ids
 	phase_label.text={"operations":"OPERAZIONI","rounds":"CONTATTO NEMICO","ended":"MISSIONE TERMINATA"}.get(game.state.phase,"PAUSA")
 	condition_label.text="CONDIZIONE %d" % game.state.condition
 	progress_label.text="%d / 13 PV" % game.net_vp()
@@ -205,6 +209,8 @@ func refresh() -> void:
 	objectives.text="\n".join(objective_lines)
 	diary.text="\n".join(lines)
 	status_label.text=notice if notice!="" else (game.state.blocked if game.state.blocked!="" else "%s selezionato. %s%s" % [u.name,"Entra da A1–J1." if u.hex=="" else "Scegli un esagono adiacente evidenziato."," Trascinamento attivo." if drag_target!="" else " Gruppo attivo." if move_as_group else ""])
+	if notice=="" and game.state.phase=="rounds" and game.state.blocked=="" and not game.state.get("round_movement",{}).is_empty():
+		status_label.text="%s: %d/%d PM spesi. Scegli un altro esagono verde o termina il movimento." % [game.state.round_movement.soldier,int(game.state.round_movement.spent),int(game.soldier(str(game.state.round_movement.soldier)).get("mp",4))]
 	board.selected=selected;board.queue_redraw()
 
 func escape_bbcode(value: String) -> String:
@@ -240,8 +246,11 @@ func show_hover(id: String) -> void:
 				hover_label.tooltip_text = str(shot.reason)
 
 func move_to_hex(hex_id: String) -> void:
+	if game.state.phase == "rounds":
+		send_command({"type":"round_move","soldier":selected,"hex":hex_id})
+		return
 	if game.state.phase != "operations":
-		notice="Il movimento nei Round richiede ancora i costi di terreno verificati."
+		notice="Non è possibile muoversi in questa fase."
 		refresh()
 		return
 	if drag_target != "":

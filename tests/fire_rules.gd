@@ -22,6 +22,8 @@ func _initialize() -> void:
  assert(f.damage("Fucile automatico",9) == "K")
  assert(f.hit_chance("Fucile automatico",5,0,"open","standing",false,false,2) == 8)
  assert(f.hit_chance("Pistola",4,0,"woods","prone",true) == 0)
+ assert(f.LOCATION.brush.prone == -2)
+ assert(f.LOCATION.crater.crouching == -2)
  assert(f.jammed("Fucile automatico",10,true))
  assert(not f.jammed("Fucile automatico",11,true))
  assert(f.spent_clip("Carabina",25))

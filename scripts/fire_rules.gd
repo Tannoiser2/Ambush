@@ -4,8 +4,9 @@ extends RefCounted
 const LOCATION := {
  "open": {"standing":1,"crouching":0,"prone":-1},
  "cover": {"standing":0,"crouching":-1,"prone":-3},
- "brush": {"standing":0,"crouching":-1,"prone":-3},
+ "brush": {"standing":0,"crouching":-1,"prone":-2},
  "rough": {"standing":-1,"crouching":-2,"prone":-3},
+ "crater": {"standing":-1,"crouching":-2,"prone":-3},
  "rubble": {"standing":-1,"crouching":-2,"prone":-3},
  "woods": {"standing":-2,"crouching":-3,"prone":-4},
  "interior_aperture_distant": {"standing":-2,"crouching":-4},

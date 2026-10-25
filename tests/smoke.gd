@@ -1,6 +1,7 @@
 extends SceneTree
 const Game = preload("res://scripts/game.gd")
 const Damage = preload("res://scripts/damage.gd")
+const RoundRules = preload("res://scripts/round_rules.gd")
 func _initialize() -> void:
  var g = Game.new()
  g.new_game(123)
@@ -128,6 +129,26 @@ func _initialize() -> void:
  assert(round_end.state.phase == "operations")
  assert(round_end.state.round_track.is_empty())
  assert(round_end.state.blocked == "")
+ var us_move = Game.new()
+ us_move.new_game(41)
+ us_move.soldier("A").hex = "A1"
+ us_move.state.phase = "rounds"
+ us_move.state.round_setup = {"number":2,"advantage":"roll"}
+ us_move.state.round_track = RoundRules.start_action_sequence(RoundRules.assign_turns(us_move.state.squad,[],{"A":true},0,0,"us"))
+ assert(us_move.dispatch({"type":"round_move","soldier":"A","hex":"B1"}).ok)
+ assert(us_move.soldier("A").hex == "B1")
+ assert(us_move.state.round_track.us["A"].turns == 2)
+ assert(us_move.state.round_movement.spent == 1)
+ var moving_save = Game.new()
+ assert(moving_save.restore(JSON.parse_string(JSON.stringify(us_move.snapshot()))))
+ assert(moving_save.state.round_movement.spent == 1)
+ assert(not us_move.dispatch({"type":"round_pass","soldier":"A"}).ok)
+ assert(us_move.dispatch({"type":"round_move","soldier":"A","hex":"A1"}).ok)
+ assert("A1" in us_move.state.event_markers)
+ assert(us_move.state.round_movement.spent == 2)
+ assert(us_move.dispatch({"type":"round_move_finish","soldier":"A"}).ok)
+ assert(us_move.state.round_track.us["A"].turns == 1)
+ assert(us_move.state.phase == "rounds")
  var surprised = Game.new()
  surprised.new_game(36)
  surprised.resolve("289")

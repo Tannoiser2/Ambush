@@ -3,6 +3,7 @@ extends Control
 signal hex_clicked(id: String)
 signal hover_changed(id: String)
 const Hex = preload("res://scripts/hex_grid.gd")
+const RoundRules = preload("res://scripts/round_rules.gd")
 var game: AmbushGame
 var selected := "A"
 var hovered := ""
@@ -38,11 +39,21 @@ func _draw() -> void:
 	draw_texture_rect_region(texture, rect, Rect2(0,0,7000,6400),Color(0.94,0.93,0.85))
 	if game == null or game.state.is_empty(): return
 	var chosen := game.soldier(selected)
-	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "" and game.state.phase == "operations":
+	if not chosen.is_empty() and chosen.status == "active" and game.state.blocked == "":
+		var can_round_move := false
+		if game.state.phase == "rounds" and not game.state.get("round_track",{}).is_empty():
+			var bucket: Dictionary = RoundRules.current_turn_bucket(game.state.round_track)
+			can_round_move = not bucket.is_empty() and bucket.side == "us" and selected in bucket.ids
+			if not game.state.get("round_movement",{}).is_empty() and str(game.state.round_movement.soldier) != selected: can_round_move = false
 		for col in 25:
 			for row in range(1,20):
 				var id := String.chr(65+col)+str(row)
 				var legal := Hex.is_entry(id) if chosen.hex == "" else Hex.distance(chosen.hex,id)==1
+				if game.state.phase == "rounds":
+					legal = can_round_move and legal and (chosen.hex != "" or int(game.state.round_setup.number) >= 2)
+					if legal:
+						var move: Dictionary = game.round_move_cost(selected,id)
+						legal = move.status == "legal" and int(game.state.get("round_movement",{}).get("spent",0)) + int(move.get("points",0)) <= int(chosen.get("mp",4))
 				if legal and chosen.stance != "prone":
 					var points := polygon_at(id)
 					draw_colored_polygon(points,Color(0.26,0.42,0.24,0.25))
