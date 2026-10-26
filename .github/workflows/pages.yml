@@ -34,10 +34,8 @@ jobs:
       - name: Verify gameplay rules
         run: |
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --editor --path . --quit
-          for test in tests/*.gd; do
-            /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script "$test"
-          done
-          python3 tools/audit_content.py
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/verifica.gd
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 8 1
       - name: Export Web build
         run: |
           mkdir -p build/web

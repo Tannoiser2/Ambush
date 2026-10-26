@@ -1,41 +1,59 @@
 # Ambush! — edizione digitale italiana
 
-Progetto Godot 4.7 per la missione base 1, «Sangue a Saint-Michaux». Aprire `project.godot` con Godot o eseguire `godot --path .`.
+Versione digitale in Godot 4.7 di **Ambush!** (Victory Games, 1983), il wargame tattico in solitario a paragrafi.
+Questa edizione contiene la **Missione 1 · Sangue a Saint-Michaux** (*Bloody St. Mick*), giocabile dall’inizio alla fine.
 
-## Stato effettivo
+Si gioca nel browser da GitHub Pages; la partita si salva da sola sul dispositivo. Ambush! è un gioco solitario: non c’è modalità online.
 
-La versione 0.3 permette ingresso da A1–J1, movimento singolo e di gruppo durante le Operazioni, postura e trascinamento dei feriti con evacuazione dal margine nord. Controlla i riferimenti neri delle quattro carte Condizione della missione 1, eventi, avvistamenti e 112 paragrafi tradotti. Registra campi minati permanenti, risolve i controlli di percezione all’ingresso e applica i danni da granata al chiuso della tabella originale. Il colpo d’artiglieria del paragrafo 011 ora uccide i soldati nell’esagono e crea un cratere o macerie in un edificio; il terreno modificato resta nel salvataggio e partecipa alla LOS preliminare. Gestisce la perdita o scelta dell’equipaggiamento dopo una ferita, la penalità di 2 PV per ciascun soldato ucciso o incapacitato, il premio di 3 PV per il soldato K e il soccorso del pilota britannico con la sua carta e i relativi PV. Le schede dei tedeschi attivati forniscono caratteristiche, PV di attivazione e riferimenti della tabella azioni. I 31 riferimenti d'azione presenti in queste schede, più il riferimento 830 richiamato da uno di essi, sono tradotti in italiano ma non ancora eseguiti dal motore. Il diario mostra i tiri e i motivi delle diramazioni. Salva automaticamente sul dispositivo. Ambush è progettato esclusivamente per il gioco in solitario; non include modalità online.
+## Cosa c’è
 
-Questa **non è una missione completa**. Sono disponibili Operazioni, quattro carte Condizione, 112 paragrafi italiani rivisti, una parte della LOS, la pista dei Round, il movimento americano e il primo caso di tiro mirato verificato. Mancano ancora molti paragrafi e riferimenti rossi, aperture degli edifici, gran parte del combattimento, movimenti e attacchi tedeschi, soccorso del pilota nei Round e parte del conteggio finale dei PV. Le classi di terreno sono candidate per 475 esagoni; le quote non riconosciute partono dal livello 1 assunto, modificabile nell'editor. M5 è verificato visivamente per il combattimento, mentre molte aperture restano indeterminate. Il motore sospende le regole che non può applicare in modo affidabile. L'OCR inglese in `data/source` è una fonte da verificare sulle scansioni, non testo pronto per il gioco.
+- **Operazioni**: ingresso dal margine nord (A1–J1), movimento singolo o di gruppo, controlli di paragrafo sulle quattro carte Condizione della missione, segnalini Evento, controlli Evento con due dadi, avvistamenti s0–s9, cambi di Condizione con i controlli negli esagoni occupati.
+- **Tutti i 113 paragrafi di missione e di movimento** raggiungibili dalla Missione 1 e **i 33 paragrafi d’azione** delle sette carte tedesche, verificati sulle scansioni originali e tradotti in italiano. Ogni paragrafo è anche uno script eseguito dal motore (`tools/paragrafi_m1.py`).
+- **Round** completi (regola 6): consapevolezza nei Round 1 e 2, fase Evento, iniziativa con vantaggio, pista dei Round originale (2 turni, 1 turno, panico, numeri rossi e comando), turni ceduti dai comandanti, allerta, attivazioni durante i Round, soldati fuori mappa (6/10), cambi di Condizione durante i Round, fine Round con panico e ritorno alle Operazioni.
+- **Tedeschi automatici**: carte originali (colonne di Condizione, reazioni speciali A/B, autoconservazione S), numero d’azione tedesco, tutti i paragrafi d’azione usati in missione (tiro migliore, bersaglio più vicino/più facile, tiri rapidi, assalto, granate, cessione dei turni, resa, movimento evasivo e rimozione), movimento con i **riferimenti rossi** della carta della Condizione 4.
+- **Combattimento**: tiro mirato e rapido con tabella delle armi, modificatori di terreno e postura (anche edifici), inceppamenti, munizioni, raffiche delle armi automatiche su più bersagli, bazooka; granate e cariche con deviazione (diagrammi A e B) e reazione dei soldati; assalto e carica d’assalto, cattura e prigionieri; panico, ferite, incapacitazione e morte; disinceppamento; campi minati, artiglieria, cecchino nascosto, granata difettosa.
+- **Linea di vista** (regola 8) su tutta la mappa A: quote 1–3, boschi, macchie, edifici con porte e finestre, creste e scarpate.
+- **Missione**: soldato K da mettere in salvo, Typhoon abbattuto e pilota britannico (carta US 05), ufficiale 34 con passaggio alla Condizione 4, punteggio finale con i due modi di concludere la missione.
 
-Le attivazioni che si verificano mentre sono già in corso i Round registrano il nuovo tedesco e gli eventuali PV senza riavviare il primo Round né modificare vantaggio e consapevolezza già determinati. La collocazione del rinforzo sulla pista resta sospesa finché non sarà implementata la sequenza dei Round (regola 6/6).
+## Interfaccia
 
-Quando il cursore è sopra un tedesco attivo durante i Round, la scheda mostra un'anteprima del tiro mirato del soldato selezionato: LOS preliminare, motivo di un eventuale blocco e probabilità stimata dalla tabella dell'arma, distanza, abilità, terreno, postura e ferita. È un ausilio di pianificazione: non tira dadi, non consuma munizioni e non risolve il combattimento. Edifici e terreni senza modificatore verificato restano indeterminati.
+Tema da campo del 1944: verde oliva, carta dei rapporti, caratteri stampigliati (Stardos Stencil), da macchina da scrivere (Special Elite) e Oswald per le etichette. Pedine ricavate dalle sagome originali del gioco.
 
-Il pulsante «Prepara il Round» ora esegue i controlli di consapevolezza del primo Round quando la LOS è determinabile, tira i dadi d'iniziativa, applica vantaggio, panico, comando e turni speciali, e salva la pista dei turni. Il giocatore può passare un turno americano disponibile; il motore esegue le azioni tedesche già automatizzate e si ferma sulle altre. Se una LOS necessaria è indeterminata, la preparazione si ferma prima dei tiri. Il tiro mirato è limitato al caso descritto sotto; molte azioni tedesche restano da implementare.
-Il movimento dei Round permette ora a un americano con turno disponibile di percorrere più esagoni adiacenti nella stessa azione, con un clic per esagono e il pulsante «Termina movimento». Usa i costi per terreno e lati dalla tabella originale del Player Aid Screen, compresi creste, scarpate in salita e strisciamento; rifiuta lati e aperture non verificati. In ingresso si controlla il paragrafo, mentre un riferimento Evento pone soltanto il segnalino come prescrive la regola 6. Le quote assenti sono trattate come livello 1 finché l'editor non assegna un livello esplicito. Il tiro mirato è eseguibile contro un singolo tedesco in M5, esagono di bosco e quota 1 controllato visivamente sulla scansione originale, se il soldato americano è nello stesso esagono o in uno adiacente con LOS libera. Risolve nell'ordine inceppamento, colpo, danno e consumo del caricatore. Altri bersagli, fuoco rapido e molte azioni tedesche restano da implementare.
+- a sinistra la **scheda della squadra** (clic per scegliere, Maiusc/Ctrl+clic per un gruppo nelle Operazioni);
+- al centro la **mappa A** originale: rotella per lo zoom, tasto destro per spostarla, passaggio del mouse per terreno, linea di vista dal soldato scelto e probabilità di tiro;
+- sotto la mappa i **comandi** del soldato scelto;
+- a destra la **pista dei Round**, gli **obiettivi**, le **carte dei tedeschi** attivati e il **rapporto di combattimento** con tutti i paragrafi letti e i tiri di dado.
 
-Durante un turno americano, un soldato non ferito può cambiare postura gratuitamente una volta, poi usare o passare il turno. Il numero d'azione tedesca viene tirato una volta per la casella di turno e il paragrafo 800 («Sdraiati prono») è eseguito automaticamente; gli altri paragrafi interrompono ancora la sequenza mostrando il riferimento e il testo italiano. Alla fine del Round i soldati in panico cadono proni; se non restano tedeschi attivi tornano le Operazioni, altrimenti il pulsante «Round successivo» esegue il controllo Evento (dal secondo Round) e apre la preparazione della nuova pista. Un evento non ancora supportato sospende la risoluzione.
+## Struttura
 
-La squadra usa le pedine A–H originali del modulo TTS, raggruppate per esagono; un clic aggiunge o toglie dalla selezione i soldati nello stesso esagono e con la stessa postura. Il clic sulla carta muove solo le pedine selezionate. La carta usa anche le pedine tedesche originali della missione 1. Le azioni della regola 5/3 sono elencate nella barra laterale: il movimento e il trascinamento sono disponibili quando legali; scambio equipaggiamento, preparazione arma, disinceppamento e movimento dei prigionieri sono visibili ma disabilitati finché le rispettive procedure non sono automatizzate. «Mappa semplificata» mostra in verde gli esagoni verificati, in ocra quelli con terreno candidato e in rosso quelli senza quota; il passaggio del cursore indica che cosa va controllato. Questa vista è un elenco visivo delle lacune, non un editor.
+```
+scene/principale.tscn          scena principale
+scripts/motore/esagoni.gd      geometria della griglia
+scripts/motore/terreno.gd      terreno, costi di movimento, linea di vista
+scripts/motore/tabelle.gd      tabelle dello schermo del giocatore e pista dei Round
+scripts/motore/partita.gd      Operazioni, Round, paragrafi, combattimento, punteggio, salvataggi
+scripts/motore/tedeschi.gd     comportamento dei tedeschi
+scripts/ui/                    interfaccia (tema, mappa, pista, schermata principale)
+data/                          dati generati: paragrafi, missione, mappa
+tools/costruisci_dati.py       genera data/ dalle trascrizioni verificate
+tests/                         verifiche e simulazione automatica di partite
+assets/reference/              materiale originale di consultazione (escluso dalla build)
+```
 
-## Verifica
+## Verifica e build
 
-`godot --headless --path . --script tests/smoke.gd`
+```
+python3 tools/costruisci_dati.py
+godot --headless --path . --script tests/calcola_alture.gd
+godot --headless --path . --script tests/verifica.gd
+godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite simulate
+godot --headless --path . --export-release Web build/web/index.html
+```
 
-`godot --headless --path . --script tests/round_rules.gd`
+`tests/visivi/scatti.gd` produce schermate dell’interfaccia (serve un display, per esempio `xvfb-run`).
 
-`godot --headless --path . --script tests/fire_rules.gd`
+## Note sulla mappa
 
-`godot --headless --path . --script tests/los_geometry.gd`
+Terreno e lati speciali vengono dalla revisione manuale della mappa; le quote ancora presunte sono state ricavate dagli esagoni vicini e dal colore di fondo della mappa (livello 3 nell’angolo sud-est, come indicato dal briefing). Nessun esagono dell’altura vede letteralmente tutte le 25 caselle di strada (gli edifici K13–L13 e le scarpate ne coprono qualcuna): come suggerisce la regola 8/3, vale come obiettivo l’esagono dell’altura con la vista più ampia sulla strada (T12), evidenziato in mappa.
 
-`godot --headless --path . --export-release Web build/web/index.html`
-
-La build web è destinata a HTTPS/GitHub Pages e usa l’esportazione senza thread. L’archivio TTS originale resta fuori dal repository. Le immagini e i testi del gioco originale sono da usare nel rispetto dei diritti applicabili.
-
-`python3 tools/extract_map_a_candidates.py` misura l'immagine originale; `python3 tools/build_map_a_terrain.py` produce `data/map_a_terrain.json` con le classi candidate dei 475 esagoni e le eccezioni visivamente riconosciute per gli edifici K13, L13 e T8. Il classificatore non distingue in modo affidabile le quote gialle 2 e 3 e non rileva tutte le aperture o i lati speciali: la LOS resta diagnostica fuori dai casi di combattimento strettamente verificati. Il centro degli edifici, per esempio, sembra terreno libero a un classificatore di pixel.
-
-
-## Editor mappa
-
-Attiva «Mappa semplificata», clicca uno o più esagoni e assegna separatamente terreno, quota, edificio/secondo piano e tipo di lato. Le quote non riconosciute sono assunte al livello 1 e indicate nell'editor; puoi correggerle selezionando il livello reale. I lati condividono un identificatore non orientato tra i due esagoni; porte e finestre sono marcate D/W e vengono considerate aperture dalla LOS. «Salva mappa» memorizza le revisioni in `user://ambush_map_a_reviews.json`; il file si trova nella cartella dati utente di Godot. La LOS da/attraverso un edificio resta indeterminata finché i lati attraversati non hanno aperture dichiarate.
+Le immagini e i testi del gioco originale restano dei rispettivi titolari e sono usati per uso personale.

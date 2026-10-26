@@ -1,9 +1,12 @@
 {
   "titolo": "Ambush!",
-  "sottotitolo": "Missione base · solitario · in sviluppo",
-  "descrizione": "Guida una squadra americana nella Seconda guerra mondiale: missioni a paragrafi, eventi e combattimenti tattici. La versione digitale della prima missione è ancora in sviluppo.",
+  "sottotitolo": "Missione 1 · solitario",
+  "descrizione": "Guida una squadra americana nel bocage normanno del 1944: paragrafi, eventi, cecchini e combattimenti tattici in solitario. La prima missione, «Sangue a Saint-Michaux», è giocabile dall’inizio alla fine.",
   "online": false,
   "sezione": "conversione",
-  "generi": ["Wargame", "Storici"],
+  "generi": [
+    "Wargame",
+    "Storici"
+  ],
   "ordine": 181
 }
