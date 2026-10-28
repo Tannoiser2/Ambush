@@ -18,6 +18,8 @@ var ia: RefCounted
 var rng := RandomNumberGenerator.new()
 ## Voci di cronaca prodotte dall’ultimo comando (per la scheda dei paragrafi).
 var recenti: Array = []
+## Posizioni e stati delle pedine all’inizio dell’ultimo comando (per la riproduzione animata).
+var vista_iniziale: Dictionary = {}
 var _profondita := 0
 var _stampa := OS.get_environment("AMBUSH_CRONACA") == "1"
 
@@ -86,6 +88,31 @@ func d10(motivo := "") -> int:
 
 func percentuale() -> int:
 	return rng.randi_range(0, 99)
+
+## Istantanea dello stato visibile delle pedine (posizione, postura, condizioni).
+func istantanea() -> Dictionary:
+	var out := {}
+	for k in s.get("unita", {}):
+		var x: Dictionary = s.unita[k]
+		if x.hex == "" or x.stato in ["fuori", "uscito", "rimosso"]:
+			continue
+		out[k] = {"hex": x.hex, "postura": x.postura, "stato": x.stato, "ferito": x.ferito, "panico": x.get("panico", false)}
+	return out
+
+## Effetto visivo da riprodurre sulla mappa, con l’istantanea dopo l’evento.
+func _fx(tipo: String, dati := {}) -> Dictionary:
+	var v := {"t": "fx", "fx": tipo, "vista": istantanea()}
+	v.merge(dati)
+	recenti.append(v)
+	return v
+
+func _aggiorna_fx(v: Dictionary, dati: Dictionary) -> void:
+	v.merge(dati, true)
+	v.vista = istantanea()
+
+func _inizia_registrazione() -> void:
+	recenti.clear()
+	vista_iniziale = istantanea()
 
 func _log(tipo: String, testo: String, extra := {}) -> void:
 	var v := {"t": tipo, "x": testo}
@@ -339,6 +366,7 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			_op_munizioni_finite()
 		"typhoon_crash":
 			s.punti["R15"] = "typhoon"
+			_fx("esplosione", {"a": "R15", "grande": true})
 			for x in unita_in("R15"):
 				_uccidi(x, "schiacciato dal Typhoon")
 		"typhoon_burn":
@@ -557,6 +585,7 @@ func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 			var dati: Dictionary = missione.tedeschi[str(num)]
 			_pv(int(dati.pv), "attivazione del tedesco %d" % num)
 		_log("attivazione", "Attivato il %s in %s, %s." % [nome(g), h, T.NOMI_POSTURA[g.postura]])
+		_fx("compare", {"id": g.id, "a": h})
 		# Americani attivi nello stesso esagono? Nessun effetto immediato; il Round lo deciderà.
 	if nuovi.is_empty():
 		return
@@ -642,7 +671,7 @@ func _descrivi_esito(es: Dictionary) -> String:
 # =================================================================== Round
 ## Comando dell’interfaccia: prosegue dopo una pausa.
 func prosegui() -> void:
-	recenti.clear()
+	_inizia_registrazione()
 	var p: String = s.pausa
 	s.pausa = ""
 	match p:
@@ -842,7 +871,7 @@ func _fine_round() -> void:
 				if terreno.tipo(x.hex) == "stream" and not (terreno.ponte(x.hex) and x.get("sul_ponte", false)):
 					pass  # nel ruscello chi è in panico non si sdraia
 				else:
-					x.postura = "prone"
+					imposta_postura(x, "prone")
 					_log("info", "%s, in preda al panico, si getta a terra." % nome(x))
 		if x.lato == "us":
 			x.turni = 0
@@ -875,7 +904,7 @@ func _errore(m: String) -> Dictionary:
 const OK := {"ok": true}
 
 func _inizio_comando() -> void:
-	recenti.clear()
+	_inizia_registrazione()
 
 func _fine_comando() -> void:
 	terreno.imposta_modifiche(s.modifiche)
@@ -946,8 +975,8 @@ func cambia_postura(id: String, postura: String) -> Dictionary:
 				return _errore("Punti movimento insufficienti.")
 		else:
 			return _errore("Nessun cambio di postura disponibile in questo turno.")
-	a.postura = postura
 	_log("azione", "%s ora è %s." % [nome(a), T.NOMI_POSTURA[postura]])
+	imposta_postura(a, postura)
 	_fine_comando()
 	return OK
 
@@ -1039,6 +1068,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		t.mosso = true
 	var sul_ponte := terreno.ponte(verso) and da_hex in terreno.capi_ponte(verso)
 	var nomi: Array = []
+	var mossi: Array = []
 	for id in ids:
 		var a := u(str(id))
 		if a.stato == "fuori":
@@ -1046,11 +1076,13 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		a.hex = verso
 		a.sul_ponte = sul_ponte
 		nomi.append(a.lettera)
+		mossi.append(a.id)
 		for pid in a.prigionieri:
 			var p := u(pid)
 			if not p.is_empty() and p.stato == "catturato":
 				p.hex = verso
 	_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
+	_fx("muovi", {"ids": mossi, "da": da_hex, "a": verso})
 	# Cattura dei tedeschi arresi.
 	for g in unita_in(verso, "de", false):
 		if g.stato == "arreso":
@@ -1083,6 +1115,7 @@ func _ingresso(h: String, ids: Array, sul_ponte: bool) -> void:
 				continue
 			if not controllo_pc(a, 0, "campo minato"):
 				_log("combattimento", "Una mina esplode sotto %s!" % nome(a))
+				_fx("esplosione", {"a": h})
 				_danno_esplosione(a, T.GRANATA_DENTRO)
 	if s.fase == "fine":
 		return
@@ -1225,6 +1258,8 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	_rendi_consapevoli(bersaglio.hex)
 	var modo := "mirato" if mirato else "rapido"
 	_log("combattimento", "%s spara (%s, %s) a %s in %s." % [nome(tiratore), modo, info.nome.to_lower(), nome(bersaglio), bersaglio.hex])
+	var fx := _fx("tiro", {"da": tiratore.get("hex", ""), "a": bersaglio.hex, "tiratore": tiratore.get("id", ""), "bersaglio": bersaglio.id,
+		"auto": bool(info.get("auto", false)), "mirato": mirato, "arma": tipo, "esito": "mancato"})
 	if fase_round() and tiratore.get("lato", "") == "de":
 		s.round.sparato.append([tiratore.id, tipo])
 		tiratore.bersagli_round.append(bersaglio.id)
@@ -1238,10 +1273,12 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 		else:
 			arma.inceppata = true
 			_log("dado", "Percentuale %02d: l’arma si inceppa!" % pi)
+		fx.esito = "inceppata"
 		return {"ok": true, "colpito": false}
 	# 2–5. Tiro per colpire.
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
+	fx.esito = "colpito" if colpito else "mancato"
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
 	if colpito:
 		var rd := d10()
@@ -1317,10 +1354,12 @@ func _applica_danno(x: Dictionary, l: String, fonte: Dictionary) -> void:
 				x.turni = 0
 				x.slot = "panico"
 				_log("danno", "%s è in preda al panico." % nome(x))
+				_fx("danno", {"id": x.id, "tipo": "panico"})
 				if not s.turno.is_empty() and s.turno.id == x.id:
 					s.turno = {}
 			else:
 				_log("danno", "%s si spaventa, ma senza conseguenze." % nome(x))
+				_fx("danno", {"id": x.id, "tipo": "spavento"})
 		"W":
 			if x.ferito:
 				_incapacita(x)
@@ -1341,10 +1380,18 @@ func _cade_prono(x: Dictionary) -> void:
 		return
 	x.postura = "prone"
 
+## Cambio di postura registrato per la riproduzione.
+func imposta_postura(x: Dictionary, postura: String) -> void:
+	if x.postura == postura:
+		return
+	x.postura = postura
+	_fx("postura", {"id": x.id})
+
 func _ferisci(x: Dictionary) -> void:
 	x.ferito = true
 	_log("danno", "%s è FERITO." % nome(x))
 	_cade_prono(x)
+	_fx("danno", {"id": x.id, "tipo": "ferito"})
 	if not attivo(x):
 		return
 	if fase_round():
@@ -1373,6 +1420,7 @@ func _incapacita(x: Dictionary) -> void:
 	x.panico = false
 	_log("danno", "%s è INCAPACITATO." % nome(x))
 	_cade_prono(x)
+	_fx("danno", {"id": x.id, "tipo": "incapacitato"})
 	_dopo_perdita(x)
 
 func _uccidi(x: Dictionary, come: String) -> void:
@@ -1384,6 +1432,7 @@ func _uccidi(x: Dictionary, come: String) -> void:
 	x.panico = false
 	x.postura = "prone"
 	_log("danno", "%s è UCCISO%s." % [nome(x), "" if come == "" else " (" + come + ")"])
+	_fx("danno", {"id": x.id, "tipo": "ucciso"})
 	_dopo_perdita(x)
 
 func _dopo_perdita(x: Dictionary) -> void:
@@ -1503,9 +1552,11 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		arrivo = _deviazione(lanciatore.hex, h)
 		_log("dado", "Lancio: serve 0–%d, esce %d → devia in %s." % [int(p.prob), r, arrivo])
 		_rendi_consapevoli(arrivo)
+	var fx := _fx("lancio", {"da": lanciatore.hex, "bersaglio": h, "a": arrivo, "tipo": tipo, "esito": "esplode", "id": lanciatore.id})
 	var pd := percentuale()
 	if pd <= 5:
 		_log("dado", "Percentuale %02d: ordigno inesploso." % pd)
+		fx.esito = "inesploso"
 		return
 	var presenti: Array = unita_in(arrivo, "", false).filter(func(x): return x.stato in ["attivo", "incapacitato", "catturato"])
 	if presenti.is_empty():
@@ -1519,9 +1570,10 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 			if fase_round() and int(x.turni) > 0 and x.postura != "prone":
 				_log("combattimento", "%s rilancia l’ordigno fuori portata: esplode senza danni!" % nome(x))
 				_consuma_turno(x)
+				fx.esito = "rilanciato"
 				return
 			elif not x.ferito and x.postura != "prone":
-				x.postura = "prone"
+				imposta_postura(x, "prone")
 				_log("info", "%s si butta a terra." % nome(x))
 	var dentro := terreno.edificio(arrivo)
 	var tab := (T.GRANATA_DENTRO if dentro else T.GRANATA_FUORI) if tipo == "granata" else (T.CARICA_DENTRO if dentro else T.CARICA_FUORI)
@@ -1631,10 +1683,13 @@ func probabilita_assalto(att: Dictionary, dif: Dictionary, carica: bool) -> Dict
 func risolvi_assalto(att: Dictionary, dif: Dictionary, intento: String, carica: bool) -> void:
 	var p := probabilita_assalto(att, dif, carica)
 	_log("combattimento", "%s %s %s per %s." % [nome(att), "carica" if carica else "assalta", nome(dif), "catturarlo" if intento == "cattura" else "ucciderlo"])
+	var fx := _fx("assalto", {"id": att.id, "bersaglio": dif.id, "a": dif.hex, "esito": "fallito"})
 	_rendi_consapevoli(dif.hex)
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
 	_log("dado", "Assalto: serve 0–%d, esce %d → %s." % [int(p.prob), r, "riuscito" if colpito else "fallito"])
+	if colpito:
+		fx.esito = "riuscito"
 	if not colpito:
 		return
 	var rd := d10()
@@ -1658,6 +1713,7 @@ func _cattura(guardia: Dictionary, g: Dictionary) -> void:
 	g.guardia = guardia.id
 	guardia.prigionieri.append(g.id)
 	_log("danno", "%s è CATTURATO da %s." % [nome(g), nome(guardia)])
+	_fx("danno", {"id": g.id, "tipo": "catturato"})
 	_premio_cattura(g)
 
 func assalta(id: String, bersaglio_id: String, intento: String) -> Dictionary:
@@ -1877,17 +1933,21 @@ func trascina(id: String, ferito_id: String, verso: String) -> Dictionary:
 		else:
 			_log("dado", "Trascinamento: %d → sopravvive." % r)
 	if uscita:
+		var da_u: String = a.hex
 		a.stato = "uscito"
 		a.hex = ""
 		f.hex = ""
+		_fx("sparisce", {"ids": [a.id, f.id], "da": da_u, "motivo": "uscito"})
 		f.uscito = true
 		_log("azione", "%s esce dalla mappa trascinando %s." % [nome(a), nome(f)])
 		_chiudi_azione_semplice(a)
 		_fine_comando()
 		return OK
+	var da_t: String = a.hex
 	a.hex = verso
 	f.hex = verso
 	_log("azione", "%s trascina %s in %s." % [nome(a), nome(f), verso])
+	_fx("muovi", {"ids": [a.id, f.id], "da": da_t, "a": verso})
 	if s.fase == "round":
 		_turno_di(a).azione = "trascina"
 	_ingresso(verso, [a.id], false)
@@ -1911,9 +1971,11 @@ func esci(id: String) -> Dictionary:
 		if not p.is_empty() and p.stato == "catturato":
 			p.hex = ""
 			p.stato = "rimosso"
+	var da_e: String = a.hex
 	a.stato = "uscito"
 	a.hex = ""
 	_log("azione", "%s esce dalla mappa." % nome(a))
+	_fx("sparisce", {"ids": [a.id], "da": da_e, "motivo": "uscito"})
 	_chiudi_azione_semplice(a)
 	_fine_comando()
 	return OK
@@ -2000,6 +2062,7 @@ func _op_pilota() -> void:
 	p.slot = "completo" if fase_round() else ""
 	s.unita["J"] = p
 	_log("info", "Il pilota britannico (J) si unisce alla squadra: è già ferito.")
+	_fx("compare", {"id": "J", "a": "R15", "amico": true})
 
 func _op_soldato_k() -> void:
 	if not u("K").is_empty():
@@ -2013,6 +2076,7 @@ func _op_soldato_k() -> void:
 	k.senza_carta = true
 	k.ferito = true
 	s.unita["K"] = k
+	_fx("compare", {"id": "K", "a": "G10", "amico": true})
 	_log("info", "Il soldato K giace incapacitato in G10. Portalo al sicuro per guadagnare 3 PV.")
 
 func _op_cecchino(ctx: Dictionary) -> void:
@@ -2055,6 +2119,7 @@ func _op_campo_minato(ctx: Dictionary) -> void:
 			continue
 		if not controllo_pc(a, 0, "campo minato"):
 			_log("combattimento", "Una mina esplode sotto %s!" % nome(a))
+			_fx("esplosione", {"a": h})
 			_danno_esplosione(a, T.GRANATA_DENTRO)
 
 func _op_artiglieria() -> void:
@@ -2077,6 +2142,7 @@ func _op_artiglieria() -> void:
 		_log("info", "Il colpo cade fuori mappa.")
 		return
 	_log("combattimento", "Un colpo d’artiglieria si abbatte su %s!" % h)
+	_fx("esplosione", {"a": h, "grande": true})
 	if terreno.edificio(h):
 		s.modifiche[h] = "rubble"
 	else:
@@ -2105,6 +2171,7 @@ func _op_granata_difettosa() -> void:
 				break
 		_log("info", "%s la getta in %s, dove esplode senza danni." % [nome(a), libero if libero != "" else "un fosso vicino"])
 	else:
+		_fx("esplosione", {"a": a.hex})
 		for x in unita_in(a.hex, "", false):
 			if x.stato in ["attivo", "incapacitato"]:
 				_danno_esplosione(x, T.GRANATA_DENTRO)

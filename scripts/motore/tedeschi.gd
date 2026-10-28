@@ -25,6 +25,7 @@ func turno(g: Dictionary) -> void:
 	var numero: int = int(p.s.round.numero_azione)
 	var par := paragrafo_da_carta(g, col, numero)
 	p._log("tedesco", "Turno del %s: colonna %s, numero d’azione %d → paragrafo %d." % [p.nome(g), _nome_colonna(col), numero, par])
+	p._fx("attore", {"id": g.id, "a": g.hex})
 	esegui(par)
 	if _reazione_cambiata:
 		# Una reazione speciale fa tirare un nuovo numero d’azione per i tedeschi che devono ancora agire.
@@ -408,8 +409,8 @@ func _set_postura(x: String) -> void:
 		return
 	if x == "prone" and p.terreno.tipo(_g.hex) == "stream" and not _g.get("sul_ponte", false):
 		return
-	_g.postura = x
 	p._log("tedesco", "Il %s è ora %s." % [p.nome(_g), T.NOMI_POSTURA[x]])
+	p.imposta_postura(_g, x)
 
 func _accovacciati() -> void:
 	if _g.postura == "crouching":
@@ -475,6 +476,7 @@ func _passo(verso: String, strisciando: bool) -> bool:
 	g.hex = verso
 	g.sul_ponte = p.terreno.ponte(verso) and da_hex in p.terreno.capi_ponte(verso)
 	p._log("tedesco", "Il %s %s in %s." % [p.nome(g), "striscia" if strisciando else "corre", verso])
+	p._fx("muovi", {"ids": [g.id], "da": da_hex, "a": verso, "strisciando": strisciando})
 	if not p.unita_in(verso, "us").is_empty():
 		_fermo = true
 	return true
@@ -485,11 +487,13 @@ func _segui_riferimento(rif: String, strisciando: bool) -> bool:
 	if rif == "":
 		return false
 	if rif == "USCITA":
+		var da_u: String = g.hex
 		g.stato = "uscito"
 		g.hex = ""
 		g.turni = 0
 		g.slot = "inattivo"
 		p._log("tedesco", "Il %s esce dalla mappa." % p.nome(g))
+		p._fx("sparisce", {"ids": [g.id], "da": da_u, "motivo": "uscito"})
 		return false
 	if rif.is_valid_int() and rif.length() == 3:
 		var ctx := {"g": g.id, "hex": g.hex, "strisciando": strisciando}
@@ -502,8 +506,10 @@ func entra_da_paragrafo(ctx: Dictionary, h: String) -> void:
 		return
 	if not _passo(h, bool(ctx.get("strisciando", false))):
 		# Senza punti sufficienti si entra comunque: il riferimento definisce la mossa.
+		var da_h: String = _g.hex
 		_g.hex = h
 		p._log("tedesco", "Il %s entra in %s." % [p.nome(_g), h])
+		p._fx("muovi", {"ids": [_g.id], "da": da_h, "a": h})
 
 func imposta_reazione(ctx: Dictionary, r: String) -> void:
 	var g: Dictionary = p.u(ctx.get("g", ""))
@@ -577,6 +583,7 @@ func _striscia_verso(h: String) -> void:
 		p._log("tedesco", "Il %s non riesce a strisciare in %s." % [p.nome(_g), h])
 
 func rimuovi_evasivo(g: Dictionary) -> void:
+	var da_r: String = g.hex
 	g.stato = "rimosso"
 	g.hex = ""
 	g.turni = 0
@@ -584,6 +591,7 @@ func rimuovi_evasivo(g: Dictionary) -> void:
 	var k := str(int(g.num))
 	p.s.evasi[k] = int(p.s.evasi.get(k, 0)) + 1
 	p._log("tedesco", "Il %s si dilegua fuori dalla vista degli americani: è rimosso dalla mappa." % p.nome(g))
+	p._fx("sparisce", {"ids": [g.id], "da": da_r, "motivo": "dileguato"})
 
 # ------------------------------------------------------------------ altre azioni
 func _arrenditi() -> void:
@@ -597,6 +605,7 @@ func _arrenditi() -> void:
 	else:
 		g.stato = "arreso"
 		p._log("danno", "Il %s si arrende e alza le mani. Il primo americano che entra in %s lo cattura." % [p.nome(g), g.hex])
+		p._fx("danno", {"id": g.id, "tipo": "arreso"})
 
 func _bersaglio_assalto() -> Dictionary:
 	var lista: Array = p.unita_in(_g.hex, "us")
@@ -627,6 +636,7 @@ func _granata_adiacente() -> bool:
 				if c <= int(p.effettivo_mpa(g)) / 2:
 					g.hex = a.hex
 					p._log("tedesco", "Il %s carica in %s." % [p.nome(g), a.hex])
+					p._fx("muovi", {"ids": [g.id], "da": vecchio, "a": a.hex})
 					_assalta(_bersaglio_assalto(), true)
 					return true
 			g.hex = vecchio

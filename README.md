@@ -22,6 +22,7 @@ Tema da campo del 1944: verde oliva, carta dei rapporti, caratteri stampigliati 
 - a sinistra la **scheda della squadra** (clic per scegliere, Maiusc/Ctrl+clic per un gruppo nelle Operazioni);
 - al centro la **mappa A** originale: rotella per lo zoom, tasto destro per spostarla, passaggio del mouse per terreno, linea di vista dal soldato scelto e probabilità di tiro;
 - sotto la mappa i **comandi** del soldato scelto;
+- ogni comando viene **riprodotto in sequenza**: chi agisce è cerchiato in giallo, i tiri mostrano la freccia dal tiratore al bersaglio con traccianti (raffiche per le armi automatiche), granate in volo ed esplosioni, i movimenti scorrono esagono per esagono lasciando una traccia, e sopra le pedine compaiono gli esiti (COLPITO, MANCATO, FERITO…). Il rapporto avanza riga per riga in sincronia; «Più veloce», «Salta» (Spazio) e «Rivedi»;
 - a destra la **pista dei Round**, gli **obiettivi**, le **carte dei tedeschi** attivati e il **rapporto di combattimento** con tutti i paragrafi letti e i tiri di dado.
 
 ## Struttura
@@ -50,7 +51,7 @@ godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite sim
 godot --headless --path . --export-release Web build/web/index.html
 ```
 
-`tests/visivi/scatti.gd` produce schermate dell’interfaccia (serve un display, per esempio `xvfb-run`).
+`tests/visivi/scatti.gd` e `tests/visivi/effetti.gd` producono schermate dell’interfaccia e delle animazioni (serve un display, per esempio `xvfb-run`).
 
 ## Note sulla mappa
 

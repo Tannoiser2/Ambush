@@ -27,17 +27,18 @@ var aiuto_azioni: Label
 var flusso_azioni: HFlowContainer
 var info_hex: Label
 var rapporto: RichTextLabel
+var titolo_rapporto: Label
+## Righe della cronaca che appartengono all’ultima sequenza e quante ne sono già state mostrate.
+var _lotto := 0
+var _mostrate := 0
+var _titolo_lotto := ""
 var carte_box: HFlowContainer
 var obiettivi_box: VBoxContainer
 var velo: ColorRect
-var dispaccio: PanelContainer
-var dispaccio_testo: RichTextLabel
-var dispaccio_titolo: Label
-var dispaccio_bottone: Button
 var finestra: PanelContainer
 var menu_bersagli: PopupMenu
-var ultimo: PanelContainer
-var ultimo_testo: RichTextLabel
+var riproducendo := false
+var _salta := false
 var _bersagli_menu: Array = []
 var _log_mostrati := 0
 
@@ -204,40 +205,6 @@ func _colonna_centrale() -> Control:
 	sovra.add_child(info_pc)
 	info_pc.visible = false
 	info_hex.set_meta("pannello", info_pc)
-	# Ultimo rapporto (non bloccante): paragrafi letti con l’ultimo comando
-	ultimo = PanelContainer.new()
-	ultimo.add_theme_stylebox_override("panel", Tema.carta(10))
-	ultimo.anchor_left = 1.0
-	ultimo.anchor_right = 1.0
-	ultimo.anchor_top = 1.0
-	ultimo.anchor_bottom = 1.0
-	ultimo.offset_right = -10
-	ultimo.offset_bottom = -12
-	ultimo.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	ultimo.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	ultimo.visible = false
-	var uv := VBoxContainer.new()
-	var uh := HBoxContainer.new()
-	var ut := Tema.titolo("ULTIMO RAPPORTO", 14, Tema.INCHIOSTRO)
-	ut.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	uh.add_child(ut)
-	var chiudi := Tema.bottone("×", func(): ultimo.visible = false)
-	chiudi.custom_minimum_size = Vector2(28, 24)
-	uh.add_child(chiudi)
-	uv.add_child(uh)
-	ultimo_testo = RichTextLabel.new()
-	ultimo_testo.bbcode_enabled = true
-	ultimo_testo.fit_content = true
-	ultimo_testo.scroll_active = false
-	ultimo_testo.custom_minimum_size = Vector2(400, 0)
-	ultimo_testo.add_theme_font_override("normal_font", Tema.macchina)
-	ultimo_testo.add_theme_font_override("bold_font", Tema.testo_bold)
-	ultimo_testo.add_theme_font_size_override("normal_font_size", 14)
-	ultimo_testo.add_theme_font_size_override("bold_font_size", 14)
-	ultimo_testo.add_theme_color_override("default_color", Tema.INCHIOSTRO)
-	uv.add_child(ultimo_testo)
-	ultimo.add_child(uv)
-	sovra.add_child(ultimo)
 	vb.add_child(cornice)
 	# Barra dei comandi
 	var barra := PanelContainer.new()
@@ -290,7 +257,8 @@ func _colonna_destra() -> Control:
 	rp.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rp.add_theme_stylebox_override("panel", Tema.carta(10))
 	var rv := VBoxContainer.new()
-	rv.add_child(Tema.titolo("RAPPORTO DI COMBATTIMENTO", 16, Tema.INCHIOSTRO))
+	titolo_rapporto = Tema.titolo("RAPPORTO DI COMBATTIMENTO", 16, Tema.INCHIOSTRO)
+	rv.add_child(titolo_rapporto)
 	rapporto = RichTextLabel.new()
 	rapporto.bbcode_enabled = true
 	rapporto.scroll_following = true
@@ -313,38 +281,6 @@ func _costruisci_overlay() -> void:
 	velo.visible = false
 	velo.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(velo)
-	# Dispaccio: scheda dei paragrafi e degli eventi dell’ultimo comando
-	dispaccio = PanelContainer.new()
-	dispaccio.add_theme_stylebox_override("panel", Tema.carta(18))
-	dispaccio.visible = false
-	dispaccio.custom_minimum_size = Vector2(620, 0)
-	var dv := VBoxContainer.new()
-	dv.add_theme_constant_override("separation", 8)
-	dispaccio_titolo = Tema.titolo("RAPPORTO", 24, Tema.INCHIOSTRO)
-	dv.add_child(dispaccio_titolo)
-	var linea := ColorRect.new()
-	linea.color = Tema.INCHIOSTRO_TENUE
-	linea.custom_minimum_size = Vector2(0, 2)
-	dv.add_child(linea)
-	dispaccio_testo = RichTextLabel.new()
-	dispaccio_testo.bbcode_enabled = true
-	dispaccio_testo.fit_content = true
-	dispaccio_testo.scroll_active = true
-	dispaccio_testo.custom_minimum_size = Vector2(580, 60)
-	dispaccio_testo.add_theme_font_override("normal_font", Tema.macchina)
-	dispaccio_testo.add_theme_font_override("bold_font", Tema.testo_bold)
-	dispaccio_testo.add_theme_font_size_override("normal_font_size", 16)
-	dispaccio_testo.add_theme_font_size_override("bold_font_size", 17)
-	dispaccio_testo.add_theme_color_override("default_color", Tema.INCHIOSTRO)
-	dv.add_child(dispaccio_testo)
-	var bb := HBoxContainer.new()
-	bb.alignment = BoxContainer.ALIGNMENT_END
-	dispaccio_bottone = Tema.bottone("Continua", _chiudi_dispaccio)
-	dispaccio_bottone.custom_minimum_size = Vector2(160, 40)
-	bb.add_child(dispaccio_bottone)
-	dv.add_child(bb)
-	dispaccio.add_child(dv)
-	add_child(dispaccio)
 	finestra = PanelContainer.new()
 	finestra.add_theme_stylebox_override("panel", Tema.carta(26))
 	finestra.visible = false
@@ -549,7 +485,7 @@ func _chip(testo: String, colore: Color) -> Control:
 	return pc
 
 func _clic_riga(ev: InputEvent, id: String) -> void:
-	if not (ev is InputEventMouseButton) or not ev.pressed or ev.button_index != MOUSE_BUTTON_LEFT:
+	if not (ev is InputEventMouseButton) or not ev.pressed or ev.button_index != MOUSE_BUTTON_LEFT or riproducendo:
 		return
 	var a := p.u(id)
 	var multi: bool = ev.shift_pressed or ev.ctrl_pressed or ev.meta_pressed
@@ -617,6 +553,12 @@ func _aggiorna_azioni() -> void:
 	for c in flusso_azioni.get_children():
 		c.queue_free()
 	var s := p.s
+	if riproducendo:
+		titolo_azioni.text = "AZIONE IN CORSO · " + _titolo_lotto
+		aiuto_azioni.text = "Segui sulla mappa chi agisce (anello giallo), le frecce di tiro e i movimenti; il rapporto a destra avanza riga per riga. Spazio per saltare."
+		_b("Più veloce" if mappa.velocita < 1.5 else "Velocità normale", func(): mappa.velocita = 2.5 if mappa.velocita < 1.5 else 1.0; _aggiorna_azioni())
+		_b("Salta ▸▸", func(): _salta = true, "Mostra subito l’esito (Spazio)")
+		return
 	if s.fase == "fine":
 		titolo_azioni.text = "MISSIONE CONCLUSA"
 		aiuto_azioni.text = "Totale %d PV · %s" % [int(s.fine.get("totale", 0)), "vittoria" if s.fine.get("vinta", false) else "sconfitta"]
@@ -625,8 +567,10 @@ func _aggiorna_azioni() -> void:
 		return
 	if s.pausa != "":
 		titolo_azioni.text = "IN ATTESA DI ORDINI"
-		aiuto_azioni.text = "Leggi il rapporto e premi «Continua»."
-		_b("Continua", _prosegui)
+		aiuto_azioni.text = "Premi «Continua» (Spazio) per passare alla fase successiva. «Rivedi» ripete l’ultima sequenza sulla mappa."
+		var c := _b("Continua ▸", _prosegui, "Spazio o Invio")
+		c.custom_minimum_size = Vector2(170, 36)
+		_b("Rivedi", _rivedi)
 		return
 	if selezione.is_empty():
 		titolo_azioni.text = "NESSUN SOLDATO SCELTO"
@@ -799,6 +743,9 @@ func _annulla_carica(a: Dictionary) -> void:
 	_esito(p.fine_azione(a.id))
 
 func _azioni_missione() -> void:
+	if not _ultima_sequenza.is_empty() and p.s.pausa == "" and not riproducendo:
+		_sep()
+		_b("↺ Rivedi", _rivedi, "Ripeti sulla mappa l’ultima sequenza di eventi")
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:
 		_sep()
 		var b := _b("★ Missione compiuta: termina", func(): _conferma("Terminare la missione?", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.", func(): _esito(p.termina_missione("obiettivo"))))
@@ -819,7 +766,7 @@ func _imposta_modo(a: Dictionary, m: String) -> void:
 
 # =================================================================== mappa: clic e passaggio
 func _clic_mappa(h: String, _tasto: int) -> void:
-	if p.s.pausa != "" or p.s.fase == "fine":
+	if riproducendo or p.s.pausa != "" or p.s.fase == "fine":
 		return
 	var a: Dictionary = p.u(selezione[0]) if not selezione.is_empty() else {}
 	if not a.is_empty():
@@ -937,18 +884,23 @@ func _sopra_mappa(h: String) -> void:
 func _unhandled_input(ev: InputEvent) -> void:
 	if ev is InputEventKey and ev.pressed and not ev.echo:
 		if ev.keycode == KEY_ESCAPE:
-			if dispaccio.visible:
-				_chiudi_dispaccio()
+			if riproducendo:
+				_salta = true
 			elif finestra.visible:
 				_chiudi_finestra()
 			elif modo != "":
 				modo = ""
 				_aggiorna_tutto()
-		elif ev.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER] and dispaccio.visible:
-			_chiudi_dispaccio()
+		elif ev.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+			if riproducendo:
+				_salta = true
+			elif p.s.pausa != "" and not finestra.visible:
+				_prosegui()
 
-# =================================================================== esiti e dispacci
+# =================================================================== esiti e riproduzione
 func _esito(r: Dictionary) -> void:
+	if riproducendo:
+		return
 	if not r.get("ok", false):
 		aiuto_azioni.text = "⚠ " + str(r.get("errore", "Azione non valida."))
 		aiuto_azioni.add_theme_color_override("font_color", Color("f2a58f"))
@@ -957,71 +909,132 @@ func _esito(r: Dictionary) -> void:
 	if not (modo == "rapido" and not p.s.turno.is_empty() and p.s.turno.get("azione", "") == "rapido"):
 		modo = ""
 	_salva()
-	_aggiorna_tutto()
-	_forse_dispaccio()
+	_riproduci()
 
 func _prosegui() -> void:
+	if riproducendo:
+		return
 	p.prosegui()
 	_salva()
-	_aggiorna_tutto()
-	_forse_dispaccio()
+	_riproduci()
 
-const TIPI_NOTEVOLI := ["combattimento", "attivazione", "condizione", "danno", "pv", "round", "fine", "tedesco"]
+func _titolo_iniziale() -> String:
+	return ("ROUND %d" % int(p.s.round.get("n", 0))) if p.fase_round() and int(p.s.round.get("n", 0)) > 0 else ("ROUND" if p.fase_round() else "OPERAZIONI")
 
-func _forse_dispaccio() -> void:
-	var notevoli := false
-	var paragrafi := false
-	for v in p.recenti:
-		if v.t in TIPI_NOTEVOLI:
-			notevoli = true
-		if v.t == "par" or v.t == "dado":
-			paragrafi = true
-	if p.s.fase == "fine" and not dispaccio.visible:
-		_mostra_fine()
+func _aggiorna_titolo(v: Dictionary) -> void:
+	match str(v.t):
+		"round":
+			var x := str(v.x).trim_suffix(".").to_upper()
+			if x.begins_with("ROUND") or x.begins_with("INIZIANO"):
+				_titolo_lotto = x
+		"attivazione":
+			_titolo_lotto = "CONTATTO!"
+		"tedesco":
+			_titolo_lotto = "AZIONI TEDESCHE"
+		"condizione":
+			if _titolo_lotto == "OPERAZIONI":
+				_titolo_lotto = "CAMBIO DI CONDIZIONE"
+		"fine":
+			_titolo_lotto = "FINE MISSIONE"
+
+func _durata_riga(v: Dictionary) -> float:
+	var d := 0.35
+	match str(v.t):
+		"par":
+			d = clampf(0.8 + str(v.x).length() / 260.0, 0.9, 2.4)
+		"dado":
+			d = 0.5
+		"tedesco":
+			d = 0.6
+		"combattimento":
+			d = 0.45
+		"danno":
+			d = 0.35
+		"condizione", "round", "titolo":
+			d = 1.0
+		"attivazione", "pv":
+			d = 0.7
+		"azione":
+			d = 0.2
+	return d / mappa.velocita
+
+func _attendi(t: float) -> void:
+	var fine := Time.get_ticks_msec() + int(t * 1000.0)
+	while Time.get_ticks_msec() < fine and not _salta:
+		await get_tree().process_frame
+
+var _ultima_sequenza: Array = []
+var _ultima_vista: Dictionary = {}
+
+## Riproduce gli eventi dell’ultimo comando: righe del rapporto una alla volta,
+## sincronizzate con gli spostamenti, i tiri e le esplosioni sulla mappa.
+func _riproduci(ripetizione := false) -> void:
+	var voci: Array = p.recenti.duplicate()
+	if not ripetizione:
+		_ultima_sequenza = voci
+		_ultima_vista = p.vista_iniziale
+	var significative := voci.filter(func(v): return v.t != "fx" or v.fx != "postura")
+	if significative.is_empty():
+		_aggiorna_tutto()
 		return
-	if not notevoli and p.s.pausa == "":
-		if paragrafi:
-			ultimo_testo.text = _bbcode(p.recenti)
-			ultimo.visible = true
-			ultimo.reset_size()
+	riproducendo = true
+	_salta = false
+	_lotto = voci.filter(func(v): return v.t != "fx").size()
+	_mostrate = 0
+	_titolo_lotto = _titolo_iniziale()
+	mappa.pulisci_tracce()
+	mappa.evidenzia = {}
+	mappa.vista = p.vista_iniziale
+	_render_rapporto(true)
+	_aggiorna_azioni()
+	for v in voci:
+		if _salta:
+			break
+		if v.t == "fx":
+			var d: float = mappa.anima(v)
+			if d > 0.0:
+				await _attendi(d)
 		else:
-			ultimo.visible = false
+			_aggiorna_titolo(v)
+			_mostrate += 1
+			_render_rapporto(true)
+			if v.t in ["round", "condizione", "pv"] or str(v.x).begins_with("Turni:"):
+				_aggiorna_barra()
+				pista.queue_redraw()
+			await _attendi(_durata_riga(v))
+	if _salta:
+		for v in voci:
+			if v.t != "fx":
+				_aggiorna_titolo(v)
+	mappa.fine_riproduzione()
+	riproducendo = false
+	_aggiorna_tutto()
+	if p.s.fase == "fine":
+		_mostra_fine()
+
+func _rivedi() -> void:
+	if riproducendo or _ultima_sequenza.is_empty():
 		return
-	ultimo.visible = false
-	var titolo := "RAPPORTO"
-	match p.s.pausa:
-		"inizio_round":
-			titolo = "INIZIANO I ROUND" if int(p.s.round.get("n", 0)) == 0 else "FINE DEL ROUND %d" % int(p.s.round.get("n", 0))
-		"azioni_tedesche":
-			titolo = "AZIONI TEDESCHE"
-	dispaccio_titolo.text = titolo
-	dispaccio_testo.text = _bbcode(p.recenti, true)
-	dispaccio_bottone.text = "Continua" if p.s.pausa != "" else "Chiudi"
-	_mostra_dispaccio()
+	p.recenti = _ultima_sequenza.duplicate()
+	p.vista_iniziale = _ultima_vista
+	_riproduci(true)
 
-func _mostra_dispaccio() -> void:
-	velo.visible = true
-	dispaccio.visible = true
-	dispaccio.reset_size()
-	await get_tree().process_frame
-	var h := minf(dispaccio_testo.get_content_height() + 10, size.y * 0.62)
-	dispaccio_testo.fit_content = false
-	dispaccio_testo.custom_minimum_size = Vector2(620, h)
-	dispaccio.reset_size()
-	dispaccio.position = (size - dispaccio.size) / 2.0
-	dispaccio_testo.fit_content = true
-
-func _chiudi_dispaccio() -> void:
-	dispaccio.visible = false
-	velo.visible = finestra.visible
-	dispaccio_testo.custom_minimum_size = Vector2(580, 60)
-	if p.s.pausa != "":
-		_prosegui()
-
-func _bbcode(voci: Array, grande := false) -> String:
+func _bbcode(voci: Array, grande := false, attenuato := false) -> String:
 	var out: Array = []
 	for v in voci:
 		var x: String = str(v.x).replace("[", "[lb]")
+		if attenuato:
+			var pre := ""
+			match str(v.t):
+				"par":
+					pre = "§ %s  " % v.get("id", "")
+					x = x.replace("\n", " ")
+				"dado":
+					pre = "    "
+				"round", "titolo", "fine":
+					x = "— %s —" % x
+			out.append(pre + x)
+			continue
 		match v.t:
 			"par":
 				var pid: String = v.get("id", "")
@@ -1051,16 +1064,29 @@ func _bbcode(voci: Array, grande := false) -> String:
 	return "\n".join(out)
 
 func _aggiorna_rapporto(ricostruisci := false) -> void:
+	if ricostruisci:
+		_lotto = 0
+	_mostrate = _lotto
+	_render_rapporto(false)
+
+## Cronaca: righe precedenti attenuate, poi la sequenza corrente con la riga in corso evidenziata.
+func _render_rapporto(evidenzia: bool) -> void:
 	var cron: Array = p.s.cronaca
-	if ricostruisci or _log_mostrati > cron.size():
-		rapporto.clear()
-		_log_mostrati = 0
-		rapporto.append_text(_bbcode(cron))
-		_log_mostrati = cron.size()
-		return
-	if cron.size() > _log_mostrati:
-		rapporto.append_text("\n" + _bbcode(cron.slice(_log_mostrati)))
-		_log_mostrati = cron.size()
+	var inizio_lotto := maxi(0, cron.size() - _lotto)
+	var vecchie: Array = cron.slice(maxi(0, inizio_lotto - 140), inizio_lotto)
+	var testo := ""
+	if not vecchie.is_empty():
+		testo = "[color=#8c8371]" + _bbcode(vecchie, false, true) + "[/color]"
+	if _lotto > 0:
+		testo += ("\n\n" if testo != "" else "") + "[center][b][color=#7a2a1c]━━━  %s  ━━━[/color][/b][/center]" % _titolo_lotto
+		var nuove: Array = cron.slice(inizio_lotto, inizio_lotto + _mostrate)
+		for i in nuove.size():
+			var riga := _bbcode([nuove[i]])
+			if evidenzia and i == nuove.size() - 1:
+				riga = "[bgcolor=#f2d98c]" + riga + "[/bgcolor]"
+			testo += "\n" + riga
+	rapporto.text = testo
+	titolo_rapporto.text = ("RAPPORTO · " + _titolo_lotto) if _lotto > 0 else "RAPPORTO DI COMBATTIMENTO"
 
 # =================================================================== finestre
 func _apri_finestra(contenuto: Control, larghezza := 760.0) -> void:
@@ -1077,7 +1103,7 @@ func _apri_finestra(contenuto: Control, larghezza := 760.0) -> void:
 
 func _chiudi_finestra() -> void:
 	finestra.visible = false
-	velo.visible = dispaccio.visible
+	velo.visible = false
 
 func _intestazione(vb: VBoxContainer, titolo: String, sotto := "") -> void:
 	vb.add_child(Tema.titolo(titolo, 30, Tema.INCHIOSTRO))
