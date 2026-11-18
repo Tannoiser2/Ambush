@@ -603,6 +603,10 @@ func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 		var g := _crea_tedesco(num, h, str(o.stance))
 		if o.get("reaction") != null and str(o.reaction) != "":
 			g.reazione = str(o.reaction)
+		# Tabella dell’assalto, modificatore 4: un tedesco attivato da un americano che entra nel suo
+		# esagono o in uno adiacente non usa la propria abilità con le armi in quel turno.
+		if s.fase == "round" and not s.turno.is_empty() and str(ctx.get("hex", "")) != "" and E.distanza(str(ctx.hex), h) <= 1:
+			g.senza_ws_per = str(s.turno.id)
 		nuovi.append(g)
 		if not (str(num) in s.attivati):
 			s.attivati.append(str(num))
@@ -985,6 +989,9 @@ func effettivo_mpa(un: Dictionary) -> int:
 	return m
 
 func _termina_azione(a: Dictionary) -> void:
+	for g in tedeschi():
+		if str(g.get("senza_ws_per", "")) == str(a.id):
+			g.erase("senza_ws_per")
 	s.turno = {}
 	_consuma_turno(a)
 	_flusso()
@@ -1047,7 +1054,7 @@ func _costo_passo(a: Dictionary, da_hex: String, verso: String) -> int:
 
 func _costo_ingresso(h: String) -> int:
 	match terreno.tipo(h):
-		"rough", "brush", "woods", "rubble", "stream":
+		"rough", "brush", "woods", "rubble", "stream", "ford":
 			return 2
 	return 1
 
@@ -1719,6 +1726,8 @@ func probabilita_assalto(att: Dictionary, dif: Dictionary, carica: bool) -> Dict
 		mods.append(["attaccante ferito", -2])
 	var ws_d := int(dif.WS)
 	var difesa_valida: bool = ws_d >= 1 and not dif.panico and not dif.ferito
+	if dif.lato == "de" and str(dif.get("senza_ws_per", "")) == str(att.id):
+		difesa_valida = false
 	if dif.lato == "us" and fase_round() and not dif.consapevole:
 		difesa_valida = false
 	if difesa_valida:

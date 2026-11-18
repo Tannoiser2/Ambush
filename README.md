@@ -67,7 +67,9 @@ Solo su richiesta: «Run workflow» a mano su GitHub, oppure un commit su `main`
 
 ## Regole
 
-La sequenza dei Round (6/1), il comando (6/3), il panico (6/4), la consapevolezza (6/5), le attivazioni durante i Round (6/6), le azioni (6/7) e il comportamento dei tedeschi (6/8, 6/9) sono stati riletti sul regolamento: numero d’azione tedesco tirato a ogni turno in cui i tedeschi agiscono e valido per tutti, tedeschi in ordine alfabetico, parità d’iniziativa ai tedeschi, autoconservazione nello stesso esagono o adiacente. Non sono implementate, perché la Missione 1 non le usa, le armi di squadra, i veicoli e la carica da demolizione piazzata con ritardo.
+La sequenza dei Round (6/1), il comando (6/3), il panico (6/4), la consapevolezza (6/5), le attivazioni durante i Round (6/6), le azioni (6/7) e il comportamento dei tedeschi (6/8, 6/9) sono stati riletti sul regolamento: numero d’azione tedesco tirato a ogni turno in cui i tedeschi agiscono e valido per tutti, tedeschi in ordine alfabetico, parità d’iniziativa ai tedeschi, autoconservazione nello stesso esagono o adiacente. Le tabelle dello schermo del giocatore (tabella delle armi con gittate, inceppamenti, danni e munizioni; modificatori del tiro; granate e cariche; assalto; costi di movimento; disinceppamento; pista dei Round con i numeri rossi) sono state confrontate casella per casella con la scansione originale: coincidono. Dove la tabella ridisegnata del modulo TTS differisce dall’originale (macchia, bersaglio prono: −3 invece di −2) vale l’originale.
+
+Non sono implementate, perché la Missione 1 non le usa, le armi di squadra, i veicoli e la carica da demolizione piazzata con ritardo.
 
 ## Note sulla mappa
 

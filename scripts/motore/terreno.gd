@@ -91,7 +91,7 @@ func costo_movimento(a: String, b: String) -> int:
 	var t := tipo(b)
 	var c := 1
 	match t:
-		"rough", "brush", "woods", "rubble":
+		"rough", "brush", "woods", "rubble", "ford":
 			c = 2
 		"stream":
 			c = 1 if (ponte(b) and a in capi_ponte(b)) else 2
