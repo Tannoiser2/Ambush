@@ -1,5 +1,7 @@
 name: Publish Godot Web to Pages
 
+# Pubblicazione solo su richiesta: «Run workflow» a mano, oppure un commit su main
+# con [pubblica] nel messaggio. Un push normale non pubblica nulla.
 on:
   push:
     branches: [main]
@@ -16,6 +18,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[pubblica]')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -33,6 +36,8 @@ jobs:
           cp /tmp/godot-templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.stable/"
       - name: Verify gameplay rules
         run: |
+          pip install --quiet fonttools
+          python3 tools/controlla_glifi.py
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --editor --path . --quit
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/verifica.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 8 1

@@ -10,7 +10,7 @@ func _init() -> void:
 func scatta(nome: String) -> void:
 	await process_frame
 	await process_frame
-	root.get_viewport().get_texture().get_image().get_region(Rect2i(356, 70, 856, 690)).save_png("/tmp/claude-0/fx_%s.png" % nome)
+	root.get_viewport().get_texture().get_image().get_region(Rect2i(356, 70, 856, 690)).save_png("/tmp/ambush_scatti/fx_%s.png" % nome)
 
 func prova(nome: String, ev: Dictionary, tempi: Array) -> void:
 	ev.vista = ui.p.istantanea()

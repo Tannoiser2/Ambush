@@ -20,6 +20,10 @@ var rng := RandomNumberGenerator.new()
 var recenti: Array = []
 ## Posizioni e stati delle pedine all’inizio dell’ultimo comando (per la riproduzione animata).
 var vista_iniziale: Dictionary = {}
+## Stato dei pannelli (pista, scheda, fasi) all’inizio dell’ultimo comando.
+var stato_iniziale: Dictionary = {}
+## Ultimo dado tirato (per i riepiloghi delle fasi).
+var ultimo_dado := 0
 var _profondita := 0
 var _stampa := OS.get_environment("AMBUSH_CRONACA") == "1"
 
@@ -82,6 +86,7 @@ func carica(dati: Dictionary) -> bool:
 # =================================================================== utilità
 func d10(motivo := "") -> int:
 	var r := rng.randi_range(0, 9)
+	ultimo_dado = r
 	if motivo != "":
 		_log("dado", "%s: %d" % [motivo, r])
 	return r
@@ -113,6 +118,21 @@ func _aggiorna_fx(v: Dictionary, dati: Dictionary) -> void:
 func _inizia_registrazione() -> void:
 	recenti.clear()
 	vista_iniziale = istantanea()
+	stato_iniziale = stato_pannelli()
+
+## Copia dello stato che i pannelli mostrano: serve a tenerli allineati alla riproduzione.
+func stato_pannelli() -> Dictionary:
+	return {"unita": s.get("unita", {}).duplicate(true), "round": s.get("round", {}).duplicate(true),
+		"fase": s.get("fase", "operazioni"), "condizione": s.get("condizione", 1), "pausa": s.get("pausa", ""),
+		"avvistamenti": s.get("avvistamenti", []).duplicate(), "pv_tot": pv_totali() if s.has("pv") else 0}
+
+## Inizio di un passo della riproduzione: una fase del Round, il turno di un tedesco, un contatto…
+## L’interfaccia si ferma a ogni passo e mostra la scheda dell’azione.
+func _passo(tipo: String, dati := {}) -> Dictionary:
+	var v := {"t": "passo", "tipo": tipo, "stato": stato_pannelli(), "vista": istantanea()}
+	v.merge(dati)
+	recenti.append(v)
+	return v
 
 func _log(tipo: String, testo: String, extra := {}) -> void:
 	var v := {"t": tipo, "x": testo}
@@ -524,17 +544,19 @@ func controllo_paragrafo(h: String, ids: Array, opzioni := {}) -> void:
 	else:
 		_risolvi_riferimento(rif, ctx)
 
-func evento_casuale(ctx: Dictionary) -> void:
+func evento_casuale(ctx: Dictionary, passo: Dictionary = {}) -> void:
 	var a := d10()
 	var b := d10()
 	var somma := a + b
 	var rif := riferimento_evento(somma)
+	passo.merge({"a": a, "b": b, "somma": somma, "rif": rif}, true)
 	_log("dado", "Controllo Evento: %d + %d = %d → %s" % [a, b, somma, "nessun evento" if rif == "NONE" else rif.replace(":", " ")])
 	_risolvi_riferimento(rif, ctx)
 
 func cambia_condizione(n: int) -> void:
 	if n <= int(s.condizione):
 		return
+	_passo("condizione", {"n": n})
 	s.condizione = n
 	s.eventi.clear()
 	_log("condizione", "Passa alla Condizione %d. Livello di attivazione 0–%d. Tutti i segnalini Evento sono rimossi." % [n, livello_attivazione()])
@@ -576,6 +598,8 @@ func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 					continue
 			else:
 				continue
+		if nuovi.is_empty():
+			_passo("attivazione")
 		var g := _crea_tedesco(num, h, str(o.stance))
 		if o.get("reaction") != null and str(o.reaction) != "":
 			g.reazione = str(o.reaction)
@@ -694,34 +718,42 @@ func _avvia_round() -> void:
 	r.iniziativa_fatta = false
 	for g in tedeschi():
 		g.bersagli_round = []
+	var pc := _passo("consapevolezza", {"n": r.n, "righe": []})
 	_log("round", "ROUND %d" % r.n)
 	# 1. Consapevolezza (solo Round 1 e 2).
 	if r.n <= 2:
-		_fase_consapevolezza(r)
+		_fase_consapevolezza(r, pc.righe)
 	else:
 		for a in americani():
 			if attivo(a) or a.stato == "fuori":
 				a.consapevole = true
+		_log("info", "Dal Round 3 tutti i soldati sono consapevoli.")
 	# 2. Evento (non nel Round 1).
 	if r.n >= 2:
+		var pe := _passo("evento", {"n": r.n})
 		_log("info", "Fase Evento.")
-		evento_casuale({"hex": "", "ids": []})
+		evento_casuale({"hex": "", "ids": []}, pe)
 		if s.fase != "round":
 			return
 	# 3. Iniziativa.
 	_iniziativa(r)
 	_flusso()
 
-func _fase_consapevolezza(r: Dictionary) -> void:
+func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 	var auto_id: String = r.get("consapevole_auto", "")
 	for a in americani():
-		if not (attivo(a) or a.stato == "fuori") or a.consapevole:
+		if not (attivo(a) or a.stato == "fuori"):
+			continue
+		if a.consapevole:
+			righe.append({"id": a.id, "esito": "gia"})
 			continue
 		if a.stato == "fuori" and r.n == 1:
+			righe.append({"id": a.id, "esito": "fuori"})
 			continue  # 6/10: fuori mappa durante il Round 1
 		if a.id == auto_id and r.n == 1:
 			a.consapevole = true
 			_log("info", "%s è automaticamente consapevole." % nome(a))
+			righe.append({"id": a.id, "esito": "auto"})
 			continue
 		if a.stato == "attivo" and a.hex == "" :
 			continue
@@ -732,8 +764,10 @@ func _fase_consapevolezza(r: Dictionary) -> void:
 				if not g.is_empty() and in_mappa(g) and vede_unita(a, g):
 					vede = true
 			if not vede:
+				righe.append({"id": a.id, "esito": "non_vede"})
 				continue
 		a.consapevole = controllo_pc(a, 0, "consapevolezza")
+		righe.append({"id": a.id, "esito": "si" if a.consapevole else "no", "dado": ultimo_dado, "pc": int(a.PC)})
 
 func in_comando(un: Dictionary) -> bool:
 	var tot := 0
@@ -754,9 +788,11 @@ func _iniziativa(r: Dictionary) -> void:
 	var vant: String = "us" if du > dt else "de"
 	if r.n == 1 and r.get("vantaggio_forzato", "") != "":
 		vant = r.vantaggio_forzato
+	var forzato: bool = r.n == 1 and r.get("vantaggio_forzato", "") != ""
 	r.vantaggio = vant
 	r.dado_us = du
 	r.dado_de = dt
+	var pi := _passo("iniziativa", {"n": r.n, "du": du, "dt": dt, "vant": vant, "forzato": forzato, "righe": []})
 	_log("dado", "Iniziativa: americani %d, tedeschi %d → vantaggio %s." % [du, dt, "americano" if vant == "us" else "tedesco"])
 	for a in americani():
 		a.panico = false
@@ -768,9 +804,11 @@ func _iniziativa(r: Dictionary) -> void:
 			a.turni = 0
 			a.slot = "inconsapevole"
 			continue
-		var es := T.esito_turni(int(a.IN), du, true, in_comando(a), a.ferito)
+		var comando := in_comando(a)
+		var es := T.esito_turni(int(a.IN), du, true, comando, a.ferito)
 		if r.n == 1 and r.get("due_turni_us", false) and not es.panico:
 			es.turni = 1 if a.ferito else 2
+		pi.righe.append({"id": a.id, "turni": es.turni, "panico": es.panico, "rosso": es.rosso, "comando": comando, "ferito": a.ferito})
 		if es.panico:
 			a.panico = true
 			a.turni = 0
@@ -786,7 +824,8 @@ func _iniziativa(r: Dictionary) -> void:
 			continue
 		var es := T.esito_turni(int(g.IN), dt, false, true, g.ferito)
 		if g.id in r.get("due_turni_de", []):
-			es = {"turni": 1 if g.ferito else 2, "panico": false}
+			es = {"turni": 1 if g.ferito else 2, "panico": false, "paragrafo": true}
+		pi.righe.append({"id": g.id, "turni": es.turni, "panico": es.panico, "ferito": g.ferito, "paragrafo": es.get("paragrafo", false)})
 		if es.panico:
 			g.panico = true
 			g.turni = 0
@@ -840,16 +879,18 @@ func _flusso() -> void:
 			return  # attende il giocatore
 		# Turno tedesco: nuovo numero d’azione all’inizio della casella.
 		var chiave := "%d%s" % [c[0], c[1]]
+		var tirato := false
 		if s.round.slot_azione != chiave:
 			s.round.slot_azione = chiave
 			s.round.numero_azione = d10()
-			_log("dado", "Numero d’azione tedesco: %d" % s.round.numero_azione)
+			tirato = true
 		var agiti := false
 		for g in tedeschi():
 			if s.fase != "round":
 				return
 			if int(g.turni) == c[0] and g.slot == "turni" and in_mappa(g):
-				ia.turno(g)
+				ia.turno(g, tirato, chiave)
+				tirato = false
 				agiti = true
 				if int(g.turni) == c[0]:
 					_consuma_turno(g)
@@ -863,6 +904,7 @@ func _consuma_turno(x: Dictionary) -> void:
 		x.slot = "completo"
 
 func _fine_round() -> void:
+	_passo("fine_round", {"n": int(s.round.n)})
 	_log("round", "Fine del Round %d." % int(s.round.n))
 	for x in s.unita.values():
 		if x.panico and attivo(x):
@@ -886,6 +928,7 @@ func _fine_round() -> void:
 	s.pausa = "inizio_round"
 
 func _torna_operazioni() -> void:
+	_passo("operazioni")
 	s.fase = "operazioni"
 	s.round = {}
 	s.turno = {}
@@ -1259,7 +1302,8 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	var modo := "mirato" if mirato else "rapido"
 	_log("combattimento", "%s spara (%s, %s) a %s in %s." % [nome(tiratore), modo, info.nome.to_lower(), nome(bersaglio), bersaglio.hex])
 	var fx := _fx("tiro", {"da": tiratore.get("hex", ""), "a": bersaglio.hex, "tiratore": tiratore.get("id", ""), "bersaglio": bersaglio.id,
-		"auto": bool(info.get("auto", false)), "mirato": mirato, "arma": tipo, "esito": "mancato"})
+		"auto": bool(info.get("auto", false)), "mirato": mirato, "arma": tipo, "esito": "mancato",
+		"prob": int(p.prob), "base": int(p.get("base", -1)), "mods": p.get("mods", []), "gittata": str(p.get("gittata", ""))})
 	if fase_round() and tiratore.get("lato", "") == "de":
 		s.round.sparato.append([tiratore.id, tipo])
 		tiratore.bersagli_round.append(bersaglio.id)
@@ -1279,10 +1323,13 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
 	fx.esito = "colpito" if colpito else "mancato"
+	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
 	if colpito:
 		var rd := d10()
 		var lettera := T.lettera_danno(info.danni, rd)
+		fx.dado_danno = rd
+		fx.danno = _nome_danno(lettera)
 		_log("dado", "Danno: %d → %s" % [rd, _nome_danno(lettera)])
 		_applica_danno(bersaglio, lettera, tiratore)
 		if tipo == "bazooka":
@@ -1552,7 +1599,8 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		arrivo = _deviazione(lanciatore.hex, h)
 		_log("dado", "Lancio: serve 0–%d, esce %d → devia in %s." % [int(p.prob), r, arrivo])
 		_rendi_consapevoli(arrivo)
-	var fx := _fx("lancio", {"da": lanciatore.hex, "bersaglio": h, "a": arrivo, "tipo": tipo, "esito": "esplode", "id": lanciatore.id})
+	var fx := _fx("lancio", {"da": lanciatore.hex, "bersaglio": h, "a": arrivo, "tipo": tipo, "esito": "esplode", "id": lanciatore.id,
+		"prob": int(p.prob), "dado": r})
 	var pd := percentuale()
 	if pd <= 5:
 		_log("dado", "Percentuale %02d: ordigno inesploso." % pd)
@@ -1687,6 +1735,8 @@ func risolvi_assalto(att: Dictionary, dif: Dictionary, intento: String, carica: 
 	_rendi_consapevoli(dif.hex)
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
+	fx.prob = int(p.prob)
+	fx.dado = r
 	_log("dado", "Assalto: serve 0–%d, esce %d → %s." % [int(p.prob), r, "riuscito" if colpito else "fallito"])
 	if colpito:
 		fx.esito = "riuscito"

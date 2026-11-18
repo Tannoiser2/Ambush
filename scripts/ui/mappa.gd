@@ -1,5 +1,7 @@
 extends Control
-## Mappa A con pedine, segnalini, evidenziazioni, linea di vista. Zoom con la rotella, trascina con il tasto destro.
+## Mappa A con pedine, segnalini, evidenziazioni, linea di vista.
+## Mouse: rotella per lo zoom, trascinamento (sinistro o destro) per spostare.
+## Tocco: un dito trascina, due dita pizzicano per lo zoom e spostano.
 
 signal esagono_cliccato(h: String, tasto: int)
 signal esagono_sopra(h: String)
@@ -37,6 +39,24 @@ var velocita := 1.0
 ## Unità che sta agendo durante la riproduzione (anello persistente).
 var attore_id := ""
 var _tween_pan: Tween
+## Stato dei pannelli durante la riproduzione (consapevolezza, turni rimasti…), o vuoto.
+var stato_pannelli: Dictionary = {}
+## Segni che restano sulla mappa finché non parte il comando successivo: linee di tiro con l’esito.
+var segni: Array = []
+## Passo della riproduzione in corso: i segni dei passi precedenti si attenuano.
+var passo_corrente := 0
+## Etichette sugli esagoni (probabilità di tiro sui bersagli): h → testo.
+var etichette: Dictionary = {}
+## Linee di vista da mostrare: [{da, a, colore}].
+var linee: Array = []
+# tocco e trascinamento
+var _tocchi := {}
+var _pizzico_dist := 0.0
+var _pizzico_centro := Vector2.ZERO
+var _premuto := false
+var _premuto_pos := Vector2.ZERO
+var _trascinato := false
+var _multi := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -137,7 +157,36 @@ func poligono(h: String, riduzione := 1.0) -> PackedVector2Array:
 	return pts
 
 func _gui_input(ev: InputEvent) -> void:
-	if ev is InputEventMouseButton:
+	if ev is InputEventScreenTouch:
+		var st := ev as InputEventScreenTouch
+		if st.pressed:
+			_tocchi[st.index] = st.position
+		else:
+			_tocchi.erase(st.index)
+		if _tocchi.size() >= 2:
+			_multi = true
+			var k := _tocchi.keys()
+			_pizzico_dist = (_tocchi[k[0]] as Vector2).distance_to(_tocchi[k[1]])
+			_pizzico_centro = ((_tocchi[k[0]] as Vector2) + (_tocchi[k[1]] as Vector2)) / 2.0
+		else:
+			_pizzico_dist = 0.0
+	elif ev is InputEventScreenDrag:
+		var sd := ev as InputEventScreenDrag
+		_tocchi[sd.index] = sd.position
+		if _tocchi.size() >= 2:
+			var k := _tocchi.keys()
+			var a: Vector2 = _tocchi[k[0]]
+			var b: Vector2 = _tocchi[k[1]]
+			var d := a.distance_to(b)
+			var centro := (a + b) / 2.0
+			if _pizzico_dist > 1.0 and d > 1.0:
+				zoom_a(d / _pizzico_dist, centro)
+				spostamento += centro - _pizzico_centro
+				_limita()
+				queue_redraw()
+			_pizzico_dist = d
+			_pizzico_centro = centro
+	elif ev is InputEventMouseButton:
 		var mb := ev as InputEventMouseButton
 		if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
 			zoom_a(1.15, mb.position)
@@ -145,17 +194,32 @@ func _gui_input(ev: InputEvent) -> void:
 			zoom_a(1.0 / 1.15, mb.position)
 		elif mb.button_index in [MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE]:
 			_trascina = mb.pressed
-		elif mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
-			var h := esagono_a(mb.position)
-			if h != "":
-				esagono_cliccato.emit(h, MOUSE_BUTTON_LEFT)
+		elif mb.button_index == MOUSE_BUTTON_LEFT:
+			if mb.pressed:
+				_premuto = true
+				_premuto_pos = mb.position
+				_trascinato = false
+				if _tocchi.size() < 2:
+					_multi = false
+			else:
+				if _premuto and not _trascinato and not _multi:
+					var h := esagono_a(mb.position)
+					if h != "":
+						if h != sopra:
+							sopra = h
+							esagono_sopra.emit(h)
+						esagono_cliccato.emit(h, MOUSE_BUTTON_LEFT)
+				_premuto = false
 		accept_event()
 	elif ev is InputEventMouseMotion:
 		var mm := ev as InputEventMouseMotion
-		if _trascina:
-			spostamento += mm.relative
-			_limita()
-			queue_redraw()
+		if _tocchi.size() < 2:
+			if _premuto and not _trascinato and mm.position.distance_to(_premuto_pos) > 10.0:
+				_trascinato = true
+			if _trascina or (_premuto and _trascinato):
+				spostamento += mm.relative
+				_limita()
+				queue_redraw()
 		var h := esagono_a(mm.position)
 		if h != sopra:
 			sopra = h
@@ -214,14 +278,12 @@ func _draw() -> void:
 	for h in per_hex:
 		var pila: Array = per_hex[h]
 		pila.sort_custom(func(a, b): return _ordine(a) < _ordine(b))
-		var n := pila.size()
-		var dim := lato * (1.05 if n <= 2 else 0.92)
-		var passo := minf(lato * 0.22, lato * 0.9 / maxf(1.0, n - 1)) if n > 1 else 0.0
-		var base := centro_schermo(h) - Vector2(dim, dim) / 2.0 - Vector2(passo, -passo) * (n - 1) / 2.0
-		for i in n:
+		var posti := _posti(pila.size(), lato)
+		for i in pila.size():
 			var x: Dictionary = pila[i]
-			var p := base + Vector2(passo, -passo) * i
-			_pedina(x, Rect2(p, Vector2(dim, dim)), vista == null and x.id in selezionati, x.id in di_turno)
+			var r: Rect2 = posti[i]
+			r.position += centro_schermo(h)
+			_pedina(x, r, vista == null and x.id in selezionati, x.id in di_turno)
 	# Pedine in movimento (sopra le altre)
 	for id in mobili:
 		var m: Dictionary = mobili[id]
@@ -244,9 +306,17 @@ func _draw() -> void:
 			cc = centro_schermo(m.da).lerp(centro_schermo(m.a), km * km * (3.0 - 2.0 * km))
 		var pul := 0.75 + 0.25 * sin(_t * 6.0)
 		draw_arc(cc, RAGGIO * zoom * 0.95, 0, TAU, 40, Color(1.0, 0.82, 0.3, pul), maxf(3.0, 5.0 * zoom), true)
+	# Linee di vista (chi vede chi) e segni dei tiri già risolti
+	for l in linee:
+		_linea_vista(l)
+	for i in segni.size():
+		_disegna_segno(segni[i], i)
 	# Effetti animati
 	for a in animazioni:
 		_disegna_effetto(a)
+	# Etichette sui bersagli
+	for h in etichette:
+		_etichetta_hex(h, str(etichette[h]))
 	# Esagono sotto il cursore e linea di vista
 	if sopra != "":
 		draw_polyline(_chiudi(poligono(sopra, 0.98)), Color(1, 0.95, 0.75, 0.9), maxf(1.5, 2.5 * zoom))
@@ -269,6 +339,8 @@ func _stati_visibili() -> Dictionary:
 			if not vista.has(id):
 				continue
 			d = x.duplicate()
+			if stato_pannelli.has("unita") and stato_pannelli.unita.has(id):
+				d = (stato_pannelli.unita[id] as Dictionary).duplicate()
 			d.merge(vista[id], true)
 		else:
 			if x.hex == "" or x.stato in ["fuori", "uscito", "rimosso"]:
@@ -329,6 +401,7 @@ func _pedina(x: Dictionary, r: Rect2, selezionato: bool, di_turno: bool) -> void
 		var fs := int(maxf(9.0, r.size.x * 0.2))
 		draw_rect(Rect2(r.position + Vector2(0, r.size.y * 0.38), Vector2(r.size.x, fs * 1.25)), Color(0.65, 0.12, 0.08, 0.9))
 		draw_string(f, r.position + Vector2(0, r.size.y * 0.38 + fs), "PANICO", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, fs, Color.WHITE)
+	_icone_stato(x, r)
 	if selezionato:
 		draw_rect(r.grow(2.0), Tema.OTTONE, false, maxf(2.0, 4.0 * zoom))
 	elif di_turno:
@@ -354,11 +427,15 @@ func anima(ev: Dictionary) -> float:
 				var x: Dictionary = partita.u(str(ev.ids[0]))
 				if not x.is_empty():
 					lato = x.lato
-				tracce.append({"da": ev.da, "a": ev.a, "lato": lato})
+				tracce.append({"da": ev.da, "a": ev.a, "lato": lato, "passo": passo_corrente})
 			assicura_visibili([ev.da, ev.a] if ev.da != "" else [ev.a])
 		"tiro":
 			dur = 0.8 if ev.esito == "inceppata" else (1.25 if ev.get("auto", false) else 0.95)
 			assicura_visibili([ev.da, ev.a] if ev.da != "" else [ev.a])
+			var nemico: bool = partita.u(str(ev.tiratore)).get("lato", "de") != "us"
+			segni.append({"da": ev.da, "a": ev.a, "nemico": nemico, "esito": ev.esito, "bersaglio": ev.get("bersaglio", ""),
+				"testo": {"colpito": "COLPITO", "mancato": "MANCATO", "inceppata": "ARMA INCEPPATA"}.get(ev.esito, ""),
+				"passo": passo_corrente, "da_t": _t + dur * 0.6 / velocita})
 		"lancio":
 			dur = 1.5
 			assicura_visibili([ev.da, ev.a])
@@ -374,6 +451,11 @@ func anima(ev: Dictionary) -> float:
 			ev.a = x.get("hex", partita.u(ev.id).get("hex", ""))
 			if ev.a != "":
 				assicura_visibili([ev.a])
+			for j in range(segni.size() - 1, -1, -1):
+				var sg: Dictionary = segni[j]
+				if sg.passo == passo_corrente and sg.bersaglio == ev.id and sg.esito == "colpito":
+					sg.testo = "COLPITO: " + {"panico": "PANICO", "spavento": "SOLO SPAVENTO", "ferito": "FERITO", "incapacitato": "INCAPACITATO", "ucciso": "UCCISO"}.get(ev.tipo, str(ev.tipo).to_upper())
+					break
 		"compare":
 			dur = 1.3
 			assicura_visibili([ev.a, _americano_vicino(ev.a)])
@@ -410,12 +492,15 @@ func _americano_vicino(h: String) -> String:
 
 func fine_riproduzione() -> void:
 	vista = null
+	stato_pannelli = {}
 	attore_id = ""
 	mobili.clear()
 	queue_redraw()
 
 func pulisci_tracce() -> void:
 	tracce.clear()
+	segni.clear()
+	passo_corrente = 0
 	animazioni.clear()
 	queue_redraw()
 
@@ -504,8 +589,11 @@ func _disegna_traccia(tr: Dictionary) -> void:
 	var a := _p(tr.da)
 	var b := _p(tr.a)
 	var col := Color(0.75, 0.85, 1.0, 0.9) if tr.lato == "de" else Color(0.95, 0.9, 0.45, 0.85)
+	var vecchia: bool = int(tr.get("passo", 0)) != passo_corrente
+	if vecchia:
+		col.a = 0.4
 	var w := maxf(3.5, 4.5 * zoom)
-	draw_line(a, b, Color(0, 0, 0, 0.5), w + 3.0)
+	draw_line(a, b, Color(0, 0, 0, 0.2 if vecchia else 0.5), w + 3.0)
 	draw_dashed_line(a, b, col, w, maxf(5.0, 12.0 * zoom))
 	var dir := (b - a).normalized()
 	var punta := b - dir * _re() * 0.45
@@ -609,9 +697,6 @@ func _effetto_tiro(a: Dictionary, k: float) -> void:
 			var kp := (kk - 1.0) / 0.8
 			var p := arrivo + perp * r * 0.12 * (float(i % 3) - 1.0)
 			draw_circle(p, r * (0.12 + 0.25 * kp), Color(0.55, 0.48, 0.38, 0.6 * (1.0 - kp)))
-	if k > 0.5:
-		var etichetta := "COLPITO" if a.esito == "colpito" else "MANCATO"
-		_testo_flottante(b, etichetta, Color("ff6b5b") if a.esito == "colpito" else Color("e8dfc2"), (k - 0.5) / 0.5, 18.0)
 
 func _effetto_lancio(a: Dictionary, k: float) -> void:
 	var o := _p(a.da)
@@ -644,3 +729,92 @@ func _effetto_lancio(a: Dictionary, k: float) -> void:
 			_testo_flottante(b, "INESPLOSA", Color("e8dfc2"), ke)
 		"rilanciato":
 			_testo_flottante(b, "RILANCIATA!", Color("9fd0ff"), ke)
+
+# ================================================================== pedine affiancate, icone, segni
+## Posti delle pedine di un esagono, affiancate invece che impilate: rettangoli relativi al centro.
+func _posti(n: int, lato: float) -> Array:
+	var out: Array = []
+	if n <= 1:
+		var d := lato * 1.05
+		out.append(Rect2(-d / 2.0, -d / 2.0, d, d))
+		return out
+	var colonne := 2 if n <= 4 else 3
+	var righe := int(ceil(n / float(colonne)))
+	var d := lato * (0.84 if n == 2 else (0.74 if n <= 4 else (0.6 if righe <= 2 else 0.52)))
+	var gap := lato * 0.04
+	for i in n:
+		var rg := i / colonne
+		var in_riga := mini(colonne, n - rg * colonne)
+		var cl := i % colonne
+		var x := (cl - (in_riga - 1) / 2.0) * (d + gap) - d / 2.0
+		var y := (rg - (righe - 1) / 2.0) * (d + gap) - d / 2.0
+		out.append(Rect2(x, y, d, d))
+	return out
+
+func _in_round() -> bool:
+	if stato_pannelli.has("fase"):
+		return stato_pannelli.fase == "round"
+	return partita != null and partita.fase_round()
+
+## Segni sulla pedina: inconsapevole (pedina scurita con un punto di domanda), turni rimasti (pallini).
+func _icone_stato(x: Dictionary, r: Rect2) -> void:
+	if not _in_round() or x.get("stato", "") != "attivo":
+		return
+	var u := r.size.x
+	if x.lato == "us" and not x.get("consapevole", true) and not x.get("panico", false):
+		draw_rect(r, Color(0.08, 0.09, 0.07, 0.38))
+		var c := r.position + Vector2(u * 0.74, u * 0.27)
+		var rr := u * 0.2
+		draw_circle(c, rr + 1.5, Color(0.93, 0.9, 0.8))
+		draw_circle(c, rr, Color(0.13, 0.14, 0.11))
+		var fs := int(maxf(9.0, rr * 1.7))
+		draw_string(Tema.testo_bold, c + Vector2(-rr, fs * 0.36), "?", HORIZONTAL_ALIGNMENT_CENTER, rr * 2.0, fs, Color(0.96, 0.93, 0.82))
+	if x.get("slot", "") == "turni" and int(x.get("turni", 0)) > 0:
+		var n := int(x.turni)
+		var rp := maxf(3.0, u * 0.085)
+		for i in n:
+			var c := r.position + Vector2(u - rp * 1.4 - i * rp * 2.4, u - rp * 1.4)
+			draw_circle(c, rp + 1.5, Color(0.08, 0.09, 0.07))
+			draw_circle(c, rp, Color(0.55, 0.95, 0.45) if x.lato == "us" else Color(0.6, 0.85, 1.0))
+
+func _linea_vista(l: Dictionary) -> void:
+	var a := _p(str(l.da))
+	var b := _p(str(l.a))
+	var col: Color = l.get("colore", Color(1, 1, 1, 0.6))
+	draw_dashed_line(a, b, Color(0, 0, 0, col.a * 0.5), maxf(3.0, 4.5 * zoom), maxf(5.0, 10.0 * zoom))
+	draw_dashed_line(a, b, col, maxf(1.5, 2.5 * zoom), maxf(5.0, 10.0 * zoom))
+	draw_circle(b, maxf(3.5, 7.0 * zoom), col)
+
+## Linea di tiro che resta sulla mappa con l’esito scritto sul bersaglio.
+func _disegna_segno(sg: Dictionary, indice: int) -> void:
+	var b := _p(str(sg.a))
+	var o := _p(str(sg.da)) if str(sg.da) != "" else _origine_cecchino(b)
+	var attuale: bool = int(sg.passo) == passo_corrente
+	var alfa := 0.95 if attuale else 0.38
+	var col := Color(1.0, 0.45, 0.25, alfa) if sg.nemico else Color(1.0, 0.92, 0.4, alfa)
+	var r := _re()
+	_freccia(o, b, col, maxf(3.0, 3.5 * zoom), r * 0.6)
+	draw_arc(o, r * 0.66, 0, TAU, 32, col, maxf(2.5, 3.0 * zoom), true)
+	if str(sg.da) == "":
+		_scritta(o, "CECCHINO NASCOSTO", col, 13)
+	if _t < float(sg.get("da_t", 0.0)) or str(sg.testo) == "":
+		return
+	# più tiri sullo stesso esagono: scritte una sopra l’altra
+	var livello := 0
+	for j in indice:
+		if str(segni[j].a) == str(sg.a) and int(segni[j].passo) == int(sg.passo):
+			livello += 1
+	var colore_testo := Color(1.0, 0.5, 0.42, alfa) if sg.esito == "colpito" else Color(0.92, 0.89, 0.78, alfa)
+	if attuale or livello == 0:
+		_scritta(b - Vector2(0, r * 0.95 + livello * 24.0), str(sg.testo), colore_testo, 15)
+
+func _scritta(pos: Vector2, testo: String, colore: Color, dim: int) -> void:
+	var f: Font = Tema.testo_bold
+	var w := f.get_string_size(testo, HORIZONTAL_ALIGNMENT_LEFT, -1, dim).x
+	var rr := Rect2(Vector2(pos.x - w / 2.0 - 6, pos.y - dim - 4), Vector2(w + 12, dim + 9))
+	draw_rect(rr, Color(0.1, 0.1, 0.07, 0.85 * colore.a))
+	draw_rect(rr, colore, false, 1.5)
+	draw_string(f, Vector2(pos.x - w / 2.0, pos.y), testo, HORIZONTAL_ALIGNMENT_LEFT, -1, dim, colore)
+
+func _etichetta_hex(h: String, testo: String) -> void:
+	_scritta(_p(h) + Vector2(0, _re() * 1.05 + 16.0), testo, Color(1.0, 0.93, 0.7), 15)

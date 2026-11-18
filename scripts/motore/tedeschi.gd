@@ -15,7 +15,7 @@ func _init(partita: Partita) -> void:
 	p = partita
 
 # ------------------------------------------------------------------ turno
-func turno(g: Dictionary) -> void:
+func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 	_g = g
 	g.cambio_libero = not g.ferito
 	_mp = p.effettivo_mpa(g)
@@ -24,6 +24,15 @@ func turno(g: Dictionary) -> void:
 	var col := colonna(g)
 	var numero: int = int(p.s.round.numero_azione)
 	var par := paragrafo_da_carta(g, col, numero)
+	var motivo := "condizione"
+	if col == "S":
+		motivo = "autoconservazione"
+	elif col.length() == 1 and col >= "A" and col <= "Z":
+		motivo = "reazione"
+	p._passo("tedesco", {"id": g.id, "colonna": col, "numero": numero, "paragrafo": par, "motivo": motivo,
+		"casella": casella, "numero_tirato": numero_tirato, "vede": bersagli(g).map(func(a): return a.id)})
+	if numero_tirato:
+		p._log("dado", "Numero d’azione tedesco: %d (vale per tutti i tedeschi di questo turno)." % numero)
 	p._log("tedesco", "Turno del %s: colonna %s, numero d’azione %d → paragrafo %d." % [p.nome(g), _nome_colonna(col), numero, par])
 	p._fx("attore", {"id": g.id, "a": g.hex})
 	esegui(par)

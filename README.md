@@ -17,13 +17,17 @@ Si gioca nel browser da GitHub Pages; la partita si salva da sola sul dispositiv
 
 ## Interfaccia
 
-Tema da campo del 1944: verde oliva, carta dei rapporti, caratteri stampigliati (Stardos Stencil), da macchina da scrivere (Special Elite) e Oswald per le etichette. Pedine ricavate dalle sagome originali del gioco.
+Tema da campo del 1944: verde oliva, carta dei rapporti, caratteri stampigliati (Stardos Stencil) per i titoli e Oswald per tutti i testi da leggere; la macchina da scrivere (Special Elite) resta solo per l’ordine di missione. Pedine ricavate dalle sagome originali del gioco.
 
-- a sinistra la **scheda della squadra** (clic per scegliere, Maiusc/Ctrl+clic per un gruppo nelle Operazioni);
-- al centro la **mappa A** originale: rotella per lo zoom, tasto destro per spostarla, passaggio del mouse per terreno, linea di vista dal soldato scelto e probabilità di tiro;
-- sotto la mappa i **comandi** del soldato scelto;
-- ogni comando viene **riprodotto in sequenza**: chi agisce è cerchiato in giallo, i tiri mostrano la freccia dal tiratore al bersaglio con traccianti (raffiche per le armi automatiche), granate in volo ed esplosioni, i movimenti scorrono esagono per esagono lasciando una traccia, e sopra le pedine compaiono gli esiti (COLPITO, MANCATO, FERITO…). Il rapporto avanza riga per riga in sincronia; «Più veloce», «Salta» (Spazio) e «Rivedi»;
-- a destra la **pista dei Round**, gli **obiettivi**, le **carte dei tedeschi** attivati e il **rapporto di combattimento** con tutti i paragrafi letti e i tiri di dado.
+L’interfaccia è costruita per far capire sempre **in che fase si è, chi agisce, perché e con quale esito**:
+
+- **Barra delle fasi** sotto il titolo: Operazioni, oppure Round n con Consapevolezza, Evento, Iniziativa, le quattro caselle dei turni (2 turni e 1 turno, prima chi ha il vantaggio) e Fine Round. La fase in corso è accesa, quelle fatte hanno la spunta, quelle saltate sono barrate.
+- **Riproduzione a passi**: ogni comando del motore è diviso in passi (una fase, un tedesco, un’azione del giocatore). A ogni passo la **scheda dell’azione** sotto la mappa mostra *chi agisce* (pedina, posizione, turno), *perché* (per i tedeschi la tabella della loro carta con riga del dado e colonna evidenziate, il numero d’azione e il testo del paragrafo; per le fasi la regola e i dadi) e *cosa succede* (calcolo del tiro con base e modificatori, dadi, danni). «Continua» (Spazio) passa al passo successivo; «Modo: automatico» scorre da solo; «Velocità» e «Salta tutto» accorciano.
+- **Pannelli allineati**: pista dei Round, scheda della squadra e barra delle fasi mostrano lo stato del passo che si sta guardando, non quello finale.
+- **Mappa**: pedine dello stesso esagono affiancate; inconsapevoli scuriti con un punto di domanda, pallini per i turni rimasti, fascia PANICO; linee di tiro (gialle americane, arancioni tedesche) che restano con l’esito scritto sul bersaglio fino al comando successivo; scie dei movimenti; linee tratteggiate per chi vede chi (rosse dal soldato scelto, azzurre dal tedesco di turno); probabilità di colpire accanto a ogni bersaglio valido.
+- **Comandi** raggruppati (Postura, Movimento, Fuoco, Assalto, Comando, Equipaggiamento, Fine), con la riga di aiuto che dice che cosa toccare.
+- **Mouse e tocco**: rotella o pizzico con due dita per lo zoom, trascinamento (anche con un dito) per spostare la mappa, tocco su un esagono per sceglierlo e leggerne le informazioni.
+- A destra la **pista dei Round** con i dadi dell’iniziativa, gli **obiettivi**, i **tedeschi incontrati** (tocca per la carta) e il **rapporto** con tutti i paragrafi e i tiri. «Legenda» in alto spiega tutti i segni.
 
 ## Struttura
 
@@ -34,7 +38,7 @@ scripts/motore/terreno.gd      terreno, costi di movimento, linea di vista
 scripts/motore/tabelle.gd      tabelle dello schermo del giocatore e pista dei Round
 scripts/motore/partita.gd      Operazioni, Round, paragrafi, combattimento, punteggio, salvataggi
 scripts/motore/tedeschi.gd     comportamento dei tedeschi
-scripts/ui/                    interfaccia (tema, mappa, pista, schermata principale)
+scripts/ui/                    interfaccia: tema, mappa, pista, barra delle fasi, tabella della carta, schermata principale
 data/                          dati generati: paragrafi, missione, mappa
 tools/costruisci_dati.py       genera data/ dalle trascrizioni verificate
 tests/                         verifiche e simulazione automatica di partite
@@ -45,13 +49,25 @@ assets/reference/              materiale originale di consultazione (escluso dal
 
 ```
 python3 tools/costruisci_dati.py
+python3 tools/controlla_glifi.py                                  # ogni carattere esiste nei font
 godot --headless --path . --script tests/calcola_alture.gd
 godot --headless --path . --script tests/verifica.gd
-godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite simulate
+godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite simulate sul motore
+xvfb-run godot --path . --script tests/visivi/tocco.gd           # gesti a tocco sulla mappa
+xvfb-run godot --path . --script tests/visivi/partita_ui.gd -- 2 1   # partite intere attraverso l’interfaccia
+xvfb-run godot --path . --script tests/visivi/scatti.gd -- 7 1600 900 /tmp/ambush_scatti   # schermate a ogni passo
 godot --headless --path . --export-release Web build/web/index.html
 ```
 
-`tests/visivi/scatti.gd` e `tests/visivi/effetti.gd` producono schermate dell’interfaccia e delle animazioni (serve un display, per esempio `xvfb-run`).
+`scatti.gd` accetta seme, larghezza, altezza e cartella: con `1024 768` produce le schermate in formato iPad.
+
+## Pubblicazione
+
+Solo su richiesta: «Run workflow» a mano su GitHub, oppure un commit su `main` con `[pubblica]` nel messaggio. Un push normale non pubblica.
+
+## Regole
+
+La sequenza dei Round (6/1), il comando (6/3), il panico (6/4), la consapevolezza (6/5), le attivazioni durante i Round (6/6), le azioni (6/7) e il comportamento dei tedeschi (6/8, 6/9) sono stati riletti sul regolamento: numero d’azione tedesco tirato a ogni turno in cui i tedeschi agiscono e valido per tutti, tedeschi in ordine alfabetico, parità d’iniziativa ai tedeschi, autoconservazione nello stesso esagono o adiacente. Non sono implementate, perché la Missione 1 non le usa, le armi di squadra, i veicoli e la carica da demolizione piazzata con ritardo.
 
 ## Note sulla mappa
 
