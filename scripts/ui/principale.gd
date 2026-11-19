@@ -101,12 +101,12 @@ func _ready() -> void:
 	var dati := _leggi_salvataggio()
 	if not dati.is_empty() and p.carica(dati):
 		_aggiorna_tutto(true)
-		_mostra_briefing(true)
 	else:
 		p.nuova(0, true)
 		selezione = ["A"]
 		_aggiorna_tutto(true)
-		_mostra_briefing(false)
+	# La pagina iniziale è l’elenco illustrato delle missioni.
+	_scegli_missione()
 
 # =================================================================== costruzione
 func _costruisci() -> void:
@@ -1937,6 +1937,16 @@ func _mostra_briefing(c_e_salvataggio: bool, solo_lettura := false) -> void:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 10)
 	_intestazione(vb, "ORDINE DI MISSIONE", "%s · RISERVATO" % p.titolo_missione().to_upper())
+	var percorso_img := "res://assets/missioni/missione%d.jpg" % p.numero
+	if ResourceLoader.exists(percorso_img):
+		var img := TextureRect.new()
+		img.texture = load(percorso_img)
+		img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		img.custom_minimum_size = Vector2(0, clampf(size.y * 0.2, 110.0, 190.0))
+		img.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		img.clip_contents = true
+		vb.add_child(img)
 	_paragrafo(vb, p.missione.briefing, 16, true)
 	var livelli: Array = []
 	var chiavi: Array = p.missione.attivazione.keys()
@@ -2086,41 +2096,157 @@ func _chiedi_nuova() -> void:
 	_scegli_missione()
 
 ## Elenco delle missioni: quelle pronte si giocano, le altre sono «in preparazione».
+const NOMI_MISSIONI := ["Sangue a Saint-Michaux", "Avanzata su Chasoul", "Un freddo mattino in Belgio", "Lancio notturno nel D-Day",
+	"Operazione Borseggio", "Gita in canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre"]
+const DATE_MISSIONI := ["Normandia, giugno 1944", "Francia, agosto 1944", "Belgio, inverno 1944", "Normandia, 6 giugno 1944",
+	"Olanda, 4 luglio 1944", "Germania, gennaio 1945", "Mortain, 8 agosto 1944", "Belgio, settembre 1944"]
+var pagina_missioni: Control
+
+## Pagina delle missioni: a tutto schermo, una scheda illustrata per ciascuna delle 8 missioni.
 func _scegli_missione() -> void:
+	_chiudi_finestra()
+	if pagina_missioni != null:
+		pagina_missioni.queue_free()
+	var pagina := PanelContainer.new()
+	pagina_missioni = pagina
+	pagina.mouse_filter = Control.MOUSE_FILTER_STOP
+	pagina.add_theme_stylebox_override("panel", Tema.scatola(Tema.OLIVA_SCURO, Color.TRANSPARENT, 0, 0, 0))
+	add_child(pagina)
+	pagina.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var margine := MarginContainer.new()
+	for lato in ["left", "right", "top", "bottom"]:
+		margine.add_theme_constant_override("margin_" + lato, 18)
+	pagina.add_child(margine)
 	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 8)
-	_intestazione(vb, "MISSIONI", "Scegli la missione: ognuna ha il suo salvataggio")
+	vb.add_theme_constant_override("separation", 10)
+	margine.add_child(vb)
+	var testa := HBoxContainer.new()
+	testa.add_theme_constant_override("separation", 14)
+	vb.add_child(testa)
+	testa.add_child(Tema.titolo("AMBUSH!", 40, Tema.CARTA))
+	var sotto := VBoxContainer.new()
+	sotto.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sotto.add_child(Tema.titolo("LE MISSIONI", 22, Tema.OTTONE))
+	var spiega := Tema.etichetta("Scegli la missione. Ognuna ha il suo salvataggio: «Riprendi» continua la partita lasciata a metà.", Tema.testo, 15, Tema.KAKI_SPENTO)
+	spiega.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	spiega.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sotto.add_child(spiega)
+	testa.add_child(sotto)
+	if p != null and p.s.has("fase"):
+		var torna := Tema.bottone("Torna alla partita", func(): _chiudi_pagina_missioni())
+		torna.custom_minimum_size = Vector2(170, 40)
+		torna.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		testa.add_child(torna)
+	var linea := ColorRect.new()
+	linea.color = Tema.BORDO
+	linea.custom_minimum_size = Vector2(0, 2)
+	vb.add_child(linea)
+	var scorri := ScrollContainer.new()
+	scorri.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scorri.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vb.add_child(scorri)
+	var griglia := GridContainer.new()
+	griglia.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	griglia.add_theme_constant_override("h_separation", 14)
+	griglia.add_theme_constant_override("v_separation", 14)
+	scorri.add_child(griglia)
 	var pronte := Partita.disponibili()
-	var nomi := ["Sangue a Saint-Michaux", "Avanzata su Chasoul", "Un freddo mattino in Belgio", "Lancio notturno del D-Day",
-		"Operazione Borseggio", "In canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre"]
 	for i in 8:
-		var n := i + 1
-		var riga := HBoxContainer.new()
-		riga.add_theme_constant_override("separation", 10)
-		var pronta := n in pronte
-		var salvata := FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
-		var b := Tema.bottone("Missione %d · %s" % [n, nomi[i]], func(): _chiudi_finestra(); _avvia_missione(n, false))
-		b.custom_minimum_size = Vector2(430, 40)
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.disabled = not pronta
-		riga.add_child(b)
-		if salvata and pronta:
-			riga.add_child(Tema.bottone("Riprendi", func(): _chiudi_finestra(); _avvia_missione(n, true)))
-		elif not pronta:
-			var l := Label.new()
-			l.text = "in preparazione"
-			l.custom_minimum_size = Vector2(130, 0)
-			l.add_theme_color_override("font_color", Color("8a8f74"))
-			riga.add_child(l)
-		vb.add_child(riga)
+		griglia.add_child(_scheda_missione(i + 1, i + 1 in pronte))
+	var adatta := func():
+		if not is_instance_valid(scorri):
+			return
+		var w: float = maxf(size.x - 36.0 - 4.0, 300.0)
+		var hh: float = maxf(size.y - (scorri.global_position.y - global_position.y) - 18.0, 300.0)
+		# Si sceglie il numero di colonne che dà le immagini più grandi senza dover scorrere.
+		var migliore := [4, 0.0, w / 4.0, 120.0]
+		for col: int in [1, 2, 3, 4]:
+			var righe: int = ceili(8.0 / col)
+			var lw: float = (w - 14.0 * (col - 1)) / col
+			var ih: float = minf(lw * 0.75, (hh - 14.0 * (righe - 1)) / righe - 104.0)
+			if ih < 100.0:
+				continue
+			var area: float = ih * minf(lw, ih * 4.0 / 3.0)
+			if area > float(migliore[1]):
+				migliore = [col, area, lw, ih]
+		griglia.columns = int(migliore[0])
+		for scheda in griglia.get_children():
+			scheda.custom_minimum_size = Vector2(float(migliore[2]), 0)
+			var img: TextureRect = scheda.get_meta("immagine")
+			img.custom_minimum_size = Vector2(0, float(migliore[3]))
+	resized.connect(adatta)
+	pagina.tree_exiting.connect(func(): if resized.is_connected(adatta): resized.disconnect(adatta))
+	await get_tree().process_frame
+	adatta.call()
+
+func _chiudi_pagina_missioni() -> void:
+	if pagina_missioni != null:
+		pagina_missioni.queue_free()
+		pagina_missioni = null
+
+func _scheda_missione(n: int, pronta: bool) -> Control:
+	var salvata := pronta and FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
+	var corrente := p != null and p.numero == n
+	var scheda := PanelContainer.new()
+	scheda.add_theme_stylebox_override("panel", Tema.scatola(Tema.CARTA, Tema.OTTONE if corrente else Color("9b8c66"), 3 if corrente else 1, 3, 6))
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 4)
+	scheda.add_child(vb)
+	var img := TextureRect.new()
+	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	img.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	img.custom_minimum_size = Vector2(0, 150)
+	img.clip_contents = true
+	var percorso := "res://assets/missioni/missione%d.jpg" % n
+	if ResourceLoader.exists(percorso):
+		img.texture = load(percorso)
+	img.mouse_filter = Control.MOUSE_FILTER_STOP
+	img.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	img.tooltip_text = "Riprendi la missione" if salvata else "Inizia la missione"
+	img.gui_input.connect(func(ev):
+		if pronta and ((ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT) or (ev is InputEventScreenTouch and ev.pressed)):
+			_chiudi_pagina_missioni()
+			_avvia_missione(n, salvata))
+	if not pronta:
+		img.modulate = Color(0.45, 0.45, 0.45)
+	scheda.set_meta("immagine", img)
+	vb.add_child(img)
+	var testi := VBoxContainer.new()
+	testi.add_theme_constant_override("separation", 0)
+	vb.add_child(testi)
+	var num := Tema.etichetta("MISSIONE %d · %s" % [n, DATE_MISSIONI[n - 1].to_upper()], Tema.testo_bold, 12, Tema.ROSSO)
+	num.clip_text = true
+	num.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	testi.add_child(num)
+	var nome_l := Tema.titolo(NOMI_MISSIONI[n - 1], 17, Tema.INCHIOSTRO)
+	nome_l.clip_text = true
+	nome_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	nome_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	nome_l.tooltip_text = NOMI_MISSIONI[n - 1]
+	nome_l.mouse_filter = Control.MOUSE_FILTER_PASS
+	testi.add_child(nome_l)
 	var bb := HBoxContainer.new()
-	bb.alignment = BoxContainer.ALIGNMENT_END
-	bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
+	bb.add_theme_constant_override("separation", 6)
 	vb.add_child(bb)
-	_apri_finestra(vb, 680)
+	if not pronta:
+		bb.add_child(Tema.etichetta("in preparazione", Tema.testo, 14, Tema.INCHIOSTRO_TENUE))
+		return scheda
+	var nuova := Tema.bottone("Nuova", func(): _chiudi_pagina_missioni(); _avvia_missione(n, false), "Comincia la missione da capo")
+	nuova.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	nuova.custom_minimum_size = Vector2(80, 34)
+	bb.add_child(nuova)
+	if salvata:
+		var rip := Tema.bottone("Riprendi", func(): _chiudi_pagina_missioni(); _avvia_missione(n, true), "Continua la partita salvata")
+		rip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		rip.custom_minimum_size = Vector2(80, 34)
+		rip.add_theme_color_override("font_color", Tema.OTTONE)
+		bb.add_child(rip)
+	return scheda
 
 ## Passa alla missione n: riprende il suo salvataggio o ne comincia una nuova.
 func _avvia_missione(n: int, riprendi: bool) -> void:
+	_chiudi_pagina_missioni()
 	p.imposta_missione(n)
 	_ricorda_missione(n)
 	titolo_missione_l.text = p.titolo_missione().to_upper()
