@@ -362,7 +362,8 @@
      825,
      813
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "27": {
    "lettera": "M",
@@ -432,7 +433,8 @@
      825,
      839
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "53": {
    "lettera": "S",
@@ -552,7 +554,8 @@
      808,
      60
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "2": {
    "lettera": "N",
@@ -622,7 +625,8 @@
      800,
      817
     ]
-   }
+   },
+   "primo_turno": 802
   },
   "81": {
    "lettera": "P",
@@ -730,7 +734,8 @@
      825,
      813
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "84": {
    "lettera": "P",
@@ -895,7 +900,8 @@
      816,
      833
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "40": {
    "lettera": "R",
@@ -952,7 +958,8 @@
      839,
      825
     ]
-   }
+   },
+   "primo_turno": 808
   },
   "28": {
    "lettera": "U",
@@ -1021,7 +1028,8 @@
      971,
      817
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "33": {
    "lettera": "V",
@@ -1066,7 +1074,8 @@
      833,
      833
     ]
-   }
+   },
+   "primo_turno": 867
   },
   "82": {
    "lettera": "S",
@@ -1213,7 +1222,8 @@
      833,
      869
     ]
-   }
+   },
+   "primo_turno": 867
   },
   "23": {
    "lettera": "S",
@@ -1258,7 +1268,8 @@
      833,
      833
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "41": {
    "lettera": "M",
@@ -1360,7 +1371,8 @@
      869,
      833
     ]
-   }
+   },
+   "primo_turno": 867
   },
   "31": {
    "lettera": "L",
@@ -1405,7 +1417,8 @@
      825,
      819
     ]
-   }
+   },
+   "primo_turno": 864
   },
   "29": {
    "lettera": "U",
@@ -1450,7 +1463,8 @@
      869,
      812
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "30": {
    "lettera": "R",
@@ -1496,7 +1510,8 @@
      802,
      809
     ]
-   }
+   },
+   "primo_turno": 866
   },
   "35": {
    "lettera": "L",
@@ -1644,7 +1659,8 @@
      869,
      869
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "43": {
    "lettera": "W",
@@ -1689,7 +1705,8 @@
      839,
      816
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "44": {
    "lettera": "T",
@@ -1734,7 +1751,8 @@
      869,
      816
     ]
-   }
+   },
+   "primo_turno": 868
   },
   "91": {
    "lettera": "W",
@@ -2098,7 +2116,8 @@
      813
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 1
   },
   "11": {
    "lettera": "M",
@@ -2162,7 +2181,8 @@
      971
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 1
   },
   "26": {
    "lettera": "X",
@@ -2221,7 +2241,8 @@
      813
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 1
   },
   "93": {
    "lettera": "M",
@@ -2395,7 +2416,8 @@
      817
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 1
   },
   "89": {
    "lettera": "U",
@@ -2447,7 +2469,8 @@
      812
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 1
   },
   "7": {
    "lettera": "N",
@@ -2517,7 +2540,8 @@
      806
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "primo_turno": 829
   },
   "34": {
    "lettera": "X",
@@ -2582,7 +2606,8 @@
      813
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "pv_cattura": 2
   },
   "38": {
    "lettera": "R",
@@ -2641,7 +2666,8 @@
      839
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "primo_turno": 867
   },
   "46": {
    "lettera": "N",
@@ -2688,7 +2714,8 @@
      816
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "primo_turno": 868
   },
   "36": {
    "lettera": "V",
@@ -2827,7 +2854,8 @@
      857,
      60
     ]
-   }
+   },
+   "primo_turno": 825
   },
   "6": {
    "lettera": "S",
@@ -2897,7 +2925,8 @@
      839,
      711
     ]
-   }
+   },
+   "primo_turno": 825
   },
   "60": {
    "lettera": "W",
@@ -2960,7 +2989,8 @@
      825,
      865
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "16": {
    "lettera": "L",
@@ -3018,7 +3048,8 @@
      857,
      800
     ]
-   }
+   },
+   "primo_turno": 865
   },
   "86": {
    "lettera": "L",
@@ -3087,7 +3118,8 @@
      808,
      869
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "17": {
    "lettera": "T",
@@ -3157,7 +3189,8 @@
      800,
      857
     ]
-   }
+   },
+   "primo_turno": 808
   },
   "73": {
    "lettera": "Q",
@@ -3214,7 +3247,8 @@
      732,
      732
     ]
-   }
+   },
+   "primo_turno": 825
   },
   "10": {
    "lettera": "L",
@@ -3283,7 +3317,8 @@
      800,
      964
     ]
-   }
+   },
+   "primo_turno": 802
   },
   "15": {
    "lettera": "L",
@@ -3397,7 +3432,8 @@
      967,
      971
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "21": {
    "lettera": "X",
@@ -3442,7 +3478,8 @@
      800,
      770
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "20": {
    "lettera": "N",
@@ -3488,7 +3525,8 @@
      815,
      965
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "5": {
    "lettera": "U",
@@ -3551,7 +3589,8 @@
      965,
      971
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "66": {
    "lettera": "T",
@@ -3596,7 +3635,8 @@
      770,
      800
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "32": {
    "lettera": "S",
@@ -3700,7 +3740,8 @@
      965,
      800
     ]
-   }
+   },
+   "primo_turno": 815
   },
   "47": {
    "lettera": "R",
@@ -3826,7 +3867,9 @@
      808,
      470
     ]
-   }
+   },
+   "primo_turno": 825,
+   "pv_cattura": 1
   },
   "14": {
    "lettera": "U",
@@ -4051,7 +4094,12 @@
      470
     ]
    },
-   "comandante": true
+   "comandante": true,
+   "primo_turno": 712,
+   "reazione_par": {
+    "Q": 554
+   },
+   "pv_cattura": 2
   },
   "13": {
    "lettera": "W",
@@ -4165,7 +4213,8 @@
      971,
      839
     ]
-   }
+   },
+   "primo_turno": 801
   },
   "64": {
    "lettera": "Q",

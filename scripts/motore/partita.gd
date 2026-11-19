@@ -67,6 +67,13 @@ func _applica_regole_terreno() -> void:
 		vista = int(s.vista)
 	terreno.limite_vista = vista
 	terreno.fiume = bool(regola("fiume", false))
+	terreno.illuminati = {}
+	if not s.is_empty():
+		for c in s.get("razzi", []):
+			for h in E.tutti():
+				if E.distanza(h, str(c)) <= 3:
+					terreno.illuminati[h] = true
+	terreno._cache_los.clear()
 
 func titolo_missione() -> String:
 	return "Missione %d · %s" % [numero, missione.titolo]
@@ -121,6 +128,8 @@ func e_ingresso(h: String) -> bool:
 
 ## Esagoni da cui si esce dalla mappa (di solito gli stessi dell’ingresso).
 func e_uscita(h: String) -> bool:
+	if bool(regola("uscita_bordo", false)):
+		return E.colonna(h) == 0 or E.colonna(h) == E.COLONNE - 1 or E.riga(h) == 1 or E.riga(h) == E.RIGHE
 	if missione.has("uscita_esagoni"):
 		return h in missione.uscita_esagoni
 	return e_ingresso(h)
@@ -133,6 +142,12 @@ func schiera(ids: Array, h: String) -> Dictionary:
 		return {"ok": false, "errore": "Lo schieramento è già concluso."}
 	if h != "" and not (h in esagoni_ingresso()):
 		return {"ok": false, "errore": "Si entra solo %s." % testo_ingresso()}
+	if h != "" and bool(regola("uno_per_esagono", false)):
+		if ids.size() > 1:
+			return {"ok": false, "errore": "Nel lancio si mette un solo soldato per esagono."}
+		for x in americani():
+			if x.hex == h and not (x.id in ids.map(func(y): return str(y))):
+				return {"ok": false, "errore": "In %s c’è già %s: un soldato per esagono." % [h, nome(x)]}
 	var max_ed := int(regola("max_edifici", 0))
 	if h != "" and max_ed > 0:
 		var occupati := {}
@@ -180,6 +195,12 @@ func inizia_missione() -> Dictionary:
 			if a.get("comandante", false) and a.hex != "":
 				s.radio_hex = a.hex
 		_log("info", "La radio della squadra è in %s: è presidiata finché lì resta un soldato attivo." % s.radio_hex)
+	if bool(regola("lancio", false)):
+		_lancio(esagoni)
+		if fase_round() and s.turno.is_empty() and s.pausa == "":
+			_flusso()
+		_fine_comando()
+		return {"ok": true}
 	for h in esagoni:
 		if s.fase == "fine":
 			break
@@ -603,6 +624,9 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			var hl: String = ctx.get("hex", "") if str(o.hex) == "@hex" else str(o.hex)
 			if hl != "":
 				s.punti[hl] = str(o.name)
+				if str(o.name) == "kubelwagen" and veicoli.v("vk").is_empty():
+					veicoli.crea("vk", "kubelwagen", hl, "de")
+					s.punti.erase(hl)
 				_log("info", "Segnaposto «%s» in %s." % [NOMI_SEGNAPOSTO.get(str(o.name), str(o.name)), hl])
 		"indica":
 			ctx.indicato = str(o.hex)
@@ -669,6 +693,54 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			s.staffetta_spia = true
 		"staffetta_smascherata":
 			_op_staffetta_smascherata()
+		"tiro_invisibile":
+			_op_tiro_invisibile(ctx)
+		"lista_vista":
+			for hl in o.hexes:
+				if qualcuno_vede_hex(str(hl)) and unita_in(str(hl), "us").is_empty():
+					ctx.indicato = str(hl)
+					_esegui(o.ok, ctx)
+					break
+		"adv_pc":
+			var gp: Dictionary = missione.tedeschi[str(int(o.g))]
+			var r := d10("Controllo di percezione del tedesco %d" % int(o.g))
+			var ok := r == 0 or (r != 9 and r <= int(gp.PC))
+			ctx.adv_pc = "de" if ok else "us"
+			_log("info", "Il tedesco %d %s: vantaggio %s." % [int(o.g), "se ne accorge" if ok else "non se ne accorge", "tedesco" if ok else "americano"])
+		"consapevoli_vede":
+			if fase_round():
+				s.round.consapevoli_vede = str(o.hex)
+			elif s.has("atterraggio"):
+				pass
+		"razzo_illuminante":
+			var hr := _esagono_dadi("Razzo illuminante")
+			if hr != "":
+				if not s.has("razzi"):
+					s.razzi = []
+				s.razzi.append(hr)
+				_applica_regole_terreno()
+				_fx("esplosione", {"a": hr})
+				_log("info", "Un razzo illuminante si accende sopra %s: gli esagoni entro 3 sono illuminati." % hr)
+		"spegni_razzo":
+			var rz: Array = s.get("razzi", [])
+			if rz.is_empty():
+				_log("info", "Nessun razzo in cielo.")
+			else:
+				var hs: String = rz.pop_at(rng.randi_range(0, rz.size() - 1))
+				_applica_regole_terreno()
+				_log("info", "Il razzo sopra %s si spegne." % hs)
+		"artiglieria_dadi":
+			var ha := _esagono_dadi("Artiglieria")
+			if ha != "":
+				_op_artiglieria_esagoni([ha])
+		"sopravvissuto_aliante":
+			_op_sopravvissuto()
+		"morte_lancio":
+			_op_morte_lancio()
+		"no_autoconservazione":
+			var gn: Dictionary = u(ctx.get("g", ""))
+			if not gn.is_empty():
+				gn.no_auto = true
 		_:
 			_log("errore", "Istruzione sconosciuta: %s" % o.op)
 
@@ -706,6 +778,13 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 		return int(s.evasi.get(str(int(t.evaded)), 0)) >= 1
 	if t.has("radio"):
 		return radio_presidiata()
+	if t.has("tedeschi_attivati"):
+		return not s.attivati.is_empty()
+	if t.has("g_vede_us"):
+		var gv: Dictionary = u(ctx.get("g", ""))
+		return not gv.is_empty() and in_mappa(gv) and not ia.bersagli(gv).is_empty()
+	if t.has("us_in"):
+		return not unita_in(str(t.us_in), "us").is_empty()
 	if t.has("indicato"):
 		return str(ctx.get("indicato", "")) == str(t.indicato)
 	if t.has("bridge_intact"):
@@ -750,6 +829,310 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 
 func _hex_test(v, ctx: Dictionary) -> String:
 	return str(ctx.get("hex", "")) if str(v) == "@hex" else str(v)
+
+# =================================================================== Missione 4: lancio col paracadute
+## Esagono da due dadi: colonna 1 = A … 9 = I, 0 = J; riga = secondo dado + 10 (paragrafi 086, 556).
+func _esagono_dadi(motivo: String) -> String:
+	var a := d10()
+	var b := d10()
+	var col := 9 if a == 0 else a - 1
+	var h := E.da(col, b + 10)
+	_log("dado", "%s: colonna %d, riga %d + 10 → %s" % [motivo, a, b, h])
+	return h
+
+func _lancio(occupati: Array) -> void:
+	s.atterraggio = true
+	s.attivazioni_lancio = []
+	s.sparati_lancio = false
+	s.incapacitati_lancio = []
+	_passo("lancio")
+	# La cassa delle armi occupa il primo esagono libero.
+	var libero := ""
+	for h in esagoni_ingresso():
+		if not (h in occupati):
+			libero = h
+			break
+	var c: Dictionary = missione.get("cassa", {})
+	s.cassa = {"hex": libero, "stato": "in volo", "armi": c.get("armi", []).duplicate(), "munizioni": c.get("munizioni", {}).duplicate()}
+	_log("titolo", "Il lancio")
+	var ordine: Array = americani().filter(func(x): return x.hex != "")
+	ordine.sort_custom(func(x, y): return str(x.id) < str(y.id))
+	for a in ordine:
+		_scendi(a)
+	if libero != "":
+		_scendi({})
+	s.atterraggio = false
+	var nuova := 3 if s.sparati_lancio else 2
+	_log("info", "Tutti a terra. %s" % ("Qualcuno è stato bersagliato durante la discesa: Condizione 3." if nuova == 3 else "Condizione 2."))
+	s.atterraggio = true
+	cambia_condizione(nuova)
+	s.atterraggio = false
+	var lista: Array = s.attivazioni_lancio
+	if lista.is_empty():
+		for a in americani():
+			a.paracadute = 0
+		_log("info", "Nessun tedesco in vista: iniziano le Operazioni e i paracadute vengono tolti.")
+		return
+	var punti := func(x): return (2 if str(x.adv) == "us" else (-2 if str(x.adv) == "de" else 0)) + (1 if x.us_two else 0) - (1 if not x.two.is_empty() else 0)
+	var scelta: Dictionary = lista[0]
+	for x in lista:
+		if (int(s.condizione) == 2 and punti.call(x) > punti.call(scelta)) or (int(s.condizione) != 2 and punti.call(x) < punti.call(scelta)):
+			scelta = x
+	var nuovi: Array = []
+	var due: Array = []
+	for x in lista:
+		for id in x.ids:
+			nuovi.append(u(str(id)))
+	for x in lista:
+		if x == scelta:
+			for id in x.ids:
+				if int(u(str(id)).num) in x.two:
+					due.append(int(u(str(id)).num))
+	_log("info", "Si usa l’attivazione %s per il vantaggio (Condizione %d)." % ["più favorevole agli americani" if int(s.condizione) == 2 else "più favorevole ai tedeschi", int(s.condizione)])
+	_inizia_round_da_attivazione(nuovi, {"adv": scelta.adv, "two": due, "us_two": scelta.us_two}, "")
+	s.round.tutti_consapevoli = true
+
+## Discesa di un soldato (o della cassa, se a è vuoto) finché la carta della Condizione 1 non dice «Atterra».
+func _scendi(a: Dictionary) -> void:
+	var cassa := a.is_empty()
+	var h: String = s.cassa.hex if cassa else a.hex
+	var chi := "La cassa delle armi" if cassa else nome(a)
+	var percorso: Array = [h]
+	for i in 40:
+		var r := d10()
+		var verso := E.vicino(h, 5 if r % 2 == 0 else 4)
+		if verso == "":
+			_log("info", "%s arriva al bordo della mappa e atterra in %s." % [chi, h])
+			break
+		var da := h
+		h = verso
+		percorso.append(h)
+		if cassa:
+			s.cassa.hex = h
+		else:
+			a.hex = h
+		_fx("muovi", {"ids": [] if cassa else [a.id], "da": da, "a": h})
+		var rif := riferimento(h, 1)
+		if rif == "LAND":
+			if terreno.edificio(h) and not cassa:
+				var esito := _atterra(a, h)
+				if esito == "ancora":
+					continue
+				break
+			if not cassa:
+				_atterra(a, h)
+			else:
+				_atterra_cassa(h)
+			break
+		if not cassa and rif != "NONE" and rif != "EVENT":
+			_log("info", "%s scende su %s." % [chi, h])
+			_risolvi_riferimento(rif, {"hex": h, "ids": [a.id]})
+			if not attivo(a):
+				break
+	_log("azione", "%s scende col paracadute: %s." % [chi, " → ".join(percorso)])
+
+func _atterra_cassa(h: String) -> void:
+	if terreno.tipo(h) == "stream":
+		var r := d10("La cassa cade nel fiume")
+		if r <= 1:
+			var nord := E.vicino(h, 0)
+			if nord != "" and terreno.tipo(nord) != "stream":
+				h = nord
+		else:
+			s.cassa.stato = "persa"
+			s.cassa.hex = ""
+			_log("danno", "La cassa delle armi affonda nel fiume: è persa.")
+			return
+	s.cassa.hex = h
+	s.cassa.stato = "chiusa"
+	_log("info", "La cassa delle armi atterra in %s, chiusa." % h)
+
+func _vicino_scoperto(h: String, a_caso: bool) -> String:
+	var lista: Array = E.vicini(h).filter(func(v): return terreno.tipo(v) in ["clear", "road"] and not ponti().has(v))
+	if lista.is_empty():
+		lista = E.vicini(h).filter(func(v): return terreno.tipo(v) != "stream" and not terreno.edificio(v))
+	if lista.is_empty():
+		return h
+	return lista[rng.randi_range(0, lista.size() - 1)] if a_caso else lista[0]
+
+## Esito dell’atterraggio secondo il terreno; "ancora" se il soldato manca l’edificio e continua a scendere.
+func _atterra(a: Dictionary, h: String) -> String:
+	var tipo := terreno.tipo(h)
+	a.postura = "prone"
+	a.consapevole = true
+	a.paracadute = 2
+	var r := d10("Atterraggio di %s (%s)" % [nome(a), terreno.nome_tipo(h)])
+	var esito := "buono"
+	var dove := h
+	if tipo == "stream":
+		if r <= 1:
+			var nord := E.vicino(h, 0)
+			dove = nord if nord != "" and terreno.tipo(nord) != "stream" else _vicino_scoperto(h, true)
+			_log("info", "%s manca il fiume per un soffio." % nome(a))
+		elif r <= 5:
+			dove = _vicino_scoperto(h, true)
+			a.armi.clear()
+			a.munizioni = {}
+			a.postura = "crouching"
+			a.paracadute = 0
+			_log("danno", "%s finisce nel fiume: si libera dell’imbracatura e raggiunge la riva, ma perde armi e munizioni." % nome(a))
+		else:
+			a.hex = ""
+			a.armi.clear()
+			_uccidi(a, "annegato nel fiume")
+			return "morto"
+	elif tipo in ["clear", "road"]:
+		if r == 9:
+			esito = "ferito"
+	elif tipo in ["cover", "brush"]:
+		if r == 9:
+			esito = "ferito" if d10() <= 4 else "incapacitato"
+	elif terreno.edificio(h):
+		if r <= 3:
+			_log("info", "%s manca il tetto per un soffio e continua a scendere." % nome(a))
+			return "ancora"
+		var r2 := d10()
+		if r <= 7:
+			esito = "buono" if r2 <= 4 else "ferito"
+			dove = _vicino_scoperto(h, false)
+		elif r == 8:
+			esito = "ferito" if r2 <= 4 else "incapacitato"
+			dove = _vicino_scoperto(h, r2 > 4)
+		else:
+			esito = "incapacitato" if r2 <= 4 else "ucciso"
+			dove = _vicino_scoperto(h, true)
+	else:
+		if r >= 5 and r <= 8:
+			esito = "ferito" if d10() >= 6 else "buono"
+		elif r == 9:
+			var r3 := d10()
+			esito = "ferito" if r3 <= 4 else "incapacitato"
+			dove = _vicino_scoperto(h, r3 > 4)
+	a.hex = dove
+	match esito:
+		"buono":
+			_log("info", "%s atterra bene in %s." % [nome(a), dove])
+		"ferito":
+			_log("danno", "%s atterra male in %s ed è ferito." % [nome(a), dove])
+			_applica_danno(a, "W", {})
+		"incapacitato":
+			_log("danno", "%s atterra male in %s ed è incapacitato." % [nome(a), dove])
+			_applica_danno(a, "I", {})
+			s.incapacitati_lancio.append(a.id)
+		"ucciso":
+			_uccidi(a, "atterraggio")
+	return esito
+
+func _op_tiro_invisibile(ctx: Dictionary) -> void:
+	var a := u(str(ctx.get("ids", [""])[0])) if not ctx.get("ids", []).is_empty() else {}
+	if a.is_empty() or not attivo(a):
+		return
+	s.sparati_lancio = true
+	var base := T.base_per_distanza("bolt", 15)
+	var mod := int(T.MOD_TERRENO.get("clear", [0, 0, 0])[T.indice_postura("crouching")])
+	var prob := clampi(base - 2 + mod, 0, 8)
+	var vera: String = a.postura
+	a.postura = "crouching"
+	risolvi_tiro({"lato": "cecchino", "WS": 0}, {"tipo": "bolt", "inceppata": false}, a, false, prob)
+	if attivo(a):
+		a.postura = vera
+
+func _op_sopravvissuto() -> void:
+	if s.unita.has("J"):
+		_log("info", "Il sopravvissuto dell’aliante è già in gioco.")
+		return
+	var d := {"id": "J", "nome": "Sopravvissuto dell’aliante", "IN": 2, "PC": 4, "WS": 0, "DS": 2, "MPA": 2, "comandante": false,
+		"porte": ["carbine"], "munizioni": {"carbine": 2, "pistol": 1}}
+	var j := _nuovo_americano(d)
+	j.stato = "attivo"
+	j.hex = "A5"
+	j.postura = "crouching"
+	j.ferito = true
+	j.consapevole = fase_round()
+	j.pv_attivo_fine = 2
+	s.unita["J"] = j
+	_log("info", "Il sopravvissuto dell’aliante (J, già ferito) entra in A5: vale 2 PV se è attivo alla fine.")
+	_fx("compare", {"id": "J", "a": "A5", "amico": true})
+
+func _op_morte_lancio() -> void:
+	if s.get("morte_lancio_fatta", false):
+		_log("info", "Paragrafo già applicato: nessun effetto.")
+		return
+	var lista: Array = s.get("incapacitati_lancio", []).filter(func(id): return u(str(id)).stato == "incapacitato")
+	if lista.is_empty():
+		_log("info", "Nessun soldato incapacitato nel lancio: nessun effetto.")
+		return
+	s.morte_lancio_fatta = true
+	_uccidi(u(str(lista[rng.randi_range(0, lista.size() - 1)])), "ferite del lancio")
+
+## Togliere il paracadute: due azioni, accovacciati o in piedi.
+func togli_paracadute(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a, true)
+	if e != "":
+		return _errore(e)
+	if int(a.get("paracadute", 0)) <= 0:
+		return _errore("Non ha il paracadute addosso.")
+	if a.postura == "prone":
+		return _errore("Per togliere il paracadute bisogna essere accovacciati o in piedi.")
+	if a.panico:
+		return _errore("Un soldato in preda al panico non riesce a togliersi il paracadute.")
+	var t := _turno_di(a)
+	if t.azione != "":
+		return _errore("Hai già scelto un’azione.")
+	a.paracadute = int(a.paracadute) - 1
+	_log("azione", "%s armeggia con le cinghie del paracadute (%s)." % [nome(a), "tolto" if int(a.paracadute) == 0 else "ancora un’azione"])
+	_termina_azione(a)
+	_fine_comando()
+	return OK
+
+func apri_cassa(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	if not s.has("cassa") or s.cassa.stato != "chiusa" or s.cassa.hex != a.hex:
+		return _errore("Nel suo esagono non c’è una cassa chiusa.")
+	if a.postura != "crouching":
+		return _errore("Per aprire la cassa bisogna essere accovacciati.")
+	s.cassa.stato = "aperta"
+	for tipo in s.cassa.armi:
+		_lascia_oggetto(a.hex, {"tipo": tipo, "inceppata": false, "rotta": false, "preparata": false, "catturata": false})
+	for k in s.cassa.munizioni:
+		for i in int(s.cassa.munizioni[k]):
+			_lascia_oggetto(a.hex, {"tipo": "mun:" + k})
+	_log("azione", "%s apre la cassa delle armi: il contenuto si può prendere con «Equipaggiamento»." % nome(a))
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
+## Disinnesco delle cariche di un ponte (Missione 4): quattro turni in tutto, anche di soldati diversi.
+func disinnesca_ponte(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	if not ponti().has(a.hex) or not ponte_intatto(a.hex):
+		return _errore("Bisogna essere su un ponte intatto.")
+	var st := ponte_stato(a.hex)
+	if st.get("catturato", false):
+		return _errore("Il ponte è già stato catturato.")
+	if s.fase == "operazioni":
+		_log("azione", "%s stacca i fili delle cariche sotto il ponte in %s." % [nome(a), a.hex])
+		evento_casuale({"hex": a.hex, "ids": [a.id]})
+		st.disinnesco = 4
+	else:
+		st.disinnesco = int(st.get("disinnesco", 0)) + 1
+		_log("azione", "%s lavora alle cariche del ponte in %s (%d/4)." % [nome(a), a.hex, int(st.disinnesco)])
+	if int(st.get("disinnesco", 0)) >= 4 and ponte_intatto(a.hex):
+		st.catturato = true
+		_log("info", "Il ponte in %s è catturato intatto: i tedeschi non possono più farlo saltare." % a.hex)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
 
 # =================================================================== Missione 3: ponti, radio, staffette
 func ponte_stato(h: String) -> Dictionary:
@@ -849,8 +1232,9 @@ func _op_controlla_ponte(ctx: Dictionary) -> void:
 		_log("tedesco", "Il ponte in %s è stato controllato: eventuali cariche sono state disinnescate." % h)
 
 func _op_artiglieria_esagoni(lista: Array) -> void:
-	var r := d10("Esagono colpito dall’artiglieria")
-	var h := str(lista[r])
+	var h := str(lista[0])
+	if lista.size() > 1:
+		h = str(lista[d10("Esagono colpito dall’artiglieria")])
 	_log("combattimento", "Un colpo d’artiglieria si abbatte su %s!" % h)
 	_fx("esplosione", {"a": h, "grande": true})
 	if ponti().has(h):
@@ -1194,6 +1578,8 @@ func cambia_condizione(n: int) -> void:
 func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 	var o := o_orig.duplicate()
 	o.two = o_orig.get("two", []).map(func(x): return int(x))
+	if str(o.get("adv", "")) == "pc":
+		o.adv = ctx.get("adv_pc", null)
 	var nuovi: Array = []
 	for coppia in o.g:
 		var num := int(coppia[0])
@@ -1238,7 +1624,10 @@ func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 		aware_id = str(ctx.forza_consapevole)
 	if str(ctx.get("forza_inconsapevole", "")) != "":
 		o._inconsapevole = str(ctx.forza_inconsapevole)
-	if s.fase == "operazioni":
+	if s.get("atterraggio", false):
+		# Lancio (Missione 4): si annotano le attivazioni; i Round iniziano dopo tutti i controlli.
+		s.attivazioni_lancio.append({"ids": nuovi.map(func(x): return x.id), "adv": o.adv, "two": o.two, "us_two": bool(o.us_two)})
+	elif s.fase == "operazioni":
 		_inizia_round_da_attivazione(nuovi, o, aware_id)
 	elif int(s.round.get("n", 0)) == 0:
 		# Round in preparazione: si aggiungono ai tedeschi della prima pista.
@@ -1374,6 +1763,10 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 		if a.stato == "fuori" and r.n == 1:
 			righe.append({"id": a.id, "esito": "fuori"})
 			continue  # 6/10: fuori mappa durante il Round 1
+		if r.n == 1 and (r.get("tutti_consapevoli", false) or (str(r.get("consapevoli_vede", "")) != "" and attivo(a) and terreno.vede(a.hex, str(r.consapevoli_vede), a.postura, "standing"))):
+			a.consapevole = true
+			righe.append({"id": a.id, "esito": "auto"})
+			continue
 		if a.id == auto_id and r.n == 1:
 			a.consapevole = true
 			_log("info", "%s è automaticamente consapevole." % nome(a))
@@ -1608,6 +2001,7 @@ func _torna_operazioni() -> void:
 		a.consapevole = false
 		a.turni = 0
 		a.slot = ""
+		a.paracadute = 0
 		a.panico = false
 	_log("round", "Nessun tedesco attivo sulla mappa: riprendono le Operazioni.")
 	if s.get("jeep_in_arrivo", false):
@@ -1629,7 +2023,7 @@ func _fine_comando() -> void:
 	_controlla_fine_automatica()
 	aggiornata.emit()
 
-func puo_agire(a: Dictionary) -> String:
+func puo_agire(a: Dictionary, consenti_paracadute := false) -> String:
 	if s.fase == "fine":
 		return "La missione è terminata."
 	if s.pausa != "":
@@ -1644,6 +2038,8 @@ func puo_agire(a: Dictionary) -> String:
 		var t: Dictionary = s.turno
 		if not t.is_empty() and t.id != a.id:
 			return "%s sta ancora agendo." % nome(u(t.id))
+		if int(a.get("paracadute", 0)) > 0 and not consenti_paracadute:
+			return "%s deve prima togliersi il paracadute." % nome(a)
 	return ""
 
 ## Turno in corso dell’americano (Round).
@@ -1673,7 +2069,7 @@ func _termina_azione(a: Dictionary) -> void:
 func cambia_postura(id: String, postura: String) -> Dictionary:
 	_inizio_comando()
 	var a := u(id)
-	var e := puo_agire(a)
+	var e := puo_agire(a, true)
 	if e != "":
 		return _errore(e)
 	if a.hex == "":
@@ -1999,7 +2395,7 @@ func scendi_veicolo(id: String) -> Dictionary:
 func passa(id: String) -> Dictionary:
 	_inizio_comando()
 	var a := u(id)
-	var e := puo_agire(a)
+	var e := puo_agire(a, true)
 	if e != "":
 		return _errore(e)
 	if s.fase != "round":
@@ -2306,7 +2702,10 @@ func _dopo_perdita(x: Dictionary) -> void:
 		x.prigionieri = []
 
 func _premio_cattura(g: Dictionary) -> void:
-	if int(g.num) == 34:
+	var dati: Dictionary = missione.tedeschi.get(str(int(g.num)), {})
+	if dati.has("pv_cattura") and not (numero == 1 and int(g.num) == 34):
+		_pv(int(dati.pv_cattura), "cattura del tedesco %d" % int(g.num))
+	if int(g.num) == 34 and numero == 1:
 		_pv(2, "cattura dell’ufficiale tedesco 34")
 		cambia_condizione(4)
 
@@ -2681,7 +3080,11 @@ func oggetti_disponibili(id: String) -> Array:
 		return out
 	for i in s.oggetti.get(a.hex, []).size():
 		var o: Dictionary = s.oggetti[a.hex][i]
-		out.append({"da": "terra", "indice": i, "tipo": o.tipo, "testo": T.ARMI.get(o.tipo, {}).get("nome", o.tipo) + (" (inceppata)" if o.get("inceppata", false) else "")})
+		var testo_o: String = T.ARMI.get(o.tipo, {}).get("nome", o.tipo) + (" (inceppata)" if o.get("inceppata", false) else "")
+		if str(o.tipo).begins_with("mun:"):
+			var km := str(o.tipo).substr(4)
+			testo_o = "Granata" if km == "granata" else ("Razzo per bazooka" if km == "bazooka" else "Caricatore: " + str(T.ARMI.get(km, {}).get("breve", km)))
+		out.append({"da": "terra", "indice": i, "tipo": o.tipo, "testo": testo_o})
 	for x in unita_in(a.hex, "", false):
 		if x.id == a.id:
 			continue
@@ -2713,6 +3116,13 @@ func prendi(id: String, voce: Dictionary) -> Dictionary:
 		var k := tipo.substr(4)
 		if scatole_munizioni(a) >= 6:
 			return _errore("Le caselle delle munizioni sono piene.")
+		if voce.da == "terra":
+			s.oggetti[a.hex].remove_at(int(voce.indice))
+			a.munizioni[k] = int(a.munizioni.get(k, 0)) + 1
+			_log("azione", "%s prende: %s." % [nome(a), "una granata" if k == "granata" else "un caricatore (" + str(T.ARMI.get(k, {}).get("breve", k)) + ")"])
+			_chiudi_azione_semplice(a)
+			_fine_comando()
+			return OK
 		var x := u(str(voce.da))
 		x.munizioni[k] = int(x.munizioni[k]) - 1
 		a.munizioni[k] = munizioni_arma(a, k) + 1
@@ -3338,6 +3748,17 @@ func righe_obiettivi() -> Array:
 				[v.stazione, "Tutti in stazione", "Tutti i soldati attivi nella stazione (O6, P5, Q5)"],
 				[pv >= int(missione.vittoria_pv), "%d PV (ora %d)" % [int(missione.vittoria_pv), pv], "Punti vittoria necessari"],
 			]
+		4:
+			var r4: Array = []
+			for h in ponti():
+				var st := ponte_stato(h)
+				var stato_p := "catturato" if st.get("catturato", false) and ponte_intatto(h) else ("saltato" if not ponte_intatto(h) else "disinnesco %d/4" % int(st.get("disinnesco", 0)))
+				r4.append([st.get("catturato", false) and ponte_intatto(h), "Ponte %s: %s" % [h, stato_p], "Quattro turni sul ponte per staccare le cariche: 4 PV, entrambi 10 PV"])
+			var cassa: Dictionary = s.get("cassa", {})
+			if not cassa.is_empty():
+				r4.append([cassa.stato == "aperta", "Cassa %s" % {"in volo": "in volo", "chiusa": "chiusa in " + str(cassa.hex), "aperta": "aperta", "persa": "persa"}.get(cassa.stato, ""), "Fucile automatico, bazooka e razzi sono nella cassa"])
+			r4.append([pv >= int(missione.vittoria_pv), "%d PV (ora %d)" % [int(missione.vittoria_pv), pv], "Punti vittoria necessari"])
+			return r4
 		3:
 			var entrati: Array = s.get("edifici_entrati", [])
 			var lista: Array = regola("pv_esagoni", [])
@@ -3408,6 +3829,16 @@ func termina_missione(modo: String) -> Dictionary:
 func _controlla_fine_automatica() -> void:
 	if s.fase == "fine":
 		return
+	if bool(regola("fine_ponti", false)) and int(s.condizione) >= 4 and tedeschi_attivi().filter(func(g): return attivo(g)).is_empty() \
+			and not americani_attivi_in_mappa().is_empty():
+		var tutti := true
+		for h in ponti():
+			if ponte_intatto(h) and not ponte_stato(h).get("catturato", false):
+				tutti = false
+		if tutti:
+			_log("info", "Nessun tedesco attivo e tutti i ponti catturati o saltati: la missione termina.")
+			_calcola_fine("obiettivo")
+			return
 	var vivi_in_mappa := americani_attivi_in_mappa().filter(func(x): return not x.get("pilota", false))
 	var da_entrare := americani().filter(func(x): return x.stato == "fuori")
 	if vivi_in_mappa.is_empty() and da_entrare.is_empty():
@@ -3436,9 +3867,23 @@ func _calcola_fine(modo: String) -> void:
 			righe.append(["%s ucciso" % nome(a), -2])
 		elif a.stato == "incapacitato":
 			var salvo: bool = a.get("uscito", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))
+			if bool(regola("niente_salvataggio", false)):
+				salvo = false
 			if not salvo:
 				perdite -= 2
 				righe.append(["%s incapacitato e non messo in salvo" % nome(a), -2])
+	if numero == 4:
+		var catturati: Array = ponti().filter(func(h): return ponte_stato(h).get("catturato", false) and ponte_intatto(h))
+		if catturati.size() >= 2:
+			bonus += 10
+			righe.append(["Entrambi i ponti catturati intatti", 10])
+		elif catturati.size() == 1:
+			bonus += 4
+			righe.append(["Ponte %s catturato intatto" % catturati[0], 4])
+	for a in americani():
+		if int(a.get("pv_attivo_fine", 0)) > 0 and a.stato in ["attivo", "uscito"]:
+			bonus += int(a.pv_attivo_fine)
+			righe.append(["%s attivo alla fine" % nome(a), int(a.pv_attivo_fine)])
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

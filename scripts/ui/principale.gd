@@ -662,6 +662,8 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 	stati.add_theme_constant_override("v_separation", 2)
 	if a.get("comandante", false):
 		stati.add_child(_chip("comandante", Color("7a6226")))
+	if int(a.get("paracadute", 0)) > 0:
+		stati.add_child(_chip("paracadute %d" % int(a.paracadute), Color("5a4f7a")))
 	if a.stato == "attivo" or a.stato == "fuori":
 		stati.add_child(_chip(T.NOMI_POSTURA[a.postura], Color("6b6248")))
 	if a.ferito and a.stato == "attivo":
@@ -1029,6 +1031,13 @@ func _azioni_round(a: Dictionary) -> void:
 ## Salire e scendere da un veicolo americano nello stesso esagono.
 ## Missione 3: ponti (paragrafo 1000), deposito di carburante, ruota della jeep.
 func _bottoni_ponte(a: Dictionary) -> void:
+	if int(a.get("paracadute", 0)) > 0 and p.s.fase == "round":
+		_b("Togli il paracadute (%d)" % int(a.paracadute), func(): _esito(p.togli_paracadute(a.id)), "Due azioni, da accovacciati o in piedi: finché non l’ha tolto non può fare altro.", a.postura != "prone")
+	var cassa: Dictionary = p.s.get("cassa", {})
+	if not cassa.is_empty() and cassa.stato == "chiusa" and cassa.hex == a.hex:
+		_b("Apri la cassa delle armi", func(): _esito(p.apri_cassa(a.id)), "Un’azione da accovacciati; poi il contenuto si prende con «Equipaggiamento».", a.postura == "crouching")
+	if bool(p.regola("disinnesco", false)) and p.ponti().has(a.hex) and p.ponte_intatto(a.hex) and not p.ponte_stato(a.hex).get("catturato", false):
+		_b("Stacca le cariche del ponte (%d/4)" % int(p.ponte_stato(a.hex).get("disinnesco", 0)), func(): _esito(p.disinnesca_ponte(a.id)), "Quattro turni in tutto, anche di soldati diversi; nelle Operazioni costa un controllo Evento.")
 	for x in p.azioni_ponte(a):
 		var az: String = x.azione
 		var hh: String = x.hex

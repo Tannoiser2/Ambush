@@ -27,6 +27,15 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 	var numero: int = int(p.s.round.numero_azione)
 	var par := paragrafo_da_carta(g, col, numero)
 	var motivo := "condizione"
+	var dati_g: Dictionary = p.missione.tedeschi.get(str(int(g.num)), {})
+	if dati_g.has("primo_turno") and not g.get("primo_fatto", false):
+		g.primo_fatto = true
+		par = int(dati_g.primo_turno)
+		col = "primo"
+		motivo = "primo turno"
+	elif str(g.get("reazione", "")) != "" and dati_g.get("reazione_par", {}).has(str(g.reazione)) and col != "S":
+		par = int(dati_g.reazione_par[str(g.reazione)])
+		motivo = "reazione"
 	if col == "S":
 		motivo = "autoconservazione"
 	elif col.length() == 1 and col >= "A" and col <= "Z":
@@ -44,6 +53,8 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 		p._log("dado", "Reazione speciale: nuovo numero d’azione tedesco %d." % int(p.s.round.numero_azione))
 
 func _nome_colonna(c: String) -> String:
+	if c == "primo":
+		return "primo turno (indicato sulla carta)"
 	if c == "S":
 		return "autoconservazione (S)"
 	if c.length() == 1 and c >= "A" and c <= "Z":
@@ -381,7 +392,7 @@ func esegui(n: int) -> void:
 		60:
 			var saltato := false
 			for hp in ["G14", "G13"]:
-				if p.ponte_intatto(hp) and not _tedeschi_attivi_vicino(hp):
+				if p.ponte_intatto(hp) and not p.ponte_stato(hp).get("catturato", false) and not _tedeschi_attivi_vicino(hp):
 					p._log("par", p.paragrafi["565"].it, {"id": "565", "tedesco": g.id})
 					p.distruggi_ponte(hp, "interruttore segreto")
 					for v in E.vicini(hp):
@@ -421,7 +432,93 @@ func esegui(n: int) -> void:
 				_prendi_arma_vicina()
 				_accovacciati()
 		814, 826, 828:
-			p._log("tedesco", "Il %s non è su un veicolo: resta fermo." % p.nome(g))
+			var vg: Dictionary = p.veicoli.di(g)
+			if p.veicoli.attivo(vg):
+				var veloce: bool = n == 828 or (n == 826 and bool(vg.get("bersagliato", false)))
+				p.veicoli.guida_tedesca(vg, veloce)
+			else:
+				p._log("tedesco", "Il %s non è su un veicolo: resta fermo." % p.nome(g))
+		50:
+			p.cambia_condizione(4)
+			esegui(868)
+		55:
+			var vg: Dictionary = p.veicoli.di(g)
+			if p.veicoli.attivo(vg):
+				p.veicoli.guida_tedesca(vg, true)
+			else:
+				_reazione_e_rilancia("U")
+		470:
+			_op_470()
+		554:
+			var vg: Dictionary = p.veicoli.di(g)
+			if p.veicoli.attivo(vg) and p.attivo(p.veicoli.autista(vg)) and p.veicoli.autista(vg).id != g.id:
+				_miglior_tiro("facile")
+			elif p.veicoli.attivo(vg):
+				g.reazione = "T"
+				p._log("tedesco", "Reazione speciale T in vigore per il %s: in questo turno non agisce." % p.nome(g))
+			else:
+				_reazione_e_rilancia("U")
+		708:
+			if int(p.s.condizione) >= 4:
+				g.reazione = ""
+				p._log("tedesco", "Il %s torna a seguire la Condizione in vigore." % p.nome(g))
+				esegui(paragrafo_da_carta(g, colonna(g, true), int(p.s.round.get("numero_azione", 0))))
+			else:
+				esegui(802)
+		711:
+			if p.unita_in(g.hex, "us").size() >= 2:
+				_arrenditi()
+			else:
+				_alzati()
+				_miglior_tiro("vicino")
+				_prono_se_libero()
+		712:
+			if _tedesco_vicino(1):
+				_accovacciati()
+				if not _cedi_turno(1):
+					_prono()
+			else:
+				esegui(801)
+		856, 857:
+			if p.terreno.edificio(g.hex):
+				_alzati()
+			else:
+				_accovacciati()
+			_miglior_tiro("facile" if n == 856 else "vicino")
+			_prono_se_libero()
+		859:
+			if not p.unita_in(g.hex, "us").is_empty():
+				_assalta(_bersaglio_assalto())
+			elif p.terreno.edificio(g.hex):
+				_alzati()
+				_miglior_tiro("vicino")
+				_prono_se_libero()
+			else:
+				_accovacciati()
+				_miglior_tiro("vicino")
+		865:
+			var v := bersagli(g)
+			if v.is_empty():
+				_muovi_rapido(false)
+			elif v.size() <= 2:
+				_accovacciati()
+				_miglior_tiro("vicino")
+			else:
+				_prono()
+		866:
+			var v := bersagli(g)
+			if v.is_empty():
+				_muovi_rapido(false)
+			elif v.size() <= 2:
+				_muovi_rapido(false, true)
+				_prono_fine_movimento()
+			else:
+				_accovacciati()
+				_tiri_rapidi()
+		868:
+			_muovi_rapido(false)
+			if not bersagli(g).is_empty():
+				_prono_se_libero()
 		817:
 			var adiac := _americano_adiacente()
 			if adiac and int(g.munizioni.get("granata", 0)) > 0:
@@ -972,6 +1069,51 @@ func _tedeschi_attivi_vicino(h: String) -> bool:
 		if x.lato == "de" and p.attivo(x) and p.in_mappa(x) and E.distanza(x.hex, h) <= 1:
 			return true
 	return false
+
+func _reazione_e_rilancia(r: String) -> void:
+	_g.reazione = r
+	p._log("tedesco", "Reazione speciale %s in vigore per il %s." % [r, p.nome(_g)])
+	_ritira_e_esegui()
+
+## 470: il generale (63) e l’aiutante (83) cercano di fuggire con la Kübelwagen nascosta.
+func _op_470() -> void:
+	var g := _g
+	var vk: Dictionary = p.veicoli.v("vk")
+	var in_auto: bool = not vk.is_empty() and g.get("veicolo", "") == "vk"
+	var us_dentro: bool = not vk.is_empty() and not p.unita_in(vk.hex, "us").is_empty()
+	if vk.is_empty() or not p.veicoli.attivo(vk) or us_dentro:
+		g.reazione = "U"
+		p._log("tedesco", "La Kübelwagen non è utilizzabile: reazione speciale U per il %s." % p.nome(g))
+		if _alzati():
+			_corri_verso("L4")
+		return
+	if not in_auto:
+		if g.hex != vk.hex:
+			_corri_verso(vk.hex)
+		if g.hex == vk.hex and p.in_mappa(g):
+			g.veicolo = "vk"
+			if not (g.id in vk.occupanti):
+				vk.occupanti.append(g.id)
+			g.postura = "crouching"
+			p._log("tedesco", "Il %s sale sulla Kübelwagen." % p.nome(g))
+		return
+	var g63 := p.u("g63")
+	var g83 := p.u("g83")
+	var a63: bool = not g63.is_empty() and p.attivo(g63) and g63.get("veicolo", "") == "vk"
+	var a83: bool = not g83.is_empty() and p.attivo(g83) and g83.get("veicolo", "") == "vk"
+	var i63: bool = g63.is_empty() or not p.attivo(g63)
+	var i83: bool = g83.is_empty() or not p.attivo(g83)
+	if a63 and a83:
+		g63.reazione = "Q"
+		g83.reazione = "Q"
+		p._log("tedesco", "Generale e aiutante sono a bordo: reazione speciale Q per entrambi.")
+		_ritira_e_esegui()
+	elif a63 and i83 and g.id == "g63":
+		_reazione_e_rilancia("T")
+	elif a83 and i63 and g.id == "g83":
+		_reazione_e_rilancia("Q")
+	else:
+		esegui(825)
 
 ## Prono alla fine del movimento, spendendo un punto movimento se serve.
 func _prono_fine_movimento() -> void:

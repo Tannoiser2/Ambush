@@ -302,6 +302,12 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 4: esagoni illuminati dai razzi, cassa delle armi
+	for h in partita.terreno.illuminati:
+		draw_colored_polygon(poligono(h, 0.96), Color(1.0, 0.93, 0.55, 0.22))
+	var cassa: Dictionary = s.get("cassa", {})
+	if not cassa.is_empty() and str(cassa.hex) != "" and cassa.stato != "persa":
+		_marcatore(str(cassa.hex), "CASSA" + (" APERTA" if cassa.stato == "aperta" else ""), Vector2(0.0, 0.66), Color("4a5d32"))
 	# Missione 3: radio, deposito, cariche e carburante sui ponti
 	if str(s.get("radio_hex", "")) != "":
 		_marcatore(str(s.radio_hex), "RADIO", Vector2(0.0, -0.62), Color("3d4f5f"))
@@ -319,6 +325,10 @@ func _draw() -> void:
 			parti.append("CARBURANTE")
 		if int(st.controlli) > 0:
 			parti.append("CONTROLLO %d/4" % mini(4, int(st.controlli)))
+		if st.get("catturato", false):
+			parti.append("CATTURATO")
+		elif int(st.get("disinnesco", 0)) > 0:
+			parti.append("CARICHE STACCATE %d/4" % int(st.disinnesco))
 		if not parti.is_empty():
 			_marcatore(h, " · ".join(parti), Vector2(0.0, -0.62), Color("6b3a1f"))
 	for h in s.mine:

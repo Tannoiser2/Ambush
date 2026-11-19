@@ -29,6 +29,16 @@ def tedeschi():
             d["colonne"][col.replace("*", "")] = v
         if c["ruolo"] in ("Officer", "NCO", "Veteran NCO", "Sergeant", "SS General"):
             d["comandante"] = True
+        testo = " ".join(c["testo"].split())
+        m = re.search(r"(?i)on first turn use (\d{3})", testo)
+        if m:
+            d["primo_turno"] = int(m.group(1))
+        m = re.search(r"(?i)if special reaction (\w) comes into effect use (\d{3})", testo)
+        if m:
+            d["reazione_par"] = {m.group(1): int(m.group(2))}
+        m = re.search(r"\+(\d) VP if captured", testo)
+        if m:
+            d["pv_cattura"] = int(m.group(1))
         out[str(c["num"])] = d
     # Carri (Panzer IV, Jagdpanther): tabella per numero di uomini dell’equipaggio.
     for k, c in CARTE.items():
@@ -97,6 +107,27 @@ MISSIONI[3] = {
   "testo_fine": "",
 }
 
+MISSIONI[4] = {
+  "titolo": "Lancio notturno nel D-Day", "titolo_originale": "D-Day Night Drop to Destiny", "data": "Normandia, 6 giugno 1944", "mappa": "B",
+  "nord": "in alto",
+  "briefing": "D-Day, 6 giugno 1944. All’alba il reggimento della tua squadra si lancia col paracadute sulla penisola del Cotentin, a sostegno degli sbarchi di Utah Beach. La squadra deve catturare intatti due ponti in un piccolo borgo vicino a Carentan. È prevista resistenza, ma la ricognizione non ha visto carri né armi pesanti vicino alla zona di lancio.",
+  "ingresso": "Mappa B, nord in alto. Disponi i soldati sugli esagoni da Y6 a Y15, uno per esagono: la cassa delle armi occupa un esagono libero. Quando dai il via, ognuno scende col paracadute verso ovest (dado pari: nord-ovest; dispari: sud-ovest) finché la carta della Condizione 1 non dice «Atterra». All’atterraggio il terreno decide se il lancio va bene. Poi si controllano gli esagoni occupati con la nuova Condizione.",
+  "regole_testo": "[b]Regole speciali.[/b] Notte: si vede al massimo a 5 esagoni, salvo gli esagoni illuminati da un razzo. Il corso d’acqua da A6 a Y17 è un fiume: si attraversa solo sui ponti intatti. Nei Round chi è appena atterrato deve togliersi il paracadute (due azioni, accovacciato o in piedi) prima di fare altro; nelle Operazioni lo toglie da solo. Il fucile automatico, il bazooka e i suoi razzi sono nella cassa: per aprirla serve un’azione da accovacciati nel suo esagono, poi si prende l’equipaggiamento.",
+  "ingresso_breve": "sugli esagoni da Y6 a Y15, uno per esagono", "uscita_breve": "qualsiasi esagono del bordo",
+  "ingresso_esagoni": [f"Y{r}" for r in range(6, 16)],
+  "vittoria_pv": 10, "attivazione": {"2": 2, "3": 5, "4": 8, "5": 8, "6": 8},
+  "obiettivi": ["G13", "G14"],
+  "regole": {"vista": 5, "fiume": True, "lancio": True, "disinnesco": True, "uscita_bordo": True, "uno_per_esagono": True,
+             "fine_ponti": True, "niente_salvataggio": True},
+  "squadra_armi": {"A": ["smg"], "B": ["carbine"], "C": ["carbine"], "D": ["carbine"], "E": ["carbine"], "F": ["smg"], "G": ["carbine"], "H": ["carbine"]},
+  "squadra_munizioni": {"A": {"smg": 3, "granata": 2}, "B": {"carbine": 3, "granata": 2}, "C": {"carbine": 3, "granata": 2},
+                        "D": {"carbine": 3, "granata": 2}, "E": {"carbine": 3, "granata": 2}, "F": {"smg": 3, "granata": 2},
+                        "G": {"carbine": 3, "granata": 2}, "H": {"carbine": 3, "granata": 2}},
+  "cassa": {"armi": ["ar", "bazooka", "smg"], "munizioni": {"ar": 3, "bazooka": 3, "smg": 2}},
+  "vittoria_testo": "[b]Vittoria: 10 PV.[/b] Un ponte catturato intatto (disinnescando le cariche: quattro turni, anche divisi tra più soldati) vale 4 PV; entrambi 10 PV. Valgono anche le attivazioni e le catture dei tedeschi. In questa missione gli incapacitati costano sempre PV. Fine: nelle Condizioni 4–6 quando non ci sono tedeschi attivi e entrambi i ponti sono catturati o saltati; oppure quando tutti i soldati attivi sono usciti da un bordo; oppure se muoiono tutti.",
+  "testo_fine": "",
+}
+
 def verifica(n, d):
     """Ogni riferimento delle carte e delle carte dei tedeschi attivati deve avere il suo paragrafo."""
     P = json.loads((R / "data/paragrafi.json").read_text())
@@ -139,11 +170,18 @@ def main():
         carte = json.loads((R / f"data/carte/missione{n}.json").read_text())
         d = {"id": n}
         d.update(meta)
-        d["squadra"] = M1["squadra"]
+        d["squadra"] = json.loads(json.dumps(M1["squadra"]))
+        for s in d["squadra"]:
+            if s["id"] in meta.get("squadra_armi", {}):
+                s["porte"] = meta["squadra_armi"][s["id"]]
+                s["munizioni"] = meta["squadra_munizioni"][s["id"]]
         d["tedeschi"] = ted
         if n == 3:
             d["ingresso_esagoni"] = edifici_b()
         d["condizioni"] = {k: {"esagoni": v["esagoni"], "evento": v["evento"], "movimenti": v["movimenti"]} for k, v in carte.items()}
+        if n == 4 and "4" not in d["condizioni"]:
+            # Manca la carta della Condizione 4: si usa quella della 5 (stessi livelli di attivazione).
+            d["condizioni"]["4"] = dict(d["condizioni"]["5"], sostituita=5)
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         print(n, len(d["condizioni"]), len(ted), "mancanti:", verifica(n, d))
 

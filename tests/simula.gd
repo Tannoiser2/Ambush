@@ -17,6 +17,10 @@ func _init() -> void:
 	missione = int(args[2]) if args.size() > 2 else 1
 	if missione == 2:
 		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
+	elif missione == 3:
+		obiettivi = ["A3", "T3", "G13", "G14", "L10", "A15", "V3", "C3"]
+	elif missione == 4:
+		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
 	for i in n:
 		gioca(seme + i)
 	print("RISULTATI ", JSON.stringify(statistiche))
@@ -28,7 +32,19 @@ func _init() -> void:
 
 func gioca(seme: int) -> void:
 	var p = PartitaScript.new(missione)
-	p.nuova(seme)
+	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0:
+		p.nuova(seme, true)
+		var ingressi: Array = p.esagoni_ingresso()
+		var i := 0
+		for a in p.americani():
+			if bool(p.regola("lancio", false)):
+				p.schiera([a.id], ingressi[i])
+			else:
+				p.schiera([a.id], ingressi[(i % 3) * 7])
+			i += 1
+		p.inizia_missione()
+	else:
+		p.nuova(seme)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seme * 7919
 	var bersaglio_di := {}
@@ -113,6 +129,12 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 				if verso != "":
 					p.trascina(a.id, x.id, verso)
 					return
+		if p.s.has("cassa") and p.s.cassa.stato == "chiusa" and p.s.cassa.hex == a.hex:
+			p.cambia_postura(a.id, "crouching")
+			p.apri_cassa(a.id)
+			return
+		if p.ponti().has(a.hex) and bool(p.regola("disinnesco", false)) and p.disinnesca_ponte(a.id).ok:
+			return
 		if a.hex == "R15" and p.s.pilota == "intrappolato" and not a.ferito:
 			p.libera_pilota(a.id)
 			return
@@ -141,6 +163,14 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 		p.muovi([a.id], verso)
 
 func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Dictionary) -> void:
+	if int(a.get("paracadute", 0)) > 0:
+		if a.postura == "prone":
+			p.cambia_postura(a.id, "crouching")
+		if not p.togli_paracadute(a.id).ok:
+			p.passa(a.id)
+		return
+	if a.stato != "fuori" and p.ponti().has(a.hex) and bool(p.regola("disinnesco", false)) and p.disinnesca_ponte(a.id).ok:
+		return
 	if a.stato == "fuori":
 		p.scegli_azione(a.id, "muovi")
 		var r: Dictionary = p.muovi([a.id], "%s1" % char(65 + rng.randi_range(0, 9)))

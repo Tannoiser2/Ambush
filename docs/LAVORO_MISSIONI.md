@@ -32,11 +32,19 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   Semplificazioni: la radio resta nell’esagono del comandante allo schieramento; la jeep di squadra viene
   parcheggiata automaticamente nell’esagono scoperto accanto alla strada più vicino alla squadra.
 
+- Missione 4 FATTA (test `tests/missione4.gd`, `tests/simula.gd -- 6 1 4`, scatti `tests/visivi/missione4_ui.gd`).
+  Lancio: `_lancio`/`_scendi`/`_atterra` (deriva NO/SO, carta C1 «LAND», tabella d’atterraggio), attivazioni
+  annotate in `s.attivazioni_lancio` e un solo vantaggio scelto (C2 il migliore per gli USA, C3 per i tedeschi).
+  Paracadute `a.paracadute` (2 azioni nei Round, tolto nelle Operazioni); cassa `s.cassa` (apri → oggetti a terra);
+  disinnesco ponti `disinnesca_ponte` (4 turni → catturato); notte vista 5 + razzi (`s.razzi`, illuminati r=3).
+  Kübelwagen «vk» del generale (470, 554, 055). Carte tedesche: `primo_turno`, `pv_cattura`, `reazione_par`.
+  MANCA la carta C4: si usa la C5 (`sostituita: 5`). Equipaggiamento pre-generato (squadra_armi/cassa).
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M4 lancio (deriva, LAND, tabella atterraggio, paracadute), notte 5, sminare ponti; M5 guadi, documenti;
+3. Regole speciali: M5 guadi, documenti;
    M6 canoe, bunker, notte; M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
    M8 Sherman (entra in A6), blocchi stradali, XXX.

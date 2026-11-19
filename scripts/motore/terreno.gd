@@ -268,7 +268,7 @@ func vista(a: String, b: String, postura_a := "standing", postura_b := "standing
 		return {"ok": false, "motivo": "fuori mappa"}
 	if a == b:
 		return {"ok": true, "motivo": ""}
-	if limite_vista > 0 and E.distanza(a, b) > limite_vista:
+	if limite_vista > 0 and E.distanza(a, b) > limite_vista and not illuminati.has(b):
 		return {"ok": false, "motivo": "oltre la visibilità (%d esagoni)" % limite_vista}
 	var chiave := "%s>%s>%s>%s" % [a, b, postura_a, postura_b]
 	if _cache_los.has(chiave):
@@ -320,6 +320,8 @@ func guado(h: String) -> bool:
 
 ## Limite di visibilità (nebbia, notte): 0 = nessun limite.
 var limite_vista := 0
+## Esagoni illuminati da un razzo (notte): si vedono anche oltre il limite di visibilità.
+var illuminati: Dictionary = {}
 ## Fiume: il corso d’acqua si attraversa solo sui ponti (Missioni 3, 4, 5, 6, 8).
 var fiume := false
 
