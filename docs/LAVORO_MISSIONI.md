@@ -13,6 +13,16 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
 - Mappa B: `data/mappa_b.json` (terreno a vista, livelli dal colore, creste/scarpate/porte/finestre approssimate),
   `assets/maps/mappa_b.jpg` e `mappa_b_realistica.jpg` nel reticolo del gioco (`tools/prepara_mappa_b.py`).
 
+- Motore multi-missione (fatto): `Partita.new(n)`, `imposta_missione`, `data/missioneN.json` generati da
+  `tools/costruisci_missioni.py` (MISSIONI = testi italiani; tedeschi da `tools/carte_tedeschi.json`;
+  carta 19 Kübelwagen = autista 19 + ufficiale 119). Paragrafi: `tools/paragrafi_mN.py`, uniti da
+  `tools/costruisci_dati.py` in `data/paragrafi.json` (prima esegui costruisci_dati, poi costruisci_missioni).
+  Menu «Nuova partita» = elenco missioni; salvataggi `user://ambush_missioneN.json`.
+- Veicoli: `scripts/motore/veicoli.gd` (stato in `s.veicoli`; occupanti con campo `veicolo`; tabella dei colpi
+  delle auto, incidenti, guida tedesca lungo i riferimenti rossi, jeep americana con MG montata).
+- Missione 2 FATTA (test `tests/missione2.gd`, `tests/simula.gd -- 6 1 2`, scatti `tests/visivi/missione2_ui.gd`).
+  Semplificazioni: equipaggiamento pre-generato (niente acquisti); Me-109: tiro all’aereo semplificato.
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
