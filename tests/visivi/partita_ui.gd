@@ -5,6 +5,7 @@ extends SceneTree
 const E = preload("res://scripts/motore/esagoni.gd")
 var ui
 var conteggio := {}
+var veloce := false
 
 func _init() -> void:
 	DisplayServer.window_set_size(Vector2i(640, 360))
@@ -18,6 +19,10 @@ func attendi() -> void:
 	while fermo < 3 and giri < 4000:
 		giri += 1
 		await process_frame
+		if ui._in_attesa:
+			ui._avanti = true
+		if veloce and ui.riproducendo:
+			ui._salta_tutto = true
 		if ui.riproducendo or (ui.p.s.pausa != "" and ui.p.s.fase != "fine"):
 			fermo = 0
 		else:
@@ -43,6 +48,7 @@ func _gioca() -> void:
 	var args := OS.get_cmdline_user_args()
 	var partite := int(args[0]) if args.size() > 0 else 3
 	var seme0 := int(args[1]) if args.size() > 1 else 1
+	veloce = args.size() > 2 and args[2] == "veloce"
 	var vinte := 0
 	for k in partite:
 		var rng := RandomNumberGenerator.new()
@@ -50,12 +56,12 @@ func _gioca() -> void:
 		var p: Partita = ui.p
 		p.nuova(seme0 + k)
 		ui._chiudi_finestra()
-		ui.automatico = true
+		ui.automatico = (k % 2 == 1)
 		ui.mappa.velocita = 60.0
 		ui._aggiorna_tutto(true)
 		var mete := ["T8", "K13", "T12"]
 		var comandi := 0
-		while p.s.fase != "fine" and comandi < 900:
+		while p.s.fase != "fine" and comandi < 350:
 			comandi += 1
 			if p.s.fase == "operazioni":
 				if p.condizioni_vittoria().ok:
@@ -96,6 +102,37 @@ func _gioca() -> void:
 				elif a.postura == "prone" and p.s.turno.is_empty() and not a.ferito:
 					ui._esito(p.cambia_postura(a.id, "crouching"))
 					await attendi()
+				# ogni tanto si muove verso il nemico e lo assalta, per provare anche quei percorsi
+				var nemici: Array = p.tedeschi_attivi()
+				if not fatto and not nemici.is_empty() and p.puo_agire(a) == "" and a.postura == "standing" and rng.randf() < 0.45:
+					var g0: Dictionary = nemici[rng.randi_range(0, nemici.size() - 1)]
+					if a.hex == g0.hex:
+						ui._esito(p.assalta(a.id, g0.id, "uccidi" if rng.randf() < 0.5 else "cattura"))
+						fatto = true
+					else:
+						ui._esito(p.scegli_azione(a.id, "carica" if E.distanza(a.hex, g0.hex) <= 2 else "muovi"))
+						await attendi()
+						for passo in 5:
+							if p.s.turno.is_empty() or p.s.turno.id != a.id or p.s.fase != "round":
+								break
+							ui.selezione = [a.id]
+							ui._aggiorna_tutto()
+							if a.hex == g0.hex and p.s.turno.azione == "carica":
+								ui._esito(p.assalta(a.id, g0.id, "uccidi"))
+								await attendi()
+								break
+							var v := _verso(a, g0.hex, rng)
+							if v == "" or not (v in ui.mappa.evidenzia):
+								break
+							ui._clic_mappa(v, 1)
+							await attendi()
+						if not p.s.turno.is_empty() and p.s.turno.id == a.id:
+							ui._esito(p.fine_azione(a.id))
+							await attendi()
+							if not p.s.turno.is_empty() and p.s.turno.id == a.id:
+								p.s.turno.azione = "muovi"
+								ui._esito(p.fine_azione(a.id))
+						fatto = true
 				if not fatto and p.puo_agire(a) == "" and a.postura != "prone":
 					for g in p.tedeschi_attivi():
 						if fatto:
@@ -122,5 +159,7 @@ func _gioca() -> void:
 		if p.s.get("fine", {}).get("vinta", false):
 			vinte += 1
 		print("partita %d: %d comandi, fase %s, round giocati fino al %s, PV %d" % [seme0 + k, comandi, p.s.fase, str(p.s.get("round", {}).get("n", "-")), p.pv_totali()])
+	if ui._ultimo_esito.begins_with("La sequenza si era interrotta"):
+		conteggio["ripristini"] = 1
 	print("RISULTATI UI ", JSON.stringify(conteggio), " vinte ", vinte, "/", partite)
 	quit(1 if not conteggio.is_empty() else 0)

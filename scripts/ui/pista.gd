@@ -36,7 +36,7 @@ func _draw() -> void:
 		return
 	var r: Dictionary = stato.get("round", {})
 	if stato.get("fase", "") != "round" or r.is_empty():
-		draw_string(Tema.stencil, Vector2(12, 40), "OPERAZIONI", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Tema.KAKI)
+		draw_string(Tema.stencil, Vector2(12, 40), "SCHIERAMENTO" if stato.get("fase", "") == "schieramento" else "OPERAZIONI", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Tema.KAKI)
 		var righe := ["Nessun nemico attivo: la pista è vuota.", "Quando un tedesco si attiva iniziano i Round", "e qui compare chi agisce, in che ordine", "e quanti turni ha."]
 		for i in righe.size():
 			draw_string(fm, Vector2(12, 68 + i * 21), righe[i], HORIZONTAL_ALIGNMENT_LEFT, size.x - 20, 15, Tema.KAKI_SPENTO)

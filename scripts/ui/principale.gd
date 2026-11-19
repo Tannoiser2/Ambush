@@ -93,12 +93,14 @@ func _ready() -> void:
 	_costruisci()
 	mappa.velocita = _velocita_iniziale
 	_aggiorna_bottoni_scheda()
+	_applica_linee()
 	var dati := _leggi_salvataggio()
 	if not dati.is_empty() and p.carica(dati):
 		_aggiorna_tutto(true)
 		_mostra_briefing(true)
 	else:
-		p.nuova()
+		p.nuova(0, true)
+		selezione = ["A"]
 		_aggiorna_tutto(true)
 		_mostra_briefing(false)
 
@@ -243,6 +245,8 @@ func _colonna_centrale() -> Control:
 	zoom_box.add_child(bp)
 	zoom_box.add_child(Tema.bottone("Intera mappa", func(): mappa.centra()))
 	zoom_box.add_child(Tema.bottone("Squadra", _centra_squadra, "Inquadra i soldati sulla mappa"))
+	bottone_vista = Tema.bottone("", _cambia_linee, "Mostra o nasconde la linea di vista dal soldato scelto e le linee di chi vede chi")
+	zoom_box.add_child(bottone_vista)
 	zoom_box.add_child(Tema.bottone("Rivedi", _rivedi, "Ripete sulla mappa, passo per passo, l’ultima sequenza di eventi"))
 	sovra.add_child(zoom_box)
 	var info_pc := PanelContainer.new()
@@ -516,11 +520,14 @@ func _aggiorna_mappa() -> void:
 	mappa.postura_vista = a.postura if not a.is_empty() else "standing"
 	if not a.is_empty() and p.s.pausa == "" and p.s.fase != "fine" and not riproducendo:
 		# chi vede chi: linee dal soldato scelto ai tedeschi che ha in vista
-		if a.hex != "":
+		if a.hex != "" and linee_vista and p.s.fase != "schieramento":
 			for g in p.tedeschi_attivi():
 				if p.vede_unita(a, g):
 					linee.append({"da": a.hex, "a": g.hex, "colore": Color(1.0, 0.45, 0.3, 0.7)})
-		if modo == "" and _puo_muovere(a):
+		if p.s.fase == "schieramento":
+			for h in p.esagoni_ingresso():
+				ev[h] = Color("8fd16a")
+		elif modo == "" and _puo_muovere(a):
 			for h in p.destinazioni(a.id):
 				ev[h] = Color("8fd16a")
 		elif modo in ["mirato", "rapido"]:
@@ -610,7 +617,7 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nome.clip_text = true
 	r1.add_child(nome)
-	var dove := "fuori mappa" if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else str(a.hex))
+	var dove := ("da schierare" if _S().get("fase", "") == "schieramento" else "fuori mappa") if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else str(a.hex))
 	r1.add_child(Tema.etichetta(dove, Tema.stencil, 14, Tema.INCHIOSTRO_TENUE))
 	vb.add_child(r1)
 	var righe: Array = []
@@ -688,7 +695,7 @@ func _clic_riga(ev: InputEvent, id: String) -> void:
 		return
 	var a := p.u(id)
 	var multi: bool = ev.shift_pressed or ev.ctrl_pressed or ev.meta_pressed
-	if multi and p.s.fase == "operazioni" and not selezione.is_empty():
+	if multi and p.s.fase in ["operazioni", "schieramento"] and not selezione.is_empty():
 		if id in selezione:
 			selezione.erase(id)
 		else:
@@ -758,6 +765,9 @@ func _aggiorna_azioni() -> void:
 		_b("Resoconto finale", _mostra_fine)
 		_b("Nuova partita", _chiedi_nuova)
 		return
+	if s.fase == "schieramento":
+		_azioni_schieramento()
+		return
 	if s.pausa != "":
 		# Si arriva qui solo riprendendo una partita salvata a metà di una sequenza.
 		var testi := {"inizio_round": ["IL NEMICO È IN VISTA", "Sta per iniziare il prossimo Round: consapevolezza, evento, iniziativa e poi i turni."],
@@ -801,6 +811,23 @@ func _aggiorna_azioni() -> void:
 		aiuto_azioni.text = _ultimo_esito + "\n" + aiuto_azioni.text
 
 var _gruppo_box: HBoxContainer
+var bottone_vista: Button
+var linee_vista := true
+
+func _cambia_linee() -> void:
+	linee_vista = not linee_vista
+	_salva_preferenze()
+	_applica_linee()
+	if not riproducendo:
+		_aggiorna_mappa()
+
+func _applica_linee() -> void:
+	mappa.mostra_vista = linee_vista
+	if not linee_vista:
+		mappa.linee = []
+	mappa.queue_redraw()
+	if bottone_vista != null:
+		bottone_vista.text = "Linee di vista: sì" if linee_vista else "Linee di vista: no"
 
 func _b(testo: String, cb: Callable, tip := "", attivo := true) -> Button:
 	var b := Tema.bottone(testo, cb, tip)
@@ -835,6 +862,38 @@ func _azioni_posture(a: Dictionary, costo := "") -> void:
 
 func _maiuscola(t: String) -> String:
 	return t.substr(0, 1).to_upper() + t.substr(1)
+
+## Schieramento iniziale: si dispongono i soldati sul margine nord, poi si dà il via.
+func _azioni_schieramento() -> void:
+	var tutti: Array = p.americani().filter(func(x): return x.stato in ["attivo", "fuori"])
+	var fuori: Array = tutti.filter(func(x): return x.hex == "")
+	var dentro := tutti.size() - fuori.size()
+	titolo_azioni.text = "SCHIERAMENTO · %d di %d soldati sulla mappa" % [dentro, tutti.size()]
+	var scelti: Array = selezione.map(func(id): return p.u(id).lettera)
+	aiuto_azioni.text = "Scegli i soldati nella scheda a sinistra e tocca un esagono verde del margine nord (A1–J1). Puoi spostarli quante volte vuoi: nessuna carta viene letta e il nemico non reagisce finché non dai il via. Chi lasci fuori potrà entrare più tardi."
+	if not scelti.is_empty():
+		aiuto_azioni.text = "Scelti: %s. " % ", ".join(scelti) + aiuto_azioni.text
+	_gruppo("SCEGLI")
+	_b("Tutti", func(): selezione = tutti.map(func(x): return x.id); _aggiorna_tutto(), "Sceglie tutta la squadra: un tocco su un esagono li mette insieme")
+	_b("Quelli ancora fuori (%d)" % fuori.size(), func(): selezione = fuori.map(func(x): return x.id); _aggiorna_tutto(), "", not fuori.is_empty())
+	_b("Aggiungi il prossimo", _aggiungi_prossimo, "Aggiunge alla scelta il prossimo soldato ancora fuori", not fuori.filter(func(x): return not (x.id in selezione)).is_empty())
+	_gruppo("SPOSTA")
+	var sulla_mappa: Array = selezione.filter(func(id): return p.u(id).hex != "")
+	_b("Rimetti fuori mappa", func(): p.schiera(sulla_mappa, ""); _salva(); _aggiorna_tutto(), "", not sulla_mappa.is_empty())
+	_gruppo("VIA")
+	var via := _b("Inizia la missione", func(): _esito(p.inizia_missione()), "La squadra entra davvero: si legge la carta della Condizione per ogni esagono occupato", dentro > 0)
+	via.custom_minimum_size = Vector2(220, 44)
+	via.add_theme_font_size_override("font_size", 19)
+	if dentro > 0:
+		via.add_theme_color_override("font_color", Color("fff3c4"))
+		via.add_theme_stylebox_override("normal", Tema.scatola(Color("6b5a22"), Tema.OTTONE, 2, 3, 10))
+
+func _aggiungi_prossimo() -> void:
+	for x in p.americani():
+		if x.stato == "fuori" and not (x.id in selezione):
+			selezione.append(x.id)
+			break
+	_aggiorna_tutto()
 
 func _azioni_operazioni(a: Dictionary) -> void:
 	if a.stato == "fuori":
@@ -1019,6 +1078,20 @@ func _imposta_modo(a: Dictionary, m: String) -> void:
 # =================================================================== mappa: clic e passaggio
 func _clic_mappa(h: String, _tasto: int) -> void:
 	if riproducendo or p.s.pausa != "" or p.s.fase == "fine" or finestra.visible:
+		return
+	if p.s.fase == "schieramento":
+		if h in p.esagoni_ingresso() and not selezione.is_empty():
+			p.schiera(selezione, h)
+			# pronto il prossimo soldato ancora fuori
+			var fuori: Array = p.americani().filter(func(x): return x.stato == "fuori")
+			if not fuori.is_empty():
+				selezione = [fuori[0].id]
+			_salva()
+		else:
+			var qui: Array = p.unita_in(h, "us")
+			if not qui.is_empty():
+				selezione = qui.map(func(x): return x.id)
+		_aggiorna_tutto()
 		return
 	var a: Dictionary = p.u(selezione[0]) if not selezione.is_empty() else {}
 	if not a.is_empty():
@@ -1209,9 +1282,40 @@ func _aggiorna_bottoni_scheda() -> void:
 		sch_continua.remove_theme_color_override("font_color")
 		sch_continua.remove_theme_stylebox_override("normal")
 
+## Sorveglianza della riproduzione: se la sequenza si interrompe a metà (un errore imprevisto),
+## l’interfaccia non resta bloccata: si ripristina da sola e dice in che punto è successo.
+var _battito := 0
+var _gen := 0
+var _punto := ""
+
+func _process(delta: float) -> void:
+	var ora := Time.get_ticks_msec()
+	if delta > 1.0 or not riproducendo:
+		_battito = ora
+	elif ora - _battito > 4000:
+		_ripristina()
+
+func _ripristina() -> void:
+	_gen += 1
+	var dove := _punto
+	riproducendo = false
+	_in_attesa = false
+	stato_vis = {}
+	_mostrate = _lotto
+	mappa.animazioni.clear()
+	mappa.mobili.clear()
+	mappa.fine_riproduzione()
+	mappa.linee = []
+	_aggiorna_bottoni_scheda()
+	_aggiorna_tutto()
+	_ultimo_esito = "La sequenza si era interrotta (%s): l’ho ripristinata, la partita continua da qui. Se ricapita, riferiscimi questo testo." % dove
+	_aggiorna_azioni()
+	push_warning("Riproduzione ripristinata: " + dove)
+
 func _attendi(t: float) -> void:
 	var fine := Time.get_ticks_msec() + int(t * 1000.0)
 	while Time.get_ticks_msec() < fine and not _salta_tutto and not _salta_passo:
+		_battito = Time.get_ticks_msec()
 		await get_tree().process_frame
 
 func _attendi_clic() -> void:
@@ -1219,6 +1323,7 @@ func _attendi_clic() -> void:
 	_avanti = false
 	_aggiorna_bottoni_scheda()
 	while not _avanti and not _salta_tutto and not automatico:
+		_battito = Time.get_ticks_msec()
 		await get_tree().process_frame
 	_in_attesa = false
 	_aggiorna_bottoni_scheda()
@@ -1282,6 +1387,9 @@ func _riproduci(ripetizione := false) -> void:
 		_dopo_riproduzione(ripetizione)
 		return
 	riproducendo = true
+	_gen += 1
+	var gen := _gen
+	_battito = Time.get_ticks_msec()
 	_salta_tutto = false
 	_mostrate = 0
 	_titolo_lotto = "OPERAZIONI"
@@ -1291,7 +1399,11 @@ func _riproduci(ripetizione := false) -> void:
 	mappa.linee = []
 	_aggiorna_azioni()
 	for i in passi.size():
+		if gen != _gen:
+			return
 		var ps: Dictionary = passi[i]
+		_punto = "passo %d di %d, %s" % [i + 1, passi.size(), ps.tipo]
+		_battito = Time.get_ticks_msec()
 		_n_passo += 1
 		_salta_passo = false
 		mappa.passo_corrente = _n_passo
@@ -1306,6 +1418,10 @@ func _riproduci(ripetizione := false) -> void:
 		if not _salta_tutto and ps.tipo != "comando":
 			await _attendi(0.35 / mappa.velocita)
 		for v in ps.voci:
+			if gen != _gen:
+				return
+			_battito = Time.get_ticks_msec()
+			_punto = "passo %d di %d, %s, voce %s %s" % [i + 1, passi.size(), ps.tipo, v.t, v.get("fx", "")]
 			if v.t == "fx":
 				_scheda_fx(v)
 				if v.fx == "tiro" and ps.tipo == "comando":
@@ -1322,6 +1438,9 @@ func _riproduci(ripetizione := false) -> void:
 				_render_rapporto(true)
 				if not _salta_tutto and not _salta_passo:
 					await _attendi(_durata_riga(v))
+		if gen != _gen:
+			return
+		_punto = "passo %d di %d, %s, chiusura" % [i + 1, passi.size(), ps.tipo]
 		# Il passo è finito: i pannelli passano allo stato successivo, la scheda resta leggibile.
 		var prossimo: Dictionary = passi[i + 1] if i + 1 < passi.size() else {}
 		stato_vis = prossimo.get("stato", {})
@@ -1341,6 +1460,9 @@ func _riproduci(ripetizione := false) -> void:
 				await _attendi(clampf(1.2 + lunghezza / 110.0, 1.6, 7.0) / mappa.velocita)
 			else:
 				await _attendi_clic()
+	if gen != _gen:
+		return
+	_punto = "fine sequenza"
 	_mostrate = _lotto
 	mappa.fine_riproduzione()
 	mappa.linee = []
@@ -1450,11 +1572,11 @@ func _prepara_scheda(ps: Dictionary) -> void:
 				motivo = "Colonna R-%s: reazione speciale decisa da un paragrafo." % d.colonna
 			var numero := "Numero d’azione %s %s" % [_dado(int(d.numero)), "appena tirato, vale per tutti i tedeschi di questo turno." if d.get("numero_tirato", false) else "(lo stesso per tutti i tedeschi di questo turno)."]
 			var vede: Array = d.get("vede", [])
-			var visti := "Non vede nessun americano." if vede.is_empty() else "Vede: " + ", ".join(vede.map(func(id): return str(st.unita.get(id, {}).get("lettera", id)))) + " (linee tratteggiate sulla mappa)."
+			var visti := "Non vede nessun americano." if vede.is_empty() else "Vede: " + ", ".join(vede.map(func(id): return str(st.unita.get(id, {}).get("lettera", id)))) + ("" if not linee_vista else " (linee tratteggiate sulla mappa)") + "."
 			_perche_righe.append(numero + " " + motivo + " " + visti)
 			for id in vede:
 				var a: Dictionary = st.unita.get(id, {})
-				if a.get("hex", "") != "" and g.get("hex", "") != "":
+				if linee_vista and a.get("hex", "") != "" and g.get("hex", "") != "":
 					mappa.linee.append({"da": g.hex, "a": a.hex, "colore": Color(0.72, 0.85, 1.0, 0.6)})
 		"consapevolezza":
 			_titolo_lotto = "ROUND %d · CONSAPEVOLEZZA" % n
@@ -1873,12 +1995,13 @@ func _chiedi_nuova() -> void:
 	_conferma("Nuova partita?", "La missione in corso andrà persa.", _nuova)
 
 func _nuova() -> void:
-	p.nuova()
+	p.nuova(0, true)
 	selezione = ["A"]
 	modo = ""
 	_ultimo_esito = ""
 	_ultima_sequenza = []
 	mappa.pulisci_tracce()
+	mappa.vista_iniziale.call_deferred()
 	_salva()
 	_aggiorna_tutto(true)
 	mappa.centra()
@@ -1905,6 +2028,7 @@ func _leggi_preferenze() -> void:
 	var d = JSON.parse_string(FileAccess.get_file_as_string(PREFERENZE))
 	if d is Dictionary:
 		automatico = bool(d.get("automatico", false))
+		linee_vista = bool(d.get("linee_vista", true))
 		_velocita_iniziale = float(d.get("velocita", 1.0))
 
 var _velocita_iniziale := 1.0
@@ -1912,7 +2036,7 @@ var _velocita_iniziale := 1.0
 func _salva_preferenze() -> void:
 	var f := FileAccess.open(PREFERENZE, FileAccess.WRITE)
 	if f != null:
-		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita}))
+		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista}))
 
 func _mostra_legenda() -> void:
 	var vb := VBoxContainer.new()

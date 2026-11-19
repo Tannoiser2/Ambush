@@ -547,6 +547,8 @@ func _re() -> float:
 	return RAGGIO * maxf(zoom, 0.42)
 
 func _freccia(o: Vector2, b: Vector2, col: Color, w: float, accorcia := 0.0) -> void:
+	if o.distance_to(b) < maxf(4.0, accorcia + w * 4.0):
+		return  # tiro dentro lo stesso esagono: nessuna freccia, bastano l’anello e la scritta
 	var dir := (b - o).normalized()
 	var fine := b - dir * accorcia
 	draw_line(o, fine, Color(0, 0, 0, col.a * 0.6), w + 3.0)

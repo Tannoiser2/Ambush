@@ -34,7 +34,7 @@ func _init() -> void:
 	ia = TedeschiScript.new(self)
 
 # =================================================================== stato
-func nuova(seme := 0) -> void:
+func nuova(seme := 0, con_schieramento := false) -> void:
 	if seme == 0:
 		seme = int(Time.get_unix_time_from_system() * 1000.0) % 2147483647
 	rng.seed = seme
@@ -51,9 +51,70 @@ func nuova(seme := 0) -> void:
 	terreno.imposta_modifiche(s.modifiche)
 	_log("titolo", "Missione 1 · Sangue a Saint-Michaux")
 	_log("info", missione.briefing)
-	_log("info", "Condizione 1. Livello di attivazione 0–1. Entra con i soldati dal margine nord (A1–J1).")
+	if con_schieramento:
+		s.fase = "schieramento"
+		_log("info", "Condizione 1. Livello di attivazione 0–1. Schiera i soldati sul margine nord (A1–J1), poi dai il via alla missione.")
+	else:
+		_log("info", "Condizione 1. Livello di attivazione 0–1. Entra con i soldati dal margine nord (A1–J1).")
 	recenti.clear()
 	aggiornata.emit()
+
+# ------------------------------------------------------------------ schieramento iniziale
+## Esagoni del margine nord da cui la squadra entra.
+func esagoni_ingresso() -> Array:
+	var out: Array = []
+	for c in 10:
+		out.append(E.da(c, 1))
+	return out
+
+## Dispone (o sposta) dei soldati su un esagono d’ingresso prima che la missione cominci.
+## Con h vuoto li rimette fuori mappa. Nessuna carta viene letta finché non si dà il via.
+func schiera(ids: Array, h: String) -> Dictionary:
+	recenti.clear()
+	if s.fase != "schieramento":
+		return {"ok": false, "errore": "Lo schieramento è già concluso."}
+	if h != "" and not (h in esagoni_ingresso()):
+		return {"ok": false, "errore": "Si entra solo dal margine nord, da A1 a J1."}
+	for id in ids:
+		var a := u(str(id))
+		if a.is_empty() or a.lato != "us":
+			continue
+		a.hex = h
+		a.stato = "attivo" if h != "" else "fuori"
+		a.postura = "standing"
+	aggiornata.emit()
+	return {"ok": true}
+
+## Fine dello schieramento: la squadra entra davvero e si controlla ogni esagono occupato.
+func inizia_missione() -> Dictionary:
+	if s.fase != "schieramento":
+		return {"ok": false, "errore": "La missione è già cominciata."}
+	var gruppi := {}
+	for a in americani():
+		if a.stato == "attivo" and a.hex != "":
+			if not gruppi.has(a.hex):
+				gruppi[a.hex] = []
+			gruppi[a.hex].append(a.id)
+	if gruppi.is_empty():
+		return {"ok": false, "errore": "Schiera almeno un soldato sul margine nord."}
+	_inizio_comando()
+	s.fase = "operazioni"
+	var esagoni: Array = gruppi.keys()
+	esagoni.sort()
+	var parti: Array = []
+	for h in esagoni:
+		parti.append("%s in %s" % [", ".join(gruppi[h]), h])
+	_log("azione", "La squadra entra in mappa: %s." % "; ".join(parti))
+	for h in esagoni:
+		if s.fase == "fine":
+			break
+		var presenti: Array = gruppi[h].filter(func(id): return attivo(u(str(id))) and u(str(id)).hex == h)
+		if not presenti.is_empty():
+			_ingresso(h, presenti, false)
+	if fase_round() and s.turno.is_empty() and s.pausa == "":
+		_flusso()
+	_fine_comando()
+	return {"ok": true}
 
 func _nuovo_americano(d: Dictionary) -> Dictionary:
 	var armi: Array = []
@@ -887,7 +948,16 @@ func _flusso() -> void:
 		if s.round.slot_azione != chiave:
 			s.round.slot_azione = chiave
 			s.round.numero_azione = d10()
+			s.round.giri_casella = 0
 			tirato = true
+		# Sicurezza: la stessa casella tedesca non può ripetersi all’infinito (turni ceduti avanti e indietro).
+		s.round.giri_casella = int(s.round.get("giri_casella", 0)) + 1
+		if int(s.round.giri_casella) > 4:
+			_log("info", "I tedeschi di questa casella hanno esaurito i turni.")
+			for g in tedeschi():
+				if int(g.turni) == c[0] and g.slot == "turni":
+					_consuma_turno(g)
+			continue
 		var agiti := false
 		for g in tedeschi():
 			if s.fase != "round":

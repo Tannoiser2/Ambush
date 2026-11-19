@@ -45,12 +45,13 @@ func _draw() -> void:
 	var w_tit := 190.0
 	if not in_round:
 		var fine: bool = stato.get("fase", "") == "fine"
-		draw_string(Tema.stencil, Vector2(14, y + h * 0.74), "MISSIONE CONCLUSA" if fine else "OPERAZIONI", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Tema.OTTONE if fine else Tema.KAKI)
+		var schier: bool = stato.get("fase", "") == "schieramento"
+		draw_string(Tema.stencil, Vector2(14, y + h * 0.74), "MISSIONE CONCLUSA" if fine else ("SCHIERAMENTO" if schier else "OPERAZIONI"), HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Tema.OTTONE if (fine or schier) else Tema.KAKI)
 		if not fine:
 			var rr := Rect2(w_tit + 40, y, size.x - w_tit - 50, h)
 			draw_rect(rr, Color("2f3424"))
 			draw_rect(rr, Color("6d7650"), false, 1.0)
-			draw_string(fm, rr.position + Vector2(12, h * 0.68), "Muovi la squadra un esagono alla volta: ogni esagono raggiunto fa leggere la carta della Condizione. Appena compare un tedesco iniziano i Round.", HORIZONTAL_ALIGNMENT_LEFT, rr.size.x - 20, 15, Tema.KAKI_SPENTO)
+			draw_string(fm, rr.position + Vector2(12, h * 0.68), "Disponi tutti i soldati sul margine nord (A1–J1), poi premi «Inizia la missione». Finché non dai il via non succede nulla." if schier else "Muovi la squadra un esagono alla volta: ogni esagono raggiunto fa leggere la carta della Condizione. Appena compare un tedesco iniziano i Round.", HORIZONTAL_ALIGNMENT_LEFT, rr.size.x - 20, 15, Tema.KAKI_SPENTO)
 		return
 	var n := int(r.get("n", 0))
 	draw_string(Tema.stencil, Vector2(14, y + h * 0.74), ("ROUND %d" % n) if n > 0 else "CONTATTO!", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("f08d74"))
