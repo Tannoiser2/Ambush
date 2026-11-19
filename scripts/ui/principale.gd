@@ -664,6 +664,8 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 		stati.add_child(_chip("comandante", Color("7a6226")))
 	if int(a.get("paracadute", 0)) > 0:
 		stati.add_child(_chip("paracadute %d" % int(a.paracadute), Color("5a4f7a")))
+	if int(a.get("documenti", 0)) > 0:
+		stati.add_child(_chip("documenti", Color("7a6226")))
 	if a.stato == "attivo" or a.stato == "fuori":
 		stati.add_child(_chip(T.NOMI_POSTURA[a.postura], Color("6b6248")))
 	if a.ferito and a.stato == "attivo":
@@ -1036,6 +1038,13 @@ func _bottoni_ponte(a: Dictionary) -> void:
 	var cassa: Dictionary = p.s.get("cassa", {})
 	if not cassa.is_empty() and cassa.stato == "chiusa" and cassa.hex == a.hex:
 		_b("Apri la cassa delle armi", func(): _esito(p.apri_cassa(a.id)), "Un’azione da accovacciati; poi il contenuto si prende con «Equipaggiamento».", a.postura == "crouching")
+	for hi in p.installazioni_vicine(a):
+		var hh2: String = hi
+		var nome_i: String = {"antenna": "l’antenna", "radar": "la stazione radar", "rampa": "la rampa", "v2": "il V-2"}.get(str(p.s.installazioni[hi].nome), "l’installazione")
+		if p.s.fase == "operazioni":
+			_b("Fai saltare %s (%s)" % [nome_i, hi], func(): _esito(p.demolisci(a.id, hh2)), "Nelle Operazioni la carica si piazza a mano; nei Round va lanciata nell’esagono.")
+	if int(a.get("documenti", 0)) > 0:
+		_b("Porta i documenti fuori mappa", Callable(), "Valgono %d PV quando questo soldato esce dalla mappa." % int(a.documenti), false)
 	if bool(p.regola("disinnesco", false)) and p.ponti().has(a.hex) and p.ponte_intatto(a.hex) and not p.ponte_stato(a.hex).get("catturato", false):
 		_b("Stacca le cariche del ponte (%d/4)" % int(p.ponte_stato(a.hex).get("disinnesco", 0)), func(): _esito(p.disinnesca_ponte(a.id)), "Quattro turni in tutto, anche di soldati diversi; nelle Operazioni costa un controllo Evento.")
 	for x in p.azioni_ponte(a):

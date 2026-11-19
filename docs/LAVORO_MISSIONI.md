@@ -40,11 +40,16 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   Kübelwagen «vk» del generale (470, 554, 055). Carte tedesche: `primo_turno`, `pv_cattura`, `reazione_par`.
   MANCA la carta C4: si usa la C5 (`sostituita: 5`). Equipaggiamento pre-generato (squadra_armi/cassa).
 
+- Missione 5 FATTA (test `tests/missione5.gd`, `simula.gd -- 6 1 5`, scatti `tests/visivi/missione5_ui.gd`).
+  Guadi `s.guadi` (terreno.guadi), installazioni `s.installazioni` (carica lanciata nei Round, `demolisci` nelle
+  Operazioni), documenti `a.documenti` (PV all’uscita, a terra se cade), V-2 (639), auto comando 13 con
+  scienziati 24/42 e ufficiale 7 (`_auto_raccoglie`, `_sali_su_auto`). Carte: `veicolo`, `pv_veicolo`,
+  `pv_eliminato`, `pv_uscita_prigioniero`. Equipaggiamento pre-generato.
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M5 guadi, documenti;
-   M6 canoe, bunker, notte; M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
+3. Regole speciali: M6 canoe, bunker, notte; M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
    M8 Sherman (entra in A6), blocchi stradali, XXX.

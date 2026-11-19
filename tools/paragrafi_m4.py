@@ -78,7 +78,7 @@ par("098", "[s8] Attiva il tedesco 62 nel primo esagono dell’elenco visto dagl
     sighting(8) + [activate([(62, "@indicato")], "crouching", adv="de")])
 par("099", "Effettua un controllo di attivazione (+1):\n• se riesce, vedi 586;\n• se fallisce, effettua un controllo di percezione (+1): se riesce, vedi 744.",
     [act(1, [see("586")], [pc(1, [see("744")])])])
-par("133", "Il soldato trova documenti importanti. Guadagni 1 PV.", [{"op": "vp", "n": 1, "why": "documenti importanti"}])
+par("133", "Il soldato trova documenti importanti. Guadagni 1 PV (nella Missione 5 vale solo se li porta fuori mappa).", [{"op": "documenti", "n": 1}])
 par("460", "Serve s7: passa alla Condizione 3.", [if_(S(7), [cond(3)])])
 par("467", "Se si muove un soldato (non la cassa), tira un dado: 0–8 nessun effetto; 9 vedi 040.",
     [{"op": "die", "b": [[0, 8, []], [9, 9, [see("040")]]]}])

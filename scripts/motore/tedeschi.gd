@@ -431,10 +431,45 @@ func esegui(n: int) -> void:
 			else:
 				_prendi_arma_vicina()
 				_accovacciati()
-		814, 826, 828:
+		811:
+			if not bersagli(g).is_empty():
+				_arrenditi()
+			else:
+				_prono()
+		840:
+			p._log("tedesco", "Il %s non fa nulla." % p.nome(g))
+		974:
+			g.reazione = "B"
+			_prono_fine_movimento()
+		977:
+			p._log("tedesco", "Il %s usa la radio." % p.nome(g))
+			p.cambia_condizione(3)
+		993:
+			esegui(977 if int(p.s.condizione) <= 2 else 839)
+		642:
 			var vg: Dictionary = p.veicoli.di(g)
 			if p.veicoli.attivo(vg):
-				var veloce: bool = n == 828 or (n == 826 and bool(vg.get("bersagliato", false)))
+				p.veicoli.guida_tedesca(vg, not bersagli(g).is_empty())
+		34:
+			_auto_raccoglie([7], "X", ["P7", "Q6"])
+		459:
+			_auto_raccoglie([24, 42], "Q", ["T15", "R14"])
+		630:
+			_sali_su_auto("S14", "S15")
+		972:
+			_sali_su_auto("P5", "P6")
+		649:
+			var vg: Dictionary = p.veicoli.di(g)
+			if p.veicoli.attivo(vg) and p.veicoli.autista(vg).get("id", "") != g.id:
+				esegui(832)
+			elif p.veicoli.attivo(vg):
+				p.veicoli.guida_tedesca(vg, true)
+			else:
+				_reazione_e_rilancia("U")
+		814, 826, 827, 828:
+			var vg: Dictionary = p.veicoli.di(g)
+			if p.veicoli.attivo(vg):
+				var veloce: bool = n in [827, 828] or (n == 826 and bool(vg.get("bersagliato", false)))
 				p.veicoli.guida_tedesca(vg, veloce)
 			else:
 				p._log("tedesco", "Il %s non è su un veicolo: resta fermo." % p.nome(g))
@@ -1069,6 +1104,66 @@ func _tedeschi_attivi_vicino(h: String) -> bool:
 		if x.lato == "de" and p.attivo(x) and p.in_mappa(x) and E.distanza(x.hex, h) <= 1:
 			return true
 	return false
+
+## Auto comando (Missione 5): passeggeri da raccogliere; poi via, con la reazione speciale C.
+func _auto_raccoglie(nums: Array, reazione: String, primi: Array) -> void:
+	var g := _g
+	var vg: Dictionary = p.veicoli.di(g)
+	var tutti_inattivi := true
+	var fuori := false
+	for num in nums:
+		var x := p.u("g%d" % int(num))
+		if not x.is_empty() and p.attivo(x):
+			tutti_inattivi = false
+			if x.get("veicolo", "") != vg.get("id", "-"):
+				fuori = true
+	if tutti_inattivi:
+		g.reazione = ""
+		p._log("tedesco", "Nessuno da raccogliere: il %s torna alla colonna delle Condizioni." % p.nome(g))
+		_ritira_e_esegui()
+	elif fuori:
+		esegui(825)
+	else:
+		for num in nums + [13]:
+			var x := p.u("g%d" % int(num))
+			if not x.is_empty():
+				x.reazione = "C"
+		p._log("tedesco", "Tutti a bordo: l’auto comando riparte (reazione speciale C).")
+		if p.veicoli.attivo(vg):
+			var primo: String = primi[0] if str(p.s.get("ingresso_auto", "Y8")) == "Y8" else primi[1]
+			if E.adiacenti(vg.hex, primo) and p.veicoli.costo(vg, vg.hex, primo) >= 0:
+				p.veicoli.sposta(vg, primo)
+				p._log("tedesco", "%s entra in %s." % [p.veicoli.nome_art(vg), primo])
+			p.veicoli.guida_tedesca(vg, true)
+
+## Un passeggero raggiunge l’auto comando strisciando e sale a bordo.
+func _sali_su_auto(da: String, verso: String) -> void:
+	var g := _g
+	var vg: Dictionary = {}
+	for v in p.veicoli.tutti():
+		if v.modello == "auto_comando" and v.lato == "de":
+			vg = v
+	if g.get("veicolo", "") != "" and p.veicoli.attivo(p.veicoli.di(g)):
+		var vv: Dictionary = p.veicoli.di(g)
+		if not p.attivo(p.veicoli.autista(vv)) or p.veicoli.autista(vv).id == g.id:
+			p.veicoli.guida_tedesca(vv, true)
+		else:
+			p._log("tedesco", "Il %s aspetta a bordo." % p.nome(g))
+		return
+	if vg.is_empty() or not p.veicoli.attivo(vg):
+		esegui(832)
+		return
+	if g.hex == vg.hex:
+		g.veicolo = vg.id
+		if not (g.id in vg.occupanti):
+			vg.occupanti.append(g.id)
+		g.postura = "crouching"
+		p._log("tedesco", "Il %s sale sull’auto comando." % p.nome(g))
+	elif g.hex == da and E.adiacenti(da, verso):
+		_accovacciati()
+		_passo(verso, true)
+	else:
+		_corri_verso(vg.hex)
 
 func _reazione_e_rilancia(r: String) -> void:
 	_g.reazione = r

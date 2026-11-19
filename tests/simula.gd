@@ -19,6 +19,8 @@ func _init() -> void:
 		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
 	elif missione == 3:
 		obiettivi = ["A3", "T3", "G13", "G14", "L10", "A15", "V3", "C3"]
+	elif missione == 5:
+		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
 	elif missione == 4:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
 	for i in n:
@@ -135,6 +137,9 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 			return
 		if p.ponti().has(a.hex) and bool(p.regola("disinnesco", false)) and p.disinnesca_ponte(a.id).ok:
 			return
+		for hi in p.installazioni_vicine(a):
+			if p.demolisci(a.id, hi).ok:
+				return
 		if a.hex == "R15" and p.s.pilota == "intrappolato" and not a.ferito:
 			p.libera_pilota(a.id)
 			return

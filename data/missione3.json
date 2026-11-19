@@ -2541,7 +2541,8 @@
     ]
    },
    "comandante": true,
-   "primo_turno": 829
+   "primo_turno": 829,
+   "pv_eliminato": 1
   },
   "34": {
    "lettera": "X",
@@ -3975,7 +3976,8 @@
      800,
      630
     ]
-   }
+   },
+   "pv_uscita_prigioniero": 2
   },
   "42": {
    "lettera": "Q",
@@ -4024,7 +4026,8 @@
      800,
      630
     ]
-   }
+   },
+   "pv_uscita_prigioniero": 2
   },
   "63": {
    "lettera": "N",
@@ -4162,7 +4165,9 @@
      459,
      825
     ]
-   }
+   },
+   "veicolo": "auto_comando",
+   "pv_veicolo": 2
   },
   "12": {
    "lettera": "T",

@@ -302,6 +302,11 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 5: installazioni da distruggere
+	for h in s.get("installazioni", {}):
+		var ins: Dictionary = s.installazioni[h]
+		var nome_i: String = {"antenna": "ANTENNA", "radar": "RADAR", "rampa": "RAMPA V-2", "v2": "RAZZO V-2"}.get(str(ins.nome), str(ins.nome).to_upper())
+		_marcatore(h, nome_i + (" DISTRUTTO" if ins.distrutta else ""), Vector2(0.0, 0.62), Color("3a3a3a") if ins.distrutta else Color("7a2e22"))
 	# Missione 4: esagoni illuminati dai razzi, cassa delle armi
 	for h in partita.terreno.illuminati:
 		draw_colored_polygon(poligono(h, 0.96), Color(1.0, 0.93, 0.55, 0.22))
@@ -341,7 +346,7 @@ func _draw() -> void:
 			_segnalino(h, nome_p, Vector2(0.0, -0.45), 0.7)
 		else:
 			_marcatore(h, {"carro": "PANZER", "bunker": "BUNKER", "trappola": "TRAPPOLA", "guado": "GUADO",
-				"deposito": "CARBURANTE"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
+				"deposito": "CARBURANTE", "kubelwagen": "KÜBELWAGEN", "avviso_mine": "MINEN!", "rifiuti": "RIFIUTI", "radar": "RADAR"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
 	# Veicoli
 	for veic in s.get("veicoli", {}).values():
 		if str(veic.hex) != "":

@@ -36,6 +36,17 @@ def tedeschi():
         m = re.search(r"(?i)if special reaction (\w) comes into effect use (\d{3})", testo)
         if m:
             d["reazione_par"] = {m.group(1): int(m.group(2))}
+        if "Staff Car" in c["ruolo"]:
+            d["veicolo"] = "auto_comando"
+        m = re.search(r"\+(\d) VP if disabled", testo)
+        if m:
+            d["pv_veicolo"] = int(m.group(1))
+        m = re.search(r"\+(\d) VP if incapacitated OR killed", testo)
+        if m:
+            d["pv_eliminato"] = int(m.group(1))
+        m = re.search(r"If captured \+(\d) VP for exiting", testo)
+        if m:
+            d["pv_uscita_prigioniero"] = int(m.group(1))
         m = re.search(r"\+(\d) VP if captured", testo)
         if m:
             d["pv_cattura"] = int(m.group(1))
@@ -125,6 +136,25 @@ MISSIONI[4] = {
                         "G": {"carbine": 3, "granata": 2}, "H": {"carbine": 3, "granata": 2}},
   "cassa": {"armi": ["ar", "bazooka", "smg"], "munizioni": {"ar": 3, "bazooka": 3, "smg": 2}},
   "vittoria_testo": "[b]Vittoria: 10 PV.[/b] Un ponte catturato intatto (disinnescando le cariche: quattro turni, anche divisi tra più soldati) vale 4 PV; entrambi 10 PV. Valgono anche le attivazioni e le catture dei tedeschi. In questa missione gli incapacitati costano sempre PV. Fine: nelle Condizioni 4–6 quando non ci sono tedeschi attivi e entrambi i ponti sono catturati o saltati; oppure quando tutti i soldati attivi sono usciti da un bordo; oppure se muoiono tutti.",
+  "testo_fine": "",
+}
+
+MISSIONI[5] = {
+  "titolo": "Operazione Borseggio", "titolo_originale": "Operation Pickpocket", "data": "Olanda, 4 luglio 1944", "mappa": "B",
+  "nord": "in alto",
+  "briefing": "4 luglio 1944. La tua squadra si è offerta volontaria per un pericoloso raid di commando dietro le linee tedesche: con l’aiuto della resistenza olandese deve infiltrarsi in Olanda e colpire una base segreta di razzi vicino all’Aia. Il comando alleato vuole i documenti sul misterioso razzo V-2 e la distruzione della base.",
+  "ingresso": "Mappa B, nord in alto. I soldati entrano dal margine sud o ovest, tra A12 e L19 compresi. All’inizio non ci sono segnalini sulla mappa. Equipaggiamento leggero (niente fucili automatici, bazooka o mitragliatrici medie) più due cariche da demolizione.",
+  "regole_testo": "[b]Regole speciali.[/b] Il corso d’acqua da A6 a Y17 è un fiume: si entra in un suo esagono solo su un ponte intatto o da un guado. I guadi si scoprono durante la missione (segnaposto GUADO) e si entrano da qualsiasi esagono di terra adiacente.",
+  "ingresso_breve": "dal margine sud o ovest, tra A12 e L19", "uscita_breve": "il margine sud o ovest, tra A12 e L19",
+  "ingresso_esagoni": [f"A{r}" for r in range(12, 20)] + [f"{c}19" for c in "BCDEFGHIJKL"],
+  "vittoria_pv": 15, "attivazione": {"1": 1, "2": 3, "3": 5, "4": 7},
+  "obiettivi": [],
+  "regole": {"fiume": True, "documenti": True, "fine_uscita": True},
+  "squadra_armi": {"A": ["smg"], "B": ["carbine"], "C": ["carbine"], "D": ["carbine"], "E": ["sar"], "F": ["sar", "satchel"], "G": ["smg"], "H": ["sar", "satchel"]},
+  "squadra_munizioni": {"A": {"smg": 4, "granata": 2}, "B": {"carbine": 4, "granata": 2}, "C": {"carbine": 4, "granata": 2},
+                        "D": {"carbine": 4, "granata": 2}, "E": {"sar": 4, "granata": 2}, "F": {"sar": 3, "granata": 2},
+                        "G": {"smg": 4, "granata": 2}, "H": {"sar": 3, "granata": 2}},
+  "vittoria_testo": "[b]Vittoria: 15 PV.[/b] I punti arrivano dai documenti trovati e dalle installazioni distrutte, come scoprirai giocando (le installazioni si distruggono lanciando una carica da demolizione nel loro esagono). I documenti valgono solo se il soldato che li porta esce dalla mappa: se cade, un altro può raccoglierli. La missione termina quando tutti i soldati attivi sono usciti tra A12 e L19; un incapacitato portato fuori da lì non costa PV.",
   "testo_fine": "",
 }
 
