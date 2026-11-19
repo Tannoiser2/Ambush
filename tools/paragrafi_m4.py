@@ -193,6 +193,15 @@ par("987", "1. Se un americano attivo vede L14 e L14 non è occupato da american
 par("988", "Se un soldato americano attivo vede uno di questi esagoni, vedi 073: 1. B12; 2. E11; 3. G17; 4. K15.",
     [vista(["B12", "E11", "G17", "K15"], "073")])
 
+par("056", "Esci dalla mappa. Passa alla Condizione 6.", [{"op": "g_exit"}, cond(6)], "movimento")
+par("594", "1. Se non ci sono stati né s5 né s7, vedi 632.\n2. Se non c’è stato s5, vedi 637.\n3. Se non c’è stato s7, vedi 633.\n4. Se i tedeschi 63 e 83 sono inattivi, passa alla Condizione 5.\n5. Nessun evento.",
+    chain((ALL(NOT(S(5)), NOT(S(7))), [see("632")]), (NOT(S(5)), [see("637")]), (NOT(S(7)), [see("633")]), ({"inattivi": [63, 83]}, [cond(5)])))
+par("717", "1. Se non ci sono stati né s5 né s7, vedi 579.\n2. Se non c’è stato s1, vedi 569.\n3. Se non c’è stato s7, vedi 631.\n4. Se non c’è stato s5, vedi 497.\n5. Se ci sono stati s1, s5 e s7, nessun evento.",
+    chain((ALL(NOT(S(5)), NOT(S(7))), [see("579")]), (NOT(S(1)), [see("569")]), (NOT(S(7)), [see("631")]), (NOT(S(5)), [see("497")])))
+par("870", "1. Se non c’è stato s1, vedi 573.\n2. Se non c’è stato s2, vedi 069.\n3. Se non c’è stato s3, vedi 559.\n4. Se non c’è stato s8, tira un dado: pari 988, dispari 738.\n5. Se i tedeschi 63 e 83 sono inattivi, passa alla Condizione 5.\n6. Nessun evento.",
+    chain((NOT(S(1)), [see("573")]), (NOT(S(2)), [see("069")]), (NOT(S(3)), [see("559")]), (NOT(S(8)), [dado_pari([see("988")], [see("738")])]),
+          ({"inattivi": [63, 83]}, [cond(5)])))
+
 AZ = {
 "050": "Passa alla Condizione 4, poi vedi 868.",
 "055": "• Se il veicolo è attivo, guidalo veloce.\n• Altrimenti metti in effetto la reazione speciale U e tira di nuovo per questa azione, eseguendola subito.",

@@ -793,6 +793,23 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			_op_sopravvissuto()
 		"morte_lancio":
 			_op_morte_lancio()
+		"g_exit":
+			if ctx.get("veicolo", false):
+				var ve: Dictionary = veicoli.v(str(ctx.get("veicolo_id", "")))
+				if not ve.is_empty():
+					veicoli._esce(ve)
+					ctx.verso_veicolo = ""
+			else:
+				var ge: Dictionary = u(ctx.get("g", ""))
+				if not ge.is_empty() and in_mappa(ge):
+					var da_g: String = ge.hex
+					ge.stato = "uscito"
+					ge.hex = ""
+					ge.turni = 0
+					ge.slot = "inattivo"
+					ia.ferma()
+					_log("tedesco", "Il %s esce dalla mappa." % nome(ge))
+					_fx("sparisce", {"ids": [ge.id], "da": da_g, "motivo": "uscito"})
 		"no_autoconservazione":
 			var gn: Dictionary = u(ctx.get("g", ""))
 			if not gn.is_empty():

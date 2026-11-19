@@ -194,10 +194,53 @@ def verifica(n, d):
                     mancanti.add("%03d" % int(num))
     return sorted(mancanti)
 
+EXCEL = json.loads((R / "tools/carte_excel.json").read_text()) if (R / "tools/carte_excel.json").exists() else {}
+# Correzioni dei valori neri confrontando OCR e foglio Excel (Ambush_ToolBoxV4.xlsm), verificate sul testo dei paragrafi.
+CORR_EXCEL = {(5, "3", "Y17"): "108", (6, "4", "R10"): "757"}
+CORR_EVENTI = {(6, "3", "6"): "s4:739"}
+
+def _adiacenti(a, b):
+    import math
+    def cubo(h):
+        q = COL.index(h[0]); r = int(h[1:]) - 1 - (q - (q & 1)) // 2
+        return q, r, -q - r
+    x, y = cubo(a), cubo(b)
+    return max(abs(x[0] - y[0]), abs(x[1] - y[1]), abs(x[2] - y[2])) == 1
+
+def _mov_valido(h, v):
+    if v in ("", None):
+        return False
+    if v == "USCITA" or (len(v) == 3 and v.isdigit()):
+        return True
+    return len(v) >= 2 and v[0] in COL and v[1:].isdigit() and _adiacenti(h, v)
+
+def unisci_excel(n, carte):
+    """Carte mancanti dal foglio Excel; movimenti rossi sostituiti quando la lettura OCR non è un esagono adiacente."""
+    for c in range(1, 7):
+        x = EXCEL.get(f"Amb_M{n}_C{c}")
+        if not x:
+            continue
+        k = str(c)
+        if k not in carte:
+            carte[k] = x
+            print(f"  M{n} C{c}: carta presa dal foglio Excel")
+            continue
+        mio = carte[k]["movimenti"]
+        for h, v in x["movimenti"].items():
+            if _mov_valido(h, v) and not _mov_valido(h, mio.get(h, "")):
+                mio[h] = v
+    for (m, c, h), v in CORR_EXCEL.items():
+        if m == n and c in carte:
+            carte[c]["esagoni"][h] = v
+    for (m, c, e), v in CORR_EVENTI.items():
+        if m == n and c in carte:
+            carte[c]["evento"][e] = v
+    return carte
+
 def main():
     ted = tedeschi()
     for n, meta in MISSIONI.items():
-        carte = json.loads((R / f"data/carte/missione{n}.json").read_text())
+        carte = unisci_excel(n, json.loads((R / f"data/carte/missione{n}.json").read_text()))
         d = {"id": n}
         d.update(meta)
         d["squadra"] = json.loads(json.dumps(M1["squadra"]))
@@ -209,7 +252,7 @@ def main():
         if n == 3:
             d["ingresso_esagoni"] = edifici_b()
         d["condizioni"] = {k: {"esagoni": v["esagoni"], "evento": v["evento"], "movimenti": v["movimenti"]} for k, v in carte.items()}
-        if n == 4 and "4" not in d["condizioni"]:
+        if n == 4 and "4" not in d["condizioni"] and "5" in d["condizioni"]:
             # Manca la carta della Condizione 4: si usa quella della 5 (stessi livelli di attivazione).
             d["condizioni"]["4"] = dict(d["condizioni"]["5"], sostituita=5)
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))

@@ -38,13 +38,20 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   Paracadute `a.paracadute` (2 azioni nei Round, tolto nelle Operazioni); cassa `s.cassa` (apri → oggetti a terra);
   disinnesco ponti `disinnesca_ponte` (4 turni → catturato); notte vista 5 + razzi (`s.razzi`, illuminati r=3).
   Kübelwagen «vk» del generale (470, 554, 055). Carte tedesche: `primo_turno`, `pv_cattura`, `reazione_par`.
-  MANCA la carta C4: si usa la C5 (`sostituita: 5`). Equipaggiamento pre-generato (squadra_armi/cassa).
+  Carta C4 presa dal foglio Excel di Stefano. Equipaggiamento pre-generato (squadra_armi/cassa).
 
 - Missione 5 FATTA (test `tests/missione5.gd`, `simula.gd -- 6 1 5`, scatti `tests/visivi/missione5_ui.gd`).
   Guadi `s.guadi` (terreno.guadi), installazioni `s.installazioni` (carica lanciata nei Round, `demolisci` nelle
   Operazioni), documenti `a.documenti` (PV all’uscita, a terra se cade), V-2 (639), auto comando 13 con
   scienziati 24/42 e ufficiale 7 (`_auto_raccoglie`, `_sali_su_auto`). Carte: `veicolo`, `pv_veicolo`,
   `pv_eliminato`, `pv_uscita_prigioniero`. Equipaggiamento pre-generato.
+
+- Foglio Excel «Ambush_ToolBoxV4.xlsm» (tutte le carte, anche Move Out! M9–M12): estratto con
+  /home/claude/strumenti/xl_carte.py in `tools/carte_excel.json`. Ordine delle righe nel foglio: indice 0 vuoto,
+  poi 3,6,…,18, 1,4,…,19, 2,5,…,17; colonna RE = eventi 0,3,…,18,1,…,16,(vuoto),2,…,17. Le carte M10 hanno un
+  formato diverso (22 righe). `costruisci_missioni.unisci_excel`: carte mancanti dal foglio, movimenti rossi
+  dal foglio quando l’OCR non dà un esagono adiacente, correzioni puntuali CORR_EXCEL/CORR_EVENTI. Attenzione:
+  nel foglio «S1» al posto di «S7» in vari esagoni (l’OCR qui è giusto).
 
 ## Prossimo passo: Missione 6 «Gita in canoa fino al Vallo occidentale» (mappa A, nord in alto)
 - Regole (regolamento p. 37–38, testo in /home/claude/aid/rules.txt): fiume H1–O19 attraversabile solo sui ponti o in

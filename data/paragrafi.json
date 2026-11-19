@@ -11239,6 +11239,367 @@
   ],
   "tipo": "missione"
  },
+ "056": {
+  "id": "056",
+  "it": "Esci dalla mappa. Passa alla Condizione 6.",
+  "ops": [
+   {
+    "op": "g_exit"
+   },
+   {
+    "op": "condition",
+    "n": 6
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "594": {
+  "id": "594",
+  "it": "1. Se non ci sono stati né s5 né s7, vedi 632.\n2. Se non c’è stato s5, vedi 637.\n3. Se non c’è stato s7, vedi 633.\n4. Se i tedeschi 63 e 83 sono inattivi, passa alla Condizione 5.\n5. Nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "s": 5
+       }
+      },
+      {
+       "not": {
+        "s": 7
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "632"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 5
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "637"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 7
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "633"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "inattivi": [
+            63,
+            83
+           ]
+          },
+          "then": [
+           {
+            "op": "condition",
+            "n": 5
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "717": {
+  "id": "717",
+  "it": "1. Se non ci sono stati né s5 né s7, vedi 579.\n2. Se non c’è stato s1, vedi 569.\n3. Se non c’è stato s7, vedi 631.\n4. Se non c’è stato s5, vedi 497.\n5. Se ci sono stati s1, s5 e s7, nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "s": 5
+       }
+      },
+      {
+       "not": {
+        "s": 7
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "579"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "569"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 7
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "631"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 5
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "497"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "870": {
+  "id": "870",
+  "it": "1. Se non c’è stato s1, vedi 573.\n2. Se non c’è stato s2, vedi 069.\n3. Se non c’è stato s3, vedi 559.\n4. Se non c’è stato s8, tira un dado: pari 988, dispari 738.\n5. Se i tedeschi 63 e 83 sono inattivi, passa alla Condizione 5.\n6. Nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 1
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "573"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 2
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "069"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 3
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "559"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 8
+           }
+          },
+          "then": [
+           {
+            "op": "die",
+            "b": [
+             [
+              0,
+              0,
+              [
+               {
+                "op": "goto",
+                "p": "988"
+               }
+              ]
+             ],
+             [
+              1,
+              1,
+              [
+               {
+                "op": "goto",
+                "p": "738"
+               }
+              ]
+             ],
+             [
+              2,
+              2,
+              [
+               {
+                "op": "goto",
+                "p": "988"
+               }
+              ]
+             ],
+             [
+              3,
+              3,
+              [
+               {
+                "op": "goto",
+                "p": "738"
+               }
+              ]
+             ],
+             [
+              4,
+              4,
+              [
+               {
+                "op": "goto",
+                "p": "988"
+               }
+              ]
+             ],
+             [
+              5,
+              5,
+              [
+               {
+                "op": "goto",
+                "p": "738"
+               }
+              ]
+             ],
+             [
+              6,
+              6,
+              [
+               {
+                "op": "goto",
+                "p": "988"
+               }
+              ]
+             ],
+             [
+              7,
+              7,
+              [
+               {
+                "op": "goto",
+                "p": "738"
+               }
+              ]
+             ],
+             [
+              8,
+              8,
+              [
+               {
+                "op": "goto",
+                "p": "988"
+               }
+              ]
+             ],
+             [
+              9,
+              9,
+              [
+               {
+                "op": "goto",
+                "p": "738"
+               }
+              ]
+             ]
+            ]
+           }
+          ],
+          "else": [
+           {
+            "op": "if",
+            "t": {
+             "inattivi": [
+              63,
+              83
+             ]
+            },
+            "then": [
+             {
+              "op": "condition",
+              "n": 5
+             }
+            ],
+            "else": []
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
  "050": {
   "id": "050",
   "it": "Passa alla Condizione 4, poi vedi 868.",
