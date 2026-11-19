@@ -84,7 +84,10 @@ func _carica_cartella(cartella: String) -> void:
 func imposta_grafica(realistica: bool, nuove: bool) -> void:
 	mappa_realistica = realistica
 	pedine_nuove = nuove
-	mappa = load("res://assets/maps/mappa_a_realistica.jpg" if realistica else "res://assets/maps/mappa_a.jpg")
+	var lettera := "a"
+	if partita != null:
+		lettera = str(partita.missione.get("mappa", "A")).to_lower()
+	mappa = load("res://assets/maps/mappa_%s%s.jpg" % [lettera, "_realistica" if realistica else ""])
 	trame.clear()
 	_carica_cartella("res://assets/pedine")
 	if nuove:
@@ -110,10 +113,18 @@ func _adatta() -> void:
 	_limita()
 	queue_redraw()
 
-## All’inizio si inquadra il margine nord, da cui entra la squadra.
+## All’inizio si inquadrano gli esagoni da cui entra la squadra.
 func vista_iniziale() -> void:
 	zoom = maxf(scala_minima(), minf(size.x / 2300.0, size.y / 1500.0))
-	spostamento = Vector2(size.x / 2.0 - 1100.0 * zoom, 10.0 - 40.0 * zoom)
+	var ing: Array = partita.esagoni_ingresso() if partita != null else []
+	if ing.is_empty():
+		spostamento = Vector2(size.x / 2.0 - 1100.0 * zoom, 10.0 - 40.0 * zoom)
+	else:
+		var c := Vector2.ZERO
+		for h in ing:
+			c += centro_tex(h)
+		c /= float(ing.size())
+		spostamento = size / 2.0 - c * zoom
 	_limita()
 	queue_redraw()
 
@@ -273,7 +284,7 @@ func _draw() -> void:
 						draw_polyline(_chiudi(poligono(h, 0.98)), Color(0.95, 0.8, 0.3, 0.3), maxf(1.0, 1.5 * zoom))
 	# Obiettivi della missione
 	if mostra_obiettivi:
-		for h in ["T8", "K13", "L13"] + partita.alture_obiettivo():
+		for h in partita.obiettivi_mappa():
 			draw_polyline(_chiudi(poligono(h, 0.92)), Color(0.78, 0.6, 0.15, 0.85), maxf(2.0, 5.0 * zoom))
 	# Evidenziazioni (destinazioni, bersagli)
 	for h in evidenzia:

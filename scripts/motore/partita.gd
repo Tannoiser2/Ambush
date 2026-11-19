@@ -1,6 +1,6 @@
 class_name Partita
 extends RefCounted
-## Motore della Missione 1: Operazioni, Round, paragrafi, combattimento e punteggio.
+## Motore delle missioni: Operazioni, Round, paragrafi, combattimento e punteggio.
 ## Tutto lo stato è in `s` (dizionario serializzabile in JSON).
 
 const E = preload("res://scripts/motore/esagoni.gd")
@@ -27,11 +27,35 @@ var ultimo_dado := 0
 var _profondita := 0
 var _stampa := OS.get_environment("AMBUSH_CRONACA") == "1"
 
-func _init() -> void:
-	missione = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione1.json"))
+var numero := 1
+
+func _init(n := 1) -> void:
 	paragrafi = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi.json"))
-	terreno = TerrenoScript.new()
 	ia = TedeschiScript.new(self)
+	imposta_missione(n)
+
+## Missioni con i dati pronti (le altre compaiono nel menu come «in preparazione»).
+static func disponibili() -> Array:
+	var out: Array = []
+	for n in range(1, 9):
+		if FileAccess.file_exists("res://data/missione%d.json" % n):
+			out.append(n)
+	return out
+
+## Carica i dati della missione n (carte, tedeschi, mappa) se non sono già quelli in uso.
+func imposta_missione(n: int) -> void:
+	if n == numero and not missione.is_empty():
+		return
+	numero = n
+	missione = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
+	terreno = TerrenoScript.new("res://data/mappa_%s.json" % str(missione.get("mappa", "A")).to_lower())
+	_alture_cache = []
+
+func titolo_missione() -> String:
+	return "Missione %d · %s" % [numero, missione.titolo]
+
+func testo_ingresso() -> String:
+	return str(missione.get("ingresso_breve", "dal margine nord (A1–J1)"))
 
 # =================================================================== stato
 func nuova(seme := 0, con_schieramento := false) -> void:
@@ -39,7 +63,7 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 		seme = int(Time.get_unix_time_from_system() * 1000.0) % 2147483647
 	rng.seed = seme
 	s = {
-		"versione": 2, "seme": seme, "fase": "operazioni", "condizione": 1,
+		"versione": 2, "missione": numero, "seme": seme, "fase": "operazioni", "condizione": 1,
 		"avvistamenti": [false, false, false, false, false, false, false, false, false, false],
 		"pv": [], "eventi": {}, "mine": {}, "modifiche": {}, "oggetti": {}, "punti": {},
 		"unita": {}, "evasi": {}, "no_rientro": false, "pilota": "", "cronaca": [],
@@ -49,23 +73,39 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 		var u := _nuovo_americano(d)
 		s.unita[u.id] = u
 	terreno.imposta_modifiche(s.modifiche)
-	_log("titolo", "Missione 1 · Sangue a Saint-Michaux")
+	_log("titolo", titolo_missione())
 	_log("info", missione.briefing)
 	if con_schieramento:
 		s.fase = "schieramento"
-		_log("info", "Condizione 1. Livello di attivazione 0–1. Schiera i soldati sul margine nord (A1–J1), poi dai il via alla missione.")
+		_log("info", "Condizione 1. %s Schiera i soldati %s, poi dai il via alla missione." % [_testo_livello(), testo_ingresso()])
 	else:
-		_log("info", "Condizione 1. Livello di attivazione 0–1. Entra con i soldati dal margine nord (A1–J1).")
+		_log("info", "Condizione 1. %s Entra con i soldati %s." % [_testo_livello(), testo_ingresso()])
 	recenti.clear()
 	aggiornata.emit()
 
 # ------------------------------------------------------------------ schieramento iniziale
-## Esagoni del margine nord da cui la squadra entra.
+func _testo_livello() -> String:
+	if missione.attivazione.has(str(int(s.condizione))):
+		return "Livello di attivazione 0–%d." % livello_attivazione()
+	return "Nessun controllo di attivazione in questa Condizione."
+
+## Esagoni da cui la squadra entra (Missione 1: margine nord, A1–J1).
 func esagoni_ingresso() -> Array:
+	if missione.has("ingresso_esagoni"):
+		return missione.ingresso_esagoni.duplicate()
 	var out: Array = []
 	for c in 10:
 		out.append(E.da(c, 1))
 	return out
+
+func e_ingresso(h: String) -> bool:
+	return h in esagoni_ingresso()
+
+## Esagoni da cui si esce dalla mappa (di solito gli stessi dell’ingresso).
+func e_uscita(h: String) -> bool:
+	if missione.has("uscita_esagoni"):
+		return h in missione.uscita_esagoni
+	return e_ingresso(h)
 
 ## Dispone (o sposta) dei soldati su un esagono d’ingresso prima che la missione cominci.
 ## Con h vuoto li rimette fuori mappa. Nessuna carta viene letta finché non si dà il via.
@@ -74,7 +114,7 @@ func schiera(ids: Array, h: String) -> Dictionary:
 	if s.fase != "schieramento":
 		return {"ok": false, "errore": "Lo schieramento è già concluso."}
 	if h != "" and not (h in esagoni_ingresso()):
-		return {"ok": false, "errore": "Si entra solo dal margine nord, da A1 a J1."}
+		return {"ok": false, "errore": "Si entra solo %s." % testo_ingresso()}
 	for id in ids:
 		var a := u(str(id))
 		if a.is_empty() or a.lato != "us":
@@ -96,7 +136,7 @@ func inizia_missione() -> Dictionary:
 				gruppi[a.hex] = []
 			gruppi[a.hex].append(a.id)
 	if gruppi.is_empty():
-		return {"ok": false, "errore": "Schiera almeno un soldato sul margine nord."}
+		return {"ok": false, "errore": "Schiera almeno un soldato %s." % testo_ingresso()}
 	_inizio_comando()
 	s.fase = "operazioni"
 	var esagoni: Array = gruppi.keys()
@@ -138,6 +178,7 @@ func carica(dati: Dictionary) -> bool:
 	# Un salvataggio riletto dal JSON ha tutti i numeri come decimali (1.0 al posto di 1):
 	# vanno riportati a interi, altrimenti le ricerche per Condizione e per numero falliscono.
 	s = _interi(dati.duplicate(true))
+	imposta_missione(int(s.get("missione", 1)))
 	rng.seed = int(s.seme)
 	if s.has("rng_stato"):
 		rng.state = int(s.rng_stato)
@@ -288,7 +329,7 @@ func _pv(n: int, motivo: String) -> void:
 	_log("pv", "%+d PV — %s" % [n, motivo])
 
 func livello_attivazione() -> int:
-	return int(missione.attivazione.get(str(int(s.condizione)), 8))
+	return int(missione.attivazione.get(str(int(s.condizione)), -1))
 
 func fase_round() -> bool:
 	return s.fase == "round"
@@ -559,6 +600,8 @@ func _op_controllo(o: Dictionary, ctx: Dictionary) -> void:
 		ok = controllo_pc(sold, mod)
 		if ok:
 			ctx.ultimo_pc = sold.id
+	elif livello_attivazione() < 0:
+		_log("info", "Controllo di attivazione: in questa Condizione non c’è livello di attivazione, il controllo fallisce.")
 	else:
 		var livello := livello_attivazione() + mod
 		var r := d10()
@@ -629,12 +672,20 @@ func evento_casuale(ctx: Dictionary, passo: Dictionary = {}) -> void:
 	_risolvi_riferimento(rif, ctx)
 
 func cambia_condizione(n: int) -> void:
-	if n <= int(s.condizione):
+	# Missione 1: la Condizione cresce soltanto. Nelle altre si segue il paragrafo alla lettera.
+	if n == int(s.condizione) or (numero == 1 and n < int(s.condizione)):
+		return
+	if not missione.condizioni.has(str(n)):
+		_log("errore", "La carta della Condizione %d non è disponibile: si resta nella Condizione %d." % [n, int(s.condizione)])
 		return
 	_passo("condizione", {"n": n})
 	s.condizione = n
+	if not s.has("condizioni_viste"):
+		s.condizioni_viste = [1]
+	if not (n in s.condizioni_viste):
+		s.condizioni_viste.append(n)
 	s.eventi.clear()
-	_log("condizione", "Passa alla Condizione %d. Livello di attivazione 0–%d. Tutti i segnalini Evento sono rimossi." % [n, livello_attivazione()])
+	_log("condizione", "Passa alla Condizione %d. %s Tutti i segnalini Evento sono rimossi." % [n, _testo_livello()])
 	# Controlli di paragrafo negli esagoni occupati, in ordine di numero (5/5 e 6/11).
 	var esagoni_occ: Array = []
 	for a in americani_attivi_in_mappa():
@@ -1183,8 +1234,8 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 	var da_hex: String = a.hex
 	if da_hex != "" and not E.adiacenti(da_hex, verso):
 		return "Si può entrare solo in un esagono adiacente."
-	if da_hex == "" and not (E.riga(verso) == 1 and E.colonna(verso) <= 9):
-		return "Si entra dal margine nord, tra A1 e J1."
+	if da_hex == "" and not e_ingresso(verso):
+		return "Si entra %s." % testo_ingresso()
 	var costo := _costo_passo(a, da_hex, verso)
 	if costo < 0:
 		return "Non si può attraversare un muro senza aperture."
@@ -1291,8 +1342,12 @@ func _ingresso(h: String, ids: Array, sul_ponte: bool) -> void:
 	var vivi: Array = ids.filter(func(i): return attivo(u(str(i))))
 	if vivi.is_empty():
 		return
-	controllo_paragrafo(h, vivi, {"sul_ponte": sul_ponte})
-	if h == "R15" and s.punti.get("R15", "") == "typhoon" and s.pilota == "":
+	_edificio_raggiunto(h)
+	if _niente_controlli_round():
+		_log("info", "Nei Round di questa missione non si fanno controlli di paragrafo entrando negli esagoni.")
+	else:
+		controllo_paragrafo(h, vivi, {"sul_ponte": sul_ponte})
+	if numero == 1 and h == "R15" and s.punti.get("R15", "") == "typhoon" and s.pilota == "":
 		leggi("349", {"hex": h, "ids": vivi})
 
 ## Fine di un’azione di movimento nei Round (o di qualsiasi azione a più passi).
@@ -2099,8 +2154,8 @@ func trascina(id: String, ferito_id: String, verso: String) -> Dictionary:
 		return _errore("Serve una casella di porto libera.")
 	var uscita := verso == "USCITA"
 	if uscita:
-		if not (E.riga(a.hex) == 1 and E.colonna(a.hex) <= 9):
-			return _errore("Si esce solo dal margine nord, tra A1 e J1.")
+		if not e_uscita(a.hex):
+			return _errore("Si esce solo da %s." % str(missione.get("uscita_breve", "margine nord, tra A1 e J1")))
 	elif terreno.costo_movimento(a.hex, verso) < 0:
 		return _errore("Non si passa da quella parte.")
 	if f.stato == "incapacitato":
@@ -2140,8 +2195,8 @@ func esci(id: String) -> Dictionary:
 	var e := _azione_semplice(a)
 	if e != "":
 		return _errore(e)
-	if not (E.riga(a.hex) == 1 and E.colonna(a.hex) <= 9):
-		return _errore("Si esce solo dal margine nord, tra A1 e J1.")
+	if not e_uscita(a.hex):
+		return _errore("Si esce solo da %s." % str(missione.get("uscita_breve", "margine nord, tra A1 e J1")))
 	if a.postura == "prone":
 		return _errore("Un soldato prono non si muove.")
 	for pid in a.prigionieri:
@@ -2396,7 +2451,71 @@ func alture_obiettivo() -> Array:
 	_alture_cache = migliori
 	return migliori
 
+func _niente_controlli_round() -> bool:
+	return s.fase == "round" and bool(missione.get("regole", {}).get("niente_controlli_round", false))
+
+## Missione 2: 1 PV per ogni esagono di edificio in cui entra un soldato.
+func _edificio_raggiunto(h: String) -> void:
+	if not bool(missione.get("regole", {}).get("pv_edifici", false)) or not terreno.edificio(h):
+		return
+	if not s.has("edifici_entrati"):
+		s.edifici_entrati = []
+	if h in s.edifici_entrati:
+		return
+	s.edifici_entrati.append(h)
+	_pv(1, "edificio %s raggiunto" % h)
+
+func esagoni_edificio() -> Array:
+	var out: Array = []
+	for h in E.tutti():
+		if terreno.edificio(h):
+			out.append(h)
+	return out
+
+## Esagono in cui un incapacitato non costa PV se la missione finisce con l’obiettivo raggiunto.
+func _salvo_a_fine(h: String) -> bool:
+	if numero == 1:
+		return terreno.edificio(h)
+	return h in missione.get("obiettivi", [])
+
+## Righe del pannello obiettivi: [fatto, etichetta, spiegazione].
+func righe_obiettivi() -> Array:
+	var v := condizioni_vittoria()
+	var pv := pv_totali()
+	match numero:
+		2:
+			return [
+				[v.edifici >= v.edifici_tot, "Edifici %d/%d" % [v.edifici, v.edifici_tot], "1 PV per ogni esagono di edificio in cui entra un tuo soldato"],
+				[v.stazione, "Tutti in stazione", "Tutti i soldati attivi nella stazione (O6, P5, Q5)"],
+				[pv >= int(missione.vittoria_pv), "%d PV (ora %d)" % [int(missione.vittoria_pv), pv], "Punti vittoria necessari"],
+			]
+	var alt: Array = alture_obiettivo()
+	return [
+		[v.t8, "Edificio T8", "Un soldato attivo nell’edificio T8"],
+		[v.kl, "Edifici K13–L13", "Un soldato negli edifici K13–L13"],
+		[v.altura != "", "Altura %s" % ", ".join(alt), "Un soldato attivo sull’altura con vista sulla strada"],
+		[v.nessun_tedesco, "Nessun tedesco attivo", "Nessun tedesco attivo sulla mappa"],
+		[pv + (4 if v.ok else 0) >= 13, "13 PV (ora %d)" % pv, "Servono 13 punti vittoria; il primo finale ne dà 4 in più"],
+	]
+
+## Esagoni da evidenziare come obiettivi sulla mappa.
+func obiettivi_mappa() -> Array:
+	if numero == 1:
+		return ["T8", "K13", "L13"] + alture_obiettivo()
+	return missione.get("obiettivi", [])
+
 func condizioni_vittoria() -> Dictionary:
+	if numero == 2:
+		var entrati: Array = s.get("edifici_entrati", [])
+		var tutti := esagoni_edificio()
+		var in_stazione := true
+		var attivi := americani_attivi_in_mappa()
+		for a in attivi:
+			if not (a.hex in missione.obiettivi):
+				in_stazione = false
+		var completo := entrati.size() >= tutti.size()
+		return {"edifici": entrati.size(), "edifici_tot": tutti.size(), "stazione": in_stazione and not attivi.is_empty(),
+			"ok": completo and in_stazione and not attivi.is_empty() and s.fase == "operazioni"}
 	var t8 := false
 	var kl := false
 	var altura := ""
@@ -2439,7 +2558,7 @@ func _calcola_fine(modo: String) -> void:
 	var righe: Array = []
 	var tot := pv_totali()
 	var bonus := 0
-	if modo == "obiettivo":
+	if modo == "obiettivo" and numero == 1:
 		bonus = 4
 		righe.append(["Obiettivo raggiunto: strada di Saint-Michaux sotto controllo", 4])
 	var perdite := 0
@@ -2450,7 +2569,7 @@ func _calcola_fine(modo: String) -> void:
 			perdite -= 2
 			righe.append(["%s ucciso" % nome(a), -2])
 		elif a.stato == "incapacitato":
-			var salvo: bool = a.get("uscito", false) or (modo == "obiettivo" and terreno.edificio(a.hex))
+			var salvo: bool = a.get("uscito", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))
 			if not salvo:
 				perdite -= 2
 				righe.append(["%s incapacitato e non messo in salvo" % nome(a), -2])

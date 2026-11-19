@@ -10,7 +10,7 @@ const MappaScript = preload("res://scripts/ui/mappa.gd")
 const PistaScript = preload("res://scripts/ui/pista.gd")
 const FasiScript = preload("res://scripts/ui/fasi.gd")
 const TabellaScript = preload("res://scripts/ui/tabella_carta.gd")
-const SALVATAGGIO := "user://ambush_missione1.json"
+const ULTIMA := "user://ambush_ultima.json"
 const PREFERENZE := "user://ambush_preferenze.json"
 
 const C_CHIARO := "f0e7c9"
@@ -88,12 +88,13 @@ var _ultimo_esito := ""
 func _ready() -> void:
 	theme = Tema.tema()
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	p = Partita.new()
+	p = Partita.new(_ultima_missione())
 	_leggi_preferenze()
 	_costruisci()
 	mappa.velocita = _velocita_iniziale
 	_aggiorna_bottoni_scheda()
 	_applica_linee()
+	mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
 	_applica_grafica()
 	var dati := _leggi_salvataggio()
 	if not dati.is_empty() and p.carica(dati):
@@ -502,7 +503,8 @@ func _pulisci_selezione() -> void:
 
 func _aggiorna_barra(st: Dictionary) -> void:
 	var cond := int(st.get("condizione", 1))
-	barra_cond.text = "CONDIZIONE %d · ATT. 0–%d" % [cond, int(p.missione.attivazione.get(str(cond), 8))]
+	var liv := int(p.missione.attivazione.get(str(cond), -1))
+	barra_cond.text = ("CONDIZIONE %d · ATT. 0–%d" % [cond, liv]) if liv >= 0 else ("CONDIZIONE %d · NESSUNA ATT." % cond)
 	barra_pv.text = "PV %d / %d" % [int(st.get("pv_tot", 0)), int(p.missione.vittoria_pv)]
 	var avv: Array = st.get("avvistamenti", [])
 	for i in 10:
@@ -725,15 +727,7 @@ func _visibile_su_mappa(h: String) -> bool:
 func _aggiorna_obiettivi() -> void:
 	for c in obiettivi_box.get_children():
 		c.queue_free()
-	var v := p.condizioni_vittoria()
-	var alt: Array = p.alture_obiettivo()
-	var righe := [
-		[v.t8, "Edificio T8", "Un soldato attivo nell’edificio T8"],
-		[v.kl, "Edifici K13–L13", "Un soldato negli edifici K13–L13"],
-		[v.altura != "", "Altura %s" % ", ".join(alt), "Un soldato attivo sull’altura con vista sulla strada"],
-		[v.nessun_tedesco, "Nessun tedesco attivo", "Nessun tedesco attivo sulla mappa"],
-		[p.pv_totali() + (4 if v.ok else 0) >= 13, "13 PV (ora %d)" % p.pv_totali(), "Servono 13 punti vittoria; il primo finale ne dà 4 in più"],
-	]
+	var righe: Array = p.righe_obiettivi()
 	for r in righe:
 		var c := _chip(("fatto: " if r[0] else "") + str(r[1]), Color("3f6b2f") if r[0] else Color("3a3f2c"))
 		c.tooltip_text = r[2]
@@ -879,7 +873,7 @@ func _azioni_schieramento() -> void:
 	var dentro := tutti.size() - fuori.size()
 	titolo_azioni.text = "SCHIERAMENTO · %d di %d soldati sulla mappa" % [dentro, tutti.size()]
 	var scelti: Array = selezione.map(func(id): return p.u(id).lettera)
-	aiuto_azioni.text = "Scegli i soldati nella scheda a sinistra e tocca un esagono verde del margine nord (A1–J1). Puoi spostarli quante volte vuoi: nessuna carta viene letta e il nemico non reagisce finché non dai il via. Chi lasci fuori potrà entrare più tardi."
+	aiuto_azioni.text = "Scegli i soldati nella scheda a sinistra e tocca un esagono verde d’ingresso (" + p.testo_ingresso() + "). Puoi spostarli quante volte vuoi: nessuna carta viene letta e il nemico non reagisce finché non dai il via. Chi lasci fuori potrà entrare più tardi."
 	if not scelti.is_empty():
 		aiuto_azioni.text = "Scelti: %s. " % ", ".join(scelti) + aiuto_azioni.text
 	_gruppo("SCEGLI")
@@ -906,7 +900,7 @@ func _aggiungi_prossimo() -> void:
 
 func _azioni_operazioni(a: Dictionary) -> void:
 	if a.stato == "fuori":
-		aiuto_azioni.text = "Tocca un esagono verde del margine nord (A1–J1) per entrare. Ogni esagono raggiunto fa leggere la carta della Condizione."
+		aiuto_azioni.text = "Tocca un esagono verde d’ingresso (" + p.testo_ingresso() + ") per entrare. Ogni esagono raggiunto fa leggere la carta della Condizione."
 	else:
 		aiuto_azioni.text = "Tocca un esagono verde adiacente per muovere%s. Nelle Operazioni non ci sono limiti di movimento." % (" il gruppo" if selezione.size() > 1 else "")
 	if a.hex != "" and selezione.size() == 1:
@@ -949,12 +943,12 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 	var inattivi: Array = p.unita_in(a.hex, "us", false).filter(func(x): return x.stato in ["incapacitato", "morto"])
 	if not inattivi.is_empty():
 		_b("Trascina " + inattivi[0].lettera, func(): modo = "trascina"; _aggiorna_tutto(), "Poi tocca l’esagono adiacente. Il soldato deve essere in piedi.")
-		if E.riga(a.hex) == 1 and E.colonna(a.hex) <= 9:
+		if p.e_uscita(a.hex):
 			_b("Esci trascinando " + inattivi[0].lettera, func(): _esito(p.trascina(a.id, inattivi[0].id, "USCITA")))
-	if a.hex == "R15" and p.s.pilota == "intrappolato":
+	if p.numero == 1 and a.hex == "R15" and p.s.pilota == "intrappolato":
 		_b("Libera il pilota", func(): _esito(p.libera_pilota(a.id)), "Durante le Operazioni costa un controllo Evento; nei Round due azioni.")
-	if E.riga(a.hex) == 1 and E.colonna(a.hex) <= 9:
-		_b("Esci dalla mappa", func(): _conferma("Uscire dalla mappa?", "%s lascia il campo e non potrà rientrare. Se tutti i soldati attivi escono dal margine nord la missione termina." % p.nome(a), func(): _esito(p.esci(a.id))))
+	if p.e_uscita(a.hex):
+		_b("Esci dalla mappa", func(): _conferma("Uscire dalla mappa?", "%s lascia il campo e non potrà rientrare. Se tutti i soldati attivi escono dalla mappa la missione termina." % p.nome(a), func(): _esito(p.esci(a.id))))
 
 func _azioni_round(a: Dictionary) -> void:
 	var t: Dictionary = p.s.turno if (not p.s.turno.is_empty() and p.s.turno.id == a.id) else {}
@@ -990,7 +984,7 @@ func _azioni_round(a: Dictionary) -> void:
 		" gratuito" if cambio else " (1 PM, è ferito)", (" Nella stessa casella possono agire anche " + ", ".join(altri) + ": scegli tu l’ordine.") if not altri.is_empty() else ""]
 	if a.stato == "fuori":
 		_gruppo("MOVIMENTO")
-		_b("Entra sulla mappa", func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento per il primo esagono del margine nord.")
+		_b("Entra sulla mappa", func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento per il primo esagono d’ingresso (%s)." % p.testo_ingresso())
 		_gruppo("FINE")
 		_b("Passa", func(): _esito(p.passa(a.id)))
 		return
@@ -1058,7 +1052,7 @@ func _annulla_carica(a: Dictionary) -> void:
 func _azioni_missione() -> void:
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:
 		_gruppo("MISSIONE")
-		var b := _b("Missione compiuta: termina", func(): _conferma("Terminare la missione?", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.", func(): _esito(p.termina_missione("obiettivo"))))
+		var b := _b("Missione compiuta: termina", func(): _conferma("Terminare la missione?", str(p.missione.get("testo_fine", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.")), func(): _esito(p.termina_missione("obiettivo"))))
 		b.add_theme_color_override("font_color", Tema.OTTONE)
 
 func _imposta_modo(a: Dictionary, m: String) -> void:
@@ -1182,10 +1176,12 @@ func _sopra_mappa(h: String) -> void:
 		extra.append("segnalino Evento")
 	if p.s.mine.has(h):
 		extra.append("CAMPO MINATO")
-	if h in ["T8", "K13", "L13"]:
+	if p.numero == 1 and h in ["T8", "K13", "L13"]:
 		extra.append("obiettivo: edificio")
-	if h in p.alture_obiettivo():
+	if p.numero == 1 and h in p.alture_obiettivo():
 		extra.append("obiettivo: altura")
+	if p.numero != 1 and h in p.obiettivi_mappa():
+		extra.append("obiettivo")
 	if not extra.is_empty():
 		righe.append(", ".join(extra))
 	for x in p.unita_in(h, "", false):
@@ -1867,20 +1863,30 @@ func _paragrafo(vb: VBoxContainer, testo: String, dim := 16, a_macchina := false
 func _mostra_briefing(c_e_salvataggio: bool, solo_lettura := false) -> void:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 10)
-	_intestazione(vb, "ORDINE DI MISSIONE", "MISSIONE 1 · SANGUE A SAINT-MICHAUX · RISERVATO")
+	_intestazione(vb, "ORDINE DI MISSIONE", "%s · RISERVATO" % p.titolo_missione().to_upper())
 	_paragrafo(vb, p.missione.briefing, 16, true)
-	_paragrafo(vb, "[b]Ingresso.[/b] " + p.missione.ingresso + " Livelli di attivazione: Condizione 1: 0–1; Condizione 2: 0–3; Condizione 3: 0–5; Condizione 4: 0–8.", 15)
-	_paragrafo(vb, "[b]Vittoria: 13 PV.[/b] La missione termina in uno di due modi:\n1. Un soldato attivo nell’edificio T8, un soldato negli edifici K13–L13 e un soldato attivo sull’altura di sud-est da cui si vede tutta la strada, senza tedeschi attivi sulla mappa: ottieni 4 PV in più.\n2. Tutti i soldati attivi escono dalla mappa da A1–J1.\nPerdi 2 PV per ogni americano ucciso o incapacitato. Un incapacitato non costa PV se lo porti fuori mappa da A1–J1 o, con il primo finale, in uno dei due edifici. Altri PV si scoprono durante la missione.", 15)
+	var livelli: Array = []
+	var chiavi: Array = p.missione.attivazione.keys()
+	chiavi.sort()
+	for k in chiavi:
+		livelli.append("Condizione %s: 0–%d" % [k, int(p.missione.attivazione[k])])
+	var att := ("Livelli di attivazione: " + "; ".join(livelli) + ".") if not livelli.is_empty() else "Nessun livello di attivazione: i tedeschi entrano per evento casuale."
+	_paragrafo(vb, "[b]Ingresso.[/b] " + p.missione.ingresso + " " + att, 15)
+	_paragrafo(vb, str(p.missione.get("vittoria_testo", "[b]Vittoria: 13 PV.[/b] La missione termina in uno di due modi:\n1. Un soldato attivo nell’edificio T8, un soldato negli edifici K13–L13 e un soldato attivo sull’altura di sud-est da cui si vede tutta la strada, senza tedeschi attivi sulla mappa: ottieni 4 PV in più.\n2. Tutti i soldati attivi escono dalla mappa da A1–J1.\nPerdi 2 PV per ogni americano ucciso o incapacitato. Un incapacitato non costa PV se lo porti fuori mappa da A1–J1 o, con il primo finale, in uno dei due edifici. Altri PV si scoprono durante la missione.")), 15)
+	if p.missione.has("regole_testo"):
+		_paragrafo(vb, p.missione.regole_testo, 15)
 	var bb := HBoxContainer.new()
 	bb.alignment = BoxContainer.ALIGNMENT_END
 	if solo_lettura:
 		bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
 	else:
 		if c_e_salvataggio:
-			bb.add_child(Tema.bottone("Nuova missione", func(): _chiudi_finestra(); _nuova()))
+			bb.add_child(Tema.bottone("Altra missione", func(): _chiudi_finestra(); _scegli_missione()))
+			bb.add_child(Tema.bottone("Ricomincia", func(): _chiudi_finestra(); _nuova()))
 			var r := Tema.bottone("Riprendi la partita", _chiudi_finestra)
 			bb.add_child(r)
 		else:
+			bb.add_child(Tema.bottone("Altra missione", func(): _chiudi_finestra(); _scegli_missione()))
 			bb.add_child(Tema.bottone("Regole in breve", _mostra_regole))
 			bb.add_child(Tema.bottone("Agli ordini: inizia", func(): _chiudi_finestra(); _seleziona_primo()))
 	vb.add_child(bb)
@@ -2004,7 +2010,72 @@ func _finestra_equipaggiamento(id: String) -> void:
 	_apri_finestra(vb, 620)
 
 func _chiedi_nuova() -> void:
-	_conferma("Nuova partita?", "La missione in corso andrà persa.", _nuova)
+	_scegli_missione()
+
+## Elenco delle missioni: quelle pronte si giocano, le altre sono «in preparazione».
+func _scegli_missione() -> void:
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 8)
+	_intestazione(vb, "MISSIONI", "Scegli la missione: ognuna ha il suo salvataggio")
+	var pronte := Partita.disponibili()
+	var nomi := ["Sangue a Saint-Michaux", "Avanzata su Chasoul", "Un freddo mattino in Belgio", "Lancio notturno del D-Day",
+		"Operazione Borseggio", "In canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre"]
+	for i in 8:
+		var n := i + 1
+		var riga := HBoxContainer.new()
+		riga.add_theme_constant_override("separation", 10)
+		var pronta := n in pronte
+		var salvata := FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
+		var b := Tema.bottone("Missione %d · %s" % [n, nomi[i]], func(): _chiudi_finestra(); _avvia_missione(n, false))
+		b.custom_minimum_size = Vector2(430, 40)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.disabled = not pronta
+		riga.add_child(b)
+		if salvata and pronta:
+			riga.add_child(Tema.bottone("Riprendi", func(): _chiudi_finestra(); _avvia_missione(n, true)))
+		elif not pronta:
+			var l := Label.new()
+			l.text = "in preparazione"
+			l.custom_minimum_size = Vector2(130, 0)
+			l.add_theme_color_override("font_color", Color("8a8f74"))
+			riga.add_child(l)
+		vb.add_child(riga)
+	var bb := HBoxContainer.new()
+	bb.alignment = BoxContainer.ALIGNMENT_END
+	bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
+	vb.add_child(bb)
+	_apri_finestra(vb, 680)
+
+## Passa alla missione n: riprende il suo salvataggio o ne comincia una nuova.
+func _avvia_missione(n: int, riprendi: bool) -> void:
+	p.imposta_missione(n)
+	_ricorda_missione(n)
+	mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
+	var dati := _leggi_salvataggio(n) if riprendi else {}
+	if not dati.is_empty() and p.carica(dati):
+		selezione = []
+		modo = ""
+		mappa.pulisci_tracce()
+		_aggiorna_tutto(true)
+		mappa.centra()
+		_mostra_briefing(true)
+	else:
+		_nuova()
+
+func _ultima_missione() -> int:
+	if FileAccess.file_exists(ULTIMA):
+		var d = JSON.parse_string(FileAccess.get_file_as_string(ULTIMA))
+		if d is Dictionary and int(d.get("missione", 1)) in Partita.disponibili():
+			return int(d.get("missione", 1))
+	return 1
+
+func _ricorda_missione(n: int) -> void:
+	var f := FileAccess.open(ULTIMA, FileAccess.WRITE)
+	if f != null:
+		f.store_string(JSON.stringify({"missione": n}))
+
+func _file_salvataggio(n: int) -> String:
+	return "user://ambush_missione%d.json" % n
 
 func _nuova() -> void:
 	p.nuova(0, true)
@@ -2021,16 +2092,17 @@ func _nuova() -> void:
 
 # =================================================================== salvataggio
 func _salva() -> void:
-	var f := FileAccess.open(SALVATAGGIO, FileAccess.WRITE)
+	var f := FileAccess.open(_file_salvataggio(p.numero), FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify(p.salva()))
 
-func _leggi_salvataggio() -> Dictionary:
-	if not FileAccess.file_exists(SALVATAGGIO):
+func _leggi_salvataggio(n := -1) -> Dictionary:
+	var file := _file_salvataggio(p.numero if n < 0 else n)
+	if not FileAccess.file_exists(file):
 		return {}
-	var testo := FileAccess.get_file_as_string(SALVATAGGIO)
+	var testo := FileAccess.get_file_as_string(file)
 	var d = JSON.parse_string(testo)
-	if d is Dictionary and d.get("fase", "") != "fine":
+	if d is Dictionary and d.get("fase", "") != "fine" and int(d.get("missione", 1)) == (p.numero if n < 0 else n):
 		return d
 	return {}
 
@@ -2053,7 +2125,7 @@ func _mostra_grafica() -> void:
 	vb.add_theme_constant_override("separation", 10)
 	_intestazione(vb, "GRAFICA", "Scegli l’aspetto della mappa e delle pedine: le regole non cambiano")
 	var voci := [
-		["MAPPA", "mappa", "Originale del 1983", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa A: stessi esagoni, stesso terreno."],
+		["MAPPA", "mappa", "Originale del 1983", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa (A o B): stessi esagoni, stesso terreno."],
 		["PEDINE", "pedine", "Originali", "Ridisegnate", "Le pedine ridisegnate mostrano il soldato in piedi oppure accovacciato secondo la postura."],
 		["COMANDO", "comando", "Nascosto", "Mostrato", "Mostra sulla mappa chi è in comando e gli esagoni entro due dal comandante."],
 	]
