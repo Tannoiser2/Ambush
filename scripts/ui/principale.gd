@@ -863,6 +863,8 @@ func _gruppo(testo: String) -> void:
 	flusso_azioni.add_child(pc)
 
 func _azioni_posture(a: Dictionary, costo := "") -> void:
+	if a.get("carro_us", false):
+		return
 	_gruppo("POSTURA")
 	for k in ["standing", "crouching", "prone"]:
 		var b := _b(_maiuscola(T.NOMI_POSTURA[k]) + costo, func(): _esito(p.cambia_postura(a.id, k)), "", a.postura != k and a.hex != "")
@@ -957,7 +959,7 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 			_b("Esci trascinando " + inattivi[0].lettera, func(): _esito(p.trascina(a.id, inattivi[0].id, "USCITA")))
 	if p.numero == 1 and a.hex == "R15" and p.s.pilota == "intrappolato":
 		_b("Libera il pilota", func(): _esito(p.libera_pilota(a.id)), "Durante le Operazioni costa un controllo Evento; nei Round due azioni.")
-	if p.e_uscita(a.hex):
+	if p.e_uscita(a.hex) and not a.get("carro_us", false):
 		_b("Esci dalla mappa", func(): _conferma("Uscire dalla mappa?", "%s lascia il campo e non potrà rientrare. Se tutti i soldati attivi escono dalla mappa la missione termina." % p.nome(a), func(): _esito(p.esci(a.id))))
 
 func _azioni_round(a: Dictionary) -> void:
@@ -1033,6 +1035,10 @@ func _azioni_round(a: Dictionary) -> void:
 ## Salire e scendere da un veicolo americano nello stesso esagono.
 ## Missione 3: ponti (paragrafo 1000), deposito di carburante, ruota della jeep.
 func _bottoni_ponte(a: Dictionary) -> void:
+	if p.sherman_entrabile():
+		_b("Fai entrare lo Sherman in A6", func(): _esito(p.entra_sherman()), "Lo comandi come un soldato (Z): guida fino a 3 PM piano o 6 veloce, cannone e mitragliatrice.")
+	if a.hex in p.s.get("blocchi", []) and p.s.fase == "operazioni":
+		_b("Sposta il blocco stradale", func(): _esito(p.sgombra_blocco(a.id)), "Servono almeno tre soldati attivi nell’esagono; costa un controllo Evento.")
 	if bool(p.regola("eventi_continui", false)) and p.s.fase == "operazioni" and p.tedeschi_attivi().is_empty():
 		_b("Aspetta i tedeschi", func(): _esito(p.aspetta_tedeschi()), "Si tirano eventi casuali finché un tedesco entra in gioco.")
 	for par_s in p.s.get("scelte", {}):
@@ -1067,6 +1073,8 @@ func _bottoni_ponte(a: Dictionary) -> void:
 func _bottoni_veicolo(a: Dictionary) -> void:
 	var veic: Dictionary = p.veicoli.di(a)
 	if p.veicoli.e_canoa(veic) and not p.veicoli.spiaggiata(veic):
+		return
+	if a.get("carro_us", false):
 		return
 	if not veic.is_empty():
 		_b("Scendi dalla %s" % veic.nome, func(): _esito(p.scendi_veicolo(a.id)), "Nei Round costa 1 punto movimento di un’azione di movimento.")

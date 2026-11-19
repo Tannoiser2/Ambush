@@ -1,0 +1,7409 @@
+{
+ "id": 8,
+ "titolo": "Corsa verso la Sambre",
+ "titolo_originale": "Dash for the Sambre",
+ "data": "Belgio, inizio settembre 1944",
+ "mappa": "A",
+ "nord": "in alto",
+ "briefing": "Inizio settembre 1944. Mentre la divisione entra nei Paesi Bassi, al reggimento viene assegnata una compagnia di Sherman per l’appoggio alla fanteria. Ieri, sotto un pesante fuoco di mortai, avete avuto l’ordine di attestarvi a ovest della Sambre; ora uno di quei preziosi carri è stato mandato avanti con la tua squadra. L’ultimo tratto verso l’unico ponte del settore è una strada sopraelevata, molto esposta: i tuoi uomini devono precedere il carro, ripulire la zona e mettere in sicurezza il ponte. Quando il carro avrà passato il ponte, avanzerete a vostra discrezione.",
+ "ingresso": "Mappa A, nord in alto. I soldati entrano dal margine ovest, tra A1 e A6 compresi. All’inizio non ci sono segnalini sulla mappa. Lo Sherman arriverà durante la missione (un paragrafo lo annuncerà) ed entrerà in A6.",
+ "regole_testo": "[b]Regole speciali.[/b] Il fiume da H1 a O19 si attraversa solo sul ponte intatto (o sui guadi scoperti). Gli argini non ostacolano i soldati ma sono vietati ai veicoli; il carro non entra nei boschi. I blocchi stradali fermano i veicoli: si spostano solo nelle Operazioni, con almeno tre soldati attivi nell’esagono e un controllo Evento. Gli esagoni segnati «XXX» sulla carta non si possono attraversare. Lo Sherman lo guidi tu: si muove, spara col cannone e con le mitragliatrici.",
+ "ingresso_breve": "dal margine ovest, tra A1 e A6",
+ "uscita_breve": "Y8 (oppure, ritirandosi, da A1–A6)",
+ "ingresso_esagoni": [
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "A5",
+  "A6"
+ ],
+ "uscita_esagoni": [
+  "Y8",
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "A5",
+  "A6"
+ ],
+ "vittoria_pv": 18,
+ "attivazione": {
+  "1": 1,
+  "2": 4,
+  "3": 5,
+  "4": 6,
+  "5": 7
+ },
+ "obiettivi": [
+  "M12",
+  "Y8"
+ ],
+ "regole": {
+  "fiume": true,
+  "argini_veicoli": true,
+  "xxx": true,
+  "pv_uscita": {
+   "Y8": 1
+  }
+ },
+ "squadra_armi": {
+  "A": [
+   "smg"
+  ],
+  "B": [
+   "carbine"
+  ],
+  "C": [
+   "carbine",
+   "bazooka"
+  ],
+  "D": [
+   "carbine"
+  ],
+  "E": [
+   "sar"
+  ],
+  "F": [
+   "sar",
+   "satchel"
+  ],
+  "G": [
+   "ar"
+  ],
+  "H": [
+   "sar"
+  ]
+ },
+ "squadra_munizioni": {
+  "A": {
+   "smg": 4,
+   "granata": 2
+  },
+  "B": {
+   "carbine": 4,
+   "granata": 2
+  },
+  "C": {
+   "carbine": 2,
+   "bazooka": 3,
+   "granata": 1
+  },
+  "D": {
+   "carbine": 4,
+   "granata": 2
+  },
+  "E": {
+   "sar": 4,
+   "granata": 2
+  },
+  "F": {
+   "sar": 3,
+   "granata": 2
+  },
+  "G": {
+   "ar": 5,
+   "granata": 1
+  },
+  "H": {
+   "sar": 4,
+   "granata": 2
+  }
+ },
+ "vittoria_testo": "[b]Vittoria: 18 PV.[/b] Ogni soldato attivo che esce da Y8 vale 1 PV; altri PV si scoprono durante la missione. La missione termina quando tutti i soldati attivi sono usciti da Y8, oppure tutti da A1–A6 (lo Sherman può restare sulla mappa). Un incapacitato portato fuori da quegli esagoni non costa PV.",
+ "testo_fine": "",
+ "squadra": [
+  {
+   "id": "A",
+   "nome": "Alex",
+   "IN": 4,
+   "PC": 6,
+   "WS": 2,
+   "DS": 2,
+   "MPA": 4,
+   "comandante": true,
+   "porte": [
+    "smg"
+   ],
+   "munizioni": {
+    "smg": 4,
+    "granata": 2
+   }
+  },
+  {
+   "id": "B",
+   "nome": "Bradley",
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "DS": 4,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "carbine"
+   ],
+   "munizioni": {
+    "carbine": 4,
+    "granata": 2
+   }
+  },
+  {
+   "id": "C",
+   "nome": "Charles",
+   "IN": 3,
+   "PC": 4,
+   "WS": 0,
+   "DS": 4,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "carbine",
+    "bazooka"
+   ],
+   "munizioni": {
+    "carbine": 2,
+    "bazooka": 3,
+    "granata": 1
+   }
+  },
+  {
+   "id": "D",
+   "nome": "David",
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "DS": 6,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "carbine"
+   ],
+   "munizioni": {
+    "carbine": 4,
+    "granata": 2
+   }
+  },
+  {
+   "id": "E",
+   "nome": "Encio",
+   "IN": 2,
+   "PC": 3,
+   "WS": -1,
+   "DS": 4,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "sar"
+   ],
+   "munizioni": {
+    "sar": 4,
+    "granata": 2
+   }
+  },
+  {
+   "id": "F",
+   "nome": "Frankie",
+   "IN": 2,
+   "PC": 5,
+   "WS": 0,
+   "DS": 6,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "sar",
+    "satchel"
+   ],
+   "munizioni": {
+    "sar": 3,
+    "granata": 2
+   }
+  },
+  {
+   "id": "G",
+   "nome": "Gerald",
+   "IN": 2,
+   "PC": 3,
+   "WS": 1,
+   "DS": 4,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "ar"
+   ],
+   "munizioni": {
+    "ar": 5,
+    "granata": 1
+   }
+  },
+  {
+   "id": "H",
+   "nome": "Harold",
+   "IN": 2,
+   "PC": 3,
+   "WS": 1,
+   "DS": 6,
+   "MPA": 4,
+   "comandante": false,
+   "porte": [
+    "sar"
+   ],
+   "munizioni": {
+    "sar": 4,
+    "granata": 2
+   }
+  }
+ ],
+ "tedeschi": {
+  "3": {
+   "lettera": "L",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1": [
+     927,
+     840,
+     926,
+     801
+    ],
+    "2": [
+     928,
+     802,
+     801,
+     800
+    ],
+    "3-5": [
+     802,
+     801,
+     808,
+     800
+    ],
+    "A": [
+     837,
+     804,
+     836,
+     800
+    ],
+    "S": [
+     839,
+     802,
+     971,
+     816
+    ]
+   }
+  },
+  "1": {
+   "lettera": "Q",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     808,
+     824,
+     802,
+     800
+    ],
+    "4": [
+     920,
+     803,
+     809,
+     813
+    ],
+    "A": [
+     808,
+     824,
+     802,
+     800
+    ],
+    "S": [
+     813,
+     816,
+     802,
+     839
+    ]
+   }
+  },
+  "50": {
+   "lettera": "R",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 3,
+   "WS": -2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "4-5": [
+     801,
+     800,
+     824,
+     970
+    ],
+    "6": [
+     824,
+     970,
+     801,
+     809
+    ],
+    "S": [
+     816,
+     971,
+     825,
+     813
+    ]
+   },
+   "primo_turno": 801
+  },
+  "27": {
+   "lettera": "M",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     807,
+     915,
+     803,
+     868
+    ],
+    "R": [
+     856,
+     856,
+     732,
+     732
+    ],
+    "V": [
+     824,
+     829,
+     825,
+     801
+    ],
+    "T": [
+     825,
+     808,
+     801,
+     824
+    ],
+    "X": [
+     824,
+     829,
+     825,
+     801
+    ],
+    "S": [
+     839,
+     808,
+     825,
+     839
+    ]
+   },
+   "primo_turno": 868
+  },
+  "53": {
+   "lettera": "S",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     808,
+     802,
+     800,
+     829
+    ],
+    "4": [
+     838,
+     919,
+     838,
+     800
+    ],
+    "B": [
+     802,
+     801,
+     829,
+     808
+    ],
+    "S": [
+     839,
+     833,
+     971,
+     816
+    ]
+   }
+  },
+  "62": {
+   "lettera": "U",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     825,
+     801,
+     800,
+     808
+    ],
+    "5-6": [
+     800,
+     867,
+     803,
+     825
+    ],
+    "S": [
+     816,
+     839,
+     800,
+     825
+    ],
+    "X": [
+     801,
+     824,
+     808,
+     825
+    ],
+    "Y": [
+     829,
+     60,
+     808,
+     60
+    ]
+   },
+   "primo_turno": 801
+  },
+  "2": {
+   "lettera": "N",
+   "ruolo": "Cecchino",
+   "pv": 2,
+   "armi": [
+    "scoped",
+    "pistol"
+   ],
+   "granate": 1,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-2": [
+     955,
+     954,
+     802,
+     802
+    ],
+    "3-4": [
+     956,
+     954,
+     802,
+     802
+    ],
+    "5-6": [
+     958,
+     801,
+     800,
+     802
+    ],
+    "A": [
+     806,
+     952,
+     953,
+     952
+    ],
+    "B": [
+     808,
+     810,
+     809,
+     807
+    ],
+    "S": [
+     816,
+     963,
+     800,
+     817
+    ]
+   },
+   "primo_turno": 802
+  },
+  "81": {
+   "lettera": "P",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 1,
+   "WS": -2,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     800,
+     801,
+     808,
+     801
+    ],
+    "4": [
+     813,
+     920,
+     809,
+     825
+    ],
+    "B": [
+     800,
+     801,
+     808,
+     802
+    ],
+    "S": [
+     816,
+     839,
+     813,
+     800
+    ]
+   }
+  },
+  "37": {
+   "lettera": "P",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": -2,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "4-5": [
+     824,
+     809,
+     801,
+     800
+    ],
+    "6": [
+     970,
+     824,
+     801,
+     809
+    ],
+    "S": [
+     816,
+     971,
+     825,
+     813
+    ]
+   },
+   "primo_turno": 801
+  },
+  "84": {
+   "lettera": "P",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 3,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "6": [
+     800,
+     825,
+     824,
+     862
+    ],
+    "S": [
+     800,
+     808,
+     802,
+     825
+    ],
+    "X": [
+     800,
+     808,
+     801,
+     825
+    ],
+    "Y": [
+     800,
+     60,
+     858,
+     60
+    ]
+   }
+  },
+  "9": {
+   "lettera": "R",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "scoped"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "3": [
+     801,
+     915,
+     800,
+     825
+    ],
+    "4": [
+     916,
+     800,
+     809,
+     916
+    ],
+    "S": [
+     839,
+     971,
+     816,
+     813
+    ]
+   }
+  },
+  "39": {
+   "lettera": "P",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 1,
+   "PC": 2,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     5
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     8,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     803,
+     868,
+     807,
+     807
+    ],
+    "V": [
+     869,
+     824,
+     825,
+     801
+    ],
+    "R": [
+     732,
+     732,
+     856,
+     856
+    ],
+    "S": [
+     833,
+     817,
+     816,
+     833
+    ]
+   },
+   "primo_turno": 868
+  },
+  "40": {
+   "lettera": "R",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 3,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "1": [
+     802,
+     800,
+     808,
+     825
+    ],
+    "2-3": [
+     802,
+     829,
+     808,
+     825
+    ],
+    "4": [
+     801,
+     802,
+     802,
+     825
+    ],
+    "S": [
+     971,
+     816,
+     839,
+     825
+    ]
+   },
+   "primo_turno": 808
+  },
+  "28": {
+   "lettera": "U",
+   "ruolo": "Soldato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     807,
+     915,
+     803,
+     868
+    ],
+    "R": [
+     732,
+     856,
+     732,
+     732
+    ],
+    "V": [
+     801,
+     829,
+     869,
+     824
+    ],
+    "T": [
+     808,
+     824,
+     869,
+     869
+    ],
+    "X": [
+     801,
+     829,
+     869,
+     824
+    ],
+    "S": [
+     817,
+     800,
+     971,
+     817
+    ]
+   },
+   "primo_turno": 868
+  },
+  "33": {
+   "lettera": "V",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 1,
+   "PC": 2,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     863,
+     866,
+     819,
+     867
+    ],
+    "S": [
+     816,
+     819,
+     833,
+     833
+    ]
+   },
+   "primo_turno": 867
+  },
+  "82": {
+   "lettera": "S",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     803,
+     808,
+     801,
+     803
+    ],
+    "S": [
+     833,
+     812,
+     816,
+     971
+    ],
+    "X": [
+     808,
+     824,
+     800,
+     801
+    ]
+   }
+  },
+  "85": {
+   "lettera": "T",
+   "ruolo": "Fante veterano",
+   "pv": 2,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 4,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     830,
+     807,
+     809,
+     803
+    ],
+    "S": [
+     812,
+     816,
+     833,
+     802
+    ],
+    "X": [
+     801,
+     808,
+     801,
+     824
+    ]
+   }
+  },
+  "88": {
+   "lettera": "Q",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 1,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     863,
+     821,
+     866,
+     867
+    ],
+    "S": [
+     816,
+     800,
+     833,
+     869
+    ]
+   },
+   "primo_turno": 867
+  },
+  "23": {
+   "lettera": "S",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     862,
+     865,
+     866,
+     867
+    ],
+    "S": [
+     869,
+     869,
+     833,
+     833
+    ]
+   },
+   "primo_turno": 868
+  },
+  "41": {
+   "lettera": "M",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 3,
+   "PC": 5,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     803,
+     803,
+     808,
+     803
+    ],
+    "D": [
+     911,
+     801,
+     810,
+     801
+    ],
+    "R": [
+     812,
+     819,
+     807,
+     809
+    ],
+    "S": [
+     816,
+     833,
+     833,
+     800
+    ]
+   }
+  },
+  "87": {
+   "lettera": "X",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 2,
+   "IN": 3,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     862,
+     800,
+     867,
+     866
+    ],
+    "S": [
+     816,
+     800,
+     869,
+     833
+    ]
+   },
+   "primo_turno": 867
+  },
+  "31": {
+   "lettera": "L",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 3,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     864,
+     864,
+     863,
+     867
+    ],
+    "S": [
+     869,
+     816,
+     825,
+     819
+    ]
+   },
+   "primo_turno": 864
+  },
+  "29": {
+   "lettera": "U",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     868,
+     865,
+     865,
+     867
+    ],
+    "S": [
+     839,
+     816,
+     869,
+     812
+    ]
+   },
+   "primo_turno": 868
+  },
+  "30": {
+   "lettera": "R",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     866,
+     867,
+     862,
+     864
+    ],
+    "S": [
+     825,
+     816,
+     802,
+     809
+    ]
+   },
+   "primo_turno": 866
+  },
+  "35": {
+   "lettera": "L",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     803,
+     803,
+     809,
+     800
+    ],
+    "D": [
+     801,
+     911,
+     911,
+     800
+    ],
+    "R": [
+     812,
+     829,
+     807,
+     808
+    ],
+    "S": [
+     833,
+     816,
+     800,
+     817
+    ]
+   }
+  },
+  "18": {
+   "lettera": "P",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     862,
+     866,
+     821,
+     867
+    ],
+    "S": [
+     816,
+     869,
+     971,
+     839
+    ]
+   }
+  },
+  "22": {
+   "lettera": "M",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     867,
+     863,
+     865,
+     862
+    ],
+    "S": [
+     833,
+     833,
+     869,
+     869
+    ]
+   },
+   "primo_turno": 868
+  },
+  "43": {
+   "lettera": "W",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 2,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     863,
+     867,
+     864,
+     800
+    ],
+    "S": [
+     869,
+     833,
+     839,
+     816
+    ]
+   },
+   "primo_turno": 868
+  },
+  "44": {
+   "lettera": "T",
+   "ruolo": "Fante veterano",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     863,
+     867,
+     866,
+     866
+    ],
+    "S": [
+     839,
+     825,
+     869,
+     816
+    ]
+   },
+   "primo_turno": 868
+  },
+  "91": {
+   "lettera": "W",
+   "ruolo": "Granatiere corazzato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     808,
+     834,
+     801,
+     834
+    ],
+    "T": [
+     830,
+     912,
+     801,
+     912
+    ],
+    "S": [
+     816,
+     800,
+     833,
+     817
+    ]
+   }
+  },
+  "90": {
+   "lettera": "V",
+   "ruolo": "Granatiere corazzato",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     800,
+     809,
+     803,
+     834
+    ],
+    "T": [
+     801,
+     800,
+     830,
+     912
+    ],
+    "S": [
+     800,
+     802,
+     816,
+     971
+    ]
+   }
+  },
+  "92": {
+   "lettera": "X",
+   "ruolo": "Granatiere corazzato",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 1,
+   "IN": 3,
+   "PC": 5,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     834,
+     801,
+     803,
+     834
+    ],
+    "T": [
+     912,
+     830,
+     912,
+     801
+    ],
+    "S": [
+     817,
+     816,
+     802,
+     833
+    ]
+   }
+  },
+  "61": {
+   "lettera": "P",
+   "ruolo": "Volksgrenadier",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 0,
+   "PC": 1,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     800,
+     830,
+     803,
+     808
+    ],
+    "S": [
+     802,
+     833,
+     800,
+     816
+    ],
+    "X": [
+     808,
+     801,
+     801,
+     800
+    ]
+   }
+  },
+  "72": {
+   "lettera": "R",
+   "ruolo": "Volksgrenadier",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     830,
+     821,
+     824,
+     803
+    ],
+    "S": [
+     818,
+     816,
+     812,
+     802
+    ],
+    "X": [
+     824,
+     800,
+     808,
+     801
+    ]
+   }
+  },
+  "56": {
+   "lettera": "T",
+   "ruolo": "Fuciliere",
+   "pv": 1,
+   "armi": [
+    "scoped"
+   ],
+   "granate": 1,
+   "IN": 3,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     802,
+     800,
+     801,
+     808
+    ],
+    "3-5": [
+     800,
+     802,
+     808,
+     801
+    ],
+    "S": [
+     971,
+     816,
+     833,
+     839
+    ]
+   }
+  },
+  "45": {
+   "lettera": "N",
+   "ruolo": "Sottufficiale",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 6,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     802,
+     808,
+     801,
+     931
+    ],
+    "3-5": [
+     808,
+     932,
+     800,
+     802
+    ],
+    "D": [
+     836,
+     837,
+     837,
+     804
+    ],
+    "S": [
+     971,
+     839,
+     816,
+     813
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 1
+  },
+  "11": {
+   "lettera": "M",
+   "ruolo": "Sottufficiale",
+   "pv": 2,
+   "armi": [
+    "mp"
+   ],
+   "granate": 1,
+   "IN": 4,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1": [
+     926,
+     801,
+     927,
+     840
+    ],
+    "2": [
+     808,
+     928,
+     824,
+     928
+    ],
+    "3-5": [
+     808,
+     824,
+     829,
+     801
+    ],
+    "A": [
+     836,
+     837,
+     804,
+     837
+    ],
+    "S": [
+     833,
+     839,
+     816,
+     971
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 1
+  },
+  "26": {
+   "lettera": "X",
+   "ruolo": "Sottufficiale",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "4-5": [
+     822,
+     800,
+     969,
+     822
+    ],
+    "6": [
+     822,
+     970,
+     969,
+     800
+    ],
+    "C": [
+     810,
+     809,
+     808,
+     800
+    ],
+    "S": [
+     816,
+     800,
+     828,
+     813
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 1
+  },
+  "93": {
+   "lettera": "M",
+   "ruolo": "Sergente",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 4,
+   "IN": 3,
+   "PC": 5,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     808,
+     825,
+     863,
+     821
+    ],
+    "3-4": [
+     862,
+     863,
+     864,
+     821
+    ],
+    "5-6": [
+     864,
+     802,
+     801,
+     800
+    ],
+    "S": [
+     716,
+     816,
+     833,
+     860
+    ],
+    "Y": [
+     60,
+     60,
+     858,
+     829
+    ]
+   },
+   "comandante": true
+  },
+  "25": {
+   "lettera": "N",
+   "ruolo": "Cecchino",
+   "pv": 2,
+   "armi": [
+    "scoped",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     802,
+     829,
+     808,
+     801
+    ],
+    "4": [
+     800,
+     919,
+     919,
+     918
+    ],
+    "B": [
+     829,
+     808,
+     801,
+     801
+    ],
+    "S": [
+     816,
+     971,
+     802,
+     839
+    ]
+   }
+  },
+  "52": {
+   "lettera": "N",
+   "ruolo": "Sottufficiale veterano",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 1,
+   "IN": 4,
+   "PC": 6,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     803,
+     822,
+     831,
+     824
+    ],
+    "D": [
+     911,
+     832,
+     801,
+     810
+    ],
+    "S": [
+     833,
+     832,
+     816,
+     817
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 1
+  },
+  "89": {
+   "lettera": "U",
+   "ruolo": "Sottufficiale veterano",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 1,
+   "IN": 3,
+   "PC": 5,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     803,
+     831,
+     801,
+     822
+    ],
+    "X": [
+     824,
+     801,
+     808,
+     832
+    ],
+    "S": [
+     816,
+     833,
+     802,
+     812
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 1
+  },
+  "7": {
+   "lettera": "N",
+   "ruolo": "Ufficiale",
+   "pv": 1,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-2": [
+     825,
+     801,
+     802,
+     977
+    ],
+    "3-4": [
+     825,
+     801,
+     808,
+     832
+    ],
+    "S": [
+     816,
+     825,
+     832,
+     993
+    ],
+    "C": [
+     649,
+     649,
+     649,
+     649
+    ],
+    "X": [
+     832,
+     808,
+     825,
+     972
+    ],
+    "U": [
+     803,
+     803,
+     807,
+     806
+    ]
+   },
+   "comandante": true,
+   "primo_turno": 829,
+   "pv_eliminato": 1
+  },
+  "34": {
+   "lettera": "X",
+   "ruolo": "Ufficiale",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 6,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     965,
+     835,
+     802,
+     829
+    ],
+    "3": [
+     808,
+     914,
+     913,
+     835
+    ],
+    "4": [
+     804,
+     805,
+     836,
+     837
+    ],
+    "B": [
+     831,
+     829,
+     808,
+     832
+    ],
+    "S": [
+     971,
+     816,
+     839,
+     813
+    ]
+   },
+   "comandante": true,
+   "pv_cattura": 2
+  },
+  "38": {
+   "lettera": "R",
+   "ruolo": "Ufficiale",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 5,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     5
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     8,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "4": [
+     803,
+     868,
+     822,
+     822
+    ],
+    "V": [
+     832,
+     825,
+     829,
+     808
+    ],
+    "R": [
+     732,
+     732,
+     856,
+     856
+    ],
+    "S": [
+     832,
+     825,
+     816,
+     839
+    ]
+   },
+   "comandante": true,
+   "primo_turno": 867
+  },
+  "46": {
+   "lettera": "N",
+   "ruolo": "Ufficiale",
+   "pv": 1,
+   "armi": [
+    "mp",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     822,
+     867,
+     862,
+     865
+    ],
+    "S": [
+     832,
+     839,
+     832,
+     816
+    ]
+   },
+   "comandante": true,
+   "primo_turno": 868
+  },
+  "36": {
+   "lettera": "V",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1": [
+     813,
+     800,
+     808,
+     802
+    ],
+    "2": [
+     866,
+     808,
+     862,
+     800
+    ],
+    "3-4": [
+     802,
+     825,
+     808,
+     800
+    ],
+    "S": [
+     971,
+     971,
+     808,
+     811
+    ],
+    "A": [
+     864,
+     867,
+     862,
+     862
+    ],
+    "B": [
+     825,
+     801,
+     802,
+     800
+    ]
+   }
+  },
+  "51": {
+   "lettera": "W",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 2,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     800,
+     802,
+     858,
+     829
+    ],
+    "3": [
+     800,
+     807,
+     860,
+     857
+    ],
+    "4": [
+     800,
+     821,
+     807,
+     867
+    ],
+    "5-6": [
+     800,
+     867,
+     860,
+     856
+    ],
+    "S": [
+     800,
+     816,
+     839,
+     711
+    ],
+    "Y": [
+     800,
+     60,
+     857,
+     60
+    ]
+   },
+   "primo_turno": 825
+  },
+  "6": {
+   "lettera": "S",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     800,
+     802,
+     825,
+     808
+    ],
+    "3": [
+     808,
+     864,
+     862,
+     862
+    ],
+    "4-5": [
+     864,
+     867,
+     808,
+     802
+    ],
+    "6": [
+     825,
+     862,
+     867,
+     866
+    ],
+    "Y": [
+     800,
+     60,
+     808,
+     60
+    ],
+    "S": [
+     816,
+     802,
+     839,
+     711
+    ]
+   },
+   "primo_turno": 825
+  },
+  "60": {
+   "lettera": "W",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 2,
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     807,
+     868,
+     819,
+     867
+    ],
+    "V": [
+     824,
+     800,
+     808,
+     869
+    ],
+    "R": [
+     732,
+     732,
+     732,
+     856
+    ],
+    "S": [
+     833,
+     816,
+     971,
+     833
+    ],
+    "Y": [
+     869,
+     800,
+     825,
+     865
+    ]
+   },
+   "primo_turno": 801
+  },
+  "16": {
+   "lettera": "L",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     862,
+     864,
+     868,
+     868
+    ],
+    "4-6": [
+     862,
+     803,
+     807,
+     830
+    ],
+    "S": [
+     839,
+     816,
+     839,
+     800
+    ],
+    "Y": [
+     60,
+     857,
+     857,
+     800
+    ]
+   },
+   "primo_turno": 865
+  },
+  "86": {
+   "lettera": "L",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 3,
+   "PC": 4,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     916,
+     868,
+     807,
+     867
+    ],
+    "T": [
+     825,
+     869,
+     869,
+     802
+    ],
+    "R": [
+     732,
+     732,
+     732,
+     856
+    ],
+    "S": [
+     833,
+     971,
+     833,
+     817
+    ],
+    "V": [
+     824,
+     869,
+     869,
+     825
+    ],
+    "X": [
+     825,
+     869,
+     808,
+     869
+    ]
+   },
+   "primo_turno": 801
+  },
+  "17": {
+   "lettera": "T",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt",
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     825,
+     800,
+     824,
+     808
+    ],
+    "3": [
+     862,
+     862,
+     808,
+     868
+    ],
+    "4-6": [
+     862,
+     863,
+     868,
+     868
+    ],
+    "S": [
+     839,
+     711,
+     816,
+     859
+    ],
+    "Y": [
+     60,
+     829,
+     60,
+     808
+    ],
+    "F": [
+     708,
+     825,
+     800,
+     857
+    ]
+   },
+   "primo_turno": 808
+  },
+  "73": {
+   "lettera": "Q",
+   "ruolo": "Sentinella",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 2,
+   "IN": 1,
+   "PC": 3,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-4": [
+     807,
+     916,
+     868,
+     807
+    ],
+    "Y": [
+     800,
+     825,
+     869,
+     802
+    ],
+    "S": [
+     825,
+     817,
+     856,
+     833
+    ],
+    "R": [
+     856,
+     856,
+     732,
+     732
+    ]
+   },
+   "primo_turno": 825
+  },
+  "10": {
+   "lettera": "L",
+   "ruolo": "Cecchino",
+   "pv": 1,
+   "armi": [
+    "scoped"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-2": [
+     802,
+     802,
+     801,
+     800
+    ],
+    "3-4": [
+     950,
+     802,
+     802,
+     800
+    ],
+    "5-6": [
+     957,
+     802,
+     800,
+     813
+    ],
+    "K": [
+     951,
+     804,
+     804,
+     805
+    ],
+    "D": [
+     807,
+     801,
+     808,
+     800
+    ],
+    "S": [
+     817,
+     816,
+     800,
+     964
+    ]
+   },
+   "primo_turno": 802
+  },
+  "15": {
+   "lettera": "L",
+   "ruolo": "Cecchino",
+   "pv": 1,
+   "armi": [
+    "scoped"
+   ],
+   "granate": 1,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     3
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "3": [
+     802,
+     808,
+     915,
+     800
+    ],
+    "4": [
+     916,
+     917,
+     800,
+     809
+    ],
+    "S": [
+     833,
+     833,
+     971,
+     816
+    ]
+   }
+  },
+  "49": {
+   "lettera": "T",
+   "ruolo": "Mitragliere",
+   "pv": 1,
+   "armi": [
+    "lmg"
+   ],
+   "granate": 1,
+   "IN": 2,
+   "PC": 3,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     815,
+     815,
+     815,
+     961
+    ],
+    "5": [
+     815,
+     961,
+     815,
+     962
+    ],
+    "6": [
+     962,
+     815,
+     815,
+     961
+    ],
+    "F": [
+     819,
+     820,
+     821,
+     809
+    ],
+    "S": [
+     818,
+     968,
+     967,
+     971
+    ]
+   },
+   "primo_turno": 815
+  },
+  "21": {
+   "lettera": "X",
+   "ruolo": "Servente",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 2,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     770,
+     815,
+     800,
+     815
+    ],
+    "S": [
+     965,
+     815,
+     800,
+     770
+    ]
+   },
+   "primo_turno": 815
+  },
+  "20": {
+   "lettera": "N",
+   "ruolo": "Mitragliere",
+   "pv": 1,
+   "armi": [
+    "pistol",
+    "mmg"
+   ],
+   "granate": 2,
+   "IN": 4,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     959,
+     815,
+     800,
+     815
+    ],
+    "S": [
+     770,
+     815,
+     815,
+     965
+    ]
+   },
+   "primo_turno": 815
+  },
+  "5": {
+   "lettera": "U",
+   "ruolo": "Servente",
+   "pv": 1,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 6,
+   "WS": -1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     4,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     960,
+     815,
+     815,
+     959
+    ],
+    "5": [
+     960,
+     959,
+     815,
+     962
+    ],
+    "6": [
+     959,
+     815,
+     815,
+     960
+    ],
+    "E": [
+     820,
+     821,
+     965,
+     867
+    ],
+    "S": [
+     966,
+     966,
+     965,
+     971
+    ]
+   },
+   "primo_turno": 815
+  },
+  "66": {
+   "lettera": "T",
+   "ruolo": "Servente",
+   "pv": 1,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 2,
+   "IN": 3,
+   "PC": 5,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     815,
+     815,
+     959,
+     840
+    ],
+    "S": [
+     815,
+     965,
+     770,
+     800
+    ]
+   },
+   "primo_turno": 815
+  },
+  "32": {
+   "lettera": "S",
+   "ruolo": "Mitragliere",
+   "pv": 2,
+   "armi": [
+    "pistol",
+    "mmg"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 4,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     841,
+     959,
+     815,
+     815
+    ],
+    "3-4": [
+     800,
+     841,
+     959,
+     815
+    ],
+    "5": [
+     800,
+     843,
+     815,
+     815
+    ],
+    "S": [
+     959,
+     843,
+     816,
+     833
+    ]
+   }
+  },
+  "65": {
+   "lettera": "S",
+   "ruolo": "Mitragliere",
+   "pv": 1,
+   "armi": [
+    "pistol",
+    "mmg"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 7,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     815,
+     815,
+     770,
+     800
+    ],
+    "S": [
+     815,
+     770,
+     965,
+     800
+    ]
+   },
+   "primo_turno": 815
+  },
+  "47": {
+   "lettera": "R",
+   "ruolo": "Servente",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": -1,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "2": [
+     800,
+     841,
+     815,
+     815
+    ],
+    "3-4": [
+     842,
+     800,
+     841,
+     815
+    ],
+    "5": [
+     842,
+     800,
+     843,
+     815
+    ],
+    "S": [
+     842,
+     816,
+     843,
+     833
+    ]
+   }
+  },
+  "83": {
+   "lettera": "X",
+   "ruolo": "Aiutante di campo",
+   "pv": 1,
+   "armi": [
+    "mp"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 8,
+   "WS": 1,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     50,
+     825,
+     856,
+     808
+    ],
+    "4-6": [
+     868,
+     868,
+     868,
+     807
+    ],
+    "S": [
+     711,
+     839,
+     816,
+     813
+    ],
+    "U": [
+     868,
+     868,
+     868,
+     807
+    ],
+    "Q": [
+     55,
+     826,
+     814,
+     814
+    ],
+    "J": [
+     470,
+     800,
+     808,
+     470
+    ]
+   },
+   "primo_turno": 825,
+   "pv_cattura": 1
+  },
+  "14": {
+   "lettera": "U",
+   "ruolo": "Geniere",
+   "pv": 2,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 4,
+   "WS": -2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     6,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3": [
+     800,
+     929,
+     813,
+     801
+    ],
+    "4-5": [
+     929,
+     801,
+     800,
+     813
+    ],
+    "B": [
+     836,
+     837,
+     804,
+     837
+    ],
+    "S": [
+     816,
+     813,
+     811,
+     839
+    ]
+   }
+  },
+  "24": {
+   "lettera": "P",
+   "ruolo": "Scienziato",
+   "pv": 1,
+   "armi": [],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": -2,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     800,
+     800,
+     800,
+     811
+    ],
+    "S": [
+     811,
+     839,
+     811,
+     811
+    ],
+    "Q": [
+     800,
+     800,
+     800,
+     630
+    ]
+   },
+   "pv_uscita_prigioniero": 2
+  },
+  "42": {
+   "lettera": "Q",
+   "ruolo": "Scienziato",
+   "pv": 1,
+   "armi": [],
+   "granate": 0,
+   "IN": 0,
+   "PC": 1,
+   "WS": -2,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-4": [
+     800,
+     800,
+     800,
+     811
+    ],
+    "S": [
+     839,
+     811,
+     811,
+     811
+    ],
+    "Q": [
+     800,
+     800,
+     800,
+     630
+    ]
+   },
+   "pv_uscita_prigioniero": 2
+  },
+  "63": {
+   "lettera": "N",
+   "ruolo": "Generale delle SS",
+   "pv": 1,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     8,
+     9
+    ]
+   ],
+   "colonne": {
+    "2-3": [
+     50,
+     832,
+     712,
+     829
+    ],
+    "4-6": [
+     868,
+     868,
+     868,
+     807
+    ],
+    "S": [
+     711,
+     800,
+     816,
+     813
+    ],
+    "U": [
+     868,
+     868,
+     868,
+     807
+    ],
+    "T": [
+     55,
+     826,
+     814,
+     814
+    ],
+    "J": [
+     470,
+     800,
+     808,
+     470
+    ]
+   },
+   "comandante": true,
+   "primo_turno": 712,
+   "reazione_par": {
+    "Q": 554
+   },
+   "pv_cattura": 2
+  },
+  "13": {
+   "lettera": "W",
+   "ruolo": "Auto comando e autista",
+   "pv": 2,
+   "armi": [
+    "mp"
+   ],
+   "granate": 0,
+   "IN": 2,
+   "PC": 4,
+   "WS": 0,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     827,
+     826,
+     826,
+     642
+    ],
+    "S": [
+     801,
+     802,
+     813,
+     825
+    ],
+    "X": [
+     34,
+     34,
+     34,
+     825
+    ],
+    "C": [
+     642,
+     642,
+     642,
+     826
+    ],
+    "Q": [
+     459,
+     459,
+     459,
+     825
+    ]
+   },
+   "veicolo": "auto_comando",
+   "pv_veicolo": 2
+  },
+  "12": {
+   "lettera": "T",
+   "ruolo": "Cecchino",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 5,
+   "WS": 2,
+   "MPA": 4,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     6,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-3": [
+     802,
+     802,
+     800,
+     802
+    ],
+    "4": [
+     802,
+     802,
+     800,
+     808
+    ],
+    "S": [
+     813,
+     825,
+     971,
+     839
+    ]
+   },
+   "primo_turno": 801
+  },
+  "64": {
+   "lettera": "Q",
+   "ruolo": "Volksgrenadier",
+   "pv": 1,
+   "armi": [
+    "bolt"
+   ],
+   "granate": 0,
+   "IN": 1,
+   "PC": 2,
+   "WS": 0,
+   "MPA": 3,
+   "gruppi": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     6
+    ],
+    [
+     7,
+     9
+    ]
+   ],
+   "colonne": {
+    "3-4": [
+     803,
+     800,
+     803,
+     830
+    ],
+    "S": [
+     816,
+     800,
+     802,
+     833
+    ],
+    "X": [
+     800,
+     808,
+     801,
+     801
+    ]
+   }
+  },
+  "4": {
+   "lettera": "Y",
+   "ruolo": "Panzer IV",
+   "pv": 2,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "panzer4",
+    "gruppi": [
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      3
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      8,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       902,
+       905,
+       905,
+       900
+      ]
+     },
+     "4": {
+      "IN": 3,
+      "PC": 6,
+      "WS": 1,
+      "DS": 8,
+      "par": [
+       907,
+       905,
+       905,
+       902
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 0,
+      "DS": 6,
+      "par": [
+       905,
+       905,
+       902,
+       902
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       900,
+       811,
+       908,
+       900
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       811,
+       904,
+       904,
+       840
+      ]
+     }
+    },
+    "pv_distrutto": 3,
+    "primo_turno": 900,
+    "testo": "+3 VP if knocked out Enters open; cannon +2 VP                ready. When open, 3 crew ON FIRST             visible. TURN USE 900."
+   }
+  },
+  "55": {
+   "lettera": "Y",
+   "ruolo": "Panzer IV",
+   "pv": 3,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "panzer4",
+    "gruppi": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      8,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       905,
+       900,
+       901,
+       900
+      ]
+     },
+     "4": {
+      "IN": 3,
+      "PC": 6,
+      "WS": 1,
+      "DS": 8,
+      "par": [
+       828,
+       901,
+       905,
+       900
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 0,
+      "DS": 6,
+      "par": [
+       900,
+       904,
+       902,
+       903
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       908,
+       814,
+       900,
+       921
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       840,
+       904,
+       904,
+       840
+      ]
+     }
+    },
+    "pv_distrutto": 2,
+    "primo_turno": 0,
+    "testo": "Special Reaction B: Do not move for remainder of the mission. Fire as +3 VP    called for. +2 VP if knocked out. Enters open; cannon ready. When open, 3 crew visible"
+   }
+  },
+  "54": {
+   "lettera": "Z",
+   "ruolo": "Jagdpanther",
+   "pv": 2,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "jagdpanther",
+    "gruppi": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      6,
+      8
+     ],
+     [
+      9,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       923,
+       923,
+       925,
+       925
+      ]
+     },
+     "4": {
+      "IN": 4,
+      "PC": 6,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       923,
+       921,
+       925,
+       923
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 1,
+      "DS": 6,
+      "par": [
+       921,
+       923,
+       925,
+       925
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       921,
+       924,
+       921,
+       921
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       840,
+       811,
+       811,
+       811
+      ]
+     }
+    },
+    "pv_distrutto": 3,
+    "primo_turno": 922,
+    "testo": "+2 VP +3 VP if knocked out. Enters open; cannon not ready. When open, 3 crew visible. On first turn use 922."
+   }
+  },
+  "19": {
+   "lettera": "S",
+   "ruolo": "Autista della Kübelwagen",
+   "pv": 0,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 3,
+   "PC": 4,
+   "WS": -2,
+   "MPA": 4,
+   "DS": 6,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     802
+    ],
+    "S": [
+     813
+    ]
+   }
+  },
+  "119": {
+   "lettera": "M",
+   "ruolo": "Ufficiale della Kübelwagen",
+   "pv": 0,
+   "armi": [
+    "pistol"
+   ],
+   "granate": 0,
+   "IN": 4,
+   "PC": 8,
+   "WS": 0,
+   "MPA": 4,
+   "DS": 4,
+   "comandante": true,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     802
+    ],
+    "S": [
+     813
+    ]
+   }
+  }
+ },
+ "condizioni": {
+  "1": {
+   "esagoni": {
+    "A3": "501",
+    "B3": "EVENT",
+    "C3": "NONE",
+    "D3": "656",
+    "E3": "652",
+    "F3": "NONE",
+    "G3": "NONE",
+    "H3": "NONE",
+    "I3": "NONE",
+    "J3": "NONE",
+    "K3": "NONE",
+    "L3": "NONE",
+    "M3": "NONE",
+    "N3": "NONE",
+    "O3": "NONE",
+    "P3": "NONE",
+    "Q3": "NONE",
+    "R3": "NONE",
+    "S3": "NONE",
+    "T3": "NONE",
+    "U3": "NONE",
+    "V3": "NONE",
+    "W3": "NONE",
+    "X3": "NONE",
+    "Y3": "NONE",
+    "A6": "200",
+    "B6": "200",
+    "C6": "EVENT",
+    "D6": "EVENT",
+    "E6": "359",
+    "F6": "200",
+    "G6": "505",
+    "H6": "NONE",
+    "I6": "NONE",
+    "J6": "NONE",
+    "K6": "NONE",
+    "L6": "NONE",
+    "M6": "NONE",
+    "N6": "NONE",
+    "O6": "NONE",
+    "P6": "NONE",
+    "Q6": "NONE",
+    "R6": "NONE",
+    "S6": "NONE",
+    "T6": "NONE",
+    "U6": "NONE",
+    "V6": "NONE",
+    "W6": "NONE",
+    "X6": "NONE",
+    "Y6": "NONE",
+    "A9": "202",
+    "B9": "203",
+    "C9": "203",
+    "D9": "203",
+    "E9": "202",
+    "F9": "357",
+    "G9": "504",
+    "H9": "504",
+    "I9": "657",
+    "J9": "657",
+    "K9": "506",
+    "L9": "NONE",
+    "M9": "NONE",
+    "N9": "NONE",
+    "O9": "NONE",
+    "P9": "NONE",
+    "Q9": "NONE",
+    "R9": "NONE",
+    "S9": "NONE",
+    "T9": "NONE",
+    "U9": "NONE",
+    "V9": "NONE",
+    "W9": "NONE",
+    "X9": "NONE",
+    "Y9": "NONE",
+    "A12": "NONE",
+    "B12": "NONE",
+    "C12": "NONE",
+    "D12": "NONE",
+    "E12": "NONE",
+    "F12": "NONE",
+    "G12": "NONE",
+    "H12": "NONE",
+    "I12": "NONE",
+    "J12": "NONE",
+    "K12": "NONE",
+    "L12": "NONE",
+    "M12": "NONE",
+    "N12": "NONE",
+    "O12": "NONE",
+    "P12": "NONE",
+    "Q12": "NONE",
+    "R12": "NONE",
+    "S12": "NONE",
+    "T12": "NONE",
+    "U12": "NONE",
+    "V12": "NONE",
+    "W12": "NONE",
+    "X12": "NONE",
+    "Y12": "NONE",
+    "A15": "NONE",
+    "B15": "NONE",
+    "C15": "NONE",
+    "D15": "NONE",
+    "E15": "NONE",
+    "F15": "NONE",
+    "G15": "NONE",
+    "H15": "NONE",
+    "I15": "NONE",
+    "J15": "NONE",
+    "K15": "NONE",
+    "L15": "NONE",
+    "M15": "NONE",
+    "N15": "NONE",
+    "O15": "NONE",
+    "P15": "NONE",
+    "Q15": "NONE",
+    "R15": "NONE",
+    "S15": "NONE",
+    "T15": "NONE",
+    "U15": "NONE",
+    "V15": "NONE",
+    "W15": "NONE",
+    "X15": "NONE",
+    "Y15": "NONE",
+    "A18": "NONE",
+    "B18": "NONE",
+    "C18": "NONE",
+    "D18": "NONE",
+    "E18": "NONE",
+    "F18": "NONE",
+    "G18": "NONE",
+    "H18": "NONE",
+    "I18": "NONE",
+    "J18": "NONE",
+    "K18": "NONE",
+    "L18": "NONE",
+    "M18": "NONE",
+    "N18": "NONE",
+    "O18": "NONE",
+    "P18": "NONE",
+    "Q18": "NONE",
+    "R18": "NONE",
+    "S18": "NONE",
+    "T18": "NONE",
+    "U18": "NONE",
+    "V18": "NONE",
+    "W18": "NONE",
+    "X18": "NONE",
+    "Y18": "NONE",
+    "A1": "501",
+    "B1": "501",
+    "C1": "NONE",
+    "D1": "656",
+    "E1": "652",
+    "F1": "NONE",
+    "G1": "NONE",
+    "H1": "NONE",
+    "I1": "NONE",
+    "J1": "NONE",
+    "K1": "NONE",
+    "L1": "NONE",
+    "M1": "NONE",
+    "N1": "NONE",
+    "O1": "NONE",
+    "P1": "NONE",
+    "Q1": "NONE",
+    "R1": "NONE",
+    "S1": "NONE",
+    "T1": "NONE",
+    "U1": "NONE",
+    "V1": "NONE",
+    "W1": "NONE",
+    "X1": "NONE",
+    "Y1": "NONE",
+    "A4": "501",
+    "B4": "501",
+    "C4": "EVENT",
+    "D4": "656",
+    "E4": "652",
+    "F4": "652",
+    "G4": "NONE",
+    "H4": "NONE",
+    "I4": "NONE",
+    "J4": "NONE",
+    "K4": "NONE",
+    "L4": "NONE",
+    "M4": "NONE",
+    "N4": "NONE",
+    "O4": "NONE",
+    "P4": "NONE",
+    "Q4": "NONE",
+    "R4": "NONE",
+    "S4": "NONE",
+    "T4": "NONE",
+    "U4": "NONE",
+    "V4": "NONE",
+    "W4": "NONE",
+    "X4": "NONE",
+    "Y4": "NONE",
+    "A7": "EVENT",
+    "B7": "NONE",
+    "C7": "353",
+    "D7": "500",
+    "E7": "EVENT",
+    "F7": "657",
+    "G7": "505",
+    "H7": "358",
+    "I7": "NONE",
+    "J7": "NONE",
+    "K7": "NONE",
+    "L7": "NONE",
+    "M7": "NONE",
+    "N7": "NONE",
+    "O7": "NONE",
+    "P7": "NONE",
+    "Q7": "NONE",
+    "R7": "NONE",
+    "S7": "NONE",
+    "T7": "NONE",
+    "U7": "NONE",
+    "V7": "NONE",
+    "W7": "NONE",
+    "X7": "NONE",
+    "Y7": "NONE",
+    "A10": "203",
+    "B10": "NONE",
+    "C10": "NONE",
+    "D10": "NONE",
+    "E10": "203",
+    "F10": "NONE",
+    "G10": "NONE",
+    "H10": "NONE",
+    "I10": "504",
+    "J10": "504",
+    "K10": "506",
+    "L10": "NONE",
+    "M10": "NONE",
+    "N10": "NONE",
+    "O10": "NONE",
+    "P10": "NONE",
+    "Q10": "NONE",
+    "R10": "NONE",
+    "S10": "NONE",
+    "T10": "NONE",
+    "U10": "NONE",
+    "V10": "NONE",
+    "W10": "NONE",
+    "X10": "NONE",
+    "Y10": "NONE",
+    "A13": "NONE",
+    "B13": "NONE",
+    "C13": "NONE",
+    "D13": "NONE",
+    "E13": "NONE",
+    "F13": "NONE",
+    "G13": "NONE",
+    "H13": "NONE",
+    "I13": "NONE",
+    "J13": "NONE",
+    "K13": "NONE",
+    "L13": "NONE",
+    "M13": "NONE",
+    "N13": "NONE",
+    "O13": "NONE",
+    "P13": "NONE",
+    "Q13": "NONE",
+    "R13": "NONE",
+    "S13": "NONE",
+    "T13": "NONE",
+    "U13": "NONE",
+    "V13": "NONE",
+    "W13": "NONE",
+    "X13": "NONE",
+    "Y13": "NONE",
+    "A16": "NONE",
+    "B16": "NONE",
+    "C16": "NONE",
+    "D16": "NONE",
+    "E16": "NONE",
+    "F16": "NONE",
+    "G16": "NONE",
+    "H16": "NONE",
+    "I16": "NONE",
+    "J16": "NONE",
+    "K16": "NONE",
+    "L16": "NONE",
+    "M16": "NONE",
+    "N16": "NONE",
+    "O16": "NONE",
+    "P16": "NONE",
+    "Q16": "NONE",
+    "R16": "NONE",
+    "S16": "NONE",
+    "T16": "NONE",
+    "U16": "NONE",
+    "V16": "NONE",
+    "W16": "NONE",
+    "X16": "NONE",
+    "Y16": "NONE",
+    "A19": "NONE",
+    "B19": "NONE",
+    "C19": "NONE",
+    "D19": "NONE",
+    "E19": "NONE",
+    "F19": "NONE",
+    "G19": "NONE",
+    "H19": "NONE",
+    "I19": "NONE",
+    "J19": "NONE",
+    "K19": "NONE",
+    "L19": "NONE",
+    "M19": "NONE",
+    "N19": "NONE",
+    "O19": "NONE",
+    "P19": "NONE",
+    "Q19": "NONE",
+    "R19": "NONE",
+    "S19": "NONE",
+    "T19": "NONE",
+    "U19": "NONE",
+    "V19": "NONE",
+    "W19": "NONE",
+    "X19": "NONE",
+    "Y19": "NONE",
+    "A2": "EVENT",
+    "B2": "501",
+    "C2": "EVENT",
+    "D2": "656",
+    "E2": "652",
+    "F2": "NONE",
+    "G2": "NONE",
+    "H2": "NONE",
+    "I2": "NONE",
+    "J2": "NONE",
+    "K2": "NONE",
+    "L2": "NONE",
+    "M2": "NONE",
+    "N2": "NONE",
+    "O2": "NONE",
+    "P2": "NONE",
+    "Q2": "NONE",
+    "R2": "NONE",
+    "S2": "NONE",
+    "T2": "NONE",
+    "U2": "NONE",
+    "V2": "NONE",
+    "W2": "NONE",
+    "X2": "NONE",
+    "Y2": "NONE",
+    "A5": "EVENT",
+    "B5": "NONE",
+    "C5": "NONE",
+    "D5": "656",
+    "E5": "200",
+    "F5": "359",
+    "G5": "505",
+    "H5": "NONE",
+    "I5": "NONE",
+    "J5": "NONE",
+    "K5": "NONE",
+    "L5": "NONE",
+    "M5": "NONE",
+    "N5": "NONE",
+    "O5": "NONE",
+    "P5": "NONE",
+    "Q5": "NONE",
+    "R5": "NONE",
+    "S5": "NONE",
+    "T5": "NONE",
+    "U5": "NONE",
+    "V5": "NONE",
+    "W5": "NONE",
+    "X5": "NONE",
+    "Y5": "NONE",
+    "A8": "356",
+    "B8": "356",
+    "C8": "EVENT",
+    "D8": "202",
+    "E8": "500",
+    "F8": "500",
+    "G8": "657",
+    "H8": "657",
+    "I8": "358",
+    "J8": "358",
+    "K8": "504",
+    "L8": "NONE",
+    "M8": "NONE",
+    "N8": "NONE",
+    "O8": "NONE",
+    "P8": "NONE",
+    "Q8": "NONE",
+    "R8": "NONE",
+    "S8": "NONE",
+    "T8": "NONE",
+    "U8": "NONE",
+    "V8": "NONE",
+    "W8": "NONE",
+    "X8": "NONE",
+    "Y8": "NONE",
+    "A11": "NONE",
+    "B11": "NONE",
+    "C11": "NONE",
+    "D11": "NONE",
+    "E11": "NONE",
+    "F11": "NONE",
+    "G11": "NONE",
+    "H11": "NONE",
+    "I11": "NONE",
+    "J11": "NONE",
+    "K11": "504",
+    "L11": "NONE",
+    "M11": "NONE",
+    "N11": "NONE",
+    "O11": "NONE",
+    "P11": "NONE",
+    "Q11": "NONE",
+    "R11": "NONE",
+    "S11": "NONE",
+    "T11": "NONE",
+    "U11": "NONE",
+    "V11": "NONE",
+    "W11": "NONE",
+    "X11": "NONE",
+    "Y11": "NONE",
+    "A14": "NONE",
+    "B14": "NONE",
+    "C14": "NONE",
+    "D14": "NONE",
+    "E14": "NONE",
+    "F14": "NONE",
+    "G14": "NONE",
+    "H14": "NONE",
+    "I14": "NONE",
+    "J14": "NONE",
+    "K14": "NONE",
+    "L14": "NONE",
+    "M14": "NONE",
+    "N14": "NONE",
+    "O14": "NONE",
+    "P14": "NONE",
+    "Q14": "NONE",
+    "R14": "NONE",
+    "S14": "NONE",
+    "T14": "NONE",
+    "U14": "NONE",
+    "V14": "NONE",
+    "W14": "NONE",
+    "X14": "NONE",
+    "Y14": "NONE",
+    "A17": "NONE",
+    "B17": "NONE",
+    "C17": "NONE",
+    "D17": "NONE",
+    "E17": "NONE",
+    "F17": "NONE",
+    "G17": "NONE",
+    "H17": "NONE",
+    "I17": "NONE",
+    "J17": "NONE",
+    "K17": "NONE",
+    "L17": "NONE",
+    "M17": "NONE",
+    "N17": "NONE",
+    "O17": "NONE",
+    "P17": "NONE",
+    "Q17": "NONE",
+    "R17": "NONE",
+    "S17": "NONE",
+    "T17": "NONE",
+    "U17": "NONE",
+    "V17": "NONE",
+    "W17": "NONE",
+    "X17": "NONE",
+    "Y17": "NONE"
+   },
+   "evento": {
+    "0": "012",
+    "3": "s0:210",
+    "6": "NONE",
+    "9": "658",
+    "12": "NONE",
+    "15": "s1:509",
+    "18": "011",
+    "1": "s7:362",
+    "4": "NONE",
+    "7": "s7:362",
+    "10": "209",
+    "13": "NONE",
+    "16": "361",
+    "2": "209",
+    "5": "NONE",
+    "8": "361",
+    "11": "300",
+    "14": "NONE",
+    "17": "658"
+   },
+   "movimenti": {}
+  },
+  "2": {
+   "esagoni": {
+    "A3": "EVENT",
+    "B3": "NONE",
+    "C3": "EVENT",
+    "D3": "369",
+    "E3": "666",
+    "F3": "369",
+    "G3": "s3:663",
+    "H3": "s1:365",
+    "I3": "XXX",
+    "J3": "NONE",
+    "K3": "NONE",
+    "L3": "NONE",
+    "M3": "NONE",
+    "N3": "NONE",
+    "O3": "NONE",
+    "P3": "NONE",
+    "Q3": "NONE",
+    "R3": "NONE",
+    "S3": "NONE",
+    "T3": "NONE",
+    "U3": "NONE",
+    "V3": "NONE",
+    "W3": "NONE",
+    "X3": "NONE",
+    "Y3": "NONE",
+    "A6": "666",
+    "B6": "EVENT",
+    "C6": "NONE",
+    "D6": "s3:665",
+    "E6": "369",
+    "F6": "216",
+    "G6": "s3:663",
+    "H6": "s3:665",
+    "I6": "s3:663",
+    "J6": "s4:368",
+    "K6": "s3:663",
+    "L6": "XXX",
+    "M6": "NONE",
+    "N6": "NONE",
+    "O6": "NONE",
+    "P6": "NONE",
+    "Q6": "NONE",
+    "R6": "NONE",
+    "S6": "NONE",
+    "T6": "NONE",
+    "U6": "NONE",
+    "V6": "NONE",
+    "W6": "NONE",
+    "X6": "NONE",
+    "Y6": "NONE",
+    "A9": "s2:510",
+    "B9": "s2:356",
+    "C9": "s2:356",
+    "D9": "s2:356",
+    "E9": "s2:661",
+    "F9": "s2:357",
+    "G9": "EVENT",
+    "H9": "216",
+    "I9": "s3:665",
+    "J9": "s4:368",
+    "K9": "369",
+    "L9": "XXX",
+    "M9": "NONE",
+    "N9": "NONE",
+    "O9": "NONE",
+    "P9": "NONE",
+    "Q9": "NONE",
+    "R9": "NONE",
+    "S9": "NONE",
+    "T9": "NONE",
+    "U9": "NONE",
+    "V9": "NONE",
+    "W9": "NONE",
+    "X9": "NONE",
+    "Y9": "NONE",
+    "A12": "s2:203",
+    "B12": "NONE",
+    "C12": "s2:357",
+    "D12": "NONE",
+    "E12": "s2:203",
+    "F12": "371",
+    "G12": "s2:517",
+    "H12": "371",
+    "I12": "211",
+    "J12": "NONE",
+    "K12": "NONE",
+    "L12": "NONE",
+    "M12": "NONE",
+    "N12": "NONE",
+    "O12": "NONE",
+    "P12": "NONE",
+    "Q12": "NONE",
+    "R12": "NONE",
+    "S12": "NONE",
+    "T12": "NONE",
+    "U12": "NONE",
+    "V12": "NONE",
+    "W12": "NONE",
+    "X12": "NONE",
+    "Y12": "NONE",
+    "A15": "EVENT",
+    "B15": "NONE",
+    "C15": "EVENT",
+    "D15": "NONE",
+    "E15": "668",
+    "F15": "371",
+    "G15": "211",
+    "H15": "NONE",
+    "I15": "NONE",
+    "J15": "NONE",
+    "K15": "NONE",
+    "L15": "NONE",
+    "M15": "NONE",
+    "N15": "NONE",
+    "O15": "NONE",
+    "P15": "NONE",
+    "Q15": "NONE",
+    "R15": "NONE",
+    "S15": "NONE",
+    "T15": "NONE",
+    "U15": "NONE",
+    "V15": "NONE",
+    "W15": "NONE",
+    "X15": "NONE",
+    "Y15": "NONE",
+    "A18": "NONE",
+    "B18": "NONE",
+    "C18": "EVENT",
+    "D18": "668",
+    "E18": "211",
+    "F18": "NONE",
+    "G18": "NONE",
+    "H18": "NONE",
+    "I18": "NONE",
+    "J18": "NONE",
+    "K18": "NONE",
+    "L18": "NONE",
+    "M18": "NONE",
+    "N18": "NONE",
+    "O18": "NONE",
+    "P18": "NONE",
+    "Q18": "NONE",
+    "R18": "NONE",
+    "S18": "NONE",
+    "T18": "NONE",
+    "U18": "NONE",
+    "V18": "NONE",
+    "W18": "NONE",
+    "X18": "NONE",
+    "Y18": "NONE",
+    "A1": "EVENT",
+    "B1": "EVENT",
+    "C1": "EVENT",
+    "D1": "369",
+    "E1": "666",
+    "F1": "666",
+    "G1": "EVENT",
+    "H1": "XXX",
+    "I1": "NONE",
+    "J1": "NONE",
+    "K1": "NONE",
+    "L1": "NONE",
+    "M1": "NONE",
+    "N1": "NONE",
+    "O1": "NONE",
+    "P1": "NONE",
+    "Q1": "NONE",
+    "R1": "NONE",
+    "S1": "NONE",
+    "T1": "NONE",
+    "U1": "NONE",
+    "V1": "NONE",
+    "W1": "NONE",
+    "X1": "NONE",
+    "Y1": "NONE",
+    "A4": "EVENT",
+    "B4": "EVENT",
+    "C4": "NONE",
+    "D4": "369",
+    "E4": "666",
+    "F4": "216",
+    "G4": "s3:663",
+    "H4": "217",
+    "I4": "512",
+    "J4": "XXX",
+    "K4": "NONE",
+    "L4": "NONE",
+    "M4": "NONE",
+    "N4": "NONE",
+    "O4": "NONE",
+    "P4": "NONE",
+    "Q4": "NONE",
+    "R4": "NONE",
+    "S4": "NONE",
+    "T4": "NONE",
+    "U4": "NONE",
+    "V4": "NONE",
+    "W4": "NONE",
+    "X4": "NONE",
+    "Y4": "NONE",
+    "A7": "NONE",
+    "B7": "EVENT",
+    "C7": "666",
+    "D7": "EVENT",
+    "E7": "s3:665",
+    "F7": "s4:368",
+    "G7": "216",
+    "H7": "s4:664",
+    "I7": "s4:664",
+    "J7": "s3:663",
+    "K7": "s4:664",
+    "L7": "XXX",
+    "M7": "NONE",
+    "N7": "NONE",
+    "O7": "NONE",
+    "P7": "NONE",
+    "Q7": "NONE",
+    "R7": "NONE",
+    "S7": "NONE",
+    "T7": "NONE",
+    "U7": "NONE",
+    "V7": "NONE",
+    "W7": "NONE",
+    "X7": "NONE",
+    "Y7": "NONE",
+    "A10": "s2:356",
+    "B10": "s2:510",
+    "C10": "s2:356",
+    "D10": "s2:356",
+    "E10": "s2:356",
+    "F10": "s2:203",
+    "G10": "NONE",
+    "H10": "EVENT",
+    "I10": "EVENT",
+    "J10": "EVENT",
+    "K10": "369",
+    "L10": "XXX",
+    "M10": "NONE",
+    "N10": "NONE",
+    "O10": "NONE",
+    "P10": "NONE",
+    "Q10": "NONE",
+    "R10": "NONE",
+    "S10": "NONE",
+    "T10": "NONE",
+    "U10": "NONE",
+    "V10": "NONE",
+    "W10": "NONE",
+    "X10": "NONE",
+    "Y10": "NONE",
+    "A13": "EVENT",
+    "B13": "EVENT",
+    "C13": "EVENT",
+    "D13": "NONE",
+    "E13": "NONE",
+    "F13": "211",
+    "G13": "211",
+    "H13": "211",
+    "I13": "211",
+    "J13": "NONE",
+    "K13": "NONE",
+    "L13": "NONE",
+    "M13": "NONE",
+    "N13": "NONE",
+    "O13": "NONE",
+    "P13": "NONE",
+    "Q13": "NONE",
+    "R13": "NONE",
+    "S13": "NONE",
+    "T13": "NONE",
+    "U13": "NONE",
+    "V13": "NONE",
+    "W13": "NONE",
+    "X13": "NONE",
+    "Y13": "NONE",
+    "A16": "NONE",
+    "B16": "EVENT",
+    "C16": "NONE",
+    "D16": "EVENT",
+    "E16": "668",
+    "F16": "211",
+    "G16": "211",
+    "H16": "NONE",
+    "I16": "NONE",
+    "J16": "NONE",
+    "K16": "NONE",
+    "L16": "NONE",
+    "M16": "NONE",
+    "N16": "NONE",
+    "O16": "NONE",
+    "P16": "NONE",
+    "Q16": "NONE",
+    "R16": "NONE",
+    "S16": "NONE",
+    "T16": "NONE",
+    "U16": "NONE",
+    "V16": "NONE",
+    "W16": "NONE",
+    "X16": "NONE",
+    "Y16": "NONE",
+    "A19": "EVENT",
+    "B19": "NONE",
+    "C19": "668",
+    "D19": "211",
+    "E19": "211",
+    "F19": "NONE",
+    "G19": "NONE",
+    "H19": "NONE",
+    "I19": "NONE",
+    "J19": "NONE",
+    "K19": "NONE",
+    "L19": "NONE",
+    "M19": "NONE",
+    "N19": "NONE",
+    "O19": "NONE",
+    "P19": "NONE",
+    "Q19": "NONE",
+    "R19": "NONE",
+    "S19": "NONE",
+    "T19": "NONE",
+    "U19": "NONE",
+    "V19": "NONE",
+    "W19": "NONE",
+    "X19": "NONE",
+    "Y19": "NONE",
+    "A2": "NONE",
+    "B2": "EVENT",
+    "C2": "NONE",
+    "D2": "369",
+    "E2": "666",
+    "F2": "666",
+    "G2": "s3:665",
+    "H2": "s3:663",
+    "I2": "XXX",
+    "J2": "NONE",
+    "K2": "NONE",
+    "L2": "NONE",
+    "M2": "NONE",
+    "N2": "NONE",
+    "O2": "NONE",
+    "P2": "NONE",
+    "Q2": "NONE",
+    "R2": "NONE",
+    "S2": "NONE",
+    "T2": "NONE",
+    "U2": "NONE",
+    "V2": "NONE",
+    "W2": "NONE",
+    "X2": "NONE",
+    "Y2": "NONE",
+    "A5": "NONE",
+    "B5": "EVENT",
+    "C5": "EVENT",
+    "D5": "369",
+    "E5": "666",
+    "F5": "369",
+    "G5": "s3:663",
+    "H5": "s3:663",
+    "I5": "s1:665",
+    "J5": "s4:664",
+    "K5": "XXX",
+    "L5": "XXX",
+    "M5": "NONE",
+    "N5": "NONE",
+    "O5": "NONE",
+    "P5": "NONE",
+    "Q5": "NONE",
+    "R5": "NONE",
+    "S5": "NONE",
+    "T5": "NONE",
+    "U5": "NONE",
+    "V5": "NONE",
+    "W5": "NONE",
+    "X5": "NONE",
+    "Y5": "NONE",
+    "A8": "s2:356",
+    "B8": "s2:356",
+    "C8": "NONE",
+    "D8": "s2:661",
+    "E8": "666",
+    "F8": "216",
+    "G8": "s3:665",
+    "H8": "s4:368",
+    "I8": "s3:663",
+    "J8": "s4:664",
+    "K8": "s3:663",
+    "L8": "XXX",
+    "M8": "NONE",
+    "N8": "NONE",
+    "O8": "NONE",
+    "P8": "NONE",
+    "Q8": "NONE",
+    "R8": "NONE",
+    "S8": "NONE",
+    "T8": "NONE",
+    "U8": "NONE",
+    "V8": "NONE",
+    "W8": "NONE",
+    "X8": "NONE",
+    "Y8": "NONE",
+    "A11": "s2:356",
+    "B11": "s2:203",
+    "C11": "s2:356",
+    "D11": "s2:203",
+    "E11": "s2:203",
+    "F11": "s2:517",
+    "G11": "371",
+    "H11": "211",
+    "I11": "NONE",
+    "J11": "211",
+    "K11": "370",
+    "L11": "NONE",
+    "M11": "NONE",
+    "N11": "NONE",
+    "O11": "NONE",
+    "P11": "NONE",
+    "Q11": "NONE",
+    "R11": "NONE",
+    "S11": "NONE",
+    "T11": "NONE",
+    "U11": "NONE",
+    "V11": "NONE",
+    "W11": "NONE",
+    "X11": "NONE",
+    "Y11": "NONE",
+    "A14": "NONE",
+    "B14": "NONE",
+    "C14": "NONE",
+    "D14": "EVENT",
+    "E14": "668",
+    "F14": "211",
+    "G14": "NONE",
+    "H14": "211",
+    "I14": "NONE",
+    "J14": "NONE",
+    "K14": "NONE",
+    "L14": "NONE",
+    "M14": "NONE",
+    "N14": "NONE",
+    "O14": "NONE",
+    "P14": "NONE",
+    "Q14": "NONE",
+    "R14": "NONE",
+    "S14": "NONE",
+    "T14": "NONE",
+    "U14": "NONE",
+    "V14": "NONE",
+    "W14": "NONE",
+    "X14": "NONE",
+    "Y14": "NONE",
+    "A17": "EVENT",
+    "B17": "NONE",
+    "C17": "EVENT",
+    "D17": "668",
+    "E17": "211",
+    "F17": "NONE",
+    "G17": "NONE",
+    "H17": "NONE",
+    "I17": "NONE",
+    "J17": "NONE",
+    "K17": "NONE",
+    "L17": "NONE",
+    "M17": "NONE",
+    "N17": "NONE",
+    "O17": "NONE",
+    "P17": "NONE",
+    "Q17": "NONE",
+    "R17": "NONE",
+    "S17": "NONE",
+    "T17": "NONE",
+    "U17": "NONE",
+    "V17": "NONE",
+    "W17": "NONE",
+    "X17": "NONE",
+    "Y17": "NONE"
+   },
+   "evento": {
+    "0": "372",
+    "3": "s8:669",
+    "6": "s7:362",
+    "9": "s4:516",
+    "12": "361",
+    "15": "361",
+    "18": "131",
+    "1": "202",
+    "4": "s0:210",
+    "7": "s7:362",
+    "10": "s4:516",
+    "13": "209",
+    "16": "658",
+    "2": "372",
+    "5": "s1:509",
+    "8": "s4:516",
+    "11": "658",
+    "14": "209",
+    "17": "131"
+   },
+   "movimenti": {
+    "M6": "N6",
+    "N6": "O7",
+    "S9": "T9",
+    "T9": "527",
+    "F12": "F13",
+    "L12": "L11",
+    "M12": "N12",
+    "N12": "O13",
+    "E15": "F15",
+    "F15": "F16",
+    "K15": "K16",
+    "Q15": "R14",
+    "R15": "R14",
+    "I18": "J18",
+    "J18": "K18",
+    "K18": "L17",
+    "M18": "N18",
+    "N18": "O18",
+    "O18": "227",
+    "O7": "P7",
+    "P7": "Q8",
+    "E13": "E14",
+    "F13": "E14",
+    "L13": "K14",
+    "O13": "O14",
+    "F16": "G17",
+    "K16": "K17",
+    "P16": "Q16",
+    "Q16": "R15",
+    "Q8": "R8",
+    "R8": "S9",
+    "L11": "M12",
+    "E14": "E15",
+    "K14": "K15",
+    "O14": "P14",
+    "P14": "Q15",
+    "R14": "S14",
+    "S14": "380",
+    "G17": "H17",
+    "H17": "I18",
+    "K17": "L17",
+    "L17": "M18",
+    "O17": "677",
+    "P17": "P16",
+    "D14": "E15"
+   }
+  },
+  "3": {
+   "esagoni": {
+    "A3": "NONE",
+    "B3": "EVENT",
+    "C3": "NONE",
+    "D3": "EVENT",
+    "E3": "s5:353",
+    "F3": "s5:667",
+    "G3": "666",
+    "H3": "369",
+    "I3": "XXX",
+    "J3": "s3:222",
+    "K3": "s3:222",
+    "L3": "s3:222",
+    "M3": "s3:663",
+    "N3": "s3:663",
+    "O3": "s3:663",
+    "P3": "NONE",
+    "Q3": "EVENT",
+    "R3": "s5:353",
+    "S3": "EVENT",
+    "T3": "s5:667",
+    "U3": "EVENT",
+    "V3": "s5:353",
+    "W3": "EVENT",
+    "X3": "NONE",
+    "Y3": "NONE",
+    "A6": "EVENT",
+    "B6": "666",
+    "C6": "NONE",
+    "D6": "s3:665",
+    "E6": "s5:667",
+    "F6": "s5:353",
+    "G6": "s3:663",
+    "H6": "s3:665",
+    "I6": "666",
+    "J6": "EVENT",
+    "K6": "s3:663",
+    "L6": "XXX",
+    "M6": "NONE",
+    "N6": "NONE",
+    "O6": "s4:676",
+    "P6": "s4:676",
+    "Q6": "s5:353",
+    "R6": "s4:676",
+    "S6": "s4:676",
+    "T6": "s5:353",
+    "U6": "s4:676",
+    "V6": "s4:676",
+    "W6": "s4:676",
+    "X6": "s5:667",
+    "Y6": "EVENT",
+    "A9": "EVENT",
+    "B9": "NONE",
+    "C9": "NONE",
+    "D9": "NONE",
+    "E9": "EVENT",
+    "F9": "EVENT",
+    "G9": "666",
+    "H9": "EVENT",
+    "I9": "EVENT",
+    "J9": "s3:665",
+    "K9": "s5:358",
+    "L9": "XXX",
+    "M9": "s5:358",
+    "N9": "s5:358",
+    "O9": "s5:358",
+    "P9": "s5:353",
+    "Q9": "s4:676",
+    "R9": "s5:353",
+    "S9": "s4:522",
+    "T9": "s4:522",
+    "U9": "s0:363",
+    "V9": "s0:363",
+    "W9": "s0:363",
+    "X9": "EVENT",
+    "Y9": "NONE",
+    "A12": "NONE",
+    "B12": "EVENT",
+    "C12": "NONE",
+    "D12": "NONE",
+    "E12": "NONE",
+    "F12": "EVENT",
+    "G12": "NONE",
+    "H12": "s5:667",
+    "I12": "NONE",
+    "J12": "s5:353",
+    "K12": "s3:663",
+    "L12": "s3:663",
+    "M12": "374",
+    "N12": "671",
+    "O12": "671",
+    "P12": "001",
+    "Q12": "s6:224",
+    "R12": "s0:363",
+    "S12": "s6:224",
+    "T12": "s0:363",
+    "U12": "s0:363",
+    "V12": "s0:363",
+    "W12": "s6:377",
+    "X12": "s6:224",
+    "Y12": "EVENT",
+    "A15": "NONE",
+    "B15": "NONE",
+    "C15": "NONE",
+    "D15": "EVENT",
+    "E15": "NONE",
+    "F15": "NONE",
+    "G15": "s5:353",
+    "H15": "s2:378",
+    "I15": "s2:378",
+    "J15": "s2:378",
+    "K15": "EVENT",
+    "L15": "s2:378",
+    "M15": "s2:378",
+    "N15": "XXX",
+    "O15": "s2:376",
+    "P15": "s2:376",
+    "Q15": "s2:378",
+    "R15": "s6:224",
+    "S15": "s6:224",
+    "T15": "s2:378",
+    "U15": "s2:378",
+    "V15": "NONE",
+    "W15": "s6:377",
+    "X15": "NONE",
+    "Y15": "NONE",
+    "A18": "NONE",
+    "B18": "EVENT",
+    "C18": "NONE",
+    "D18": "NONE",
+    "E18": "s5:353",
+    "F18": "NONE",
+    "G18": "EVENT",
+    "H18": "s2:378",
+    "I18": "s2:378",
+    "J18": "NONE",
+    "K18": "NONE",
+    "L18": "EVENT",
+    "M18": "s8:672",
+    "N18": "s8:219",
+    "O18": "NONE",
+    "P18": "NONE",
+    "Q18": "NONE",
+    "R18": "NONE",
+    "S18": "NONE",
+    "T18": "EVENT",
+    "U18": "EVENT",
+    "V18": "NONE",
+    "W18": "NONE",
+    "X18": "NONE",
+    "Y18": "NONE",
+    "A1": "NONE",
+    "B1": "NONE",
+    "C1": "NONE",
+    "D1": "s3:665",
+    "E1": "s3:663",
+    "F1": "s5:353",
+    "G1": "NONE",
+    "H1": "XXX",
+    "I1": "EVENT",
+    "J1": "NONE",
+    "K1": "EVENT",
+    "L1": "NONE",
+    "M1": "NONE",
+    "N1": "s3:663",
+    "O1": "s3:663",
+    "P1": "s3:663",
+    "Q1": "s3:665",
+    "R1": "s3:663",
+    "S1": "s3:663",
+    "T1": "EVENT",
+    "U1": "NONE",
+    "V1": "NONE",
+    "W1": "NONE",
+    "X1": "EVENT",
+    "Y1": "NONE",
+    "A4": "NONE",
+    "B4": "NONE",
+    "C4": "EVENT",
+    "D4": "s5:667",
+    "E4": "s3:663",
+    "F4": "s3:663",
+    "G4": "666",
+    "H4": "s1:365",
+    "I4": "s1:660",
+    "J4": "XXX",
+    "K4": "NONE",
+    "L4": "s3:222",
+    "M4": "EVENT",
+    "N4": "NONE",
+    "O4": "NONE",
+    "P4": "EVENT",
+    "Q4": "NONE",
+    "R4": "s5:353",
+    "S4": "s4:676",
+    "T4": "s4:676",
+    "U4": "NONE",
+    "V4": "s5:353",
+    "W4": "s5:353",
+    "X4": "NONE",
+    "Y4": "EVENT",
+    "A7": "NONE",
+    "B7": "NONE",
+    "C7": "EVENT",
+    "D7": "666",
+    "E7": "EVENT",
+    "F7": "s3:665",
+    "G7": "EVENT",
+    "H7": "s3:663",
+    "I7": "s3:663",
+    "J7": "EVENT",
+    "K7": "s3:663",
+    "L7": "XXX",
+    "M7": "NONE",
+    "N7": "NONE",
+    "O7": "s4:226",
+    "P7": "s5:353",
+    "Q7": "s4:676",
+    "R7": "s5:353",
+    "S7": "s4:226",
+    "T7": "s4:522",
+    "U7": "s5:353",
+    "V7": "NONE",
+    "W7": "NONE",
+    "X7": "NONE",
+    "Y7": "NONE",
+    "A10": "NONE",
+    "B10": "EVENT",
+    "C10": "NONE",
+    "D10": "EVENT",
+    "E10": "NONE",
+    "F10": "NONE",
+    "G10": "NONE",
+    "H10": "NONE",
+    "I10": "666",
+    "J10": "666",
+    "K10": "s5:358",
+    "L10": "XXX",
+    "M10": "NONE",
+    "N10": "s5:358",
+    "O10": "s4:676",
+    "P10": "s4:226",
+    "Q10": "s4:226",
+    "R10": "520",
+    "S10": "520",
+    "T10": "s0:363",
+    "U10": "EVENT",
+    "V10": "NONE",
+    "W10": "NONE",
+    "X10": "s6:377",
+    "Y10": "s6:224",
+    "A13": "NONE",
+    "B13": "NONE",
+    "C13": "NONE",
+    "D13": "NONE",
+    "E13": "EVENT",
+    "F13": "s5:353",
+    "G13": "s5:353",
+    "H13": "EVENT",
+    "I13": "s5:353",
+    "J13": "s2:378",
+    "K13": "s6:521",
+    "L13": "s2:525",
+    "M13": "XXX",
+    "N13": "XXX",
+    "O13": "520",
+    "P13": "001",
+    "Q13": "s0:363",
+    "R13": "671",
+    "S13": "225",
+    "T13": "s6:224",
+    "U13": "s6:224",
+    "V13": "s6:224",
+    "W13": "s0:363",
+    "X13": "s0:363",
+    "Y13": "s0:363",
+    "A16": "EVENT",
+    "B16": "NONE",
+    "C16": "EVENT",
+    "D16": "NONE",
+    "E16": "NONE",
+    "F16": "s5:353",
+    "G16": "NONE",
+    "H16": "EVENT",
+    "I16": "s2:525",
+    "J16": "s2:378",
+    "K16": "s2:525",
+    "L16": "s2:378",
+    "M16": "s5:353",
+    "N16": "XXX",
+    "O16": "225",
+    "P16": "s2:376",
+    "Q16": "s2:378",
+    "R16": "s6:224",
+    "S16": "s2:378",
+    "T16": "s6:377",
+    "U16": "s2:525",
+    "V16": "EVENT",
+    "W16": "NONE",
+    "X16": "NONE",
+    "Y16": "EVENT",
+    "A19": "NONE",
+    "B19": "NONE",
+    "C19": "EVENT",
+    "D19": "NONE",
+    "E19": "EVENT",
+    "F19": "NONE",
+    "G19": "NONE",
+    "H19": "s2:378",
+    "I19": "s2:378",
+    "J19": "EVENT",
+    "K19": "s2:378",
+    "L19": "s2:378",
+    "M19": "s8:672",
+    "N19": "s8:672",
+    "O19": "XXX",
+    "P19": "NONE",
+    "Q19": "EVENT",
+    "R19": "EVENT",
+    "S19": "NONE",
+    "T19": "NONE",
+    "U19": "NONE",
+    "V19": "EVENT",
+    "W19": "NONE",
+    "X19": "NONE",
+    "Y19": "EVENT",
+    "A2": "EVENT",
+    "B2": "NONE",
+    "C2": "EVENT",
+    "D2": "s3:665",
+    "E2": "EVENT",
+    "F2": "EVENT",
+    "G2": "s3:665",
+    "H2": "s1:365",
+    "I2": "XXX",
+    "J2": "NONE",
+    "K2": "NONE",
+    "L2": "NONE",
+    "M2": "s3:665",
+    "N2": "s3:663",
+    "O2": "s3:665",
+    "P2": "s3:663",
+    "Q2": "s3:663",
+    "R2": "NONE",
+    "S2": "NONE",
+    "T2": "NONE",
+    "U2": "NONE",
+    "V2": "EVENT",
+    "W2": "NONE",
+    "X2": "NONE",
+    "Y2": "NONE",
+    "A5": "EVENT",
+    "B5": "NONE",
+    "C5": "NONE",
+    "D5": "s5:667",
+    "E5": "EVENT",
+    "F5": "EVENT",
+    "G5": "666",
+    "H5": "666",
+    "I5": "369",
+    "J5": "s1:365",
+    "K5": "XXX",
+    "L5": "XXX",
+    "M5": "NONE",
+    "N5": "EVENT",
+    "O5": "NONE",
+    "P5": "s4:676",
+    "Q5": "s4:676",
+    "R5": "s5:667",
+    "S5": "s5:353",
+    "T5": "s5:667",
+    "U5": "s5:353",
+    "V5": "s5:353",
+    "W5": "s5:667",
+    "X5": "s5:353",
+    "Y5": "NONE",
+    "A8": "NONE",
+    "B8": "NONE",
+    "C8": "NONE",
+    "D8": "NONE",
+    "E8": "EVENT",
+    "F8": "666",
+    "G8": "s3:665",
+    "H8": "s3:665",
+    "I8": "s5:353",
+    "J8": "s3:663",
+    "K8": "s3:663",
+    "L8": "XXX",
+    "M8": "EVENT",
+    "N8": "EVENT",
+    "O8": "s5:353",
+    "P8": "s4:676",
+    "Q8": "s5:353",
+    "R8": "s4:676",
+    "S8": "s4:522",
+    "T8": "225",
+    "U8": "EVENT",
+    "V8": "NONE",
+    "W8": "EVENT",
+    "X8": "s0:363",
+    "Y8": "s0:363",
+    "A11": "NONE",
+    "B11": "NONE",
+    "C11": "EVENT",
+    "D11": "NONE",
+    "E11": "NONE",
+    "F11": "NONE",
+    "G11": "NONE",
+    "H11": "EVENT",
+    "I11": "EVENT",
+    "J11": "NONE",
+    "K11": "s5:504",
+    "L11": "220",
+    "M11": "XXX",
+    "N11": "s4:226",
+    "O11": "s4:676",
+    "P11": "NONE",
+    "Q11": "520",
+    "R11": "s6:224",
+    "S11": "s6:377",
+    "T11": "EVENT",
+    "U11": "NONE",
+    "V11": "s6:224",
+    "W11": "s6:224",
+    "X11": "s6:224",
+    "Y11": "s6:377",
+    "A14": "EVENT",
+    "B14": "NONE",
+    "C14": "NONE",
+    "D14": "NONE",
+    "E14": "NONE",
+    "F14": "s5:353",
+    "G14": "s5:667",
+    "H14": "NONE",
+    "I14": "s5:353",
+    "J14": "s2:378",
+    "K14": "s2:378",
+    "L14": "s2:378",
+    "M14": "s5:667",
+    "N14": "XXX",
+    "O14": "520",
+    "P14": "671",
+    "Q14": "671",
+    "R14": "s6:224",
+    "S14": "s6:224",
+    "T14": "s2:378",
+    "U14": "s6:377",
+    "V14": "s6:224",
+    "W14": "s6:224",
+    "X14": "379",
+    "Y14": "NONE",
+    "A17": "NONE",
+    "B17": "NONE",
+    "C17": "NONE",
+    "D17": "NONE",
+    "E17": "s5:353",
+    "F17": "EVENT",
+    "G17": "NONE",
+    "H17": "s2:525",
+    "I17": "EVENT",
+    "J17": "s2:378",
+    "K17": "s2:378",
+    "L17": "s2:525",
+    "M17": "s2:378",
+    "N17": "XXX",
+    "O17": "s2:376",
+    "P17": "EVENT",
+    "Q17": "s2:525",
+    "R17": "s2:525",
+    "S17": "s6:224",
+    "T17": "s6:224",
+    "U17": "NONE",
+    "V17": "NONE",
+    "W17": "EVENT",
+    "X17": "EVENT",
+    "Y17": "NONE"
+   },
+   "evento": {
+    "0": "670",
+    "3": "134",
+    "6": "s6:658",
+    "9": "670",
+    "12": "670",
+    "15": "s6:526",
+    "18": "011",
+    "1": "s6:658",
+    "4": "s6:372",
+    "7": "s7:362",
+    "10": "s6:209",
+    "13": "s2:526",
+    "16": "s1:509",
+    "2": "s8:669",
+    "5": "s0:210",
+    "8": "s6:361",
+    "11": "030",
+    "14": "s7:362",
+    "17": "131"
+   },
+   "movimenti": {
+    "M6": "N6",
+    "N6": "O7",
+    "S9": "T8",
+    "T9": "527",
+    "F12": "F13",
+    "L12": "L11",
+    "M12": "N12",
+    "N12": "O13",
+    "F15": "F16",
+    "K15": "K16",
+    "Q15": "R14",
+    "R15": "R14",
+    "I18": "J18",
+    "J18": "K18",
+    "K18": "L17",
+    "M18": "N18",
+    "N18": "O18",
+    "O18": "227",
+    "O7": "P7",
+    "P7": "Q8",
+    "E13": "E14",
+    "F13": "E14",
+    "L13": "K14",
+    "O13": "O14",
+    "F16": "G17",
+    "K16": "K17",
+    "P16": "Q16",
+    "Q16": "R15",
+    "Q8": "R8",
+    "R8": "S9",
+    "L11": "M12",
+    "E14": "E15",
+    "K14": "K15",
+    "O14": "P14",
+    "P14": "Q15",
+    "R14": "S14",
+    "S14": "380",
+    "G17": "H17",
+    "H17": "I18",
+    "K17": "L17",
+    "L17": "M18",
+    "O17": "677",
+    "P17": "P16",
+    "E15": "F15"
+   }
+  },
+  "4": {
+   "esagoni": {
+    "A3": "EVENT",
+    "B3": "NONE",
+    "C3": "EVENT",
+    "D3": "NONE",
+    "E3": "EVENT",
+    "F3": "EVENT",
+    "G3": "EVENT",
+    "H3": "s1:365",
+    "I3": "XXX",
+    "J3": "NONE",
+    "K3": "NONE",
+    "L3": "NONE",
+    "M3": "EVENT",
+    "N3": "EVENT",
+    "O3": "NONE",
+    "P3": "EVENT",
+    "Q3": "NONE",
+    "R3": "NONE",
+    "S3": "NONE",
+    "T3": "s4:226",
+    "U3": "NONE",
+    "V3": "NONE",
+    "W3": "NONE",
+    "X3": "NONE",
+    "Y3": "NONE",
+    "A6": "NONE",
+    "B6": "NONE",
+    "C6": "EVENT",
+    "D6": "NONE",
+    "E6": "EVENT",
+    "F6": "NONE",
+    "G6": "EVENT",
+    "H6": "NONE",
+    "I6": "NONE",
+    "J6": "NONE",
+    "K6": "NONE",
+    "L6": "XXX",
+    "M6": "NONE",
+    "N6": "EVENT",
+    "O6": "s4:676",
+    "P6": "s4:676",
+    "Q6": "s4:676",
+    "R6": "s4:676",
+    "S6": "s4:676",
+    "T6": "s4:676",
+    "U6": "s4:676",
+    "V6": "s4:676",
+    "W6": "s4:676",
+    "X6": "NONE",
+    "Y6": "NONE",
+    "A9": "NONE",
+    "B9": "EVENT",
+    "C9": "NONE",
+    "D9": "NONE",
+    "E9": "NONE",
+    "F9": "NONE",
+    "G9": "NONE",
+    "H9": "NONE",
+    "I9": "NONE",
+    "J9": "NONE",
+    "K9": "EVENT",
+    "L9": "XXX",
+    "M9": "NONE",
+    "N9": "NONE",
+    "O9": "s4:226",
+    "P9": "s4:676",
+    "Q9": "s4:676",
+    "R9": "s4:676",
+    "S9": "s4:522",
+    "T9": "s4:522",
+    "U9": "s0:363",
+    "V9": "s0:363",
+    "W9": "s0:363",
+    "X9": "NONE",
+    "Y9": "EVENT",
+    "A12": "NONE",
+    "B12": "NONE",
+    "C12": "NONE",
+    "D12": "NONE",
+    "E12": "NONE",
+    "F12": "NONE",
+    "G12": "EVENT",
+    "H12": "NONE",
+    "I12": "EVENT",
+    "J12": "NONE",
+    "K12": "NONE",
+    "L12": "NONE",
+    "M12": "XXX",
+    "N12": "s6:224",
+    "O12": "s6:377",
+    "P12": "001",
+    "Q12": "s6:224",
+    "R12": "s0:363",
+    "S12": "s6:224",
+    "T12": "s6:377",
+    "U12": "s0:363",
+    "V12": "s0:363",
+    "W12": "s6:224",
+    "X12": "s6:224",
+    "Y12": "NONE",
+    "A15": "EVENT",
+    "B15": "NONE",
+    "C15": "EVENT",
+    "D15": "NONE",
+    "E15": "EVENT",
+    "F15": "EVENT",
+    "G15": "NONE",
+    "H15": "s2:378",
+    "I15": "s2:378",
+    "J15": "s2:378",
+    "K15": "s2:525",
+    "L15": "s2:378",
+    "M15": "s2:378",
+    "N15": "XXX",
+    "O15": "s2:376",
+    "P15": "s2:376",
+    "Q15": "s2:378",
+    "R15": "s2:378",
+    "S15": "s2:378",
+    "T15": "s6:224",
+    "U15": "s6:224",
+    "V15": "EVENT",
+    "W15": "s6:377",
+    "X15": "EVENT",
+    "Y15": "NONE",
+    "A18": "NONE",
+    "B18": "NONE",
+    "C18": "NONE",
+    "D18": "NONE",
+    "E18": "EVENT",
+    "F18": "NONE",
+    "G18": "NONE",
+    "H18": "s2:378",
+    "I18": "s2:378",
+    "J18": "s2:525",
+    "K18": "s2:378",
+    "L18": "s2:378",
+    "M18": "s8:672",
+    "N18": "s8:219",
+    "O18": "NONE",
+    "P18": "NONE",
+    "Q18": "EVENT",
+    "R18": "EVENT",
+    "S18": "NONE",
+    "T18": "NONE",
+    "U18": "NONE",
+    "V18": "NONE",
+    "W18": "NONE",
+    "X18": "EVENT",
+    "Y18": "NONE",
+    "A1": "NONE",
+    "B1": "NONE",
+    "C1": "EVENT",
+    "D1": "NONE",
+    "E1": "NONE",
+    "F1": "NONE",
+    "G1": "NONE",
+    "H1": "XXX",
+    "I1": "NONE",
+    "J1": "EVENT",
+    "K1": "NONE",
+    "L1": "EVENT",
+    "M1": "NONE",
+    "N1": "NONE",
+    "O1": "NONE",
+    "P1": "NONE",
+    "Q1": "EVENT",
+    "R1": "NONE",
+    "S1": "NONE",
+    "T1": "NONE",
+    "U1": "NONE",
+    "V1": "NONE",
+    "W1": "EVENT",
+    "X1": "NONE",
+    "Y1": "EVENT",
+    "A4": "NONE",
+    "B4": "NONE",
+    "C4": "NONE",
+    "D4": "EVENT",
+    "E4": "NONE",
+    "F4": "NONE",
+    "G4": "NONE",
+    "H4": "s1:365",
+    "I4": "s1:660",
+    "J4": "XXX",
+    "K4": "EVENT",
+    "L4": "NONE",
+    "M4": "NONE",
+    "N4": "NONE",
+    "O4": "NONE",
+    "P4": "NONE",
+    "Q4": "EVENT",
+    "R4": "s4:676",
+    "S4": "s4:676",
+    "T4": "s4:676",
+    "U4": "s4:226",
+    "V4": "s4:676",
+    "W4": "EVENT",
+    "X4": "EVENT",
+    "Y4": "NONE",
+    "A7": "EVENT",
+    "B7": "NONE",
+    "C7": "NONE",
+    "D7": "EVENT",
+    "E7": "NONE",
+    "F7": "NONE",
+    "G7": "NONE",
+    "H7": "EVENT",
+    "I7": "NONE",
+    "J7": "NONE",
+    "K7": "NONE",
+    "L7": "XXX",
+    "M7": "EVENT",
+    "N7": "NONE",
+    "O7": "s4:226",
+    "P7": "s4:676",
+    "Q7": "s4:676",
+    "R7": "s4:676",
+    "S7": "s4:226",
+    "T7": "s4:522",
+    "U7": "s4:676",
+    "V7": "EVENT",
+    "W7": "NONE",
+    "X7": "NONE",
+    "Y7": "NONE",
+    "A10": "EVENT",
+    "B10": "NONE",
+    "C10": "EVENT",
+    "D10": "NONE",
+    "E10": "NONE",
+    "F10": "NONE",
+    "G10": "NONE",
+    "H10": "EVENT",
+    "I10": "NONE",
+    "J10": "EVENT",
+    "K10": "NONE",
+    "L10": "XXX",
+    "M10": "EVENT",
+    "N10": "EVENT",
+    "O10": "s4:676",
+    "P10": "s4:226",
+    "Q10": "s4:226",
+    "R10": "s0:363",
+    "S10": "s0:363",
+    "T10": "s6:224",
+    "U10": "NONE",
+    "V10": "EVENT",
+    "W10": "EVENT",
+    "X10": "s6:377",
+    "Y10": "s6:224",
+    "A13": "NONE",
+    "B13": "NONE",
+    "C13": "NONE",
+    "D13": "NONE",
+    "E13": "NONE",
+    "F13": "NONE",
+    "G13": "NONE",
+    "H13": "s2:378",
+    "I13": "s2:378",
+    "J13": "s2:378",
+    "K13": "EVENT",
+    "L13": "s2:525",
+    "M13": "XXX",
+    "N13": "XXX",
+    "O13": "s0:363",
+    "P13": "001",
+    "Q13": "s0:363",
+    "R13": "s6:224",
+    "S13": "NONE",
+    "T13": "s6:224",
+    "U13": "s6:224",
+    "V13": "s6:224",
+    "W13": "s0:363",
+    "X13": "s0:363",
+    "Y13": "s0:363",
+    "A16": "NONE",
+    "B16": "NONE",
+    "C16": "NONE",
+    "D16": "EVENT",
+    "E16": "NONE",
+    "F16": "NONE",
+    "G16": "EVENT",
+    "H16": "s2:378",
+    "I16": "s2:525",
+    "J16": "s2:378",
+    "K16": "s2:525",
+    "L16": "s2:378",
+    "M16": "s2:378",
+    "N16": "XXX",
+    "O16": "NONE",
+    "P16": "s2:376",
+    "Q16": "s6:224",
+    "R16": "s6:224",
+    "S16": "s6:224",
+    "T16": "s2:525",
+    "U16": "s2:525",
+    "V16": "NONE",
+    "W16": "EVENT",
+    "X16": "NONE",
+    "Y16": "NONE",
+    "A19": "NONE",
+    "B19": "NONE",
+    "C19": "NONE",
+    "D19": "NONE",
+    "E19": "NONE",
+    "F19": "NONE",
+    "G19": "EVENT",
+    "H19": "s2:378",
+    "I19": "s2:378",
+    "J19": "s2:378",
+    "K19": "s2:378",
+    "L19": "s2:378",
+    "M19": "s8:672",
+    "N19": "s8:672",
+    "O19": "XXX",
+    "P19": "NONE",
+    "Q19": "NONE",
+    "R19": "NONE",
+    "S19": "NONE",
+    "T19": "EVENT",
+    "U19": "NONE",
+    "V19": "NONE",
+    "W19": "EVENT",
+    "X19": "NONE",
+    "Y19": "NONE",
+    "A2": "NONE",
+    "B2": "EVENT",
+    "C2": "NONE",
+    "D2": "NONE",
+    "E2": "NONE",
+    "F2": "NONE",
+    "G2": "NONE",
+    "H2": "EVENT",
+    "I2": "XXX",
+    "J2": "NONE",
+    "K2": "NONE",
+    "L2": "NONE",
+    "M2": "NONE",
+    "N2": "NONE",
+    "O2": "EVENT",
+    "P2": "NONE",
+    "Q2": "NONE",
+    "R2": "NONE",
+    "S2": "EVENT",
+    "T2": "EVENT",
+    "U2": "EVENT",
+    "V2": "NONE",
+    "W2": "NONE",
+    "X2": "NONE",
+    "Y2": "NONE",
+    "A5": "NONE",
+    "B5": "NONE",
+    "C5": "NONE",
+    "D5": "NONE",
+    "E5": "NONE",
+    "F5": "NONE",
+    "G5": "NONE",
+    "H5": "NONE",
+    "I5": "s1:365",
+    "J5": "EVENT",
+    "K5": "XXX",
+    "L5": "XXX",
+    "M5": "NONE",
+    "N5": "NONE",
+    "O5": "EVENT",
+    "P5": "s4:676",
+    "Q5": "s4:676",
+    "R5": "s4:226",
+    "S5": "s4:676",
+    "T5": "s4:226",
+    "U5": "s4:676",
+    "V5": "s4:676",
+    "W5": "s4:226",
+    "X5": "s4:676",
+    "Y5": "EVENT",
+    "A8": "EVENT",
+    "B8": "NONE",
+    "C8": "NONE",
+    "D8": "NONE",
+    "E8": "NONE",
+    "F8": "EVENT",
+    "G8": "NONE",
+    "H8": "NONE",
+    "I8": "EVENT",
+    "J8": "NONE",
+    "K8": "NONE",
+    "L8": "XXX",
+    "M8": "NONE",
+    "N8": "NONE",
+    "O8": "s4:676",
+    "P8": "s4:676",
+    "Q8": "s4:676",
+    "R8": "s4:676",
+    "S8": "s4:522",
+    "T8": "NONE",
+    "U8": "NONE",
+    "V8": "NONE",
+    "W8": "NONE",
+    "X8": "s0:363",
+    "Y8": "s0:363",
+    "A11": "NONE",
+    "B11": "EVENT",
+    "C11": "NONE",
+    "D11": "EVENT",
+    "E11": "EVENT",
+    "F11": "EVENT",
+    "G11": "NONE",
+    "H11": "NONE",
+    "I11": "NONE",
+    "J11": "NONE",
+    "K11": "NONE",
+    "L11": "EVENT",
+    "M11": "XXX",
+    "N11": "NONE",
+    "O11": "s4:676",
+    "P11": "s0:363",
+    "Q11": "s0:363",
+    "R11": "s6:224",
+    "S11": "s6:377",
+    "T11": "s0:363",
+    "U11": "s4:676",
+    "V11": "s6:224",
+    "W11": "s6:224",
+    "X11": "s6:224",
+    "Y11": "s6:377",
+    "A14": "NONE",
+    "B14": "NONE",
+    "C14": "NONE",
+    "D14": "NONE",
+    "E14": "NONE",
+    "F14": "NONE",
+    "G14": "NONE",
+    "H14": "s2:378",
+    "I14": "s2:378",
+    "J14": "s2:378",
+    "K14": "s2:378",
+    "L14": "s2:378",
+    "M14": "s2:525",
+    "N14": "XXX",
+    "O14": "s0:363",
+    "P14": "s6:377",
+    "Q14": "s6:224",
+    "R14": "s6:224",
+    "S14": "s6:224",
+    "T14": "s2:378",
+    "U14": "s6:377",
+    "V14": "s6:224",
+    "W14": "s6:224",
+    "X14": "379",
+    "Y14": "NONE",
+    "A17": "EVENT",
+    "B17": "EVENT",
+    "C17": "EVENT",
+    "D17": "NONE",
+    "E17": "NONE",
+    "F17": "NONE",
+    "G17": "NONE",
+    "H17": "s2:525",
+    "I17": "s2:378",
+    "J17": "s2:378",
+    "K17": "s2:378",
+    "L17": "s2:525",
+    "M17": "s2:378",
+    "N17": "XXX",
+    "O17": "s2:376",
+    "P17": "EVENT",
+    "Q17": "s2:525",
+    "R17": "s2:525",
+    "S17": "s2:378",
+    "T17": "s6:224",
+    "U17": "NONE",
+    "V17": "NONE",
+    "W17": "NONE",
+    "X17": "NONE",
+    "Y17": "EVENT"
+   },
+   "evento": {
+    "0": "307",
+    "3": "528",
+    "6": "s7:362",
+    "9": "678",
+    "12": "018",
+    "15": "381",
+    "18": "307",
+    "1": "018",
+    "4": "s1:509",
+    "7": "s6:658",
+    "10": "381",
+    "13": "s6:209",
+    "16": "s7:362",
+    "2": "s8:669",
+    "5": "s0:210",
+    "8": "528",
+    "11": "s6:361",
+    "14": "678",
+    "17": "s6:209"
+   },
+   "movimenti": {
+    "M6": "N6",
+    "N6": "O7",
+    "S9": "T9",
+    "T9": "527",
+    "F12": "F13",
+    "L12": "L11",
+    "M12": "N12",
+    "N12": "O13",
+    "E15": "F15",
+    "F15": "F16",
+    "K15": "K16",
+    "Q15": "R14",
+    "R15": "R14",
+    "I18": "J18",
+    "J18": "K18",
+    "K18": "L17",
+    "M18": "N18",
+    "N18": "O18",
+    "O18": "227",
+    "O7": "P7",
+    "P7": "O8",
+    "E13": "E14",
+    "F13": "E14",
+    "L13": "K14",
+    "O13": "O14",
+    "F16": "G17",
+    "K16": "K17",
+    "P16": "Q16",
+    "Q16": "R15",
+    "Q8": "R8",
+    "R8": "S9",
+    "L11": "M12",
+    "E14": "E15",
+    "K14": "K15",
+    "O14": "P14",
+    "P14": "Q15",
+    "R14": "S14",
+    "S14": "380",
+    "G17": "H17",
+    "H17": "I18",
+    "K17": "L17",
+    "L17": "M18",
+    "O17": "667",
+    "P17": "P16"
+   }
+  },
+  "5": {
+   "esagoni": {
+    "A3": "NONE",
+    "B3": "NONE",
+    "C3": "NONE",
+    "D3": "EVENT",
+    "E3": "NONE",
+    "F3": "NONE",
+    "G3": "NONE",
+    "H3": "s1:365",
+    "I3": "XXX",
+    "J3": "NONE",
+    "K3": "NONE",
+    "L3": "NONE",
+    "M3": "NONE",
+    "N3": "NONE",
+    "O3": "NONE",
+    "P3": "NONE",
+    "Q3": "EVENT",
+    "R3": "NONE",
+    "S3": "EVENT",
+    "T3": "s4:226",
+    "U3": "EVENT",
+    "V3": "NONE",
+    "W3": "EVENT",
+    "X3": "NONE",
+    "Y3": "NONE",
+    "A6": "NONE",
+    "B6": "NONE",
+    "C6": "NONE",
+    "D6": "NONE",
+    "E6": "NONE",
+    "F6": "NONE",
+    "G6": "NONE",
+    "H6": "NONE",
+    "I6": "NONE",
+    "J6": "EVENT",
+    "K6": "NONE",
+    "L6": "XXX",
+    "M6": "NONE",
+    "N6": "NONE",
+    "O6": "s4:676",
+    "P6": "s4:676",
+    "Q6": "s4:676",
+    "R6": "s4:676",
+    "S6": "s4:676",
+    "T6": "s4:676",
+    "U6": "s4:676",
+    "V6": "s4:676",
+    "W6": "s4:676",
+    "X6": "NONE",
+    "Y6": "EVENT",
+    "A9": "EVENT",
+    "B9": "NONE",
+    "C9": "NONE",
+    "D9": "NONE",
+    "E9": "EVENT",
+    "F9": "EVENT",
+    "G9": "NONE",
+    "H9": "EVENT",
+    "I9": "EVENT",
+    "J9": "NONE",
+    "K9": "NONE",
+    "L9": "XXX",
+    "M9": "NONE",
+    "N9": "NONE",
+    "O9": "s4:226",
+    "P9": "s4:676",
+    "Q9": "s4:676",
+    "R9": "s4:676",
+    "S9": "s4:522",
+    "T9": "s4:522",
+    "U9": "s0:363",
+    "V9": "s0:363",
+    "W9": "s0:363",
+    "X9": "EVENT",
+    "Y9": "NONE",
+    "A12": "EVENT",
+    "B12": "NONE",
+    "C12": "NONE",
+    "D12": "NONE",
+    "E12": "NONE",
+    "F12": "EVENT",
+    "G12": "NONE",
+    "H12": "NONE",
+    "I12": "NONE",
+    "J12": "NONE",
+    "K12": "NONE",
+    "L12": "NONE",
+    "M12": "EVENT",
+    "N12": "s6:224",
+    "O12": "s6:377",
+    "P12": "001",
+    "Q12": "s6:224",
+    "R12": "s0:363",
+    "S12": "s6:224",
+    "T12": "s6:377",
+    "U12": "s0:363",
+    "V12": "s0:363",
+    "W12": "s6:224",
+    "X12": "s6:224",
+    "Y12": "EVENT",
+    "A15": "NONE",
+    "B15": "NONE",
+    "C15": "NONE",
+    "D15": "EVENT",
+    "E15": "NONE",
+    "F15": "NONE",
+    "G15": "NONE",
+    "H15": "s2:378",
+    "I15": "s2:378",
+    "J15": "s2:378",
+    "K15": "s2:525",
+    "L15": "s2:378",
+    "M15": "s2:378",
+    "N15": "XXX",
+    "O15": "s2:376",
+    "P15": "s2:376",
+    "Q15": "s2:378",
+    "R15": "s2:378",
+    "S15": "s2:378",
+    "T15": "s6:224",
+    "U15": "s6:224",
+    "V15": "NONE",
+    "W15": "s6:377",
+    "X15": "NONE",
+    "Y15": "NONE",
+    "A18": "EVENT",
+    "B18": "EVENT",
+    "C18": "NONE",
+    "D18": "NONE",
+    "E18": "NONE",
+    "F18": "NONE",
+    "G18": "EVENT",
+    "H18": "s2:378",
+    "I18": "s2:378",
+    "J18": "s2:525",
+    "K18": "s2:378",
+    "L18": "s2:378",
+    "M18": "s8:672",
+    "N18": "s8:219",
+    "O18": "NONE",
+    "P18": "NONE",
+    "Q18": "NONE",
+    "R18": "NONE",
+    "S18": "NONE",
+    "T18": "EVENT",
+    "U18": "EVENT",
+    "V18": "NONE",
+    "W18": "NONE",
+    "X18": "NONE",
+    "Y18": "NONE",
+    "A1": "NONE",
+    "B1": "NONE",
+    "C1": "NONE",
+    "D1": "NONE",
+    "E1": "NONE",
+    "F1": "NONE",
+    "G1": "NONE",
+    "H1": "XXX",
+    "I1": "EVENT",
+    "J1": "NONE",
+    "K1": "EVENT",
+    "L1": "NONE",
+    "M1": "NONE",
+    "N1": "NONE",
+    "O1": "NONE",
+    "P1": "NONE",
+    "Q1": "NONE",
+    "R1": "NONE",
+    "S1": "NONE",
+    "T1": "EVENT",
+    "U1": "NONE",
+    "V1": "NONE",
+    "W1": "NONE",
+    "X1": "EVENT",
+    "Y1": "NONE",
+    "A4": "EVENT",
+    "B4": "EVENT",
+    "C4": "EVENT",
+    "D4": "NONE",
+    "E4": "NONE",
+    "F4": "NONE",
+    "G4": "NONE",
+    "H4": "s1:365",
+    "I4": "s1:660",
+    "J4": "XXX",
+    "K4": "NONE",
+    "L4": "NONE",
+    "M4": "EVENT",
+    "N4": "NONE",
+    "O4": "NONE",
+    "P4": "EVENT",
+    "Q4": "NONE",
+    "R4": "s4:676",
+    "S4": "s4:676",
+    "T4": "s4:676",
+    "U4": "s4:226",
+    "V4": "s4:676",
+    "W4": "NONE",
+    "X4": "NONE",
+    "Y4": "EVENT",
+    "A7": "NONE",
+    "B7": "NONE",
+    "C7": "EVENT",
+    "D7": "NONE",
+    "E7": "EVENT",
+    "F7": "NONE",
+    "G7": "EVENT",
+    "H7": "NONE",
+    "I7": "NONE",
+    "J7": "EVENT",
+    "K7": "NONE",
+    "L7": "XXX",
+    "M7": "NONE",
+    "N7": "NONE",
+    "O7": "s4:226",
+    "P7": "s4:676",
+    "Q7": "s4:676",
+    "R7": "s4:676",
+    "S7": "s4:226",
+    "T7": "s4:522",
+    "U7": "s4:676",
+    "V7": "NONE",
+    "W7": "NONE",
+    "X7": "NONE",
+    "Y7": "NONE",
+    "A10": "NONE",
+    "B10": "EVENT",
+    "C10": "NONE",
+    "D10": "EVENT",
+    "E10": "NONE",
+    "F10": "NONE",
+    "G10": "NONE",
+    "H10": "NONE",
+    "I10": "NONE",
+    "J10": "NONE",
+    "K10": "NONE",
+    "L10": "XXX",
+    "M10": "NONE",
+    "N10": "NONE",
+    "O10": "s4:676",
+    "P10": "s4:226",
+    "Q10": "s4:226",
+    "R10": "s0:363",
+    "S10": "s0:363",
+    "T10": "s6:224",
+    "U10": "EVENT",
+    "V10": "NONE",
+    "W10": "NONE",
+    "X10": "s6:377",
+    "Y10": "s6:224",
+    "A13": "NONE",
+    "B13": "EVENT",
+    "C13": "NONE",
+    "D13": "NONE",
+    "E13": "EVENT",
+    "F13": "NONE",
+    "G13": "NONE",
+    "H13": "s2:378",
+    "I13": "s2:378",
+    "J13": "s2:378",
+    "K13": "NONE",
+    "L13": "s2:525",
+    "M13": "XXX",
+    "N13": "XXX",
+    "O13": "s0:363",
+    "P13": "001",
+    "Q13": "s0:363",
+    "R13": "s6:224",
+    "S13": "NONE",
+    "T13": "s6:224",
+    "U13": "s6:224",
+    "V13": "s6:224",
+    "W13": "s0:363",
+    "X13": "s0:363",
+    "Y13": "s0:363",
+    "A16": "EVENT",
+    "B16": "NONE",
+    "C16": "EVENT",
+    "D16": "NONE",
+    "E16": "NONE",
+    "F16": "NONE",
+    "G16": "NONE",
+    "H16": "s2:378",
+    "I16": "s2:525",
+    "J16": "s2:378",
+    "K16": "s2:525",
+    "L16": "s2:378",
+    "M16": "s2:378",
+    "N16": "XXX",
+    "O16": "NONE",
+    "P16": "s2:376",
+    "Q16": "s6:224",
+    "R16": "s6:224",
+    "S16": "s6:224",
+    "T16": "s2:525",
+    "U16": "s2:525",
+    "V16": "EVENT",
+    "W16": "NONE",
+    "X16": "NONE",
+    "Y16": "EVENT",
+    "A19": "NONE",
+    "B19": "NONE",
+    "C19": "EVENT",
+    "D19": "NONE",
+    "E19": "EVENT",
+    "F19": "NONE",
+    "G19": "NONE",
+    "H19": "s2:378",
+    "I19": "s2:378",
+    "J19": "s2:378",
+    "K19": "s2:378",
+    "L19": "s2:378",
+    "M19": "s8:672",
+    "N19": "s8:672",
+    "O19": "XXX",
+    "P19": "NONE",
+    "Q19": "EVENT",
+    "R19": "EVENT",
+    "S19": "NONE",
+    "T19": "NONE",
+    "U19": "NONE",
+    "V19": "EVENT",
+    "W19": "NONE",
+    "X19": "NONE",
+    "Y19": "EVENT",
+    "A2": "NONE",
+    "B2": "NONE",
+    "C2": "EVENT",
+    "D2": "NONE",
+    "E2": "EVENT",
+    "F2": "EVENT",
+    "G2": "NONE",
+    "H2": "NONE",
+    "I2": "XXX",
+    "J2": "NONE",
+    "K2": "NONE",
+    "L2": "NONE",
+    "M2": "NONE",
+    "N2": "NONE",
+    "O2": "NONE",
+    "P2": "NONE",
+    "Q2": "NONE",
+    "R2": "NONE",
+    "S2": "NONE",
+    "T2": "NONE",
+    "U2": "NONE",
+    "V2": "EVENT",
+    "W2": "NONE",
+    "X2": "NONE",
+    "Y2": "NONE",
+    "A5": "NONE",
+    "B5": "NONE",
+    "C5": "NONE",
+    "D5": "NONE",
+    "E5": "EVENT",
+    "F5": "EVENT",
+    "G5": "NONE",
+    "H5": "NONE",
+    "I5": "s1:365",
+    "J5": "NONE",
+    "K5": "XXX",
+    "L5": "XXX",
+    "M5": "NONE",
+    "N5": "EVENT",
+    "O5": "NONE",
+    "P5": "s4:676",
+    "Q5": "s4:676",
+    "R5": "s4:226",
+    "S5": "s4:676",
+    "T5": "s4:226",
+    "U5": "s4:676",
+    "V5": "s4:676",
+    "W5": "s4:226",
+    "X5": "s4:676",
+    "Y5": "NONE",
+    "A8": "NONE",
+    "B8": "NONE",
+    "C8": "NONE",
+    "D8": "NONE",
+    "E8": "EVENT",
+    "F8": "NONE",
+    "G8": "NONE",
+    "H8": "NONE",
+    "I8": "NONE",
+    "J8": "NONE",
+    "K8": "NONE",
+    "L8": "XXX",
+    "M8": "EVENT",
+    "N8": "EVENT",
+    "O8": "s4:676",
+    "P8": "s4:676",
+    "Q8": "s4:676",
+    "R8": "s4:676",
+    "S8": "s4:522",
+    "T8": "NONE",
+    "U8": "EVENT",
+    "V8": "NONE",
+    "W8": "EVENT",
+    "X8": "s0:363",
+    "Y8": "s0:363",
+    "A11": "EVENT",
+    "B11": "NONE",
+    "C11": "EVENT",
+    "D11": "NONE",
+    "E11": "NONE",
+    "F11": "NONE",
+    "G11": "NONE",
+    "H11": "EVENT",
+    "I11": "EVENT",
+    "J11": "NONE",
+    "K11": "NONE",
+    "L11": "NONE",
+    "M11": "XXX",
+    "N11": "NONE",
+    "O11": "s4:676",
+    "P11": "s0:363",
+    "Q11": "s0:363",
+    "R11": "s6:224",
+    "S11": "s6:377",
+    "T11": "s0:363",
+    "U11": "s4:676",
+    "V11": "s6:224",
+    "W11": "s6:224",
+    "X11": "s6:224",
+    "Y11": "s6:377",
+    "A14": "NONE",
+    "B14": "NONE",
+    "C14": "NONE",
+    "D14": "NONE",
+    "E14": "NONE",
+    "F14": "NONE",
+    "G14": "NONE",
+    "H14": "s2:378",
+    "I14": "s2:378",
+    "J14": "s2:378",
+    "K14": "s2:378",
+    "L14": "s2:378",
+    "M14": "s2:525",
+    "N14": "XXX",
+    "O14": "s0:363",
+    "P14": "s6:377",
+    "Q14": "s6:224",
+    "R14": "s6:224",
+    "S14": "s6:224",
+    "T14": "s2:378",
+    "U14": "s6:377",
+    "V14": "s6:224",
+    "W14": "s6:224",
+    "X14": "379",
+    "Y14": "NONE",
+    "A17": "NONE",
+    "B17": "NONE",
+    "C17": "NONE",
+    "D17": "NONE",
+    "E17": "NONE",
+    "F17": "EVENT",
+    "G17": "NONE",
+    "H17": "s2:525",
+    "I17": "s2:378",
+    "J17": "s2:378",
+    "K17": "s2:378",
+    "L17": "s2:525",
+    "M17": "s2:378",
+    "N17": "XXX",
+    "O17": "s2:376",
+    "P17": "NONE",
+    "Q17": "s2:525",
+    "R17": "s2:525",
+    "S17": "s2:378",
+    "T17": "s6:224",
+    "U17": "NONE",
+    "V17": "NONE",
+    "W17": "EVENT",
+    "X17": "EVENT",
+    "Y17": "NONE"
+   },
+   "evento": {
+    "0": "012",
+    "3": "528",
+    "6": "NONE",
+    "9": "s7:362",
+    "12": "NONE",
+    "15": "381",
+    "18": "011",
+    "1": "NONE",
+    "4": "NONE",
+    "7": "NONE",
+    "10": "018",
+    "13": "NONE",
+    "16": "NONE",
+    "2": "NONE",
+    "5": "NONE",
+    "8": "NONE",
+    "11": "NONE",
+    "14": "678",
+    "17": "NONE"
+   },
+   "movimenti": {
+    "M6": "N6",
+    "N6": "O7",
+    "S9": "T9",
+    "T9": "527",
+    "F12": "F13",
+    "L12": "L11",
+    "M12": "N12",
+    "N12": "O13",
+    "E15": "F15",
+    "F15": "F16",
+    "K15": "K16",
+    "Q15": "R14",
+    "R15": "R14",
+    "I18": "J18",
+    "J18": "K18",
+    "K18": "L17",
+    "M18": "N18",
+    "N18": "O18",
+    "O18": "227",
+    "O7": "P7",
+    "P7": "Q8",
+    "E13": "E14",
+    "F13": "E14",
+    "L13": "K14",
+    "O13": "O14",
+    "F16": "G17",
+    "K16": "K17",
+    "P16": "Q16",
+    "Q16": "R15",
+    "Q8": "R8",
+    "R8": "S9",
+    "L11": "M12",
+    "E14": "E15",
+    "K14": "K15",
+    "O14": "P14",
+    "P14": "Q15",
+    "R14": "S14",
+    "S14": "380",
+    "G17": "H17",
+    "H17": "I18",
+    "K17": "L17",
+    "L17": "M18",
+    "O17": "677",
+    "P17": "P16"
+   }
+  }
+ }
+}

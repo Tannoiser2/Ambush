@@ -851,6 +851,32 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 					ia.entra_da_paragrafo(ctx, vd)
 		"rapide":
 			_op_rapide(ctx)
+		"act_terreno":
+			var sd2 := _soldato_pc(ctx)
+			var mod_t := int(o.si) if (not sd2.is_empty() and terreno.tipo(sd2.hex) in o.tipi) else int(o.no)
+			_op_controllo({"kind": "act", "mod": mod_t, "ok": o.ok, "ko": o.ko}, ctx)
+		"ponte_disinnescato":
+			ponte_stato("M12").catturato = true
+			_log("info", "Il ponte in M12 non può più saltare.")
+		"ponte_salta_m8":
+			_op_ponte_salta_m8()
+		"sherman_disponibile":
+			s.sherman_pronto = int(s.round.get("n", 0)) + 1 if fase_round() else 0
+			_log("info", "Lo Sherman è disponibile: entra in A6 quando vuoi (bottone «Fai entrare lo Sherman»).")
+		"blocco":
+			if not s.has("blocchi"):
+				s.blocchi = []
+			for hb2 in o.hexes:
+				if not (hb2 in s.blocchi):
+					s.blocchi.append(hb2)
+		"riattiva_evasi":
+			var coppie: Array = []
+			for num in o.g:
+				var ge2 := u("g%d" % int(num))
+				if not ge2.is_empty() and ge2.stato == "rimosso":
+					coppie.append([int(num), str(o.hex)])
+			if not coppie.is_empty():
+				_op_attiva({"g": coppie, "stance": "crouching", "adv": null, "two": [], "us_two": false, "aware": false, "reaction": null}, ctx)
 		"g_exit":
 			if ctx.get("veicolo", false):
 				var ve: Dictionary = veicoli.v(str(ctx.get("veicolo_id", "")))
@@ -909,6 +935,35 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 		return int(s.evasi.get(str(int(t.evaded)), 0)) >= 1
 	if t.has("radio"):
 		return radio_presidiata()
+	if t.has("sherman_in_mappa"):
+		var vs: Dictionary = veicoli.v("vsherman")
+		return not vs.is_empty() and veicoli.attivo(vs) and vs.hex != ""
+	if t.has("evaso_uno"):
+		for num in t.evaso_uno:
+			if u("g%d" % int(num)).get("stato", "") == "rimosso":
+				return true
+		return false
+	if t.has("m8_220"):
+		var h220: String = ctx.get("hex", "")
+		var vs2: Dictionary = veicoli.v("vsherman")
+		if not vs2.is_empty() and vs2.hex == h220:
+			return true
+		if not bool(s.avvistamenti[6]):
+			return true
+		for a in unita_in(h220, "us"):
+			for g in tedeschi_attivi():
+				if attivo(g) and vede_unita(g, a):
+					return true
+		return false
+	if t.has("m8_670"):
+		var fuori := func(num): return u("g%d" % num).get("stato", "") in ["catturato", "incapacitato", "morto"]
+		if not (fuori.call(45) and fuori.call(11)):
+			return false
+		var altri := 0
+		for g in tedeschi():
+			if not (int(g.num) in [45, 11]) and g.stato in ["catturato", "incapacitato", "morto"]:
+				altri += 1
+		return altri >= 2
 	if t.has("g_vede_entro") or t.has("g_vede_almeno"):
 		var gw: Dictionary = u(ctx.get("g", ""))
 		if gw.is_empty() or not in_mappa(gw):
@@ -1009,6 +1064,85 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 
 func _hex_test(v, ctx: Dictionary) -> String:
 	return str(ctx.get("hex", "")) if str(v) == "@hex" else str(v)
+
+# =================================================================== Missione 8: Sherman, blocchi stradali, ponte minato
+func _op_ponte_salta_m8() -> void:
+	var st := ponte_stato("M12")
+	if st.get("catturato", false) or not ponte_intatto("M12"):
+		_log("info", "Il ponte non può più saltare.")
+		return
+	st.distrutto = true
+	s.modifiche["M12"] = "stream"
+	terreno.imposta_modifiche(s.modifiche)
+	_fx("esplosione", {"a": "M12", "grande": true})
+	_log("combattimento", "Il ponte in M12 salta in aria!")
+	for x in unita_in("M12", "", false):
+		if x.stato in ["attivo", "incapacitato"]:
+			var rd := d10()
+			var l := T.lettera_danno(T.ARMI.ar.danni, rd)
+			_log("dado", "Esplosione su %s: %d → %s" % [nome(x), rd, _nome_danno(l)])
+			_applica_danno(x, l, {})
+			if x.stato != "morto":
+				x.hex = "L11" if x.lato == "us" else "N12"
+	for vid in s.get("veicoli", {}):
+		var vv: Dictionary = s.veicoli[vid]
+		if vv.hex == "M12" and vv.stato == "attivo":
+			veicoli.disabilita(vv, "crollo del ponte")
+
+func sherman_entrabile() -> bool:
+	if not s.has("sherman_pronto") or not veicoli.v("vsherman").is_empty():
+		return false
+	if fase_round():
+		return int(s.round.get("n", 0)) >= int(s.sherman_pronto)
+	return true
+
+## Lo Sherman entra in A6: equipaggio «Z» (carta americana 04) guidato dal giocatore.
+func entra_sherman() -> Dictionary:
+	_inizio_comando()
+	if not sherman_entrabile():
+		return _errore("Lo Sherman non può ancora entrare.")
+	var d := {"id": "Z", "nome": "Sherman", "IN": 3, "PC": 6, "WS": 1, "DS": 8, "MPA": 6, "comandante": false,
+		"porte": ["cannone", "mmg"], "munizioni": {"cannone": 20, "mmg": 10}}
+	var z := _nuovo_americano(d)
+	z.stato = "attivo"
+	z.hex = "A6"
+	z.postura = "crouching"
+	z.carro_us = true
+	z.consapevole = true
+	s.unita["Z"] = z
+	var v: Dictionary = veicoli.crea("vsherman", "sherman", "A6", "us")
+	v.equipaggio = 5
+	v.chiuso = false
+	v.cannone_pronto = true
+	v.fronte = 2
+	s.imbarco = true
+	veicoli.sali(z, v)
+	s.imbarco = false
+	for a in z.armi:
+		a.preparata = true
+	_log("info", "Lo Sherman entra in A6. Lo comandi come un soldato (Z): guida, cannone e mitragliatrice.")
+	_fx("compare", {"id": "Z", "a": "A6", "amico": true})
+	_fine_comando()
+	return OK
+
+## Blocco stradale: nelle Operazioni, tre soldati attivi nell’esagono e un controllo Evento.
+func sgombra_blocco(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	if s.fase != "operazioni":
+		return _errore("Il blocco si sposta solo nelle Operazioni.")
+	if not (a.hex in s.get("blocchi", [])):
+		return _errore("Qui non c’è un blocco stradale.")
+	if unita_in(a.hex, "us").filter(func(x): return not x.get("carro_us", false)).size() < 3:
+		return _errore("Servono almeno tre soldati attivi nell’esagono.")
+	_log("azione", "La squadra sposta i tronchi del blocco stradale in %s." % a.hex)
+	s.blocchi.erase(a.hex)
+	evento_casuale({"hex": a.hex, "ids": [a.id]})
+	_fine_comando()
+	return OK
 
 # =================================================================== Missione 7: mine anticarro, eventi continui
 func _piazza_mine_anticarro(esagoni_squadra: Array) -> void:
@@ -2706,6 +2840,8 @@ func cambia_postura(id: String, postura: String) -> Dictionary:
 		return _errore(e)
 	if a.hex == "":
 		return _errore("Il soldato non è ancora sulla mappa.")
+	if a.get("carro_us", false):
+		return _errore("Lo Sherman non cambia postura.")
 	if a.postura == postura:
 		return _errore("È già %s." % T.NOMI_POSTURA[postura])
 	if postura == "prone" and terreno.tipo(a.hex) == "stream" and not a.sul_ponte:
@@ -2760,6 +2896,8 @@ func _costo_ingresso(h: String) -> int:
 	return 1
 
 func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> String:
+	if bool(regola("xxx", false)) and riferimento(verso) == "XXX":
+		return "Esagono vietato (XXX sulla carta)."
 	var veic: Dictionary = veicoli.di(a)
 	if veicoli.attivo(veic):
 		if not veicoli.e_autista(a):
@@ -3067,7 +3205,7 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		return {"ok": false, "motivo": "fuori gittata"}
 	if tipo == "bazooka" and not mirato:
 		return {"ok": false, "motivo": "il bazooka non spara di rapido"}
-	if mirato and tiratore.get("lato", "") == "us" and bool(T.ARMI[tipo].get("squadra", false)):
+	if mirato and tiratore.get("lato", "") == "us" and bool(T.ARMI[tipo].get("squadra", false)) and not tiratore.get("carro_us", false):
 		var compagni := unita_in(tiratore.hex, "us").filter(func(x): return x.id != tiratore.id and not x.panico)
 		if compagni.is_empty():
 			return {"ok": false, "motivo": "da solo la mitragliatrice spara solo di rapido"}
@@ -3079,7 +3217,7 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		mods.append(["tiro rapido", -2])
 	if tiratore.ferito:
 		mods.append(["tiratore ferito", -1])
-	if veicoli.attivo(veicoli.di(tiratore)):
+	if veicoli.attivo(veicoli.di(tiratore)) and not tiratore.get("carro_us", false) and not veicoli.e_canoa(veicoli.di(tiratore)):
 		mods.append(["tiratore in auto", -2])
 	if mirato and T.ARMI[tipo].get("auto", false):
 		var extra := unita_in(bersaglio.hex, bersaglio.lato).size() - 1
@@ -3347,6 +3485,8 @@ func _dopo_perdita(x: Dictionary) -> void:
 	if x.lato == "de":
 		if int(x.num) == 34:
 			cambia_condizione(4)
+		if numero == 8 and int(x.num) in [3, 11] and int(s.condizione) == 1:
+			cambia_condizione(2)
 		var dx: Dictionary = missione.tedeschi.get(str(int(x.num)), {})
 		if dx.has("pv_eliminato") and not x.get("pv_eliminato_dato", false):
 			x.pv_eliminato_dato = true
@@ -3922,6 +4062,9 @@ func esci(id: String) -> Dictionary:
 			var dp: Dictionary = missione.tedeschi.get(str(int(p.num)), {})
 			if dp.has("pv_uscita_prigioniero"):
 				_pv(int(dp.pv_uscita_prigioniero), "%s portato fuori mappa prigioniero" % nome(p))
+	var pvu: Dictionary = regola("pv_uscita", {})
+	if pvu.has(a.hex) and not a.get("carro_us", false):
+		_pv(int(pvu[a.hex]), "%s esce da %s" % [nome(a), a.hex])
 	if int(a.get("documenti", 0)) > 0:
 		_pv(int(a.documenti), "documenti portati fuori mappa")
 		a.documenti = 0
@@ -4537,7 +4680,7 @@ func _controlla_fine_automatica() -> void:
 			_log("info", "Nessun tedesco attivo e tutti i ponti catturati o saltati: la missione termina.")
 			_calcola_fine("obiettivo")
 			return
-	var vivi_in_mappa := americani_attivi_in_mappa().filter(func(x): return not x.get("pilota", false))
+	var vivi_in_mappa := americani_attivi_in_mappa().filter(func(x): return not x.get("pilota", false) and not x.get("carro_us", false))
 	if int(regola("fine_condizione", 0)) > 0 and int(s.condizione) < int(regola("fine_condizione", 0)) and not vivi_in_mappa.is_empty():
 		return
 	var da_entrare := americani().filter(func(x): return x.stato == "fuori")
@@ -4556,7 +4699,7 @@ func _calcola_fine(modo: String) -> void:
 		righe.append(["Obiettivo raggiunto: strada di Saint-Michaux sotto controllo", 4])
 	var perdite := 0
 	for a in americani():
-		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J"):
+		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J") or a.get("carro_us", false):
 			continue
 		if a.id == "K" and s.get("staffetta_spia", false):
 			continue

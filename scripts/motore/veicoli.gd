@@ -12,7 +12,7 @@ const MODELLI := {
 	"auto_comando": {"art": "L’", "nome": "Auto comando", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 5},
 	"canoa": {"art": "La", "nome": "Canoa", "piccolo": true, "lenta": 4, "veloce": 4, "posti": 3, "canoa": true},
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
-	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
+	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 1, "carro": true, "torretta": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 
@@ -162,6 +162,12 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 			return 1
 		if acqua_da and not p.terreno.edificio(verso) and p.terreno.tipo_lato(da, verso) != "wall":
 			return 1
+		return -1
+	if bool(p.regola("argini_veicoli", false)) and p.terreno.tipo_lato(da, verso) == "embankment":
+		return -1
+	if verso in p.s.get("blocchi", []):
+		return -1
+	if bool(p.regola("xxx", false)) and p.riferimento(verso) == "XXX":
 		return -1
 	var t := p.terreno.tipo(verso)
 	if p.terreno.ponte(verso):

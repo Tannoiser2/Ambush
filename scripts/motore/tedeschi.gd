@@ -448,6 +448,66 @@ func esegui(n: int) -> void:
 			else:
 				_alzati()
 				_miglior_tiro("vicino")
+		841:
+			esegui(800 if bersagli(g).size() >= 3 else 815)
+		842:
+			_accovacciati()
+			var sc := _scegli_bersaglio("vicino", -1, false, false)
+			if not sc.is_empty():
+				p.risolvi_tiro(g, sc[1], sc[0], false)
+			if p.in_mappa(g):
+				_prono_fine_movimento()
+		843:
+			if p.unita_in(g.hex, "de").size() <= 1 and bersagli(g).size() > 1:
+				_arrenditi()
+			else:
+				esegui(815)
+		844:
+			var est := false
+			for a in bersagli(g):
+				if E.colonna(a.hex) < 12:
+					est = true
+			if not est:
+				_corri_verso("N6")
+				g.reazione = "D"
+		926:
+			_accovacciati()
+			_tiri_rapidi()
+			p.leggi("507", {"g": g.id, "hex": g.hex})
+		927:
+			_prono()
+			p.leggi("507", {"g": g.id, "hex": g.hex})
+		928:
+			if not _tedesco_vicino(1) and bersagli(g).is_empty():
+				_muovi_rapido(false)
+				g.reazione = "A"
+			else:
+				esegui(801)
+		929:
+			if p.terreno.edificio(g.hex):
+				esegui(930)
+			else:
+				_prono()
+		930:
+			_accovacciati()
+			if bersagli(g).is_empty() and p.ponte_intatto("M12") and E.adiacenti(g.hex, "L12"):
+				_alzati()
+				_passo("L12", false)
+				g.reazione = "B"
+			elif bersagli(g).is_empty() and E.adiacenti(g.hex, "L13"):
+				_corri_verso("K14")
+				g.reazione = "B"
+			else:
+				esegui(802)
+		931:
+			if bersagli(g).size() >= 3:
+				_corri_verso("N6")
+				g.rimuovi_fine_round = true
+		932:
+			if p.terreno.tipo(g.hex) == "woods":
+				esegui(844)
+			elif p.terreno.edificio(g.hex):
+				esegui(802)
 		911:
 			esegui(824 if g.hex == "J13" else 803)
 		912:

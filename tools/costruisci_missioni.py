@@ -225,6 +225,25 @@ MISSIONI[7] = {
   "testo_fine": "",
 }
 
+MISSIONI[8] = {
+  "titolo": "Corsa verso la Sambre", "titolo_originale": "Dash for the Sambre", "data": "Belgio, inizio settembre 1944", "mappa": "A",
+  "nord": "in alto",
+  "briefing": "Inizio settembre 1944. Mentre la divisione entra nei Paesi Bassi, al reggimento viene assegnata una compagnia di Sherman per l’appoggio alla fanteria. Ieri, sotto un pesante fuoco di mortai, avete avuto l’ordine di attestarvi a ovest della Sambre; ora uno di quei preziosi carri è stato mandato avanti con la tua squadra. L’ultimo tratto verso l’unico ponte del settore è una strada sopraelevata, molto esposta: i tuoi uomini devono precedere il carro, ripulire la zona e mettere in sicurezza il ponte. Quando il carro avrà passato il ponte, avanzerete a vostra discrezione.",
+  "ingresso": "Mappa A, nord in alto. I soldati entrano dal margine ovest, tra A1 e A6 compresi. All’inizio non ci sono segnalini sulla mappa. Lo Sherman arriverà durante la missione (un paragrafo lo annuncerà) ed entrerà in A6.",
+  "regole_testo": "[b]Regole speciali.[/b] Il fiume da H1 a O19 si attraversa solo sul ponte intatto (o sui guadi scoperti). Gli argini non ostacolano i soldati ma sono vietati ai veicoli; il carro non entra nei boschi. I blocchi stradali fermano i veicoli: si spostano solo nelle Operazioni, con almeno tre soldati attivi nell’esagono e un controllo Evento. Gli esagoni segnati «XXX» sulla carta non si possono attraversare. Lo Sherman lo guidi tu: si muove, spara col cannone e con le mitragliatrici.",
+  "ingresso_breve": "dal margine ovest, tra A1 e A6", "uscita_breve": "Y8 (oppure, ritirandosi, da A1–A6)",
+  "ingresso_esagoni": [f"A{r}" for r in range(1, 7)], "uscita_esagoni": ["Y8"] + [f"A{r}" for r in range(1, 7)],
+  "vittoria_pv": 18, "attivazione": {"1": 1, "2": 4, "3": 5, "4": 6, "5": 7},
+  "obiettivi": ["M12", "Y8"],
+  "regole": {"fiume": True, "argini_veicoli": True, "xxx": True, "pv_uscita": {"Y8": 1}},
+  "squadra_armi": {"A": ["smg"], "B": ["carbine"], "C": ["carbine", "bazooka"], "D": ["carbine"], "E": ["sar"], "F": ["sar", "satchel"], "G": ["ar"], "H": ["sar"]},
+  "squadra_munizioni": {"A": {"smg": 4, "granata": 2}, "B": {"carbine": 4, "granata": 2}, "C": {"carbine": 2, "bazooka": 3, "granata": 1},
+                        "D": {"carbine": 4, "granata": 2}, "E": {"sar": 4, "granata": 2}, "F": {"sar": 3, "granata": 2},
+                        "G": {"ar": 5, "granata": 1}, "H": {"sar": 4, "granata": 2}},
+  "vittoria_testo": "[b]Vittoria: 18 PV.[/b] Ogni soldato attivo che esce da Y8 vale 1 PV; altri PV si scoprono durante la missione. La missione termina quando tutti i soldati attivi sono usciti da Y8, oppure tutti da A1–A6 (lo Sherman può restare sulla mappa). Un incapacitato portato fuori da quegli esagoni non costa PV.",
+  "testo_fine": "",
+}
+
 def verifica(n, d):
     """Ogni riferimento delle carte e delle carte dei tedeschi attivati deve avere il suo paragrafo."""
     P = json.loads((R / "data/paragrafi.json").read_text())

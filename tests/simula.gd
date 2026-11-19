@@ -19,6 +19,8 @@ func _init() -> void:
 		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
 	elif missione == 3:
 		obiettivi = ["A3", "T3", "G13", "G14", "L10", "A15", "V3", "C3"]
+	elif missione == 8:
+		obiettivi = ["M12", "Y8", "S12", "K13", "T8", "O16"]
 	elif missione == 7:
 		obiettivi = ["R11", "Q16", "N12", "T8", "V15", "Y10"]
 	elif missione == 6:
@@ -120,6 +122,9 @@ func _passo_verso(p, a: Dictionary, meta: String, rng: RandomNumberGenerator) ->
 	return migliore
 
 func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, passi: int) -> void:
+	if p.sherman_entrabile() and rng.randf() < 0.5:
+		p.entra_sherman()
+		return
 	var candidati: Array = p.americani().filter(func(x): return (x.stato == "attivo" and x.hex != "") or x.stato == "fuori")
 	if candidati.is_empty():
 		p.termina_missione("ritirata")

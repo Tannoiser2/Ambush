@@ -302,6 +302,9 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 8: blocchi stradali
+	for h in s.get("blocchi", []):
+		_marcatore(str(h), "BLOCCO STRADALE", Vector2(0.0, -0.62), Color("5b4a33"))
 	# Missione 7: mine anticarro
 	for h in s.get("mine_at", []):
 		_marcatore(str(h), "MINA ANTICARRO", Vector2(0.0, -0.62), Color("6b3a1f"))

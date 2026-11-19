@@ -67,9 +67,15 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   (`aspetta_tedeschi`), penalità per i tedeschi che escono a ovest (`tedesco_uscito`), fine solo in C4.
   Carri 4 (Panzer IV) e 54 (Jagdpanther) con primo turno. Mappa non ruotata (il sud resta in basso a video).
 
+- Missione 8 FATTA (test `tests/missione8.gd`, `simula.gd -- 4 1 8`, scatti `tests/visivi/missione8_ui.gd`).
+  Sherman americano = unità «Z» (`carro_us`) a bordo di «vsherman», entra con `entra_sherman` dopo il 362;
+  esclusa da perdite e fine missione. Esagoni XXX vietati, argini vietati ai veicoli, blocchi stradali
+  `s.blocchi` (`sgombra_blocco`), ponte M12 minato (221 disinnesco, 373 esplosione), 1 PV per uscita da Y8.
+  TUTTE LE 8 MISSIONI DEL GIOCO BASE SONO FATTE. Prossimo: espansione Move Out! (M9–M12, carte nel foglio Excel).
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M8 Sherman (entra in A6), blocchi stradali, XXX.
+3. Espansioni.
