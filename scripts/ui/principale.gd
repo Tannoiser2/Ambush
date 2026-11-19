@@ -936,6 +936,7 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 	var ogg := p.oggetti_disponibili(a.id).filter(func(v): return v.da == "terra" or not p.attivo(p.u(str(v.da))))
 	_b("Equipaggiamento" + (" (%d da raccogliere)" % ogg.size() if not ogg.is_empty() else ""), func(): _finestra_equipaggiamento(a.id))
 	_bottoni_veicolo(a)
+	_bottoni_ponte(a)
 	var bz := p.arma_di(a, "bazooka")
 	if not bz.is_empty() and not bz.preparata:
 		_b("Carica il bazooka", func(): _esito(p.prepara(a.id, "bazooka")), "Serve un razzo; resta carico finché non spara.")
@@ -1026,6 +1027,20 @@ func _azioni_round(a: Dictionary) -> void:
 	_b("Passa il turno", func(): _esito(p.passa(a.id)))
 
 ## Salire e scendere da un veicolo americano nello stesso esagono.
+## Missione 3: ponti (paragrafo 1000), deposito di carburante, ruota della jeep.
+func _bottoni_ponte(a: Dictionary) -> void:
+	for x in p.azioni_ponte(a):
+		var az: String = x.azione
+		var hh: String = x.hex
+		var aiuto: String = {"tanica": "Occupa una casella di porto. Attraversa il ponte di legno con la tanica per poterlo incendiare.",
+			"carica": "Serve una carica preparata. Il ponte di pietra ne vuole due, quello di legno una.",
+			"brilla": "Le cariche esplodono subito: chi è sul ponte muore.",
+			"fuoco": "Il ponte di legno brucia per il resto della missione.",
+			"bazooka": "Serve una penetrazione pesante; modificatore +4, si ignora il terreno."}.get(az, "")
+		_b(str(x.testo), func(): _esito(p.azione_ponte(a.id, az, hh)), aiuto)
+	if p.ruota_da_cambiare(a):
+		_b("Cambia la ruota della jeep", func(): _esito(p.cambia_ruota(a.id)), "Nelle Operazioni due controlli Evento; nei Round 10 azioni in tutto.")
+
 func _bottoni_veicolo(a: Dictionary) -> void:
 	var veic: Dictionary = p.veicoli.di(a)
 	if not veic.is_empty():

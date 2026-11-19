@@ -4208,6 +4208,330 @@
     ]
    }
   },
+  "4": {
+   "lettera": "Y",
+   "ruolo": "Panzer IV",
+   "pv": 3,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "panzer4",
+    "gruppi": [
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      3
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      8,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       902,
+       905,
+       905,
+       900
+      ]
+     },
+     "4": {
+      "IN": 3,
+      "PC": 6,
+      "WS": 1,
+      "DS": 8,
+      "par": [
+       907,
+       905,
+       905,
+       902
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 0,
+      "DS": 6,
+      "par": [
+       905,
+       905,
+       902,
+       902
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       900,
+       811,
+       908,
+       900
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       811,
+       904,
+       904,
+       840
+      ]
+     }
+    },
+    "pv_distrutto": 3,
+    "testo": "+3 VP if knocked out Enters open; cannon +2 VP                ready. When open, 3 crew ON FIRST             visible. TURN USE 900."
+   }
+  },
+  "55": {
+   "lettera": "Y",
+   "ruolo": "Panzer IV",
+   "pv": 3,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "panzer4",
+    "gruppi": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      8,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       905,
+       900,
+       901,
+       900
+      ]
+     },
+     "4": {
+      "IN": 3,
+      "PC": 6,
+      "WS": 1,
+      "DS": 8,
+      "par": [
+       828,
+       901,
+       905,
+       900
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 0,
+      "DS": 6,
+      "par": [
+       900,
+       904,
+       902,
+       903
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       908,
+       814,
+       900,
+       921
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       840,
+       904,
+       904,
+       840
+      ]
+     }
+    },
+    "pv_distrutto": 2,
+    "testo": "Special Reaction B: Do not move for remainder of the mission. Fire as +3 VP    called for. +2 VP if knocked out. Enters open; cannon ready. When open, 3 crew visible"
+   }
+  },
+  "54": {
+   "lettera": "Z",
+   "ruolo": "Jagdpanther",
+   "pv": 2,
+   "armi": [],
+   "granate": 0,
+   "IN": 5,
+   "PC": 8,
+   "WS": 2,
+   "MPA": 6,
+   "DS": 8,
+   "gruppi": [
+    [
+     0,
+     9
+    ]
+   ],
+   "colonne": {
+    "1-6": [
+     800
+    ]
+   },
+   "carro": {
+    "modello": "jagdpanther",
+    "gruppi": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      6,
+      8
+     ],
+     [
+      9,
+      9
+     ]
+    ],
+    "righe": {
+     "5": {
+      "IN": 5,
+      "PC": 8,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       923,
+       923,
+       925,
+       925
+      ]
+     },
+     "4": {
+      "IN": 4,
+      "PC": 6,
+      "WS": 2,
+      "DS": 8,
+      "par": [
+       923,
+       921,
+       925,
+       923
+      ]
+     },
+     "3": {
+      "IN": 3,
+      "PC": 5,
+      "WS": 1,
+      "DS": 6,
+      "par": [
+       921,
+       923,
+       925,
+       925
+      ]
+     },
+     "2": {
+      "IN": 2,
+      "PC": 3,
+      "WS": -1,
+      "DS": 4,
+      "par": [
+       921,
+       924,
+       921,
+       921
+      ]
+     },
+     "1": {
+      "IN": 1,
+      "PC": 1,
+      "WS": -2,
+      "DS": 2,
+      "par": [
+       840,
+       811,
+       811,
+       811
+      ]
+     }
+    },
+    "pv_distrutto": 3,
+    "testo": "+2 VP +3 VP if knocked out. Enters open; cannon not ready. When open, 3 crew visible. On first turn use 922."
+   }
+  },
   "19": {
    "lettera": "S",
    "ruolo": "Autista della Kübelwagen",

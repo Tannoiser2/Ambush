@@ -23,12 +23,20 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
 - Missione 2 FATTA (test `tests/missione2.gd`, `tests/simula.gd -- 6 1 2`, scatti `tests/visivi/missione2_ui.gd`).
   Semplificazioni: equipaggiamento pre-generato (niente acquisti); Me-109: tiro all’aereo semplificato.
 
+- Missione 3 FATTA (test `tests/missione3.gd`, `tests/simula.gd -- 6 1 3`, scatti `tests/visivi/missione3_ui.gd`).
+  Regole in `missione.regole`: `vista` (terreno.limite_vista; 021/022 la cambiano in `s.vista`), `fiume`
+  (ruscello impraticabile salvo ponti), `niente_controlli_round`, `pv_esagoni`, `max_edifici`, `jeep`, `radio`,
+  `deposito`. Ponti in `s.ponti` (distrutto, attraversato, controlli/4, cariche, carburante): azioni
+  `azioni_ponte`/`azione_ponte` (paragrafo 1000), ponte distrutto = modifica "stream". Staffette J (carta 01,
+  178) e K (carta 08: 276/281/263). Carri: `veicoli.gd` (Panzer IV 55, punti equipaggio, cannone, MG).
+  Semplificazioni: la radio resta nell’esagono del comandante allo schieramento; la jeep di squadra viene
+  parcheggiata automaticamente nell’esagono scoperto accanto alla strada più vicino alla squadra.
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M3 nebbia 6 esagoni, niente controlli in Round, jeep, deposito carburante L10;
-   M4 lancio (deriva, LAND, tabella atterraggio, paracadute), notte 5, sminare ponti; M5 guadi, documenti;
+3. Regole speciali: M4 lancio (deriva, LAND, tabella atterraggio, paracadute), notte 5, sminare ponti; M5 guadi, documenti;
    M6 canoe, bunker, notte; M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
    M8 Sherman (entra in A6), blocchi stradali, XXX.

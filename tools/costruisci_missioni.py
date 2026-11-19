@@ -30,6 +30,28 @@ def tedeschi():
         if c["ruolo"] in ("Officer", "NCO", "Veteran NCO", "Sergeant", "SS General"):
             d["comandante"] = True
         out[str(c["num"])] = d
+    # Carri (Panzer IV, Jagdpanther): tabella per numero di uomini dell’equipaggio.
+    for k, c in CARTE.items():
+        if c["lato"] != "GE" or "Crew" not in c["testo"]:
+            continue
+        righe_t = c["testo"].splitlines()
+        i = next(j for j, l in enumerate(righe_t) if l.strip().startswith("Crew"))
+        intest = righe_t[i].split()[5:]
+        gruppi = [[int(x.split("-")[0]), int(x.split("-")[-1])] for x in intest]
+        righe = {}
+        for l in righe_t[i + 1:i + 6]:
+            n = l.replace("+", "").split()
+            if len(n) < 9:
+                continue
+            righe[n[0]] = {"IN": int(n[1]), "PC": int(n[2]), "WS": int(n[3]), "DS": int(n[4]), "par": [int(x) for x in n[5:9]]}
+        modello = "jagdpanther" if "Jagd" in c["ruolo"] else "panzer4"
+        pv = re.search(r"\+(\d) VP if knocked out", c["testo"])
+        r5 = righe.get("5", {"IN": 5, "PC": 8, "WS": 2, "DS": 8})
+        out[str(c["num"])] = {"lettera": c["lettera"], "ruolo": c["ruolo"], "pv": c["pv"], "armi": [], "granate": 0,
+            "IN": r5["IN"], "PC": r5["PC"], "WS": r5["WS"], "MPA": 6, "DS": r5["DS"],
+            "gruppi": [[0, 9]], "colonne": {"1-6": [800]},
+            "carro": {"modello": modello, "gruppi": gruppi, "righe": righe, "pv_distrutto": int(pv.group(1)) if pv else 0,
+                      "testo": " ".join(l.strip() for l in righe_t[1:i] if l.strip())}}
     # Carta 19 (Kübelwagen): autista S e ufficiale M, entrambi con la pistola. Le azioni dipendono da chi è attivo
     # (le gestisce scripts/motore/veicoli.gd); le colonne servono solo a dare un paragrafo di riserva.
     riserva = {"gruppi": [[0, 9]], "colonne": {"1-6": [802], "S": [813]}}
@@ -53,6 +75,26 @@ MISSIONI = {
   "vittoria_testo": "[b]Vittoria: 25 PV.[/b] Ottieni 1 PV per ogni esagono di edificio in cui entra un tuo soldato; altri modi di guadagnare PV si scoprono durante la missione. La missione termina in uno di due modi:\n1. Tutti gli esagoni di edificio sono stati raggiunti e tutti i soldati attivi sono nella stazione ferroviaria (O6, P5 e Q5).\n2. Tutti i soldati attivi escono dalla mappa da un esagono d’ingresso (A6–A15).\nPerdi 2 PV per ogni americano ucciso o incapacitato. Un incapacitato non costa PV se lo porti fuori mappa da A6–A15 o, quando tutti gli edifici sono stati raggiunti, dentro la stazione.",
   "testo_fine": "Tutti gli edifici sono stati raggiunti e la squadra è nella stazione: la missione termina. I soldati incapacitati portati nella stazione non fanno perdere punti.",
  },
+}
+
+def edifici_b():
+    m = json.loads((R / "data/mappa_b.json").read_text())
+    return sorted([h for h, v in m["esagoni"].items() if "building" in v["t"]], key=lambda h: (COL.index(h[0]), int(h[1:])))
+
+MISSIONI[3] = {
+  "titolo": "Un freddo mattino in Belgio", "titolo_originale": "A Cold Morning in Belgium", "data": "Belgio, inverno 1944", "mappa": "B",
+  "nord": "a sinistra (l’est è in alto)",
+  "briefing": "La tua squadra, di guarnigione in un settore tranquillo del fronte, è accantonata in un villaggio appena a est di un fiume. In questo mattino nebbioso e innevato gli uomini hanno l’ordine di pattugliare gli edifici bombardati lì vicino, in cerca di esploratori tedeschi.",
+  "ingresso": "Mappa B, con l’est in alto (le coordinate non cambiano). Disponi i soldati in tre edifici a tua scelta; la jeep della squadra parte in un esagono scoperto accanto alla strada. Nell’esagono di edificio L10 c’è un deposito di carburante con decine di taniche piene. La squadra ha una radio. Non ci sono livelli di attivazione: tutti i tedeschi entrano per evento casuale.",
+  "regole_testo": "[b]Regole speciali.[/b] Nebbia leggera: si vede al massimo a 6 esagoni, salvo diversa indicazione di un paragrafo. Nei Round non si fanno controlli di paragrafo entrando negli esagoni (nelle Operazioni sì). Il corso d’acqua da A6 a Y17 è un fiume: si attraversa solo su un ponte intatto.",
+  "ingresso_breve": "in tre edifici a tua scelta", "uscita_breve": "il margine ovest, da A13 ad A19",
+  "uscita_esagoni": [f"A{r}" for r in range(13, 20)],
+  "vittoria_pv": 25, "attivazione": {},
+  "obiettivi": ["A3", "A4", "B3", "C3", "T3", "U4", "V3"],
+  "regole": {"vista": 6, "niente_controlli_round": True, "fiume": True, "pv_esagoni": ["A3", "A4", "B3", "C3", "T3", "U4", "V3"],
+             "max_edifici": 3, "jeep": True, "radio": True, "deposito": "L10"},
+  "vittoria_testo": "[b]Vittoria: 25 PV.[/b] Ottieni 1 PV per ciascuno di questi esagoni in cui entra un tuo soldato: A3, A4, B3, C3, T3, U4 e V3; altri modi si scoprono durante la missione. Un incapacitato non costa PV se lo porti fuori mappa da A13–A19. Come finisce la missione lo scoprirai giocando.",
+  "testo_fine": "",
 }
 
 def verifica(n, d):
@@ -87,8 +129,8 @@ def verifica(n, d):
             continue
         for col in d["tedeschi"][g]["colonne"].values():
             for num in col:
-                if num is not None and str(num) not in P:
-                    mancanti.add(str(num))
+                if num is not None and "%03d" % int(num) not in P:
+                    mancanti.add("%03d" % int(num))
     return sorted(mancanti)
 
 def main():
@@ -99,6 +141,8 @@ def main():
         d.update(meta)
         d["squadra"] = M1["squadra"]
         d["tedeschi"] = ted
+        if n == 3:
+            d["ingresso_esagoni"] = edifici_b()
         d["condizioni"] = {k: {"esagoni": v["esagoni"], "evento": v["evento"], "movimenti": v["movimenti"]} for k, v in carte.items()}
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         print(n, len(d["condizioni"]), len(ted), "mancanti:", verifica(n, d))

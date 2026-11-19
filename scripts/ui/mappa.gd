@@ -298,7 +298,29 @@ func _draw() -> void:
 	# Segnalini sulla mappa
 	var lato := RAGGIO * zoom
 	for h in s.modifiche:
-		_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+		if s.modifiche[h] == "stream":
+			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
+		else:
+			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 3: radio, deposito, cariche e carburante sui ponti
+	if str(s.get("radio_hex", "")) != "":
+		_marcatore(str(s.radio_hex), "RADIO", Vector2(0.0, -0.62), Color("3d4f5f"))
+	var dep := str(partita.regola("deposito", ""))
+	if dep != "":
+		_marcatore(dep, "CARBURANTE", Vector2(0.0, -0.62), Color("5b4a33"))
+	for h in s.get("ponti", {}):
+		var st: Dictionary = s.ponti[h]
+		if st.distrutto:
+			continue
+		var parti: Array = []
+		if int(st.cariche) > 0:
+			parti.append("CARICHE %d" % int(st.cariche))
+		if st.carburante:
+			parti.append("CARBURANTE")
+		if int(st.controlli) > 0:
+			parti.append("CONTROLLO %d/4" % mini(4, int(st.controlli)))
+		if not parti.is_empty():
+			_marcatore(h, " · ".join(parti), Vector2(0.0, -0.62), Color("6b3a1f"))
 	for h in s.mine:
 		_segnalino(h, "campo_minato", Vector2(0.5, -0.5), 0.55)
 	for h in s.eventi:
@@ -316,7 +338,10 @@ func _draw() -> void:
 			var col := Color("4a5d32") if veic.lato == "us" else Color("5d5f63")
 			if veic.stato != "attivo":
 				col = Color("3a3a3a")
-			_marcatore(str(veic.hex), str(veic.nome).to_upper() + ("" if veic.stato == "attivo" else " (FUORI USO)"), Vector2(0.0, 0.66), col)
+			var extra := "" if veic.stato == "attivo" else " (FUORI USO)"
+			if veic.stato == "attivo" and int(veic.get("forature", 0)) > 0 and not veic.gomme:
+				extra = " (GOMMA A TERRA)"
+			_marcatore(str(veic.hex), str(veic.nome).to_upper() + extra, Vector2(0.0, 0.66), col)
 	for h in s.oggetti:
 		if not s.oggetti[h].is_empty():
 			_segnalino(h, "mitra" if s.oggetti[h][0].tipo == "smg" else "arma", Vector2(0.5, 0.5), 0.45)

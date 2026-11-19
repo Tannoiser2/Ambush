@@ -6832,5 +6832,1708 @@
   "it": "• Se il tedesco 37 o il 50 è ucciso, incapacitato o non è in questo esagono, striscia.\n• Altrimenti esegui 801.",
   "ops": [],
   "tipo": "azione"
+ },
+ "017": {
+  "id": "017",
+  "it": "Un tiro d’artiglieria tedesco! Tira un dado per l’esagono colpito:\n0: esagono O6\n1: esagono N8\n2: esagono L10\n3: esagono L13\n4: esagono O12\n5: esagono Q14\n6: esagono Q10\n7: esagono I11\n8: esagono J8\n9: esagono S7\nIn un esagono non di edificio metti un cratere; un edificio colpito diventa macerie. Tutti i soldati nell’esagono colpito muoiono e i veicoli sono distrutti.",
+  "ops": [
+   {
+    "op": "artiglieria_esagoni",
+    "esagoni": [
+     "O6",
+     "N8",
+     "L10",
+     "L13",
+     "O12",
+     "Q14",
+     "Q10",
+     "I11",
+     "J8",
+     "S7"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "031": {
+  "id": "031",
+  "it": "Un tiro d’artiglieria tedesco! Tira un dado per l’esagono colpito:\n0: esagono I5\n1: esagono S11\n2: esagono O14\n3: esagono F4\n4: esagono P7\n5: esagono U13\n6: esagono H15\n7: esagono P8\n8: esagono Q12\n9: esagono U5\nIn un esagono non di edificio metti un cratere; un edificio colpito diventa macerie. Tutti i soldati nell’esagono colpito muoiono e i veicoli sono distrutti.",
+  "ops": [
+   {
+    "op": "artiglieria_esagoni",
+    "esagoni": [
+     "I5",
+     "S11",
+     "O14",
+     "F4",
+     "P7",
+     "U13",
+     "H15",
+     "P8",
+     "Q12",
+     "U5"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "014": {
+  "id": "014",
+  "it": "Una jeep americana fora una gomma (se ce n’è più d’una, si sceglie a caso). Un soldato americano attivo nell’esagono della jeep può montare la ruota di scorta: nelle Operazioni costa due controlli Evento, nei Round 10 azioni (due soldati possono dividersele). Se succede una seconda volta alla stessa jeep, la ruota di scorta non c’è più.",
+  "ops": [
+   {
+    "op": "jeep_tire"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "019": {
+  "id": "019",
+  "it": "[s2] Un razzo di segnalazione esplode in cielo.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "021": {
+  "id": "021",
+  "it": "[s3] Una nebbia fitta scende sul campo di battaglia. La visibilità si riduce a 3 esagoni e il costo in punti movimento dei veicoli aumenta di 1 in ogni tipo di terreno. La nebbia resta finché un paragrafo non la toglie.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "vista",
+    "n": 3,
+    "veicoli": 1
+   }
+  ],
+  "tipo": "missione"
+ },
+ "022": {
+  "id": "022",
+  "it": "[s4] Serve s3. La nebbia fitta si dirada: torna il tempo del briefing (visibilità 6 esagoni).",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "s": 3
+    },
+    "then": [
+     {
+      "op": "sighting",
+      "s": 4
+     },
+     {
+      "op": "vista",
+      "n": 6,
+      "veicoli": 0
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "084": {
+  "id": "084",
+  "it": "[s7] Attiva il tedesco 93 nell’esagono N9, accovacciato. Iniziano i Round. Vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      93,
+      "N9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "121": {
+  "id": "121",
+  "it": "Ogni soldato americano che vede l’esagono Y12 fa un controllo di percezione (−1): se almeno uno riesce, vedi 250.\nSe falliscono tutti, fanno il controllo i soldati che vedono X12; poi W13; poi V13 (se uno riesce, vedi 250).\nSe falliscono anche per V13, o se non si fa nessun controllo, vedi 157.",
+  "ops": [
+   {
+    "op": "pc_sequenza",
+    "mod": -1,
+    "passi": [
+     [
+      "Y12",
+      [
+       {
+        "op": "goto",
+        "p": "250"
+       }
+      ]
+     ],
+     [
+      "X12",
+      [
+       {
+        "op": "goto",
+        "p": "250"
+       }
+      ]
+     ],
+     [
+      "W13",
+      [
+       {
+        "op": "goto",
+        "p": "250"
+       }
+      ]
+     ],
+     [
+      "V13",
+      [
+       {
+        "op": "goto",
+        "p": "250"
+       }
+      ]
+     ]
+    ],
+    "nessuno": [
+     {
+      "op": "goto",
+      "p": "157"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "143": {
+  "id": "143",
+  "it": "Se la radio è presidiata, vedi 178.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "radio": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "178"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "145": {
+  "id": "145",
+  "it": "Ogni soldato entro 8 esagoni da C4 fa un controllo di percezione (−1). Se almeno uno riesce, vedi 255.",
+  "ops": [
+   {
+    "op": "pc_entro",
+    "hex": "C4",
+    "dist": 8,
+    "mod": -1,
+    "any": [
+     {
+      "op": "goto",
+      "p": "255"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "146": {
+  "id": "146",
+  "it": "• Se si muove il tedesco 35 o il 41, entra in U13 e metti in effetto per lui la reazione speciale R.\n• Se si muove il tedesco 52, entra nell’esagono U14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_is": [
+      35,
+      41
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U13"
+     },
+     {
+      "op": "g_reaction",
+      "r": "R"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_is": [
+        52
+       ]
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "U14"
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "157": {
+  "id": "157",
+  "it": "Attiva i tedeschi 35, 41 e 52 nell’esagono V13, accovacciati. Attiva il tedesco 55 in A5. Iniziano i Round. Vantaggio tedesco. I tedeschi 35, 41 e 52 ricevono due turni in questo Round, il 55 uno solo. Per il rumore del 55 tutti i soldati americani, ovunque siano, possono fare il controllo di consapevolezza nel primo Round. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      35,
+      "V13"
+     ],
+     [
+      41,
+      "V13"
+     ],
+     [
+      52,
+      "V13"
+     ],
+     [
+      55,
+      "A5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     35,
+     41,
+     52
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "consapevolezza_libera"
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "178": {
+  "id": "178",
+  "it": "[s1] Il comando di battaglione comunica che è in corso un’offensiva tedesca: abbandonate le posizioni! Ritardate il nemico a vostra discrezione. Ricevi 2 PV per ogni soldato americano attivo che esce tra A13 e A19 compresi; non perdi PV per gli incapacitati portati fuori da quegli esagoni. Ricevi PV per la distruzione dei ponti: ponte di legno 2 PV, ponte di pietra 4 PV, entrambi 10 PV (vedi il paragrafo 1000). La missione termina quando non ci sono più soldati americani attivi sulla mappa.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "offensiva"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "250": {
+  "id": "250",
+  "it": "Attiva i tedeschi 35, 41 e 52 nell’esagono che si stava controllando, in piedi (accovacciati se in V13). Attiva il tedesco 55 in A5, in piedi. Iniziano i Round. Vantaggio americano. Il soldato americano che ha appena superato il controllo di percezione è automaticamente consapevole. Tutti i soldati americani consapevoli che non cadono nel panico ricevono 2 turni in questo Round. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "indicato": "V13"
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        35,
+        "@indicato"
+       ],
+       [
+        41,
+        "@indicato"
+       ],
+       [
+        52,
+        "@indicato"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": true,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        35,
+        "@indicato"
+       ],
+       [
+        41,
+        "@indicato"
+       ],
+       [
+        52,
+        "@indicato"
+       ]
+      ],
+      "stance": "standing",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": true,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "A5"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "251": {
+  "id": "251",
+  "it": "Se il ponte in G13 è intatto e nessun tedesco è entrato e uscito da G13, entra in G13. Altrimenti:\n• se si muove un tedesco con numero 52 o inferiore, entra in H13;\n• se si muove un tedesco con numero 53 o superiore e il ponte è intatto, entra in G13;\n• se si muove un tedesco con numero 53 o superiore e il ponte è distrutto, entra in I12.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "bridge_ok": "G13"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "G13"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_le": 52
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "H13"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "bridge_intact": "G13"
+        },
+        "then": [
+         {
+          "op": "g_enter",
+          "hex": "G13"
+         }
+        ],
+        "else": [
+         {
+          "op": "g_enter",
+          "hex": "I12"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "252": {
+  "id": "252",
+  "it": "Serve s2: vedi 121. Altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "s": 2
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "121"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "253": {
+  "id": "253",
+  "it": "Se il soldato vede l’esagono Y12, fa un controllo di percezione (+2):\n• se riesce, vedi 250;\n• se fallisce, vedi 157.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "see_hex": "Y12"
+    },
+    "then": [
+     {
+      "op": "indica",
+      "hex": "Y12"
+     },
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "250"
+       }
+      ],
+      "ko": [
+       {
+        "op": "goto",
+        "p": "157"
+       }
+      ]
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "254": {
+  "id": "254",
+  "it": "Metti in effetto per questo tedesco la reazione speciale T. Tira un nuovo numero d’azione tedesca e applica a questo tedesco l’azione indicata.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "T"
+   },
+   {
+    "op": "g_reroll"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "255": {
+  "id": "255",
+  "it": "Il soldato sente il cingolare di un mezzo corazzato diretto verso l’esagono d’ingresso A5.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "256": {
+  "id": "256",
+  "it": "• Se si muove un soldato tedesco (non un veicolo) e il ponte di questo esagono non è stato controllato per le cariche, lo controlla: servono quattro turni, che possono dividersi tutti i tedeschi mandati a questo paragrafo, anche non di seguito. Chi controlla il ponte, se bersagliato, è accovacciato in terreno scoperto.\n• Se si muove un veicolo, o il ponte è già stato controllato: entra in H13 se il tedesco ha numero 52 o inferiore, in F14 se 53 o superiore.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "not": {
+        "bridge_checked": "@hex"
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "controlla_ponte"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_le": 52
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "H13"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "F14"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "257": {
+  "id": "257",
+  "it": "Ogni soldato americano in un esagono scoperto o di strada che vede l’esagono Y12 fa un controllo di percezione (−2):\n• se almeno uno riesce, vai al 262;\n• se falliscono tutti, vai al 020;\n• se non si fa nessun controllo, nessun evento.",
+  "ops": [
+   {
+    "op": "group_pc",
+    "hex": "Y12",
+    "mod": -2,
+    "solo_aperto": true,
+    "any": [
+     {
+      "op": "goto",
+      "p": "262"
+     }
+    ],
+    "all_fail": [
+     {
+      "op": "goto",
+      "p": "020"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "258": {
+  "id": "258",
+  "it": "Se il tedesco 55 si è mosso di quattro o più esagoni nel Round precedente, ha perso un cingolo: non si muove più per il resto della missione, ma esegue le azioni che non richiedono movimento.",
+  "ops": [
+   {
+    "op": "cingolo_55"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "259": {
+  "id": "259",
+  "it": "Ogni soldato americano che vede l’esagono J1 fa un controllo di percezione (−1): se almeno uno riesce, vedi 264. Se falliscono tutti, si continua con K2, K3 e L3, nell’ordine: al primo successo vedi 264. Se falliscono tutti, vedi 269.",
+  "ops": [
+   {
+    "op": "pc_sequenza",
+    "mod": -1,
+    "passi": [
+     [
+      "J1",
+      [
+       {
+        "op": "goto",
+        "p": "264"
+       }
+      ]
+     ],
+     [
+      "K2",
+      [
+       {
+        "op": "goto",
+        "p": "264"
+       }
+      ]
+     ],
+     [
+      "K3",
+      [
+       {
+        "op": "goto",
+        "p": "264"
+       }
+      ]
+     ],
+     [
+      "L3",
+      [
+       {
+        "op": "goto",
+        "p": "264"
+       }
+      ]
+     ]
+    ],
+    "nessuno": [
+     {
+      "op": "goto",
+      "p": "269"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "260": {
+  "id": "260",
+  "it": "• Se si muove un veicolo e il ponte in G14 è intatto, entra in G14; se il ponte è distrutto, entra in H12.\n• Se si muove un soldato con numero 52 o inferiore e il ponte in G14 è intatto e nessun tedesco vi è entrato e uscito, entra in G14. Se il ponte in G14 è distrutto ma quello in G13 è intatto e nessun tedesco vi è entrato e uscito, entra in H12. Altrimenti entra in I14.\n• Se si muove un soldato con numero 53 o superiore e il ponte in G14 è intatto, entra in G14. Se G14 è distrutto ma G13 è intatto, entra in H12. Se sono distrutti entrambi, entra in H14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "bridge_intact": "G14"
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "G14"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "H12"
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_le": 52
+      },
+      "then": [
+       {
+        "op": "if",
+        "t": {
+         "bridge_ok": "G14"
+        },
+        "then": [
+         {
+          "op": "g_enter",
+          "hex": "G14"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "all": [
+            {
+             "not": {
+              "bridge_intact": "G14"
+             }
+            },
+            {
+             "bridge_ok": "G13"
+            }
+           ]
+          },
+          "then": [
+           {
+            "op": "g_enter",
+            "hex": "H12"
+           }
+          ],
+          "else": [
+           {
+            "op": "g_enter",
+            "hex": "I14"
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "bridge_intact": "G14"
+        },
+        "then": [
+         {
+          "op": "g_enter",
+          "hex": "G14"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "bridge_intact": "G13"
+          },
+          "then": [
+           {
+            "op": "g_enter",
+            "hex": "H12"
+           }
+          ],
+          "else": [
+           {
+            "op": "g_enter",
+            "hex": "H14"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "261": {
+  "id": "261",
+  "it": "• Se si muove un soldato tedesco (non un veicolo) e il ponte di questo esagono non è stato controllato per le cariche, lo controlla: servono quattro turni, che possono dividersi tutti i tedeschi mandati a questo paragrafo, anche non di seguito. Chi controlla il ponte, se bersagliato, è accovacciato in terreno scoperto.\n• Se si muove un veicolo, o il ponte è già stato controllato: entra in H12 se il tedesco ha numero 52 o inferiore, in F13 se 53 o superiore.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "not": {
+        "bridge_checked": "@hex"
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "controlla_ponte"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_le": 52
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "H12"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "F13"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "262": {
+  "id": "262",
+  "it": "Il soldato nota un movimento nell’esagono Y12.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "263": {
+  "id": "263",
+  "it": "Non ricevi PV per l’uscita di questo soldato e non ne perdi se è ucciso o incapacitato: era un agente tedesco travestito da soldato americano.",
+  "ops": [
+   {
+    "op": "staffetta_spia"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "264": {
+  "id": "264",
+  "it": "Attiva i tedeschi 61, 64 e 72 nell’esagono che si stava controllando, in piedi (accovacciati se in L3). Attiva i tedeschi 90, 91 e 92 in A5, in piedi. Iniziano i Round. Vantaggio americano. Il soldato americano che ha appena superato il controllo di percezione è automaticamente consapevole. Tutti i soldati americani consapevoli che non cadono nel panico ricevono 2 turni in questo Round. Passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "indicato": "L3"
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        61,
+        "@indicato"
+       ],
+       [
+        64,
+        "@indicato"
+       ],
+       [
+        72,
+        "@indicato"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": true,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        61,
+        "@indicato"
+       ],
+       [
+        64,
+        "@indicato"
+       ],
+       [
+        72,
+        "@indicato"
+       ]
+      ],
+      "stance": "standing",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": true,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      90,
+      "A5"
+     ],
+     [
+      91,
+      "A5"
+     ],
+     [
+      92,
+      "A5"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "265": {
+  "id": "265",
+  "it": "Se sei al piano superiore, scendi al piano inferiore. Se sei al piano inferiore e c’è un soldato americano attivo al piano superiore, sali. Se sei al piano inferiore e non c’è nessun americano al piano superiore, entra in S14.",
+  "ops": [
+   {
+    "op": "g_enter",
+    "hex": "S14"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "266": {
+  "id": "266",
+  "it": "Una staffetta del comando di battaglione entra in gioco in A17 (carta americana 01). Puoi usarla come vuoi e conta per la tua squadra ai fini dei PV, ma cerca un comandante di squadra. Se i Round sono in corso, la staffetta è automaticamente consapevole.",
+  "ops": [
+   {
+    "op": "staffetta",
+    "carta": 1
+   }
+  ],
+  "tipo": "missione"
+ },
+ "267": {
+  "id": "267",
+  "it": "Ogni soldato americano in un esagono scoperto o di strada che vede l’esagono J1 fa un controllo di percezione (−2):\n• se almeno uno riesce, vedi 272;\n• se falliscono tutti, vedi 020;\n• se non si fa nessun controllo, nessun evento.",
+  "ops": [
+   {
+    "op": "group_pc",
+    "hex": "J1",
+    "mod": -2,
+    "solo_aperto": true,
+    "any": [
+     {
+      "op": "goto",
+      "p": "272"
+     }
+    ],
+    "all_fail": [
+     {
+      "op": "goto",
+      "p": "020"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "268": {
+  "id": "268",
+  "it": "• Se è un veicolo tedesco, entra in I7.\n• Se è un soldato tedesco, entra in H7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "269": {
+  "id": "269",
+  "it": "Attiva i tedeschi 61, 64 e 72 in L3 e i tedeschi 90, 91 e 92 in A5, tutti in piedi. Iniziano i Round. Vantaggio tedesco. I tedeschi 61, 64 e 72 ricevono due turni in questo Round (90, 91 e 92 tirano normalmente). Passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "L3"
+     ],
+     [
+      64,
+      "L3"
+     ],
+     [
+      72,
+      "L3"
+     ],
+     [
+      90,
+      "A5"
+     ],
+     [
+      91,
+      "A5"
+     ],
+     [
+      92,
+      "A5"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [
+     61,
+     64,
+     72
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "270": {
+  "id": "270",
+  "it": "Entra in S15 e togli a questo tedesco la reazione speciale R: le sue azioni tornano a dipendere dalla Condizione in vigore. Se gli restano punti movimento, continua a muoversi finché non li ha spesi.",
+  "ops": [
+   {
+    "op": "g_enter",
+    "hex": "S15"
+   },
+   {
+    "op": "g_reaction",
+    "r": ""
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "271": {
+  "id": "271",
+  "it": "Una staffetta del comando di battaglione entra in gioco in A17 (carta americana 08). Puoi usarla come vuoi, ma cerca di raggiungere un comandante di squadra. Se i Round sono in corso, la staffetta è automaticamente consapevole.",
+  "ops": [
+   {
+    "op": "staffetta",
+    "carta": 8
+   }
+  ],
+  "tipo": "missione"
+ },
+ "272": {
+  "id": "272",
+  "it": "Il soldato nota un movimento nell’esagono J1.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "273": {
+  "id": "273",
+  "it": "• Se il ponte in G13 è distrutto, entra in I9.\n• Se il ponte è intatto, entra in H10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "bridge_intact": "G13"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H10"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "274": {
+  "id": "274",
+  "it": "Ogni soldato americano che vede l’esagono R3 fa un controllo di percezione (+1):\n• se almeno uno riesce, vedi 279;\n• se falliscono tutti, o non si fa nessun controllo, vedi 284.",
+  "ops": [
+   {
+    "op": "group_pc",
+    "hex": "R3",
+    "mod": 1,
+    "any": [
+     {
+      "op": "goto",
+      "p": "279"
+     }
+    ],
+    "all_fail": [
+     {
+      "op": "goto",
+      "p": "284"
+     }
+    ],
+    "nessuno": [
+     {
+      "op": "goto",
+      "p": "284"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "275": {
+  "id": "275",
+  "it": "• Se i ponti in G14 e G13 sono distrutti entrambi, oppure un ponte è intatto e almeno un tedesco è entrato e uscito da quel ponte, metti in effetto per questo tedesco la reazione speciale D, tira un nuovo numero d’azione e applica l’azione indicata.\n• Altrimenti entra in I14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "bridge_ok": "G13"
+       }
+      },
+      {
+       "not": {
+        "bridge_ok": "G14"
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_reaction",
+      "r": "D"
+     },
+     {
+      "op": "g_reroll"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "276": {
+  "id": "276",
+  "it": "I tuoi soldati capiscono che la staffetta è una quinta colonna tedesca che cerca di ingannare la squadra. Scoperto, il nazista grida «Heil Hitler!» e si uccide. Guadagni 2 PV.",
+  "ops": [
+   {
+    "op": "staffetta_smascherata"
+   },
+   {
+    "op": "vp",
+    "n": 2,
+    "why": "spia smascherata"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "277": {
+  "id": "277",
+  "it": "Ogni soldato americano in un esagono scoperto o di strada che vede l’esagono T2 fa un controllo di percezione (−2):\n• se almeno uno riesce, vedi 282;\n• se falliscono tutti, vedi 020;\n• se non si fa nessun controllo, nessun evento.",
+  "ops": [
+   {
+    "op": "group_pc",
+    "hex": "T2",
+    "mod": -2,
+    "solo_aperto": true,
+    "any": [
+     {
+      "op": "goto",
+      "p": "282"
+     }
+    ],
+    "all_fail": [
+     {
+      "op": "goto",
+      "p": "020"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "278": {
+  "id": "278",
+  "it": "• Se si muove un tedesco con numero 90 o superiore, entra in F12.\n• Se si muove un tedesco con numero 89 o inferiore, entra in F14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_ge": 90
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "F12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "F14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "279": {
+  "id": "279",
+  "it": "Attiva i tedeschi 82, 85 e 89 nell’esagono R8, accovacciati. Iniziano i Round. Vantaggio americano. Il soldato americano che ha appena superato il controllo di percezione è automaticamente consapevole. Tutti i soldati americani consapevoli che non cadono nel panico ricevono 2 turni in questo Round. Passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      82,
+      "R8"
+     ],
+     [
+      85,
+      "R8"
+     ],
+     [
+      89,
+      "R8"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "280": {
+  "id": "280",
+  "it": "• Se il ponte in G13 o in G14 è intatto e nessun tedesco è ancora entrato e uscito da quel ponte, entra in H13.\n• Altrimenti entra in J13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "any_bridge_ok": [
+      "G13",
+      "G14"
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "281": {
+  "id": "281",
+  "it": "Il comando di battaglione comunica che una pattuglia tedesca si dirige verso il villaggio, nei pressi dell’esagono Y16.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "282": {
+  "id": "282",
+  "it": "Il soldato nota un movimento nell’esagono T2.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "283": {
+  "id": "283",
+  "it": "• Se si muove un tedesco con numero 90 o superiore, entra in I9.\n• Se si muove un tedesco con numero 89 o inferiore, entra in J9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_ge": 90
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "284": {
+  "id": "284",
+  "it": "Attiva i tedeschi 82, 85 e 89 nell’esagono R3, accovacciati. Iniziano i Round. Vantaggio tedesco. Tutti i tedeschi appena attivati ricevono 2 turni in questo Round. Passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      82,
+      "R3"
+     ],
+     [
+      85,
+      "R3"
+     ],
+     [
+      89,
+      "R3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     82,
+     85,
+     89
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "285": {
+  "id": "285",
+  "it": "Metti in effetto per questo veicolo la reazione speciale B.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "B"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "286": {
+  "id": "286",
+  "it": "• Se si muove un tedesco con numero 54 o superiore, entra in K14.\n• Se si muove un tedesco con numero 53 o inferiore, entra in J13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_ge": 54
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "287": {
+  "id": "287",
+  "it": "Metti in effetto per questo tedesco la reazione speciale X.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "X"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "631": {
+  "id": "631",
+  "it": "Effettua un controllo di attivazione (+1):\n• se riesce, vedi 084;\n• se fallisce, vedi 633.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "084"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "633"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "633": {
+  "id": "633",
+  "it": "[s7] Attiva il tedesco 93 nell’esagono N9, accovacciato. Iniziano i Round. Vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      93,
+      "N9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "565": {
+  "id": "565",
+  "it": "Il tedesco aziona un interruttore segreto e il ponte salta. Chi è nell’esagono del ponte muore; chi è in un esagono adiacente subisce i danni di una granata all’aperto.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "812": {
+  "id": "812",
+  "it": "1. Se c’è un soldato americano attivo nel tuo esagono, assaltalo per uccidere.\n2. Se sei adiacente a un soldato americano attivo oltre un lato attraversabile e hai una granata, accovacciati e lanciala. Eccezione: se nel tuo esagono c’è un altro tedesco attivo, esegui invece una carica d’assalto per uccidere.\n3. Se vedi un bersaglio attivo e nel suo esagono non ci sono tedeschi, accovacciati ed esegui il miglior tiro.\n4. Muoviti e spara di rapido se durante il movimento compaiono bersagli attivi.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "834": {
+  "id": "834",
+  "it": "• Se sei in un esagono con un veicolo tedesco attivo, accovacciati ed esegui il miglior tiro contro il bersaglio più facile. Dopo il tiro sdraiati prono se ti resta il cambio di postura gratuito.\n• Altrimenti vedi 808.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "858": {
+  "id": "858",
+  "it": "• Se non vedi bersagli, accovacciati.\n• Se sei in un edificio e 1 o 2 bersagli sono in vista o negli esagoni adiacenti, alzati ed esegui il miglior tiro contro il bersaglio più facile. Sdraiati prono se ti resta il cambio di postura gratuito.\n• Se non sei in un edificio e vedi 1 o 2 bersagli, accovacciati ed esegui il miglior tiro contro il più facile. Sdraiati prono se ti resta il cambio di postura gratuito.\n• Se vedi tre o più bersagli attivi, sdraiati prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "860": {
+  "id": "860",
+  "it": "• Se sei in un edificio, alzati e spara di rapido al maggior numero possibile di bersagli, cominciando dal più vicino e poi dal più facile. Sdraiati prono se ti resta il cambio di postura gratuito.\n• Se non sei in un edificio, accovacciati e spara di rapido al maggior numero possibile di bersagli, cominciando dal più vicino e poi dal più facile.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "862": {
+  "id": "862",
+  "it": "• Se non vedi bersagli attivi, muoviti il più rapidamente possibile.\n• Se vedi un bersaglio attivo e sei in un esagono scoperto, muoviti il più rapidamente possibile e alla fine sdraiati prono (spendendo un punto movimento, se necessario).\n• Se vedi un bersaglio attivo e non sei in un esagono scoperto, accovacciati ed esegui il miglior tiro contro il bersaglio più facile.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "863": {
+  "id": "863",
+  "it": "• Se non vedi bersagli attivi, muoviti il più rapidamente possibile.\n• Se vedi un bersaglio attivo e sei in un esagono scoperto, muoviti il più rapidamente possibile e sdraiati prono nel primo esagono non scoperto in cui entri (o nell’ultimo, spendendo un punto movimento se necessario).\n• Se vedi un bersaglio attivo e non sei in un esagono scoperto, esegui 869.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "864": {
+  "id": "864",
+  "it": "• Se non vedi bersagli attivi, muoviti il più rapidamente possibile.\n• Se vedi un bersaglio attivo, alzati e spara un tiro rapido al più vicino; poi muoviti il più rapidamente possibile spendendo fino a metà dei tuoi punti movimento (per difetto). Sdraiati prono se ti resta il cambio di postura gratuito.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "869": {
+  "id": "869",
+  "it": "• Se hai una granata e un soldato americano attivo è entro tre esagoni, alzati e lanciala. Sdraiati prono se ti resta il cambio di postura gratuito.\n• Altrimenti esegui 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "060": {
+  "id": "060",
+  "it": "1. Se il ponte in G14 è intatto e nessun tedesco attivo è in G14 o adiacente, vedi 565.\n2. Se il ponte in G13 è intatto e nessun tedesco attivo è in G13 o adiacente, vedi 565.\n3. Se sono saltati entrambi i ponti, o ci sono tedeschi in entrambi gli esagoni o adiacenti, vedi 858.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "716": {
+  "id": "716",
+  "it": "• Se i tedeschi 63 e 83 sono inattivi, arrenditi.\n• Se sono attivi o non sono ancora stati attivati, esegui 802.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "911": {
+  "id": "911",
+  "it": "• Se sei nell’esagono J13, vedi 824.\n• Altrimenti vedi 803.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "912": {
+  "id": "912",
+  "it": "• Se sei nell’esagono E11 o K7, vedi 824.\n• Altrimenti vedi 803.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "811": {
+  "id": "811",
+  "it": "• Se vedi un bersaglio attivo, arrenditi.\n• Altrimenti sdraiati prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "827": {
+  "id": "827",
+  "it": "Guida il veicolo veloce.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "840": {
+  "id": "840",
+  "it": "Non fare nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "900": {
+  "id": "900",
+  "it": "Guida piano. Spara col cannone se c’è un bersaglio attivo in un edificio o un veicolo americano attivo in vista; altrimenti carica il cannone. Se il cannone è carico e non c’è un bersaglio da cannone, spara di rapido con la mitragliatrice coassiale al secondo bersaglio più vicino. Spara di rapido con la mitragliatrice di prua al bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "901": {
+  "id": "901",
+  "it": "• Se vedi uno o più bersagli attivi, vedi 910.\n• Altrimenti vedi 906.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "902": {
+  "id": "902",
+  "it": "• Se vedi bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 900).\n• Altrimenti apri i portelli (se sono già aperti, vedi 906).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "903": {
+  "id": "903",
+  "it": "• Se l’abilità di guida (DS) è 6 o più, guida veloce e carica il cannone se non è carico.\n• Altrimenti guida piano e carica il cannone se non è carico.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "904": {
+  "id": "904",
+  "it": "Spara di rapido con la mitragliatrice di prua al bersaglio più vicino. Spara col cannone se c’è un bersaglio attivo in un edificio o un veicolo americano attivo in vista; altrimenti carica il cannone.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "905": {
+  "id": "905",
+  "it": "• Se vedi 2 o più bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 900).\n• Se ne vedi uno, vedi 910.\n• Se non ne vedi, apri i portelli (se sono già aperti, vedi 906).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "906": {
+  "id": "906",
+  "it": "Guida veloce. Spara di rapido con la mitragliatrice di prua al bersaglio più vicino. Carica il cannone se non è carico.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "907": {
+  "id": "907",
+  "it": "• Se vedi 3 o più bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 910).\n• Se ne vedi 1 o 2, vedi 900.\n• Se non ne vedi, apri i portelli (se sono già aperti, vedi 900).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "908": {
+  "id": "908",
+  "it": "Tiro mirato con la mitragliatrice di prua al bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "909": {
+  "id": "909",
+  "it": "• Se vedi bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 904).\n• Altrimenti vedi 827.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "910": {
+  "id": "910",
+  "it": "Tiro mirato con la mitragliatrice di prua al bersaglio più vicino. Spara col cannone a un bersaglio attivo in un edificio o a un veicolo americano attivo in vista; altrimenti carica il cannone. Se il cannone è carico e non c’è un bersaglio da cannone, tiro mirato con la coassiale al secondo bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "921": {
+  "id": "921",
+  "it": "Guida piano. Spara di rapido con la mitragliatrice al bersaglio più vicino. Spara col cannone se c’è un bersaglio attivo in un edificio o un veicolo americano attivo in vista; altrimenti carica il cannone.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "922": {
+  "id": "922",
+  "it": "Guida veloce. Spara di rapido con la mitragliatrice al bersaglio più vicino. Carica il cannone se non è carico.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "923": {
+  "id": "923",
+  "it": "• Se vedi 2 o più bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 921).\n• Se ne vedi uno, vedi 924.\n• Se non ne vedi, apri i portelli (se sono già aperti, vedi 922).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "924": {
+  "id": "924",
+  "it": "Tiro mirato con la mitragliatrice al bersaglio più vicino. Spara col cannone a un bersaglio attivo in un edificio o a un veicolo americano attivo in vista; altrimenti carica il cannone.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "925": {
+  "id": "925",
+  "it": "• Se vedi bersagli attivi, chiudi i portelli (se sono già chiusi, vedi 921).\n• Altrimenti apri i portelli (se sono già aperti, vedi 922).",
+  "ops": [],
+  "tipo": "azione"
  }
 }

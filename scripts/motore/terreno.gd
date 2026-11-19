@@ -94,6 +94,8 @@ func costo_movimento(a: String, b: String) -> int:
 		"rough", "brush", "woods", "rubble", "ford":
 			c = 2
 		"stream":
+			if fiume and not (ponte(b) and a in capi_ponte(b)) and not guado(b):
+				return -1
 			c = 1 if (ponte(b) and a in capi_ponte(b)) else 2
 	if tl in ["door", "window"]:
 		c += 1
@@ -266,6 +268,8 @@ func vista(a: String, b: String, postura_a := "standing", postura_b := "standing
 		return {"ok": false, "motivo": "fuori mappa"}
 	if a == b:
 		return {"ok": true, "motivo": ""}
+	if limite_vista > 0 and E.distanza(a, b) > limite_vista:
+		return {"ok": false, "motivo": "oltre la visibilità (%d esagoni)" % limite_vista}
 	var chiave := "%s>%s>%s>%s" % [a, b, postura_a, postura_b]
 	if _cache_los.has(chiave):
 		return _cache_los[chiave]
@@ -307,6 +311,17 @@ func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String) 
 			if livello > mini(qa, qb) and not (alto_h in [parti[0], parti[1]]):
 				return {"ok": false, "motivo": "una scarpata blocca la vista"}
 	return {"ok": true, "motivo": ""}
+
+## Guadi rivelati dai paragrafi (Missione 5).
+var guadi: Dictionary = {}
+
+func guado(h: String) -> bool:
+	return guadi.has(h)
+
+## Limite di visibilità (nebbia, notte): 0 = nessun limite.
+var limite_vista := 0
+## Fiume: il corso d’acqua si attraversa solo sui ponti (Missioni 3, 4, 5, 6, 8).
+var fiume := false
 
 func vede(a: String, b: String, postura_a := "standing", postura_b := "standing") -> bool:
 	return bool(vista(a, b, postura_a, postura_b).ok)

@@ -95,8 +95,9 @@ func esegui(n: int) -> void:
 	var g := _g
 	if not p.in_mappa(g):
 		return
-	if n != 816:
-		p._log("par", p.paragrafi[str(n)].it, {"id": str(n), "tedesco": g.id})
+	var chiave := "%03d" % n
+	if n != 816 and p.paragrafi.has(chiave):
+		p._log("par", p.paragrafi[chiave].it, {"id": chiave, "tedesco": g.id})
 	match n:
 		800:
 			_prono()
@@ -289,6 +290,118 @@ func esegui(n: int) -> void:
 				_assalta(_bersaglio_assalto())
 			else:
 				_arrenditi()
+		812:
+			if not p.unita_in(g.hex, "us").is_empty():
+				_assalta(_bersaglio_assalto())
+			elif _americano_adiacente() and int(g.munizioni.get("granata", 0)) > 0:
+				if p.unita_in(g.hex, "de").size() > 1:
+					_assalta(_bersaglio_assalto(), true)
+				else:
+					_accovacciati()
+					_granata_adiacente()
+			elif not bersagli(g).filter(func(a): return p.unita_in(a.hex, "de").is_empty()).is_empty():
+				_accovacciati()
+				_miglior_tiro("facile")
+			else:
+				_muovi_e_spara()
+		834:
+			var con_veicolo := false
+			for vv in p.veicoli.tutti():
+				if vv.lato == "de" and vv.hex == g.hex and p.veicoli.attivo(vv):
+					con_veicolo = true
+			if con_veicolo:
+				_accovacciati()
+				_miglior_tiro("facile")
+				_prono_se_libero()
+			else:
+				esegui(808)
+		858:
+			var v := bersagli(g)
+			if v.is_empty():
+				_accovacciati()
+			elif v.size() >= 3:
+				_prono()
+			elif p.terreno.edificio(g.hex):
+				_alzati()
+				_miglior_tiro("facile")
+				_prono_se_libero()
+			else:
+				_accovacciati()
+				_miglior_tiro("facile")
+				_prono_se_libero()
+		860:
+			if p.terreno.edificio(g.hex):
+				_alzati()
+				_tiri_rapidi()
+				_prono_se_libero()
+			else:
+				_accovacciati()
+				_tiri_rapidi()
+		862:
+			var v := bersagli(g)
+			if v.is_empty():
+				_muovi_rapido(false)
+			elif p.terreno.scoperto(g.hex):
+				_muovi_rapido(false)
+				_prono_fine_movimento()
+			else:
+				_accovacciati()
+				_miglior_tiro("facile")
+		863:
+			var v := bersagli(g)
+			if v.is_empty():
+				_muovi_rapido(false)
+			elif p.terreno.scoperto(g.hex):
+				_muovi_rapido(false, true)
+				_prono_fine_movimento()
+			else:
+				esegui(869)
+		864:
+			var v := bersagli(g)
+			if v.is_empty():
+				_muovi_rapido(false)
+			else:
+				_alzati()
+				var scelta := _scegli_bersaglio("vicino", -1, false, false)
+				if not scelta.is_empty():
+					p.risolvi_tiro(g, scelta[1], scelta[0], false)
+				if p.in_mappa(g) and p.attivo(g):
+					_mp = int(p.effettivo_mpa(g) / 2)
+					_muovi_rapido(false)
+					_prono_se_libero()
+		869:
+			if int(g.munizioni.get("granata", 0)) > 0 and _bersagli_entro(3):
+				_alzati()
+				if _lancia_granata(3):
+					_prono_se_libero()
+				else:
+					esegui(801)
+			else:
+				esegui(801)
+		60:
+			var saltato := false
+			for hp in ["G14", "G13"]:
+				if p.ponte_intatto(hp) and not _tedeschi_attivi_vicino(hp):
+					p._log("par", p.paragrafi["565"].it, {"id": "565", "tedesco": g.id})
+					p.distruggi_ponte(hp, "interruttore segreto")
+					for v in E.vicini(hp):
+						for x in p.unita_in(v, ""):
+							p._danno_esplosione(x, T.GRANATA_FUORI)
+					saltato = true
+					break
+			if not saltato:
+				esegui(858)
+		716:
+			var g63 := p.u("g63")
+			var g83 := p.u("g83")
+			if not g63.is_empty() and not g83.is_empty() and not p.attivo(g63) and not p.attivo(g83):
+				_arrenditi()
+			else:
+				esegui(802)
+		911:
+			esegui(824 if g.hex == "J13" else 803)
+		912:
+			esegui(824 if g.hex in ["E11", "K7"] else 803)
 		806:
 			_corri_o_striscia(false, true)
 			g.rimuovi_fine_round = true
@@ -762,6 +875,7 @@ func _passo(verso: String, strisciando: bool) -> bool:
 		_mp -= costo
 	var da_hex: String = g.hex
 	g.hex = verso
+	p.segna_passaggio_ponte(da_hex, verso)
 	g.sul_ponte = p.terreno.ponte(verso) and da_hex in p.terreno.capi_ponte(verso)
 	p._log("tedesco", "Il %s %s in %s." % [p.nome(g), "striscia" if strisciando else "corre", verso])
 	p._fx("muovi", {"ids": [g.id], "da": da_hex, "a": verso, "strisciando": strisciando})
@@ -796,8 +910,31 @@ func entra_da_paragrafo(ctx: Dictionary, h: String) -> void:
 		# Senza punti sufficienti si entra comunque: il riferimento definisce la mossa.
 		var da_h: String = _g.hex
 		_g.hex = h
+		p.segna_passaggio_ponte(da_h, h)
 		p._log("tedesco", "Il %s entra in %s." % [p.nome(_g), h])
 		p._fx("muovi", {"ids": [_g.id], "da": da_h, "a": h})
+
+## Interrompe il movimento del tedesco di turno.
+func ferma() -> void:
+	_fermo = true
+	_mp = 0
+
+## «Tira un nuovo numero d’azione e applica l’azione indicata a questo tedesco» (254, 275).
+func rilancia_azione(ctx: Dictionary) -> void:
+	var g: Dictionary = p.u(ctx.get("g", ""))
+	if g.is_empty() or g.id != _g.id or int(ctx.get("_rilanci", 0)) >= 2:
+		return
+	ctx._rilanci = int(ctx.get("_rilanci", 0)) + 1
+	var numero := p.d10()
+	if p.fase_round():
+		p.s.round.numero_azione = numero
+	_reazione_cambiata = false
+	var col := colonna(g)
+	var par := paragrafo_da_carta(g, col, numero)
+	p._log("dado", "Nuovo numero d’azione tedesco: %d → colonna %s, paragrafo %d." % [numero, _nome_colonna(col), par])
+	_mp = p.effettivo_mpa(g)
+	_fermo = false
+	esegui(par)
 
 func imposta_reazione(ctx: Dictionary, r: String) -> void:
 	var g: Dictionary = p.u(ctx.get("g", ""))
@@ -828,6 +965,42 @@ func _muovi_rapido(prono_se_non_scoperto: bool, prono_primo_non_scoperto := fals
 			break
 		if (prono_se_non_scoperto or prono_primo_non_scoperto) and not p.terreno.scoperto(g.hex):
 			_prono()
+			return
+
+func _tedeschi_attivi_vicino(h: String) -> bool:
+	for x in p.s.unita.values():
+		if x.lato == "de" and p.attivo(x) and p.in_mappa(x) and E.distanza(x.hex, h) <= 1:
+			return true
+	return false
+
+## Prono alla fine del movimento, spendendo un punto movimento se serve.
+func _prono_fine_movimento() -> void:
+	var g := _g
+	if not p.in_mappa(g) or g.postura == "prone":
+		return
+	if g.cambio_libero:
+		g.cambio_libero = false
+	elif _mp >= 1:
+		_mp -= 1
+	_set_postura("prone")
+
+## «Muoviti e spara di rapido se compaiono bersagli durante il movimento».
+func _muovi_e_spara() -> void:
+	var g := _g
+	if _riferimento(g.hex) == "":
+		_nessun_riferimento()
+		return
+	if not _alzati():
+		return
+	var passi := 0
+	while p.in_mappa(g) and passi < 12:
+		passi += 1
+		if not _segui_riferimento(_riferimento(g.hex), false):
+			break
+		if not bersagli(g).is_empty():
+			var scelta := _scegli_bersaglio("vicino", -1, false, false)
+			if not scelta.is_empty():
+				p.risolvi_tiro(g, scelta[1], scelta[0], false)
 			return
 
 ## «Corri in un esagono scoperto, striscia in ogni altro tipo».
