@@ -140,3 +140,15 @@ static func a_punto(p: Vector2) -> String:
 				dmin = d
 				migliore = id
 	return migliore if dmin <= 1.05 else ""
+
+## Esagoni attraversati dal segmento tra i centri di a e b (per rotte e linee lunghe).
+static func linea(a: String, b: String) -> Array:
+	var pa := centro(a)
+	var pb := centro(b)
+	var n := int(pa.distance_to(pb) * 4.0) + 1
+	var out: Array = []
+	for i in n + 1:
+		var h := a_punto(pa.lerp(pb, float(i) / float(n)))
+		if h != "" and not (h in out):
+			out.append(h)
+	return out

@@ -83,6 +83,8 @@ var _ultima_vista: Dictionary = {}
 var _ultimo_stato: Dictionary = {}
 var _attori_comando: Array = []
 var _bersagli_menu: Array = []
+var titolo_missione_l: Label
+var sottotitolo_l: Label
 var _ultimo_esito := ""
 
 func _ready() -> void:
@@ -146,8 +148,10 @@ func _barra_superiore() -> Control:
 	hb.add_child(Tema.titolo("AMBUSH!", 32, Color("efe6c8")))
 	var sub := VBoxContainer.new()
 	sub.add_theme_constant_override("separation", -4)
-	sub.add_child(Tema.etichetta("MISSIONE 1 · SANGUE A SAINT-MICHAUX", Tema.testo_bold, 16, Tema.OTTONE))
-	sub.add_child(Tema.etichetta("Normandia, fine giugno 1944 · solitario", Tema.testo, 13, Tema.KAKI_SPENTO))
+	titolo_missione_l = Tema.etichetta(p.titolo_missione().to_upper(), Tema.testo_bold, 16, Tema.OTTONE)
+	sottotitolo_l = Tema.etichetta("%s · solitario" % str(p.missione.data), Tema.testo, 13, Tema.KAKI_SPENTO)
+	sub.add_child(titolo_missione_l)
+	sub.add_child(sottotitolo_l)
 	hb.add_child(sub)
 	var sp := Control.new()
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -748,7 +752,7 @@ func _aggiorna_obiettivi() -> void:
 		if not p.in_mappa(g):
 			b.modulate = Color(0.62, 0.62, 0.62)
 		carte_box.add_child(b)
-	if p.u("J").get("stato", "") != "":
+	if p.numero == 1 and p.u("J").get("stato", "") != "":
 		carte_box.add_child(Tema.bottone("J · pilota", func(): _mostra_carta(p.u("J")), "Pilota britannico"))
 
 # =================================================================== comandi
@@ -931,6 +935,7 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 	_gruppo("EQUIPAGGIAMENTO")
 	var ogg := p.oggetti_disponibili(a.id).filter(func(v): return v.da == "terra" or not p.attivo(p.u(str(v.da))))
 	_b("Equipaggiamento" + (" (%d da raccogliere)" % ogg.size() if not ogg.is_empty() else ""), func(): _finestra_equipaggiamento(a.id))
+	_bottoni_veicolo(a)
 	var bz := p.arma_di(a, "bazooka")
 	if not bz.is_empty() and not bz.preparata:
 		_b("Carica il bazooka", func(): _esito(p.prepara(a.id, "bazooka")), "Serve un razzo; resta carico finché non spara.")
@@ -990,7 +995,13 @@ func _azioni_round(a: Dictionary) -> void:
 		return
 	_azioni_posture(a, "" if cambio else " (1 PM)")
 	_gruppo("MOVIMENTO")
-	_b("Muovi (%d PM)" % p.effettivo_mpa(a), func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento secondo il terreno.", a.postura != "prone")
+	if p.veicoli.e_autista(a):
+		var veic: Dictionary = p.veicoli.di(a)
+		var mm: Dictionary = p.veicoli.MODELLI[veic.modello]
+		_b("Guida la %s (%d–%d PM)" % [veic.nome, int(mm.lenta), int(mm.veloce)], func(): _esito(p.scegli_azione(a.id, "muovi")), "Fino a %d PM senza rischi; oltre si fa un controllo d’incidente. Tutti a bordo si muovono insieme." % int(mm.lenta))
+	else:
+		_b("Muovi (%d PM)" % p.effettivo_mpa(a), func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento secondo il terreno.", a.postura != "prone")
+	_bottoni_veicolo(a)
 	_b("Muovi e spara", func(): _esito(p.scegli_azione(a.id, "muovi_spara")), "Metà dei PM e un tiro rapido, prima o dopo.", a.postura != "prone")
 	_b("Carica d’assalto", func(): _esito(p.scegli_azione(a.id, "carica")), "Muovi con metà dei PM ed entra nell’esagono nemico per assaltare (−3).", a.postura == "standing")
 	_bottoni_fuoco(a, true)
@@ -1013,6 +1024,17 @@ func _azioni_round(a: Dictionary) -> void:
 	_azioni_equipaggiamento(a)
 	_gruppo("FINE")
 	_b("Passa il turno", func(): _esito(p.passa(a.id)))
+
+## Salire e scendere da un veicolo americano nello stesso esagono.
+func _bottoni_veicolo(a: Dictionary) -> void:
+	var veic: Dictionary = p.veicoli.di(a)
+	if not veic.is_empty():
+		_b("Scendi dalla %s" % veic.nome, func(): _esito(p.scendi_veicolo(a.id)), "Nei Round costa 1 punto movimento di un’azione di movimento.")
+		return
+	for v in p.veicoli.in_esagono(a.hex):
+		if p.veicoli.attivo(v) and v.lato == "us":
+			_b("Sali sulla %s" % v.nome, func(): _esito(p.sali_veicolo(a.id)), "Il primo a bordo guida; gli altri sono passeggeri e possono usare la mitragliatrice. Nei Round costa 1 punto movimento.")
+			return
 
 func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 	var armi: Array = p.armi_da_fuoco(a)
@@ -2050,6 +2072,8 @@ func _scegli_missione() -> void:
 func _avvia_missione(n: int, riprendi: bool) -> void:
 	p.imposta_missione(n)
 	_ricorda_missione(n)
+	titolo_missione_l.text = p.titolo_missione().to_upper()
+	sottotitolo_l.text = "%s · solitario" % str(p.missione.data)
 	mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
 	var dati := _leggi_salvataggio(n) if riprendi else {}
 	if not dati.is_empty() and p.carica(dati):

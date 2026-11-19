@@ -30,7 +30,33 @@ const ARMI := {
 	"bazooka": {"nome": "Bazooka", "breve": "Bazooka", "gittate": [4, 8, 14], "inc": [5, 5], "mun": 100, "auto": false,
 		"danni": "IIKKKKKKKK", "porte": 1, "esplosivo": true},
 	"satchel": {"nome": "Carica da demolizione", "breve": "Carica", "porte": 1},
+	"lmg":     {"nome": "Mitragliatrice leggera", "breve": "MG leggera", "gittate": [10, 22, 99], "inc": [5, 10], "mun": 50, "auto": true,
+		"danni": "WWWIIIKKKK", "porte": 3, "squadra": true},
+	"mmg":     {"nome": "Mitragliatrice media", "breve": "MG media", "gittate": [10, 22, 99], "inc": [5, 10], "mun": 50, "auto": true,
+		"danni": "WWWIIIKKKK", "porte": 3, "squadra": true},
+	"hmg":     {"nome": "Mitragliatrice pesante", "breve": "MG pesante", "gittate": [15, 29, 99], "inc": [5, 10], "mun": 50, "auto": true,
+		"danni": "WIIKKKKKKK", "porte": 4, "squadra": true},
 }
+
+## Penetrazione per dado 0–9 (Tabella dei danni): - nessuna, L leggera, M media, H pesante.
+const PENETRAZIONE := {
+	"pistol": "--------LL", "bolt": "------LLLL", "scoped": "-----LLLLL", "sar": "------LLLL", "carbine": "-------LLL",
+	"mp": "-------LLL", "smg": "-----LLLLL", "ar": "----LLLLLL", "lmg": "---LLLLLLL", "mmg": "---LLLLLLL",
+	"hmg": "-LLLLLLLMM", "bazooka": "LLLLLMMMHH", "cannone": "MMHHHHHHHH",
+}
+
+static func penetrazione(arma: String, dado: int) -> String:
+	return str(PENETRAZIONE.get(arma, "----------")).substr(clampi(dado, 0, 9), 1)
+
+## Veicoli: tabella degli incidenti (dado 0–9) per auto e carri.
+const INCIDENTE_AUTO := ["schianto", "schianto", "distrutta", "distrutta", "perde_turno", "perde_turno", "ferma", "ferma", "nessuno", "nessuno"]
+const INCIDENTE_CARRO := ["cingolo", "cingolo", "perde_turno", "perde_turno", "perde_turno", "ferma", "ferma", "ferma", "nessuno", "nessuno"]
+## Costo in PM di un veicolo per entrare in un esagono (-1 vietato). Boschi: vietati ai veicoli grandi.
+const COSTO_VEICOLO := {"clear": 1, "road": 1, "cover": 2, "rough": 3, "brush": 2, "woods": 3, "crater": -1, "rubble": -1,
+	"stream": 3, "bridge": 1, "ford": -1, "stone_building": -1, "wood_building": -1}
+## Modificatori del tiro contro un veicolo (piccolo, grande) per terreno.
+const MOD_VEICOLO := {"clear": [2, 3], "road": [2, 3], "stream": [2, 3], "bridge": [2, 3], "ford": [2, 3],
+	"cover": [1, 2], "brush": [1, 3], "rough": [0, 1], "woods": [0, 1]}
 
 ## Granate e cariche: danni per dado 0–9 (P panico, Q ferita/se prono panico, W, I, K).
 const GRANATA_DENTRO := "PPPQQWWIIK"

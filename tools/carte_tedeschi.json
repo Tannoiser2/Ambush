@@ -1,0 +1,4373 @@
+{
+"GE3": {
+"lato": "GE",
+"num": 3,
+"lettera": "L",
+"ruolo": "Soldier",
+"testo": "GE 3/L                           Soldier\n\n+1 VP\nBolt Rifle\nIf killed or\nincapacitated\nin CondITION 1,\nput CondITION\n2 into effect.\n\n\n\n\n IN: 2       PC: 4 WS: -1         MPA: 4\n                Condition       Special\n    DIE       1    2     3-5    A     S\n    0-3      927 928 802       837 839\n    4-6      840 802 801       804 802\n    7-8      926 801 808       836 971\n     9       801 800 800       800 816\n\f",
+"IN": 2,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1": [
+927,
+840,
+926,
+801
+],
+"2": [
+928,
+802,
+801,
+800
+],
+"3-5": [
+802,
+801,
+808,
+800
+],
+"A": [
+837,
+804,
+836,
+800
+],
+"S": [
+839,
+802,
+971,
+816
+]
+}
+},
+"GE1": {
+"lato": "GE",
+"num": 1,
+"lettera": "Q",
+"ruolo": "Soldier",
+"testo": "GE 1/Q                       Soldier\n\n+1 VP\nSubmachine Gun\n\n\n\n\nIN: 1     PC: 2 WS: -1       MPA: 3\n           Condition   Special\n    DIE    2-3    4    A     S\n    0-2    808   920   808    813\n     3     824   803   824    816\n    4-7    802   809   802   802\n    8-9    800   813   800   839\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+3
+],
+[
+4,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-3": [
+808,
+824,
+802,
+800
+],
+"4": [
+920,
+803,
+809,
+813
+],
+"A": [
+808,
+824,
+802,
+800
+],
+"S": [
+813,
+816,
+802,
+839
+]
+}
+},
+"GE50": {
+"lato": "GE",
+"num": 50,
+"lettera": "R",
+"ruolo": "Soldier",
+"testo": "GE 50/R                         Soldier\n\n+1 VP\nBolt Rifle\nON FIRST\nTURN USE\n801.\n\n\n\n\n IN: 2       PC: 3 WS: -2       MPA: 4\n                  Condition   Special\n           DIE   4-5     6      S\n           0-3   801    824    816\n            4    800    970    971\n           5-8   824    801    825\n            9    970    809    813\n\f",
+"IN": 2,
+"PC": 3,
+"WS": -2,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+4
+],
+[
+5,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"4-5": [
+801,
+800,
+824,
+970
+],
+"6": [
+824,
+970,
+801,
+809
+],
+"S": [
+816,
+971,
+825,
+813
+]
+}
+},
+"GE27": {
+"lato": "GE",
+"num": 27,
+"lettera": "M",
+"ruolo": "Soldier",
+"testo": "GE 27/M                        Soldier\n\n+1 VP\nSubmachine Gun\nPistol\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 3     PC: 5 WS: 0          MPA: 4\n         Cond           Special\n  DIE     3-4   R   V     T     X   S\n  0-1    807 856 824 825 824 839\n   2     915 856 829 808 829 808\n  3-7    803    732 825 801 825 825\n  8-9    868    732 801 824 801 839\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"3-4": [
+807,
+915,
+803,
+868
+],
+"R": [
+856,
+856,
+732,
+732
+],
+"V": [
+824,
+829,
+825,
+801
+],
+"T": [
+825,
+808,
+801,
+824
+],
+"X": [
+824,
+829,
+825,
+801
+],
+"S": [
+839,
+808,
+825,
+839
+]
+}
+},
+"GE53": {
+"lato": "GE",
+"num": 53,
+"lettera": "S",
+"ruolo": "Soldier",
+"testo": "GE 53/S                        Soldier\n\n+1 VP\nBolt Rifle\nGrenade\n\n\n\n\n IN: 2       PC: 4 WS: 0       MPA: 4\n             Condition     Special\n    DIE      2-3    4      B     S\n    0-2      808   838   802    839\n    3-6      802   919   801    833\n     7       800   838   829    971\n    8-9      829   800   808    816\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+6
+],
+[
+7,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-3": [
+808,
+802,
+800,
+829
+],
+"4": [
+838,
+919,
+838,
+800
+],
+"B": [
+802,
+801,
+829,
+808
+],
+"S": [
+839,
+833,
+971,
+816
+]
+}
+},
+"GE62": {
+"lato": "GE",
+"num": 62,
+"lettera": "U",
+"ruolo": "Soldier",
+"testo": "GE 62/U                          Soldier\n\n+1 VP\nBolt Rifle\nON FIRST\nTURN USE\n801.\n\n\n\n\n IN: 3       PC: 5 WS: -1        MPA: 4\n             Condition      Special\n   DIE       3-4 5-6      S   X     Y\n    0        825 800     816 801 829\n   1-3       801 867     839   824   060\n   4-5       800 803     800   808   808\n   6-9       808 825     825   825   060\n\f",
+"IN": 3,
+"PC": 5,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+3
+],
+[
+4,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"3-4": [
+825,
+801,
+800,
+808
+],
+"5-6": [
+800,
+867,
+803,
+825
+],
+"S": [
+816,
+839,
+800,
+825
+],
+"X": [
+801,
+824,
+808,
+825
+],
+"Y": [
+829,
+60,
+808,
+60
+]
+}
+},
+"GE2": {
+"lato": "GE",
+"num": 2,
+"lettera": "N",
+"ruolo": "Sniper",
+"testo": "GE 2/N                    Sniper\n\n+2 VP\nBolt Rifle (Scope)\nPistol, Grenade\nOn first\nturn use\n802 unless\nSpecial\nCondition A\nis in effect,\nin which\ncase roll.\n\n IN: 5      PC: 8 WS: +2 MPA: 4\n           Condition    Special\n   DIE   1-2 3-4 5-6 A     B    S\n   0-1   955 956 958 806 808 816\n   2-4   954 954 801 952 810 963\n    5    802 802 800 953 809 800\n   6-9   802 802 802 952 807 817\n\f",
+"IN": 5,
+"PC": 8,
+"WS": 2,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"scoped",
+"pistol"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+4
+],
+[
+5,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"1-2": [
+955,
+954,
+802,
+802
+],
+"3-4": [
+956,
+954,
+802,
+802
+],
+"5-6": [
+958,
+801,
+800,
+802
+],
+"A": [
+806,
+952,
+953,
+952
+],
+"B": [
+808,
+810,
+809,
+807
+],
+"S": [
+816,
+963,
+800,
+817
+]
+}
+},
+"GE81": {
+"lato": "GE",
+"num": 81,
+"lettera": "P",
+"ruolo": "Soldier",
+"testo": "GE 81/P                         Soldier\n\n+1 VP\nBolt Rifle\n\n\n\n\n IN: 1       PC: 1 WS: -2       MPA: 3\n              Condition    Special\n    DIE      2-3     4     B     S\n    0-2      800 813      800 816\n     3       801   920    801    839\n    4-7      808   809    808    813\n    8-9      801   825    802    800\n\f",
+"IN": 1,
+"PC": 1,
+"WS": -2,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+3
+],
+[
+4,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-3": [
+800,
+801,
+808,
+801
+],
+"4": [
+813,
+920,
+809,
+825
+],
+"B": [
+800,
+801,
+808,
+802
+],
+"S": [
+816,
+839,
+813,
+800
+]
+}
+},
+"GE37": {
+"lato": "GE",
+"num": 37,
+"lettera": "P",
+"ruolo": "Soldier",
+"testo": "GE 37/P                         Soldier\n\n+1 VP\nBolt Rifle\nON FIRST\nTURN USE\n801.\n\n\n\n\n IN: 1         PC: 2 WS: -2      MPA: 3\n                  Condition   Special\n           DIE    4-5    6      S\n           0-3    824 970      816\n            4     809 824      971\n           5-8    801 801      825\n           9      800 809      813\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -2,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+4
+],
+[
+5,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"4-5": [
+824,
+809,
+801,
+800
+],
+"6": [
+970,
+824,
+801,
+809
+],
+"S": [
+816,
+971,
+825,
+813
+]
+}
+},
+"GE84": {
+"lato": "GE",
+"num": 84,
+"lettera": "P",
+"ruolo": "Soldier",
+"testo": "GE 84/P                        Soldier\n\n+1 VP\nBolt Rifle\n\n\n\n\n IN: 1       PC: 3 WS: -1      MPA: 3\n             Cond         Special\n    DIE       6      S      X     Y\n    0-1      800    800    800 800\n    2-3      825    808    808 060\n    4-5      824    802    801 858\n    6-9      862    825    825 060\n\f",
+"IN": 1,
+"PC": 3,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+3
+],
+[
+4,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"6": [
+800,
+825,
+824,
+862
+],
+"S": [
+800,
+808,
+802,
+825
+],
+"X": [
+800,
+808,
+801,
+825
+],
+"Y": [
+800,
+60,
+858,
+60
+]
+}
+},
+"GE9": {
+"lato": "GE",
+"num": 9,
+"lettera": "R",
+"ruolo": "Soldier",
+"testo": "GE 9/R                        Soldier\n\n+1 VP\nBolt Rifle (Scope)\n\n\n\n\n IN: 2     PC: 3 WS: 0         MPA: 4\n                Condition   Special\n         DIE    3      4      S\n         0-3   801 916       839\n         4-6   915 800       971\n         7-8   800 809       816\n          9    825 916       813\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"scoped"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"3": [
+801,
+915,
+800,
+825
+],
+"4": [
+916,
+800,
+809,
+916
+],
+"S": [
+839,
+971,
+816,
+813
+]
+}
+},
+"GE39": {
+"lato": "GE",
+"num": 39,
+"lettera": "P",
+"ruolo": "Soldier",
+"testo": "GE 39/P                      Soldier\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 1     PC: 2 WS: -1      MPA: 3\n           Cond         Special\n     DIE    4      V       R    S\n     0-5   803    869    732 833\n     6-7   868    824    732 817\n      8    807    825    856 816\n      9    807    801    856 833\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+5
+],
+[
+6,
+7
+],
+[
+8,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"4": [
+803,
+868,
+807,
+807
+],
+"V": [
+869,
+824,
+825,
+801
+],
+"R": [
+732,
+732,
+856,
+856
+],
+"S": [
+833,
+817,
+816,
+833
+]
+}
+},
+"GE40": {
+"lato": "GE",
+"num": 40,
+"lettera": "R",
+"ruolo": "Soldier",
+"testo": "GE 40/R                        Soldier\n\n+1 VP\nSubmachine Gun\nON FIRST\nTURN USE\n808.\n\n\n\n\n IN: 2     PC: 3 WS: +1 MPA: 4\n                 Condition     Special\n     DIE    1      2-3     4     S\n     0-2   802     802 801      971\n     3-4   800     829 802      816\n     5-6   808     808 802      839\n     7-9   825     825 825      825\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"1": [
+802,
+800,
+808,
+825
+],
+"2-3": [
+802,
+829,
+808,
+825
+],
+"4": [
+801,
+802,
+802,
+825
+],
+"S": [
+971,
+816,
+839,
+825
+]
+}
+},
+"GE28": {
+"lato": "GE",
+"num": 28,
+"lettera": "U",
+"ruolo": "Soldier",
+"testo": "GE 28/U                   Soldier\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 2     PC: 4 WS: -1   MPA: 4\n      Cond        Special\n  DIE 3-4   R   V    T    X    S\n  0-1 807 732 801 808 801     817\n   2   915 856 829 824 829    800\n  3-7 803 732 869 869 869     971\n  8-9 868 732 824 869 824     817\n\f",
+"IN": 2,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"3-4": [
+807,
+915,
+803,
+868
+],
+"R": [
+732,
+856,
+732,
+732
+],
+"V": [
+801,
+829,
+869,
+824
+],
+"T": [
+808,
+824,
+869,
+869
+],
+"X": [
+801,
+829,
+869,
+824
+],
+"S": [
+817,
+800,
+971,
+817
+]
+}
+},
+"GE33": {
+"lato": "GE",
+"num": 33,
+"lettera": "V",
+"ruolo": "Veteran Infantry",
+"testo": "GE 33/V           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n867.\n\n\n\n\n IN: 1     PC: 2 WS: 0        MPA: 3\n                 Cond   Special\n           DIE    4       S\n           0-1   863     816\n           2-6   866     819\n            7    819     833\n           8-9   867     833\n\f",
+"IN": 1,
+"PC": 2,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+6
+],
+[
+7,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"4": [
+863,
+866,
+819,
+867
+],
+"S": [
+816,
+819,
+833,
+833
+]
+}
+},
+"GE82": {
+"lato": "GE",
+"num": 82,
+"lettera": "S",
+"ruolo": "Veteran Infantry",
+"testo": "GE 82/S            Veteran Infantry\n\n+1 VP\nBolt Rifle,\nGrenade\n\n\n\n\n IN: 2        PC: 3 WS: 0     MPA: 4\n                Cond     Special\n         DIE     4      S      X\n         0-2    803    833 808\n         3-4    808    812 824\n          5     801    816 800\n         6-9    803    971 801\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"4": [
+803,
+808,
+801,
+803
+],
+"S": [
+833,
+812,
+816,
+971
+],
+"X": [
+808,
+824,
+800,
+801
+]
+}
+},
+"GE85": {
+"lato": "GE",
+"num": 85,
+"lettera": "T",
+"ruolo": "Veteran Infantry",
+"testo": "GE 85/T                Veteran Infantry\n\n+2 VP\nBolt Rifle,\nGrenade\n\n\n\n\n IN: 2        PC: 4 WS: +1 MPA: 4\n                Cond      Special\n         DIE     4        S     X\n         0-2    830      812 801\n         3-4    807      816 808\n          5     809      833 801\n         6-9    803      802 824\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 1,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"4": [
+830,
+807,
+809,
+803
+],
+"S": [
+812,
+816,
+833,
+802
+],
+"X": [
+801,
+808,
+801,
+824
+]
+}
+},
+"GE88": {
+"lato": "GE",
+"num": 88,
+"lettera": "Q",
+"ruolo": "Veteran Infantry",
+"testo": "GE 88/Q           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n867.\n\n\n\n\n IN: 1     PC: 3 WS: 0        MPA: 3\n                 Cond   Special\n           DIE    3-4     S\n           0-1   863     816\n            2    821     800\n           3-6   866     833\n           7-9   867     869\n\f",
+"IN": 1,
+"PC": 3,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+863,
+821,
+866,
+867
+],
+"S": [
+816,
+800,
+833,
+869
+]
+}
+},
+"GE23": {
+"lato": "GE",
+"num": 23,
+"lettera": "S",
+"ruolo": "Veteran Infantry",
+"testo": "GE 23/S           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 2     PC: 4 WS: -1        MPA: 4\n                 Cond   Special\n           DIE    1-4     S\n           0-2   862     869\n           3-4   865     869\n           5-6   866     833\n           7-9   867     833\n\f",
+"IN": 2,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"1-4": [
+862,
+865,
+866,
+867
+],
+"S": [
+869,
+869,
+833,
+833
+]
+}
+},
+"GE41": {
+"lato": "GE",
+"num": 41,
+"lettera": "M",
+"ruolo": "Veteran Infantry",
+"testo": "GE 41/M              Veteran Infantry\n\n+1 VP\nBolt Rifle,\nGrenade\nWhen Special\nReaction ‘R’\nis in effect\nignore\nself-preser-\nvation\n\n\n\n\n IN: 3        PC: 5 WS: +1 MPA: 4\n              Cond         Special\n     DIE       2-4    D       R       S\n     0-3      803    911     812     816\n     4-6      803    801     819     833\n     7-8      808    810    807      833\n      9       803    801    809      800\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+803,
+803,
+808,
+803
+],
+"D": [
+911,
+801,
+810,
+801
+],
+"R": [
+812,
+819,
+807,
+809
+],
+"S": [
+816,
+833,
+833,
+800
+]
+}
+},
+"GE87": {
+"lato": "GE",
+"num": 87,
+"lettera": "X",
+"ruolo": "Veteran Infantry",
+"testo": "GE 87/X            Veteran Infantry\n\n+1 VP\nSubmachine Gun,\n2 Grenades\nON FIRST\nTURN USE\n867.\n\n\n\n\n IN: 3     PC: 4 WS: 0         MPA: 4\n                  Cond   Special\n           DIE     3-4     S\n           0-1    862     816\n            2     800     800\n           3-6    867     869\n           7-9    866     833\n\f",
+"IN": 3,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+862,
+800,
+867,
+866
+],
+"S": [
+816,
+800,
+869,
+833
+]
+}
+},
+"GE31": {
+"lato": "GE",
+"num": 31,
+"lettera": "L",
+"ruolo": "Veteran Infantry",
+"testo": "GE 31/L           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n864.\n\n\n\n\n IN: 2     PC: 3 WS: +1 MPA: 4\n                 Cond   Special\n           DIE    1-4     S\n           0-4   864     869\n            5    864     816\n           6-8   863     825\n            9    867     819\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1-4": [
+864,
+864,
+863,
+867
+],
+"S": [
+869,
+816,
+825,
+819
+]
+}
+},
+"GE29": {
+"lato": "GE",
+"num": 29,
+"lettera": "U",
+"ruolo": "Veteran Infantry",
+"testo": "GE 29/U           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 2     PC: 4 WS: -1       MPA: 4\n                 Cond   Special\n           DIE    1-4     S\n           0-4   868     839\n            5    865     816\n           6-8   865     869\n            9    867     812\n\f",
+"IN": 2,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1-4": [
+868,
+865,
+865,
+867
+],
+"S": [
+839,
+816,
+869,
+812
+]
+}
+},
+"GE30": {
+"lato": "GE",
+"num": 30,
+"lettera": "R",
+"ruolo": "Veteran Infantry",
+"testo": "GE 30/R            Veteran Infantry\n\n+1 VP\nSubmachine Gun,\nPistol\nON FIRST\nTURN USE\n866.\n\n\n\n\n IN: 1     PC: 2 WS: 0         MPA: 3\n                  Cond   Special\n           DIE     1-4     S\n           0-4    866     825\n            5     867     816\n           6-8    862     802\n            9     864     809\n\f",
+"IN": 1,
+"PC": 2,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1-4": [
+866,
+867,
+862,
+864
+],
+"S": [
+825,
+816,
+802,
+809
+]
+}
+},
+"GE35": {
+"lato": "GE",
+"num": 35,
+"lettera": "L",
+"ruolo": "Veteran Infantry",
+"testo": "GE 35/L              Veteran Infantry\n\n+1 VP\nBolt Rifle,\nGrenade\nWhen Special\nReaction ‘R’\nis in effect\nignore\nself-preser-\nvation.\n\n\n\n IN: 2        PC: 3 WS: 0       MPA: 4\n              Cond         Special\n    DIE        2-4    D     R      S\n    0-3       803    801   812 833\n    4-6       803    911   829 816\n    7-8       809    911   807 800\n     9        800    800   808 817\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+803,
+803,
+809,
+800
+],
+"D": [
+801,
+911,
+911,
+800
+],
+"R": [
+812,
+829,
+807,
+808
+],
+"S": [
+833,
+816,
+800,
+817
+]
+}
+},
+"GE18": {
+"lato": "GE",
+"num": 18,
+"lettera": "P",
+"ruolo": "Veteran Infantry",
+"testo": "GE 18/P              Veteran Infantry\n\n+1 VP\nBolt Rifle,\nPistol\n\n\n\n\n IN: 1        PC: 3 WS: 0        MPA: 3\n                    Cond   Special\n              DIE    4       S\n              0-1   862     816\n              2-6   866     869\n               7    821     971\n              8-9   867     839\n\f",
+"IN": 1,
+"PC": 3,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+6
+],
+[
+7,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"4": [
+862,
+866,
+821,
+867
+],
+"S": [
+816,
+869,
+971,
+839
+]
+}
+},
+"GE22": {
+"lato": "GE",
+"num": 22,
+"lettera": "M",
+"ruolo": "Veteran Infantry",
+"testo": "GE 22/M           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 3     PC: 5 WS: 0        MPA: 4\n                 Cond   Special\n           DIE    1-4     S\n           0-2   867     833\n           3-4   863     833\n           5-6   865     869\n           7-9   862     869\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"1-4": [
+867,
+863,
+865,
+862
+],
+"S": [
+833,
+833,
+869,
+869
+]
+}
+},
+"GE43": {
+"lato": "GE",
+"num": 43,
+"lettera": "W",
+"ruolo": "Veteran Infantry",
+"testo": "GE 43/W           Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 2     PC: 2 WS: -1       MPA: 4\n                 Cond   Special\n           DIE    2-4     S\n           0-3   863     869\n           4-5   867     833\n           6-8   864     839\n            9    800     816\n\f",
+"IN": 2,
+"PC": 2,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+863,
+867,
+864,
+800
+],
+"S": [
+869,
+833,
+839,
+816
+]
+}
+},
+"GE44": {
+"lato": "GE",
+"num": 44,
+"lettera": "T",
+"ruolo": "Veteran Infantry",
+"testo": "GE 44/T          Veteran Infantry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 2     PC: 4 WS: 0       MPA: 4\n                 Cond   Special\n           DIE    2-4     S\n           0-3   863     839\n           4-5   867     825\n           6-8   866     869\n            9    866     816\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+863,
+867,
+866,
+866
+],
+"S": [
+839,
+825,
+869,
+816
+]
+}
+},
+"GE91": {
+"lato": "GE",
+"num": 91,
+"lettera": "W",
+"ruolo": "Panzergrenadier",
+"testo": "GE 91/W            Panzergrenadier\n\n+1 VP\nBolt Rifle,\nGrenade\n\n\n\n\n IN: 2        PC: 3 WS: 0     MPA: 4\n                Cond     Special\n         DIE     3-4    T      S\n         0-1    808    830 816\n          2     834    912 800\n         3-5    801    801 833\n         6-9    834    912    817\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"3-4": [
+808,
+834,
+801,
+834
+],
+"T": [
+830,
+912,
+801,
+912
+],
+"S": [
+816,
+800,
+833,
+817
+]
+}
+},
+"GE90": {
+"lato": "GE",
+"num": 90,
+"lettera": "V",
+"ruolo": "Panzergrenadier",
+"testo": "GE 90/V           Panzergrenadier\n\n+1 VP\nBolt Rifle\n\n\n\n\n IN: 1       PC: 2 WS: 0     MPA: 3\n               Cond     Special\n         DIE    3-4    T      S\n         0-1   800    801 800\n          2    809    800 802\n         3-5   803    830 816\n         6-9   834    912 971\n\f",
+"IN": 1,
+"PC": 2,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"3-4": [
+800,
+809,
+803,
+834
+],
+"T": [
+801,
+800,
+830,
+912
+],
+"S": [
+800,
+802,
+816,
+971
+]
+}
+},
+"GE92": {
+"lato": "GE",
+"num": 92,
+"lettera": "X",
+"ruolo": "Panzergrenadier",
+"testo": "GE 92/X           Panzergrenadier\n\n+1 VP\nSubmachine Gun,\nGrenade\n\n\n\n\nIN: 3     PC: 5 WS: +1 MPA: 4\n              Cond     Special\n        DIE    3-4    T      S\n        0-1   834    912    817\n         2    801    830 816\n        3-5   803    912 802\n        6-9   834    801 833\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"3-4": [
+834,
+801,
+803,
+834
+],
+"T": [
+912,
+830,
+912,
+801
+],
+"S": [
+817,
+816,
+802,
+833
+]
+}
+},
+"GE61": {
+"lato": "GE",
+"num": 61,
+"lettera": "P",
+"ruolo": "Volksgrenadier",
+"testo": "GE 61/P               Volksgrenadier\n\n+1 VP\nBolt Rifle\n\n\n\n\n IN: 0       PC: 1 WS: -1     MPA: 3\n               Cond       Special\n         DIE    3-4      S      X\n         0-1   800      802 808\n          2    830      833 801\n         3-6   803      800 801\n         7-9   808      816 800\n\f",
+"IN": 0,
+"PC": 1,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+800,
+830,
+803,
+808
+],
+"S": [
+802,
+833,
+800,
+816
+],
+"X": [
+808,
+801,
+801,
+800
+]
+}
+},
+"GE72": {
+"lato": "GE",
+"num": 72,
+"lettera": "R",
+"ruolo": "Volksgrenadier",
+"testo": "GE 72/R                Volksgrenadier\n\n+1 VP\nBolt Rifle,\nGrenade\n\n\n\n\n IN: 2        PC: 3 WS: 0      MPA: 4\n                Cond      Special\n         DIE     3-4     S      X\n         0-1    830     818 824\n          2     821     816 800\n         3-6    824     812 808\n         7-9    803     802 801\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+830,
+821,
+824,
+803
+],
+"S": [
+818,
+816,
+812,
+802
+],
+"X": [
+824,
+800,
+808,
+801
+]
+}
+},
+"GE56": {
+"lato": "GE",
+"num": 56,
+"lettera": "T",
+"ruolo": "Rifleman",
+"testo": "GE 56/T                      Rifleman\n\n+1 VP\nBolt Rifle (Scope),\nGrenade\n\n\n\n\n IN: 3     PC: 4 WS: -1         MPA: 4\n                Condition   Special\n         DIE    2     3-5     S\n         0-1   802 800       971\n          2    800 802       816\n         3-6   801 808       833\n         7-9   808 801       839\n\f",
+"IN": 3,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"scoped"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2": [
+802,
+800,
+801,
+808
+],
+"3-5": [
+800,
+802,
+808,
+801
+],
+"S": [
+971,
+816,
+833,
+839
+]
+}
+},
+"GE45": {
+"lato": "GE",
+"num": 45,
+"lettera": "N",
+"ruolo": "NCO",
+"testo": "GE 45/N                       NCO\n\n+1 VP\nSubmachine Gun\n+1 VP if\ncaptured\n\n\n\n\nIN: 4      PC: 6 WS: 0     MPA: 4\n            Condition    Special\n    DIE     2     3-5    D     S\n    0-2    802 808      836 971\n    3-6    808 932      837 839\n     7     801 800      837 816\n    8-9    931 802      804 813\n\f",
+"IN": 4,
+"PC": 6,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+6
+],
+[
+7,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2": [
+802,
+808,
+801,
+931
+],
+"3-5": [
+808,
+932,
+800,
+802
+],
+"D": [
+836,
+837,
+837,
+804
+],
+"S": [
+971,
+839,
+816,
+813
+]
+}
+},
+"GE11": {
+"lato": "GE",
+"num": 11,
+"lettera": "M",
+"ruolo": "NCO",
+"testo": "GE 11/M                          NCO\n\n+2 VP\nSubmachine Gun,\nGrenade\n+1 VP if captured.\n\nIf killed or\nincapacitated\nin Cond 1 put\nCond 2 into\neffect.\n\n\n\n IN: 4      PC: 8 WS: +2 MPA: 4\n               Condition      Special\n    DIE      1    2    3-5    A     S\n    0-3     926 808 808      836 833\n    4-6     801 928 824      837 839\n    7-8     927 824 829      804 816\n     9      840 928 801      837 971\n\f",
+"IN": 4,
+"PC": 8,
+"WS": 2,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"mp"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1": [
+926,
+801,
+927,
+840
+],
+"2": [
+808,
+928,
+824,
+928
+],
+"3-5": [
+808,
+824,
+829,
+801
+],
+"A": [
+836,
+837,
+804,
+837
+],
+"S": [
+833,
+839,
+816,
+971
+]
+}
+},
+"GE26": {
+"lato": "GE",
+"num": 26,
+"lettera": "X",
+"ruolo": "NCO",
+"testo": "GE 26/X                         NCO\n\n+1 VP\nSubmachine Gun,\nPistol\n+1 VP if captured.\n\nIf GE37 and GE/50\nare NOT in play,\nuse Special\nReaction C not\nCondition\n 4-5 or 6.\n\n\n IN: 4      PC: 7 WS: +1 MPA: 4\n              Condition    Special\n     DIE     4-5     6     C     S\n     0-3     822 822      810 816\n      4      800 970      809 800\n     5-8     969 969      808 828\n      9      822 800      800 813\n\f",
+"IN": 4,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+4
+],
+[
+5,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"4-5": [
+822,
+800,
+969,
+822
+],
+"6": [
+822,
+970,
+969,
+800
+],
+"C": [
+810,
+809,
+808,
+800
+],
+"S": [
+816,
+800,
+828,
+813
+]
+}
+},
+"GE4": {
+"lato": "GE",
+"num": 4,
+"lettera": "Y",
+"ruolo": "Panzer IV",
+"testo": "GE 4/Y                          Panzer IV\n                     +3 VP if knocked out\n                     Enters open; cannon\n+2 VP                ready. When open, 3 crew\nON FIRST             visible.\nTURN USE\n900.\n\n\n\n\nCrew IN PC WS DS          0-2   3   4-7   8-9\n  5     5   8 +2 8        902 905 905 900\n  4     3   6 +1 8        907 905 905 902\n  3     3   5   0     6   905 905 902 902\n  2     2   3   -1 4      900 811 908 900\n  1     1   1   -2    2   811 904 904 840\n\f",
+"pv": 3,
+"armi": [],
+"granate": 0
+},
+"GE93": {
+"lato": "GE",
+"num": 93,
+"lettera": "M",
+"ruolo": "Sergeant",
+"testo": "GE 93/M                    Sergeant\n\n+1 VP\nSubmachine Gun,\n4 Grenades\n\n\n\n\nIN: 3    PC: 5 WS: +1 MPA: 4\n               Condition    Special\n   DIE    2      3-4 5-6    S     Y\n   0-1   808     862 864   716 060\n   2-5   825     863 802   816 060\n   6-8   863     864 801   833 858\n    9    821     821 800   860 829\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 4,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2": [
+808,
+825,
+863,
+821
+],
+"3-4": [
+862,
+863,
+864,
+821
+],
+"5-6": [
+864,
+802,
+801,
+800
+],
+"S": [
+716,
+816,
+833,
+860
+],
+"Y": [
+60,
+60,
+858,
+829
+]
+}
+},
+"GE55": {
+"lato": "GE",
+"num": 55,
+"lettera": "Y",
+"ruolo": "Panzer IV",
+"testo": "GE 55/Y                     Panzer IV\n         Special Reaction B: Do not move for\n         remainder of the mission. Fire as\n+3 VP    called for. +2 VP if knocked out.\n         Enters open; cannon ready. When\n         open, 3 crew visible\n\n\n\n\nCrew IN PC WS DS       0   1-3 4-7 8-9\n 5   5   8 +2 8       905 900 901 900\n 4   3   6 +1 8       828 901 905 900\n 3   3   5    0   6   900 904 902 903\n 2   2   3    -1 4    908 814 900 921\n 1   1   1    -2 2    840 904 904 840\n\f",
+"pv": 3,
+"armi": [],
+"granate": 0
+},
+"GE25": {
+"lato": "GE",
+"num": 25,
+"lettera": "N",
+"ruolo": "Sniper",
+"testo": "GE 25/N                     Sniper\n\n+2 VP\nBolt Rifle (Scope),\nPistol\n\n\n\n\n IN: 4    PC: 7 WS: +1 MPA: 4\n            Condition    Special\n    DIE    2-3     4     B     S\n     0     802 800      829 816\n    1-2    829 919      808 971\n    3-5    808 919      801 802\n    6-9    801 918      801 839\n\f",
+"IN": 4,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"scoped",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"2-3": [
+802,
+829,
+808,
+801
+],
+"4": [
+800,
+919,
+919,
+918
+],
+"B": [
+829,
+808,
+801,
+801
+],
+"S": [
+816,
+971,
+802,
+839
+]
+}
+},
+"GE52": {
+"lato": "GE",
+"num": 52,
+"lettera": "N",
+"ruolo": "Veteran NCO",
+"testo": "GE 52/N              Veteran NCO\n\n+1 VP\nSubmachine Gun,\nGrenade\n+1 VP if\ncaptured\n\n\n\n\nIN: 4      PC: 6 WS: +1 MPA: 4\n              Cond     Special\n        DIE    2-4    D      S\n        0-3   803    911 833\n        4-6   822    832 832\n        7-8   831    801 816\n         9    824    810 817\n\f",
+"IN": 4,
+"PC": 6,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+803,
+822,
+831,
+824
+],
+"D": [
+911,
+832,
+801,
+810
+],
+"S": [
+833,
+832,
+816,
+817
+]
+}
+},
+"GE89": {
+"lato": "GE",
+"num": 89,
+"lettera": "U",
+"ruolo": "Veteran NCO",
+"testo": "GE 89/U              Veteran NCO\n\n+1 VP\nSubmachine Gun,\nGrenade\n+1 VP if\ncaptured\n\n\n\n\nIN: 3      PC: 5 WS: +1 MPA: 4\n              Cond     Special\n        DIE    4      X      S\n        0-2   803    824 816\n        3-4   831    801 833\n         5    801    808 802\n        6-9   822    832 812\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+2
+],
+[
+3,
+4
+],
+[
+5,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"4": [
+803,
+831,
+801,
+822
+],
+"X": [
+824,
+801,
+808,
+832
+],
+"S": [
+816,
+833,
+802,
+812
+]
+}
+},
+"GE7": {
+"lato": "GE",
+"num": 7,
+"lettera": "N",
+"ruolo": "Officer",
+"testo": "GE 7/N                             Officer\n\n+1 VP\nPistol\n+1 VP if\nincapacitated\nOR killed\nOn first\nturn use\n829.\n\n\n\n\nIN: 4 PC: 7 WS: +1 MPA: 4 DS:4\n           Condition          Special\n  DIE      1-2 3-4      S     C    X     U\n   0       825 825     816   649 832    803\n  1-2      801 801     825   649 808    803\n  3-4      802 808     832   649 825    807\n  5-9      977 832     993   649 972    806\n\f",
+"IN": 4,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"DS": 4,
+"pv": 1,
+"armi": [
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+4
+],
+[
+5,
+9
+]
+],
+"colonne": {
+"1-2": [
+825,
+801,
+802,
+977
+],
+"3-4": [
+825,
+801,
+808,
+832
+],
+"S": [
+816,
+825,
+832,
+993
+],
+"C": [
+649,
+649,
+649,
+649
+],
+"X": [
+832,
+808,
+825,
+972
+],
+"U": [
+803,
+803,
+807,
+806
+]
+}
+},
+"GE34": {
+"lato": "GE",
+"num": 34,
+"lettera": "X",
+"ruolo": "Officer",
+"testo": "GE 34/X                       Officer\n\n+1 VP\nSubmachine Gun,\nPistol\n+2 VP if captured.\nIf GE/34 is\nkilled,\ncaptured or\nincapacitated\nput Condition\n4 into effect.\n\n\n IN: 4      PC: 6 WS: +1 MPA: 4\n              Condition      Special\n    DIE     2    3      4    B     S\n    0-1    965 808 804      831 971\n     2     835 914 805      829 816\n    3-6    802 913 836      808 839\n    7-9    829 835 837      832 813\n\f",
+"IN": 4,
+"PC": 6,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2": [
+965,
+835,
+802,
+829
+],
+"3": [
+808,
+914,
+913,
+835
+],
+"4": [
+804,
+805,
+836,
+837
+],
+"B": [
+831,
+829,
+808,
+832
+],
+"S": [
+971,
+816,
+839,
+813
+]
+}
+},
+"GE38": {
+"lato": "GE",
+"num": 38,
+"lettera": "R",
+"ruolo": "Officer",
+"testo": "GE 38/R                      Officer\n\n+1 VP\nSubmachine Gun,\nPistol\nON FIRST\nTURN USE\n867.\n\n\n\n\n IN: 2     PC: 5 WS: +1 MPA: 4\n           Cond         Special\n     DIE    4      V      R     S\n     0-5   803    832    732 832\n     6-7   868    825    732 825\n      8    822    829    856 816\n      9    822    808    856 839\n\f",
+"IN": 2,
+"PC": 5,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+5
+],
+[
+6,
+7
+],
+[
+8,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"4": [
+803,
+868,
+822,
+822
+],
+"V": [
+832,
+825,
+829,
+808
+],
+"R": [
+732,
+732,
+856,
+856
+],
+"S": [
+832,
+825,
+816,
+839
+]
+}
+},
+"GE46": {
+"lato": "GE",
+"num": 46,
+"lettera": "N",
+"ruolo": "Officer",
+"testo": "GE 46/N                      Officer\n\n+1 VP\nSubmachine Gun,\nPistol\nON FIRST\nTURN USE\n868.\n\n\n\n\n IN: 4     PC: 7 WS: +1 MPA: 4\n                 Cond   Special\n           DIE    2-4     S\n           0-3   822     832\n           4-5   867     839\n           6-8   862     832\n            9    865     816\n\f",
+"IN": 4,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+5
+],
+[
+6,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-4": [
+822,
+867,
+862,
+865
+],
+"S": [
+832,
+839,
+832,
+816
+]
+}
+},
+"GE36": {
+"lato": "GE",
+"num": 36,
+"lettera": "V",
+"ruolo": "Sentry",
+"testo": "GE 36/V                        Sentry\n\n+1 VP\nBolt Rifle\nOn first\nturn use\nCONDITION 1\nCOLUMN.\n\n\n\n\n IN: 1        PC: 3 WS: 0      MPA: 3\n            Condition        Special\n   DIE    1    2    3-4    S   A     B\n   0-3   813 866 802      971 864 825\n   4-6   800 808 825      971 867 801\n   7-8   808 862 808      808 862 802\n    9    802 800 800      811 862 800\n\f",
+"IN": 1,
+"PC": 3,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1": [
+813,
+800,
+808,
+802
+],
+"2": [
+866,
+808,
+862,
+800
+],
+"3-4": [
+802,
+825,
+808,
+800
+],
+"S": [
+971,
+971,
+808,
+811
+],
+"A": [
+864,
+867,
+862,
+862
+],
+"B": [
+825,
+801,
+802,
+800
+]
+}
+},
+"GE51": {
+"lato": "GE",
+"num": 51,
+"lettera": "W",
+"ruolo": "Sentry",
+"testo": "GE 51/W                             Sentry\n\n+1 VP\nBolt Rifle,\nPistol\nOn first\nturn use\n825.\n\n\n\n\n IN: 2        PC: 2 WS: 0           MPA: 4\n                 Condition          Special\n  DIE       2     3     4    5-6    S     Y\n   0       800   800 800     800   800 800\n  1-3      802   807 821     867   816 060\n  4-6      858   860 807     860   839 857\n  7-9      829   857 867     856   711 060\n\f",
+"IN": 2,
+"PC": 2,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+3
+],
+[
+4,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2": [
+800,
+802,
+858,
+829
+],
+"3": [
+800,
+807,
+860,
+857
+],
+"4": [
+800,
+821,
+807,
+867
+],
+"5-6": [
+800,
+867,
+860,
+856
+],
+"S": [
+800,
+816,
+839,
+711
+],
+"Y": [
+800,
+60,
+857,
+60
+]
+}
+},
+"GE6": {
+"lato": "GE",
+"num": 6,
+"lettera": "S",
+"ruolo": "Sentry",
+"testo": "GE 6/S                              Sentry\n\n+1 VP\nBolt Rifle,\nPistol\nOn first\nturn use\n825.\n\n\n\n\n IN: 3        PC: 5 WS: 0           MPA: 4\n                 Condition          Special\n   DIE      2     3   4-5     6     Y     S\n    0      800   808 864     825   800 816\n   1-4     802   864 867     862   060 802\n   5-7     825   862 808     867   808 839\n   8-9     808   862 802     866   060 711\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+4
+],
+[
+5,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2": [
+800,
+802,
+825,
+808
+],
+"3": [
+808,
+864,
+862,
+862
+],
+"4-5": [
+864,
+867,
+808,
+802
+],
+"6": [
+825,
+862,
+867,
+866
+],
+"Y": [
+800,
+60,
+808,
+60
+],
+"S": [
+816,
+802,
+839,
+711
+]
+}
+},
+"GE60": {
+"lato": "GE",
+"num": 60,
+"lettera": "W",
+"ruolo": "Sentry",
+"testo": "GE 60/W                        Sentry\n\n+1 VP\nSubmachine Gun,\n2 Grenades\nOn first\nturn use\n801.\n\n\n\n\n IN: 2     PC: 4 WS: 0         MPA: 4\n           Cond          Special\n    DIE     2-4    V     R    S     Y\n    0-3    807    824   732 833    869\n     4     868    800   732 816    800\n    5-6     819   808   732 971    825\n    7-9    867    869   856 833    865\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+4
+],
+[
+5,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2-4": [
+807,
+868,
+819,
+867
+],
+"V": [
+824,
+800,
+808,
+869
+],
+"R": [
+732,
+732,
+732,
+856
+],
+"S": [
+833,
+816,
+971,
+833
+],
+"Y": [
+869,
+800,
+825,
+865
+]
+}
+},
+"GE16": {
+"lato": "GE",
+"num": 16,
+"lettera": "L",
+"ruolo": "Sentry",
+"testo": "GE 16/L                        Sentry\n\n+1 VP\nBolt Rifle,\nPistol\nOn first\nturn use\n865.\n\n\n\n\n IN: 3        PC: 5 WS: 0     MPA: 4\n               Condition    Special\n    DIE       2-3    4-6    S     Y\n    0-4       862 862      839 060\n    5-6       864 803      816 857\n    7-8       868 807      839 857\n     9        868 830      800 800\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"2-3": [
+862,
+864,
+868,
+868
+],
+"4-6": [
+862,
+803,
+807,
+830
+],
+"S": [
+839,
+816,
+839,
+800
+],
+"Y": [
+60,
+857,
+857,
+800
+]
+}
+},
+"GE86": {
+"lato": "GE",
+"num": 86,
+"lettera": "L",
+"ruolo": "Sentry",
+"testo": "GE 86/L                     Sentry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nOn first\nturn use\n801.\n\n\n\n\n IN: 3     PC: 4 WS: -1     MPA: 4\n         Cond         Special\n  DIE     2-4 T     R    S    V    X\n  0-1    916 825   732 833 824    825\n  2-4    868 869   732 971 869    869\n  5-6    807 869   732 833 869    808\n  7-9    867 802   856 817 825    869\n\f",
+"IN": 3,
+"PC": 4,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+4
+],
+[
+5,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2-4": [
+916,
+868,
+807,
+867
+],
+"T": [
+825,
+869,
+869,
+802
+],
+"R": [
+732,
+732,
+732,
+856
+],
+"S": [
+833,
+971,
+833,
+817
+],
+"V": [
+824,
+869,
+869,
+825
+],
+"X": [
+825,
+869,
+808,
+869
+]
+}
+},
+"GE17": {
+"lato": "GE",
+"num": 17,
+"lettera": "T",
+"ruolo": "Sentry",
+"testo": "GE 17/T                       Sentry\n\n+1 VP\nBolt Rifle,\nPistol\nON FIRST\nTURN USE\n808.\n\n\n\n\n IN: 2        PC: 4 WS: 0     MPA: 4\n              Condition     Special\n  DIE       2    3    4-6 S   Y     F\n  0-3      825 862 862 839 060 708\n  4-5      800 862 863 711 829 825\n   6       824 808 868 816 060 800\n  7-9      808 868 868 859 808 857\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt",
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+5
+],
+[
+6,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"2": [
+825,
+800,
+824,
+808
+],
+"3": [
+862,
+862,
+808,
+868
+],
+"4-6": [
+862,
+863,
+868,
+868
+],
+"S": [
+839,
+711,
+816,
+859
+],
+"Y": [
+60,
+829,
+60,
+808
+],
+"F": [
+708,
+825,
+800,
+857
+]
+}
+},
+"GE73": {
+"lato": "GE",
+"num": 73,
+"lettera": "Q",
+"ruolo": "Sentry",
+"testo": "GE 73/Q                      Sentry\n\n+1 VP\nBolt Rifle,\n2 Grenades\nON FIRST\nTURN USE\n825.\n\n\n\n\n IN: 1     PC: 3 WS: -1      MPA: 3\n           Cond         Special\n    DIE     2-4    Y      S     R\n     0     807    800    825 856\n    1-2    916    825    817 856\n    3-7    868    869    856 732\n    8-9    807    802    833 732\n\f",
+"IN": 1,
+"PC": 3,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-4": [
+807,
+916,
+868,
+807
+],
+"Y": [
+800,
+825,
+869,
+802
+],
+"S": [
+825,
+817,
+856,
+833
+],
+"R": [
+856,
+856,
+732,
+732
+]
+}
+},
+"GE10": {
+"lato": "GE",
+"num": 10,
+"lettera": "L",
+"ruolo": "Sniper",
+"testo": "GE 10/L                      Sniper\n\n+1 VP\nBolt Rifle (Scope)\nON FIRST\nTURN USE\n802.\n\n\n\n\n IN: 3      PC: 5 WS: 0      MPA: 4\n             Condition    Special\n  DIE      1-2 3-4 5-6 K    D     S\n  0-3      802 950 957 951 807 817\n  4-6      802 802 802 804 801 816\n  7-8      801 802 800 804 808 800\n   9       800 800 813 805 800 964\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"scoped"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"1-2": [
+802,
+802,
+801,
+800
+],
+"3-4": [
+950,
+802,
+802,
+800
+],
+"5-6": [
+957,
+802,
+800,
+813
+],
+"K": [
+951,
+804,
+804,
+805
+],
+"D": [
+807,
+801,
+808,
+800
+],
+"S": [
+817,
+816,
+800,
+964
+]
+}
+},
+"GE15": {
+"lato": "GE",
+"num": 15,
+"lettera": "L",
+"ruolo": "Sniper",
+"testo": "GE 15/L                         Sniper\n\n+1 VP\nBolt Rifle (Scope), Grenade\nOn first\nturn use\nCONDITION 1\nCOLUMN.\n\n\n\n\n IN: 3        PC: 5 WS: 0       MPA: 4\n                 Condition   Special\n         DIE     3      4      S\n         0-3    802 916       833\n         4-6    808 917       833\n         7-8    915 800       971\n          9     800 809       816\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"scoped"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+3
+],
+[
+4,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"3": [
+802,
+808,
+915,
+800
+],
+"4": [
+916,
+917,
+800,
+809
+],
+"S": [
+833,
+833,
+971,
+816
+]
+}
+},
+"GE49": {
+"lato": "GE",
+"num": 49,
+"lettera": "T",
+"ruolo": "Machine Gunner",
+"testo": "GE 49/T Machine Gunner\n+1 VP\nLMG, Grenade\nOn first turn use 815.\nFires LMG unless he or\nGE5 is wounded or\ninactive. If wounded,\nGE/49 assists GE/5.\n*Use for rest of\nmission if Condition 5\ncomes into effect\n(self-preservation\nSTILL applies).\n\n IN: 2     PC: 3 WS: 0       MPA: 4\n              Condition    Special\n   DIE     1-4    5* 6     F    S\n    0      815 815 962    819 818\n   1-3     815 961 815    820 968\n   4-7     815 815 815    821 967\n   8-9     961 962 961    809 971\n\f",
+"IN": 2,
+"PC": 3,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"lmg"
+],
+"granate": 1,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+3
+],
+[
+4,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"1-4": [
+815,
+815,
+815,
+961
+],
+"5*": [
+815,
+961,
+815,
+962
+],
+"6": [
+962,
+815,
+815,
+961
+],
+"F": [
+819,
+820,
+821,
+809
+],
+"S": [
+818,
+968,
+967,
+971
+]
+}
+},
+"GE21": {
+"lato": "GE",
+"num": 21,
+"lettera": "X",
+"ruolo": "Assistant Gunner",
+"testo": "GE 21/X Assistant Gunner\n+1 VP\nSubmachine Gun,\n2 Grenades\nOn first turn use 815.\nAssists GE/20 in firing\nmachine gun unless\nGE/20 is wounded or\nincapacitated,\nin which case\nGE/21 fires machine\ngun.\n\n\n IN: 3      PC: 5 WS: 0           MPA: 4\n                     Cond   Special\n             DIE      3-4     S\n             0-1     770     965\n             2-5     815     815\n              6      800     800\n             7-9     815     770\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+5
+],
+[
+6,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+770,
+815,
+800,
+815
+],
+"S": [
+965,
+815,
+800,
+770
+]
+}
+},
+"GE20": {
+"lato": "GE",
+"num": 20,
+"lettera": "N",
+"ruolo": "Machine Gunner",
+"testo": "GE 20/N Machine Gunner\n+1 VP\nMMG,\nPistol,\n2 Grenades\nOn first turn\nuse 815.\nFires machine gun\nunless wounded and\nGE/21 is not\nwounded. Assists\nGE/21 in this case.\n\nIN: 4     PC: 7 WS: +1 MPA: 4\n                 Cond   Special\n          DIE     3-4     S\n          0-1    959     770\n          2-5    815     815\n           6     800     815\n          7-9    815     965\n\f",
+"IN": 4,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"pistol",
+"mmg"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+5
+],
+[
+6,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+959,
+815,
+800,
+815
+],
+"S": [
+770,
+815,
+815,
+965
+]
+}
+},
+"GE5": {
+"lato": "GE",
+"num": 5,
+"lettera": "U",
+"ruolo": "Assistant Gunner",
+"testo": "GE 5/U            Assistant Gunner\n\n+1 VP\nPistol\nOn first turn use 815.\nAssists GE/49 unless\nwounded or\nincapacitated, in\nwhich case GE/5 fires\nmachine gun.\n*Use for mission\nonce Cond. 5 comes\ninto effect (self-pre-\nservation applies).\n\n IN: 3     PC: 6 WS: -1        MPA: 4\n               Condition      Special\n    DIE     1-4    5*    6    E     S\n     0      960 960 959      820 966\n    1-3     815 959 815      821 966\n    4-7     815 815 815      965 965\n    8-9     959 962 960      867 971\n\f",
+"IN": 3,
+"PC": 6,
+"WS": -1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+3
+],
+[
+4,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"1-4": [
+960,
+815,
+815,
+959
+],
+"5*": [
+960,
+959,
+815,
+962
+],
+"6": [
+959,
+815,
+815,
+960
+],
+"E": [
+820,
+821,
+965,
+867
+],
+"S": [
+966,
+966,
+965,
+971
+]
+}
+},
+"GE66": {
+"lato": "GE",
+"num": 66,
+"lettera": "T",
+"ruolo": "Assistant Gunner",
+"testo": "GE 66/T Assistant Gunner\n+1 VP\nPistol,\n2 Grenades\nOn first turn\nuse 815.\nAssists GE/65 in firing\nmachine gun unless\nGE/65 is wounded or\nincapacitated, in\nwhich case GE/66\nfires machine gun.\n\n\n IN: 3      PC: 5 WS: 0           MPA: 4\n                     Cond   Special\n             DIE      3-4     S\n             0-4     815     815\n             5-6     815     965\n             7-8     959     770\n              9      840     800\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 0,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"pistol"
+],
+"granate": 2,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"3-4": [
+815,
+815,
+959,
+840
+],
+"S": [
+815,
+965,
+770,
+800
+]
+}
+},
+"GE32": {
+"lato": "GE",
+"num": 32,
+"lettera": "S",
+"ruolo": "Machine Gunner",
+"testo": "GE 32/S Machine Gunner\n+2 VP\nMMG,\nPistol\nFires machine\ngun unless\nwounded or\ninactive and\nGE/47 is not.\nIf wounded,\nassists GE/47.\n\n\n\n IN: 3      PC: 4 WS: +1 MPA: 4\n                   Condition     Special\n     DIE      2      3-4     5     S\n      0      841     800 800      959\n     1-2     959     841 843      843\n     3-5     815     959 815      816\n     6-9     815     815 815      833\n\f",
+"IN": 3,
+"PC": 4,
+"WS": 1,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"pistol",
+"mmg"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"2": [
+841,
+959,
+815,
+815
+],
+"3-4": [
+800,
+841,
+959,
+815
+],
+"5": [
+800,
+843,
+815,
+815
+],
+"S": [
+959,
+843,
+816,
+833
+]
+}
+},
+"GE65": {
+"lato": "GE",
+"num": 65,
+"lettera": "S",
+"ruolo": "Machine Gunner",
+"testo": "GE 65/S Machine Gunner\n+1 VP\nMMG,\nPistol\nOn first turn\nuse 815.\nFires machine\ngun unless\nwounded and\nGE/66 is not\nwounded.\nAssists GE/66\nin this case.\n\n IN: 3    PC: 7 WS: +1 MPA: 4\n                Cond   Special\n          DIE    3-4     S\n          0-4   815     815\n          5-6   815     770\n          7-8   770     965\n           9    800     800\n\f",
+"IN": 3,
+"PC": 7,
+"WS": 1,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"pistol",
+"mmg"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+6
+],
+[
+7,
+8
+],
+[
+9,
+9
+]
+],
+"colonne": {
+"3-4": [
+815,
+815,
+770,
+800
+],
+"S": [
+815,
+770,
+965,
+800
+]
+}
+},
+"GE47": {
+"lato": "GE",
+"num": 47,
+"lettera": "R",
+"ruolo": "Assistant Gunner",
+"testo": "GE 47/R Assistant Gunner\n+1 VP\nBolt Rifle\nAssists GE/32\nunless GE/32\nis wounded or\ninactive, in\nwhich case\nGE/47 fires\nmachine gun.\n\n\n\n\n IN: 1       PC: 2 WS: -1          MPA: 3\n                   Condition      Special\n    DIE       2      3-4     5      S\n     0       800     842 842       842\n    1-2      841     800 800       816\n    3-5      815     841 843       843\n    6-9      815     815    815    833\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -1,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"2": [
+800,
+841,
+815,
+815
+],
+"3-4": [
+842,
+800,
+841,
+815
+],
+"5": [
+842,
+800,
+843,
+815
+],
+"S": [
+842,
+816,
+843,
+833
+]
+}
+},
+"GE83": {
+"lato": "GE",
+"num": 83,
+"lettera": "X",
+"ruolo": "Aide de Camp",
+"testo": "GE 83/X                 Aide de Camp\n\n+1 VP\nSubmachine Gun\n+1 VP if\ncaptured.\nOn first\nturn use\n825.\n\n\n\n\nIN: 4 PC: 8 WS: +1 MPA: 4 DS: 6\n           Condition          Special\n  DIE      2-3 4-6      S     U    Q     J\n  0-4      050 868     711   868 055    470\n   5       825 868     839   868 826    800\n  6-7      856 868     816   868 814    808\n  8-9      808 807     813   807 814    470\n\f",
+"IN": 4,
+"PC": 8,
+"WS": 1,
+"MPA": 4,
+"DS": 6,
+"pv": 1,
+"armi": [
+"mp"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+5
+],
+[
+6,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-3": [
+50,
+825,
+856,
+808
+],
+"4-6": [
+868,
+868,
+868,
+807
+],
+"S": [
+711,
+839,
+816,
+813
+],
+"U": [
+868,
+868,
+868,
+807
+],
+"Q": [
+55,
+826,
+814,
+814
+],
+"J": [
+470,
+800,
+808,
+470
+]
+}
+},
+"GE14": {
+"lato": "GE",
+"num": 14,
+"lettera": "U",
+"ruolo": "Engineer",
+"testo": "GE 14/U                   Engineer\n\n+2 VP\nBolt Rifle\n\n\n\n\n IN: 2       PC: 4 WS: -2    MPA: 4\n             Condition    Special\n    DIE       3    4-5    B      S\n    0-1      800 929     836 816\n    2-5      929 801     837 813\n     6       813 800     804 811\n    7-9      801 813     837 839\n\f",
+"IN": 2,
+"PC": 4,
+"WS": -2,
+"MPA": 4,
+"pv": 2,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+5
+],
+[
+6,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3": [
+800,
+929,
+813,
+801
+],
+"4-5": [
+929,
+801,
+800,
+813
+],
+"B": [
+836,
+837,
+804,
+837
+],
+"S": [
+816,
+813,
+811,
+839
+]
+}
+},
+"GE24": {
+"lato": "GE",
+"num": 24,
+"lettera": "P",
+"ruolo": "Scientist",
+"testo": "GE 24/P                 Scientist\n\n+1 VP\nno weapon.\nIf captured\n+2 VP for\nexiting\nGE/24 from\nthe map\nwith your\nsquad.\n\n\n\n\nIN: 1 PC: 2 WS: -2 MPA: 3 DS: 0\n              Cond     Special\n        DIE    1-4    S      Q\n         0    800    811 800\n        1-2   800    839 800\n        3-4   800    811 800\n        5-9    811   811 630\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -2,
+"MPA": 3,
+"DS": 0,
+"pv": 1,
+"armi": [],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+4
+],
+[
+5,
+9
+]
+],
+"colonne": {
+"1-4": [
+800,
+800,
+800,
+811
+],
+"S": [
+811,
+839,
+811,
+811
+],
+"Q": [
+800,
+800,
+800,
+630
+]
+}
+},
+"GE42": {
+"lato": "GE",
+"num": 42,
+"lettera": "Q",
+"ruolo": "Scientist",
+"testo": "GE 42/Q                  Scientist\n\n+1 VP\n               V.2\nno weapon.\nIf captured\n+2 VP for\nexiting\nGE/42 from\nthe map\nwith your\nsquad.\n\n\n\n\nIN: 0 PC: 1 WS: -2 MPA: 3 DS: 2\n              Cond     Special\n        DIE    1-4    S      Q\n         0    800    839 800\n        1-2   800    811 800\n        3-4   800    811 800\n        5-9    811   811 630\n\f",
+"IN": 0,
+"PC": 1,
+"WS": -2,
+"MPA": 3,
+"DS": 2,
+"pv": 1,
+"armi": [],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+4
+],
+[
+5,
+9
+]
+],
+"colonne": {
+"1-4": [
+800,
+800,
+800,
+811
+],
+"S": [
+839,
+811,
+811,
+811
+],
+"Q": [
+800,
+800,
+800,
+630
+]
+}
+},
+"GE63": {
+"lato": "GE",
+"num": 63,
+"lettera": "N",
+"ruolo": "SS General",
+"testo": "GE 63/N                    SS General\n\n+1 VP\nPistol\n+2 VP if captured\nOn first turn\nuse 712.\nIf Special\nReaction Q\ncomes into\neffect use 554.\n\n\n\n\nIN: 4 PC: 8 WS: +2 MPA: 4 DS: 2\n         Condition          Special\n  DIE    2-3 4-6      S     U    T     J\n  0-4    050 868     711   868 055    470\n   5     832 868     800   868 826    800\n  6-7    712 868     816   868 814    808\n  8-9    829 807     813   807 814    470\n\f",
+"IN": 4,
+"PC": 8,
+"WS": 2,
+"MPA": 4,
+"DS": 2,
+"pv": 1,
+"armi": [
+"pistol"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+4
+],
+[
+5,
+5
+],
+[
+6,
+7
+],
+[
+8,
+9
+]
+],
+"colonne": {
+"2-3": [
+50,
+832,
+712,
+829
+],
+"4-6": [
+868,
+868,
+868,
+807
+],
+"S": [
+711,
+800,
+816,
+813
+],
+"U": [
+868,
+868,
+868,
+807
+],
+"T": [
+55,
+826,
+814,
+814
+],
+"J": [
+470,
+800,
+808,
+470
+]
+}
+},
+"GE19": {
+"lato": "GE",
+"num": 19,
+"lettera": "",
+"ruolo": "Kubelwagen Officer",
+"testo": "                                       Driver,\n GE 19              Kubelwagen Officer\n +3 VP if officer\n captured\n questioned\n conduct Event\n Check then\n see 177.\n\n\n\n\n Driver/S: IN: 3 PC: 4 WS:-2 MPA: 4 DS: 6\n\n Officer/M:IN: 4 PC: 8 WS: 0 MPA: 4 DS: 4\n\nActions depend on which are NOT active:\n• None inactive: 826     • Officer inactive: 826\n• Driver inactive: 814 • Vehicle inactive: 802\n• Vehicle and One Man Inactive: 813\nBoth soldiers have pistols. If Kubelwagen is\nsearched, conduct Event Check - see 006\n\f",
+"IN": 3,
+"PC": 4,
+"WS": -2,
+"MPA": 4,
+"DS": 6,
+"pv": 3,
+"armi": [],
+"granate": 0
+},
+"GE13": {
+"lato": "GE",
+"num": 13,
+"lettera": "W",
+"ruolo": "Staff Car & Driver",
+"testo": "GE 13/W Staff Car & Driver\n                    +2 VP if disabled.\n+1 VP               *No self-preservation\n                    columns used while\nSubmachine Gun      vehicle is active\n\n\n\n\nIN: 2 PC: 4 WS: 0 MPA: 4 DS: 6\n        Condition           Special\n  DIE   3-4    S*      X      C     Q\n   0    827 801       034    642 459\n  1-2   826 802       034    642 459\n  3-4   826 813       034    642 459\n  5-9   642 825       825    826 825\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 4,
+"DS": 6,
+"pv": 2,
+"armi": [
+"mp"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+0
+],
+[
+1,
+2
+],
+[
+3,
+4
+],
+[
+5,
+9
+]
+],
+"colonne": {
+"3-4": [
+827,
+826,
+826,
+642
+],
+"S*": [
+801,
+802,
+813,
+825
+],
+"X": [
+34,
+34,
+34,
+825
+],
+"C": [
+642,
+642,
+642,
+826
+],
+"Q": [
+459,
+459,
+459,
+825
+]
+}
+},
+"GE54": {
+"lato": "GE",
+"num": 54,
+"lettera": "Z",
+"ruolo": "Jagdpanther",
+"testo": "GE 54/Z                Jagdpanther\n+2 VP\n+3 VP if knocked out. Enters open; cannon\nnot ready. When open, 3 crew visible.\nOn first turn use 922.\n\n\n\n\nCrew IN PC WS DS      0-1 2-5 6-8     9\n  5   5   8 +2 8     923 923 925 925\n  4   4   6 +2 8     923 921 925 923\n  3   3   5 +1 6     921 923 925 925\n  2   2   3   -1 4   921 924 921 921\n  1   1   1   -2 2   840 811 811 811\n\f",
+"pv": 2,
+"armi": [],
+"granate": 0
+},
+"GE12": {
+"lato": "GE",
+"num": 12,
+"lettera": "T",
+"ruolo": "Sniper",
+"testo": "GE 12/T                          Sniper\n\n+1 VP\nBolt Rifle\n(Scope)\nON FIRST\nTURN USE\n801.\n\n\n\n\n IN: 3       PC: 5 WS: +2 MPA: 4\n                  Condition   Special\n           DIE   1-3     4      S\n           0-1   802 802       813\n           2-4   802 802       825\n            5    800 800       971\n           6-9   802 808       839\n\f",
+"IN": 3,
+"PC": 5,
+"WS": 2,
+"MPA": 4,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+4
+],
+[
+5,
+5
+],
+[
+6,
+9
+]
+],
+"colonne": {
+"1-3": [
+802,
+802,
+800,
+802
+],
+"4": [
+802,
+802,
+800,
+808
+],
+"S": [
+813,
+825,
+971,
+839
+]
+}
+},
+"GE64": {
+"lato": "GE",
+"num": 64,
+"lettera": "Q",
+"ruolo": "Volksgrenadier",
+"testo": "GE 64/Q           Volksgrenadier\n\n+1 VP\nBolt Rifle\n\n\n\n\n IN: 1       PC: 2 WS: 0     MPA: 3\n               Cond     Special\n         DIE    3-4    S      X\n         0-1   803    816 800\n          2    800    800 808\n         3-6   803    802 801\n         7-9   830    833 801\n\f",
+"IN": 1,
+"PC": 2,
+"WS": 0,
+"MPA": 3,
+"pv": 1,
+"armi": [
+"bolt"
+],
+"granate": 0,
+"gruppi": [
+[
+0,
+1
+],
+[
+2,
+2
+],
+[
+3,
+6
+],
+[
+7,
+9
+]
+],
+"colonne": {
+"3-4": [
+803,
+800,
+803,
+830
+],
+"S": [
+816,
+800,
+802,
+833
+],
+"X": [
+800,
+808,
+801,
+801
+]
+}
+},
+"US1": {
+"lato": "US",
+"num": 1,
+"lettera": "J",
+"ruolo": "Runner",
+"testo": "US 01/J                     Runner\nIn Mission\n3 only, if\nrunner\nenters hex\nwith an\nactive US\ncommander\nsee 178.\n\n\n\n\nIN: 3 PC: 5 WS: -1 MPA: 3 DS: 2\n\n\n\n   Port      Semi-Automatic Rifle\n   Ammo      SAR    SAR\n\f",
+"IN": 3,
+"PC": 5,
+"WS": -1,
+"MPA": 3,
+"DS": 2,
+"pv": 0,
+"armi": [],
+"granate": 0
+},
+"US6": {
+"lato": "US",
+"num": 6,
+"lettera": "J",
+"ruolo": "Glider Survivor",
+"testo": "US 06/J          Glider Survivor\n                             Already\n                             wounded.\n                             +2 VP if this\n                             soldier is\n                             active at the\n                             end of the\n                             mission\n\n\n\n\nIN: 2   PC: 4 WS: 0       MPA: 2 DS: 2\n\n\n\n   Port     Carbine\n   Ammo     Pistol    C     C     P\n\f",
+"IN": 2,
+"PC": 4,
+"WS": 0,
+"MPA": 2,
+"DS": 2,
+"pv": 2,
+"armi": [],
+"granate": 0
+},
+"US2": {
+"lato": "US",
+"num": 2,
+"lettera": "J",
+"ruolo": "Jeep Driver",
+"testo": "US 02/J                  Jeep Driver\n\n\n\n\nIN: 2   PC: 3 WS: -2 MPA: 4 DS: 6\n\n\n\n   Port\n   Ammo     Pistol   P\n\f",
+"IN": 2,
+"PC": 3,
+"WS": -2,
+"MPA": 4,
+"DS": 6,
+"pv": 0,
+"armi": [],
+"granate": 0
+},
+"US8": {
+"lato": "US",
+"num": 8,
+"lettera": "K",
+"ruolo": "Runner",
+"testo": "US 08/K                     Runner\nMission 3 only: if\nrunner enters\nhex with an\nactive US\ncommander, all\nUS soldiers in hex\nmake PC Checks.\nIf any succeed,\nsee 276. If all\nfail, see 281. If\nrunner exits\nmap or is\nkilled or\nincapacitated,\nsee 263.\n\nIN: 1 PC: 2 WS: -2 MPA: 3 DS: 0\n\n\n\n    Port\n    Ammo       Pistol   P\n\f",
+"IN": 1,
+"PC": 2,
+"WS": -2,
+"MPA": 3,
+"DS": 0,
+"pv": 0,
+"armi": [],
+"granate": 0
+},
+"US5": {
+"lato": "US",
+"num": 5,
+"lettera": "J",
+"ruolo": "British Pilot",
+"testo": "US 05/J                     British Pilot\nAlready wounded. +2 VP if active at\nthe end of the mission.\n\n\n\n\nIN: 2 PC: 5 WS: -1 MPA: 2 DS: 2\n\n\n\n    Port\n    Ammo      Pistol    P\n\f",
+"IN": 2,
+"PC": 5,
+"WS": -1,
+"MPA": 2,
+"DS": 2,
+"pv": 2,
+"armi": [],
+"granate": 0
+},
+"US4": {
+"lato": "US",
+"num": 4,
+"lettera": "",
+"ruolo": "Sherman Tank",
+"testo": "US 04              Sherman Tank\n\n\n\n\nIN: 2   PC: 3 WS: -2 MPA: 4 DS: 6\n         Crew IN   PC WS DS\n           5   3   6   +1   8\n           4   3   6   +1   8\n           3   2   4   0    6\n           2   1   2   -1   4\n           1   0   0   -2   0\n\f",
+"IN": 2,
+"PC": 3,
+"WS": -2,
+"MPA": 4,
+"DS": 6,
+"pv": 0,
+"armi": [],
+"granate": 0
+}
+}

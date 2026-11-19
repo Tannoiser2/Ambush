@@ -21,6 +21,8 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 	_mp = p.effettivo_mpa(g)
 	_fermo = false
 	_reazione_cambiata = false
+	if p.veicoli.turno_equipaggio(self, g):
+		return
 	var col := colonna(g)
 	var numero: int = int(p.s.round.numero_azione)
 	var par := paragrafo_da_carta(g, col, numero)
@@ -60,7 +62,7 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 		return r
 	var c := int(p.s.condizione)
 	for k in colonne:
-		if k in ["A", "B", "S"]:
+		if not str(k).substr(0, 1).is_valid_int():
 			continue
 		var parti: PackedStringArray = str(k).split("-")
 		var lo := int(parti[0])
@@ -69,7 +71,7 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 			return k
 	# Condizione senza colonna (es. Condizione 1): si usa la prima colonna di Condizione disponibile.
 	for k in colonne:
-		if not (k in ["A", "B", "S"]):
+		if str(k).substr(0, 1).is_valid_int():
 			return k
 	return "S"
 
@@ -287,8 +289,277 @@ func esegui(n: int) -> void:
 				_assalta(_bersaglio_assalto())
 			else:
 				_arrenditi()
+		806:
+			_corri_o_striscia(false, true)
+			g.rimuovi_fine_round = true
+		807:
+			if not bersagli(g).is_empty():
+				_accovacciati()
+				_miglior_tiro("facile")
+				_prono_se_libero()
+			else:
+				_corri_o_striscia(false)
+				_prono_se_libero()
+		810:
+			if not bersagli(g).is_empty():
+				_accovacciati()
+				_miglior_tiro("facile")
+			else:
+				_prendi_arma_vicina()
+				_accovacciati()
+		814, 826, 828:
+			p._log("tedesco", "Il %s non è su un veicolo: resta fermo." % p.nome(g))
+		817:
+			var adiac := _americano_adiacente()
+			if adiac and int(g.munizioni.get("granata", 0)) > 0:
+				esegui(818)
+			elif bersagli(g).is_empty():
+				_accovacciati()
+			elif _ha_munizioni():
+				_accovacciati()
+				_miglior_tiro("vicino")
+			elif int(g.munizioni.get("granata", 0)) > 0:
+				esegui(818)
+			else:
+				_arrenditi()
+		818:
+			_accovacciati()
+			if not _lancia_granata(6):
+				pass
+			_prono_se_libero()
+		819:
+			if int(g.munizioni.get("granata", 0)) > 0 and _lancia_granata(6):
+				_prono_se_libero()
+			else:
+				_corri_o_striscia(false)
+		820:
+			if bersagli(g).is_empty():
+				_corri_o_striscia(false)
+			elif _tedesco_vicino(1):
+				_prono()
+			else:
+				_arrenditi()
+		821:
+			if not bersagli(g).is_empty():
+				_prono()
+			else:
+				_corri_o_striscia(false)
+		822:
+			if not _cedi_turno(1):
+				if _tutti_due_turni(1):
+					esegui(801)
+				else:
+					_corri_o_striscia(false)
+		867:
+			_muovi_rapido(false, not bersagli(g).is_empty())
+			if not bersagli(g).is_empty():
+				_prono()
+		950:
+			if _attivo_num(2):
+				esegui(802)
+			elif _bersagli_da_porta():
+				_accovacciati()
+				g._snap_forzato = true
+				_miglior_tiro("vicino")
+			else:
+				if _corri_verso("K15"):
+					_prono()
+					g.reazione = "K"
+					_reazione_cambiata = true
+		951:
+			if not p.in_vista_americani(g):
+				rimuovi_evasivo(g)
+			elif g.hex == "N13":
+				_prono()
+			else:
+				_corri_o_striscia(false, false, true)
+				_prono_se_libero()
+		952:
+			esegui(953 if g.get("bersagliato", false) else 806)
+		953:
+			if not bersagli(g).is_empty():
+				_accovacciati()
+				_miglior_tiro("facile")
+				_prono_se_libero()
+			else:
+				esegui(806)
+		954:
+			_accovacciati()
+			_miglior_tiro("facile")
+			_prono_se_libero()
+			if g.hex == "K7" and _bersaglio_verso_est():
+				g.reazione = "A"
+				_reazione_cambiata = true
+		955:
+			if int(g.get("bersagliato_da", []).size()) > 2 or g.get("granata_subita", false):
+				g.reazione = "A"
+				_reazione_cambiata = true
+				_ritira_e_esegui()
+			else:
+				esegui(801)
+		956:
+			if _attivo_num(10):
+				esegui(802)
+			else:
+				g.reazione = "A"
+				_reazione_cambiata = true
+				_ritira_e_esegui()
+		957:
+			if _bersagli_da_porta():
+				_accovacciati()
+				_miglior_tiro("facile")
+			else:
+				_corri_o_striscia(false)
+			g.reazione = "D"
+			_reazione_cambiata = true
+		958:
+			if _bersagli_da_porta():
+				_accovacciati()
+				_miglior_tiro("facile")
+			else:
+				if _corri_verso("L6"):
+					_prono()
+				g.reazione = "B"
+				_reazione_cambiata = true
+		959:
+			if _bersagli_entro(3):
+				_accovacciati()
+				_miglior_tiro("vicino", 3, false, "pistol")
+				_prono_se_libero()
+			else:
+				esegui(815)
+		960, 961:
+			var compagno := 49 if n == 960 else 5
+			if not _attivo_num(compagno) and bersagli(g).is_empty():
+				_corri_o_striscia(false, false, true)
+				g.reazione = "E" if n == 960 else "F"
+				_reazione_cambiata = true
+			else:
+				_prono()
+		962:
+			if not _attivo_num(49) and not bersagli(g).is_empty():
+				_arrenditi()
+			else:
+				esegui(815)
+		963, 964:
+			var da: String = g.hex
+			_corri_o_striscia(false)
+			var speciale := "K7" if n == 963 else "J13"
+			g.reazione = ("A" if da == speciale else "B") if n == 963 else ("K" if da == speciale else "D")
+			_reazione_cambiata = true
+		966:
+			esegui(815 if g.hex == "N12" else 813)
+		967:
+			esegui(815 if g.hex == "N12" else 820)
+		968:
+			esegui(815 if g.hex == "N12" else 818)
+		969:
+			if _bersagli_entro(7):
+				_accovacciati()
+				_miglior_tiro("facile", 7)
+				_prono_se_libero()
+			else:
+				esegui(822)
+		970:
+			var soli := true
+			for k in [37, 50]:
+				var x := p.u("g%d" % k)
+				if x.is_empty() or not p.attivo(x) or x.hex != g.hex:
+					soli = false
+			if not soli:
+				_corri_o_striscia(false, false, true)
+			else:
+				esegui(801)
 		_:
 			p._log("errore", "Paragrafo d’azione %d non gestito: il tedesco resta fermo." % n)
+
+# ------------------------------------------------------------------ aiuti per i paragrafi d’azione
+func _attivo_num(num: int) -> bool:
+	var x := p.u("g%d" % num)
+	return not x.is_empty() and p.attivo(x)
+
+func _tedesco_vicino(raggio: int) -> bool:
+	for x in p.tedeschi_attivi():
+		if x.id != _g.id and E.distanza(x.hex, _g.hex) <= raggio:
+			return true
+	return false
+
+func _americano_adiacente() -> bool:
+	for a in p.americani_attivi_in_mappa():
+		if E.adiacenti(a.hex, _g.hex):
+			return true
+	return false
+
+func _ha_munizioni() -> bool:
+	for a in _g.armi:
+		if not a.rotta and not a.get("scarica", false):
+			return true
+	return false
+
+## Bersagli visibili attraverso una porta dell’edificio in cui si trova il tedesco.
+func _bersagli_da_porta() -> bool:
+	var g := _g
+	if not p.terreno.edificio(g.hex):
+		return not bersagli(g).is_empty()
+	for b in bersagli(g):
+		for n in p.terreno._lato_di_uscita(g.hex, b.hex):
+			if p.terreno.tipo_lato(g.hex, n) == "door":
+				return true
+	return false
+
+## Bersaglio visibile verso est (finestra est dell’edificio K7).
+func _bersaglio_verso_est() -> bool:
+	for b in bersagli(_g):
+		if E.colonna(b.hex) > E.colonna(_g.hex):
+			return true
+	return false
+
+## Corre verso un esagono vicino (paragrafo che indica la destinazione); true se ci arriva.
+func _corri_verso(h: String) -> bool:
+	var passi := 0
+	while _g.hex != h and passi < 6 and p.in_mappa(_g):
+		passi += 1
+		var migliore := ""
+		for n in E.vicini(_g.hex):
+			if E.distanza(n, h) < E.distanza(_g.hex, h) and p.terreno.costo_movimento(_g.hex, n) >= 0:
+				migliore = n
+				break
+		if migliore == "" or not _alzati() or not _passo(migliore, false):
+			return _g.hex == h
+	return _g.hex == h
+
+## Ritira il numero d’azione per questo tedesco ed esegue il nuovo paragrafo (reazione speciale).
+func _ritira_e_esegui() -> void:
+	var nuovo := p.d10()
+	p._log("dado", "Nuovo numero d’azione per il %s: %d" % [p.nome(_g), nuovo])
+	esegui(paragrafo_da_carta(_g, colonna(_g, true), nuovo))
+
+## Granata al bersaglio più vicino entro il raggio; false se non c’è un bersaglio valido.
+func _lancia_granata(raggio: int) -> bool:
+	var g := _g
+	if int(g.munizioni.get("granata", 0)) <= 0:
+		return false
+	var lista: Array = p.americani_attivi_in_mappa().filter(func(a): return a.hex != g.hex and E.distanza(a.hex, g.hex) <= raggio)
+	lista.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
+	for a in lista:
+		if p.probabilita_lancio(g, "granata", a.hex).ok:
+			p.risolvi_lancio(g, "granata", a.hex)
+			return true
+	return false
+
+## 810: raccoglie l’arma di un soldato fuori combattimento entro 2 esagoni (se non vede bersagli).
+func _prendi_arma_vicina() -> void:
+	var g := _g
+	for x in p.s.unita.values():
+		if x.hex == "" or not (x.stato in ["morto", "incapacitato"]) or E.distanza(x.hex, g.hex) > 2:
+			continue
+		for a in x.armi:
+			if not a.rotta and not (a.tipo in g.armi.map(func(w): return w.tipo)):
+				x.armi.erase(a)
+				a.catturata = x.lato != "de"
+				g.armi.append(a)
+				p._log("tedesco", "Il %s raccoglie l’arma (%s) di %s." % [p.nome(g), T.ARMI[a.tipo].nome.to_lower(), p.nome(x)])
+				return
 
 # ------------------------------------------------------------------ bersagli
 func bersagli(g: Dictionary) -> Array:
@@ -369,6 +640,14 @@ func _miglior_tiro(criterio: String, limite := -1, evita_gia := false, solo := "
 	if scelta.is_empty():
 		p._log("tedesco", "Il %s non ha bersagli validi." % p.nome(g))
 		return
+	if bool(T.ARMI[scelta[1].tipo].get("squadra", false)) and mirato:
+		var servente := false
+		for x in p.unita_in(g.hex, "de"):
+			if x.id != g.id:
+				servente = true
+		if not servente:
+			mirato = false
+			p._log("tedesco", "Senza servente la mitragliatrice spara solo di rapido.")
 	p.risolvi_tiro(g, scelta[1], scelta[0], mirato)
 	g.erase("_snap_forzato")
 
@@ -552,8 +831,18 @@ func _muovi_rapido(prono_se_non_scoperto: bool, prono_primo_non_scoperto := fals
 			return
 
 ## «Corri in un esagono scoperto, striscia in ogni altro tipo».
-func _corri_o_striscia(evasivo: bool) -> void:
+## fuori_vista: fermati prono appena fuori dalla vista degli americani (806); solo_striscia: un esagono strisciando.
+func _corri_o_striscia(evasivo: bool, fuori_vista := false, solo_striscia := false) -> void:
 	var g := _g
+	if solo_striscia:
+		var rs := _riferimento(g.hex)
+		if rs == "":
+			_nessun_riferimento()
+			return
+		if g.postura != "crouching":
+			_accovacciati()
+		_segui_riferimento(rs, true)
+		return
 	if _riferimento(g.hex) == "":
 		_nessun_riferimento()
 		return
@@ -581,7 +870,7 @@ func _corri_o_striscia(evasivo: bool) -> void:
 		if not _segui_riferimento(rif, false):
 			break
 		mosso = true
-		if evasivo and not p.terreno.edificio(g.hex) and not p.in_vista_americani(g):
+		if (evasivo and not p.terreno.edificio(g.hex) and not p.in_vista_americani(g)) or (fuori_vista and g.cambio_libero and not p.in_vista_americani(g)):
 			_prono()
 			break
 

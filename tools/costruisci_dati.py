@@ -11,6 +11,7 @@ Uscite:
 Uso:  python3 tools/costruisci_dati.py
 """
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -18,6 +19,15 @@ from pathlib import Path
 RADICE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from paragrafi_m1 import P  # noqa: E402
+import importlib  # noqa: E402
+for _n in range(2, 9):
+    try:
+        _m = importlib.import_module(f"paragrafi_m{_n}")
+    except ModuleNotFoundError:
+        continue
+    for _k, _v in _m.P.items():
+        if _k not in P:
+            P[_k] = _v
 from condizione4 import C4_NERI, C4_ROSSI  # noqa: E402
 
 COLONNE = [chr(65 + i) for i in range(25)]  # A..Y
@@ -193,7 +203,9 @@ def main():
     (RADICE / "data").mkdir(exist_ok=True)
     (RADICE / "data/missione1.json").write_text(json.dumps(missione, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (RADICE / "data/paragrafi.json").write_text(json.dumps(P, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    (RADICE / "data/mappa_a.json").write_text(json.dumps(costruisci_mappa(), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # La mappa A pubblicata è stata ritoccata a mano (alture_obiettivo): si rigenera solo con COSTRUISCI_MAPPA=1.
+    if os.environ.get("COSTRUISCI_MAPPA") == "1":
+        (RADICE / "data/mappa_a.json").write_text(json.dumps(costruisci_mappa(), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"Paragrafi: {len(P)}  Condizioni: {len(cond)}  Tedeschi: {len(TEDESCHI)}")
 
 

@@ -89,9 +89,13 @@ func imposta_grafica(realistica: bool, nuove: bool) -> void:
 		lettera = str(partita.missione.get("mappa", "A")).to_lower()
 	mappa = load("res://assets/maps/mappa_%s%s.jpg" % [lettera, "_realistica" if realistica else ""])
 	trame.clear()
-	_carica_cartella("res://assets/pedine")
+	# Le pedine originali non hanno tutte le lettere tedesche: quelle mancanti vengono dalla serie ridisegnata.
 	if nuove:
+		_carica_cartella("res://assets/pedine")
 		_carica_cartella("res://assets/pedine_nuove")
+	else:
+		_carica_cartella("res://assets/pedine_nuove")
+		_carica_cartella("res://assets/pedine")
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -300,7 +304,19 @@ func _draw() -> void:
 	for h in s.eventi:
 		_segnalino(h, "evento", Vector2(-0.5, 0.5), 0.5)
 	for h in s.punti:
-		_segnalino(h, "typhoon", Vector2(0.0, -0.45), 0.7)
+		var nome_p := str(s.punti[h])
+		if trame.has(nome_p):
+			_segnalino(h, nome_p, Vector2(0.0, -0.45), 0.7)
+		else:
+			_marcatore(h, {"carro": "PANZER", "bunker": "BUNKER", "trappola": "TRAPPOLA", "guado": "GUADO",
+				"deposito": "CARBURANTE"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
+	# Veicoli
+	for veic in s.get("veicoli", {}).values():
+		if str(veic.hex) != "":
+			var col := Color("4a5d32") if veic.lato == "us" else Color("5d5f63")
+			if veic.stato != "attivo":
+				col = Color("3a3a3a")
+			_marcatore(str(veic.hex), str(veic.nome).to_upper() + ("" if veic.stato == "attivo" else " (FUORI USO)"), Vector2(0.0, 0.66), col)
 	for h in s.oggetti:
 		if not s.oggetti[h].is_empty():
 			_segnalino(h, "mitra" if s.oggetti[h][0].tipo == "smg" else "arma", Vector2(0.5, 0.5), 0.45)
@@ -406,6 +422,17 @@ func _chiudi(p: PackedVector2Array) -> PackedVector2Array:
 	q.append(p[0])
 	return q
 
+## Segnaposto disegnato: targhetta con il nome (veicoli, carro distrutto, bunker…).
+func _marcatore(h: String, testo: String, off: Vector2, colore: Color) -> void:
+	var c := centro_schermo(h) + off * RAGGIO * zoom
+	var fs := int(clampf(RAGGIO * zoom * 0.2, 9.0, 22.0))
+	var f: Font = Tema.testo_bold
+	var w := f.get_string_size(testo, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x + fs
+	var r := Rect2(c - Vector2(w / 2.0, fs * 0.75), Vector2(w, fs * 1.5))
+	draw_rect(r, colore)
+	draw_rect(r, Color("e9dfbf"), false, maxf(1.0, fs * 0.08))
+	draw_string(f, r.position + Vector2(fs * 0.5, fs * 1.08), testo, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color("f4ecd3"))
+
 func _segnalino(h: String, nome: String, off: Vector2, scala: float) -> void:
 	var tex: Texture2D = trame.get(nome)
 	if tex == null:
@@ -428,6 +455,14 @@ func _pedina(x: Dictionary, r: Rect2, selezionato: bool, di_turno: bool) -> void
 	draw_rect(Rect2(r.position + Vector2(3, 4) * clampf(zoom * 2.5, 0.5, 2.0), r.size), Color(0, 0, 0, 0.45))
 	if tex != null:
 		draw_texture_rect(tex, r, false, mod)
+	else:
+		# Pedina senza immagine: riquadro con lettera e numero.
+		draw_rect(r, (Color("4d5a3c") if x.lato == "us" else Color("6b6f73")) * mod)
+		draw_rect(r, Color("1d2116"), false, maxf(1.0, r.size.x * 0.04))
+		var fs := int(maxf(8.0, r.size.x * 0.42))
+		draw_string(Tema.stencil, r.position + Vector2(0, r.size.y * 0.55), str(x.lettera), HORIZONTAL_ALIGNMENT_CENTER, r.size.x, fs, Color("f2ead2"))
+		if x.has("num"):
+			draw_string(Tema.testo, r.position + Vector2(0, r.size.y * 0.9), str(int(x.num) % 100), HORIZONTAL_ALIGNMENT_CENTER, r.size.x, int(fs * 0.55), Color("f2ead2"))
 	var mini := r.size.x * 0.48
 	if x.postura == "prone" and x.stato == "attivo":
 		var tp: Texture2D = trame.get("prono_" + str(x.lato), trame["prono"])

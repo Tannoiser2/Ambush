@@ -7,6 +7,7 @@ const E = preload("res://scripts/motore/esagoni.gd")
 const T = preload("res://scripts/motore/tabelle.gd")
 const TerrenoScript = preload("res://scripts/motore/terreno.gd")
 const TedeschiScript = preload("res://scripts/motore/tedeschi.gd")
+const VeicoliScript = preload("res://scripts/motore/veicoli.gd")
 
 signal aggiornata
 
@@ -15,6 +16,7 @@ var missione: Dictionary
 var paragrafi: Dictionary
 var terreno: Terreno
 var ia: RefCounted
+var veicoli: RefCounted
 var rng := RandomNumberGenerator.new()
 ## Voci di cronaca prodotte dall’ultimo comando (per la scheda dei paragrafi).
 var recenti: Array = []
@@ -32,6 +34,7 @@ var numero := 1
 func _init(n := 1) -> void:
 	paragrafi = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi.json"))
 	ia = TedeschiScript.new(self)
+	veicoli = VeicoliScript.new(self)
 	imposta_missione(n)
 
 ## Missioni con i dati pronti (le altre compaiono nel menu come «in preparazione»).
@@ -363,7 +366,19 @@ func arma_di(un: Dictionary, tipo: String) -> Dictionary:
 	for a in un.armi:
 		if a.tipo == tipo:
 			return a
+	var mg := _mg_montata(un)
+	if not mg.is_empty() and mg.tipo == tipo:
+		return mg
 	return {}
+
+## Mitragliatrice montata sul veicolo in cui si trova il soldato (l’autista la usa solo a veicolo fermo).
+func _mg_montata(un: Dictionary) -> Dictionary:
+	var veic: Dictionary = veicoli.di(un)
+	if not veicoli.attivo(veic) or not veic.has("mg"):
+		return {}
+	if veicoli.e_autista(un) and fase_round() and not s.turno.is_empty() and s.turno.get("id", "") == un.id and s.turno.get("mosso", false):
+		return {}
+	return veic.mg
 
 func porte_usate(un: Dictionary) -> int:
 	var n := 0
@@ -384,12 +399,19 @@ func scatole_munizioni(un: Dictionary) -> int:
 	return n
 
 func munizioni_arma(un: Dictionary, tipo: String) -> int:
+	var mg := _mg_montata(un)
+	if not mg.is_empty() and mg.tipo == tipo and not un.munizioni.has(tipo):
+		return int(veicoli.di(un).get("mg_munizioni", 10))
 	return int(un.munizioni.get(tipo, 0))
 
 ## Armi da fuoco utilizzabili (non inceppate, non rotte, con munizioni).
 func armi_da_fuoco(un: Dictionary) -> Array:
 	var out: Array = []
-	for a in un.armi:
+	var tutte: Array = un.armi.duplicate()
+	var mg := _mg_montata(un)
+	if not mg.is_empty():
+		tutte.append(mg)
+	for a in tutte:
 		if a.tipo == "satchel" or a.rotta or a.inceppata:
 			continue
 		if un.lato == "us":
@@ -499,7 +521,7 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 		"grenade_accident":
 			_op_granata_difettosa()
 		"ammo_out":
-			_op_munizioni_finite()
+			_op_munizioni_finite(int(o.get("mg_da_condizione", 0)))
 		"typhoon_crash":
 			s.punti["R15"] = "typhoon"
 			_fx("esplosione", {"a": "R15", "grande": true})
@@ -531,9 +553,59 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 		"group_pc":
 			_op_pc_gruppo(o, ctx)
 		"g_enter":
-			ia.entra_da_paragrafo(ctx, str(o.hex))
+			if ctx.get("veicolo", false):
+				veicoli.entra_da_paragrafo(ctx, str(o.hex))
+			else:
+				ia.entra_da_paragrafo(ctx, str(o.hex))
 		"g_reaction":
 			ia.imposta_reazione(ctx, str(o.r))
+		"g_reaction_num":
+			var gx := u("g%d" % int(o.g))
+			if not gx.is_empty() and in_mappa(gx):
+				gx.reazione = str(o.r)
+				_log("info", "Reazione speciale %s in vigore per il %s." % [str(o.r), nome(gx)])
+		"vp":
+			_pv(int(o.n), str(o.get("why", "paragrafo")))
+		"landmark":
+			var hl: String = ctx.get("hex", "") if str(o.hex) == "@hex" else str(o.hex)
+			if hl != "":
+				s.punti[hl] = str(o.name)
+				_log("info", "Segnaposto «%s» in %s." % [NOMI_SEGNAPOSTO.get(str(o.name), str(o.name)), hl])
+		"indica":
+			ctx.indicato = str(o.hex)
+		"forza_consapevole":
+			if ctx.get("ultimo_pc", "") != "":
+				ctx.forza_consapevole = ctx.ultimo_pc
+			else:
+				var sc := _soldato_pc(ctx)
+				if not sc.is_empty():
+					ctx.forza_consapevole = sc.id
+		"forza_inconsapevole":
+			var si := _soldato_pc(ctx)
+			if not si.is_empty():
+				ctx.forza_inconsapevole = si.id
+		"catena":
+			_op_catena(o, ctx)
+		"note_par":
+			if ctx.get("hex", "") != "":
+				if not s.has("da_leggere"):
+					s.da_leggere = {}
+				s.da_leggere[ctx.hex] = str(o.p)
+				_log("info", "Annotato sulla scheda: leggere il paragrafo %s quando in %s restano attivi solo i tuoi soldati." % [str(o.p), ctx.hex])
+		"nota":
+			if not s.has("note"):
+				s.note = {}
+			s.note[str(o.chiave)] = true
+		"boobytrap":
+			_op_trappola(ctx)
+		"strafe":
+			_op_mitragliamento()
+		"jeep_reinforcement":
+			_op_rinforzo_jeep(o)
+		"activate_vehicle":
+			veicoli.attiva_tedesco(int(o.g), str(o.hex), ctx)
+		"kubel_surrender":
+			veicoli.resa_kubelwagen(ctx)
 		_:
 			_log("errore", "Istruzione sconosciuta: %s" % o.op)
 
@@ -549,6 +621,24 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 		return true
 	if t.has("see_hex"):
 		return qualcuno_vede_hex(str(t.see_hex))
+	if t.has("mission"):
+		return numero == int(t.mission)
+	if t.has("cond_in"):
+		return int(s.condizione) in t.cond_in.map(func(x): return int(x))
+	if t.has("cond_seen"):
+		return int(s.condizione) == int(t.cond_seen) or int(t.cond_seen) in s.get("condizioni_viste", [])
+	if t.has("not_prone"):
+		var sp := _soldato_pc(ctx)
+		return not sp.is_empty() and sp.postura != "prone"
+	if t.has("g_in_hex"):
+		return not unita_in(ctx.get("hex", ""), "de").is_empty()
+	if t.has("vehicle_moving"):
+		return bool(ctx.get("veicolo", false))
+	if t.has("no_mine_blast"):
+		return not bool(ctx.get("mina_esplosa", false))
+	if t.has("g_active"):
+		var ga := u("g%d" % int(t.g_active))
+		return not ga.is_empty() and attivo(ga)
 	if t.has("evaded"):
 		return int(s.evasi.get(str(int(t.evaded)), 0)) >= 1
 	if t.has("in_clear"):
@@ -568,6 +658,43 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 				return true
 		return false
 	return false
+
+const NOMI_SEGNAPOSTO := {"carro": "carro distrutto", "bunker": "bunker", "typhoon": "relitto del Typhoon",
+	"trappola": "trappola esplosiva", "guado": "guado", "deposito": "deposito di carburante"}
+
+## Catena di controlli: per ogni esagono, se un americano lo vede si tenta l’attivazione;
+## al primo successo si eseguono le istruzioni di quel passo.
+func _op_catena(o: Dictionary, ctx: Dictionary) -> void:
+	for passo in o.passi:
+		var h := str(passo[0])
+		if not qualcuno_vede_hex(h):
+			continue
+		var r := d10()
+		var liv := livello_attivazione()
+		var ok := liv >= 0 and (r == 0 or (r != 9 and r <= liv))
+		_log("dado", "Controllo di attivazione per l’esagono %s (livello %d): %d → %s" % [h, liv, r, "riuscito" if ok else "fallito"])
+		if ok:
+			_esegui(passo[1], ctx)
+			return
+	_log("info", "Nessun effetto.")
+
+## Trappola esplosiva (12/1): il PC più alto dell’esagono fa il controllo; se fallisce, esplode su tutti.
+func _op_trappola(ctx: Dictionary) -> void:
+	var h: String = ctx.get("hex", "")
+	if h == "":
+		return
+	var sold := _soldato_pc(ctx)
+	if sold.is_empty():
+		return
+	var mod := 3 if (h == "S14" and s.get("note", {}).has("trappola_S14")) else 0
+	s.punti[h] = "trappola"
+	if controllo_pc(sold, mod, "trappola esplosiva"):
+		_log("info", "%s scopre la trappola e la disinnesca." % nome(sold))
+		return
+	_log("combattimento", "La trappola esplode in %s!" % h)
+	_fx("esplosione", {"a": h})
+	for a in unita_in(h, "us"):
+		_danno_esplosione(a, T.GRANATA_DENTRO)
 
 ## Soldato che effettua i controlli di percezione per un esagono: il PC più alto tra gli attivi.
 func _soldato_pc(ctx: Dictionary) -> Dictionary:
@@ -737,13 +864,18 @@ func _op_attiva(o_orig: Dictionary, ctx: Dictionary) -> void:
 		if not (str(num) in s.attivati):
 			s.attivati.append(str(num))
 			var dati: Dictionary = missione.tedeschi[str(num)]
-			_pv(int(dati.pv), "attivazione del tedesco %d" % num)
+			if int(dati.pv) != 0:
+				_pv(int(dati.pv), "attivazione del tedesco %d" % num)
 		_log("attivazione", "Attivato il %s in %s, %s." % [nome(g), h, T.NOMI_POSTURA[g.postura]])
 		_fx("compare", {"id": g.id, "a": h})
 		# Americani attivi nello stesso esagono? Nessun effetto immediato; il Round lo deciderà.
 	if nuovi.is_empty():
 		return
 	var aware_id: String = ctx.get("ultimo_pc", "") if o.get("aware", false) else ""
+	if str(ctx.get("forza_consapevole", "")) != "":
+		aware_id = str(ctx.forza_consapevole)
+	if str(ctx.get("forza_inconsapevole", "")) != "":
+		o._inconsapevole = str(ctx.forza_inconsapevole)
 	if s.fase == "operazioni":
 		_inizia_round_da_attivazione(nuovi, o, aware_id)
 	elif int(s.round.get("n", 0)) == 0:
@@ -770,7 +902,7 @@ func _crea_tedesco(num: int, h: String, postura: String) -> Dictionary:
 	var vecchio := u(gid)
 	var g := {
 		"id": gid, "lato": "de", "num": num, "lettera": d.lettera, "nome": d.ruolo, "IN": d.IN, "PC": d.PC,
-		"WS": d.WS, "MPA": d.MPA, "comandante": d.get("comandante", false), "hex": h, "postura": postura,
+		"WS": d.WS, "MPA": d.MPA, "DS": int(d.get("DS", 0)), "comandante": d.get("comandante", false), "hex": h, "postura": postura,
 		"stato": "attivo", "ferito": false, "panico": false, "turni": 0, "slot": "completo",
 		"armi": armi, "munizioni": {"granata": int(d.granate)}, "reazione": "", "no_auto": false,
 		"hex_attivazione": h, "solo_S": false, "guardia": "", "rimuovi_fine_round": false,
@@ -791,7 +923,7 @@ func _inizia_round_da_attivazione(nuovi: Array, o: Dictionary, aware_id: String)
 	s.round = {
 		"n": 0, "vantaggio": "", "vantaggio_forzato": str(o.adv) if o.adv != null else "",
 		"due_turni_de": nuovi.filter(func(g): return int(g.num) in o.two).map(func(g): return g.id),
-		"due_turni_us": bool(o.us_two), "consapevole_auto": aware_id,
+		"due_turni_us": bool(o.us_two), "consapevole_auto": aware_id, "inconsapevole_auto": str(o.get("_inconsapevole", "")),
 		"attivati_ora": nuovi.map(func(g): return g.id), "numero_azione": -1, "slot_azione": "",
 		"sparato": [], "sparato_prec": [], "iniziativa": [],
 	}
@@ -884,6 +1016,10 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 			a.consapevole = true
 			_log("info", "%s è automaticamente consapevole." % nome(a))
 			righe.append({"id": a.id, "esito": "auto"})
+			continue
+		if a.id == str(r.get("inconsapevole_auto", "")) and r.n == 1:
+			_log("info", "%s è automaticamente inconsapevole in questo Round." % nome(a))
+			righe.append({"id": a.id, "esito": "no"})
 			continue
 		if a.stato == "attivo" and a.hex == "" :
 			continue
@@ -1078,6 +1214,7 @@ func _consuma_turno(x: Dictionary) -> void:
 func _fine_round() -> void:
 	_passo("fine_round", {"n": int(s.round.n)})
 	_log("round", "Fine del Round %d." % int(s.round.n))
+	_controlla_da_leggere()
 	for x in s.unita.values():
 		if x.panico and attivo(x):
 			x.panico = false
@@ -1110,6 +1247,8 @@ func _torna_operazioni() -> void:
 		a.slot = ""
 		a.panico = false
 	_log("round", "Nessun tedesco attivo sulla mappa: riprendono le Operazioni.")
+	if s.get("jeep_in_arrivo", false):
+		_arriva_jeep()
 	_controlla_fine_automatica()
 
 # =================================================================== azioni americane
@@ -1209,15 +1348,15 @@ func destinazioni(id: String) -> Array:
 	if a.hex == "":
 		if a.stato != "fuori":
 			return out
-		for c in 10:
-			out.append(E.da(c, 1))
-		return out
+		return esagoni_ingresso()
 	for v in E.vicini(a.hex):
 		if _verifica_passo(a, v, true) == "":
 			out.append(v)
 	return out
 
 func _costo_passo(a: Dictionary, da_hex: String, verso: String) -> int:
+	if veicoli.e_autista(a):
+		return veicoli.costo(veicoli.di(a), da_hex, verso)
 	if da_hex == "":
 		return terreno.costo_movimento(verso, verso) if false else _costo_ingresso(verso)
 	return terreno.costo_movimento(da_hex, verso)
@@ -1229,6 +1368,22 @@ func _costo_ingresso(h: String) -> int:
 	return 1
 
 func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> String:
+	var veic: Dictionary = veicoli.di(a)
+	if veicoli.attivo(veic):
+		if not veicoli.e_autista(a):
+			return "Per muoversi a piedi bisogna prima scendere dal veicolo."
+		if not E.adiacenti(a.hex, verso):
+			return "Si può entrare solo in un esagono adiacente."
+		var cv: int = veicoli.costo(veic, a.hex, verso)
+		if cv < 0:
+			return "Il veicolo non può entrare in quell’esagono."
+		if s.fase == "round":
+			var tv: Dictionary = s.turno if (not s.turno.is_empty() and s.turno.id == a.id) else {}
+			if tv.is_empty() or tv.azione != "muovi":
+				return "" if silenzioso else "Scegli prima «Guida»."
+			if cv > int(tv.mp):
+				return "Punti movimento del veicolo insufficienti (servono %d, restano %d)." % [cv, int(tv.mp)]
+		return ""
 	if a.postura == "prone":
 		return "Un soldato prono non può muoversi."
 	var da_hex: String = a.hex
@@ -1272,16 +1427,26 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			return _errore("Il gruppo deve essere nello stesso esagono e nella stessa postura.")
 		if a.stato != "attivo" and a.stato != "fuori":
 			return _errore("%s non può muoversi." % nome(a))
-	if s.fase == "round" and ids.size() > 1:
+	var veic_m: Dictionary = veicoli.di(primo)
+	if veicoli.attivo(veic_m) and veicoli.e_autista(primo):
+		ids = veicoli.occupanti(veic_m).map(func(x): return x.id)
+	elif s.fase == "round" and ids.size() > 1:
 		return _errore("Nei Round ogni soldato si muove con la propria azione.")
 	var e2 := _verifica_passo(primo, verso)
 	if e2 != "":
 		return _errore(e2)
 	var da_hex: String = primo.hex
 	var costo := _costo_passo(primo, da_hex, verso)
+	var controllo_veicolo := false
 	if s.fase == "round":
 		var t := _turno_di(primo)
-		if primo.postura == "crouching":
+		if veicoli.attivo(veic_m):
+			t.mp = int(t.mp) - costo
+			t.spesi = int(t.get("spesi", 0)) + costo
+			if int(t.spesi) > int(t.get("mp_lenta", 99)) and not t.get("incidente_fatto", false):
+				t.incidente_fatto = true
+				controllo_veicolo = true
+		elif primo.postura == "crouching":
 			t.mp = 0
 		else:
 			t.mp = int(t.mp) - costo
@@ -1301,8 +1466,21 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			var p := u(pid)
 			if not p.is_empty() and p.stato == "catturato":
 				p.hex = verso
-	_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
+	if veicoli.attivo(veic_m):
+		var dv := E.direzione(da_hex, verso)
+		if dv >= 0:
+			veic_m.fronte = dv
+		veic_m.hex = verso
+		_log("azione", "La %s, guidata da %s, entra in %s (%s)." % [veic_m.nome, nome(primo), verso, terreno.nome_tipo(verso)])
+	else:
+		_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
 	_fx("muovi", {"ids": mossi, "da": da_hex, "a": verso})
+	if controllo_veicolo:
+		veicoli.controllo_incidente(veic_m, "guida veloce")
+		if not veicoli.attivo(veic_m) or veic_m.get("fermo", false):
+			veic_m.fermo = false
+			if not s.turno.is_empty():
+				s.turno.mp = 0
 	# Cattura dei tedeschi arresi.
 	for g in unita_in(verso, "de", false):
 		if g.stato == "arreso":
@@ -1318,7 +1496,8 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))
-		if not attivo(a) or (t.azione == "muovi" and (a.postura == "crouching" or int(t.mp) <= 0) and not t.cambio_libero):
+		var guida: bool = veicoli.e_autista(a)
+		if not attivo(a) or (t.azione == "muovi" and ((a.postura == "crouching" and not guida) or int(t.mp) <= 0) and (not t.cambio_libero or guida)):
 			_termina_azione(a)
 	elif fase_round() and s.turno.is_empty() and s.pausa == "":
 		_flusso()
@@ -1343,6 +1522,7 @@ func _ingresso(h: String, ids: Array, sul_ponte: bool) -> void:
 	if vivi.is_empty():
 		return
 	_edificio_raggiunto(h)
+	_controlla_da_leggere()
 	if _niente_controlli_round():
 		_log("info", "Nei Round di questa missione non si fanno controlli di paragrafo entrando negli esagoni.")
 	else:
@@ -1376,6 +1556,18 @@ func scegli_azione(id: String, azione: String) -> Dictionary:
 		return _errore("Azione già scelta.")
 	match azione:
 		"muovi":
+			if veicoli.e_autista(a):
+				var veic: Dictionary = veicoli.di(a)
+				if veic.get("fermo", false):
+					return _errore("Il veicolo è fermo per un incidente in questo turno.")
+				var m: Dictionary = veicoli.MODELLI[veic.modello]
+				t.azione = "muovi"
+				t.mp = int(m.veloce) if veic.gomme else int(m.lenta)
+				t.mp_lenta = int(m.lenta)
+				t.spesi = 0
+				_log("azione", "%s guida la %s (lenta %d PM, veloce %d PM: oltre la lenta si rischia l’incidente)." % [nome(a), veic.nome, int(m.lenta), int(t.mp)])
+				_fine_comando()
+				return OK
 			if a.postura == "prone":
 				return _errore("Prima alzati: un soldato prono non si muove.")
 			t.azione = "muovi"
@@ -1390,6 +1582,50 @@ func scegli_azione(id: String, azione: String) -> Dictionary:
 		_:
 			return _errore("Azione sconosciuta.")
 	_log("azione", "%s: %s." % [nome(a), {"muovi": "movimento", "muovi_spara": "movimento e tiro rapido", "carica": "carica d’assalto"}[azione]])
+	_fine_comando()
+	return OK
+
+## Sale sul veicolo nello stesso esagono (nei Round costa un punto movimento di un’azione di movimento).
+func sali_veicolo(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	var lista: Array = veicoli.in_esagono(a.hex).filter(func(v): return veicoli.attivo(v) and v.lato == "us")
+	if lista.is_empty():
+		return _errore("Nessun veicolo in questo esagono.")
+	if s.fase == "round":
+		var t := _turno_di(a)
+		if t.azione != "muovi" or int(t.mp) < 1:
+			return _errore("Nei Round si sale spendendo 1 punto movimento: scegli prima «Muovi».")
+		t.mp = int(t.mp) - 1
+	var err: String = veicoli.sali(a, lista[0])
+	if err != "":
+		return _errore(err)
+	_log("azione", "%s sale sulla %s%s." % [nome(a), lista[0].nome, " e la guida" if veicoli.e_autista(a) else ""])
+	_fine_comando()
+	return OK
+
+func scendi_veicolo(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	var veic: Dictionary = veicoli.di(a)
+	if veic.is_empty():
+		return _errore("Il soldato non è su un veicolo.")
+	if s.fase == "round":
+		var t := _turno_di(a)
+		if veicoli.e_autista(a) and t.azione == "muovi":
+			pass
+		elif t.azione != "muovi" or int(t.mp) < 1:
+			return _errore("Nei Round si scende spendendo 1 punto movimento: scegli prima «Muovi».")
+		t.mp = maxi(0, int(t.mp) - 1)
+	veicoli.scendi(a)
+	a.postura = "crouching"
+	_log("azione", "%s scende dalla %s." % [nome(a), veic.nome])
 	_fine_comando()
 	return OK
 
@@ -1427,6 +1663,10 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		return {"ok": false, "motivo": "fuori gittata"}
 	if tipo == "bazooka" and not mirato:
 		return {"ok": false, "motivo": "il bazooka non spara di rapido"}
+	if mirato and tiratore.get("lato", "") == "us" and bool(T.ARMI[tipo].get("squadra", false)):
+		var compagni := unita_in(tiratore.hex, "us").filter(func(x): return x.id != tiratore.id and not x.panico)
+		if compagni.is_empty():
+			return {"ok": false, "motivo": "da solo la mitragliatrice spara solo di rapido"}
 	var mods: Array = []
 	var ws := int(tiratore.WS) - (1 if arma.get("catturata", false) else 0)
 	if ws != 0:
@@ -1435,13 +1675,18 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		mods.append(["tiro rapido", -2])
 	if tiratore.ferito:
 		mods.append(["tiratore ferito", -1])
+	if veicoli.attivo(veicoli.di(tiratore)):
+		mods.append(["tiratore in auto", -2])
 	if mirato and T.ARMI[tipo].get("auto", false):
 		var extra := unita_in(bersaglio.hex, bersaglio.lato).size() - 1
 		if extra > 0:
 			mods.append(["bersagli multipli", extra])
 	var ip := T.indice_postura(bersaglio.postura)
 	var th := terreno.tipo(bersaglio.hex)
-	if terreno.edificio(bersaglio.hex) and not (terreno.edificio(tiratore.hex) and dist <= 1 and terreno.tipo_lato(tiratore.hex, bersaglio.hex) == ""):
+	var veic_b: Dictionary = veicoli.di(bersaglio)
+	if veicoli.attivo(veic_b):
+		mods.append(["%s, veicolo piccolo" % terreno.nome_tipo(bersaglio.hex), veicoli.modificatore(veic_b)])
+	elif terreno.edificio(bersaglio.hex) and not (terreno.edificio(tiratore.hex) and dist <= 1 and terreno.tipo_lato(tiratore.hex, bersaglio.hex) == ""):
 		var vicino := dist <= 1
 		var m: int = (T.MOD_INTERNO_VICINO if vicino else T.MOD_INTERNO_LONTANO)[ip]
 		if m == 99:
@@ -1480,6 +1725,12 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 		if not p.ok:
 			return {"ok": false, "motivo": p.motivo}
 	_rendi_consapevoli(bersaglio.hex)
+	if bersaglio.get("lato", "") == "de":
+		bersaglio.bersagliato = true
+		if not bersaglio.has("bersagliato_da"):
+			bersaglio.bersagliato_da = []
+		if not (tiratore.get("id", "") in bersaglio.bersagliato_da):
+			bersaglio.bersagliato_da.append(tiratore.get("id", ""))
 	var modo := "mirato" if mirato else "rapido"
 	_log("combattimento", "%s spara (%s, %s) a %s in %s." % [nome(tiratore), modo, info.nome.to_lower(), nome(bersaglio), bersaglio.hex])
 	var fx := _fx("tiro", {"da": tiratore.get("hex", ""), "a": bersaglio.hex, "tiratore": tiratore.get("id", ""), "bersaglio": bersaglio.id,
@@ -1506,7 +1757,9 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	fx.esito = "colpito" if colpito else "mancato"
 	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
-	if colpito:
+	if colpito and veicoli.attivo(veicoli.di(bersaglio)):
+		veicoli.colpito(veicoli.di(bersaglio), tipo, tiratore, mirato, fx)
+	elif colpito:
 		var rd := d10()
 		var lettera := T.lettera_danno(info.danni, rd)
 		fx.dado_danno = rd
@@ -1525,7 +1778,11 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 			_consuma_bazooka(tiratore, arma)
 		else:
 			var pm := percentuale()
-			if pm <= int(info.mun):
+			if pm <= int(info.mun) and arma.get("montata", false):
+				var vm: Dictionary = veicoli.di(tiratore)
+				vm.mg_munizioni = maxi(0, int(vm.get("mg_munizioni", 10)) - 1)
+				_log("dado", "Percentuale %02d: consumata una cassetta della mitragliatrice (ne restano %d)." % [pm, int(vm.mg_munizioni)])
+			elif pm <= int(info.mun):
 				tiratore.munizioni[tipo] = maxi(0, munizioni_arma(tiratore, tipo) - 1)
 				_log("dado", "Percentuale %02d: consumato un caricatore (%s: ne restano %d)." % [pm, info.breve, munizioni_arma(tiratore, tipo)])
 	return {"ok": true, "colpito": colpito}
@@ -1788,6 +2045,9 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		fx.esito = "inesploso"
 		return
 	var presenti: Array = unita_in(arrivo, "", false).filter(func(x): return x.stato in ["attivo", "incapacitato", "catturato"])
+	for x in presenti:
+		if x.lato == "de":
+			x.granata_subita = true
 	if presenti.is_empty():
 		_log("info", "Esplode in %s senza colpire nessuno." % arrivo)
 		return
@@ -2278,6 +2538,113 @@ func libera_pilota(id: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Paragrafo 304: rinforzi, una jeep con mitragliatrice media e l’autista (soldato americano 2).
+func _op_rinforzo_jeep(o: Dictionary) -> void:
+	if s.get("jeep_arrivata", false) or s.get("jeep_in_arrivo", false):
+		_log("info", "La jeep dei rinforzi è già arrivata: l’evento non si ripete.")
+		return
+	s.jeep_ingressi = o.get("hexes", ["A5", "A17"])
+	if fase_round():
+		s.jeep_in_arrivo = true
+		_log("info", "La jeep arriverà quando riprendono le Operazioni.")
+	else:
+		_arriva_jeep()
+
+func _arriva_jeep() -> void:
+	s.jeep_in_arrivo = false
+	s.jeep_arrivata = true
+	# Ingresso scelto: quello più vicino alla squadra.
+	var ingressi: Array = s.get("jeep_ingressi", ["A5", "A17"])
+	var h: String = ingressi[0]
+	var migliore := 999
+	for i in ingressi:
+		var dmin := 999
+		for a in americani_attivi_in_mappa():
+			dmin = mini(dmin, E.distanza(a.hex, str(i)))
+		if dmin < migliore:
+			migliore = dmin
+			h = str(i)
+	var d := {"id": "J", "nome": "Autista della jeep", "IN": 2, "PC": 3, "WS": -2, "DS": 6, "MPA": 4, "comandante": false,
+		"porte": ["pistol"], "munizioni": {"pistol": 1}}
+	var autista := _nuovo_americano(d)
+	autista.stato = "attivo"
+	autista.hex = h
+	autista.postura = "crouching"
+	s.unita["J"] = autista
+	var jeep: Dictionary = veicoli.crea("vjeep", "jeep", h, "us")
+	jeep.mg = {"tipo": "mmg", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "montata": true}
+	veicoli.sali(autista, jeep)
+	_log("info", "Rinforzi! Una jeep con una mitragliatrice media entra in %s con l’autista (J)." % h)
+	_fx("compare", {"id": "J", "a": h, "amico": true})
+
+## Paragrafo 008: mitragliamento del Me-109.
+func _op_mitragliamento() -> void:
+	var r := d10()
+	var rotte := [["C"], ["F"], ["I"], ["L"], ["Q"], ["U"], ["A9", "V19"], ["A4", "Y16"], ["C1", "Y12"], ["A15", "Y3"]]
+	var rotta: Array = rotte[r]
+	var esagoni: Array = []
+	if rotta.size() == 1:
+		for riga in range(1, 20):
+			esagoni.append("%s%d" % [rotta[0], riga])
+		_log("dado", "Rotta del Me-109: %d → colonna %s." % [r, rotta[0]])
+	else:
+		esagoni = E.linea(str(rotta[0]), str(rotta[1]))
+		_log("dado", "Rotta del Me-109: %d → in diagonale da %s a %s." % [r, rotta[0], rotta[1]])
+	_fx("aereo", {"esagoni": esagoni})
+	# Tiri contro l’aereo: chi vede un esagono della rotta e supera il controllo di percezione.
+	var abbattuto := false
+	for a in americani_attivi_in_mappa():
+		if abbattuto or a.postura == "prone":
+			continue
+		var vicino := ""
+		for h in esagoni:
+			if terreno.vede(a.hex, h, a.postura, "standing") and (vicino == "" or E.distanza(a.hex, h) < E.distanza(a.hex, vicino)):
+				vicino = h
+		if vicino == "" or not controllo_pc(a, 0, "tiro contro l’aereo"):
+			continue
+		var arma: Dictionary = {}
+		for w in a.armi:
+			if not w.rotta and not w.inceppata and T.ARMI[w.tipo].has("gittate") and munizioni_arma(a, w.tipo) > 0:
+				arma = w
+				break
+		if arma.is_empty():
+			continue
+		var dist := E.distanza(a.hex, vicino) + 10
+		var base := T.base_per_distanza(arma.tipo, dist)
+		if base < 0:
+			_log("info", "%s non ha la gittata per raggiungere l’aereo." % nome(a))
+			continue
+		var prob := clampi(base - 2 + 2 + int(a.WS), 0, 8)
+		var dado := d10()
+		var colpito: bool = dado == 0 or (dado != 9 and dado <= prob)
+		_log("dado", "%s spara di rapido all’aereo (%s, %d esagoni con la quota): serve 0–%d, esce %d → %s." % [nome(a), T.ARMI[arma.tipo].breve, dist, prob, dado, "COLPITO" if colpito else "mancato"])
+		if colpito:
+			var rd := d10()
+			var pen := T.penetrazione(arma.tipo, rd)
+			_log("dado", "Danno all’aereo: %d → %s." % [rd, "penetrazione: l’aereo precipita in fiamme fuori mappa" if pen != "-" else "nessuna penetrazione"])
+			if pen != "-":
+				abbattuto = true
+	if abbattuto:
+		_log("info", "Il Me-109 è abbattuto prima di mitragliare la squadra.")
+		if numero == 2:
+			cambia_condizione(6)
+		return
+	for a in americani_attivi_in_mappa():
+		var t := terreno.tipo(a.hex)
+		if not (t in ["clear", "road", "brush", "stream"]) or veicoli.attivo(veicoli.di(a)) and false:
+			continue
+		var vicino_rotta := false
+		for h in esagoni:
+			if E.distanza(a.hex, h) <= 1:
+				vicino_rotta = true
+				break
+		if vicino_rotta:
+			var rd := d10()
+			var l := T.lettera_danno(T.ARMI.hmg.danni, rd)
+			_log("dado", "Mitragliamento su %s: %d → %s" % [nome(a), rd, _nome_danno(l)])
+			_fx("esplosione", {"a": a.hex})
+			_applica_danno(a, l, {})
+
 func _op_pilota() -> void:
 	if s.pilota == "libero":
 		return
@@ -2354,6 +2721,7 @@ func _op_campo_minato(ctx: Dictionary) -> void:
 			_log("combattimento", "Una mina esplode sotto %s!" % nome(a))
 			_fx("esplosione", {"a": h})
 			_danno_esplosione(a, T.GRANATA_DENTRO)
+			ctx.mina_esplosa = true
 
 func _op_artiglieria() -> void:
 	var a1 := d10()
@@ -2409,8 +2777,10 @@ func _op_granata_difettosa() -> void:
 			if x.stato in ["attivo", "incapacitato"]:
 				_danno_esplosione(x, T.GRANATA_DENTRO)
 
-func _op_munizioni_finite() -> void:
+func _op_munizioni_finite(mg_da := 0) -> void:
 	var lista: Array = s.round.get("sparato_prec", []) if not s.round.is_empty() else []
+	if mg_da > 0 and int(s.condizione) < mg_da:
+		lista = lista.filter(func(x): return not (str(x[1]) in ["lmg", "mmg", "hmg"]))
 	if lista.is_empty():
 		_log("info", "Nessuna arma tedesca ha sparato nel Round precedente.")
 		return
@@ -2450,6 +2820,16 @@ func alture_obiettivo() -> Array:
 			migliori.append(h)
 	_alture_cache = migliori
 	return migliori
+
+## Paragrafi annotati da leggere quando in un esagono restano attivi solo i soldati americani.
+func _controlla_da_leggere() -> void:
+	var dl: Dictionary = s.get("da_leggere", {})
+	for h in dl.keys():
+		if unita_in(h, "de").is_empty() and not unita_in(h, "us").is_empty():
+			var pid := str(dl[h])
+			dl.erase(h)
+			_log("info", "In %s ci sono solo i tuoi soldati: si legge il paragrafo annotato %s." % [h, pid])
+			leggi(pid, {"hex": h, "ids": unita_in(h, "us").map(func(x): return x.id)})
 
 func _niente_controlli_round() -> bool:
 	return s.fase == "round" and bool(missione.get("regole", {}).get("niente_controlli_round", false))

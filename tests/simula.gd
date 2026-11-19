@@ -1,24 +1,33 @@
 extends SceneTree
 ## Gioca automaticamente molte partite con scelte casuali ma sensate, per scovare errori del motore.
-## Uso: godot --headless --path . --script tests/simula.gd -- [partite] [seme]
+## Uso: godot --headless --path . --script tests/simula.gd -- [partite] [seme] [missione]
 
 const E = preload("res://scripts/motore/esagoni.gd")
 const PartitaScript = preload("res://scripts/motore/partita.gd")
 
 var obiettivi := ["T8", "K13", "V16", "L13", "R15", "G10"]
+var missione := 1
+var letti := {}
 var statistiche := {"vinte": 0, "perse": 0, "round": 0, "attivazioni": 0, "errori": 0, "passi": 0}
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	var n := int(args[0]) if args.size() > 0 else 30
 	var seme := int(args[1]) if args.size() > 1 else 1
+	missione = int(args[2]) if args.size() > 2 else 1
+	if missione == 2:
+		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
 	for i in n:
 		gioca(seme + i)
 	print("RISULTATI ", JSON.stringify(statistiche))
+	if OS.get_environment("AMBUSH_PAR") == "1":
+		var chiavi := letti.keys()
+		chiavi.sort()
+		print("PARAGRAFI ", " ".join(chiavi.map(func(k): return "%s:%d" % [k, letti[k]])))
 	quit(1 if statistiche.errori > 0 else 0)
 
 func gioca(seme: int) -> void:
-	var p = PartitaScript.new()
+	var p = PartitaScript.new(missione)
 	p.nuova(seme)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seme * 7919
@@ -51,6 +60,9 @@ func gioca(seme: int) -> void:
 	if OS.get_environment("AMBUSH_CRONACA") == "1":
 		print(JSON.stringify(p.s.fine))
 	for v in p.s.cronaca:
+		if v.t == "par" and OS.get_environment("AMBUSH_PAR") == "1":
+			var k := str(v.get("id", ""))
+			letti[k] = int(letti.get(k, 0)) + 1
 		if v.t == "errore":
 			statistiche.errori += 1
 			print("ERRORE [seme %d]: %s" % [seme, v.x])
@@ -97,7 +109,7 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 	if a.hex != "":
 		for x in p.unita_in(a.hex, "us", false):
 			if x.stato == "incapacitato" and a.postura == "standing" and rng.randf() < 0.5:
-				var verso := _passo_verso(p, a, "K13", rng)
+				var verso := _passo_verso(p, a, obiettivi[0], rng)
 				if verso != "":
 					p.trascina(a.id, x.id, verso)
 					return
@@ -110,10 +122,10 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 				p.cambia_postura(a.id, "crouching")
 			p.prendi(a.id, ogg[0])
 			return
-	if passi > 1500 and a.hex != "" and E.riga(a.hex) == 1 and E.colonna(a.hex) <= 9:
+	if passi > 1500 and a.hex != "" and p.e_uscita(a.hex):
 		p.esci(a.id)
 		return
-	var meta: String = bersaglio_di[a.id] if passi < 1500 else "E1"
+	var meta: String = bersaglio_di[a.id] if passi < 1500 else str(p.esagoni_ingresso()[0])
 	var verso := _passo_verso(p, a, meta, rng)
 	if verso == "":
 		if a.postura != "standing":
