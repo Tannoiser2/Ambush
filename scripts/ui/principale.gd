@@ -1033,6 +1033,8 @@ func _azioni_round(a: Dictionary) -> void:
 ## Salire e scendere da un veicolo americano nello stesso esagono.
 ## Missione 3: ponti (paragrafo 1000), deposito di carburante, ruota della jeep.
 func _bottoni_ponte(a: Dictionary) -> void:
+	if bool(p.regola("eventi_continui", false)) and p.s.fase == "operazioni" and p.tedeschi_attivi().is_empty():
+		_b("Aspetta i tedeschi", func(): _esito(p.aspetta_tedeschi()), "Si tirano eventi casuali finché un tedesco entra in gioco.")
 	for par_s in p.s.get("scelte", {}):
 		var ps: String = par_s
 		_b(str(p.s.scelte[par_s]), func(): _esito(p.esegui_scelta(ps)), "Quando vuoi: si legge il paragrafo %s." % par_s)

@@ -139,6 +139,7 @@ func sposta(veic: Dictionary, verso: String) -> void:
 		veic.mossi[rn] = int(veic.mossi.get(rn, 0)) + 1
 	if veic.lato == "de":
 		p.segna_passaggio_ponte(da, verso)
+	p.mina_anticarro(veic, verso)
 	var ids: Array = []
 	for x in occupanti(veic):
 		x.hex = verso
@@ -816,6 +817,8 @@ func _esce(veic: Dictionary) -> void:
 		x.turni = 0
 		x.slot = "inattivo"
 		ids.append(x.id)
+	if veic.lato == "de" and not occupanti(veic).is_empty():
+		p.tedesco_uscito(occupanti(veic)[0], da)
 	veic.hex = ""
 	p._log("tedesco", "%s esce dalla mappa." % nome_art(veic))
 	p._fx("sparisce", {"ids": ids, "da": da, "motivo": "uscito"})

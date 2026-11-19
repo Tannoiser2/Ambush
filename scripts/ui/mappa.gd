@@ -302,6 +302,9 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 7: mine anticarro
+	for h in s.get("mine_at", []):
+		_marcatore(str(h), "MINA ANTICARRO", Vector2(0.0, -0.62), Color("6b3a1f"))
 	# Missione 6: bunker
 	for h in s.get("bunker", {}):
 		var bk: Dictionary = s.bunker[h]

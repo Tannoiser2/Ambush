@@ -19,6 +19,8 @@ func _init() -> void:
 		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
 	elif missione == 3:
 		obiettivi = ["A3", "T3", "G13", "G14", "L10", "A15", "V3", "C3"]
+	elif missione == 7:
+		obiettivi = ["R11", "Q16", "N12", "T8", "V15", "Y10"]
 	elif missione == 6:
 		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
@@ -36,7 +38,7 @@ func _init() -> void:
 
 func gioca(seme: int) -> void:
 	var p = PartitaScript.new(missione)
-	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0:
+	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0 or int(p.regola("schieramento_ruscello", 0)) > 0:
 		p.nuova(seme, true)
 		var ingressi: Array = p.esagoni_ingresso()
 		var i := 0
@@ -45,6 +47,8 @@ func gioca(seme: int) -> void:
 				p.schiera([a.id], ingressi[i])
 			elif int(p.regola("canoe", 0)) > 0:
 				p.schiera([a.id], "H1")
+			elif int(p.regola("schieramento_ruscello", 0)) > 0:
+				p.schiera([a.id], ingressi[(i * 37) % ingressi.size()])
 			else:
 				p.schiera([a.id], ingressi[(i % 3) * 7])
 			i += 1

@@ -66,13 +66,20 @@ def tedeschi():
                 continue
             righe[n[0]] = {"IN": int(n[1]), "PC": int(n[2]), "WS": int(n[3]), "DS": int(n[4]), "par": [int(x) for x in n[5:9]]}
         modello = "jagdpanther" if "Jagd" in c["ruolo"] else "panzer4"
-        pv = re.search(r"\+(\d) VP if knocked out", c["testo"])
+        pv = re.search(r"\+(\d) VP if knocked", c["testo"])
+        pt = re.search(r"(?i)on first turn use (\d{3})", " ".join(c["testo"].split()))
         r5 = righe.get("5", {"IN": 5, "PC": 8, "WS": 2, "DS": 8})
         out[str(c["num"])] = {"lettera": c["lettera"], "ruolo": c["ruolo"], "pv": c["pv"], "armi": [], "granate": 0,
             "IN": r5["IN"], "PC": r5["PC"], "WS": r5["WS"], "MPA": 6, "DS": r5["DS"],
             "gruppi": [[0, 9]], "colonne": {"1-6": [800]},
             "carro": {"modello": modello, "gruppi": gruppi, "righe": righe, "pv_distrutto": int(pv.group(1)) if pv else 0,
+                      "primo_turno": int(pt.group(1)) if pt else 0,
                       "testo": " ".join(l.strip() for l in righe_t[1:i] if l.strip())}}
+    # Carta 4 (Panzer IV della M7): testo su due colonne mescolato dall’estrazione.
+    if "4" in out and "carro" in out["4"]:
+        out["4"]["pv"] = 2
+        out["4"]["carro"]["pv_distrutto"] = 3
+        out["4"]["carro"]["primo_turno"] = 900
     # Carta 19 (Kübelwagen): autista S e ufficiale M, entrambi con la pistola. Le azioni dipendono da chi è attivo
     # (le gestisce scripts/motore/veicoli.gd); le colonne servono solo a dare un paragrafo di riserva.
     riserva = {"gruppi": [[0, 9]], "colonne": {"1-6": [802], "S": [813]}}
@@ -101,6 +108,26 @@ MISSIONI = {
 def edifici_b():
     m = json.loads((R / "data/mappa_b.json").read_text())
     return sorted([h for h, v in m["esagoni"].items() if "building" in v["t"]], key=lambda h: (COL.index(h[0]), int(h[1:])))
+
+def schieramento_m7():
+    """Riva ovest del ruscello (colonne dopo il ruscello) o entro 3 esagoni a est, escluso il ruscello."""
+    m = json.loads((R / "data/mappa_a.json").read_text())
+    ruscello = [h for h, v in m["esagoni"].items() if v["t"] == "stream"]
+    def cubo(h):
+        q = COL.index(h[0]); r = int(h[1:]) - 1 - (q - (q & 1)) // 2
+        return q, r, -q - r
+    def dist(a, b):
+        x, y = cubo(a), cubo(b)
+        return max(abs(x[0] - y[0]), abs(x[1] - y[1]), abs(x[2] - y[2]))
+    out = []
+    for h, v in m["esagoni"].items():
+        if v["t"] == "stream":
+            continue
+        riga = [COL.index(x[0]) for x in ruscello if x[1:] == h[1:]]
+        ovest = bool(riga) and COL.index(h[0]) > max(riga)
+        if ovest or min(dist(h, x) for x in ruscello) <= 3:
+            out.append(h)
+    return sorted(out, key=lambda h: (COL.index(h[0]), int(h[1:])))
 
 MISSIONI[3] = {
   "titolo": "Un freddo mattino in Belgio", "titolo_originale": "A Cold Morning in Belgium", "data": "Belgio, inverno 1944", "mappa": "B",
@@ -175,6 +202,26 @@ MISSIONI[6] = {
                         "D": {"carbine": 3, "granata": 2}, "E": {"sar": 4, "granata": 2}, "F": {"sar": 3, "granata": 2},
                         "G": {"smg": 4, "granata": 2}, "H": {"sar": 3, "granata": 2}},
   "vittoria_testo": "[b]Vittoria: 12 PV.[/b] Ogni bunker messo fuori combattimento vale 6 PV: tutti i suoi occupanti iniziali uccisi o incapacitati, e il bunker ridotto in macerie oppure con una carica fatta esplodere dentro. Valgono anche le attivazioni dei tedeschi. Un incapacitato non costa PV se lo porti fuori dal margine nord (anche in canoa). La missione termina appena non ci sono più soldati americani attivi sulla mappa.",
+  "testo_fine": "",
+}
+
+MISSIONI[7] = {
+  "titolo": "Esca per la trappola", "titolo_originale": "Bait for the Trap", "data": "Mortain, 8 agosto 1944", "mappa": "A",
+  "nord": "in basso (il sud è in alto; le coordinate non cambiano)",
+  "briefing": "8 agosto 1944. La Settima Armata tedesca contrattacca verso Mortain per chiudere lo sfondamento alleato dalla Normandia. Il comando alleato vuole attirarla abbastanza avanti da poterla accerchiare. La tua squadra è proprio sulla strada della 2ª Divisione corazzata: deve ritardare i tedeschi, fargli pagare ogni metro e poi ritirarsi verso la linea americana.",
+  "ingresso": "Mappa A, con il sud in alto: l’est è il bordo delle colonne A, l’ovest quello delle colonne Y. Schiera i soldati sulla riva ovest del ruscello o entro 3 esagoni da esso sulla riva est (escluso il ruscello). La jeep e le due mine anticarro vengono piazzate nella stessa area. Bazooka pronti. I tedeschi entrano da est per evento casuale: al via si tirano eventi finché un tedesco entra in gioco.",
+  "regole_testo": "[b]Regole speciali.[/b] Il corso d’acqua da H1 a O19 è un ruscello: si attraversa ovunque, al costo normale. Mine anticarro: esplodono solo sotto un veicolo; un’auto che ci entra è distrutta e chi è a bordo subisce i danni di un bazooka all’aperto; un carro resta immobilizzato (ma spara). Niente controlli di attivazione: i tedeschi arrivano con gli eventi; se si torna nelle Operazioni puoi aspettare il prossimo evento. Perdi il doppio dei PV di ogni tedesco che esce dal bordo ovest (colonne Y).",
+  "ingresso_breve": "sulla riva ovest del ruscello o entro 3 esagoni sulla riva est", "uscita_breve": "il bordo ovest, da Y1 a Y19",
+  "uscita_esagoni": [f"Y{r}" for r in range(1, 20)],
+  "vittoria_pv": 5, "attivazione": {},
+  "obiettivi": [],
+  "regole": {"jeep": True, "mine_anticarro": 2, "schieramento_ruscello": 3, "eventi_continui": True, "fine_condizione": 4,
+             "uscita_tedeschi": "Y", "bazooka_pronti": True},
+  "squadra_armi": {"A": ["smg"], "B": ["carbine"], "C": ["carbine", "bazooka"], "D": ["carbine", "bazooka"], "E": ["sar"], "F": ["sar", "satchel"], "G": ["ar"], "H": ["sar", "satchel"]},
+  "squadra_munizioni": {"A": {"smg": 4, "granata": 2}, "B": {"carbine": 4, "granata": 2}, "C": {"carbine": 2, "bazooka": 3, "granata": 1},
+                        "D": {"carbine": 2, "bazooka": 3, "granata": 1}, "E": {"sar": 4, "granata": 2}, "F": {"sar": 3, "granata": 2},
+                        "G": {"ar": 5, "granata": 1}, "H": {"sar": 3, "granata": 2}},
+  "vittoria_testo": "[b]Vittoria: 5 PV.[/b] Valgono le attivazioni dei tedeschi e la distruzione dei loro veicoli. Perdi PV per i tuoi soldati incapacitati e uccisi (un incapacitato portato fuori dal bordo ovest, Y1–Y19, non costa PV) e il doppio del valore di ogni tedesco o veicolo che esce dal bordo ovest prima della fine. La missione può finire solo nella Condizione 4, appena non ci sono più soldati americani attivi sulla mappa.",
   "testo_fine": "",
 }
 
@@ -271,6 +318,8 @@ def main():
         d["tedeschi"] = ted
         if n == 3:
             d["ingresso_esagoni"] = edifici_b()
+        if n == 7:
+            d["ingresso_esagoni"] = schieramento_m7()
         d["condizioni"] = {k: {"esagoni": v["esagoni"], "evento": v["evento"], "movimenti": v["movimenti"]} for k, v in carte.items()}
         if n == 4 and "4" not in d["condizioni"] and "5" in d["condizioni"]:
             # Manca la carta della Condizione 4: si usa quella della 5 (stessi livelli di attivazione).

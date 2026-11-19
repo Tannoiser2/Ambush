@@ -17190,5 +17190,1304 @@
   "it": "• Se c’è un bersaglio entro 3 esagoni, alzati e lancia una granata nell’esagono più vicino con più americani attivi entro 3 esagoni dal bunker.\n• Se non c’è un bersaglio entro 3 esagoni o non hai granate, alzati e spara con la tua arma al bersaglio più vicino.",
   "ops": [],
   "tipo": "azione"
+ },
+ "052": {
+  "id": "052",
+  "it": "• Se vedi 3 o più bersagli attivi, entra in E4.\n• Altrimenti entra in E5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "E4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "E5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "053": {
+  "id": "053",
+  "it": "• Se vedi un bersaglio attivo, entra in K4.\n• Altrimenti entra in L2.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "L2"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "054": {
+  "id": "054",
+  "it": "• Se vedi un bersaglio attivo, entra in N4.\n• Altrimenti entra in N5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "058": {
+  "id": "058",
+  "it": "• Se un americano attivo è entro 3 esagoni dal ponte, entra in K12.\n• Altrimenti entra in K11.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "us_entro": [
+      "M12",
+      3
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K11"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "059": {
+  "id": "059",
+  "it": "1. Se non vedi americani attivi, entra in F16.\n2. Se non ne vedi entro 7 esagoni, entra in F16.\n3. Se ne vedi uno solo, entra in F16.\n4. Altrimenti entra in E15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "g_vede_entro": 7
+      },
+      {
+       "g_vede_almeno": 2
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "E15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "F16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "064": {
+  "id": "064",
+  "it": "1. Se non vedi americani attivi, entra in P4.\n2. Se non ne vedi entro 6 esagoni, entra in P4.\n3. Se ne vedi uno solo, entra in P4.\n4. Altrimenti entra in O3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "g_vede_entro": 6
+      },
+      {
+       "g_vede_almeno": 2
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "067": {
+  "id": "067",
+  "it": "• Se si muove un veicolo, entra in M17.\n• Se si muove un soldato e non vede americani attivi, entra in M17; se ne vede, entra in M18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M17"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_us": true
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "M18"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "M17"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "078": {
+  "id": "078",
+  "it": "[s2] Attiva i tedeschi 22 e 23 nell’esagono A2, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "A2"
+     ],
+     [
+      23,
+      "A2"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "082": {
+  "id": "082",
+  "it": "1. Se non c’è stato s6, vedi 728.\n2. Se non c’è stato s3, vedi 875.\n3. Se ci sono stati s3 e s6, passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 6
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "728"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 3
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "875"
+       }
+      ],
+      "else": [
+       {
+        "op": "condition",
+        "n": 4
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "085": {
+  "id": "085",
+  "it": "[s9] Attiva il tedesco 33 nell’esagono J1, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      33,
+      "J1"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "552": {
+  "id": "552",
+  "it": "• Se vedi un bersaglio attivo, entra in M7.\n• Altrimenti entra in N7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "553": {
+  "id": "553",
+  "it": "• Se il tedesco 22 o il 23 (o entrambi) è inattivo, entra in F8.\n• Se sono attivi o non ancora attivati, entra in F9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "inattivo_uno": [
+      22,
+      23
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "F8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "F9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "557": {
+  "id": "557",
+  "it": "• Se si muove un veicolo, entra in G9.\n• Se si muove un tedesco con numero 29 o inferiore, entra in G9.\n• Se 30 o superiore, entra in G8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "G9"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_le": 29
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "G9"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "G8"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "558": {
+  "id": "558",
+  "it": "[s7] Attiva i tedeschi 29, 30 e 31 nell’esagono A9, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      29,
+      "A9"
+     ],
+     [
+      30,
+      "A9"
+     ],
+     [
+      31,
+      "A9"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "562": {
+  "id": "562",
+  "it": "1. Se non c’è stato s4, vedi 722.\n2. Se non c’è stato s5, vedi 715.\n3. Se ci sono stati s4 e s5, passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "722"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 5
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "715"
+       }
+      ],
+      "else": [
+       {
+        "op": "condition",
+        "n": 3
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "598": {
+  "id": "598",
+  "it": "[s9] Attiva il tedesco 33 nell’esagono P19, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      33,
+      "P19"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "704": {
+  "id": "704",
+  "it": "• Se vedi 3 o più bersagli attivi, entra in H5.\n• Altrimenti entra in H6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "705": {
+  "id": "705",
+  "it": "• Se vedi un bersaglio attivo, entra in W2.\n• Altrimenti entra in W3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "W2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "W3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "706": {
+  "id": "706",
+  "it": "• Se vedi un bersaglio attivo, entra in H8.\n• Altrimenti entra in H7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "709": {
+  "id": "709",
+  "it": "• Se si muove un veicolo, entra in K11.\n• Se si muove un soldato e nessun americano attivo è entro 2 esagoni dal ponte, entra in K11; altrimenti entra in K10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K11"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "us_entro": [
+        "M12",
+        2
+       ]
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "K10"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "K11"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "714": {
+  "id": "714",
+  "it": "1. Se non c’è stato s2, vedi 078.\n2. Se non c’è stato s7, vedi 558.\n3. Se ci sono stati s2 e s7, passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "078"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 7
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "558"
+       }
+      ],
+      "else": [
+       {
+        "op": "condition",
+        "n": 2
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "715": {
+  "id": "715",
+  "it": "[s5] Attiva il tedesco 54 nell’esagono A6. Iniziano i Round. Vantaggio tedesco. Il tedesco 54 riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "A6"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     54
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "722": {
+  "id": "722",
+  "it": "[s4] Attiva i tedeschi 46, 43 e 44 nell’esagono A16, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      46,
+      "A16"
+     ],
+     [
+      43,
+      "A16"
+     ],
+     [
+      44,
+      "A16"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "726": {
+  "id": "726",
+  "it": "[s1] Attiva il tedesco 18 nell’esagono P19, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "P19"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "728": {
+  "id": "728",
+  "it": "[s6] Attiva i tedeschi 87 e 88 nell’esagono I19, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      87,
+      "I19"
+     ],
+     [
+      88,
+      "I19"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "735": {
+  "id": "735",
+  "it": "[s1] Attiva il tedesco 18 nell’esagono J1, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "J1"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "871": {
+  "id": "871",
+  "it": "• Se vedi un bersaglio attivo, entra in X6.\n• Altrimenti entra in X5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "X6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "X5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "873": {
+  "id": "873",
+  "it": "1. Se non c’è stato s9, tira un dado: dispari 598, pari 085.\n2. Se non c’è stato s1, tira un dado: dispari 726, pari 735.\n3. Se ci sono stati s1 e s9, nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 9
+     }
+    },
+    "then": [
+     {
+      "op": "die",
+      "b": [
+       [
+        0,
+        0,
+        [
+         {
+          "op": "goto",
+          "p": "085"
+         }
+        ]
+       ],
+       [
+        1,
+        1,
+        [
+         {
+          "op": "goto",
+          "p": "598"
+         }
+        ]
+       ],
+       [
+        2,
+        2,
+        [
+         {
+          "op": "goto",
+          "p": "085"
+         }
+        ]
+       ],
+       [
+        3,
+        3,
+        [
+         {
+          "op": "goto",
+          "p": "598"
+         }
+        ]
+       ],
+       [
+        4,
+        4,
+        [
+         {
+          "op": "goto",
+          "p": "085"
+         }
+        ]
+       ],
+       [
+        5,
+        5,
+        [
+         {
+          "op": "goto",
+          "p": "598"
+         }
+        ]
+       ],
+       [
+        6,
+        6,
+        [
+         {
+          "op": "goto",
+          "p": "085"
+         }
+        ]
+       ],
+       [
+        7,
+        7,
+        [
+         {
+          "op": "goto",
+          "p": "598"
+         }
+        ]
+       ],
+       [
+        8,
+        8,
+        [
+         {
+          "op": "goto",
+          "p": "085"
+         }
+        ]
+       ],
+       [
+        9,
+        9,
+        [
+         {
+          "op": "goto",
+          "p": "598"
+         }
+        ]
+       ]
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "die",
+        "b": [
+         [
+          0,
+          0,
+          [
+           {
+            "op": "goto",
+            "p": "735"
+           }
+          ]
+         ],
+         [
+          1,
+          1,
+          [
+           {
+            "op": "goto",
+            "p": "726"
+           }
+          ]
+         ],
+         [
+          2,
+          2,
+          [
+           {
+            "op": "goto",
+            "p": "735"
+           }
+          ]
+         ],
+         [
+          3,
+          3,
+          [
+           {
+            "op": "goto",
+            "p": "726"
+           }
+          ]
+         ],
+         [
+          4,
+          4,
+          [
+           {
+            "op": "goto",
+            "p": "735"
+           }
+          ]
+         ],
+         [
+          5,
+          5,
+          [
+           {
+            "op": "goto",
+            "p": "726"
+           }
+          ]
+         ],
+         [
+          6,
+          6,
+          [
+           {
+            "op": "goto",
+            "p": "735"
+           }
+          ]
+         ],
+         [
+          7,
+          7,
+          [
+           {
+            "op": "goto",
+            "p": "726"
+           }
+          ]
+         ],
+         [
+          8,
+          8,
+          [
+           {
+            "op": "goto",
+            "p": "735"
+           }
+          ]
+         ],
+         [
+          9,
+          9,
+          [
+           {
+            "op": "goto",
+            "p": "726"
+           }
+          ]
+         ]
+        ]
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "875": {
+  "id": "875",
+  "it": "[s3] Attiva il tedesco 4 nell’esagono D19. Iniziano i Round. Vantaggio tedesco. Il tedesco 4 riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      4,
+      "D19"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     4
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "989": {
+  "id": "989",
+  "it": "• Se si muove un tedesco con numero 50 o inferiore, entra in O12.\n• Se 51 o superiore, entra in O18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_le": 50
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O18"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "990": {
+  "id": "990",
+  "it": "• Se si muove un veicolo, entra in P12.\n• Se si muove un soldato e vede un bersaglio attivo, entra in O14; altrimenti in P13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P12"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_us": true
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "O14"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "P13"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "991": {
+  "id": "991",
+  "it": "• Se si muove un veicolo, entra in P14.\n• Se si muove un soldato e vede un bersaglio attivo, entra in O16; altrimenti in P14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P14"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_us": true
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "O16"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "P14"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "994": {
+  "id": "994",
+  "it": "• Se vedi un bersaglio attivo entro 6 esagoni, entra in R17.\n• Altrimenti entra in R16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_entro": 6
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R17"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "995": {
+  "id": "995",
+  "it": "• Se si muove un veicolo, entra in W14.\n• Se si muove un soldato e vede un bersaglio attivo entro 6 esagoni, entra in W15; altrimenti in W14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "W14"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_entro": 6
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "W15"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "W14"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "997": {
+  "id": "997",
+  "it": "• Se vedi un bersaglio attivo entro 7 esagoni, entra in V15.\n• Altrimenti entra in U15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_entro": 7
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "V15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
  }
 }

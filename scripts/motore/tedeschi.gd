@@ -1062,6 +1062,7 @@ func _segui_riferimento(rif: String, strisciando: bool) -> bool:
 		return false
 	if rif == "USCITA":
 		var da_u: String = g.hex
+		p.tedesco_uscito(g, da_u)
 		g.stato = "uscito"
 		g.hex = ""
 		g.turni = 0

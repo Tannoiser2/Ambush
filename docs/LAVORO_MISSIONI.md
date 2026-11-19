@@ -61,10 +61,15 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   `lato_fiume`, `rispetto_strada`. Semplificazione: le cariche e il bazooka stanno addosso ai soldati
   (non nelle caselle di porto delle canoe).
 
+- Missione 7 FATTA (test `tests/missione7.gd`, `simula.gd -- 4 1 7`, scatti `tests/visivi/missione7_ui.gd`).
+  Schieramento calcolato (`schieramento_m7`), mine anticarro `s.mine_at` (piazzate in automatico sulla strada
+  più a est dell’area; `mina_anticarro` in `veicoli.sposta` e nel movimento americano), eventi continui
+  (`aspetta_tedeschi`), penalità per i tedeschi che escono a ovest (`tedesco_uscito`), fine solo in C4.
+  Carri 4 (Panzer IV) e 54 (Jagdpanther) con primo turno. Mappa non ruotata (il sud resta in basso a video).
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
-   M8 Sherman (entra in A6), blocchi stradali, XXX.
+3. Regole speciali: M8 Sherman (entra in A6), blocchi stradali, XXX.

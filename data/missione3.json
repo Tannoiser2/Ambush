@@ -4275,7 +4275,7 @@
   "4": {
    "lettera": "Y",
    "ruolo": "Panzer IV",
-   "pv": 3,
+   "pv": 2,
    "armi": [],
    "granate": 0,
    "IN": 5,
@@ -4377,6 +4377,7 @@
      }
     },
     "pv_distrutto": 3,
+    "primo_turno": 900,
     "testo": "+3 VP if knocked out Enters open; cannon +2 VP                ready. When open, 3 crew ON FIRST             visible. TURN USE 900."
    }
   },
@@ -4485,6 +4486,7 @@
      }
     },
     "pv_distrutto": 2,
+    "primo_turno": 0,
     "testo": "Special Reaction B: Do not move for remainder of the mission. Fire as +3 VP    called for. +2 VP if knocked out. Enters open; cannon ready. When open, 3 crew visible"
    }
   },
@@ -4593,6 +4595,7 @@
      }
     },
     "pv_distrutto": 3,
+    "primo_turno": 922,
     "testo": "+2 VP +3 VP if knocked out. Enters open; cannon not ready. When open, 3 crew visible. On first turn use 922."
    }
   },

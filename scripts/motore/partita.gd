@@ -196,6 +196,13 @@ func inizia_missione() -> Dictionary:
 	_log("azione", "La squadra entra in mappa: %s." % "; ".join(parti))
 	if bool(regola("jeep", false)) and not s.get("veicoli", {}).has("vjeep"):
 		_jeep_di_squadra(esagoni)
+	if int(regola("mine_anticarro", 0)) > 0 and not s.has("mine_at"):
+		_piazza_mine_anticarro(esagoni)
+	if bool(regola("bazooka_pronti", false)):
+		for a in americani():
+			var bz := arma_di(a, "bazooka")
+			if not bz.is_empty():
+				bz.preparata = true
 	if int(regola("canoe", 0)) > 0 and not s.get("veicoli", {}).has("canoa1"):
 		_imbarca_canoe()
 	if bool(regola("radio", false)) and s.get("radio_hex", "") == "":
@@ -204,6 +211,17 @@ func inizia_missione() -> Dictionary:
 			if a.get("comandante", false) and a.hex != "":
 				s.radio_hex = a.hex
 		_log("info", "La radio della squadra è in %s: è presidiata finché lì resta un soldato attivo." % s.radio_hex)
+	if bool(regola("eventi_continui", false)):
+		for h in esagoni:
+			var presenti_e: Array = gruppi[h].filter(func(id): return attivo(u(str(id))))
+			if not presenti_e.is_empty():
+				_ingresso(h, presenti_e, false)
+		if s.fase == "operazioni":
+			aspetta_tedeschi(false)
+		if fase_round() and s.turno.is_empty() and s.pausa == "":
+			_flusso()
+		_fine_comando()
+		return {"ok": true}
 	if bool(regola("lancio", false)):
 		_lancio(esagoni)
 		if fase_round() and s.turno.is_empty() and s.pausa == "":
@@ -891,6 +909,20 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 		return int(s.evasi.get(str(int(t.evaded)), 0)) >= 1
 	if t.has("radio"):
 		return radio_presidiata()
+	if t.has("g_vede_entro") or t.has("g_vede_almeno"):
+		var gw: Dictionary = u(ctx.get("g", ""))
+		if gw.is_empty() or not in_mappa(gw):
+			return false
+		var vis: Array = ia.bersagli(gw)
+		if t.has("g_vede_entro"):
+			vis = vis.filter(func(a): return E.distanza(a.hex, gw.hex) <= int(t.g_vede_entro))
+		return vis.size() >= int(t.get("g_vede_almeno", 1))
+	if t.has("inattivo_uno"):
+		for num in t.inattivo_uno:
+			var gi2 := u("g%d" % int(num))
+			if not gi2.is_empty() and not attivo(gi2):
+				return true
+		return false
 	if t.has("us_lato"):
 		for a in americani_attivi_in_mappa():
 			if lato_fiume(a.hex) == str(t.us_lato):
@@ -977,6 +1009,67 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 
 func _hex_test(v, ctx: Dictionary) -> String:
 	return str(ctx.get("hex", "")) if str(v) == "@hex" else str(v)
+
+# =================================================================== Missione 7: mine anticarro, eventi continui
+func _piazza_mine_anticarro(esagoni_squadra: Array) -> void:
+	var area: Array = esagoni_ingresso()
+	var strade: Array = area.filter(func(h): return terreno.tipo(h) == "road" and not (h in esagoni_squadra))
+	strade.sort_custom(func(a, b): return E.colonna(a) < E.colonna(b) or (E.colonna(a) == E.colonna(b) and E.riga(a) < E.riga(b)))
+	s.mine_at = []
+	for h in strade:
+		if s.mine_at.size() >= int(regola("mine_anticarro", 0)):
+			break
+		if terreno.tipo(h) == "woods" or ponti().has(h):
+			continue
+		s.mine_at.append(h)
+	_log("info", "Mine anticarro piazzate in %s: esplodono solo sotto un veicolo." % ", ".join(s.mine_at))
+
+## Un veicolo entra in un esagono con una mina anticarro.
+func mina_anticarro(veic: Dictionary, h: String) -> void:
+	if not (h in s.get("mine_at", [])) or veic.stato != "attivo":
+		return
+	s.mine_at.erase(h)
+	_fx("esplosione", {"a": h, "grande": true})
+	if bool(veicoli.MODELLI[veic.modello].get("carro", false)):
+		veic.immobilizzato = true
+		veic.cingolo = true
+		_log("combattimento", "%s salta su una mina anticarro in %s: è immobilizzato, ma può ancora sparare." % [veicoli.nome_art(veic), h])
+		return
+	_log("combattimento", "%s salta su una mina anticarro in %s!" % [veicoli.nome_art(veic), h])
+	var a_bordo: Array = veicoli.occupanti(veic)
+	veicoli.disabilita(veic, "mina anticarro")
+	for x in a_bordo:
+		if attivo(x):
+			var rd := d10()
+			var l := T.lettera_danno(T.ARMI.bazooka.danni, rd)
+			_log("dado", "Esplosione su %s: %d → %s" % [nome(x), rd, _nome_danno(l)])
+			_applica_danno(x, l, {})
+
+## Si tirano eventi casuali finché un tedesco entra in gioco (Missione 7).
+func aspetta_tedeschi(da_comando := true) -> Dictionary:
+	if da_comando:
+		_inizio_comando()
+	if s.fase != "operazioni":
+		return _errore("Si aspetta solo nelle Operazioni.")
+	var prove := 0
+	while s.fase == "operazioni" and prove < 40:
+		prove += 1
+		evento_casuale({"hex": "", "ids": []})
+	if da_comando:
+		if fase_round() and s.turno.is_empty() and s.pausa == "":
+			_flusso()
+		_fine_comando()
+	return OK
+
+## Un tedesco o un veicolo tedesco esce dal bordo ovest: perdi il doppio del suo valore in PV.
+func tedesco_uscito(x: Dictionary, h: String) -> void:
+	var lato := str(regola("uscita_tedeschi", ""))
+	if lato == "" or h == "" or h.substr(0, 1) != lato:
+		return
+	var d: Dictionary = missione.tedeschi.get(str(int(x.get("num", 0))), {})
+	var valore := int(d.get("pv", 0)) + int(d.get("pv_cattura", 0))
+	if valore > 0:
+		_pv(-2 * valore, "%s esce dal bordo ovest" % nome(x))
 
 # =================================================================== Missione 6: canoe e bunker
 ## Lato del fiume (mappa A, fiume H1–O19): "est", "ovest" o "fiume".
@@ -1719,8 +1812,11 @@ func radio_presidiata() -> bool:
 func _jeep_di_squadra(esagoni_squadra: Array) -> void:
 	var migliore := ""
 	var dmin := 999
+	var area: Array = esagoni_ingresso() if int(regola("schieramento_ruscello", 0)) > 0 else []
 	for h in terreno.esagoni:
 		if terreno.tipo(h) != "clear" or ponti().has(h):
+			continue
+		if not area.is_empty() and not (h in area):
 			continue
 		var accanto_strada := false
 		for v in E.vicini(h):
@@ -2774,6 +2870,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		if dv >= 0:
 			veic_m.fronte = dv
 		veic_m.hex = verso
+		mina_anticarro(veic_m, verso)
 		_log("azione", "La %s, guidata da %s, entra in %s (%s)." % [veic_m.nome, nome(primo), verso, terreno.nome_tipo(verso)])
 	else:
 		_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
@@ -4441,6 +4538,8 @@ func _controlla_fine_automatica() -> void:
 			_calcola_fine("obiettivo")
 			return
 	var vivi_in_mappa := americani_attivi_in_mappa().filter(func(x): return not x.get("pilota", false))
+	if int(regola("fine_condizione", 0)) > 0 and int(s.condizione) < int(regola("fine_condizione", 0)) and not vivi_in_mappa.is_empty():
+		return
 	var da_entrare := americani().filter(func(x): return x.stato == "fuori")
 	if vivi_in_mappa.is_empty() and da_entrare.is_empty():
 		var usciti := americani().filter(func(x): return x.stato == "uscito")

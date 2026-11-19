@@ -54,6 +54,8 @@ jobs:
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 6 1 5
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione6.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 4 1 6
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione7.gd
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 4 1 7
       - name: Export Web build
         run: |
           mkdir -p build/web
