@@ -804,17 +804,19 @@ func _aggiorna_azioni() -> void:
 	var nomi: Array = selezione.map(func(id): return p.u(id).lettera)
 	var dove: String = "fuori mappa" if a.stato == "fuori" else a.hex
 	var prefisso := ""
-	if p.fase_round() and p.puo_agire(a) == "":
+	if p.fase_round() and p.puo_agire(a, true) == "":
 		prefisso = "TOCCA A TE: "
 	if selezione.size() > 1:
 		titolo_azioni.text = "GRUPPO %s · %s · %s" % [", ".join(nomi), dove, T.NOMI_POSTURA[a.postura]]
 	else:
 		titolo_azioni.text = "%s%s %s · %s · %s" % [prefisso, a.lettera, str(a.nome).to_upper(), dove, T.NOMI_POSTURA[a.postura]]
-	var err := p.puo_agire(a)
+	var err := p.puo_agire(a, true)
 	if p.s.fase == "operazioni":
 		_azioni_operazioni(a)
 	elif err != "":
 		aiuto_azioni.text = err
+	elif int(a.get("paracadute", 0)) > 0:
+		_azioni_paracadute(a)
 	else:
 		_azioni_round(a)
 	_azioni_missione()
@@ -961,6 +963,27 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 		_b("Libera il pilota", func(): _esito(p.libera_pilota(a.id)), "Durante le Operazioni costa un controllo Evento; nei Round due azioni.")
 	if p.e_uscita(a.hex) and not a.get("carro_us", false):
 		_b("Esci dalla mappa", func(): _conferma("Uscire dalla mappa?", "%s lascia il campo e non potrà rientrare. Se tutti i soldati attivi escono dalla mappa la missione termina." % p.nome(a), func(): _esito(p.esci(a.id))))
+
+## Missione 4: chi ha ancora il paracadute addosso può solo cambiare postura, toglierlo o passare.
+func _azioni_paracadute(a: Dictionary) -> void:
+	var t: Dictionary = p.s.turno if (not p.s.turno.is_empty() and p.s.turno.id == a.id) else {}
+	var cambio: bool = t.get("cambio_libero", not a.ferito) if not t.is_empty() else not a.ferito
+	var usato: bool = str(t.get("azione", "")) != ""
+	if usato:
+		aiuto_azioni.text = "%s ha già speso l’azione di questo turno: potrà togliersi il paracadute nel prossimo turno." % a.nome
+	elif a.postura == "prone":
+		aiuto_azioni.text = "%s ha ancora il paracadute (%d azioni per toglierlo). Prima mettiti accovacciato o in piedi%s, poi «Togli il paracadute»." % [a.nome, int(a.paracadute), "" if cambio else " (da ferito costa l’azione: lo toglierai nel turno dopo)"]
+	else:
+		aiuto_azioni.text = "%s ha ancora il paracadute: servono %d azioni per toglierlo; finché non l’ha tolto non può fare altro." % [a.nome, int(a.paracadute)]
+	if not usato:
+		_azioni_posture(a, "" if cambio else " (azione)")
+		_gruppo("PARACADUTE")
+		_b("Togli il paracadute (%d)" % int(a.paracadute), func(): _esito(p.togli_paracadute(a.id)), "Un’azione; ne servono due in tutto.", a.postura != "prone" and not a.panico)
+	_gruppo("FINE")
+	if usato:
+		_b("Fine del turno", func(): _esito(p.fine_azione(a.id)))
+	else:
+		_b("Passa il turno", func(): _esito(p.passa(a.id)))
 
 func _azioni_round(a: Dictionary) -> void:
 	var t: Dictionary = p.s.turno if (not p.s.turno.is_empty() and p.s.turno.id == a.id) else {}
