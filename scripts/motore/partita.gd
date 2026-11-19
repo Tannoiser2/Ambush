@@ -920,9 +920,20 @@ func casella_attuale() -> Array:
 	return []
 
 ## Americani che possono agire adesso.
+## Vero se il soldato ha un’azione cominciata e non ancora conclusa (movimento, secondo tiro rapido…).
+func _azione_in_corso(a: Dictionary) -> bool:
+	return s.fase == "round" and s.pausa == "" and not s.turno.is_empty() and str(s.turno.id) == str(a.id) \
+		and attivo(a) and a.slot == "turni" and int(a.turni) > 0
+
 func americani_di_turno() -> Array:
 	if s.fase != "round" or s.pausa != "":
 		return []
+	# Un’azione cominciata va conclusa anche se nel frattempo un tedesco appena attivato
+	# è finito in una casella della pista che viene prima (regola 6/6).
+	if not s.turno.is_empty():
+		var in_corso := u(str(s.turno.id))
+		if not in_corso.is_empty() and _azione_in_corso(in_corso):
+			return [in_corso]
 	var c := casella_attuale()
 	if c.is_empty() or c[1] != "us":
 		return []
@@ -1036,6 +1047,8 @@ func puo_agire(a: Dictionary) -> String:
 	if not (attivo(a) or a.stato == "fuori"):
 		return "%s non può agire." % nome(a)
 	if s.fase == "round":
+		if _azione_in_corso(a):
+			return ""  # regola 6/6: chi ha attivato un tedesco con la propria azione la porta a termine
 		if not (a in americani_di_turno()):
 			return "Non è il turno di %s." % nome(a)
 		var t: Dictionary = s.turno
