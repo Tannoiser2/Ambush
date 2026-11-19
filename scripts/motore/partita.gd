@@ -861,6 +861,28 @@ func in_comando(un: Dictionary) -> bool:
 			tot += int(o.IN)
 	return tot >= 5
 
+## Vero se, spostando quei soldati nell’esagono h, resterebbero tutti in comando.
+## Serve all’interfaccia per avvisare prima del movimento; lo stato non cambia.
+func in_comando_se(ids: Array, h: String) -> bool:
+	var prima := {}
+	for id in ids:
+		var a := u(str(id))
+		if a.is_empty():
+			continue
+		prima[id] = [a.hex, a.stato]
+		a.hex = h
+		if a.stato == "fuori":
+			a.stato = "attivo"
+	var tutti := true
+	for id in prima:
+		if not in_comando(u(str(id))):
+			tutti = false
+	for id in prima:
+		var a := u(str(id))
+		a.hex = prima[id][0]
+		a.stato = prima[id][1]
+	return tutti
+
 func _iniziativa(r: Dictionary) -> void:
 	var du := d10()
 	var dt := d10()

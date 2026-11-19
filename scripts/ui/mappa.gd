@@ -15,8 +15,13 @@ const RAGGIO := 180.5 * SCALA
 const ZOOM_AZIONE := 0.5
 
 var partita: Partita
-var mappa: Texture2D = preload("res://assets/maps/mappa_a.jpg")
+var mappa: Texture2D
 var trame := {}
+## Grafica a scelta: mappa originale o «realistica», pedine originali o ridisegnate.
+var mappa_realistica := false
+var pedine_nuove := false
+## Mostra chi è in comando e il raggio di comando dei comandanti.
+var mostra_comando := true
 var zoom := 0.0
 var spostamento := Vector2.ZERO
 var _trascina := false
@@ -61,15 +66,30 @@ var _multi := false
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
-	for f in DirAccess.get_files_at("res://assets/pedine"):
-		if f.ends_with(".png"):
-			trame[f.get_basename()] = load("res://assets/pedine/" + f)
-		elif f.ends_with(".png.import"):
-			var n := f.trim_suffix(".import")
-			if not trame.has(n.get_basename()):
-				trame[n.get_basename()] = load("res://assets/pedine/" + n)
+	imposta_grafica(mappa_realistica, pedine_nuove)
 	resized.connect(_adatta)
 	mouse_exited.connect(func(): sopra = ""; esagono_sopra.emit(""); queue_redraw())
+
+func _carica_cartella(cartella: String) -> void:
+	for f in DirAccess.get_files_at(cartella):
+		var n := f
+		if f.ends_with(".png.import"):
+			n = f.trim_suffix(".import")
+		elif not f.ends_with(".png"):
+			continue
+		trame[n.get_basename()] = load(cartella + "/" + n)
+
+## Sceglie la mappa (originale o realistica) e la serie di pedine (originali o ridisegnate).
+## Le due mappe hanno lo stesso reticolo; le pedine nuove sostituiscono quelle con lo stesso nome.
+func imposta_grafica(realistica: bool, nuove: bool) -> void:
+	mappa_realistica = realistica
+	pedine_nuove = nuove
+	mappa = load("res://assets/maps/mappa_a_realistica.jpg" if realistica else "res://assets/maps/mappa_a.jpg")
+	trame.clear()
+	_carica_cartella("res://assets/pedine")
+	if nuove:
+		_carica_cartella("res://assets/pedine_nuove")
+	queue_redraw()
 
 func _process(delta: float) -> void:
 	_t += delta
@@ -236,9 +256,21 @@ func _gui_input(ev: InputEvent) -> void:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), Color("15170f"))
 	draw_texture_rect(mappa, Rect2(spostamento, Vector2(mappa.get_size()) * zoom), false)
+	if mappa_realistica:
+		# la mappa realistica ha un reticolo appena accennato: lo si rinforza un poco
+		for h in E.tutti():
+			draw_polyline(_chiudi(poligono(h)), Color(1, 1, 1, clampf(zoom * 0.3, 0.05, 0.16)), 1.0)
 	if partita == null or partita.s.is_empty():
 		return
 	var s: Dictionary = partita.s
+	# Raggio di comando: gli esagoni entro due dal comandante
+	if mostra_comando and vista == null:
+		for a in partita.americani():
+			if a.get("comandante", false) and a.stato == "attivo" and a.hex != "" and not a.get("panico", false):
+				for h in E.tutti():
+					if E.distanza(a.hex, h) <= 2:
+						draw_colored_polygon(poligono(h, 0.98), Color(0.95, 0.8, 0.3, 0.09))
+						draw_polyline(_chiudi(poligono(h, 0.98)), Color(0.95, 0.8, 0.3, 0.3), maxf(1.0, 1.5 * zoom))
 	# Obiettivi della missione
 	if mostra_obiettivi:
 		for h in ["T8", "K13", "L13"] + partita.alture_obiettivo():
@@ -387,7 +419,11 @@ func _pedina(x: Dictionary, r: Rect2, selezionato: bool, di_turno: bool) -> void
 		draw_texture_rect(tex, r, false, mod)
 	var mini := r.size.x * 0.48
 	if x.postura == "prone" and x.stato == "attivo":
-		draw_texture_rect(trame["prono"], Rect2(r.position + Vector2(0, r.size.y - mini * 0.62), Vector2(mini * 1.2, mini * 0.62)), false)
+		var tp: Texture2D = trame.get("prono_" + str(x.lato), trame["prono"])
+		if trame.has("prono_" + str(x.lato)):
+			draw_texture_rect(tp, Rect2(r.position + Vector2(0, r.size.y - mini), Vector2(mini, mini)), false)
+		else:
+			draw_texture_rect(tp, Rect2(r.position + Vector2(0, r.size.y - mini * 0.62), Vector2(mini * 1.2, mini * 0.62)), false)
 	if x.ferito and x.stato == "attivo":
 		draw_texture_rect(trame["ferito"], Rect2(r.position + Vector2(r.size.x - mini * 0.8, -mini * 0.15), Vector2(mini * 0.8, mini * 0.8)), false)
 	if x.stato == "incapacitato":
@@ -760,7 +796,10 @@ func _in_round() -> bool:
 
 ## Segni sulla pedina: inconsapevole (pedina scurita con un punto di domanda), turni rimasti (pallini).
 func _icone_stato(x: Dictionary, r: Rect2) -> void:
-	if not _in_round() or x.get("stato", "") != "attivo":
+	if x.get("stato", "") != "attivo":
+		return
+	if not _in_round():
+		_segno_comando(x, r)
 		return
 	var u := r.size.x
 	if x.lato == "us" and not x.get("consapevole", true) and not x.get("panico", false):
@@ -771,6 +810,7 @@ func _icone_stato(x: Dictionary, r: Rect2) -> void:
 		draw_circle(c, rr, Color(0.13, 0.14, 0.11))
 		var fs := int(maxf(9.0, rr * 1.7))
 		draw_string(Tema.testo_bold, c + Vector2(-rr, fs * 0.36), "?", HORIZONTAL_ALIGNMENT_CENTER, rr * 2.0, fs, Color(0.96, 0.93, 0.82))
+	_segno_comando(x, r)
 	if x.get("slot", "") == "turni" and int(x.get("turni", 0)) > 0:
 		var n := int(x.turni)
 		var rp := maxf(3.0, u * 0.085)
@@ -820,3 +860,24 @@ func _scritta(pos: Vector2, testo: String, colore: Color, dim: int) -> void:
 
 func _etichetta_hex(h: String, testo: String) -> void:
 	_scritta(_p(h) + Vector2(0, _re() * 1.05 + 16.0), testo, Color(1.0, 0.93, 0.7), 15)
+
+## In comando (cerchio verde con spunta) o fuori comando (cerchio rosso con croce):
+## chi è fuori comando va nel panico con i numeri rossi dell’iniziativa.
+func _segno_comando(x: Dictionary, r: Rect2) -> void:
+	if not mostra_comando or vista != null or partita == null or x.lato != "us" or x.get("panico", false):
+		return
+	var vivo := partita.u(str(x.id))
+	if vivo.is_empty() or vivo.stato != "attivo" or vivo.hex == "":
+		return
+	var dentro: bool = partita.in_comando(vivo)
+	var u := r.size.x
+	var c := r.position + Vector2(u * 0.86, u * 0.56)
+	var rr := maxf(4.5, u * 0.115)
+	var w := maxf(1.5, rr * 0.3)
+	draw_circle(c, rr + 1.5, Color(0.08, 0.09, 0.07))
+	draw_circle(c, rr, Color(0.25, 0.6, 0.25) if dentro else Color(0.78, 0.16, 0.1))
+	if dentro:
+		draw_polyline(PackedVector2Array([c + Vector2(-rr * 0.5, 0), c + Vector2(-rr * 0.12, rr * 0.4), c + Vector2(rr * 0.55, -rr * 0.4)]), Color.WHITE, w, true)
+	else:
+		draw_line(c + Vector2(-rr * 0.42, -rr * 0.42), c + Vector2(rr * 0.42, rr * 0.42), Color.WHITE, w, true)
+		draw_line(c + Vector2(-rr * 0.42, rr * 0.42), c + Vector2(rr * 0.42, -rr * 0.42), Color.WHITE, w, true)

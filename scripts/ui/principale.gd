@@ -94,6 +94,7 @@ func _ready() -> void:
 	mappa.velocita = _velocita_iniziale
 	_aggiorna_bottoni_scheda()
 	_applica_linee()
+	_applica_grafica()
 	var dati := _leggi_salvataggio()
 	if not dati.is_empty() and p.carica(dati):
 		_aggiorna_tutto(true)
@@ -171,6 +172,7 @@ func _barra_superiore() -> Control:
 	hb.add_child(avv)
 	hb.add_child(Tema.bottone("Briefing", func(): _mostra_briefing(false, true)))
 	hb.add_child(Tema.bottone("Regole", _mostra_regole))
+	hb.add_child(Tema.bottone("Grafica", _mostra_grafica, "Mappa originale o realistica, pedine originali o ridisegnate, raggio di comando"))
 	hb.add_child(Tema.bottone("Legenda", _mostra_legenda))
 	hb.add_child(Tema.bottone("Nuova partita", _chiedi_nuova))
 	return pc
@@ -658,6 +660,13 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 		stati.add_child(_chip(T.NOMI_POSTURA[a.postura], Color("6b6248")))
 	if a.ferito and a.stato == "attivo":
 		stati.add_child(_chip("FERITO", Tema.ROSSO))
+	if a.stato == "attivo" and a.hex != "" and not riproducendo and not a.get("panico", false) and not a.get("senza_carta", false):
+		var vivo := p.u(str(a.id))
+		if not vivo.is_empty() and vivo.stato == "attivo":
+			if p.in_comando(vivo):
+				stati.add_child(_chip("in comando", Color("3f6b2f")))
+			else:
+				stati.add_child(_chip("FUORI COMANDO", Color("9a3b1e")))
 	match a.stato:
 		"incapacitato":
 			stati.add_child(_chip("INCAPACITATO", Tema.ROSSO))
@@ -1186,6 +1195,9 @@ func _sopra_mappa(h: String) -> void:
 		righe.append("· %s — %s%s" % [p.nome(x), st, ", ferito" if x.ferito and x.stato == "attivo" else ""])
 	for o in p.s.oggetti.get(h, []):
 		righe.append("· a terra: " + T.ARMI.get(o.tipo, {}).get("nome", o.tipo))
+	if not selezione.is_empty() and mappa.evidenzia.has(h) and modo == "" and not riproducendo and (p.s.fase == "schieramento" or _puo_muovere(p.u(selezione[0]))):
+		var chi: String = ", ".join(selezione.map(func(id): return p.u(id).lettera))
+		righe.append("Qui %s %s" % [chi, "resta IN COMANDO" if p.in_comando_se(selezione, h) else "sarebbe FUORI COMANDO: rischia il panico con i numeri rossi"])
 	if not selezione.is_empty():
 		var a := p.u(selezione[0])
 		if a.hex != "" and a.hex != h:
@@ -2029,14 +2041,62 @@ func _leggi_preferenze() -> void:
 	if d is Dictionary:
 		automatico = bool(d.get("automatico", false))
 		linee_vista = bool(d.get("linee_vista", true))
+		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true))}
 		_velocita_iniziale = float(d.get("velocita", 1.0))
 
 var _velocita_iniziale := 1.0
+var _pref_grafica := {"mappa": false, "pedine": false, "comando": true}
+
+## Finestra della grafica: mappa, pedine e raggio di comando a scelta del giocatore.
+func _mostra_grafica() -> void:
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 10)
+	_intestazione(vb, "GRAFICA", "Scegli l’aspetto della mappa e delle pedine: le regole non cambiano")
+	var voci := [
+		["MAPPA", "mappa", "Originale del 1983", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa A: stessi esagoni, stesso terreno."],
+		["PEDINE", "pedine", "Originali", "Ridisegnate", "Le pedine ridisegnate mostrano il soldato in piedi oppure accovacciato secondo la postura."],
+		["COMANDO", "comando", "Nascosto", "Mostrato", "Mostra sulla mappa chi è in comando e gli esagoni entro due dal comandante."],
+	]
+	for v in voci:
+		var riga := HBoxContainer.new()
+		riga.add_theme_constant_override("separation", 10)
+		var l := Tema.etichetta(v[0], Tema.stencil, 18, Tema.INCHIOSTRO)
+		l.custom_minimum_size = Vector2(120, 0)
+		riga.add_child(l)
+		for scelta in [false, true]:
+			var attiva: bool = bool(_pref_grafica[v[1]]) == scelta
+			var b := Tema.bottone(("[x] " if attiva else "[  ] ") + str(v[3] if scelta else v[2]), func(): _scegli_grafica(v[1], scelta))
+			b.custom_minimum_size = Vector2(230, 40)
+			if attiva:
+				b.add_theme_color_override("font_color", Color("fff3c4"))
+				b.add_theme_stylebox_override("normal", Tema.scatola(Color("6b5a22"), Tema.OTTONE, 2, 3, 10))
+			riga.add_child(b)
+		vb.add_child(riga)
+		_paragrafo(vb, v[4], 14)
+	var bb := HBoxContainer.new()
+	bb.alignment = BoxContainer.ALIGNMENT_END
+	bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
+	vb.add_child(bb)
+	_apri_finestra(vb, 760)
+
+func _scegli_grafica(chiave: String, valore: bool) -> void:
+	_pref_grafica[chiave] = valore
+	_applica_grafica()
+	_salva_preferenze()
+	_aggiorna_tutto()
+	_mostra_grafica()
+
+func _applica_grafica() -> void:
+	if mappa.mappa_realistica != bool(_pref_grafica.mappa) or mappa.pedine_nuove != bool(_pref_grafica.pedine):
+		mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
+	mappa.mostra_comando = bool(_pref_grafica.comando)
+	mappa.queue_redraw()
 
 func _salva_preferenze() -> void:
 	var f := FileAccess.open(PREFERENZE, FileAccess.WRITE)
 	if f != null:
-		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista}))
+		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista,
+			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando}))
 
 func _mostra_legenda() -> void:
 	var vb := VBoxContainer.new()
@@ -2044,6 +2104,7 @@ func _mostra_legenda() -> void:
 	_intestazione(vb, "LEGENDA", "Cosa significano i segni sulla mappa e sui pannelli")
 	_paragrafo(vb, "[b]Pedine.[/b] Gialle: americani. Grigio-azzurre: tedeschi. Nello stesso esagono stanno affiancate, mai coperte. Bordo ottone: soldato scelto. Bordo verde che pulsa: può agire adesso.", 15)
 	_paragrafo(vb, "[b]Stati sulla pedina.[/b] Pedina scurita con un punto di domanda: inconsapevole, non riceve turni. Pallini in basso a destra: turni che gli restano in questo Round. Fascia rossa PANICO: non agisce e a fine Round si getta a terra. Croce rossa: ferito. Segnalino PRONE: prono.", 15)
+	_paragrafo(vb, "[b]Comando.[/b] Cerchio verde con la spunta: il soldato è in comando. Cerchio rosso con la croce: è fuori comando, e se il dado d’iniziativa dà un numero rosso per la sua Iniziativa va nel panico. Si è in comando quando le Iniziative dei soldati nello stesso esagono sommano almeno 5, oppure entro due esagoni dal comandante (gli esagoni dorati). Passando su un esagono di destinazione il riquadro in alto dice se lì il soldato resterebbe in comando.", 15)
 	_paragrafo(vb, "[b]Linee.[/b] Linea piena con freccia: un tiro, gialla se spara un americano e arancione se spara un tedesco, con l’esito scritto sul bersaglio. Resta finché non dai il comando successivo; i tiri dei passi precedenti si attenuano. Linea tratteggiata rossa: un tedesco che il soldato scelto vede. Linea tratteggiata azzurra: un americano che il tedesco di turno vede. Tratteggio con freccia: un movimento.", 15)
 	_paragrafo(vb, "[b]Esagoni.[/b] Verde: dove puoi muovere. Rosso: bersaglio valido, con la probabilità di colpire. Arancione: dove puoi lanciare. Azzurro: compagno che puoi comandare. Bordo ottone fisso: obiettivo della missione.", 15)
 	_paragrafo(vb, "[b]Pista dei Round.[/b] Ogni soldato è una casella con la sua lettera, nella riga dei turni che gli restano. La casella con il bordo giallo è quella che sta agendo.", 15)

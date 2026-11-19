@@ -22,6 +22,8 @@ Tema da campo del 1944: verde oliva, carta dei rapporti, caratteri stampigliati 
 L’interfaccia è costruita per far capire sempre **in che fase si è, chi agisce, perché e con quale esito**:
 
 - **Schieramento iniziale**: una partita nuova comincia disponendo i soldati sul margine nord (A1–J1). Si possono spostare a piacere; nessuna carta viene letta e nessun nemico si attiva finché non si preme «Inizia la missione». Chi resta fuori può entrare più tardi.
+- **Comando**: su ogni soldato un cerchio verde con la spunta (in comando) o rosso con la croce (fuori comando: va nel panico con i numeri rossi dell’iniziativa); gli esagoni entro due dal comandante sono velati d’oro; passando su una destinazione il riquadro dice se lì si resta in comando.
+- **Grafica a scelta** (pulsante «Grafica»): mappa originale del 1983 oppure «realistica», pedine originali oppure ridisegnate (in piedi o accovacciate secondo la postura). Le due mappe hanno lo stesso reticolo, le regole non cambiano; la scelta resta salvata. Le immagini si rigenerano con `tools/prepara_mappa_realistica.py` e `tools/estrai_pedine_nuove.py`.
 - **Linee di vista**: il pulsante sulla mappa le mostra o le nasconde (linea dal soldato scelto all’esagono puntato e linee di chi vede chi).
 - **Barra delle fasi** sotto il titolo: Operazioni, oppure Round n con Consapevolezza, Evento, Iniziativa, le quattro caselle dei turni (2 turni e 1 turno, prima chi ha il vantaggio) e Fine Round. La fase in corso è accesa, quelle fatte hanno la spunta, quelle saltate sono barrate.
 - **Riproduzione a passi**: ogni comando del motore è diviso in passi (una fase, un tedesco, un’azione del giocatore). A ogni passo la **scheda dell’azione** sotto la mappa mostra *chi agisce* (pedina, posizione, turno), *perché* (per i tedeschi la tabella della loro carta con riga del dado e colonna evidenziate, il numero d’azione e il testo del paragrafo; per le fasi la regola e i dadi) e *cosa succede* (calcolo del tiro con base e modificatori, dadi, danni). «Continua» (Spazio) passa al passo successivo; «Modo: automatico» scorre da solo; «Velocità» e «Salta tutto» accorciano.
@@ -58,6 +60,7 @@ godot --headless --path . --script tests/schieramento.gd
 godot --headless --path . --script tests/attivazione_round.gd
 godot --headless --path . --script tests/salvataggio.gd
 godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite simulate sul motore
+xvfb-run godot --path . --script tests/visivi/grafica_ui.gd      # opzioni di grafica e segni del comando
 xvfb-run godot --path . --script tests/visivi/tocco.gd           # gesti a tocco sulla mappa
 xvfb-run godot --path . --script tests/visivi/partita_ui.gd -- 2 1   # partite intere attraverso l’interfaccia
 xvfb-run godot --path . --script tests/visivi/scatti.gd -- 7 1600 900 /tmp/ambush_scatti   # schermate a ogni passo
