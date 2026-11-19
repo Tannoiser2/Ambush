@@ -915,6 +915,11 @@ func _azioni_operazioni(a: Dictionary) -> void:
 		aiuto_azioni.text = "Tocca un esagono verde d’ingresso (" + p.testo_ingresso() + ") per entrare. Ogni esagono raggiunto fa leggere la carta della Condizione."
 	else:
 		aiuto_azioni.text = "Tocca un esagono verde adiacente per muovere%s. Nelle Operazioni non ci sono limiti di movimento." % (" il gruppo" if selezione.size() > 1 else "")
+		var vc: Dictionary = p.veicoli.di(a)
+		if not vc.is_empty() and not vc.get("occupanti", []).is_empty() and str(vc.occupanti[0]) != a.id:
+			aiuto_azioni.text = "%s è passeggero della %s: la muove chi la guida (%s). Selezionalo per spostare tutti." % [a.id, vc.nome, str(vc.occupanti[0])]
+			if p.veicoli.e_canoa(vc) and not p.veicoli.spiaggiata(vc):
+				aiuto_azioni.text += " Si scende solo con la canoa arenata a riva."
 	if a.hex != "" and selezione.size() == 1:
 		_azioni_posture(a)
 	if a.hex != "":
@@ -1142,6 +1147,9 @@ func armi_scelta_valida(a: Dictionary, armi: Array) -> bool:
 	return false
 
 func _annulla_carica(a: Dictionary) -> void:
+	if p.s.turno.is_empty() or str(p.s.turno.get("id", "")) != a.id:
+		_aggiorna_tutto()
+		return
 	p.s.turno.azione = "muovi"
 	_esito(p.fine_azione(a.id))
 
@@ -1703,8 +1711,11 @@ func _prepara_scheda(ps: Dictionary) -> void:
 						_esito_righe.append("%s: PC %d, dado %s  %s" % [nome, int(r.pc), _dado(int(r.dado)), _col("non si accorge di nulla", C_ROSSO)])
 					"auto":
 						_esito_righe.append("%s: %s" % [nome, _col("consapevole senza tirare (lo dice il paragrafo)", C_VERDE)])
+					"auto_no":
+						_esito_righe.append("%s: %s" % [nome, _col("inconsapevole in questo Round (lo dice il paragrafo)", C_ROSSO)])
 					_:
-						gruppi[str(r.esito)].append(str(st.unita.get(str(r.id), {}).get("lettera", r.id)))
+						if gruppi.has(str(r.esito)):
+							gruppi[str(r.esito)].append(str(st.unita.get(str(r.id), {}).get("lettera", r.id)))
 			if not gruppi.gia.is_empty():
 				_esito_righe.append("[b]%s[/b]: %s" % [", ".join(gruppi.gia), _col("già consapevoli", C_VERDE)])
 			if not gruppi.non_vede.is_empty():

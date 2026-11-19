@@ -2537,7 +2537,7 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 			continue
 		if a.id == str(r.get("inconsapevole_auto", "")) and r.n == 1:
 			_log("info", "%s è automaticamente inconsapevole in questo Round." % nome(a))
-			righe.append({"id": a.id, "esito": "no"})
+			righe.append({"id": a.id, "esito": "auto_no"})
 			continue
 		if a.stato == "attivo" and a.hex == "" :
 			continue
@@ -3028,7 +3028,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			_log("info", "Il %s, arreso, viene fatto prigioniero." % nome(g))
 			_premio_cattura(g)
 	# Fermarsi in un esagono con un nemico attivo.
-	if s.fase == "round" and not unita_in(verso, "de").is_empty():
+	if s.fase == "round" and not s.turno.is_empty() and not unita_in(verso, "de").is_empty():
 		s.turno.fermo = true
 	_ingresso(verso, ids, sul_ponte)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
