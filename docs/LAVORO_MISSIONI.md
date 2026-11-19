@@ -46,6 +46,22 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   scienziati 24/42 e ufficiale 7 (`_auto_raccoglie`, `_sali_su_auto`). Carte: `veicolo`, `pv_veicolo`,
   `pv_eliminato`, `pv_uscita_prigioniero`. Equipaggiamento pre-generato.
 
+## Prossimo passo: Missione 6 «Gita in canoa fino al Vallo occidentale» (mappa A, nord in alto)
+- Regole (regolamento p. 37–38, testo in /home/claude/aid/rules.txt): fiume H1–O19 attraversabile solo sui ponti o in
+  canoa; notte (vista 5, escluso il proprio esagono); 4 canoe (2 soldati + 2 caselle di porto, o 3 soldati),
+  si muovono solo sul fiume (4 PM nei Round, 1 per esagono; un esagono per volta nelle Operazioni con controllo
+  di paragrafo), servono 2 soldati attivi a bordo; spiaggiare = entrare in un esagono di terra adiacente (1 PM);
+  salire/scendere solo a canoa spiaggiata (1 PM / 1 azione); se un tiro tedesco manca, dado pari = canoa forata
+  (deve spiaggiare nel turno successivo o affonda). Ingresso in H1 in canoa. Crateri G7 K8 L12 L15 K18 M17,
+  macerie K13 L13. Livelli c1 0–1, c2 0–3, c3 0–5, c4 0–7.
+- Bunker: esagono come edificio con finestre su tutti i lati e una porta (lato indicato dal paragrafo
+  d’attivazione); tabelle dei colpi fronte/porta (muro H, feritoia M/H, porta L = sfondata, equipaggio);
+  +2 al tiro contro il bunker; distrutto = occupanti originali fuori combattimento E (macerie O carica esplosa
+  dentro). 6 PV per bunker, vittoria 12 PV; fine quando non ci sono americani attivi in mappa.
+- Paragrafi mancanti: 90 (561–599, 702–786, 872–899). Attenzione: la carta C3 cita s4:738 e s4:739, ma 738 è
+  già un paragrafo della M4 (controllare sulla scansione: forse è un’altra cifra).
+- Azioni tedesche ancora da scrivere: 732, 770, 841–843, 926–932 (servono a M6–M8).
+
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
