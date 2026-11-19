@@ -10,6 +10,7 @@ const MODELLI := {
 	"jeep": {"art": "La", "nome": "Jeep", "piccolo": true, "lenta": 5, "veloce": 9, "posti": 4},
 	"kubelwagen": {"art": "La", "nome": "Kübelwagen", "piccolo": true, "lenta": 5, "veloce": 9, "posti": 4},
 	"auto_comando": {"art": "L’", "nome": "Auto comando", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 5},
+	"canoa": {"art": "La", "nome": "Canoa", "piccolo": true, "lenta": 4, "veloce": 4, "posti": 3, "canoa": true},
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
@@ -98,6 +99,8 @@ func crea(vid: String, modello: String, h: String, lato: String) -> Dictionary:
 func sali(un: Dictionary, veic: Dictionary) -> String:
 	if not attivo(veic):
 		return "Il veicolo è fuori uso."
+	if bool(MODELLI[veic.modello].get("canoa", false)) and not spiaggiata(veic) and p.s.fase != "schieramento" and not p.s.get("imbarco", false):
+		return "Si sale solo su una canoa spiaggiata."
 	if un.hex != veic.hex:
 		return "Si sale solo su un veicolo nello stesso esagono."
 	if occupanti(veic).size() >= int(MODELLI[veic.modello].posti):
@@ -115,6 +118,12 @@ func scendi(un: Dictionary) -> void:
 	for a in un.armi.duplicate():
 		if a.get("montata", false):
 			un.armi.erase(a)
+
+func spiaggiata(veic: Dictionary) -> bool:
+	return p.terreno.esagoni.get(str(veic.hex), {}).get("t", "") != "stream"
+
+func e_canoa(veic: Dictionary) -> bool:
+	return not veic.is_empty() and bool(MODELLI[veic.modello].get("canoa", false))
 
 ## Sposta il veicolo e tutti gli occupanti.
 func sposta(veic: Dictionary, verso: String) -> void:
@@ -143,6 +152,15 @@ func sposta(veic: Dictionary, verso: String) -> void:
 ## Costo in PM per un veicolo (Tabella dei costi di movimento): -1 se vietato.
 func costo(veic: Dictionary, da: String, verso: String) -> int:
 	if not E.adiacenti(da, verso):
+		return -1
+	if bool(MODELLI[veic.modello].get("canoa", false)):
+		# La canoa va solo sul fiume; spiaggia entrando in un esagono di terra accanto (non in un edificio).
+		var acqua_da: bool = p.terreno.esagoni.get(da, {}).get("t", "") == "stream"
+		var acqua_verso: bool = p.terreno.esagoni.get(verso, {}).get("t", "") == "stream"
+		if acqua_verso:
+			return 1
+		if acqua_da and not p.terreno.edificio(verso) and p.terreno.tipo_lato(da, verso) != "wall":
+			return 1
 		return -1
 	var t := p.terreno.tipo(verso)
 	if p.terreno.ponte(verso):

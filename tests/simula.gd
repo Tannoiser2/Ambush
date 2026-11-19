@@ -19,6 +19,8 @@ func _init() -> void:
 		obiettivi = ["O6", "P5", "Q5", "K7", "J13", "S13", "N12", "L10", "V8"]
 	elif missione == 3:
 		obiettivi = ["A3", "T3", "G13", "G14", "L10", "A15", "V3", "C3"]
+	elif missione == 6:
+		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
 		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
 	elif missione == 4:
@@ -34,13 +36,15 @@ func _init() -> void:
 
 func gioca(seme: int) -> void:
 	var p = PartitaScript.new(missione)
-	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0:
+	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0:
 		p.nuova(seme, true)
 		var ingressi: Array = p.esagoni_ingresso()
 		var i := 0
 		for a in p.americani():
 			if bool(p.regola("lancio", false)):
 				p.schiera([a.id], ingressi[i])
+			elif int(p.regola("canoe", 0)) > 0:
+				p.schiera([a.id], "H1")
 			else:
 				p.schiera([a.id], ingressi[(i % 3) * 7])
 			i += 1
@@ -117,6 +121,14 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 		p.termina_missione("ritirata")
 		return
 	var a: Dictionary = candidati[rng.randi_range(0, candidati.size() - 1)]
+	var vc: Dictionary = p.veicoli.di(a)
+	if p.veicoli.e_canoa(vc) and not p.veicoli.e_autista(a):
+		if p.veicoli.spiaggiata(vc):
+			p.scendi_veicolo(a.id)
+		return
+	if p.veicoli.e_canoa(vc) and p.veicoli.spiaggiata(vc) and rng.randf() < 0.5:
+		p.scendi_veicolo(a.id)
+		return
 	if a.hex != "" and a.postura == "prone":
 		p.cambia_postura(a.id, "standing")
 		return
@@ -176,6 +188,12 @@ func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Di
 		return
 	if a.stato != "fuori" and p.ponti().has(a.hex) and bool(p.regola("disinnesco", false)) and p.disinnesca_ponte(a.id).ok:
 		return
+	for hb in p.bunker_in_vista(a):
+		for arma in p.armi_da_fuoco(a):
+			if a.postura == "prone":
+				p.cambia_postura(a.id, "crouching")
+			if rng.randf() < 0.5 and p.tiro_bunker(a.id, arma.tipo, hb).ok:
+				return
 	if a.stato == "fuori":
 		p.scegli_azione(a.id, "muovi")
 		var r: Dictionary = p.muovi([a.id], "%s1" % char(65 + rng.randi_range(0, 9)))

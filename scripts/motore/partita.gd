@@ -69,6 +69,7 @@ func _applica_regole_terreno() -> void:
 	terreno.fiume = bool(regola("fiume", false))
 	terreno.illuminati = {}
 	terreno.guadi = {}
+	terreno.bunker = s.get("bunker", {}) if not s.is_empty() else {}
 	if not s.is_empty():
 		for hg in s.get("guadi", []):
 			terreno.guadi[str(hg)] = true
@@ -100,6 +101,8 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 	for d in missione.squadra:
 		var u := _nuovo_americano(d)
 		s.unita[u.id] = u
+	for hm in missione.get("modifiche_iniziali", {}):
+		s.modifiche[hm] = missione.modifiche_iniziali[hm]
 	terreno.imposta_modifiche(s.modifiche)
 	_applica_regole_terreno()
 	_log("titolo", titolo_missione())
@@ -193,6 +196,8 @@ func inizia_missione() -> Dictionary:
 	_log("azione", "La squadra entra in mappa: %s." % "; ".join(parti))
 	if bool(regola("jeep", false)) and not s.get("veicoli", {}).has("vjeep"):
 		_jeep_di_squadra(esagoni)
+	if int(regola("canoe", 0)) > 0 and not s.get("veicoli", {}).has("canoa1"):
+		_imbarca_canoe()
 	if bool(regola("radio", false)) and s.get("radio_hex", "") == "":
 		s.radio_hex = esagoni[0]
 		for a in americani():
@@ -793,6 +798,41 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			_op_sopravvissuto()
 		"morte_lancio":
 			_op_morte_lancio()
+		"bunker":
+			_crea_bunker(str(o.hex), str(o.porta))
+		"entra_bunker":
+			var gb: Dictionary = u(ctx.get("g", ""))
+			var hb := str(o.hex)
+			if not gb.is_empty() and in_mappa(gb) and gb.hex != hb:
+				var porta: String = s.get("bunker", {}).get(hb, {}).get("porta", "")
+				if porta != "" and gb.hex == porta:
+					ia.entra_da_paragrafo(ctx, hb)
+				elif porta != "":
+					ia.entra_da_paragrafo(ctx, porta)
+		"cratere":
+			s.modifiche[str(o.hex)] = "crater"
+			terreno.imposta_modifiche(s.modifiche)
+		"scelta_attiva":
+			if not s.has("scelte"):
+				s.scelte = {}
+			s.scelte[str(o.par)] = str(o.testo)
+			_log("info", "Annotato: «%s» (paragrafo %s), quando vuoi." % [str(o.testo), str(o.par)])
+		"linea_mine":
+			for hl in E.linea(str(o.da), str(o.a)):
+				s.punti[str(hl)] = "avviso_mine"
+		"togli_reazioni":
+			for x in tedeschi():
+				if str(x.get("reazione", "")) in o.r:
+					x.reazione = ""
+			_log("info", "Le reazioni speciali %s sono tolte." % ", ".join(o.r))
+		"g_enter_dir":
+			var gd: Dictionary = u(ctx.get("g", ""))
+			if not gd.is_empty() and in_mappa(gd):
+				var vd := E.vicino(gd.hex, int(o.dir))
+				if vd != "":
+					ia.entra_da_paragrafo(ctx, vd)
+		"rapide":
+			_op_rapide(ctx)
 		"g_exit":
 			if ctx.get("veicolo", false):
 				var ve: Dictionary = veicoli.v(str(ctx.get("veicolo_id", "")))
@@ -851,6 +891,29 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 		return int(s.evasi.get(str(int(t.evaded)), 0)) >= 1
 	if t.has("radio"):
 		return radio_presidiata()
+	if t.has("us_lato"):
+		for a in americani_attivi_in_mappa():
+			if lato_fiume(a.hex) == str(t.us_lato):
+				return true
+		return false
+	if t.has("us_strada"):
+		for a in americani_attivi_in_mappa():
+			if rispetto_strada(a.hex, str(t.us_strada[0])) in (["sud", "su"] if str(t.us_strada[1]) == "sud" else ["nord", "su"]):
+				return true
+		return false
+	if t.has("us_entro"):
+		for a in americani_attivi_in_mappa():
+			if E.distanza(a.hex, str(t.us_entro[0])) <= int(t.us_entro[1]):
+				return true
+		return false
+	if t.has("g_da"):
+		var gg2: Dictionary = u(ctx.get("g", ""))
+		return not gg2.is_empty() and str(gg2.get("hex_prec", "")) in t.g_da
+	if t.has("bunker_intatto"):
+		var hbk := _hex_test(t.bunker_intatto, ctx)
+		return s.get("bunker", {}).has(hbk) and not s.bunker[hbk].distrutto
+	if t.has("bunker_qui"):
+		return s.get("bunker", {}).has(str(ctx.get("hex", "")))
 	if t.has("inattivi"):
 		for num in t.inattivi:
 			var gi := u("g%d" % int(num))
@@ -914,6 +977,256 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 
 func _hex_test(v, ctx: Dictionary) -> String:
 	return str(ctx.get("hex", "")) if str(v) == "@hex" else str(v)
+
+# =================================================================== Missione 6: canoe e bunker
+## Lato del fiume (mappa A, fiume H1–O19): "est", "ovest" o "fiume".
+func lato_fiume(h: String) -> String:
+	var r := E.riga(h)
+	var cols: Array = []
+	for x in terreno.esagoni:
+		if E.riga(x) == r and terreno.esagoni[x].get("t", "") == "stream":
+			cols.append(E.colonna(x))
+	if cols.is_empty():
+		return "est"
+	var c := E.colonna(h)
+	if c > cols.max():
+		return "est"
+	if c < cols.min():
+		return "ovest"
+	return "fiume"
+
+## Posizione rispetto alla strada che parte da «da» (N12: N12–Y8, A6: A6–L11): "nord", "su" o "sud".
+func rispetto_strada(h: String, da: String) -> String:
+	var strada: Array = []
+	for x in terreno.esagoni:
+		if terreno.esagoni[x].get("t", "") == "road":
+			var c := E.colonna(x)
+			if (da == "N12" and c >= 13) or (da == "A6" and c <= 11):
+				strada.append(x)
+	if strada.is_empty():
+		return "sud"
+	if h in strada:
+		return "su"
+	var c := clampi(E.colonna(h), 13 if da == "N12" else 0, 24 if da == "N12" else 11)
+	var righe: Array = strada.filter(func(x): return E.colonna(x) == c).map(func(x): return E.riga(x))
+	if righe.is_empty():
+		return "sud"
+	return "nord" if E.riga(h) < righe.min() else "sud"
+
+func _imbarca_canoe() -> void:
+	s.imbarco = true
+	var gruppi: Dictionary = {}
+	for a in americani():
+		if a.hex != "" and attivo(a):
+			if not gruppi.has(a.hex):
+				gruppi[a.hex] = []
+			gruppi[a.hex].append(a)
+	var n := 0
+	for h in gruppi:
+		var lista: Array = gruppi[h]
+		var i := 0
+		while i < lista.size() and n < int(regola("canoe", 4)):
+			n += 1
+			var c: Dictionary = veicoli.crea("canoa%d" % n, "canoa", h, "us")
+			c.nome = "Canoa %d" % n
+			for j in 2:
+				if i < lista.size():
+					veicoli.sali(lista[i], c)
+					lista[i].postura = "crouching"
+					i += 1
+	s.imbarco = false
+	_log("info", "La squadra parte in %d canoe, due soldati per canoa." % n)
+
+## Una canoa può muoversi solo con due soldati attivi a bordo.
+func canoa_pronta(veic: Dictionary) -> bool:
+	return veicoli.occupanti(veic).filter(func(x): return attivo(x)).size() >= 2
+
+func _canoe_forate() -> void:
+	for v in veicoli.tutti():
+		if veicoli.e_canoa(v) and v.stato == "attivo" and v.get("forata", false) and not veicoli.spiaggiata(v):
+			if v.get("forata_round", -1) == -1:
+				v.forata_round = int(s.round.get("n", 0))
+			else:
+				_affonda_canoa(v, "la canoa forata imbarca acqua e affonda")
+		elif veicoli.e_canoa(v) and veicoli.spiaggiata(v):
+			v.forata_round = -1
+
+func _affonda_canoa(v: Dictionary, motivo: String) -> void:
+	var h: String = v.hex
+	var riva := ""
+	for x in E.vicini(h):
+		if terreno.esagoni.get(x, {}).get("t", "") != "stream" and not terreno.edificio(x):
+			riva = x
+			break
+	_log("danno", "%s: %s." % [v.nome, motivo])
+	for a in veicoli.occupanti(v):
+		veicoli.scendi(a)
+		if riva != "":
+			a.hex = riva
+			a.postura = "prone"
+	v.stato = "distrutto"
+	v.hex = ""
+	if riva != "":
+		_ingresso(riva, americani().filter(func(a): return a.hex == riva and attivo(a)).map(func(a): return a.id), false)
+
+func _op_rapide(ctx: Dictionary) -> void:
+	for v in veicoli.tutti():
+		if not veicoli.e_canoa(v) or v.stato != "attivo" or v.hex != ctx.get("hex", v.hex):
+			continue
+		var occ: Array = veicoli.occupanti(v).filter(func(x): return attivo(x))
+		if occ.is_empty():
+			continue
+		occ.sort_custom(func(a, b): return int(a.DS) > int(b.DS))
+		var timoniere: Dictionary = occ[0]
+		if controllo_pc(timoniere, 0, "rapide"):
+			_log("info", "%s supera le rapide." % v.nome)
+			continue
+		_log("par", paragrafi["872"].it, {"id": "872"})
+		var r := d10("Controllo d’incidente di %s (guida %d)" % [nome(timoniere), int(timoniere.DS)])
+		if r == 0 or (r != 9 and r <= int(timoniere.DS)):
+			_log("info", "%s riprende il controllo della canoa." % nome(timoniere))
+		else:
+			_affonda_canoa(v, "si capovolge nelle rapide")
+
+func _crea_bunker(h: String, porta: String) -> void:
+	if not s.has("bunker"):
+		s.bunker = {}
+	if s.bunker.has(h):
+		return
+	s.bunker[h] = {"porta": porta, "sfondata": false, "distrutto": false, "carica": false, "occupanti": [], "pv_dati": false}
+	s.modifiche[h] = "bunker"
+	terreno.imposta_modifiche(s.modifiche)
+	_applica_regole_terreno()
+	_log("info", "Un bunker in %s, con la porta verso %s." % [h, porta])
+
+## Gli occupanti iniziali vengono annotati quando si attivano nell’esagono del bunker.
+func _annota_occupanti_bunker() -> void:
+	for h in s.get("bunker", {}):
+		var b: Dictionary = s.bunker[h]
+		for g in unita_in(h, "de", false):
+			if not (g.id in b.occupanti) and b.occupanti.size() < 2 and str(g.hex_attivazione) == h:
+				b.occupanti.append(g.id)
+
+## Scelte lasciate al giocatore da un paragrafo (575, 713): si leggono quando si vuole.
+func esegui_scelta(par: String) -> Dictionary:
+	_inizio_comando()
+	if not s.get("scelte", {}).has(par):
+		return _errore("Scelta non disponibile.")
+	s.scelte.erase(par)
+	leggi(par, {"hex": "", "ids": []})
+	if fase_round() and s.turno.is_empty() and s.pausa == "":
+		_flusso()
+	_fine_comando()
+	return OK
+
+func bunker_in_vista(a: Dictionary) -> Array:
+	var out: Array = []
+	for h in s.get("bunker", {}):
+		if not s.bunker[h].distrutto and a.hex != "" and terreno.vede(a.hex, h, a.postura if a.postura != "prone" else "crouching", "standing"):
+			out.append(h)
+	return out
+
+func controlla_bunker() -> void:
+	_annota_occupanti_bunker()
+	for h in s.get("bunker", {}):
+		var b: Dictionary = s.bunker[h]
+		if b.pv_dati or b.occupanti.is_empty():
+			continue
+		var fuori := true
+		for id in b.occupanti:
+			if u(str(id)).stato in ["attivo"]:
+				fuori = false
+		if fuori and (b.distrutto or b.carica or s.modifiche.get(h, "") == "rubble"):
+			b.pv_dati = true
+			_pv(6, "bunker in %s messo fuori combattimento" % h)
+
+## Tiro contro il bunker (regole della Missione 6): +2 per colpire, poi tabella dei colpi.
+func tiro_bunker(id: String, tipo_arma: String, h: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	if s.fase != "round":
+		return _errore("Nelle Operazioni non si combatte.")
+	var b: Dictionary = s.get("bunker", {}).get(h, {})
+	if b.is_empty() or b.distrutto:
+		return _errore("Nessun bunker intatto in %s." % h)
+	var arma := arma_di(a, tipo_arma)
+	if arma.is_empty() or not (arma in armi_da_fuoco(a)):
+		return _errore("Arma non disponibile.")
+	if a.postura == "prone":
+		return _errore("Da prono non si spara.")
+	if not terreno.vede(a.hex, h, a.postura, "standing"):
+		return _errore("Il bunker non è in vista.")
+	var t := _turno_di(a)
+	if t.azione != "":
+		return _errore("Il tiro al bunker è un tiro mirato: un’azione a sé.")
+	var base := T.base_per_distanza(tipo_arma, E.distanza(a.hex, h))
+	if base < 0:
+		return _errore("Fuori gittata.")
+	t.azione = "mirato"
+	var prob := clampi(base + 2 + int(a.WS) - (1 if a.ferito else 0), 0, 8)
+	_log("combattimento", "%s spara al bunker in %s (serve 0–%d)." % [nome(a), h, prob])
+	_fx("tiro", {"da": a.hex, "a": h, "tiratore": a.id, "bersaglio": "", "arma": tipo_arma, "mirato": true, "esito": "mancato", "prob": prob})
+	_rendi_consapevoli(h)
+	var r := d10()
+	if r == 0 or (r != 9 and r <= prob):
+		_colpo_bunker(a, arma, h, b)
+	else:
+		_log("dado", "Mancato (%d)." % r)
+	if tipo_arma == "bazooka":
+		_consuma_bazooka(a, arma)
+	else:
+		var pm := percentuale()
+		if pm <= int(T.ARMI[tipo_arma].mun):
+			a.munizioni[tipo_arma] = maxi(0, munizioni_arma(a, tipo_arma) - 1)
+	controlla_bunker()
+	if attivo(a) and not s.turno.is_empty():
+		_termina_azione(a)
+	_fine_comando()
+	return OK
+
+func _colpo_bunker(a: Dictionary, arma: Dictionary, h: String, b: Dictionary) -> void:
+	var dalla_porta: bool = a.hex == str(b.porta) or (E.direzione(h, a.hex) == E.direzione(h, str(b.porta)) and E.direzione(h, a.hex) >= 0)
+	var r := d10("Bunker colpito: lato %s" % ("della porta" if dalla_porta else "frontale"))
+	var parte := ""
+	if dalla_porta:
+		parte = "muro" if r <= 4 else ("porta" if r <= 7 else "equipaggio")
+	else:
+		parte = "muro" if r <= 7 else ("feritoia" if r == 8 else "equipaggio")
+	if parte == "equipaggio" and arma.tipo == "bazooka":
+		parte = "porta" if dalla_porta else "feritoia"
+	if parte == "equipaggio":
+		var esposti: Array = unita_in(h, "de").filter(func(x): return x.postura != "prone" or (dalla_porta and b.sfondata))
+		if esposti.is_empty():
+			_log("info", "Colpo nell’apertura, ma l’equipaggio è a terra: nessun effetto.")
+			return
+		var x: Dictionary = esposti[rng.randi_range(0, esposti.size() - 1)]
+		var rd := d10()
+		var l := T.lettera_danno(T.ARMI[arma.tipo].danni, rd)
+		_log("dado", "Colpito %s: %d → %s" % [nome(x), rd, _nome_danno(l)])
+		_applica_danno(x, l, a)
+		return
+	var dp := d10()
+	var pen := T.penetrazione(arma.tipo, dp)
+	_log("dado", "Colpo su %s: penetrazione %d → %s." % [parte, dp, {"L": "leggera", "M": "media", "H": "pesante"}.get(pen, "nessuna")])
+	var distrutto := (parte == "muro" and pen == "H") or (parte in ["feritoia", "porta"] and pen in ["H", "M"])
+	if distrutto:
+		b.distrutto = true
+		s.modifiche[h] = "rubble"
+		terreno.imposta_modifiche(s.modifiche)
+		_fx("esplosione", {"a": h, "grande": true})
+		_log("combattimento", "Il bunker in %s è distrutto!" % h)
+		for x in unita_in(h, "", false):
+			if x.stato in ["attivo", "incapacitato", "catturato", "arreso"]:
+				_uccidi(x, "nel bunker")
+	elif parte == "porta" and pen == "L" and not b.sfondata:
+		b.sfondata = true
+		_applica_regole_terreno()
+		_log("combattimento", "La porta del bunker in %s è sfondata: da lì si può entrare." % h)
+	else:
+		_log("info", "Il bunker regge.")
 
 # =================================================================== Missione 5: guadi, installazioni, documenti
 const NOMI_INSTALLAZIONI := {"antenna": "Un’antenna", "radar": "Una stazione radar", "rampa": "La rampa di lancio", "v2": "Il razzo V-2"}
@@ -2187,6 +2500,7 @@ func _consuma_turno(x: Dictionary) -> void:
 		x.slot = "completo"
 
 func _fine_round() -> void:
+	_canoe_forate()
 	_passo("fine_round", {"n": int(s.round.n)})
 	s.ultimo_round = int(s.round.n)
 	_log("round", "Fine del Round %d." % int(s.round.n))
@@ -2240,6 +2554,8 @@ func _inizio_comando() -> void:
 func _fine_comando() -> void:
 	terreno.imposta_modifiche(s.modifiche)
 	_controlla_staffette()
+	if s.has("bunker"):
+		controlla_bunker()
 	_controlla_fine_automatica()
 	aggiornata.emit()
 
@@ -2408,6 +2724,12 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		if a.stato != "attivo" and a.stato != "fuori":
 			return _errore("%s non può muoversi." % nome(a))
 	var veic_m: Dictionary = veicoli.di(primo)
+	if veicoli.e_canoa(veic_m) and not veicoli.e_autista(primo):
+		return _errore("La canoa la muove il primo soldato a bordo; per andare a terra bisogna prima spiaggiarla e scendere.")
+	if veicoli.e_canoa(veic_m) and not canoa_pronta(veic_m):
+		return _errore("Una canoa si muove solo con due soldati attivi a bordo.")
+	if s.get("bunker", {}).has(verso) and not s.bunker[verso].sfondata and not veicoli.attivo(veic_m):
+		return _errore("Nel bunker si entra solo dalla porta sfondata.")
 	if veicoli.attivo(veic_m) and veicoli.e_autista(primo):
 		ids = veicoli.occupanti(veic_m).map(func(x): return x.id)
 	elif s.fase == "round" and ids.size() > 1:
@@ -2599,6 +2921,8 @@ func scendi_veicolo(id: String) -> Dictionary:
 	var veic: Dictionary = veicoli.di(a)
 	if veic.is_empty():
 		return _errore("Il soldato non è su un veicolo.")
+	if veicoli.e_canoa(veic) and not veicoli.spiaggiata(veic):
+		return _errore("Si scende solo da una canoa spiaggiata: prima portala a riva.")
 	if s.fase == "round":
 		var t := _turno_di(a)
 		if veicoli.e_autista(a) and t.azione == "muovi":
@@ -2667,7 +2991,13 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 	var ip := T.indice_postura(bersaglio.postura)
 	var th := terreno.tipo(bersaglio.hex)
 	var veic_b: Dictionary = veicoli.di(bersaglio)
-	if veicoli.attivo(veic_b):
+	if veicoli.e_canoa(veic_b):
+		# In canoa si conta accovacciati in terreno scoperto.
+		ip = T.indice_postura("crouching")
+		var mc: int = int(T.MOD_TERRENO.get("clear", [0, 0, 0])[ip])
+		if mc != 0:
+			mods.append(["in canoa (accovacciato allo scoperto)", mc])
+	elif veicoli.attivo(veic_b):
 		mods.append(["%s, veicolo piccolo" % terreno.nome_tipo(bersaglio.hex), veicoli.modificatore(veic_b)])
 	elif terreno.edificio(bersaglio.hex) and not (terreno.edificio(tiratore.hex) and dist <= 1 and terreno.tipo_lato(tiratore.hex, bersaglio.hex) == ""):
 		var vicino := dist <= 1
@@ -2740,7 +3070,14 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	fx.esito = "colpito" if colpito else "mancato"
 	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
-	if colpito and veicoli.attivo(veicoli.di(bersaglio)):
+	if not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)):
+		var rc := d10()
+		if rc % 2 == 0:
+			var vc: Dictionary = veicoli.di(bersaglio)
+			if not vc.get("forata", false):
+				vc.forata = true
+				_log("danno", "Il colpo buca la %s (%d): deve spiaggiare entro il Round o affonda." % [vc.nome.to_lower(), rc])
+	if colpito and veicoli.attivo(veicoli.di(bersaglio)) and not veicoli.e_canoa(veicoli.di(bersaglio)):
 		veicoli.colpito(veicoli.di(bersaglio), tipo, tiratore, mirato, fx)
 	elif colpito:
 		var rd := d10()
@@ -3040,6 +3377,9 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		return
 	if tipo == "satchel":
 		_colpisci_installazione(arrivo)
+		if s.get("bunker", {}).has(arrivo):
+			s.bunker[arrivo].carica = true
+			_log("combattimento", "La carica esplode dentro il bunker in %s." % arrivo)
 	var presenti: Array = unita_in(arrivo, "", false).filter(func(x): return x.stato in ["attivo", "incapacitato", "catturato"])
 	for x in presenti:
 		if x.lato == "de":

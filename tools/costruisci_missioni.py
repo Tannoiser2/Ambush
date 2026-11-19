@@ -158,6 +158,26 @@ MISSIONI[5] = {
   "testo_fine": "",
 }
 
+MISSIONI[6] = {
+  "titolo": "Gita in canoa fino al Vallo occidentale", "titolo_originale": "Pleasure Boating to the West Wall", "data": "Germania, 16 gennaio 1945", "mappa": "A",
+  "nord": "in alto",
+  "briefing": "16 gennaio 1945. L’esercito americano è arrivato al Vallo occidentale. Vicino a Treviri un gruppo di bunker blocca l’avanzata: né gli attacchi né i bombardamenti dei B-17 sono riusciti a distruggerli. La tua squadra è stata «offerta volontaria» per una missione pericolosa: avvicinarsi di notte in canoa e far saltare i bunker.",
+  "ingresso": "Mappa A, nord in alto. La squadra entra in H1 sulle quattro canoe, due soldati per canoa. Sulla mappa ci sono già crateri in G7, K8, L12, L15, K18, M17 e macerie in K13 e L13. Quattro cariche da demolizione e un bazooka per i bunker.",
+  "regole_testo": "[b]Regole speciali.[/b] Notte: si vede al massimo a 5 esagoni. Il fiume da H1 a O19 si attraversa solo sul ponte intatto o in canoa. Una canoa si muove solo sul fiume (4 PM nei Round, 1 per esagono; nelle Operazioni un esagono alla volta) e solo con due soldati attivi a bordo; si spiaggia entrando in un esagono di terra accanto al fiume (1 PM), e solo da spiaggiata si sale o si scende. Chi è in canoa conta come accovacciato in terreno scoperto; se un tiro tedesco lo manca, con un dado pari la canoa è forata e deve spiaggiare entro il Round, o affonda. I bunker hanno feritoie su tutti i lati e una porta: si possono colpire direttamente (+2 al tiro, tabelle dei colpi muro, feritoia, porta, equipaggio).",
+  "ingresso_breve": "in H1, sulle canoe", "uscita_breve": "il margine nord (anche in canoa)",
+  "ingresso_esagoni": ["H1"], "uscita_esagoni": [f"{c}1" for c in COL],
+  "vittoria_pv": 12, "attivazione": {"1": 1, "2": 3, "3": 5, "4": 7},
+  "obiettivi": [],
+  "modifiche_iniziali": {"G7": "crater", "K8": "crater", "L12": "crater", "L15": "crater", "K18": "crater", "M17": "crater", "K13": "rubble", "L13": "rubble"},
+  "regole": {"vista": 5, "fiume": True, "canoe": 4, "bunker": True},
+  "squadra_armi": {"A": ["smg"], "B": ["carbine", "satchel"], "C": ["bazooka"], "D": ["carbine", "satchel"], "E": ["sar"], "F": ["sar", "satchel"], "G": ["smg"], "H": ["sar", "satchel"]},
+  "squadra_munizioni": {"A": {"smg": 4, "granata": 2}, "B": {"carbine": 3, "granata": 2}, "C": {"bazooka": 3, "granata": 1},
+                        "D": {"carbine": 3, "granata": 2}, "E": {"sar": 4, "granata": 2}, "F": {"sar": 3, "granata": 2},
+                        "G": {"smg": 4, "granata": 2}, "H": {"sar": 3, "granata": 2}},
+  "vittoria_testo": "[b]Vittoria: 12 PV.[/b] Ogni bunker messo fuori combattimento vale 6 PV: tutti i suoi occupanti iniziali uccisi o incapacitati, e il bunker ridotto in macerie oppure con una carica fatta esplodere dentro. Valgono anche le attivazioni dei tedeschi. Un incapacitato non costa PV se lo porti fuori dal margine nord (anche in canoa). La missione termina appena non ci sono più soldati americani attivi sulla mappa.",
+  "testo_fine": "",
+}
+
 def verifica(n, d):
     """Ogni riferimento delle carte e delle carte dei tedeschi attivati deve avere il suo paragrafo."""
     P = json.loads((R / "data/paragrafi.json").read_text())

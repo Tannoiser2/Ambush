@@ -409,6 +409,45 @@ func esegui(n: int) -> void:
 				_arrenditi()
 			else:
 				esegui(802)
+		732:
+			var coppia: Array = [20, 21] if E.distanza(g.hex, "H15") <= E.distanza(g.hex, "S13") else [65, 66]
+			var inattivi := 0
+			var arma_mg := {}
+			for num in coppia:
+				var m := p.u("g%d" % num)
+				if m.is_empty() or not p.attivo(m):
+					inattivi += 1
+					if not m.is_empty() and m.hex == g.hex:
+						for w in m.armi:
+							if w.tipo in ["lmg", "mmg", "hmg"]:
+								arma_mg = w
+			if inattivi == 1 and not arma_mg.is_empty():
+				for num in coppia:
+					var m := p.u("g%d" % num)
+					if not m.is_empty() and not p.attivo(m):
+						m.armi.erase(arma_mg)
+				g.armi.append(arma_mg)
+				p._log("tedesco", "Il %s prende la mitragliatrice del bunker." % p.nome(g))
+				esegui(815)
+			elif inattivi == 1:
+				esegui(815)
+			else:
+				esegui(802)
+		770:
+			var migliore := ""
+			var quanti := 0
+			for a in p.americani_attivi_in_mappa():
+				var d := E.distanza(a.hex, g.hex)
+				if d >= 1 and d <= 3:
+					var n_h := p.unita_in(a.hex, "us").size()
+					if n_h > quanti or (n_h == quanti and migliore != "" and d < E.distanza(migliore, g.hex)):
+						quanti = n_h
+						migliore = a.hex
+			if migliore != "" and int(g.munizioni.get("granata", 0)) > 0 and _alzati() and p.probabilita_lancio(g, "granata", migliore).ok:
+				p.risolvi_lancio(g, "granata", migliore)
+			else:
+				_alzati()
+				_miglior_tiro("vicino")
 		911:
 			esegui(824 if g.hex == "J13" else 803)
 		912:
@@ -1006,6 +1045,7 @@ func _passo(verso: String, strisciando: bool) -> bool:
 			return false
 		_mp -= costo
 	var da_hex: String = g.hex
+	g.hex_prec = da_hex
 	g.hex = verso
 	p.segna_passaggio_ponte(da_hex, verso)
 	g.sul_ponte = p.terreno.ponte(verso) and da_hex in p.terreno.capi_ponte(verso)
@@ -1041,6 +1081,7 @@ func entra_da_paragrafo(ctx: Dictionary, h: String) -> void:
 	if not _passo(h, bool(ctx.get("strisciando", false))):
 		# Senza punti sufficienti si entra comunque: il riferimento definisce la mossa.
 		var da_h: String = _g.hex
+		_g.hex_prec = da_h
 		_g.hex = h
 		p.segna_passaggio_ponte(da_h, h)
 		p._log("tedesco", "Il %s entra in %s." % [p.nome(_g), h])

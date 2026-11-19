@@ -6,12 +6,12 @@ const E = preload("res://scripts/motore/esagoni.gd")
 
 const BLOCCANTI := ["woods", "brush", "rough", "rubble"]
 const SCOPERTI := ["clear", "road", "stream", "bridge", "ford"]
-const EDIFICI := ["stone_building", "wood_building"]
+const EDIFICI := ["stone_building", "wood_building", "bunker"]
 const NOMI := {
 	"clear": "terreno libero", "road": "strada", "cover": "copertura", "brush": "macchia",
 	"woods": "bosco", "rough": "terreno accidentato", "stream": "ruscello", "bridge": "ponte",
 	"stone_building": "edificio in pietra", "wood_building": "edificio in legno",
-	"crater": "cratere", "rubble": "macerie",
+	"crater": "cratere", "rubble": "macerie", "bunker": "bunker",
 }
 
 var esagoni: Dictionary = {}
@@ -68,7 +68,18 @@ func capi_ponte(h: String) -> Array[String]:
 			out.append(v)
 	return out
 
+## Bunker (Missione 6): {esagono: {porta: esagono davanti alla porta, sfondata: bool}}. Tutti i lati sono feritoie.
+var bunker: Dictionary = {}
+
 func tipo_lato(a: String, b: String) -> String:
+	if bunker.has(a) or bunker.has(b):
+		var hb := a if bunker.has(a) else b
+		var fuori := b if hb == a else a
+		if bunker.has(fuori):
+			return ""
+		if str(bunker[hb].get("porta", "")) == fuori and bool(bunker[hb].get("sfondata", false)):
+			return "door"
+		return "window"
 	var k := E.lato(a, b)
 	if lati.has(k):
 		return str(lati[k])
@@ -87,6 +98,10 @@ func costo_movimento(a: String, b: String) -> int:
 		return -1
 	var tl := tipo_lato(a, b)
 	if tl == "wall":
+		return -1
+	if bunker.has(b) and str(bunker[b].get("porta", "")) != a:
+		return -1
+	if bunker.has(a) and str(bunker[a].get("porta", "")) != b:
 		return -1
 	var t := tipo(b)
 	var c := 1

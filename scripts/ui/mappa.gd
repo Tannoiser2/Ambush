@@ -302,6 +302,14 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 6: bunker
+	for h in s.get("bunker", {}):
+		var bk: Dictionary = s.bunker[h]
+		var testo_b := "BUNKER DISTRUTTO" if bk.distrutto else ("BUNKER · PORTA SFONDATA" if bk.sfondata else "BUNKER")
+		_marcatore(h, testo_b, Vector2(0.0, -0.62), Color("3a3a3a") if bk.distrutto else Color("4b4f55"))
+		if not bk.distrutto and E.adiacenti(h, str(bk.porta)):
+			var pm := (centro_schermo(h) + centro_schermo(str(bk.porta))) / 2.0
+			draw_circle(pm, maxf(3.0, RAGGIO * zoom * 0.12), Color("c9a227"))
 	# Missione 5: installazioni da distruggere
 	for h in s.get("installazioni", {}):
 		var ins: Dictionary = s.installazioni[h]
@@ -346,7 +354,7 @@ func _draw() -> void:
 			_segnalino(h, nome_p, Vector2(0.0, -0.45), 0.7)
 		else:
 			_marcatore(h, {"carro": "PANZER", "bunker": "BUNKER", "trappola": "TRAPPOLA", "guado": "GUADO",
-				"deposito": "CARBURANTE", "kubelwagen": "KÜBELWAGEN", "avviso_mine": "MINEN!", "rifiuti": "RIFIUTI", "radar": "RADAR"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
+				"deposito": "CARBURANTE", "kubelwagen": "KÜBELWAGEN", "avviso_mine": "MINEN!", "rifiuti": "RIFIUTI", "radar": "RADAR", "sherman": "SHERMAN DISTRUTTO"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
 	# Veicoli
 	for veic in s.get("veicoli", {}).values():
 		if str(veic.hex) != "":

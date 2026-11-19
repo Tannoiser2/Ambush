@@ -53,26 +53,18 @@ Richiesta di Stefano: tutte le 8 missioni del gioco base, poi le espansioni. Pub
   dal foglio quando l’OCR non dà un esagono adiacente, correzioni puntuali CORR_EXCEL/CORR_EVENTI. Attenzione:
   nel foglio «S1» al posto di «S7» in vari esagoni (l’OCR qui è giusto).
 
-## Prossimo passo: Missione 6 «Gita in canoa fino al Vallo occidentale» (mappa A, nord in alto)
-- Regole (regolamento p. 37–38, testo in /home/claude/aid/rules.txt): fiume H1–O19 attraversabile solo sui ponti o in
-  canoa; notte (vista 5, escluso il proprio esagono); 4 canoe (2 soldati + 2 caselle di porto, o 3 soldati),
-  si muovono solo sul fiume (4 PM nei Round, 1 per esagono; un esagono per volta nelle Operazioni con controllo
-  di paragrafo), servono 2 soldati attivi a bordo; spiaggiare = entrare in un esagono di terra adiacente (1 PM);
-  salire/scendere solo a canoa spiaggiata (1 PM / 1 azione); se un tiro tedesco manca, dado pari = canoa forata
-  (deve spiaggiare nel turno successivo o affonda). Ingresso in H1 in canoa. Crateri G7 K8 L12 L15 K18 M17,
-  macerie K13 L13. Livelli c1 0–1, c2 0–3, c3 0–5, c4 0–7.
-- Bunker: esagono come edificio con finestre su tutti i lati e una porta (lato indicato dal paragrafo
-  d’attivazione); tabelle dei colpi fronte/porta (muro H, feritoia M/H, porta L = sfondata, equipaggio);
-  +2 al tiro contro il bunker; distrutto = occupanti originali fuori combattimento E (macerie O carica esplosa
-  dentro). 6 PV per bunker, vittoria 12 PV; fine quando non ci sono americani attivi in mappa.
-- Paragrafi mancanti: 90 (561–599, 702–786, 872–899). Attenzione: la carta C3 cita s4:738 e s4:739, ma 738 è
-  già un paragrafo della M4 (controllare sulla scansione: forse è un’altra cifra).
-- Azioni tedesche ancora da scrivere: 732, 770, 841–843, 926–932 (servono a M6–M8).
+- Missione 6 FATTA (test `tests/missione6.gd`, `simula.gd -- 4 1 6`, scatti `tests/visivi/missione6_ui.gd`).
+  Canoe = veicoli «canoa» (solo fiume, spiaggiano su terra adiacente; salire/scendere solo spiaggiate; due
+  soldati attivi per muoversi; forata se un tiro tedesco manca con dado pari, affonda a fine Round se non
+  spiaggiata; rapide 750/872). Bunker `s.bunker` + `terreno.bunker` (feritoie, porta), `tiro_bunker`,
+  `_colpo_bunker`, `controlla_bunker` (6 PV). Scelte del giocatore `s.scelte` (575, 713). Geometria:
+  `lato_fiume`, `rispetto_strada`. Semplificazione: le cariche e il bazooka stanno addosso ai soldati
+  (non nelle caselle di porto delle canoe).
 
 ## Da fare
 1. Motore multi-missione: `data/missioni/N.json`, scelta missione nel menu, mappa A/B, salvataggi per missione,
    codice M1 (R15, T8, K13...) spostato dietro `missione.id == 1`.
 2. Paragrafi per missione (testo italiano + ops), come `tools/paragrafi_m1.py`; tedeschi dalle carte
    (`Cards_ready_to_print_v1.5.pdf`, 75 carte + veicoli).
-3. Regole speciali: M6 canoe, bunker, notte; M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
+3. Regole speciali: M7 jeep, mine anticarro, ingresso per evento casuale, mappa A sud in alto;
    M8 Sherman (entra in A6), blocchi stradali, XXX.

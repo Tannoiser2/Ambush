@@ -1033,6 +1033,9 @@ func _azioni_round(a: Dictionary) -> void:
 ## Salire e scendere da un veicolo americano nello stesso esagono.
 ## Missione 3: ponti (paragrafo 1000), deposito di carburante, ruota della jeep.
 func _bottoni_ponte(a: Dictionary) -> void:
+	for par_s in p.s.get("scelte", {}):
+		var ps: String = par_s
+		_b(str(p.s.scelte[par_s]), func(): _esito(p.esegui_scelta(ps)), "Quando vuoi: si legge il paragrafo %s." % par_s)
 	if int(a.get("paracadute", 0)) > 0 and p.s.fase == "round":
 		_b("Togli il paracadute (%d)" % int(a.paracadute), func(): _esito(p.togli_paracadute(a.id)), "Due azioni, da accovacciati o in piedi: finché non l’ha tolto non può fare altro.", a.postura != "prone")
 	var cassa: Dictionary = p.s.get("cassa", {})
@@ -1061,6 +1064,8 @@ func _bottoni_ponte(a: Dictionary) -> void:
 
 func _bottoni_veicolo(a: Dictionary) -> void:
 	var veic: Dictionary = p.veicoli.di(a)
+	if p.veicoli.e_canoa(veic) and not p.veicoli.spiaggiata(veic):
+		return
 	if not veic.is_empty():
 		_b("Scendi dalla %s" % veic.nome, func(): _esito(p.scendi_veicolo(a.id)), "Nei Round costa 1 punto movimento di un’azione di movimento.")
 		return
@@ -1086,6 +1091,9 @@ func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 			if scelta:
 				b.add_theme_color_override("font_color", Tema.OTTONE)
 	if mirato:
+		for hb in p.bunker_in_vista(a):
+			var hbb: String = hb
+			_b("Spara al bunker in %s" % hb, func(): _esito(p.tiro_bunker(a.id, arma_scelta[a.id], hbb)), "Tiro mirato con +2: poi la tabella dei colpi (muro, feritoia, porta, equipaggio).", a.postura != "prone")
 		var b := _b("Tiro mirato", func(): _imposta_modo(a, "mirato"), "Un tiro senza malus; il bazooka spara solo mirato.", a.postura != "prone")
 		if modo == "mirato":
 			b.add_theme_color_override("font_color", Tema.OTTONE)
