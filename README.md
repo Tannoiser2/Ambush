@@ -56,6 +56,7 @@ godot --headless --path . --script tests/calcola_alture.gd
 godot --headless --path . --script tests/verifica.gd
 godot --headless --path . --script tests/schieramento.gd
 godot --headless --path . --script tests/attivazione_round.gd
+godot --headless --path . --script tests/salvataggio.gd
 godot --headless --path . --script tests/simula.gd -- 50 1      # 50 partite simulate sul motore
 xvfb-run godot --path . --script tests/visivi/tocco.gd           # gesti a tocco sulla mappa
 xvfb-run godot --path . --script tests/visivi/partita_ui.gd -- 2 1   # partite intere attraverso l’interfaccia

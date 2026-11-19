@@ -135,7 +135,9 @@ func salva() -> Dictionary:
 func carica(dati: Dictionary) -> bool:
 	if int(dati.get("versione", 0)) != 2:
 		return false
-	s = dati.duplicate(true)
+	# Un salvataggio riletto dal JSON ha tutti i numeri come decimali (1.0 al posto di 1):
+	# vanno riportati a interi, altrimenti le ricerche per Condizione e per numero falliscono.
+	s = _interi(dati.duplicate(true))
 	rng.seed = int(s.seme)
 	if s.has("rng_stato"):
 		rng.state = int(s.rng_stato)
@@ -143,6 +145,18 @@ func carica(dati: Dictionary) -> bool:
 	recenti.clear()
 	aggiornata.emit()
 	return true
+
+## Riporta a interi i numeri senza parte decimale, in tutto lo stato.
+func _interi(v):
+	if v is float:
+		return int(v) if v == floorf(v) and absf(v) < 9.0e15 else v
+	if v is Dictionary:
+		for k in v.keys():
+			v[k] = _interi(v[k])
+	elif v is Array:
+		for i in v.size():
+			v[i] = _interi(v[i])
+	return v
 
 # =================================================================== utilità
 func d10(motivo := "") -> int:
@@ -274,7 +288,7 @@ func _pv(n: int, motivo: String) -> void:
 	_log("pv", "%+d PV — %s" % [n, motivo])
 
 func livello_attivazione() -> int:
-	return int(missione.attivazione.get(str(s.condizione), 8))
+	return int(missione.attivazione.get(str(int(s.condizione)), 8))
 
 func fase_round() -> bool:
 	return s.fase == "round"
@@ -356,15 +370,15 @@ func _lascia_oggetto(h: String, ogg: Dictionary) -> void:
 
 # =================================================================== paragrafi
 func riferimento(h: String, cond := -1) -> String:
-	var c: Dictionary = missione.condizioni[str(s.condizione if cond < 0 else cond)]
+	var c: Dictionary = missione.condizioni[str(int(s.condizione) if cond < 0 else cond)]
 	return str(c.esagoni.get(h, "NONE"))
 
 func riferimento_evento(n: int) -> String:
-	var c: Dictionary = missione.condizioni[str(s.condizione)]
+	var c: Dictionary = missione.condizioni[str(int(s.condizione))]
 	return str(c.evento.get(str(n), "NONE"))
 
 func movimento_rosso(h: String) -> String:
-	var c: Dictionary = missione.condizioni[str(s.condizione)]
+	var c: Dictionary = missione.condizioni[str(int(s.condizione))]
 	return str(c.movimenti.get(h, ""))
 
 ## Risolve un riferimento delle carte (con eventuale prefisso di avvistamento).
