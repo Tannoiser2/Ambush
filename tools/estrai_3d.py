@@ -82,6 +82,55 @@ def estrai(lettera):
                 continue
             muri.append({"tipo": nome, "poly": [[round(float(x) * SCALA, 1), round(float(y) * SCALA, 1)] for x, y in ap]})
 
+    # --- pianta degli edifici: i muri vicini formano un edificio; si chiude il contorno
+    edif_poly = []
+    for nome, m in (("pietra", azzurro), ("legno", legno)):
+        mm = m & edifici
+        largo = cv2.morphologyEx(mm, cv2.MORPH_OPEN, disco(17))
+        mm = mm & (1 - cv2.dilate(largo, disco(4)))
+        mm = cv2.morphologyEx(mm, cv2.MORPH_OPEN, disco(3))
+        # gruppi di esagoni edificio adiacenti (stesso tipo): ognuno è un edificio
+        tipo_hex = "stone_building" if nome == "pietra" else "wood_building"
+        hex_ed = [h for h in ids if tipi.get(h, "") == tipo_hex]
+        visti, gruppi_hex = set(), []
+        def vicini_h(h):
+            c, r = ord(h[0]) - 65, int(h[1:])
+            out = []
+            for k2, h2 in enumerate(hex_ed):
+                c2, r2 = ord(h2[0]) - 65, int(h2[1:])
+                if np.linalg.norm(centro(c, r) - centro(c2, r2)) < RAGGIO * 1.9 and h2 != h:
+                    out.append(h2)
+            return out
+        for h in hex_ed:
+            if h in visti:
+                continue
+            coda, gr = [h], []
+            visti.add(h)
+            while coda:
+                x = coda.pop()
+                gr.append(x)
+                for y in vicini_h(x):
+                    if y not in visti:
+                        visti.add(y)
+                        coda.append(y)
+            gruppi_hex.append(gr)
+        for gr in gruppi_hex:
+            zona = np.isin(idx, [ids.index(h) for h in gr]).astype(np.uint8)
+            zona = cv2.dilate(zona, disco(12))
+            g = (zona & mm).astype(np.uint8)
+            if g.sum() < 800:
+                continue
+            ch = cv2.morphologyEx(g, cv2.MORPH_CLOSE, disco(70))
+            cont, _ = cv2.findContours(ch, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            c = max(cont, key=cv2.contourArea)
+            rett = cv2.minAreaRect(c)
+            area_r = rett[1][0] * rett[1][1]
+            if cv2.contourArea(c) < 0.72 * area_r:
+                ap = cv2.approxPolyDP(c, 12.0, True).reshape(-1, 2)
+            else:
+                ap = cv2.boxPoints(rett)
+            if len(ap) >= 3:
+                edif_poly.append({"tipo": nome, "poly": [[float(x), float(y)] for x, y in ap]})
     meta = lambda m: cv2.resize(m, (img.shape[1] // 2, img.shape[0] // 2), interpolation=cv2.INTER_AREA)
 
     def semina(densita, soglia, passo, raggio_fn, massimo=4000):
@@ -137,7 +186,7 @@ def estrai(lettera):
     cv2.imwrite(os.path.join(RADICE, "assets/maps/mappa_%s_maschere.png" % lettera), out)
 
     ris = {"mappa": lettera.upper(), "nota": "Generato da tools/estrai_3d.py: coordinate in pixel della mappa.",
-           "alberi": alberi, "cespugli": cespugli, "ciuffi": ciuffi, "muri": muri}
+           "alberi": alberi, "cespugli": cespugli, "ciuffi": ciuffi, "muri": muri, "edifici": edif_poly}
     json.dump(ris, open(os.path.join(RADICE, "data/mappa_%s_3d.json" % lettera), "w"), separators=(",", ":"))
     print(lettera, "alberi", len(alberi), "cespugli", len(cespugli), "ciuffi", len(ciuffi), "muri", len(muri))
     return img, alberi, cespugli, muri
@@ -152,6 +201,8 @@ if __name__ == "__main__":
             cv2.circle(vis, (int(x / SCALA), int(y / SCALA)), int(r / SCALA), (0, 140, 0), 3)
         for x, y, r in cespugli:
             cv2.circle(vis, (int(x / SCALA), int(y / SCALA)), max(2, int(r / SCALA)), (0, 200, 200), 2)
+        for m in json.load(open(os.path.join(RADICE, "data/mappa_%s_3d.json" % l)))["edifici"]:
+            cv2.polylines(vis, [(np.array(m["poly"]) / SCALA).astype(np.int32)], True, (0, 0, 255), 6)
         for m in muri:
             p = (np.array(m["poly"]) / SCALA).astype(np.int32)
             cv2.polylines(vis, [p], True, (200, 0, 0) if m["tipo"] == "pietra" else (0, 60, 160), 4)

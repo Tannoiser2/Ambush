@@ -40,6 +40,7 @@ var alberi_xf: Array = []             # trasformazioni originali delle chiome
 var tronchi_xf: Array = []
 var _firma_oggetti := ""
 var _firma_pedine := ""
+var _muri_rovine: Array = []
 
 # camera
 var bersaglio := Vector3(21, 0, 19)
@@ -78,7 +79,7 @@ func _init() -> void:
 	mondo.add_child(cam)
 	luce = DirectionalLight3D.new()
 	luce.rotation_degrees = Vector3(-48, -35, 0)
-	luce.light_energy = 1.05
+	luce.light_energy = 0.72
 	luce.light_color = Color(1.0, 0.96, 0.88)
 	luce.shadow_enabled = true
 	luce.shadow_bias = 0.04
@@ -89,7 +90,9 @@ func _init() -> void:
 	env.background_color = Color("2b2f24")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color(0.72, 0.74, 0.78)
-	env.ambient_light_energy = 0.55
+	env.ambient_light_energy = 0.34
+	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	env.tonemap_exposure = 0.95
 	env.fog_enabled = true
 	env.fog_light_color = Color("3a3f31")
 	env.fog_density = 0.006
@@ -453,9 +456,8 @@ func _costruisci_vegetazione() -> void:
 		tm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s * rng.randf_range(0.8, 1.6), s)), punto3d(p, 0.06 * s)))
 		tm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.13, 0.19), rng.randf_range(0.3, 0.45), rng.randf_range(0.5, 0.65)))
 	_aggiungi_mm(tm, false)
-	# Muri delle case diroccate
-	for m in d.get("muri", []):
-		_muro(m.poly, str(m.tipo))
+	# I muri disegnati servono solo per le case ridotte in macerie (vedi _aggiorna_oggetti)
+	_muri_rovine = d.get("muri", [])
 
 func _aggiungi_mm(mm: MultiMesh, ombra: bool) -> void:
 	var mi := MultiMeshInstance3D.new()
@@ -464,7 +466,7 @@ func _aggiungi_mm(mm: MultiMesh, ombra: bool) -> void:
 	oggetti.add_child(mi)
 
 ## Muro estruso dal contorno disegnato sulla mappa.
-func _muro(poly_dati: Array, tipo: String) -> void:
+func _muro(poly_dati: Array, tipo: String, padre: Node3D = null) -> void:
 	var poly := PackedVector2Array()
 	for q in poly_dati:
 		poly.append(Vector2(float(q[0]), float(q[1])))
@@ -505,7 +507,7 @@ func _muro(poly_dati: Array, tipo: String) -> void:
 	var mi := MeshInstance3D.new()
 	mi.mesh = st.commit()
 	mi.material_override = _materiale(colore, 0.95)
-	oggetti.add_child(mi)
+	(padre if padre != null else oggetti).add_child(mi)
 
 # ================================================================== oggetti che cambiano con la partita
 var _dinamici: Node3D
@@ -524,6 +526,13 @@ func _aggiorna_oggetti() -> void:
 	_dinamici = Node3D.new()
 	mondo.add_child(_dinamici)
 	var t: Terreno = p.terreno
+	_costruisci_case(_dinamici)
+	# case ridotte in macerie: restano i muri diroccati del disegno
+	for m in _muri_rovine:
+		var pm: Array = m.poly
+		var c0 := Vector2(float(pm[0][0]), float(pm[0][1]))
+		if t.tipo(esagono_px(c0)) == "rubble":
+			_muro(pm, str(m.tipo), _dinamici)
 	var pietra := _materiale(Color("9ea5a1"))
 	var legno := _materiale(Color("7a5a3c"))
 	var cemento := _materiale(Color("8c8f86"))
@@ -660,6 +669,169 @@ func _dirada_alberi() -> void:
 				tronchi_mm.set_instance_transform(i, xt)
 
 
+# ================================================================== edifici
+## Ogni gruppo di esagoni edificio adiacenti dello stesso tipo è una casa: muri pieni sui lati
+## verso l'esterno, finestre e porte dove le regole le mettono (lati «window» e «door»), tetto piatto.
+## Quando si gioca con chi sta dentro (pedine, esagoni evidenziati, esagono sotto il dito)
+## il tetto sparisce e i muri diventano trasparenti.
+const ALTEZZA_CASA := 0.95
+const SPESSORE_MURO := 0.07
+var _case: Array = []   # {hex: [..], muri: MeshInstance3D, tetto: MeshInstance3D, mat: StandardMaterial3D}
+
+func _costruisci_case(padre: Node3D) -> void:
+	_case.clear()
+	var t: Terreno = mappa2d.partita.terreno
+	var visti := {}
+	for h in E.tutti():
+		var tipo := t.tipo(h)
+		if not tipo in ["stone_building", "wood_building"] or visti.has(h):
+			continue
+		var gruppo: Array = []
+		var coda: Array = [h]
+		visti[h] = true
+		while not coda.is_empty():
+			var x: String = coda.pop_back()
+			gruppo.append(x)
+			for v in E.vicini(x):
+				if v != "" and not visti.has(v) and t.tipo(v) == tipo and t.tipo_lato(x, v) == "":
+					visti[v] = true
+					coda.append(v)
+		_casa(padre, gruppo, tipo == "stone_building")
+
+func _casa(padre: Node3D, gruppo: Array, pietra: bool) -> void:
+	var t: Terreno = mappa2d.partita.terreno
+	var base := 1e9
+	for h in gruppo:
+		base = minf(base, altezza_px(centro_px(h)) - 0.04)
+		for i in 6:
+			base = minf(base, altezza_px(centro_px(h) + Vector2.RIGHT.rotated(deg_to_rad(60.0 * i)) * RAGGIO_PX * 0.9) - 0.04)
+	var muri := SurfaceTool.new()
+	muri.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var vetri := SurfaceTool.new()
+	vetri.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var tetto := SurfaceTool.new()
+	tetto.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var r := RAGGIO_PX * 0.93
+	for h in gruppo:
+		var c := centro_px(h)
+		var vtx: Array = []
+		for i in 6:
+			vtx.append(c + Vector2.RIGHT.rotated(deg_to_rad(60.0 * i)) * r)
+		# tetto: esagono pieno
+		for i in 6:
+			_tri(tetto, Vector3(c.x * K, base + ALTEZZA_CASA, c.y * K), _p3(vtx[(i + 1) % 6], base + ALTEZZA_CASA), _p3(vtx[i], base + ALTEZZA_CASA), Vector3.UP)
+		# lati: direzioni 0 N (vertici 4–5), 1 NE (5–0), 2 SE (0–1), 3 S (1–2), 4 SO (2–3), 5 NO (3–4)
+		var coppie := [[4, 5], [5, 0], [0, 1], [1, 2], [2, 3], [3, 4]]
+		for d in 6:
+			var v := E.vicino(h, d)
+			var tipo_lato := t.tipo_lato(h, v) if v != "" else ""
+			if v != "" and v in gruppo and tipo_lato == "":
+				continue
+			var a: Vector2 = vtx[coppie[d][0]]
+			var b: Vector2 = vtx[coppie[d][1]]
+			_lato_casa(muri, vetri, a, b, c, base, tipo_lato)
+	var colore := Color("9d978a") if pietra else Color("84654a")
+	var mat := _materiale(colore, 0.92)
+	var mat_tetto := _materiale(Color("5c4a42") if pietra else Color("6b4a33"), 0.95)
+	var mat_vetri := _materiale(Color("1e2226"), 0.4)
+	var n := Node3D.new()
+	padre.add_child(n)
+	var mi := MeshInstance3D.new()
+	mi.mesh = muri.commit()
+	mi.material_override = mat
+	n.add_child(mi)
+	var mv := MeshInstance3D.new()
+	mv.mesh = vetri.commit()
+	mv.material_override = mat_vetri
+	n.add_child(mv)
+	var mt := MeshInstance3D.new()
+	mt.mesh = tetto.commit()
+	mt.material_override = mat_tetto
+	n.add_child(mt)
+	_case.append({"hex": gruppo, "muri": mi, "vetri": mv, "tetto": mt, "mat": mat, "aperta": false})
+
+func _p3(p: Vector2, y: float) -> Vector3:
+	return Vector3(p.x * K, y, p.y * K)
+
+func _tri(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, n: Vector3) -> void:
+	st.set_normal(n)
+	st.add_vertex(a)
+	st.add_vertex(b)
+	st.add_vertex(c)
+
+## Parallelepipedo tra due punti della pianta (pixel), da quota y0 a y1, spessore verso l'interno.
+func _blocco(st: SurfaceTool, a: Vector2, b: Vector2, dentro: Vector2, y0: float, y1: float, spess: float) -> void:
+	var a2 := a + dentro * spess / K
+	var b2 := b + dentro * spess / K
+	var pts := [a, b, b2, a2]
+	var fuori := -dentro
+	var nrm := [Vector3(fuori.x, 0, fuori.y), Vector3((b - a).normalized().x, 0, (b - a).normalized().y), Vector3(dentro.x, 0, dentro.y), Vector3(-(b - a).normalized().x, 0, -(b - a).normalized().y)]
+	for i in 4:
+		var p: Vector2 = pts[i]
+		var q: Vector2 = pts[(i + 1) % 4]
+		var n3: Vector3 = nrm[i]
+		_tri(st, _p3(p, y0), _p3(q, y0), _p3(q, y1), n3)
+		_tri(st, _p3(p, y0), _p3(q, y1), _p3(p, y1), n3)
+	_tri(st, _p3(a, y1), _p3(b, y1), _p3(b2, y1), Vector3.UP)
+	_tri(st, _p3(a, y1), _p3(b2, y1), _p3(a2, y1), Vector3.UP)
+
+func _lato_casa(muri: SurfaceTool, vetri: SurfaceTool, a: Vector2, b: Vector2, c: Vector2, base: float, tipo: String) -> void:
+	var mezzo := (a + b) / 2.0
+	var dentro := (c - mezzo).normalized()
+	var h := ALTEZZA_CASA
+	if tipo == "":
+		_blocco(muri, a, b, dentro, base, base + h, SPESSORE_MURO)
+		return
+	var lungo := a.distance_to(b)
+	var dir := (b - a) / lungo
+	var largo := 0.42 if tipo == "window" else 0.34
+	var p1 := mezzo - dir * lungo * largo / 2.0
+	var p2 := mezzo + dir * lungo * largo / 2.0
+	_blocco(muri, a, p1, dentro, base, base + h, SPESSORE_MURO)
+	_blocco(muri, p2, b, dentro, base, base + h, SPESSORE_MURO)
+	if tipo == "window":
+		_blocco(muri, p1, p2, dentro, base, base + 0.36, SPESSORE_MURO)
+		_blocco(muri, p1, p2, dentro, base + 0.66, base + h, SPESSORE_MURO)
+		# vetro scuro arretrato e traversa
+		_blocco(vetri, p1, p2, dentro, base + 0.36, base + 0.66, 0.012)
+		var m1 := (p1 + p2) / 2.0 - dir * 2.0
+		var m2 := (p1 + p2) / 2.0 + dir * 2.0
+		_blocco(muri, m1, m2, dentro, base + 0.36, base + 0.66, 0.02)
+	else:
+		_blocco(muri, p1, p2, dentro, base + 0.62, base + h, SPESSORE_MURO)
+		# soglia scura della porta
+		_blocco(vetri, p1, p2, dentro, base, base + 0.62, 0.01)
+
+## Tetti e muri si aprono quando si interagisce con chi sta dentro.
+func _aggiorna_case() -> void:
+	if _case.is_empty():
+		return
+	var interessati := {}
+	var p: Partita = mappa2d.partita
+	for x in mappa2d._stati_visibili().values():
+		interessati[str(x.hex)] = true
+	for h in mappa2d.evidenzia:
+		interessati[str(h)] = true
+	if sopra != "":
+		interessati[sopra] = true
+	for id in mappa2d.mobili:
+		interessati[str(mappa2d.mobili[id].a)] = true
+	for casa in _case:
+		var aperta := false
+		for h in casa.hex:
+			if interessati.has(h):
+				aperta = true
+				break
+		if aperta == casa.aperta:
+			continue
+		casa.aperta = aperta
+		var mat: StandardMaterial3D = casa.mat
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA if aperta else BaseMaterial3D.TRANSPARENCY_DISABLED
+		mat.albedo_color.a = 0.28 if aperta else 1.0
+		casa.tetto.visible = not aperta
+		casa.vetri.visible = not aperta
+		casa.muri.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if aperta else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+
 # ================================================================== miniature dei soldati
 ## Le pedine diventano miniature 3D (assets/soldati3d, da tools/costruisci_soldati3d.py),
 ## scelte secondo parte, postura, stato e arma principale.
@@ -764,9 +936,12 @@ func _materiale_soldato(chiave: String) -> StandardMaterial3D:
 	_mat_soldati[chiave] = m
 	return m
 
+const SCALA_FIGURE := 1.4
+
 func _crea_figura(id: String) -> Node3D:
 	var n := Node3D.new()
 	n.name = "F_" + id
+	n.scale = Vector3.ONE * SCALA_FIGURE
 	var mi := MeshInstance3D.new()
 	mi.name = "corpo"
 	n.add_child(mi)
@@ -831,6 +1006,8 @@ func _aggiorna_pedine() -> void:
 		var x: Dictionary = stati[id]
 		# carri e mezzi corazzati: per ora restano segnalini sul terreno (miniature da aggiungere)
 		if str(x.get("nome", "")) in ["Panzer IV", "Jagdpanther"] or x.get("carro_us", false):
+			_carro_unita(str(id), x, posti[id])
+			visti[id] = true
 			continue
 		visti[id] = true
 		var fig: Node3D = _figure.get(id)
@@ -840,6 +1017,23 @@ func _aggiorna_pedine() -> void:
 		var pos2: Vector2 = posti[id]
 		fig.position = punto3d(pos2)
 		var nome := modello_per(x)
+		var ang_mezzo := INF
+		# a bordo di un mezzo: seduti in fila lungo il mezzo
+		var vm: Dictionary = _veicolo_di(x)
+		if not vm.is_empty() and _mezzi.has(str(vm.id)):
+			var nm: Node3D = _mezzi[str(vm.id)]
+			var posto: int = vm.occupanti.find(str(id))
+			var lung := 0.5 if str(vm.modello) == "canoa" else 0.35
+			var loc := Vector3(0, 0.1, (float(posto) - (vm.occupanti.size() - 1) / 2.0) * lung / maxf(1.0, vm.occupanti.size() - 1.0) * -1.0)
+			if str(vm.modello) != "canoa":
+				loc = Vector3(-0.1 if posto % 2 == 0 else 0.1, 0.12, 0.1 - 0.25 * (posto / 2))
+			fig.position = nm.position + nm.basis * loc
+			ang_mezzo = nm.rotation.y
+			if not str(x.stato) in ["morto", "incapacitato"]:
+				nome = nome.replace("_piedi2", "_acc").replace("_piedi", "_acc")
+				if "_acc" not in nome:
+					nome = "us_fucile_acc" if str(x.lato) == "us" else "de_fucile_acc"
+		_paracadute(fig, str(id), x)
 		var corpo: MeshInstance3D = fig.get_node("corpo")
 		if corpo.get_meta("modello", "") != nome:
 			corpo.mesh = _mesh_soldato(nome)
@@ -847,7 +1041,8 @@ func _aggiorna_pedine() -> void:
 		var morto := str(x.stato) == "morto"
 		corpo.material_override = _materiale_soldato("morto" if morto else str(x.lato))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
-		corpo.rotation = Vector3(0, _verso(x, pos2) + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
+		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
+		corpo.rotation = Vector3(0, yaw + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
 		corpo.position.y = 0.05 if morto else 0.0
 		var base: MeshInstance3D = fig.get_node("base")
 		var sel: bool = mappa2d.vista == null and id in mappa2d.selezionati
@@ -871,6 +1066,11 @@ func _aggiorna_pedine() -> void:
 		if sel:
 			et.modulate = Color("fff3c4")
 		et.position.y = 0.3 if str(x.get("postura", "")) == "prone" or str(x.stato) in ["morto", "incapacitato"] else 0.66
+	for id in _carri_unita.keys():
+		if not visti.has(id):
+			if is_instance_valid(_carri_unita[id]):
+				_carri_unita[id].queue_free()
+			_carri_unita.erase(id)
 	for id in _figure.keys():
 		if not visti.has(id):
 			if is_instance_valid(_figure[id]):
@@ -878,6 +1078,10 @@ func _aggiorna_pedine() -> void:
 			_figure.erase(id)
 
 func _verso(x: Dictionary, da: Vector2) -> float:
+	var dz: Array = mappa2d.direzioni.get(str(x.id), [])
+	if dz.size() == 2 and E.valido(str(dz[0])) and E.valido(str(dz[1])):
+		var dv := centro_px(str(dz[1])) - centro_px(str(dz[0]))
+		return atan2(dv.x, dv.y)
 	var nemico := "de" if str(x.lato) == "us" else "us"
 	var migliore := 1e9
 	var dir := Vector2(0, 1) if nemico == "de" else Vector2(0, -1)
@@ -895,13 +1099,261 @@ func _verso(x: Dictionary, da: Vector2) -> float:
 	# angolo attorno a Y: 0 = guarda verso +Z (sud sulla mappa)
 	return atan2(dir.x, dir.y)
 
+
+# ================================================================== mezzi
+## Mezzi (assets/mezzi3d, da tools/costruisci_mezzi3d.py): Jeep, Kübelwagen, auto comando, canoe,
+## Sherman, Panzer IV (scafo disegnato qui con la torretta del kit), Jagdpanther.
+const DIR_MEZZI := "res://assets/mezzi3d/"
+var _mezzi: Dictionary = {}       # id veicolo -> Node3D
+var _carri_unita: Dictionary = {} # id unità carro tedesca -> Node3D
+var _mezzi_nodo: Node3D
+var _mesh_mezzi: Dictionary = {}
+
+func _mesh_mezzo(nome: String) -> Mesh:
+	if _mesh_mezzi.has(nome):
+		return _mesh_mezzi[nome]
+	var m: Mesh = null
+	if ResourceLoader.exists(DIR_MEZZI + nome + ".glb"):
+		var n := (load(DIR_MEZZI + nome + ".glb") as PackedScene).instantiate()
+		var mi := _trova_mesh(n)
+		if mi != null:
+			m = mi.mesh
+		n.free()
+	_mesh_mezzi[nome] = m
+	return m
+
+func _veicolo_di(x: Dictionary) -> Dictionary:
+	var vid := str(x.get("veicolo", ""))
+	if vid == "":
+		return {}
+	return mappa2d.partita.s.get("veicoli", {}).get(vid, {})
+
+func _nodo_mezzo(modello: String, lato: String) -> Node3D:
+	var n := Node3D.new()
+	var colore := Color("5f6339") if lato == "us" else Color("6c7068")
+	if modello in ["panzer4", "jagdpanther"]:
+		colore = Color("7a7259")   # giallo scuro tedesco di fine guerra
+	if modello == "canoa":
+		colore = Color("6b5236")
+	if modello == "auto_comando":
+		colore = Color("3c3f3d")
+	var mat := _materiale(colore, 0.8)
+	var corpo := MeshInstance3D.new()
+	corpo.name = "corpo"
+	corpo.material_override = mat
+	n.add_child(corpo)
+	match modello:
+		"panzer4":
+			_scafo_panzer4(n, mat)
+		"auto_comando":
+			corpo.mesh = _mesh_mezzo("kubelwagen")
+			corpo.scale = Vector3(1.1, 1.05, 1.15)
+		_:
+			corpo.mesh = _mesh_mezzo(modello)
+	var et := Label3D.new()
+	et.name = "etichetta"
+	et.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	et.no_depth_test = true
+	et.fixed_size = true
+	et.pixel_size = 0.0009
+	et.font = Tema.testo_bold
+	et.font_size = 16
+	et.outline_size = 6
+	et.outline_modulate = Color(0, 0, 0, 0.85)
+	et.position.y = 0.95
+	n.add_child(et)
+	if _mezzi_nodo == null:
+		_mezzi_nodo = Node3D.new()
+		mondo.add_child(_mezzi_nodo)
+	_mezzi_nodo.add_child(n)
+	return n
+
+## Panzer IV: scafo con cingoli e gonne laterali, torretta dal kit, cannone lungo.
+func _scafo_panzer4(n: Node3D, mat: Material) -> void:
+	var scuro := _materiale(Color("2e2c26"), 0.9)
+	_scatola(n, Vector3(0, 0.2, 0), Vector3(0.62, 0.22, 1.35), 0.0, mat)
+	_scatola(n, Vector3(0, 0.36, -0.05), Vector3(0.52, 0.12, 1.05), 0.0, mat)
+	for lato: float in [-1.0, 1.0]:
+		_scatola(n, Vector3(lato * 0.33, 0.12, 0), Vector3(0.14, 0.2, 1.42), 0.0, scuro)
+		_scatola(n, Vector3(lato * 0.41, 0.27, -0.02), Vector3(0.02, 0.2, 1.1), 0.0, mat)
+	var tor := MeshInstance3D.new()
+	tor.mesh = _mesh_mezzo("pz4_torretta")
+	tor.material_override = mat
+	tor.position = Vector3(0, 0.42, -0.08)
+	n.add_child(tor)
+	var can := CylinderMesh.new()
+	can.top_radius = 0.025
+	can.bottom_radius = 0.03
+	can.height = 0.8
+	can.radial_segments = 8
+	var mc := MeshInstance3D.new()
+	mc.mesh = can
+	mc.material_override = mat
+	mc.rotation.x = PI / 2.0
+	mc.position = Vector3(0, 0.55, 0.55)
+	n.add_child(mc)
+
+func _angolo_fronte(h: String, fronte: int) -> float:
+	var v := E.vicino(h, clampi(fronte, 0, 5))
+	if v == "":
+		return 0.0
+	var d := centro_px(v) - centro_px(h)
+	return atan2(d.x, d.y)
+
+func _aggiorna_mezzi() -> void:
+	var p: Partita = mappa2d.partita
+	var vista_v: Dictionary = p.s.get("veicoli", {})
+	var visti := {}
+	for veic in vista_v.values():
+		if str(veic.hex) == "" or str(veic.stato) == "uscito":
+			continue
+		var vid := str(veic.id)
+		visti[vid] = true
+		var n: Node3D = _mezzi.get(vid)
+		if n == null or not is_instance_valid(n):
+			n = _nodo_mezzo(str(veic.modello), str(veic.lato))
+			_mezzi[vid] = n
+		var c := centro_px(str(veic.hex))
+		# se il mezzo si sta muovendo con chi lo guida, segue l'animazione
+		for x in veic.occupanti:
+			if mappa2d.mobili.has(x):
+				var m: Dictionary = mappa2d.mobili[x]
+				var k := clampf((float(mappa2d._t) - float(m.t0)) / float(m.dur), 0.0, 1.0)
+				k = k * k * (3.0 - 2.0 * k)
+				c = centro_px(str(m.da)).lerp(centro_px(str(m.a)), k)
+				break
+		var acqua := str(veic.modello) == "canoa" and p.terreno.tipo(str(veic.hex)) == "stream"
+		n.position = punto3d(c)
+		if acqua:
+			n.position.y = (_quota_base(c) - 1.0) * LIVELLO - 0.1
+		n.rotation.y = _angolo_fronte(str(veic.hex), int(veic.get("fronte", 0)))
+		var corpo: MeshInstance3D = n.get_node("corpo")
+		var fuori_uso := str(veic.stato) != "attivo"
+		corpo.material_override = _materiale(Color("2b2824"), 0.95) if fuori_uso else corpo.material_override
+		var et: Label3D = n.get_node("etichetta")
+		et.text = str(veic.nome).to_upper() + (" FUORI USO" if fuori_uso else "")
+		et.visible = fuori_uso or sopra == str(veic.hex)
+	for vid in _mezzi.keys():
+		if not visti.has(vid):
+			if is_instance_valid(_mezzi[vid]):
+				_mezzi[vid].queue_free()
+			_mezzi.erase(vid)
+
+## Carri tedeschi che sono unità (Panzer IV, Jagdpanther delle carte).
+func _carro_unita(id: String, x: Dictionary, pos: Vector2) -> void:
+	var modello := "jagdpanther" if str(x.nome) == "Jagdpanther" else "panzer4"
+	if x.get("carro_us", false):
+		return   # lo Sherman è già tra i veicoli
+	var n: Node3D = _carri_unita.get(id)
+	if n == null or not is_instance_valid(n):
+		n = _nodo_mezzo(modello, "de")
+		_carri_unita[id] = n
+	n.position = punto3d(centro_px(str(x.hex)) if not mappa2d.mobili.has(id) else pos)
+	n.rotation.y = _verso(x, pos)
+	var et: Label3D = n.get_node("etichetta")
+	var morto := str(x.stato) == "morto"
+	et.text = "%s %d%s" % [str(x.get("lettera", "")), int(x.get("num", 0)) % 100, " DISTRUTTO" if morto else ""]
+	et.visible = true
+	if morto:
+		(n.get_node("corpo") as MeshInstance3D).material_override = _materiale(Color("2b2824"), 0.95)
+
+# ================================================================== paracadute (missione 4)
+var _mesh_vela: Mesh
+var _mat_vela: StandardMaterial3D
+
+func _vela() -> Node3D:
+	if _mesh_vela == null:
+		var s := SphereMesh.new()
+		s.radius = 0.55
+		s.height = 0.55
+		s.is_hemisphere = true
+		s.radial_segments = 16
+		s.rings = 6
+		_mesh_vela = s
+		_mat_vela = _materiale(Color("d9d4bf"), 0.9)
+		_mat_vela.cull_mode = BaseMaterial3D.CULL_DISABLED
+	var n := Node3D.new()
+	n.name = "paracadute"
+	var cupola := MeshInstance3D.new()
+	cupola.name = "cupola"
+	cupola.mesh = _mesh_vela
+	cupola.material_override = _mat_vela
+	cupola.position.y = 1.15
+	n.add_child(cupola)
+	var funi := MeshInstance3D.new()
+	var im := ImmediateMesh.new()
+	im.surface_begin(Mesh.PRIMITIVE_LINES)
+	for i in 8:
+		var a := TAU * i / 8.0
+		im.surface_add_vertex(Vector3(0, 0.5, 0))
+		im.surface_add_vertex(Vector3(cos(a) * 0.52, 1.15, sin(a) * 0.52))
+	im.surface_end()
+	funi.mesh = im
+	funi.material_override = _materiale(Color("3b3a33"))
+	funi.name = "funi"
+	n.add_child(funi)
+	return n
+
+## Durante la discesa il soldato è in aria sotto la vela e ondeggia; appena atterrato la vela
+## si affloscia accanto a lui e resta finché non si toglie il paracadute.
+func _paracadute(fig: Node3D, id: String, x: Dictionary) -> void:
+	var corpo: MeshInstance3D = fig.get_node("corpo")
+	var vela: Node3D = fig.get_node_or_null("paracadute")
+	var info: Dictionary = mappa2d.paracadutisti.get(id, {})
+	var t_ora: float = mappa2d._t
+	var quota := 0.0
+	var aperta := false
+	if not info.is_empty():
+		var passo := int(info.get("passo", 0))
+		var q0 := maxf(1.4, 4.2 - passo * 0.45)
+		var q1 := maxf(1.2, 4.2 - (passo + 1) * 0.45)
+		var m: Dictionary = mappa2d.mobili.get(id, {})
+		if not m.is_empty():
+			var k := clampf((t_ora - float(m.t0)) / float(m.dur), 0.0, 1.0)
+			quota = lerpf(q0, q1, k)
+		else:
+			quota = q1
+		aperta = true
+		if float(info.get("atterra", -1.0)) >= 0.0:
+			var k2 := clampf((t_ora - float(info.atterra)) / float(info.get("dur", 1.0)), 0.0, 1.0)
+			quota = lerpf(q1, 0.0, 1.0 - (1.0 - k2) * (1.0 - k2))
+			if k2 >= 1.0:
+				mappa2d.paracadutisti.erase(id)
+				aperta = false
+	if aperta:
+		if vela == null:
+			vela = _vela()
+			fig.add_child(vela)
+		vela.visible = true
+		fig.position.y += quota
+		var oscilla := sin(t_ora * 2.3 + id.hash() % 7) * 0.12
+		vela.rotation = Vector3(oscilla, 0, oscilla * 0.6)
+		corpo.rotation.x = oscilla
+		(vela.get_node("cupola") as MeshInstance3D).scale = Vector3.ONE
+		vela.get_node("funi").visible = true
+		vela.position = Vector3.ZERO
+	elif int(x.get("paracadute", 0)) > 0 and str(x.stato) == "attivo":
+		# a terra con l'imbracatura ancora addosso: vela afflosciata accanto
+		if vela == null:
+			vela = _vela()
+			fig.add_child(vela)
+		vela.visible = true
+		vela.rotation = Vector3.ZERO
+		vela.position = Vector3(0.22, -1.12, -0.18)
+		(vela.get_node("cupola") as MeshInstance3D).scale = Vector3(1.0, 0.12, 0.8)
+		vela.get_node("funi").visible = false
+	elif vela != null:
+		vela.visible = false
+
 # ================================================================== camera
 func _process(_delta: float) -> void:
 	if not visible or mappa2d == null:
 		return
 	_sincronizza_velo()
 	_aggiorna_oggetti()
+	_aggiorna_mezzi()
 	_aggiorna_pedine()
+	_aggiorna_case()
 	_dirada_alberi()
 	_aggiorna_camera()
 

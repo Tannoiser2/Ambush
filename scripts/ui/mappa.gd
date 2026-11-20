@@ -66,6 +66,10 @@ var _multi := false
 var solo_velo := false
 ## Nel velo della vista 3D le pedine sono miniature: non si disegnano le pedine piatte.
 var senza_pedine := false
+## Verso dell'ultimo movimento o tiro di ogni unità: id -> [da, a] (per girare le miniature 3D).
+var direzioni: Dictionary = {}
+## Missione 4: soldati in discesa col paracadute: id -> {"passo": n, "atterra": t0 o -1}
+var paracadutisti: Dictionary = {}
 ## Vista 3D (scripts/ui/mappa3d.gd), creata la prima volta che si passa al 3D.
 var vista3d = null
 var in_3d := false
@@ -409,7 +413,7 @@ func _draw() -> void:
 			_marcatore(h, {"carro": "PANZER", "bunker": "BUNKER", "trappola": "TRAPPOLA", "guado": "GUADO",
 				"deposito": "CARBURANTE", "kubelwagen": "KÜBELWAGEN", "avviso_mine": "MINEN!", "rifiuti": "RIFIUTI", "radar": "RADAR", "sherman": "SHERMAN DISTRUTTO"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
 	# Veicoli
-	for veic in s.get("veicoli", {}).values():
+	for veic in ({} if senza_pedine else s.get("veicoli", {})).values():
 		if str(veic.hex) != "":
 			var col := Color("4a5d32") if veic.lato == "us" else Color("5d5f63")
 			if veic.stato != "attivo":
@@ -436,13 +440,7 @@ func _draw() -> void:
 		per_hex[d.hex].append(d)
 	var di_turno: Array = [] if vista != null else partita.americani_di_turno().map(func(a): return a.id)
 	if senza_pedine:
-		# restano piatti solo i carri, che non hanno ancora una miniatura
-		var carri := {}
-		for h in per_hex:
-			var solo_carri: Array = per_hex[h].filter(func(x): return str(x.get("nome", "")) in ["Panzer IV", "Jagdpanther"] or x.get("carro_us", false))
-			if not solo_carri.is_empty():
-				carri[h] = solo_carri
-		per_hex = carri
+		per_hex = {}
 	for h in per_hex:
 		var pila: Array = per_hex[h]
 		pila.sort_custom(func(a, b): return _ordine(a) < _ordine(b))
@@ -610,8 +608,14 @@ func anima(ev: Dictionary) -> float:
 		"muovi":
 			dur = (0.65 if ev.get("strisciando", false) else 0.42)
 			var i := 0
+			if ev.get("paracadute", false):
+				dur = 0.7
 			for id in ev.ids:
 				mobili[id] = {"da": ev.da if ev.da != "" else ev.a, "a": ev.a, "t0": _t, "dur": dur / velocita, "off": i * 6.0}
+				if ev.da != "" and ev.da != ev.a:
+					direzioni[id] = [ev.da, ev.a]
+				if ev.get("paracadute", false):
+					paracadutisti[id] = {"passo": int(ev.get("passo", 0)), "atterra": -1.0}
 				i += 1
 			if ev.da != "":
 				var lato := "us"
@@ -622,6 +626,8 @@ func anima(ev: Dictionary) -> float:
 			assicura_visibili([ev.da, ev.a] if ev.da != "" else [ev.a])
 		"tiro":
 			dur = 0.8 if ev.esito == "inceppata" else (1.25 if ev.get("auto", false) else 0.95)
+			if str(ev.get("da", "")) != "" and str(ev.get("a", "")) != "" and ev.da != ev.a:
+				direzioni[str(ev.tiratore)] = [ev.da, ev.a]
 			assicura_visibili([ev.da, ev.a] if ev.da != "" else [ev.a])
 			var nemico: bool = partita.u(str(ev.tiratore)).get("lato", "de") != "us"
 			segni.append({"da": ev.da, "a": ev.a, "nemico": nemico, "esito": ev.esito, "bersaglio": ev.get("bersaglio", ""),
@@ -630,6 +636,14 @@ func anima(ev: Dictionary) -> float:
 		"lancio":
 			dur = 1.5
 			assicura_visibili([ev.da, ev.a])
+			if ev.has("id") and ev.da != ev.a:
+				direzioni[str(ev.id)] = [ev.da, ev.a]
+		"atterra":
+			dur = 1.1
+			if paracadutisti.has(str(ev.id)):
+				paracadutisti[str(ev.id)].atterra = _t
+				paracadutisti[str(ev.id)].dur = dur / velocita
+			assicura_visibili([ev.a])
 		"esplosione":
 			dur = 1.2 if ev.get("grande", false) else 0.9
 			assicura_visibili([ev.a])

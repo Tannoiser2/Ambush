@@ -1666,7 +1666,7 @@ func _scendi(a: Dictionary) -> void:
 			s.cassa.hex = h
 		else:
 			a.hex = h
-		_fx("muovi", {"ids": [] if cassa else [a.id], "da": da, "a": h})
+		_fx("muovi", {"ids": [] if cassa else [a.id], "da": da, "a": h, "paracadute": true, "passo": i})
 		var rif := riferimento(h, 1)
 		if rif == "LAND":
 			if terreno.edificio(h) and not cassa:
@@ -1684,6 +1684,8 @@ func _scendi(a: Dictionary) -> void:
 			_risolvi_riferimento(rif, {"hex": h, "ids": [a.id]})
 			if not attivo(a):
 				break
+	if not cassa:
+		_fx("atterra", {"id": a.id, "a": h})
 	_log("azione", "%s scende col paracadute: %s." % [chi, " → ".join(percorso)])
 
 func _atterra_cassa(h: String) -> void:

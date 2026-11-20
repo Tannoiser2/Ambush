@@ -7,8 +7,8 @@ void fragment() {
 	vec3 m = texture(mappa, UV).rgb;
 	vec4 o = texture(velo, UV);
 	// il velo è disegnato su fondo trasparente: colori già moltiplicati per l'alfa
-	ALBEDO = m * (1.0 - o.a) + o.rgb;
-	EMISSION = o.rgb * 0.35;
+	ALBEDO = m * vec3(0.74, 0.74, 0.70) * (1.0 - o.a) + o.rgb;
+	EMISSION = o.rgb * 0.18;
 	ROUGHNESS = 0.93;
 	SPECULAR = 0.2;
 }

@@ -126,7 +126,7 @@ def salva(nome, m, scala, coricato=False):
     b = m.bounds
     m.apply_translation([-(b[0][0] + b[1][0]) / 2, -b[0][1], -(b[0][2] + b[1][2]) / 2])
     m.fix_normals()
-    m.export(os.path.join(USCITA, nome + ".glb"))
+    m.export(os.path.join(USCITA, nome + ".glb"), include_normals=True)
     return len(m.faces), m.extents.round(3).tolist()
 
 
