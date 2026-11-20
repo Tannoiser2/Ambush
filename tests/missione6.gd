@@ -60,6 +60,53 @@ func _init() -> void:
 		r = p.muovi([guida.id], riva)
 		ok(r.ok and p.veicoli.spiaggiata(c1), "la canoa spiaggia in %s" % riva)
 		ok(p.scendi_veicolo(passeggero.id).ok, "da spiaggiata si scende")
+	# Nelle Operazioni il gruppo muove tutte le canoe insieme; chi è a piedi non si mescola a chi è in canoa.
+	var g6 = PartitaScript.new(6)
+	g6.nuova(11, true)
+	for id in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+		g6.schiera([id], "H1")
+	g6.inizia_missione()
+	g6.s.fase = "operazioni"
+	r = g6.muovi(["B", "A", "C", "D", "E", "F", "G", "H"], "G1")
+	ok(r.ok and g6.veicoli.tutti().all(func(v): return v.hex == "G1") and g6.americani().all(func(x): return x.hex == "G1"), "le quattro canoe spiaggiano insieme in G1 (%s)" % str(r))
+	ok(g6.destinazioni("A") == ["H1"], "da riva la canoa torna solo in acqua (%s)" % str(g6.destinazioni("A")))
+	ok(g6.scendi_veicolo("B").ok, "B scende dalla canoa spiaggiata")
+	var terra: Array = g6.destinazioni("B").filter(func(h): return g6.terreno.esagoni[h].t != "stream")
+	ok(not g6.muovi(["B", "A"], terra[0]).ok, "chi è a piedi non trascina chi è in canoa")
+	r = g6.muovi(["B"], terra[0])
+	ok(r.ok and g6.s.veicoli.canoa1.hex == "G1", "B va a piedi, la canoa resta a riva (%s, fase %s)" % [str(r), g6.s.fase])
+	ok(not g6.muovi(["A"], terra[0]).ok, "A da solo non porta la canoa sulla terra")
+	ok(not g6.muovi(["A"], "H1").ok and g6.s.veicoli.canoa1.hex == "G1", "con un solo soldato attivo la canoa non riprende il fiume")
+	# Nei Round si scende da una canoa spiaggiata con un bottone solo (avvia il movimento).
+	var z = PartitaScript.new(6)
+	z.nuova(12, true)
+	for id in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+		z.schiera([id], "H1")
+	z.inizia_missione()
+	z.s.fase = "operazioni"
+	z.muovi(["A", "B", "C", "D", "E", "F", "G", "H"], "G1")
+	z.leggi("725", {"hex": "", "ids": []})
+	var scesi := 0
+	var passi_z := 0
+	while z.s.fase == "round" and passi_z < 200 and scesi < 3:
+		passi_z += 1
+		if z.s.pausa != "":
+			z.prosegui()
+			continue
+		var tz: Array = z.americani_di_turno()
+		if tz.is_empty():
+			z.prosegui()
+			continue
+		var sz: Dictionary = tz[0]
+		if not z.veicoli.di(sz).is_empty():
+			var rz: Dictionary = z.scendi_veicolo(sz.id)
+			ok(rz.ok and z.veicoli.di(sz).is_empty(), "nei Round %s scende dalla canoa (%s)" % [sz.id, str(rz)])
+			scesi += 1
+			z.fine_azione(sz.id)
+		else:
+			z.passa(sz.id)
+	ok(scesi > 0, "almeno un soldato è sceso nei Round")
+	ok(errori_cronaca(z).is_empty(), "discesa nei Round senza errori")
 	# Bunker.
 	var q = PartitaScript.new(6)
 	q.nuova(3)

@@ -2907,6 +2907,10 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 		var cv: int = veicoli.costo(veic, a.hex, verso)
 		if cv < 0:
 			return "Il veicolo non può entrare in quell’esagono."
+		if veicoli.e_canoa(veic) and not canoa_pronta(veic) and terreno.esagoni.get(verso, {}).get("t", "") == "stream":
+			return "Con un solo soldato attivo a bordo la canoa può solo andare a riva (un esagono di terra accanto)."
+		if veicoli.e_canoa(veic) and veic.hex != a.hex:
+			return "La canoa non è nell’esagono del soldato."
 		if s.fase == "round":
 			var tv: Dictionary = s.turno if (not s.turno.is_empty() and s.turno.id == a.id) else {}
 			if tv.is_empty() or tv.azione != "muovi":
@@ -2958,14 +2962,38 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		if a.stato != "attivo" and a.stato != "fuori":
 			return _errore("%s non può muoversi." % nome(a))
 	var veic_m: Dictionary = veicoli.di(primo)
+	if veicoli.attivo(veic_m) and not veicoli.e_autista(primo):
+		# Nel gruppo c’è chi guida: il gruppo segue lui.
+		for id in ids:
+			if veicoli.e_autista(u(str(id))):
+				primo = u(str(id))
+				veic_m = veicoli.di(primo)
+				break
 	if veicoli.e_canoa(veic_m) and not veicoli.e_autista(primo):
 		return _errore("La canoa la muove il primo soldato a bordo; per andare a terra bisogna prima spiaggiarla e scendere.")
-	if veicoli.e_canoa(veic_m) and not canoa_pronta(veic_m):
-		return _errore("Una canoa si muove solo con due soldati attivi a bordo.")
+	for id in ids:
+		var ax := u(str(id))
+		if str(ax.get("veicolo", "")) != str(primo.get("veicolo", "")) and veicoli.attivo(veicoli.di(ax)) and not veicoli.e_autista(primo):
+			return _errore("%s è a bordo della %s: si muove con il suo mezzo, non insieme a chi va a piedi." % [nome(ax), veicoli.di(ax).nome])
 	if s.get("bunker", {}).has(verso) and not s.bunker[verso].sfondata and not veicoli.attivo(veic_m):
 		return _errore("Nel bunker si entra solo dalla porta sfondata.")
+	var altri_mezzi: Array = []
 	if veicoli.attivo(veic_m) and veicoli.e_autista(primo):
-		ids = veicoli.occupanti(veic_m).map(func(x): return x.id)
+		# Nelle Operazioni più canoe (o mezzi) nello stesso esagono si muovono insieme se si sposta il gruppo.
+		var nuovi_ids: Array = veicoli.occupanti(veic_m).map(func(x): return x.id)
+		if s.fase != "round":
+			for id in ids:
+				var ax := u(str(id))
+				var vx: Dictionary = veicoli.di(ax)
+				if veicoli.attivo(vx) and vx.id != veic_m.id and not (vx in altri_mezzi) and vx.hex == veic_m.hex:
+					if veicoli.e_canoa(vx) and not canoa_pronta(vx):
+						continue
+					if veicoli.costo(vx, vx.hex, verso) < 0:
+						continue
+					altri_mezzi.append(vx)
+					for x in veicoli.occupanti(vx):
+						nuovi_ids.append(x.id)
+		ids = nuovi_ids
 	elif s.fase == "round" and ids.size() > 1:
 		return _errore("Nei Round ogni soldato si muove con la propria azione.")
 	var e2 := _verifica_passo(primo, verso)
@@ -3009,7 +3037,15 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			veic_m.fronte = dv
 		veic_m.hex = verso
 		mina_anticarro(veic_m, verso)
-		_log("azione", "La %s, guidata da %s, entra in %s (%s)." % [veic_m.nome, nome(primo), verso, terreno.nome_tipo(verso)])
+		for vx in altri_mezzi:
+			if dv >= 0:
+				vx.fronte = dv
+			vx.hex = verso
+		if altri_mezzi.is_empty():
+			_log("azione", "La %s, guidata da %s, entra in %s (%s)." % [veic_m.nome, nome(primo), verso, terreno.nome_tipo(verso)])
+		else:
+			var nomi_m: Array = [veic_m.nome] + altri_mezzi.map(func(x): return x.nome)
+			_log("azione", "%s entrano insieme in %s (%s)." % [", ".join(nomi_m), verso, terreno.nome_tipo(verso)])
 	else:
 		_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
 	_fx("muovi", {"ids": mossi, "da": da_hex, "a": verso})
@@ -3112,11 +3148,15 @@ func scegli_azione(id: String, azione: String) -> Dictionary:
 				return _errore("Prima alzati: un soldato prono non si muove.")
 			t.azione = "muovi"
 		"muovi_spara":
+			if veicoli.attivo(veicoli.di(a)):
+				return _errore("A bordo di un mezzo: prima scendi (o guida).")
 			if armi_da_fuoco(a).filter(func(x): return x.tipo != "bazooka").is_empty():
 				return _errore("Nessuna arma pronta al tiro.")
 			t.azione = "muovi_spara"
 			t.mp = mini(int(t.mp), int(effettivo_mpa(a)) / 2)
 		"carica":
+			if veicoli.attivo(veicoli.di(a)):
+				return _errore("A bordo di un mezzo: prima scendi (o guida).")
 			t.azione = "carica"
 			t.mp = mini(int(t.mp), int(effettivo_mpa(a)) / 2)
 		_:
@@ -3160,10 +3200,19 @@ func scendi_veicolo(id: String) -> Dictionary:
 		return _errore("Si scende solo da una canoa spiaggiata: prima portala a riva.")
 	if s.fase == "round":
 		var t := _turno_di(a)
-		if veicoli.e_autista(a) and t.azione == "muovi":
-			pass
-		elif t.azione != "muovi" or int(t.mp) < 1:
-			return _errore("Nei Round si scende spendendo 1 punto movimento: scegli prima «Muovi».")
+		if t.azione == "":
+			# Scendere è l’inizio di un’azione di movimento a piedi.
+			t.azione = "muovi"
+			t.mp = int(effettivo_mpa(a))
+			_log("azione", "%s: movimento." % nome(a))
+		elif not (t.azione in ["muovi", "muovi_spara"]):
+			return _errore("Nei Round si scende durante un’azione di movimento (costa 1 PM).")
+		elif int(t.mp) < 1 and not veicoli.e_autista(a):
+			return _errore("Servono ancora 1 punto movimento per scendere.")
+		if veicoli.e_autista(a):
+			# Chi guidava prosegue a piedi con i suoi PM, meno quelli già spesi col mezzo.
+			t.mp = maxi(0, mini(int(t.mp), int(effettivo_mpa(a)) - int(t.get("spesi", 0))))
+			t.erase("mp_lenta")
 		t.mp = maxi(0, int(t.mp) - 1)
 	veicoli.scendi(a)
 	a.postura = "crouching"

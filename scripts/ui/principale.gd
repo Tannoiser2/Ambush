@@ -923,7 +923,7 @@ func _azioni_operazioni(a: Dictionary) -> void:
 	if a.hex != "" and selezione.size() == 1:
 		_azioni_posture(a)
 	if a.hex != "":
-		var compagni: Array = p.unita_in(a.hex, "us").filter(func(x): return x.postura == a.postura)
+		var compagni: Array = p.unita_in(a.hex, "us").filter(func(x): return x.postura == a.postura and p.veicoli.di(x).is_empty() == p.veicoli.di(a).is_empty())
 		if compagni.size() > 1:
 			_gruppo("GRUPPO")
 			if selezione.size() > 1:
@@ -1008,6 +1008,9 @@ func _azioni_round(a: Dictionary) -> void:
 			for g in qui:
 				_b("Assalta %s per uccidere" % g.lettera, func(): _esito(p.assalta(a.id, g.id, "uccidi")))
 				_b("Assalta %s per catturare" % g.lettera, func(): _esito(p.assalta(a.id, g.id, "cattura")))
+		if azione in ["muovi", "muovi_spara"] and not p.veicoli.di(a).is_empty():
+			_gruppo("MEZZO")
+			_bottoni_veicolo(a)
 		if azione != "carica" or p.unita_in(a.hex, "de").is_empty():
 			_gruppo("FINE")
 			_b("Fine movimento", func(): _esito(p.fine_azione(a.id)) if azione != "carica" else _annulla_carica(a))
@@ -1037,8 +1040,9 @@ func _azioni_round(a: Dictionary) -> void:
 	else:
 		_b("Muovi (%d PM)" % p.effettivo_mpa(a), func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento secondo il terreno.", a.postura != "prone")
 	_bottoni_veicolo(a)
-	_b("Muovi e spara", func(): _esito(p.scegli_azione(a.id, "muovi_spara")), "Metà dei PM e un tiro rapido, prima o dopo.", a.postura != "prone")
-	_b("Carica d’assalto", func(): _esito(p.scegli_azione(a.id, "carica")), "Muovi con metà dei PM ed entra nell’esagono nemico per assaltare (−3).", a.postura == "standing")
+	if p.veicoli.di(a).is_empty():
+		_b("Muovi e spara", func(): _esito(p.scegli_azione(a.id, "muovi_spara")), "Metà dei PM e un tiro rapido, prima o dopo.", a.postura != "prone")
+		_b("Carica d’assalto", func(): _esito(p.scegli_azione(a.id, "carica")), "Muovi con metà dei PM ed entra nell’esagono nemico per assaltare (−3).", a.postura == "standing")
 	_bottoni_fuoco(a, true)
 	_b("Due tiri rapidi", func(): _imposta_modo(a, "rapido"), "Due tiri rapidi (−2 ciascuno), anche a bersagli diversi.", a.postura != "prone" and not p.armi_da_fuoco(a).filter(func(x): return x.tipo != "bazooka").is_empty())
 	if int(a.munizioni.get("granata", 0)) > 0:
