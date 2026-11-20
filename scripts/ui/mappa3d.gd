@@ -146,6 +146,7 @@ func _sincronizza_velo() -> void:
 			"stato_pannelli", "segni", "etichette", "linee", "trame", "velocita", "pedine_nuove", "_t"]:
 		velo.set(k, mappa2d.get(k))
 	velo.sopra = sopra
+	velo.senza_pedine = true
 	velo.zoom = SCALA_VELO
 	velo.spostamento = Vector2.ZERO
 	velo.queue_redraw()
@@ -658,12 +659,249 @@ func _dirada_alberi() -> void:
 				alberi_mm.set_instance_transform(i, xf)
 				tronchi_mm.set_instance_transform(i, xt)
 
+
+# ================================================================== miniature dei soldati
+## Le pedine diventano miniature 3D (assets/soldati3d, da tools/costruisci_soldati3d.py),
+## scelte secondo parte, postura, stato e arma principale.
+const DIR_SOLDATI := "res://assets/soldati3d/"
+const VERSO_MODELLI := PI   # rotazione che porta il «davanti» delle miniature verso +Z
+var _mesh_soldati: Dictionary = {}
+var _figure: Dictionary = {}     # id unità -> Node3D
+var _figure_nodo: Node3D
+var _mat_soldati: Dictionary = {}
+
+func _mesh_soldato(nome: String) -> Mesh:
+	if _mesh_soldati.has(nome):
+		return _mesh_soldati[nome]
+	var m: Mesh = null
+	var percorso := DIR_SOLDATI + nome + ".glb"
+	if ResourceLoader.exists(percorso):
+		var sc: PackedScene = load(percorso)
+		var n := sc.instantiate()
+		var mi := _trova_mesh(n)
+		if mi != null:
+			m = mi.mesh
+		n.free()
+	_mesh_soldati[nome] = m
+	return m
+
+func _trova_mesh(n: Node) -> MeshInstance3D:
+	if n is MeshInstance3D:
+		return n
+	for c in n.get_children():
+		var r := _trova_mesh(c)
+		if r != null:
+			return r
+	return null
+
+static func _tipi_armi(x: Dictionary) -> Array:
+	var out: Array = []
+	for a in x.get("armi", []):
+		out.append(str(a.get("tipo", "")) if a is Dictionary else str(a))
+	return out
+
+## Nome del modello per un'unità.
+static func modello_per(x: Dictionary) -> String:
+	var us := str(x.get("lato", "us")) == "us"
+	var armi := _tipi_armi(x)
+	var post := str(x.get("postura", "standing"))
+	var stato := str(x.get("stato", "attivo"))
+	var arma := "fucile"
+	if "bazooka" in armi:
+		arma = "bazooka"
+	elif "lmg" in armi or "mmg" in armi or "hmg" in armi:
+		arma = "mg"
+	elif "ar" in armi:
+		arma = "bar"
+	elif "smg" in armi or "mp" in armi:
+		arma = "mitra"
+	elif "scoped" in armi:
+		arma = "ott"
+	elif armi.is_empty() or armi == ["pistol"]:
+		arma = "capo"
+	var lett := str(x.get("lettera", x.get("id", "")))
+	var var2 := (lett.unicode_at(0) if lett != "" else 0) % 2 == 1
+	if stato in ["morto", "incapacitato"]:
+		return "us_strisciante" if us else "de_fucile_prono"
+	if stato in ["catturato", "arreso"]:
+		return "us_fucile_piedi2" if us else "de_riposo"
+	if us:
+		if post == "prone":
+			return {"bazooka": "us_fucile_prono", "mg": "us_mg_prono", "bar": "us_bar_prono", "mitra": "us_mitra_prono", "capo": "us_capo_prono"}.get(arma, "us_fucile_prono")
+		if post == "crouching":
+			return {"bazooka": "us_bazooka_acc", "mg": "us_mg_acc", "bar": "us_bar_acc", "mitra": "us_mitra_acc", "capo": "us_capo_acc"}.get(arma, "us_fucile_acc2" if var2 else "us_fucile_acc")
+		return {"bazooka": "us_bazooka_piedi", "mg": "us_mg_piedi", "bar": "us_bar_piedi", "mitra": "us_mitra_piedi", "capo": "us_capo_piedi"}.get(arma, "us_fucile_piedi2" if var2 else "us_fucile_piedi")
+	if post == "prone":
+		return "de_fucile_prono"
+	var ufficiale := str(x.get("ruolo", "")).to_lower().contains("ufficiale") or arma == "capo"
+	if post == "crouching":
+		if ufficiale:
+			return "de_ufficiale_acc"
+		return {"bazooka": "de_pzf", "mitra": "de_mp_acc", "ott": "de_ott_acc", "mg": "de_fucile_acc"}.get(arma, "de_fucile_acc")
+	if ufficiale:
+		return "de_ufficiale_piedi"
+	if arma == "bazooka":
+		return "de_pzf"
+	if arma == "mitra":
+		return "de_mp_piedi"
+	if arma == "mg":
+		return "de_mg_piedi"
+	if arma == "ott":
+		return "de_fucile_piedi3"
+	var n := int(x.get("num", 0))
+	return ["de_fucile_piedi", "de_fucile_piedi2", "de_fucile_piedi3", "de_fucile_piedi4"][n % 4]
+
+func _materiale_soldato(chiave: String) -> StandardMaterial3D:
+	if _mat_soldati.has(chiave):
+		return _mat_soldati[chiave]
+	var c: Color = {"us": Color("6f6d43"), "de": Color("737a74"), "morto": Color("4a463e"), "us_base": Color("2f4a22"), "de_base": Color("3c3f45"),
+		"sel": Color("d9b44a"), "turno": Color("6fd35a")}.get(chiave, Color.WHITE)
+	var m := _materiale(c, 0.75)
+	if chiave in ["sel", "turno"]:
+		m.emission_enabled = true
+		m.emission = c
+		m.emission_energy_multiplier = 0.8
+	_mat_soldati[chiave] = m
+	return m
+
+func _crea_figura(id: String) -> Node3D:
+	var n := Node3D.new()
+	n.name = "F_" + id
+	var mi := MeshInstance3D.new()
+	mi.name = "corpo"
+	n.add_child(mi)
+	var base := MeshInstance3D.new()
+	base.name = "base"
+	var cil := CylinderMesh.new()
+	cil.top_radius = 0.17
+	cil.bottom_radius = 0.18
+	cil.height = 0.025
+	cil.radial_segments = 16
+	base.mesh = cil
+	base.position.y = 0.012
+	base.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	n.add_child(base)
+	var et := Label3D.new()
+	et.name = "etichetta"
+	et.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	et.no_depth_test = true
+	et.fixed_size = true
+	et.pixel_size = 0.0009
+	et.font = Tema.testo_bold
+	et.font_size = 18
+	et.outline_size = 6
+	et.outline_modulate = Color(0, 0, 0, 0.85)
+	et.position.y = 0.66
+	n.add_child(et)
+	_figure_nodo.add_child(n)
+	return n
+
+func _aggiorna_pedine() -> void:
+	if _figure_nodo == null:
+		_figure_nodo = Node3D.new()
+		mondo.add_child(_figure_nodo)
+	var stati: Dictionary = mappa2d._stati_visibili()
+	var per_hex := {}
+	for id in stati:
+		var d: Dictionary = stati[id]
+		if mappa2d.mobili.has(id):
+			continue
+		if not per_hex.has(d.hex):
+			per_hex[d.hex] = []
+		per_hex[d.hex].append(d)
+	var posti := {}
+	for h in per_hex:
+		var pila: Array = per_hex[h]
+		pila.sort_custom(func(a, b): return mappa2d._ordine(a) < mappa2d._ordine(b))
+		var pp: Array = mappa2d._posti(pila.size(), RAGGIO_PX)
+		for i in pila.size():
+			var r: Rect2 = pp[i]
+			posti[pila[i].id] = centro_px(str(h)) + r.get_center() * 0.95
+	var t_ora: float = mappa2d._t
+	for id in mappa2d.mobili:
+		if not stati.has(id):
+			continue
+		var m: Dictionary = mappa2d.mobili[id]
+		var k := clampf((t_ora - float(m.t0)) / float(m.dur), 0.0, 1.0)
+		k = k * k * (3.0 - 2.0 * k)
+		posti[id] = centro_px(str(m.da)).lerp(centro_px(str(m.a)), k) + Vector2(float(m.off), -float(m.off))
+	var di_turno: Array = [] if mappa2d.vista != null else mappa2d.partita.americani_di_turno().map(func(a): return a.id)
+	var visti := {}
+	for id in posti:
+		var x: Dictionary = stati[id]
+		# carri e mezzi corazzati: per ora restano segnalini sul terreno (miniature da aggiungere)
+		if str(x.get("nome", "")) in ["Panzer IV", "Jagdpanther"] or x.get("carro_us", false):
+			continue
+		visti[id] = true
+		var fig: Node3D = _figure.get(id)
+		if fig == null or not is_instance_valid(fig):
+			fig = _crea_figura(str(id))
+			_figure[id] = fig
+		var pos2: Vector2 = posti[id]
+		fig.position = punto3d(pos2)
+		var nome := modello_per(x)
+		var corpo: MeshInstance3D = fig.get_node("corpo")
+		if corpo.get_meta("modello", "") != nome:
+			corpo.mesh = _mesh_soldato(nome)
+			corpo.set_meta("modello", nome)
+		var morto := str(x.stato) == "morto"
+		corpo.material_override = _materiale_soldato("morto" if morto else str(x.lato))
+		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
+		corpo.rotation = Vector3(0, _verso(x, pos2) + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
+		corpo.position.y = 0.05 if morto else 0.0
+		var base: MeshInstance3D = fig.get_node("base")
+		var sel: bool = mappa2d.vista == null and id in mappa2d.selezionati
+		var turno: bool = id in di_turno
+		base.material_override = _materiale_soldato("sel" if sel else ("turno" if turno else str(x.lato) + "_base"))
+		var et: Label3D = fig.get_node("etichetta")
+		var testo := str(x.get("lettera", id))
+		if str(x.lato) == "de" and x.has("num"):
+			testo = "%s %d" % [testo, int(x.num) % 100]
+		var extra: Array = []
+		if x.get("panico", false):
+			extra.append("PANICO")
+		if x.get("ferito", false) and str(x.stato) == "attivo":
+			extra.append("FERITO")
+		if str(x.stato) in ["incapacitato", "morto", "catturato", "arreso"]:
+			extra.append({"incapacitato": "INCAPACITATO", "morto": "UCCISO", "catturato": "PRIGIONIERO", "arreso": "ARRESO"}[str(x.stato)])
+		if not extra.is_empty():
+			testo += "\n" + " · ".join(extra)
+		et.text = testo
+		et.modulate = Color("f2d77a") if str(x.lato) == "us" else Color("f0f0ea")
+		if sel:
+			et.modulate = Color("fff3c4")
+		et.position.y = 0.3 if str(x.get("postura", "")) == "prone" or str(x.stato) in ["morto", "incapacitato"] else 0.66
+	for id in _figure.keys():
+		if not visti.has(id):
+			if is_instance_valid(_figure[id]):
+				_figure[id].queue_free()
+			_figure.erase(id)
+
+func _verso(x: Dictionary, da: Vector2) -> float:
+	var nemico := "de" if str(x.lato) == "us" else "us"
+	var migliore := 1e9
+	var dir := Vector2(0, 1) if nemico == "de" else Vector2(0, -1)
+	for id in mappa2d.partita.s.unita:
+		var y: Dictionary = mappa2d.partita.s.unita[id]
+		if str(y.lato) != nemico or str(y.get("hex", "")) == "" or not str(y.stato) in ["attivo"]:
+			continue
+		if nemico == "de" and not mappa2d.partita.attivo(y):
+			continue
+		var c := centro_px(str(y.hex))
+		var d := c.distance_squared_to(da)
+		if d < migliore and d > 1.0:
+			migliore = d
+			dir = c - da
+	# angolo attorno a Y: 0 = guarda verso +Z (sud sulla mappa)
+	return atan2(dir.x, dir.y)
+
 # ================================================================== camera
 func _process(_delta: float) -> void:
 	if not visible or mappa2d == null:
 		return
 	_sincronizza_velo()
 	_aggiorna_oggetti()
+	_aggiorna_pedine()
 	_dirada_alberi()
 	_aggiorna_camera()
 

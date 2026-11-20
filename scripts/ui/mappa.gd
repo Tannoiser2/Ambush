@@ -64,6 +64,8 @@ var _trascinato := false
 var _multi := false
 ## Seconda istanza usata come velo della vista 3D: disegna solo pedine e segni, senza fondo.
 var solo_velo := false
+## Nel velo della vista 3D le pedine sono miniature: non si disegnano le pedine piatte.
+var senza_pedine := false
 ## Vista 3D (scripts/ui/mappa3d.gd), creata la prima volta che si passa al 3D.
 var vista3d = null
 var in_3d := false
@@ -433,6 +435,14 @@ func _draw() -> void:
 			per_hex[d.hex] = []
 		per_hex[d.hex].append(d)
 	var di_turno: Array = [] if vista != null else partita.americani_di_turno().map(func(a): return a.id)
+	if senza_pedine:
+		# restano piatti solo i carri, che non hanno ancora una miniatura
+		var carri := {}
+		for h in per_hex:
+			var solo_carri: Array = per_hex[h].filter(func(x): return str(x.get("nome", "")) in ["Panzer IV", "Jagdpanther"] or x.get("carro_us", false))
+			if not solo_carri.is_empty():
+				carri[h] = solo_carri
+		per_hex = carri
 	for h in per_hex:
 		var pila: Array = per_hex[h]
 		pila.sort_custom(func(a, b): return _ordine(a) < _ordine(b))
@@ -443,7 +453,7 @@ func _draw() -> void:
 			r.position += centro_schermo(h)
 			_pedina(x, r, vista == null and x.id in selezionati, x.id in di_turno)
 	# Pedine in movimento (sopra le altre)
-	for id in mobili:
+	for id in ({} if senza_pedine else mobili):
 		var m: Dictionary = mobili[id]
 		if not stati.has(id):
 			continue
