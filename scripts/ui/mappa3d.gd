@@ -10,7 +10,7 @@ const E = preload("res://scripts/motore/esagoni.gd")
 const MappaScript = preload("res://scripts/ui/mappa.gd")
 
 const K := 0.01            # unità 3D per pixel della mappa
-const LIVELLO := 0.42      # altezza di un livello di quota
+const LIVELLO := 0.72      # altezza di un livello di quota
 const PASSO_GRIGLIA := 20  # pixel tra i vertici del rilievo
 const SCALA_VELO := 0.55   # risoluzione del velo disegnato rispetto alla mappa
 const RAGGIO_PX := 180.5 * 0.6
@@ -85,6 +85,11 @@ func _init() -> void:
 	luce.shadow_bias = 0.04
 	luce.directional_shadow_max_distance = 45.0
 	mondo.add_child(luce)
+	var riempimento := DirectionalLight3D.new()
+	riempimento.rotation_degrees = Vector3(-30, 150, 0)
+	riempimento.light_energy = 0.28
+	riempimento.light_color = Color(0.8, 0.85, 1.0)
+	mondo.add_child(riempimento)
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = Color("2b2f24")
@@ -183,7 +188,7 @@ func _quota_base(p: Vector2) -> float:
 		var hx := str(x)
 		if hx == "":
 			continue
-		var d := p.distance_to(centro_px(hx)) / (RAGGIO_PX * 1.32)
+		var d := p.distance_to(centro_px(hx)) / (RAGGIO_PX * 1.15)
 		var w := maxf(0.0, 1.0 - d)
 		w = w * w * w
 		somma += w * float(t.quota(hx))
@@ -516,7 +521,7 @@ func _aggiorna_oggetti() -> void:
 	var p: Partita = mappa2d.partita
 	if p == null or p.s.is_empty():
 		return
-	var firma := str([p.s.get("modifiche", {}), p.s.get("bunker", {}).keys(), p.s.get("bunker", {}).values().map(func(b): return b.get("distrutto", false)),
+	var firma := str([p.s.get("radio_hex", ""), p.s.get("modifiche", {}), p.s.get("bunker", {}).keys(), p.s.get("bunker", {}).values().map(func(b): return b.get("distrutto", false)),
 		p.s.get("blocchi", []), p.s.get("ponti", {}).values().map(func(b): return b.get("distrutto", false)), lettera])
 	if firma == _firma_oggetti:
 		return
@@ -527,12 +532,6 @@ func _aggiorna_oggetti() -> void:
 	mondo.add_child(_dinamici)
 	var t: Terreno = p.terreno
 	_costruisci_case(_dinamici)
-	# case ridotte in macerie: restano i muri diroccati del disegno
-	for m in _muri_rovine:
-		var pm: Array = m.poly
-		var c0 := Vector2(float(pm[0][0]), float(pm[0][1]))
-		if t.tipo(esagono_px(c0)) == "rubble":
-			_muro(pm, str(m.tipo), _dinamici)
 	var pietra := _materiale(Color("9ea5a1"))
 	var legno := _materiale(Color("7a5a3c"))
 	var cemento := _materiale(Color("8c8f86"))
@@ -569,22 +568,6 @@ func _aggiorna_oggetti() -> void:
 			for lato: float in [-1.0, 1.0]:
 				var q := c + dir * RAGGIO_PX * 0.7 * lato
 				_scatola(_dinamici, Vector3(q.x * K, quota - 0.04, q.y * K), Vector3(lung * 0.32, 0.07, 0.42), ang + lato * 0.25, pietra)
-	# Campanile (mappa B)
-	if lettera == "b":
-		var c := centro_px("S13")
-		var base := Vector3(c.x * K, altezza_px(c), c.y * K)
-		_scatola(_dinamici, base + Vector3(0, 0.75, 0), Vector3(0.42, 1.5, 0.42), 0.0, pietra)
-		var tetto := CylinderMesh.new()
-		tetto.top_radius = 0.0
-		tetto.bottom_radius = 0.34
-		tetto.height = 0.5
-		tetto.radial_segments = 4
-		var mt := MeshInstance3D.new()
-		mt.mesh = tetto
-		mt.material_override = _materiale(Color("6e4a3a"))
-		mt.position = base + Vector3(0, 1.75, 0)
-		mt.rotation.y = PI / 4.0
-		_dinamici.add_child(mt)
 	# Bunker (missione 6)
 	for h in p.s.get("bunker", {}):
 		var bk: Dictionary = p.s.bunker[h]
@@ -604,11 +587,42 @@ func _aggiorna_oggetti() -> void:
 	for h in E.tutti():
 		if t.tipo(h) == "rough":
 			_macerie(_dinamici, centro_px(h), 10, _materiale(Color("8a8a80")))
-	# Blocchi stradali (missione 8)
+	# Blocchi stradali (missione 8): barricate di traverso alla strada
 	for h in p.s.get("blocchi", []):
 		var c := centro_px(str(h))
-		for i in 3:
-			_scatola(_dinamici, punto3d(c, 0.07 + i * 0.09), Vector3(0.9, 0.08, 0.08), 0.3 * i, legno)
+		var ang := 0.0
+		for v in E.vicini(str(h)):
+			if t.tipo(v) == "road":
+				var dv := centro_px(v) - c
+				ang = atan2(dv.x, dv.y) + PI / 2.0
+				break
+		for k in [-1, 1]:
+			var mb := _oggetto("barricata", Color("5e4a36"))
+			mb.position = punto3d(c + Vector2(cos(ang), -sin(ang)).rotated(PI / 2.0) * 22.0 * k)
+			mb.rotation.y = ang
+			_dinamici.add_child(mb)
+	# Missione 3: radio presidiata e deposito di carburante
+	var rh := str(p.s.get("radio_hex", ""))
+	if rh != "":
+		var mr := _oggetto("radio", Color("4f5638"))
+		mr.position = punto3d(centro_px(rh) + Vector2(38, -30))
+		mr.rotation.y = 0.6
+		_dinamici.add_child(mr)
+	var dep := str(p.regola("deposito", ""))
+	if dep != "" and t.tipo(dep) != "rubble":
+		var rng_t := RandomNumberGenerator.new()
+		rng_t.seed = 7
+		for i in 14:
+			var mt := _oggetto("tanica", Color("4c5233") if i % 3 else Color("6b2e22"))
+			mt.position = punto3d(centro_px(dep) + Vector2((i % 5) * 13 - 26, (i / 5) * 18 - 30 + rng_t.randf() * 4))
+			mt.rotation.y = rng_t.randf_range(-0.2, 0.2)
+			_dinamici.add_child(mt)
+
+func _oggetto(nome: String, colore: Color) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	mi.mesh = _mesh_mezzo(nome)
+	mi.material_override = _materiale(colore, 0.85)
+	return mi
 
 func _scatola(padre: Node3D, pos: Vector3, dim: Vector3, ang: float, mat: Material) -> void:
 	var b := BoxMesh.new()
@@ -675,64 +689,92 @@ func _dirada_alberi() -> void:
 ## Quando si gioca con chi sta dentro (pedine, esagoni evidenziati, esagono sotto il dito)
 ## il tetto sparisce e i muri diventano trasparenti.
 const ALTEZZA_CASA := 0.95
-const SPESSORE_MURO := 0.07
+const SPESSORE_MURO := 0.12
 var _case: Array = []   # {hex: [..], muri: MeshInstance3D, tetto: MeshInstance3D, mat: StandardMaterial3D}
 
 func _costruisci_case(padre: Node3D) -> void:
 	_case.clear()
+	var percorso := "res://data/mappa_%s_3d.json" % lettera
+	if not FileAccess.file_exists(percorso):
+		return
+	var d: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(percorso))
 	var t: Terreno = mappa2d.partita.terreno
-	var visti := {}
-	for h in E.tutti():
-		var tipo := t.tipo(h)
-		if not tipo in ["stone_building", "wood_building"] or visti.has(h):
+	for st in d.get("case", []):
+		var angoli: Array = []
+		for q in st.angoli:
+			angoli.append(Vector2(float(q[0]), float(q[1])))
+		var macerie := false
+		for h in st.hex:
+			if t.tipo(str(h)) == "rubble":
+				macerie = true
+		if macerie:
+			# casa crollata: restano i muri diroccati del disegno dentro la sua pianta
+			var pol := PackedVector2Array(angoli)
+			for m in _muri_rovine:
+				var pm: Array = m.poly
+				if Geometry2D.is_point_in_polygon(Vector2(float(pm[0][0]), float(pm[0][1])), pol):
+					_muro(pm, str(m.tipo), padre)
 			continue
-		var gruppo: Array = []
-		var coda: Array = [h]
-		visti[h] = true
-		while not coda.is_empty():
-			var x: String = coda.pop_back()
-			gruppo.append(x)
-			for v in E.vicini(x):
-				if v != "" and not visti.has(v) and t.tipo(v) == tipo and t.tipo_lato(x, v) == "":
-					visti[v] = true
-					coda.append(v)
-		_casa(padre, gruppo, tipo == "stone_building")
+		var campanile: bool = lettera == "b" and "S13" in st.hex
+		_stanza(padre, st, angoli, str(st.tipo) == "pietra", campanile)
 
-func _casa(padre: Node3D, gruppo: Array, pietra: bool) -> void:
-	var t: Terreno = mappa2d.partita.terreno
+## Una stanza come è stampata: muri, finestre e porte lungo i quattro lati, tetto a padiglione.
+func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, campanile: bool) -> void:
 	var base := 1e9
-	for h in gruppo:
-		base = minf(base, altezza_px(centro_px(h)) - 0.04)
-		for i in 6:
-			base = minf(base, altezza_px(centro_px(h) + Vector2.RIGHT.rotated(deg_to_rad(60.0 * i)) * RAGGIO_PX * 0.9) - 0.04)
+	var centro := Vector2.ZERO
+	for p in angoli:
+		base = minf(base, altezza_px(p))
+		centro += p
+	centro /= 4.0
+	base = minf(base, altezza_px(centro)) - 0.04
 	var muri := SurfaceTool.new()
 	muri.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var vetri := SurfaceTool.new()
 	vetri.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var tetto := SurfaceTool.new()
 	tetto.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var r := RAGGIO_PX * 0.93
-	for h in gruppo:
-		var c := centro_px(h)
-		var vtx: Array = []
-		for i in 6:
-			vtx.append(c + Vector2.RIGHT.rotated(deg_to_rad(60.0 * i)) * r)
-		# tetto: esagono pieno
-		for i in 6:
-			_tri(tetto, Vector3(c.x * K, base + ALTEZZA_CASA, c.y * K), _p3(vtx[(i + 1) % 6], base + ALTEZZA_CASA), _p3(vtx[i], base + ALTEZZA_CASA), Vector3.UP)
-		# lati: direzioni 0 N (vertici 4–5), 1 NE (5–0), 2 SE (0–1), 3 S (1–2), 4 SO (2–3), 5 NO (3–4)
-		var coppie := [[4, 5], [5, 0], [0, 1], [1, 2], [2, 3], [3, 4]]
-		for d in 6:
-			var v := E.vicino(h, d)
-			var tipo_lato := t.tipo_lato(h, v) if v != "" else ""
-			if v != "" and v in gruppo and tipo_lato == "":
-				continue
-			var a: Vector2 = vtx[coppie[d][0]]
-			var b: Vector2 = vtx[coppie[d][1]]
-			_lato_casa(muri, vetri, a, b, c, base, tipo_lato)
-	var colore := Color("9d978a") if pietra else Color("84654a")
+	var h_muri := 1.75 if campanile else ALTEZZA_CASA
+	for i in 4:
+		var p: Vector2 = angoli[i]
+		var q: Vector2 = angoli[(i + 1) % 4]
+		var dentro := (centro - (p + q) / 2.0).normalized()
+		for seg in st.lati[i]:
+			var a := p.lerp(q, float(seg[0]))
+			var b := p.lerp(q, float(seg[1]))
+			match str(seg[2]):
+				"muro":
+					_blocco(muri, a, b, dentro, base, base + h_muri, SPESSORE_MURO)
+				"finestra":
+					_blocco(muri, a, b, dentro, base, base + 0.36, SPESSORE_MURO)
+					_blocco(muri, a, b, dentro, base + 0.68, base + h_muri, SPESSORE_MURO)
+					_blocco(vetri, a, b, dentro, base + 0.36, base + 0.68, 0.015)
+				"porta":
+					_blocco(muri, a, b, dentro, base + 0.66, base + h_muri, SPESSORE_MURO)
+	var alto := base + h_muri
+	if campanile:
+		# cella campanaria: pilastri agli angoli con un'apertura per lato, cornicione, guglia
+		for i in 4:
+			var p: Vector2 = angoli[i]
+			var q: Vector2 = angoli[(i + 1) % 4]
+			var dentro := (centro - (p + q) / 2.0).normalized()
+			_blocco(muri, p, p.lerp(q, 0.28), dentro, alto, alto + 0.5, SPESSORE_MURO * 1.4)
+			_blocco(muri, p.lerp(q, 0.72), q, dentro, alto, alto + 0.5, SPESSORE_MURO * 1.4)
+			_blocco(muri, p, q, dentro, alto + 0.5, alto + 0.68, SPESSORE_MURO * 1.6)
+			_blocco(muri, p, q, dentro, alto - 0.05, alto + 0.02, SPESSORE_MURO * 1.9)
+		alto += 0.68
+		var cima := Vector3(centro.x * K, alto + 0.95, centro.y * K)
+		for i in 4:
+			var p: Vector2 = centro + (angoli[i] - centro) * 1.08
+			var q: Vector2 = centro + (angoli[(i + 1) % 4] - centro) * 1.08
+			var nrm := (Vector3(p.x - centro.x, 0, p.y - centro.y) + Vector3(q.x - centro.x, 0, q.y - centro.y)).normalized()
+			nrm = (nrm + Vector3.UP * 0.6).normalized()
+			_tri(tetto, _p3(p, alto), cima, _p3(q, alto), nrm)
+	else:
+		_tetto_padiglione(tetto, angoli, centro, alto)
+	var colore := Color("8a8477") if pietra else Color("7a5d43")
 	var mat := _materiale(colore, 0.92)
-	var mat_tetto := _materiale(Color("5c4a42") if pietra else Color("6b4a33"), 0.95)
+	var mat_tetto := _materiale(Color("6e3b2e") if pietra else Color("5a4632"), 0.95)
+	mat_tetto.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var mat_vetri := _materiale(Color("1e2226"), 0.4)
 	var n := Node3D.new()
 	padre.add_child(n)
@@ -748,7 +790,41 @@ func _casa(padre: Node3D, gruppo: Array, pietra: bool) -> void:
 	mt.mesh = tetto.commit()
 	mt.material_override = mat_tetto
 	n.add_child(mt)
-	_case.append({"hex": gruppo, "muri": mi, "vetri": mv, "tetto": mt, "mat": mat, "aperta": false})
+	var hexes: Array = st.hex.duplicate()
+	var pol := PackedVector2Array(angoli)
+	for h in E.tutti():
+		if not h in hexes and Geometry2D.is_point_in_polygon(centro_px(h), pol):
+			hexes.append(h)
+	_case.append({"hex": hexes, "muri": mi, "vetri": mv, "tetto": mt, "mat": mat, "aperta": false})
+
+## Tetto a padiglione sopra un rettangolo: colmo lungo il lato lungo, piccola sporgenza.
+func _tetto_padiglione(st: SurfaceTool, angoli: Array, centro: Vector2, alto: float) -> void:
+	var c: Array = []
+	for p in angoli:
+		c.append(centro + (p - centro) * 1.06)
+	var l01: float = (c[1] as Vector2).distance_to(c[0])
+	var l12: float = (c[2] as Vector2).distance_to(c[1])
+	# u: direzione del lato lungo
+	var u: Vector2 = ((c[1] - c[0]) as Vector2).normalized() if l01 >= l12 else ((c[2] - c[1]) as Vector2).normalized()
+	var lungo := maxf(l01, l12)
+	var corto := minf(l01, l12)
+	var colmo := alto + corto * K * 0.42
+	var r1 := centro - u * (lungo - corto) / 2.0
+	var r2 := centro + u * (lungo - corto) / 2.0
+	var R1 := Vector3(r1.x * K, colmo, r1.y * K)
+	var R2 := Vector3(r2.x * K, colmo, r2.y * K)
+	for i in 4:
+		var p: Vector2 = c[i]
+		var q: Vector2 = c[(i + 1) % 4]
+		var mezzo := (p + q) / 2.0
+		# il colmo più vicino a ciascun estremo del lato
+		var rp := R1 if p.distance_to(r1) < p.distance_to(r2) else R2
+		var rq := R1 if q.distance_to(r1) < q.distance_to(r2) else R2
+		var fuori := (mezzo - centro).normalized()
+		var nrm := (Vector3(fuori.x, 0, fuori.y) + Vector3.UP).normalized()
+		_tri(st, _p3(p, alto), rp, _p3(q, alto), nrm)
+		if rp != rq:
+			_tri(st, rp, rq, _p3(q, alto), nrm)
 
 func _p3(p: Vector2, y: float) -> Vector3:
 	return Vector3(p.x * K, y, p.y * K)
@@ -917,7 +993,7 @@ static func modello_per(x: Dictionary) -> String:
 	if arma == "mitra":
 		return "de_mp_piedi"
 	if arma == "mg":
-		return "de_mg_piedi"
+		return "mz:mg_tiratore"
 	if arma == "ott":
 		return "de_fucile_piedi3"
 	var n := int(x.get("num", 0))
@@ -926,9 +1002,13 @@ static func modello_per(x: Dictionary) -> String:
 func _materiale_soldato(chiave: String) -> StandardMaterial3D:
 	if _mat_soldati.has(chiave):
 		return _mat_soldati[chiave]
-	var c: Color = {"us": Color("6f6d43"), "de": Color("737a74"), "morto": Color("4a463e"), "us_base": Color("2f4a22"), "de_base": Color("3c3f45"),
+	var c: Color = {"us": Color("8d8752"), "de": Color("6f7a73"), "morto": Color("5a554b"), "us_base": Color("3d5c2c"), "de_base": Color("4a4e55"),
 		"sel": Color("d9b44a"), "turno": Color("6fd35a")}.get(chiave, Color.WHITE)
-	var m := _materiale(c, 0.75)
+	var m := _materiale(c, 0.7)
+	if chiave in ["us", "de", "morto"]:
+		m.rim_enabled = true
+		m.rim = 0.6
+		m.rim_tint = 0.4
 	if chiave in ["sel", "turno"]:
 		m.emission_enabled = true
 		m.emission = c
@@ -1036,13 +1116,29 @@ func _aggiorna_pedine() -> void:
 		_paracadute(fig, str(id), x)
 		var corpo: MeshInstance3D = fig.get_node("corpo")
 		if corpo.get_meta("modello", "") != nome:
-			corpo.mesh = _mesh_soldato(nome)
+			corpo.mesh = _mesh_mezzo(nome.substr(3)) if nome.begins_with("mz:") else _mesh_soldato(nome)
 			corpo.set_meta("modello", nome)
+		# mitragliatrice su treppiede davanti a chi la serve da accovacciato o prono
+		var tre: MeshInstance3D = fig.get_node_or_null("treppiede")
+		var serve_mg := str(x.lato) == "de" and str(x.stato) == "attivo" and str(x.get("postura", "")) != "standing" and _tipi_armi(x).any(func(a): return a in ["lmg", "mmg", "hmg"])
+		if serve_mg and tre == null:
+			tre = MeshInstance3D.new()
+			tre.name = "treppiede"
+			tre.mesh = _mesh_mezzo("mg_treppiede")
+			tre.material_override = _materiale(Color("3a3b38"), 0.6)
+			fig.add_child(tre)
+		if tre != null:
+			tre.visible = serve_mg
 		var morto := str(x.stato) == "morto"
 		corpo.material_override = _materiale_soldato("morto" if morto else str(x.lato))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
 		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
 		corpo.rotation = Vector3(0, yaw + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
+		var tre2: MeshInstance3D = fig.get_node_or_null("treppiede")
+		if tre2 != null and tre2.visible:
+			tre2.rotation.y = yaw + VERSO_MEZZI
+			tre2.scale = Vector3.ONE * 0.7
+			tre2.position = Vector3(sin(yaw), 0, cos(yaw)) * 0.2
 		corpo.position.y = 0.05 if morto else 0.0
 		var base: MeshInstance3D = fig.get_node("base")
 		var sel: bool = mappa2d.vista == null and id in mappa2d.selezionati
@@ -1104,6 +1200,7 @@ func _verso(x: Dictionary, da: Vector2) -> float:
 ## Mezzi (assets/mezzi3d, da tools/costruisci_mezzi3d.py): Jeep, Kübelwagen, auto comando, canoe,
 ## Sherman, Panzer IV (scafo disegnato qui con la torretta del kit), Jagdpanther.
 const DIR_MEZZI := "res://assets/mezzi3d/"
+const VERSO_MEZZI := 0.0   # i mezzi sono salvati col davanti verso +Z
 var _mezzi: Dictionary = {}       # id veicolo -> Node3D
 var _carri_unita: Dictionary = {} # id unità carro tedesca -> Node3D
 var _mezzi_nodo: Node3D

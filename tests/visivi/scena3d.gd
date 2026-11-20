@@ -32,6 +32,8 @@ func _scatti(dir: String, tag: String) -> void:
 		p.schiera([a.id], "M10" if a.id < "D" else ("N9" if a.id < "G" else "P9"))
 	p.inizia_missione()
 	p._crea_tedesco(4, "O8", "standing")
+	p._crea_tedesco(49, "P7", "crouching")
+	p._crea_tedesco(21, "P7", "standing")
 	var j = p._crea_tedesco(54, "R6", "standing")
 	ui.selezione = ["E"]
 	ui._aggiorna_tutto(true)
@@ -46,6 +48,19 @@ func _scatti(dir: String, tag: String) -> void:
 	v3.distanza = 5.0
 	v3.beccheggio = 50.0
 	await foto("%s/scena_%s_dentro.png" % [dir, tag])
+	v3.bersaglio = v3.centro3d("S13")
+	v3.distanza = 6.0
+	v3.beccheggio = 30.0
+	v3.imbardata = 1.2
+	await foto("%s/scena_%s_campanile.png" % [dir, tag])
+	v3.bersaglio = v3.centro3d("P7")
+	v3.distanza = 4.0
+	v3.beccheggio = 35.0
+	v3.imbardata = 0.3
+	await foto("%s/scena_%s_mg.png" % [dir, tag])
+	v3.bersaglio = v3.centro3d("L10")
+	v3.distanza = 4.5
+	await foto("%s/scena_%s_deposito.png" % [dir, tag])
 	var jeep_hex: String = p.s.veicoli.vjeep.hex if p.s.get("veicoli", {}).has("vjeep") else "J12"
 	v3.bersaglio = v3.centro3d(jeep_hex)
 	v3.distanza = 4.0

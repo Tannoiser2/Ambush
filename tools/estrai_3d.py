@@ -82,55 +82,145 @@ def estrai(lettera):
                 continue
             muri.append({"tipo": nome, "poly": [[round(float(x) * SCALA, 1), round(float(y) * SCALA, 1)] for x, y in ap]})
 
-    # --- pianta degli edifici: i muri vicini formano un edificio; si chiude il contorno
-    edif_poly = []
-    for nome, m in (("pietra", azzurro), ("legno", legno)):
-        mm = m & edifici
-        largo = cv2.morphologyEx(mm, cv2.MORPH_OPEN, disco(17))
-        mm = mm & (1 - cv2.dilate(largo, disco(4)))
-        mm = cv2.morphologyEx(mm, cv2.MORPH_OPEN, disco(3))
-        # gruppi di esagoni edificio adiacenti (stesso tipo): ognuno è un edificio
-        tipo_hex = "stone_building" if nome == "pietra" else "wood_building"
-        hex_ed = [h for h in ids if tipi.get(h, "") == tipo_hex]
-        visti, gruppi_hex = set(), []
-        def vicini_h(h):
-            c, r = ord(h[0]) - 65, int(h[1:])
-            out = []
-            for k2, h2 in enumerate(hex_ed):
-                c2, r2 = ord(h2[0]) - 65, int(h2[1:])
-                if np.linalg.norm(centro(c, r) - centro(c2, r2)) < RAGGIO * 1.9 and h2 != h:
-                    out.append(h2)
-            return out
-        for h in hex_ed:
-            if h in visti:
+    # --- case come sono stampate: una stanza rettangolare per ogni spazio chiuso dai muri;
+    #     lungo ogni lato si legge dal disegno dove c'è muro, finestra (linee sottili) o porta (varco)
+    scuro = (V < 0.5).astype(np.uint8)
+    area_hex = 2.6 * RAGGIO ** 2
+    stanze = []
+    for nome, m, tipo_h in (("pietra", azzurro, "stone_building"), ("legno", legno, "wood_building")):
+        W = cv2.morphologyEx(m & edifici, cv2.MORPH_CLOSE, disco(4))
+        largo = cv2.morphologyEx(W, cv2.MORPH_OPEN, disco(21))
+        W = W & (1 - cv2.dilate(largo, disco(4)))
+        W = cv2.morphologyEx(W, cv2.MORPH_OPEN, disco(3))
+        cont = (W | (scuro & cv2.dilate(W, disco(40)))).astype(np.uint8)
+        chiusi = []
+        for rc in (45, 32, 60):
+            ch = cv2.morphologyEx(cont, cv2.MORPH_CLOSE, disco(rc))
+            chiusi.append((ch, cv2.connectedComponents((1 - ch).astype(np.uint8))[1]))
+        for k, h in enumerate(ids):
+            if tipi.get(h, "") != tipo_h:
                 continue
-            coda, gr = [h], []
-            visti.add(h)
-            while coda:
-                x = coda.pop()
-                gr.append(x)
-                for y in vicini_h(x):
-                    if y not in visti:
-                        visti.add(y)
-                        coda.append(y)
-            gruppi_hex.append(gr)
-        for gr in gruppi_hex:
-            zona = np.isin(idx, [ids.index(h) for h in gr]).astype(np.uint8)
-            zona = cv2.dilate(zona, disco(12))
-            g = (zona & mm).astype(np.uint8)
-            if g.sum() < 800:
-                continue
-            ch = cv2.morphologyEx(g, cv2.MORPH_CLOSE, disco(70))
-            cont, _ = cv2.findContours(ch, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            c = max(cont, key=cv2.contourArea)
-            rett = cv2.minAreaRect(c)
-            area_r = rett[1][0] * rett[1][1]
-            if cv2.contourArea(c) < 0.72 * area_r:
-                ap = cv2.approxPolyDP(c, 12.0, True).reshape(-1, 2)
+            c = centro(ord(h[0]) - 65, int(h[1:])).astype(int)
+            reg = None
+            for ch, lab in chiusi:
+                seme = None
+                for d in range(0, 70, 4):
+                    for dx, dy in ((d, 0), (-d, 0), (0, d), (0, -d), (d, d), (-d, -d), (d, -d), (-d, d)):
+                        x, y = c[0] + dx, c[1] + dy
+                        if ch[y, x] == 0:
+                            seme = (x, y)
+                            break
+                    if seme:
+                        break
+                if not seme:
+                    continue
+                r_ = (lab == lab[seme[1], seme[0]]).astype(np.uint8)
+                a_ = r_.sum()
+                if 0.2 * area_hex < a_ < 2.5 * area_hex:
+                    rr = cv2.minAreaRect(cv2.findNonZero(r_))
+                    if a_ > 0.72 * rr[1][0] * rr[1][1]:
+                        reg = cv2.dilate(r_, disco(20))
+                        break
+            if reg is None:
+                cella = cv2.dilate((idx == k).astype(np.uint8), disco(30))
+                pts = cv2.findNonZero(W & cella)
+                if pts is None or len(pts) < 200:
+                    continue
+                reg = None
+                rett = cv2.minAreaRect(pts)
             else:
-                ap = cv2.boxPoints(rett)
-            if len(ap) >= 3:
-                edif_poly.append({"tipo": nome, "poly": [[float(x), float(y)] for x, y in ap]})
+                rett0 = cv2.minAreaRect(cv2.findNonZero(reg))
+                # orientamento: quello i cui lati coincidono meglio con muri e linee disegnati
+                pts = cv2.findNonZero(reg).reshape(-1, 2).astype(np.float32)
+                cella = cv2.dilate((idx == k).astype(np.uint8), disco(30))
+                pw = cv2.findNonZero(W & cella)
+                candidati = [rett0[2], rett0[2] + 45.0]
+                if pw is not None and len(pw) > 200:
+                    candidati.append(cv2.minAreaRect(pw)[2])
+                migliore = None
+                for ang in candidati:
+                    ca, sa = np.cos(np.radians(ang)), np.sin(np.radians(ang))
+                    rot = pts @ np.array([[ca, -sa], [sa, ca]])
+                    mn, mx = rot.min(0), rot.max(0)
+                    cen = ((mn + mx) / 2) @ np.array([[ca, sa], [-sa, ca]])
+                    r_c = ((float(cen[0]), float(cen[1])), (float(mx[0] - mn[0]), float(mx[1] - mn[1])), float(ang))
+                    box = cv2.boxPoints(r_c)
+                    colpi, tot = 0, 0
+                    for i in range(4):
+                        p, q = box[i], box[(i + 1) % 4]
+                        dentro = np.array(r_c[0]) - (p + q) / 2
+                        dentro = dentro / max(np.linalg.norm(dentro), 1)
+                        for s_ in np.linspace(0, 1, 40):
+                            pt = p + (q - p) * s_ + dentro * 14
+                            x, y = int(pt[0]), int(pt[1])
+                            if 0 <= y < cont.shape[0] and 0 <= x < cont.shape[1]:
+                                tot += 1
+                                colpi += int(cont[max(0, y - 6):y + 7, max(0, x - 6):x + 7].any())
+                    punti = colpi / max(tot, 1)
+                    if migliore is None or punti > migliore[0]:
+                        migliore = (punti, r_c)
+                rett = migliore[1]
+            # una stanza già trovata da un altro esagono è la stessa
+            doppia = None
+            for s in stanze:
+                if np.hypot(s["rett"][0] - rett[0][0], s["rett"][1] - rett[0][1]) < 25:
+                    doppia = s
+            if doppia:
+                doppia["hex"].append(h)
+                continue
+            # lati: si campiona il disegno lungo ogni lato, appena dentro il bordo
+            box = cv2.boxPoints(rett)
+            cen = np.array(rett[0])
+            lati = []
+            for i in range(4):
+                p, q = box[i], box[(i + 1) % 4]
+                lung = np.linalg.norm(q - p)
+                dirv = (q - p) / max(lung, 1)
+                dentro = cen - (p + q) / 2
+                dentro = dentro / max(np.linalg.norm(dentro), 1)
+                cls = []
+                for s_ in np.arange(0, lung, 4):
+                    pt = p + dirv * s_ + dentro * 14
+                    x, y = int(pt[0]), int(pt[1])
+                    x0, x1, y0, y1 = max(0, x - 9), x + 10, max(0, y - 9), y + 10
+                    if W[y0:y1, x0:x1].any():
+                        cls.append("m")
+                    elif scuro[y0:y1, x0:x1].any():
+                        cls.append("f")
+                    else:
+                        cls.append("v")
+                # tratti consecutivi
+                tratti = []
+                for j, cl in enumerate(cls):
+                    if tratti and tratti[-1][2] == cl:
+                        tratti[-1][1] = j + 1
+                    else:
+                        tratti.append([j, j + 1, cl])
+                # pulizia: tratti corti assorbiti dai vicini
+                buoni = []
+                for tr in tratti:
+                    if (tr[1] - tr[0]) * 4 < 14 and buoni:
+                        buoni[-1][1] = tr[1]
+                    else:
+                        buoni.append(tr)
+                uniti = []
+                for tr in buoni:
+                    if uniti and uniti[-1][2] == tr[2]:
+                        uniti[-1][1] = tr[1]
+                    else:
+                        uniti.append(tr)
+                n_ = max(1, len(cls))
+                lato = []
+                for tr in uniti:
+                    tipo = {"m": "muro", "f": "finestra", "v": "porta"}[tr[2]]
+                    if tipo == "porta" and (tr[1] - tr[0]) * 4 > 140:
+                        tipo = "finestra"   # varchi lunghi: finestre larghe (case chiuse)
+                    lato.append([round(tr[0] / n_, 3), round(min(1.0, tr[1] / n_), 3), tipo])
+                lati.append(lato)
+            stanze.append({"tipo": nome, "hex": [h], "rett": [float(rett[0][0]), float(rett[0][1]), float(rett[1][0]), float(rett[1][1]), float(rett[2])],
+                           "angoli": [[float(x), float(y)] for x, y in box], "lati": lati})
+    case = stanze
+    edif_poly = [{"tipo": c["tipo"], "poly": c["angoli"]} for c in case]
     meta = lambda m: cv2.resize(m, (img.shape[1] // 2, img.shape[0] // 2), interpolation=cv2.INTER_AREA)
 
     def semina(densita, soglia, passo, raggio_fn, massimo=4000):
@@ -186,7 +276,7 @@ def estrai(lettera):
     cv2.imwrite(os.path.join(RADICE, "assets/maps/mappa_%s_maschere.png" % lettera), out)
 
     ris = {"mappa": lettera.upper(), "nota": "Generato da tools/estrai_3d.py: coordinate in pixel della mappa.",
-           "alberi": alberi, "cespugli": cespugli, "ciuffi": ciuffi, "muri": muri, "edifici": edif_poly}
+           "alberi": alberi, "cespugli": cespugli, "ciuffi": ciuffi, "muri": muri, "edifici": edif_poly, "case": case}
     json.dump(ris, open(os.path.join(RADICE, "data/mappa_%s_3d.json" % lettera), "w"), separators=(",", ":"))
     print(lettera, "alberi", len(alberi), "cespugli", len(cespugli), "ciuffi", len(ciuffi), "muri", len(muri))
     return img, alberi, cespugli, muri
@@ -201,8 +291,14 @@ if __name__ == "__main__":
             cv2.circle(vis, (int(x / SCALA), int(y / SCALA)), int(r / SCALA), (0, 140, 0), 3)
         for x, y, r in cespugli:
             cv2.circle(vis, (int(x / SCALA), int(y / SCALA)), max(2, int(r / SCALA)), (0, 200, 200), 2)
-        for m in json.load(open(os.path.join(RADICE, "data/mappa_%s_3d.json" % l)))["edifici"]:
-            cv2.polylines(vis, [(np.array(m["poly"]) / SCALA).astype(np.int32)], True, (0, 0, 255), 6)
+        for cs in json.load(open(os.path.join(RADICE, "data/mappa_%s_3d.json" % l)))["case"]:
+            box = np.array(cs["angoli"])
+            for i, lato in enumerate(cs["lati"]):
+                p, q = box[i], box[(i + 1) % 4]
+                for t0, t1, tipo in lato:
+                    a_, b_ = p + (q - p) * t0, p + (q - p) * t1
+                    col = {"muro": (0, 0, 220), "finestra": (220, 0, 220), "porta": (0, 200, 0)}[tipo]
+                    cv2.line(vis, (int(a_[0]), int(a_[1])), (int(b_[0]), int(b_[1])), col, 10)
         for m in muri:
             p = (np.array(m["poly"]) / SCALA).astype(np.int32)
             cv2.polylines(vis, [p], True, (200, 0, 0) if m["tipo"] == "pietra" else (0, 60, 160), 4)
