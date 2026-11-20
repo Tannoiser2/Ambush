@@ -62,6 +62,34 @@ var _premuto := false
 var _premuto_pos := Vector2.ZERO
 var _trascinato := false
 var _multi := false
+## Seconda istanza usata come velo della vista 3D: disegna solo pedine e segni, senza fondo.
+var solo_velo := false
+## Vista 3D (scripts/ui/mappa3d.gd), creata la prima volta che si passa al 3D.
+var vista3d = null
+var in_3d := false
+const Mappa3DScript = preload("res://scripts/ui/mappa3d.gd")
+
+func imposta_3d(attiva: bool) -> void:
+	in_3d = attiva
+	if attiva:
+		if vista3d == null:
+			vista3d = Mappa3DScript.new()
+			add_child(vista3d)
+			vista3d.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		vista3d.visible = true
+		vista3d.prepara(self)
+	elif vista3d != null:
+		vista3d.visible = false
+	queue_redraw()
+
+func _3d() -> bool:
+	return in_3d and vista3d != null and vista3d.visible
+
+## Posizione sullo schermo del centro di un esagono, nella vista attiva (2D o 3D).
+func posizione_schermo(h: String) -> Vector2:
+	if _3d():
+		return vista3d.centro_schermo(h)
+	return centro_schermo(h)
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -96,6 +124,8 @@ func imposta_grafica(realistica: bool, nuove: bool) -> void:
 	else:
 		_carica_cartella("res://assets/pedine_nuove")
 		_carica_cartella("res://assets/pedine")
+	if vista3d != null and in_3d:
+		vista3d.prepara(self)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -119,6 +149,9 @@ func _adatta() -> void:
 
 ## All’inizio si inquadrano gli esagoni da cui entra la squadra.
 func vista_iniziale() -> void:
+	if _3d():
+		vista3d.vista_iniziale()
+		return
 	zoom = maxf(scala_minima(), minf(size.x / 2300.0, size.y / 1500.0))
 	var ing: Array = partita.esagoni_ingresso() if partita != null else []
 	if ing.is_empty():
@@ -136,11 +169,17 @@ func scala_minima() -> float:
 	return minf(size.x / mappa.get_width(), size.y / mappa.get_height())
 
 func centra() -> void:
+	if _3d():
+		vista3d.centra()
+		return
 	zoom = scala_minima()
 	spostamento = (size - Vector2(mappa.get_size()) * zoom) / 2.0
 	queue_redraw()
 
 func zoom_a(fattore: float, punto: Vector2) -> void:
+	if _3d():
+		vista3d.zoom_a(fattore, punto)
+		return
 	var vecchio := zoom
 	zoom = clampf(zoom * fattore, scala_minima() * 0.95, 1.6)
 	spostamento = punto - (punto - spostamento) * (zoom / vecchio)
@@ -149,6 +188,9 @@ func zoom_a(fattore: float, punto: Vector2) -> void:
 
 func centra_su(h: String) -> void:
 	if h == "":
+		return
+	if _3d():
+		vista3d.centra_su(h)
 		return
 	var p := centro_tex(h)
 	spostamento = size / 2.0 - p * zoom
@@ -269,9 +311,12 @@ func _gui_input(ev: InputEvent) -> void:
 
 # ------------------------------------------------------------------ disegno
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, size), Color("15170f"))
-	draw_texture_rect(mappa, Rect2(spostamento, Vector2(mappa.get_size()) * zoom), false)
-	if mappa_realistica:
+	if _3d():
+		return
+	if not solo_velo:
+		draw_rect(Rect2(Vector2.ZERO, size), Color("15170f"))
+		draw_texture_rect(mappa, Rect2(spostamento, Vector2(mappa.get_size()) * zoom), false)
+	if mappa_realistica and not solo_velo:
 		# la mappa realistica ha un reticolo appena accennato: lo si rinforza un poco
 		for h in E.tutti():
 			draw_polyline(_chiudi(poligono(h)), Color(1, 1, 1, clampf(zoom * 0.3, 0.05, 0.16)), 1.0)
@@ -642,6 +687,9 @@ func pulisci_tracce() -> void:
 
 ## Sposta la vista in modo che gli esagoni indicati siano visibili.
 func assicura_visibili(esagoni: Array) -> void:
+	if _3d():
+		vista3d.assicura_visibili(esagoni)
+		return
 	var punti: Array = []
 	for h in esagoni:
 		if h != "" and E.valido(str(h)):

@@ -255,6 +255,9 @@ func _colonna_centrale() -> Control:
 	bottone_vista = Tema.bottone("", _cambia_linee, "Mostra o nasconde la linea di vista dal soldato scelto e le linee di chi vede chi")
 	zoom_box.add_child(bottone_vista)
 	zoom_box.add_child(Tema.bottone("Rivedi", _rivedi, "Ripete sulla mappa, passo per passo, l’ultima sequenza di eventi"))
+	bottone_3d = Tema.bottone("3D", _cambia_3d, "Passa dalla mappa piatta alla vista in rilievo e ritorno. In 3D: trascina per spostare, tasto destro o due dita per ruotare e inclinare.")
+	bottone_3d.custom_minimum_size = Vector2(48, 36)
+	zoom_box.add_child(bottone_3d)
 	sovra.add_child(zoom_box)
 	var info_pc := PanelContainer.new()
 	info_pc.add_theme_stylebox_override("panel", Tema.scatola(Color(0.91, 0.87, 0.76, 0.94), Color("7a6c4c"), 1, 2, 8))
@@ -729,7 +732,7 @@ func _clic_riga(ev: InputEvent, id: String) -> void:
 	_aggiorna_tutto()
 
 func _visibile_su_mappa(h: String) -> bool:
-	var c: Vector2 = mappa.centro_schermo(h)
+	var c: Vector2 = mappa.posizione_schermo(h)
 	return Rect2(Vector2(40, 40), mappa.size - Vector2(80, 80)).has_point(c)
 
 # ------------------------------------------------------------------ obiettivi e tedeschi
@@ -2324,6 +2327,7 @@ func _avvia_missione(n: int, riprendi: bool, con_briefing := true) -> void:
 	titolo_missione_l.text = p.titolo_missione().to_upper()
 	sottotitolo_l.text = "%s · solitario" % str(p.missione.data)
 	mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
+	_applica_3d()
 	var dati := _leggi_salvataggio(n) if riprendi else {}
 	if not dati.is_empty() and p.carica(dati):
 		selezione = []
@@ -2388,10 +2392,22 @@ func _leggi_preferenze() -> void:
 	if d is Dictionary:
 		automatico = bool(d.get("automatico", false))
 		linee_vista = bool(d.get("linee_vista", true))
-		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true))}
+		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true)), "3d": bool(d.get("vista_3d", false))}
 		_velocita_iniziale = float(d.get("velocita", 1.0))
 
 var _velocita_iniziale := 1.0
+var bottone_3d: Button
+
+func _cambia_3d() -> void:
+	_pref_grafica["3d"] = not bool(_pref_grafica.get("3d", false))
+	_applica_3d()
+	_salva_preferenze()
+
+func _applica_3d() -> void:
+	var on := bool(_pref_grafica.get("3d", false))
+	mappa.imposta_3d(on)
+	if bottone_3d != null:
+		bottone_3d.text = "2D" if on else "3D"
 var _pref_grafica := {"mappa": false, "pedine": false, "comando": true}
 
 ## Finestra della grafica: mappa, pedine e raggio di comando a scelta del giocatore.
@@ -2443,7 +2459,7 @@ func _salva_preferenze() -> void:
 	var f := FileAccess.open(PREFERENZE, FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista,
-			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando}))
+			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando, "vista_3d": bool(_pref_grafica.get("3d", false))}))
 
 func _mostra_legenda() -> void:
 	var vb := VBoxContainer.new()
