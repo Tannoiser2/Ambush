@@ -948,67 +948,68 @@ static func _tipi_armi(x: Dictionary) -> Array:
 		out.append(str(a.get("tipo", "")) if a is Dictionary else str(a))
 	return out
 
-## Nome del modello per un'unità.
+## Nome del modello per un'unità: miniature colorate del modulo TTS (tools/costruisci_soldati_tts.py),
+## scelte per parte, arma principale e postura; a terra per i caduti e gli incapacitati.
 static func modello_per(x: Dictionary) -> String:
 	var us := str(x.get("lato", "us")) == "us"
 	var armi := _tipi_armi(x)
 	var post := str(x.get("postura", "standing"))
 	var stato := str(x.get("stato", "attivo"))
-	var arma := "fucile"
-	if "bazooka" in armi:
-		arma = "bazooka"
-	elif "lmg" in armi or "mmg" in armi or "hmg" in armi:
-		arma = "mg"
-	elif "ar" in armi:
-		arma = "bar"
-	elif "smg" in armi or "mp" in armi:
-		arma = "mitra"
-	elif "scoped" in armi:
-		arma = "ott"
-	elif armi.is_empty() or armi == ["pistol"]:
-		arma = "capo"
-	var lett := str(x.get("lettera", x.get("id", "")))
-	var var2 := (lett.unicode_at(0) if lett != "" else 0) % 2 == 1
-	if stato in ["morto", "incapacitato"]:
-		return "us_strisciante" if us else "de_fucile_prono"
+	var lato := "us" if us else "de"
+	if stato == "morto":
+		return lato + "_morto"
+	if stato == "incapacitato":
+		return lato + "_ferito"
+	var posa: String = {"prone": "prono", "crouching": "acc"}.get(post, "piedi")
 	if stato in ["catturato", "arreso"]:
-		return "us_fucile_piedi2" if us else "de_riposo"
+		posa = "piedi"
+	var arma := ""
 	if us:
-		if post == "prone":
-			return {"bazooka": "us_fucile_prono", "mg": "us_mg_prono", "bar": "us_bar_prono", "mitra": "us_mitra_prono", "capo": "us_capo_prono"}.get(arma, "us_fucile_prono")
-		if post == "crouching":
-			return {"bazooka": "us_bazooka_acc", "mg": "us_mg_acc", "bar": "us_bar_acc", "mitra": "us_mitra_acc", "capo": "us_capo_acc"}.get(arma, "us_fucile_acc2" if var2 else "us_fucile_acc")
-		return {"bazooka": "us_bazooka_piedi", "mg": "us_mg_piedi", "bar": "us_bar_piedi", "mitra": "us_mitra_piedi", "capo": "us_capo_piedi"}.get(arma, "us_fucile_piedi2" if var2 else "us_fucile_piedi")
-	if post == "prone":
-		return "de_fucile_prono"
-	var ufficiale := str(x.get("ruolo", "")).to_lower().contains("ufficiale") or arma == "capo"
-	if post == "crouching":
-		if ufficiale:
-			return "de_ufficiale_acc"
-		return {"bazooka": "de_pzf", "mitra": "de_mp_acc", "ott": "de_ott_acc", "mg": "de_fucile_acc"}.get(arma, "de_fucile_acc")
-	if ufficiale:
-		return "de_ufficiale_piedi"
-	if arma == "bazooka":
-		return "de_pzf"
-	if arma == "mitra":
-		return "de_mp_piedi"
-	if arma == "mg":
-		return "mz:mg_tiratore"
-	if arma == "ott":
-		return "de_fucile_piedi3"
-	var n := int(x.get("num", 0))
-	return ["de_fucile_piedi", "de_fucile_piedi2", "de_fucile_piedi3", "de_fucile_piedi4"][n % 4]
+		if "bazooka" in armi:
+			arma = "bazooka"
+		elif "ar" in armi or "lmg" in armi or "mmg" in armi or "hmg" in armi:
+			arma = "bar"
+		elif "smg" in armi or "mp" in armi:
+			arma = "mitra"
+		elif "carbine" in armi:
+			arma = "carabina"
+		elif armi.is_empty() or armi == ["pistol"]:
+			arma = "mitra"
+		else:
+			arma = "garand"
+	else:
+		if "bazooka" in armi:
+			return "de_pzf" if posa != "prono" else "de_fucile_prono"
+		if "lmg" in armi or "mmg" in armi or "hmg" in armi:
+			arma = "mg"
+		elif "smg" in armi or "mp" in armi:
+			arma = "mp"
+		elif "scoped" in armi:
+			arma = "ott"
+		elif "sar" in armi or "ar" in armi:
+			arma = "stg"
+		elif armi.is_empty() or armi == ["pistol"]:
+			arma = "pistola"
+		else:
+			arma = "fucile2" if int(x.get("num", 0)) % 2 == 1 else "fucile"
+	return "%s_%s_%s" % [lato, arma, posa]
 
 func _materiale_soldato(chiave: String) -> StandardMaterial3D:
 	if _mat_soldati.has(chiave):
 		return _mat_soldati[chiave]
-	var c: Color = {"us": Color("8d8752"), "de": Color("6f7a73"), "morto": Color("5a554b"), "us_base": Color("3d5c2c"), "de_base": Color("4a4e55"),
-		"sel": Color("d9b44a"), "turno": Color("6fd35a")}.get(chiave, Color.WHITE)
-	var m := _materiale(c, 0.7)
-	if chiave in ["us", "de", "morto"]:
+	var c: Color = {"us": Color.WHITE, "de": Color.WHITE, "us_morto": Color(0.62, 0.6, 0.58), "de_morto": Color(0.62, 0.6, 0.58), "pzf": Color("6f7a73"),
+		"us_base": Color("3d5c2c"), "de_base": Color("4a4e55"), "sel": Color("d9b44a"), "turno": Color("6fd35a")}.get(chiave, Color.WHITE)
+	var m := _materiale(c, 0.75)
+	if chiave in ["us", "de", "us_morto", "de_morto"]:
+		# tessitura dipinta delle miniature del modulo TTS
+		var tex: Texture2D = load(DIR_SOLDATI + "tessitura_%s.jpg" % chiave.substr(0, 2))
+		m.albedo_texture = tex
 		m.rim_enabled = true
-		m.rim = 0.6
-		m.rim_tint = 0.4
+		m.rim = 0.35
+		m.rim_tint = 0.5
+	if chiave == "pzf":
+		m.rim_enabled = true
+		m.rim = 0.5
 	if chiave in ["sel", "turno"]:
 		m.emission_enabled = true
 		m.emission = c
@@ -1110,9 +1111,9 @@ func _aggiorna_pedine() -> void:
 			fig.position = nm.position + nm.basis * loc
 			ang_mezzo = nm.rotation.y
 			if not str(x.stato) in ["morto", "incapacitato"]:
-				nome = nome.replace("_piedi2", "_acc").replace("_piedi", "_acc")
-				if "_acc" not in nome:
-					nome = "us_fucile_acc" if str(x.lato) == "us" else "de_fucile_acc"
+				nome = nome.replace("_piedi", "_acc").replace("_prono", "_acc")
+				if nome == "de_pzf":
+					nome = "de_fucile_acc"
 		_paracadute(fig, str(id), x)
 		var corpo: MeshInstance3D = fig.get_node("corpo")
 		if corpo.get_meta("modello", "") != nome:
@@ -1120,7 +1121,7 @@ func _aggiorna_pedine() -> void:
 			corpo.set_meta("modello", nome)
 		# mitragliatrice su treppiede davanti a chi la serve da accovacciato o prono
 		var tre: MeshInstance3D = fig.get_node_or_null("treppiede")
-		var serve_mg := str(x.lato) == "de" and str(x.stato) == "attivo" and str(x.get("postura", "")) != "standing" and _tipi_armi(x).any(func(a): return a in ["lmg", "mmg", "hmg"])
+		var serve_mg := str(x.lato) == "de" and str(x.stato) == "attivo" and str(x.get("postura", "")) != "standing" and _tipi_armi(x).any(func(a): return a in ["mmg", "hmg"])
 		if serve_mg and tre == null:
 			tre = MeshInstance3D.new()
 			tre.name = "treppiede"
@@ -1130,7 +1131,7 @@ func _aggiorna_pedine() -> void:
 		if tre != null:
 			tre.visible = serve_mg
 		var morto := str(x.stato) == "morto"
-		corpo.material_override = _materiale_soldato("morto" if morto else str(x.lato))
+		corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto else str(x.lato)))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
 		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
 		corpo.rotation = Vector3(0, yaw + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
