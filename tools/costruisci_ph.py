@@ -31,10 +31,45 @@ def distanza(a, b):
     return max(abs(x1 - x2), abs(y1 - y2), abs(z1 - z2))
 
 
+MODELLI = {"Panzer IV": "panzer4", "\"E\" Boat": "eboat", "E Boat": "eboat", "Sherman Tank": "sherman"}
+
+
+def mezzo(c):
+    """Carta di un mezzo (equipaggio 1–5) nel formato dei carri del gioco."""
+    eq = c["equipaggio"]
+    tutte = [tuple(eq[str(k)]["valori"][d] for k in range(1, 6)) for d in range(10)]
+    gr = []
+    for d in range(10):
+        if gr and tutte[gr[-1][0]] == tutte[d]:
+            gr[-1][1] = d
+        else:
+            gr.append([d, d])
+    righe = {k: {"IN": v["IN"], "PC": v["PC"], "WS": v["WS"], "DS": v["DS"], "par": [v["valori"][a] for a, _ in gr]} for k, v in eq.items()}
+    r5 = righe["5"]
+    modello = MODELLI.get(c["ruolo"], "eboat" if "Boat" in c["ruolo"] else "panzer4")
+    return {"lettera": c["lettera"], "ruolo": {"panzer4": "Panzer IV", "eboat": "Motosilurante", "sherman": "Sherman"}[modello],
+            "pv": c["pv"], "armi": [], "granate": 0, "IN": r5["IN"], "PC": r5["PC"], "WS": r5["WS"], "DS": r5["DS"], "MPA": 6,
+            "gruppi": [[0, 9]], "colonne": {"1-6": [800]},
+            "carro": {"modello": modello, "gruppi": gr, "righe": righe, "immobile": False,
+                      "pv_distrutto": int(c.get("pv_distrutto", 0)), "primo_turno": int(c.get("primo_turno", 0)) or
+                      int((__import__("re").search(r"conduct\s*(\d{3})", c.get("note", "")) or [0, 0])[1]),
+                      "testo": c.get("note", "")}}
+
+
+CANE = {"lettera": "", "ruolo": "Cane da guardia", "pv": 0, "armi": [], "granate": 0, "IN": 5, "PC": 9, "WS": 2, "MPA": 6,
+        "gruppi": [[0, 9]], "colonne": {"1-6": [391], "S": [391], "A": [391]}}
+
+
 def tedeschi(nums):
     out = {}
     for n in nums:
+        if n in (91, 92):
+            out[str(n)] = dict(CANE)
+            continue
         c = CARTE["GE%d" % n]
+        if c.get("veicolo"):
+            out[str(n)] = mezzo(c)
+            continue
         d = {"lettera": c["lettera"], "ruolo": RUOLI.get(c["ruolo"], c["ruolo"]), "pv": c["pv"], "armi": c["armi"],
              "granate": c["granate"], "IN": c["IN"], "PC": c["PC"], "WS": c["WS"], "MPA": c["MPA"],
              "gruppi": c["gruppi"], "colonne": {}}
@@ -59,6 +94,27 @@ DEPOSITO_16 = ["U15", "U16", "V12", "V13", "V14", "V15", "W13", "W14", "W15"]
 ANGOLI = ["A1", "A19", "Y1", "Y19"]
 
 MISSIONI = {
+    13: {
+        "titolo": "Dispersi", "titolo_originale": "Drop Outs",
+        "data": "Francia del nord, 6 giugno 1944", "mappa": "A", "nord": "a sinistra (in alto è est)", "libro": "ph",
+        "briefing": "6 giugno 1944, da qualche parte nella Francia del nord. Nell’assalto aereo che precede il D-Day la squadra è stata "
+                    "lanciata a chilometri dalla zona prevista. Per tutta la notte ha cercato invano di unirsi ad altri reparti "
+                    "alleati. Sta per albeggiare: forse non resta che arrendersi… che cosa possono fare così pochi contro così tanti?",
+        "ingresso": "Mappa A, in alto è est. Prima della missione ogni soldato fa il controllo dell’atterraggio (terreno e qualità "
+                    "dell’atterraggio, tirati in automatico): può finire ferito, incapacitato o annegato nel fiume. Poi la squadra "
+                    "entra da un esagono tra I1 e Y1.",
+        "regole_testo": "[b]Notte.[/b] Si vede fino a quattro esagoni. [b]Fiume.[/b] Il fiume da H1 a R16 si attraversa solo sui ponti "
+                        "intatti. [b]Lancio.[/b] La squadra tiene il suo equipaggiamento (la cassa delle armi non è gestita); si "
+                        "perdono 2 PV per ogni soldato incapacitato o ucciso nel lancio.",
+        "ingresso_breve": "bordo est, I1–Y1", "uscita_breve": "qualsiasi bordo (dalla Condizione 3)",
+        "ingresso_esagoni": ["%s1" % c for c in "IJKLMNOPQRSTUVWXY"],
+        "vittoria_pv": 21, "attivazione": {"1": 1, "2": 3, "3": 5, "4": 8}, "obiettivi": [],
+        "regole": {"vista": 4, "fiume": True, "atterraggio_ph": True, "uscita_bordo": True, "fine_condizione": 3},
+        "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b] Valgono le attivazioni dei tedeschi; si perdono 2 PV per "
+                          "ogni soldato incapacitato o ucciso nel lancio.",
+        "testo_fine": "",
+        "germani": [61, 62, 63, 64, 65, 66, 67, 68, 69, 91, 92],
+    },
     16: {
         "titolo": "In guardia", "titolo_originale": "On Guard",
         "data": "Valle del Rodano, 3 settembre 1944", "mappa": "C", "nord": "a sinistra (in alto è est)", "libro": "ph",
@@ -97,6 +153,9 @@ def main():
         d["squadra"] = json.loads(json.dumps(M1["squadra"]))
         d["tedeschi"] = tedeschi(nums)
         d["condizioni"] = condizioni(n)
+        if n == 13:
+            for g in d["tedeschi"].values():
+                g.pop("pv_cattura", None) if g.get("ruolo") == "Cane da guardia" else None
         if n == 16:
             vic = [f"{c}{r}" for c in COL for r in range(1, 20) if any(distanza(f"{c}{r}", a) <= 10 for a in ANGOLI)]
             d["ingresso_esagoni"] = [h for h in vic if h not in DEPOSITO_16]

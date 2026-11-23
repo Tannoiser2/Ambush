@@ -100,6 +100,22 @@ Ordine scelto: M11, M10, M12, M9.
   `tools/paragrafi_ph<n>.py`), `scripts/motore/missioni_ph.gd` (op, test, agganci) e `scripts/motore/tedeschi_ph.gd`
   (paragrafi d’azione propri di Purple Heart).
 
+## Missione 13 «Dispersi» (mappa A, poi A + mezza D = lettera «AD»)
+- Lancio (regola atterraggio_ph): controllo automatico all’avvio, −2 PV per ogni soldato perso; nord-ovest del fiume
+  tracciato in s.ph.nw_fiume (571 → 589).
+- Condizione 1: sentinella 61 con due cani (pseudo-carte 91/92, colonna unica 391): 2 turni, corsa di 6 esagoni, attacco
+  a dado (panico/ferito/incapacitato); 649 rianima un cane una volta.
+- 495 → mappa AD: faro E11 (ruota in senso orario, illumina il cono di 120° in vista), antenna U14 (895: −10 PV),
+  cannoni costieri W12/X12 (554/682 → 672: carica da demolizione nel deposito munizioni, +4 PV).
+- Deposito della marina (607/526): esplosivi al plastico (2 a testa) — nei Round saltano all’inizio del secondo Round,
+  nelle Operazioni quando nessun americano è entro un esagono; +2 PV per esagono di edificio, 616 per il deposito,
+  725 per i serbatoi (incendio che illumina).
+- Mezzi: 67/68 motosiluranti (modello eboat, solo acqua), 69 Panzer IV; 662 cattura della motosilurante; auto comando
+  (713) e scialuppa (718, +10 PV uscendo a ovest; parte già sulla spiaggia in I18).
+- Non gestiti: tiro ai cani (−3), cassa delle armi del lancio, treno (486), soldati «fuori di testa» (655/689), ritorno
+  della sentinella 61 in E11 (648, 3–4), colpi al faro con le armi (si distrugge solo con un esplosivo).
+- Il bot delle simulazioni non usa gli esplosivi: perde sempre, ma serve a cercare errori (0 in 20 partite).
+
 ## Missione 16 «In guardia» (mappa C)
 - Schieramento: almeno due soldati entro 10 esagoni da ogni angolo, nessuno nel deposito (U15, U16, V12–V15, W13–W15).
 - Battelli d’assalto (432): s.ph.barche; i tedeschi a bordo hanno `barca`; 522 muove il battello (lento 4, veloce 6) seguendo

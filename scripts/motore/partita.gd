@@ -137,6 +137,7 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 		var u := _nuovo_americano(d)
 		s.unita[u.id] = u
 	mo.dopo_nuova()
+	ph.dopo_nuova()
 	for hm in missione.get("modifiche_iniziali", {}):
 		s.modifiche[hm] = missione.modifiche_iniziali[hm]
 	terreno.imposta_modifiche(s.modifiche)
@@ -2010,6 +2011,30 @@ func disinnesca_ponte(id: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Purple Heart, Missione 13: prendere o piazzare esplosivi al plastico, far saltare un cannone costiero (un’azione).
+func azione_ph(id: String, tipo: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	match tipo:
+		"prendi":
+			if not ph.nel_deposito_navale(a):
+				return _errore("Gli esplosivi si prendono nel deposito della marina.")
+			ph.prendi_esplosivi(a)
+		"piazza":
+			if int(a.get("esplosivi_ph", 0)) <= 0:
+				return _errore("Non hai esplosivi al plastico.")
+			ph.piazza_esplosivo_us(a)
+		"cannone":
+			var err: String = ph.fai_saltare_cannone(a)
+			if err != "":
+				return _errore(err)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
 ## Purple Heart: disinnesco di un esplosivo dei commando (due azioni; nelle Operazioni in un colpo solo, con un controllo Evento).
 func disinnesca_esplosivo(id: String) -> Dictionary:
 	_inizio_comando()
@@ -2783,7 +2808,7 @@ func _iniziativa(r: Dictionary) -> void:
 			g.turni = 0
 			g.slot = "inattivo"
 			continue
-		var es: Dictionary = mo.turni_tedesco(g, T.esito_turni(int(g.IN), dt, false, true, g.ferito))
+		var es: Dictionary = ph.turni_tedesco(g, mo.turni_tedesco(g, T.esito_turni(int(g.IN), dt, false, true, g.ferito)))
 		if g.id in r.get("due_turni_de", []):
 			es = {"turni": 1 if g.ferito else 2, "panico": false, "paragrafo": true}
 		pi.righe.append({"id": g.id, "turni": es.turni, "panico": es.panico, "ferito": g.ferito, "paragrafo": es.get("paragrafo", false)})
@@ -4306,6 +4331,7 @@ func esci(id: String) -> Dictionary:
 			if dp.has("pv_uscita_prigioniero"):
 				_pv(int(dp.pv_uscita_prigioniero), "%s portato fuori mappa prigioniero" % nome(p))
 	mo.uscita(a, a.hex)
+	ph.uscita(a, a.hex)
 	var pvu: Dictionary = regola("pv_uscita", {})
 	if pvu.has(a.hex) and not a.get("carro_us", false):
 		_pv(int(pvu[a.hex]), "%s esce da %s" % [nome(a), a.hex])

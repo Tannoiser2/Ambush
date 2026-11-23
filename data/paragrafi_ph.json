@@ -1,4 +1,1622 @@
 {
+ "354": {
+  "id": "354",
+  "it": "Effettua un controllo di attivazione (+4):\n• se riesce, vedi 359;\n• se fallisce, vedi 374.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 4,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "359"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "374"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "374": {
+  "id": "374",
+  "it": "Effettua un controllo di percezione (−2):\n• se riesce, vedi 379;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -2,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "379"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "379": {
+  "id": "379",
+  "it": "Il soldato vede la sagoma di una sentinella tedesca in piedi in Q7. Se vuoi cominciare i Round vedi 384; altrimenti continua a muovere nelle Operazioni.",
+  "ops": [
+   {
+    "op": "scelta_attiva",
+    "par": "384",
+    "testo": "Attacca la sentinella in Q7"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "359": {
+  "id": "359",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in Q7 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "Q7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "384": {
+  "id": "384",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in Q7 con i due cani. Iniziano i Round, vantaggio americano; i soldati consapevoli che non vanno nel panico ricevono 2 turni in questo Round. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "Q7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "393": {
+  "id": "393",
+  "it": "Effettua un controllo di attivazione (+4):\n• se riesce, vedi 401;\n• se fallisce, vedi 410.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 4,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "401"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "410"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "410": {
+  "id": "410",
+  "it": "Effettua un controllo di percezione (−2):\n• se riesce, vedi 419;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -2,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "419"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "419": {
+  "id": "419",
+  "it": "Il soldato vede la sagoma di una sentinella tedesca in piedi in S6. Se vuoi cominciare i Round vedi 426; altrimenti continua a muovere nelle Operazioni.",
+  "ops": [
+   {
+    "op": "scelta_attiva",
+    "par": "426",
+    "testo": "Attacca la sentinella in S6"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "401": {
+  "id": "401",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in S6 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "S6"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "426": {
+  "id": "426",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in S6 con i due cani. Iniziano i Round, vantaggio americano; i soldati consapevoli che non vanno nel panico ricevono 2 turni in questo Round. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "S6"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "435": {
+  "id": "435",
+  "it": "Effettua un controllo di attivazione (+4):\n• se riesce, vedi 441;\n• se fallisce, vedi 446.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 4,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "441"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "446"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "446": {
+  "id": "446",
+  "it": "Effettua un controllo di percezione (−2):\n• se riesce, vedi 452;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -2,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "452"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "452": {
+  "id": "452",
+  "it": "Il soldato vede la sagoma di una sentinella tedesca in piedi in X4. Se vuoi cominciare i Round vedi 456; altrimenti continua a muovere nelle Operazioni.",
+  "ops": [
+   {
+    "op": "scelta_attiva",
+    "par": "456",
+    "testo": "Attacca la sentinella in X4"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "441": {
+  "id": "441",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in X4 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "X4"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "456": {
+  "id": "456",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in X4 con i due cani. Iniziano i Round, vantaggio americano; i soldati consapevoli che non vanno nel panico ricevono 2 turni in questo Round. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "X4"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "464": {
+  "id": "464",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in Q9 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "Q9"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "468": {
+  "id": "468",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in T7 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "T7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "474": {
+  "id": "474",
+  "it": "[s3] Una sentinella tedesca e due cani da guardia! Attiva il tedesco 61 in piedi in X7 con i due cani. Iniziano i Round, vantaggio tedesco. Vedi 391 per i cani.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      61,
+      "X7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "cani"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "391": {
+  "id": "391",
+  "it": "I cani da guardia. 1. Non hanno segnalini AR: ricevono 2 turni per Round (1 se feriti) e corrono 6 esagoni per turno (4 se feriti) verso il soldato americano attivo più vicino, senza badare al terreno ma girando attorno agli ostacoli vietati. 2. Un cane che comincia il turno nell’esagono di un americano attivo lo attacca; se è a 3 esagoni o meno (2 se ferito) lo raggiunge e attacca subito; altrimenti si avvicina. 3. L’attacco non usa la probabilità di colpire: tira un dado, 0–5 nessun effetto, 6–7 il soldato va nel panico, 8 è ferito, 9 è incapacitato. Nell’assalto i cani hanno abilità +2 e non vanno mai nel panico. 4. Un cane continua ad attaccare lo stesso soldato finché uno dei due resta attivo. 5. Due cani nello stesso esagono con più bersagli ne scelgono uno a caso ciascuno. 6. Chi spara a un cane ha −3 (in questa versione non si applica). 7. Per granate e cariche i cani sono in piedi.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "495": {
+  "id": "495",
+  "it": "[s0] Il soldato vede uno spettacolo incredibile: sotto di lui c’è la costa francese e una base navale tedesca! Si passa alla mappa A con la mezza mappa D sopra (i soldati restano negli stessi esagoni). In U14 c’è un’antenna, in E11 un faro e in W12 e X12 due batterie costiere rivolte a nord-ovest. Vedi 548 per il faro. Questa base potrebbe fare molti danni allo sbarco del mattino: senza tempo per pensarci, la squadra decide di seminare più distruzione possibile. Vedi 508 per i PV e come vincere. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "mappa_d"
+   },
+   {
+    "op": "goto",
+    "p": "508"
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "508": {
+  "id": "508",
+  "it": "Ti servono 21 PV per vincere. Oltre ai PV delle attivazioni ci saranno PV bonus rivelati durante il gioco. La missione finisce, nella Condizione 3 o 4, quando tutti i soldati americani attivi sono usciti da un qualsiasi bordo della mappa; uscendo si evitano anche i PV persi per gli incapacitati. Nota: perdi 2 PV per ogni soldato incapacitato o ucciso nel lancio.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "548": {
+  "id": "548",
+  "it": "Il faro all’inizio è rivolto a ovest. Quando richiesto ruota di 90° in senso orario (da ovest a nord, da nord a est…). Il fascio è potentissimo: illumina tutti gli esagoni in vista del faro nella direzione in cui punta, e chi è illuminato si vede da qualsiasi distanza. Il faro si distrugge con un risultato di penetrazione leggera o migliore (+1 per colpirlo; in questa versione: con un esplosivo nell’esagono).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "571": {
+  "id": "571",
+  "it": "Se un soldato americano attivo è o è stato a nord-ovest del fiume, vedi 589. Altrimenti vedi 604.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "nw_fiume": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "589"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "604"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "589": {
+  "id": "589",
+  "it": "[s2] Attiva il tedesco 69 (Panzer IV) in Y15. Iniziano i Round; il tedesco 69 riceve 2 turni in questo Round. Passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      69,
+      "Y15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [
+     69
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "604": {
+  "id": "604",
+  "it": "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Se s9 è avvenuto, vedi 629.",
+  "ops": [
+   {
+    "op": "faro_ruota"
+   },
+   {
+    "op": "if",
+    "t": {
+     "s": 9
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "629"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "632": {
+  "id": "632",
+  "it": "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Poi: se s6 non è avvenuto, vedi 643; altrimenti vedi 648.",
+  "ops": [
+   {
+    "op": "faro_ruota"
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 6
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "643"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "648"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "648": {
+  "id": "648",
+  "it": "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Poi tira un dado:\n0: un esplosivo piazzato (a caso) salta.\n1–2: un edificio accanto a un edificio in fiamme prende fuoco ed esplode (ricevi i PV dell’edificio).\n3–4: vedi 443 (il ritorno del tedesco 61 in E11 non è gestito).\n5–6: vedi 649.\n7–9: se ci sono incendi entro 2 esagoni dai serbatoi, vedi 725.",
+  "ops": [
+   {
+    "op": "faro_ruota"
+   },
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      0,
+      [
+       {
+        "op": "esplosivo_us_casuale"
+       }
+      ]
+     ],
+     [
+      1,
+      2,
+      [
+       {
+        "op": "incendio_adiacente"
+       }
+      ]
+     ],
+     [
+      3,
+      4,
+      [
+       {
+        "op": "goto",
+        "p": "443"
+       }
+      ]
+     ],
+     [
+      5,
+      6,
+      [
+       {
+        "op": "goto",
+        "p": "649"
+       }
+      ]
+     ],
+     [
+      7,
+      9,
+      [
+       {
+        "op": "solo_testo",
+        "testo": "Nessun incendio vicino ai serbatoi."
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "629": {
+  "id": "629",
+  "it": "Se è stato piazzato un esplosivo, tira i dadi percentuali: con 75 o più uno salta in anticipo (a caso se più d’uno).",
+  "ops": [
+   {
+    "op": "esplosione_prematura"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "634": {
+  "id": "634",
+  "it": "Tira un dado:\n0–5: vedi 648.\n6: vedi 461.\n7: vedi 623.\n8: vedi 641.\n9: vedi 646.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "648"
+       }
+      ]
+     ],
+     [
+      6,
+      6,
+      [
+       {
+        "op": "goto",
+        "p": "461"
+       }
+      ]
+     ],
+     [
+      7,
+      7,
+      [
+       {
+        "op": "goto",
+        "p": "623"
+       }
+      ]
+     ],
+     [
+      8,
+      8,
+      [
+       {
+        "op": "goto",
+        "p": "641"
+       }
+      ]
+     ],
+     [
+      9,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "646"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "646": {
+  "id": "646",
+  "it": "Tira un dado: 0–4 vedi 655; 5–9 vedi 689.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "goto",
+        "p": "655"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "689"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "641": {
+  "id": "641",
+  "it": "Un soldato tedesco a caso, non in un mezzo, si arrende. Può accadere più volte.",
+  "ops": [
+   {
+    "op": "arresa_casuale"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "649": {
+  "id": "649",
+  "it": "Se un cane da guardia era stato incapacitato, uno si riprende (ferito) e riparte verso l’americano attivo più vicino. Una volta sola per missione. Se entrambi i cani sono morti, vedi 486.",
+  "ops": [
+   {
+    "op": "cane_recupera"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "486": {
+  "id": "486",
+  "it": "[s8] Un treno tedesco… (in questa missione il treno non è previsto: nessun effetto).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "655": {
+  "id": "655",
+  "it": "Un soldato tedesco a caso va fuori di testa e carica gli americani… (in questa versione l’evento non ha effetti).",
+  "ops": [
+   {
+    "op": "solo_testo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "689": {
+  "id": "689",
+  "it": "Un soldato americano a caso (non un comandante) va fuori di testa e carica i tedeschi… (in questa versione l’evento non ha effetti).",
+  "ops": [
+   {
+    "op": "solo_testo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "517": {
+  "id": "517",
+  "it": "[s7] Attiva il tedesco 65 in M13, accovacciati. Iniziano i Round. Se s5 è avvenuto (o si è già sparato), questi tedeschi hanno il vantaggio e 2 turni in questo Round; altrimenti i soldati americani consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "if",
+    "t": {
+     "s": 5
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        65,
+        "M13"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "de",
+      "two": [
+       65
+      ],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        65,
+        "M13"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "534": {
+  "id": "534",
+  "it": "[s4] Attiva i tedeschi 63 e 64 in S15 (al piano di sopra), accovacciati. Iniziano i Round. Se s5 è avvenuto (o si è già sparato), questi tedeschi hanno il vantaggio e 2 turni in questo Round; altrimenti i soldati americani consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "if",
+    "t": {
+     "s": 5
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        63,
+        "S15"
+       ],
+       [
+        64,
+        "S15"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "de",
+      "two": [
+       63,
+       64
+      ],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        63,
+        "S15"
+       ],
+       [
+        64,
+        "S15"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "540": {
+  "id": "540",
+  "it": "[s8] Attiva i tedeschi 62 e 66 in G12, accovacciati. Iniziano i Round. Se s5 è avvenuto (o si è già sparato), questi tedeschi hanno il vantaggio e 2 turni in questo Round; altrimenti i soldati americani consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "if",
+    "t": {
+     "s": 5
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        62,
+        "G12"
+       ],
+       [
+        66,
+        "G12"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "de",
+      "two": [
+       62,
+       66
+      ],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        62,
+        "G12"
+       ],
+       [
+        66,
+        "G12"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "578": {
+  "id": "578",
+  "it": "[s8] Attiva i tedeschi 62 e 66 in P14, accovacciati. Iniziano i Round. Se s5 è avvenuto (o si è già sparato), questi tedeschi hanno il vantaggio e 2 turni in questo Round; altrimenti i soldati americani consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "if",
+    "t": {
+     "s": 5
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        62,
+        "P14"
+       ],
+       [
+        66,
+        "P14"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "de",
+      "two": [
+       62,
+       66
+      ],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        62,
+        "P14"
+       ],
+       [
+        66,
+        "P14"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": "us",
+      "two": [],
+      "us_two": true,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "607": {
+  "id": "607",
+  "it": "Se questo edificio (o un esagono collegato) è stato colpito in qualsiasi modo, nessun avvistamento. Altrimenti vedi 526.",
+  "ops": [
+   {
+    "op": "goto",
+    "p": "526"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "526": {
+  "id": "526",
+  "it": "[s9] Tutto l’edificio è un deposito della marina! Centinaia di rifornimenti, tra cui esplosivi al plastico a tempo che distruggono tutto in un esagono: perfetti per far saltare la base! Ricevi 2 PV per ogni esagono di edificio distrutto e 4 PV per ogni cannone costiero distrutto. Ogni esplosivo occupa una casella di porto.\n1. Nei Round piazzarlo costa un’azione: all’inizio del Round seguente si gira sul lato 1, all’inizio del secondo Round salta.\n2. Nelle Operazioni si piazza da solo e salta quando decidi tu (qui: quando la squadra si è allontanata).\n3. In un edificio lascia un Edificio in fiamme.\n4. Chi è nell’esagono muore; chi è negli esagoni adiacenti subisce i danni della colonna Granata al chiuso.\n5. Se il deposito salta o è colpito da cannone, bazooka, granata o carica, vedi 616.\n6. Un incendio fa da sfondo: chi ha la vista su un edificio in fiamme vede i bersagli lungo quella linea.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "deposito_navale"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "616": {
+  "id": "616",
+  "it": "Tutto il deposito esplode! Chi è negli esagoni del deposito muore; chi è negli esagoni adiacenti è incapacitato; chi è entro 2 esagoni è colpito come da un tiro di pistola. Un segnalino Edificio in fiamme in ogni esagono del deposito.",
+  "ops": [
+   {
+    "op": "deposito_esplode"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "612": {
+  "id": "612",
+  "it": "I cannoni costieri sono così massicci che solo un colpo diretto da 406 mm potrebbe distruggerli.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "554": {
+  "id": "554",
+  "it": "La porta del cannone costiero in W12 è aperta: hai sorpreso la guarnigione! Se un soldato entra nel bunker, vedi 672.",
+  "ops": [
+   {
+    "op": "porta_cannone",
+    "hex": "W12"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "682": {
+  "id": "682",
+  "it": "La porta del cannone costiero in X12 è aperta: hai sorpreso la guarnigione! Se un soldato entra nel bunker, vedi 672.",
+  "ops": [
+   {
+    "op": "porta_cannone",
+    "hex": "X12"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "672": {
+  "id": "672",
+  "it": "Il soldato vede un enorme cannone navale da 406 mm e un deposito di polvere e proiettili. Con una carica da demolizione piazzata nel deposito (due azioni nei Round, automatica nelle Operazioni) cannone e bunker saltano: chi è nell’esagono muore, chi è negli esagoni adiacenti è incapacitato.",
+  "ops": [
+   {
+    "op": "magazzino"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "725": {
+  "id": "725",
+  "it": "I due serbatoi esplodono con una forza tremenda! Tutti entro 6 esagoni cadono proni e perdono i turni del Round; chi è entro 2 esagoni subisce i danni della colonna Granata al chiuso; gli edifici entro 2 esagoni crollano. Da ora ogni esagono in vista dei serbatoi è illuminato dall’incendio.",
+  "ops": [
+   {
+    "op": "serbatoi"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "643": {
+  "id": "643",
+  "it": "[s6] I motori rombano e due motosiluranti escono dalla base dei sottomarini! Attiva il tedesco 67 in G15 e il tedesco 68 in F15, rivolti a nord-ovest. Iniziano i Round. Vedi 654.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "attiva_eboat"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "662": {
+  "id": "662",
+  "it": "[s6] Il soldato vede due motosiluranti che si preparano a fuggire! Se un soldato americano in questo esagono ha un’azione da spendere, spara una raffica, punta l’arma alla testa del capitano più vicino e grida «Halt!»: la motosilurante in G15 si arrende ed è affondata (+5 PV); quella in F15 fugge (si attiva solo il tedesco 68, vantaggio americano). Altrimenti vedi subito 643.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "eboat_662"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "654": {
+  "id": "654",
+  "it": "Le motosiluranti hanno siluri (solo contro le navi alleate) e una mitragliatrice pesante e una leggera che sparano in tutte le direzioni. Servono 2 punti equipaggio per muoversi o per un tiro mirato, 1 per un tiro rapido; non fanno controlli d’incidente. Si possono distruggere anche con una carica da demolizione lanciata a bordo (−3). Affondata: +10 PV.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "702": {
+  "id": "702",
+  "it": "Tira un dado: 0–4 vedi 713; 5–9 vedi 718.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "goto",
+        "p": "713"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "718"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "713": {
+  "id": "713",
+  "it": "[s1] Il soldato vede un’auto comando abbandonata in I14. Se un soldato entra nell’esagono, vedi 897.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "auto_comando"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "897": {
+  "id": "897",
+  "it": "Le chiavi sono nel cruscotto e c’è benzina in abbondanza.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "718": {
+  "id": "718",
+  "it": "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe essere la via verso la flotta! Ci sta tutta la squadra; si vara da una spiaggia o da una banchina, si rema di 2 esagoni per turno. Chi è a bordo è accovacciato in copertura. Uscendo dal bordo ovest in scialuppa guadagni 10 PV. (In questa versione la scialuppa si trova già sulla spiaggia in I18.)",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "scialuppa"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "595": {
+  "id": "595",
+  "it": "[s9] I tesori del Louvre! Guadagni 10 PV.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "vp",
+    "n": 10,
+    "why": "tesori del Louvre"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "404": {
+  "id": "404",
+  "it": "Un soldato americano incapacitato a caso muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "us",
+    "chiave": "ph404"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "443": {
+  "id": "443",
+  "it": "Un’arma tedesca usata nel Round precedente ha finito le munizioni (a caso se più d’una).",
+  "ops": [
+   {
+    "op": "ammo_out"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "447": {
+  "id": "447",
+  "it": "Un soldato americano a caso con IN 3 o meno va nel panico e cade prono: si riprende solo quando un altro soldato entra nel suo esagono e spende un’azione. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "panico_mo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "457": {
+  "id": "457",
+  "it": "Se un soldato americano ha una granata, una granata esplode per sbaglio (vedi la procedura delle granate difettose).",
+  "ops": [
+   {
+    "op": "grenade_accident"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "461": {
+  "id": "461",
+  "it": "Un tedesco incapacitato a caso muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "de",
+    "chiave": "ph461"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "485": {
+  "id": "485",
+  "it": "Un tedesco ferito a caso diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "de",
+    "chiave": "ph485"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "623": {
+  "id": "623",
+  "it": "Un soldato americano ferito a caso diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "us",
+    "chiave": "ph623"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "489": {
+  "id": "489",
+  "it": "[s5] Il tedesco aziona un interruttore e in lontananza suona una sirena. Reazione speciale A per questo tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "g_reaction",
+    "r": "A"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "478": {
+  "id": "478",
+  "it": "Se questo tedesco ha un’azione da spendere e s5 non è avvenuto, vedi 489. Altrimenti esegue 801.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "489"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "484": {
+  "id": "484",
+  "it": "Il motore del carro tossisce e scoppietta entrando in I10.",
+  "ops": [],
+  "tipo": "movimento"
+ },
+ "546": {
+  "id": "546",
+  "it": "Il carro resta senza benzina: non si muove più, ma spara normalmente.",
+  "ops": [
+   {
+    "op": "solo_testo",
+    "testo": "Il carro non si muove più."
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "617": {
+  "id": "617",
+  "it": "Passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "625": {
+  "id": "625",
+  "it": "Se i serbatoi in J13 e K14 sono intatti entra in I13; altrimenti entra in I12.",
+  "ops": [
+   {
+    "op": "g_enter",
+    "hex": "I13"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "678": {
+  "id": "678",
+  "it": "Se si muove il Panzer IV entra in Q15; altrimenti entra in R13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "688": {
+  "id": "688",
+  "it": "Se si muove il Panzer IV entra in Q15; altrimenti entra in R15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "695": {
+  "id": "695",
+  "it": "Se si muove il tedesco 67 entra in S18; altrimenti entra in T17.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num": 67
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S18"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "T17"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "403": {
+  "id": "403",
+  "it": "Se i cani sono attivi, si accovaccia e fa il miglior tiro al bersaglio più vicino non nell’esagono di un cane. Se i cani sono fuori combattimento e non vede bersagli, esce dalla mappa; se ne vede, corre via e sparisce nel primo esagono fuori vista.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "411": {
+  "id": "411",
+  "it": "Se i cani sono attivi, si accovaccia e spara di rapido a quanti più bersagli può (non negli esagoni dei cani). Se i cani sono fuori combattimento e non vede bersagli, esce dalla mappa; se ne vede, corre via e sparisce fuori vista, altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "428": {
+  "id": "428",
+  "it": "Se i cani sono attivi vedi 840. Se sono fuori combattimento e non vede bersagli, esce dalla mappa; se ne vede, corre e cade prono nell’ultimo esagono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "573": {
+  "id": "573",
+  "it": "Con un bersaglio in vista entro 6 esagoni e una granata, si alza e la lancia; anche senza vista, se un bersaglio è entro 6 esagoni (−3). Senza granate ma con un bersaglio in vista esegue 801; altrimenti si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "711": {
+  "id": "711",
+  "it": "Con 2 o più americani attivi nel suo esagono si arrende; altrimenti si alza e fa il miglior tiro al più vicino, poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "869": {
+  "id": "869",
+  "it": "Con una granata e un bersaglio entro tre esagoni si accovaccia e la lancia al più vicino, poi prono se può; altrimenti esegue 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "877": {
+  "id": "877",
+  "it": "Con un bersaglio in vista esegue 815. Se non vede bersagli ma uno è entro 6 esagoni e ha una granata, si alza e la lancia (−3); poi prono se può. Altrimenti prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "883": {
+  "id": "883",
+  "it": "Con un bersaglio in vista si alza e spara di rapido con l’arma personale al più vicino e al secondo più vicino; altrimenti prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "884": {
+  "id": "884",
+  "it": "Si alza e fa il miglior tiro con l’arma personale al bersaglio più facile, poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "895": {
+  "id": "895",
+  "it": "Se non vede bersagli e l’antenna è intatta, trasmette al comando che l’invasione è cominciata: perdi 10 PV (una volta sola). Altrimenti non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "874": {
+  "id": "874",
+  "it": "Si arrende.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "826": {
+  "id": "826",
+  "it": "Se il mezzo è già stato bersagliato va veloce, altrimenti lento.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "900": {
+  "id": "900",
+  "it": "Con 3 o più bersagli in vista, o se il mezzo è stato bersagliato, si chiude (se è già chiuso vedi 901). Con 1 o 2 bersagli vedi 903. Senza bersagli si apre (se è già aperto vedi 903).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "901": {
+  "id": "901",
+  "it": "Tiro mirato con la mitragliatrice di scafo al più vicino; cannone contro un mezzo americano o un bersaglio in un edificio (altrimenti lo carica); con il cannone carico e senza bersagli, tiro mirato con la coassiale al secondo più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "903": {
+  "id": "903",
+  "it": "Avanza lento; cannone contro un mezzo americano o un bersaglio in un edificio (altrimenti lo carica); con il cannone carico e senza bersagli tiro rapido con la coassiale al secondo più vicino; tiro rapido con la mitragliatrice di scafo al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "733": {
+  "id": "733",
+  "it": "Avanza lento. Tiro mirato con la mitragliatrice pesante al più vicino, tiro rapido con la leggera al secondo.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "736": {
+  "id": "736",
+  "it": "Avanza lento. Tiri rapidi con la mitragliatrice leggera e con la pesante.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "747": {
+  "id": "747",
+  "it": "Avanza veloce. Tiro mirato con la pesante al secondo più vicino, tiro rapido con la leggera al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "758": {
+  "id": "758",
+  "it": "Avanza veloce.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "763": {
+  "id": "763",
+  "it": "Avanza lento. Tiro mirato con la mitragliatrice leggera al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "776": {
+  "id": "776",
+  "it": "Avanza veloce. Tiro mirato con la mitragliatrice pesante al bersaglio più facile.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "847": {
+  "id": "847",
+  "it": "Avanza lento.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "849": {
+  "id": "849",
+  "it": "Avanza veloce.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "873": {
+  "id": "873",
+  "it": "Si arrende (la motosilurante si arena sulla spiaggia più vicina).",
+  "ops": [],
+  "tipo": "azione"
+ },
  "329": {
   "id": "329",
   "it": "Colloca un segnalino Evento. Effettua un controllo di percezione (-2):\n• se riesce, vedi 338;\n• se fallisce, nessun evento.",
@@ -1700,62 +3318,6 @@
   "id": "679",
   "it": "L’esplosivo salta! Togli il segnalino e colloca un Edificio in fiamme: chi è nell’esagono muore; chi è negli esagoni adiacenti effettua un controllo di percezione (se riesce si butta a terra) e subisce i danni della colonna Granata al chiuso.",
   "ops": [],
-  "tipo": "missione"
- },
- "443": {
-  "id": "443",
-  "it": "Un’arma tedesca usata nel Round precedente ha finito le munizioni (a caso se più d’una).",
-  "ops": [
-   {
-    "op": "ammo_out"
-   }
-  ],
-  "tipo": "missione"
- },
- "447": {
-  "id": "447",
-  "it": "Un soldato americano a caso con IN 3 o meno va nel panico e cade prono: si riprende solo quando un altro soldato entra nel suo esagono e spende un’azione. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "panico_mo"
-   }
-  ],
-  "tipo": "missione"
- },
- "461": {
-  "id": "461",
-  "it": "Un tedesco incapacitato a caso muore per le ferite. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "morte_incapacitato",
-    "lato": "de",
-    "chiave": "ph461"
-   }
-  ],
-  "tipo": "missione"
- },
- "485": {
-  "id": "485",
-  "it": "Un tedesco ferito a caso diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "de",
-    "chiave": "ph485"
-   }
-  ],
-  "tipo": "missione"
- },
- "623": {
-  "id": "623",
-  "it": "Un soldato americano ferito a caso diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "us",
-    "chiave": "ph623"
-   }
-  ],
   "tipo": "missione"
  },
  "370": {

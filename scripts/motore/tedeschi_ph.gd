@@ -79,6 +79,181 @@ func esegui(n: int) -> bool:
 				t.esegui(816)
 			else:
 				t.esegui(868)
+		391:
+			_cane(g)
+		403, 411, 428:
+			if _cani_attivi():
+				if n == 403:
+					t._accovacciati()
+					t._miglior_tiro("vicino")
+				elif n == 411:
+					t._accovacciati()
+					t._tiri_rapidi()
+			elif t.bersagli(g).is_empty():
+				t.rimuovi_evasivo(g)
+			else:
+				t._muovi_rapido(false)
+				if n == 411 and t.p.in_mappa(g) and t.bersagli(g).is_empty():
+					t.rimuovi_evasivo(g)
+				else:
+					t._prono()
+		573, 877:
+			var vis: Array = t.bersagli(g)
+			var vicino: Array = t.p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) <= 6)
+			if n == 877 and not vis.is_empty():
+				t.esegui(815)
+			elif int(g.munizioni.get("granata", 0)) > 0 and (not vis.is_empty() or not vicino.is_empty()):
+				if t._alzati():
+					t.mo._granata_su(g, (vis[0] if not vis.is_empty() else vicino[0]).hex)
+					t._prono_se_libero()
+			elif not vis.is_empty():
+				t.esegui(801)
+			elif n == 573:
+				t._accovacciati()
+			else:
+				t._prono()
+		711:
+			var qui: Array = t.p.unita_in(g.hex, "us").filter(func(a): return t.p.attivo(a))
+			if qui.size() >= 2:
+				t._arrenditi()
+			elif t._alzati():
+				t._miglior_tiro("vicino")
+				t._prono_se_libero()
+		869:
+			if int(g.munizioni.get("granata", 0)) > 0 and t._bersagli_entro(3):
+				t._accovacciati()
+				var b: Array = t.bersagli(g)
+				if not b.is_empty():
+					t.mo._granata_su(g, b[0].hex)
+				t._prono_se_libero()
+			else:
+				t.esegui(801)
+		883:
+			if not t.bersagli(g).is_empty() and t._alzati():
+				t._tiri_rapidi()
+			else:
+				t._prono()
+		884:
+			if t._alzati():
+				t._miglior_tiro("facile")
+				t._prono_se_libero()
+		895:
+			var st: Dictionary = _ph()._st()
+			if t.bersagli(g).is_empty() and not st.get("antenna_distrutta", false) and not st.get("allarme_dato", false):
+				st.allarme_dato = true
+				t.p._pv(-10, "il tedesco %d avvisa il comando dello sbarco" % int(g.num))
+				t.p._log("info", "Il tedesco %d trasmette al comando: l’invasione è cominciata!" % int(g.num))
+		874:
+			t._arrenditi()
+		_:
+			return false
+	return true
+
+# ------------------------------------------------------------------ cani da guardia (391)
+func _cani_attivi() -> bool:
+	for x in t.p.tedeschi_attivi():
+		if x.get("cane", false) and t.p.in_mappa(x):
+			return true
+	return false
+
+func _cane(g: Dictionary) -> void:
+	var p = t.p
+	var bersaglio: Dictionary = p.u(str(g.get("cane_bersaglio", "")))
+	if bersaglio.is_empty() or not p.attivo(bersaglio) or bersaglio.hex != g.hex:
+		var qui: Array = p.unita_in(g.hex, "us").filter(func(a): return p.attivo(a))
+		bersaglio = qui[p.rng.randi_range(0, qui.size() - 1)] if not qui.is_empty() else {}
+	if bersaglio.is_empty():
+		var vicino: Dictionary = {}
+		for a in p.americani_attivi_in_mappa():
+			if vicino.is_empty() or E.distanza(a.hex, g.hex) < E.distanza(vicino.hex, g.hex):
+				vicino = a
+		if vicino.is_empty():
+			return
+		var passi := 4 if g.ferito else 6
+		var assalto := E.distanza(vicino.hex, g.hex) <= (2 if g.ferito else 3)
+		for i in passi:
+			if g.hex == vicino.hex:
+				break
+			var migliore := ""
+			for v in E.vicini(g.hex):
+				if p.terreno.costo_movimento(g.hex, v) < 0:
+					continue
+				if migliore == "" or E.distanza(v, vicino.hex) < E.distanza(migliore, vicino.hex):
+					migliore = v
+			if migliore == "" or E.distanza(migliore, vicino.hex) >= E.distanza(g.hex, vicino.hex):
+				break
+			var da: String = g.hex
+			g.hex = migliore
+			p._fx("muovi", {"ids": [g.id], "da": da, "a": migliore})
+		p._log("tedesco", "Il %s corre verso %s e arriva in %s." % [p.nome(g), p.nome(vicino), g.hex])
+		if not (assalto and g.hex == vicino.hex):
+			return
+		bersaglio = vicino
+	g.cane_bersaglio = bersaglio.id
+	var d: int = p.d10()
+	p._log("dado", "Il %s azzanna %s: dado %d (6–7 panico, 8 ferito, 9 incapacitato)." % [p.nome(g), p.nome(bersaglio), d])
+	if d in [6, 7]:
+		p._applica_danno(bersaglio, "P", {})
+	elif d == 8:
+		p._applica_danno(bersaglio, "W", {})
+	elif d == 9:
+		p._applica_danno(bersaglio, "I", {})
+
+# ------------------------------------------------------------------ carri e motosiluranti
+func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
+	var vv = t.p.veicoli
+	var b: Array = vv.bersagli_carro(g)
+	match n:
+		826:
+			vv._guida(veic, bool(veic.get("bersagliato", false)), g)
+		900:
+			if b.size() >= 3 or veic.get("bersagliato", false):
+				if veic.get("chiuso", false):
+					vv.esegui_carro(910, g, veic)
+				else:
+					vv._apri_chiudi(veic, true)
+			elif not b.is_empty():
+				esegui_carro(903, g, veic)
+			elif not veic.get("chiuso", false):
+				esegui_carro(903, g, veic)
+			else:
+				vv._apri_chiudi(veic, false)
+		901:
+			vv.esegui_carro(910, g, veic)
+		903:
+			vv._guida(veic, false, g)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "coax", false, 1)
+			vv._mg(g, veic, "scafo", false, 0)
+		733:
+			vv._guida(veic, false, g)
+			vv._mg(g, veic, "scafo", true, 0)
+			vv._mg(g, veic, "coax", false, 1)
+		736:
+			vv._guida(veic, false, g)
+			vv._mg(g, veic, "coax", false, 0)
+			vv._mg(g, veic, "scafo", false, 0)
+		747:
+			vv._guida(veic, true, g)
+			vv._mg(g, veic, "scafo", true, 1)
+			vv._mg(g, veic, "coax", false, 0)
+		758:
+			vv._guida(veic, true, g)
+		763:
+			vv._guida(veic, false, g)
+			vv._mg(g, veic, "coax", true, 0)
+		776:
+			vv._guida(veic, true, g)
+			vv._mg(g, veic, "scafo", true, 0)
+		847:
+			vv._guida(veic, false, g)
+		849:
+			vv._guida(veic, true, g)
+		873, 874:
+			t.p._log("danno", "L’equipaggio della %s si arrende." % veic.nome)
+			vv.disabilita(veic, "equipaggio arreso")
+			g.stato = "arreso"
 		_:
 			return false
 	return true

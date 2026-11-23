@@ -14,6 +14,7 @@ const MODELLI := {
 	"chiatta": {"art": "La", "nome": "Chiatta", "piccolo": false, "lenta": 4, "veloce": 4, "posti": 10, "canoa": true},
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 1, "carro": true, "torretta": true},
+	"eboat": {"art": "La", "nome": "Motosilurante", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 0, "carro": true, "torretta": false, "nave": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 
@@ -155,10 +156,12 @@ func sposta(veic: Dictionary, verso: String) -> void:
 func costo(veic: Dictionary, da: String, verso: String) -> int:
 	if not E.adiacenti(da, verso):
 		return -1
+	if bool(MODELLI[veic.modello].get("nave", false)):
+		return 1 if p.terreno.esagoni.get(verso, {}).get("t", "") in ["water", "stream"] else -1
 	if bool(MODELLI[veic.modello].get("canoa", false)):
-		# La canoa va solo sul fiume; spiaggia entrando in un esagono di terra accanto (non in un edificio).
-		var acqua_da: bool = p.terreno.esagoni.get(da, {}).get("t", "") == "stream"
-		var acqua_verso: bool = p.terreno.esagoni.get(verso, {}).get("t", "") == "stream"
+		# La canoa va solo sul fiume (o sul mare); spiaggia entrando in un esagono di terra accanto (non in un edificio).
+		var acqua_da: bool = p.terreno.esagoni.get(da, {}).get("t", "") in ["stream", "water"]
+		var acqua_verso: bool = p.terreno.esagoni.get(verso, {}).get("t", "") in ["stream", "water"]
 		if acqua_verso:
 			return 1
 		if acqua_da and not p.terreno.edificio(verso) and p.terreno.tipo_lato(da, verso) != "wall":
@@ -553,6 +556,8 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> void:
 	if not attivo(veic):
 		return
 	if p.mo.attiva() and p.ia.mo.esegui_carro(n, g, veic):
+		return
+	if p.ph.attiva() and p.ia.ph.esegui_carro(n, g, veic):
 		return
 	p._log("par", p.paragrafi[str(n)].it, {"id": str(n), "tedesco": g.id})
 	var b := bersagli_carro(g)

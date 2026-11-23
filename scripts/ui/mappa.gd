@@ -451,7 +451,7 @@ func _draw() -> void:
 				extra = " (GOMMA A TERRA)"
 			_marcatore(str(veic.hex), str(veic.nome).to_upper() + extra, Vector2(0.0, 0.66), col)
 	for h in s.oggetti:
-		var armi_a_terra: Array = s.oggetti[h].filter(func(o): return not (str(o.get("tipo", "")) in ["barca", "esplosivo", "incendio"]))
+		var armi_a_terra: Array = s.oggetti[h].filter(func(o): return not (str(o.get("tipo", "")) in ["barca", "esplosivo", "incendio", "carica_us", "faro", "antenna", "cannone_costiero"]))
 		if not armi_a_terra.is_empty():
 			_segnalino(h, "mitra" if armi_a_terra[0].tipo == "smg" else "arma", Vector2(0.5, 0.5), 0.45)
 		for o in s.oggetti[h]:
@@ -462,6 +462,14 @@ func _draw() -> void:
 					_marcatore(h, "ESPLOSIVO %d" % int(s.get("ph", {}).get("esplosivi", {}).get(h, 2)), Vector2(0.0, -0.62), Color("8a2b1c"))
 				"incendio":
 					_marcatore(h, "IN FIAMME", Vector2(0.0, 0.3), Color("a04a12"))
+				"carica_us":
+					_marcatore(h, "ESPLOSIVO", Vector2(0.0, -0.62), Color("4a5d32"))
+				"faro":
+					_marcatore(h, "FARO", Vector2(0.0, -0.62), Color("6b5a22"))
+				"antenna":
+					_marcatore(h, "ANTENNA", Vector2(0.0, -0.62), Color("5b4a33"))
+				"cannone_costiero":
+					_marcatore(h, "CANNONE COSTIERO", Vector2(0.0, -0.62), Color("5d5f63"))
 	# Pedine
 	# Tracce dei movimenti dell’ultima sequenza
 	for tr in tracce:
