@@ -5,16 +5,19 @@
   "lettera": "L",
   "ruolo": "Motorcycle and Driver",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Pistol (Luger)",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self oe while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 3,
   "PC": 5,
   "WS": -1,
   "MPA": 4,
+  "DS": 8,
   "armi": [
    "pistol"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -65,7 +68,7 @@
     613
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self oe while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE6": {
   "lato": "GE",
@@ -73,16 +76,19 @@
   "lettera": "S",
   "ruolo": "Motorcycle and Driver",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Pistol (Luger)",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self a pematon while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 3,
   "PC": 6,
   "WS": 0,
   "MPA": 4,
+  "DS": 8,
   "armi": [
    "pistol"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -133,7 +139,7 @@
     613
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self a pematon while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE8": {
   "lato": "GE",
@@ -141,16 +147,19 @@
   "lettera": "T",
   "ruolo": "Kubelwagen and Driver",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Pistol (Luger)",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self oo while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 3,
   "PC": 5,
   "WS": 0,
   "MPA": 4,
+  "DS": 8,
   "armi": [
    "pistol"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -201,7 +210,7 @@
     613
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self oo while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE9": {
   "lato": "GE",
@@ -209,6 +218,9 @@
   "lettera": "U",
   "ruolo": "Scout",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Bolt Rifle (Scope); 1 Grenade",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self la while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 3,
   "PC": 4,
@@ -218,7 +230,6 @@
    "scoped"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -269,7 +280,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self la while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE10": {
   "lato": "GE",
@@ -277,6 +288,9 @@
   "lettera": "W",
   "ruolo": "Scout",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self oo while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 2,
   "PC": 3,
@@ -286,7 +300,6 @@
    "mp"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -337,7 +350,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self oo while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE11": {
   "lato": "GE",
@@ -345,6 +358,9 @@
   "lettera": "R",
   "ruolo": "Scout",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Bolt Rifle",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self ileal while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 2,
   "PC": 1,
@@ -354,7 +370,6 @@
    "bolt"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -405,7 +420,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self ileal while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE12": {
   "lato": "GE",
@@ -413,6 +428,9 @@
   "lettera": "Z",
   "ruolo": "Field Marshal",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 15 VP if captured)",
+  "armi_testo": "Pistol (Luger)",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self —e while in active vehicle. On first turn, use",
   "pv_cattura": 15,
   "IN": 5,
   "PC": 9,
@@ -422,7 +440,6 @@
    "pistol"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -443,7 +460,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self —e while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE14": {
   "lato": "GE",
@@ -451,6 +468,9 @@
   "lettera": "M",
   "ruolo": "Bodyguard",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 3 Grenades",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self ee while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 4,
   "PC": 7,
@@ -461,7 +481,6 @@
    "pistol"
   ],
   "granate": 3,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -512,7 +531,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self ee while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE15": {
   "lato": "GE",
@@ -520,6 +539,9 @@
   "lettera": "X",
   "ruolo": "Bodyguard",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 3 Grenades",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self lla while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 4,
   "PC": 7,
@@ -530,7 +552,6 @@
    "pistol"
   ],
   "granate": 3,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -581,7 +602,7 @@
     626
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self lla while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE16": {
   "lato": "GE",
@@ -589,17 +610,20 @@
   "lettera": "N",
   "ruolo": "Staff Car and Driver",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 1 VP if captured)",
+  "armi_testo": "Machine Pistol; Pistol (Luger); Grenade",
+  "note": "NOTES: Begins in Special Reaction W. Ignore Self 5) gale while in active vehicle. On first turn, use",
   "pv_cattura": 1,
   "IN": 4,
   "PC": 8,
   "WS": 1,
   "MPA": 4,
+  "DS": 8,
   "armi": [
    "mp",
    "pistol"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -650,7 +674,7 @@
     613
    ]
   },
-  "note": "NOTES: Begins in Special Reaction W. Ignore Self 5) gale while in active vehicle. On first turn, use"
+  "esplosivi": 0
  },
  "GE17": {
   "lato": "GE",
@@ -658,7 +682,9 @@
   "lettera": "U",
   "ruolo": "Machinegunner",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Light Machinegun; Pistol (Luger); 3 Grenades",
+  "note": "NOTES: On first turn, use 815. Fires MG unless wounded and GE 35 not wounded. Assists GE 35 in this case.",
   "IN": 3,
   "PC": 5,
   "WS": 1,
@@ -668,7 +694,6 @@
    "lmg"
   ],
   "granate": 3,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -701,7 +726,8 @@
     839
    ]
   },
-  "note": "NOTES: On first turn, use 815. Fires MG unless wounded and GE 35 not wounded. Assists GE 35 in this case."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE19": {
   "lato": "GE",
@@ -709,7 +735,9 @@
   "lettera": "W",
   "ruolo": "Panzergrenadier",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; Grenade; Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 2,
   "PC": 3,
   "WS": -1,
@@ -719,7 +747,6 @@
    "pzf"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -776,7 +803,8 @@
     882
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE20": {
   "lato": "GE",
@@ -784,6 +812,9 @@
   "lettera": "Z",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 5,
   "PC": 8,
@@ -855,8 +886,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE21": {
   "lato": "GE",
@@ -864,6 +894,9 @@
   "lettera": "Y",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 5,
   "PC": 8,
@@ -935,8 +968,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE22": {
   "lato": "GE",
@@ -944,7 +976,10 @@
   "lettera": "T",
   "ruolo": "Machinegunner",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Light Machinegun; Pistol (Luger); 2 Grenades",
+  "note": "NOTES: Fires Light MG until inactive.",
+  "pv_inattivo": true,
   "IN": 3,
   "PC": 4,
   "WS": 1,
@@ -954,7 +989,6 @@
    "lmg"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1005,7 +1039,8 @@
     971
    ]
   },
-  "note": "NOTES: Fires Light MG until inactive."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE23": {
   "lato": "GE",
@@ -1013,7 +1048,10 @@
   "lettera": "Q",
   "ruolo": "Volksgrenadier",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "NOTES: *Receives only one turn per Round. Assists GE 44 until GE 44 becomes inactive or is not in hex, at which time put Special Reaction X in effect for GE 23.",
+  "pv_inattivo": true,
   "IN": 1,
   "PC": 1,
   "WS": -1,
@@ -1022,7 +1060,6 @@
    "bolt"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1051,8 +1088,8 @@
    "S": [
     859,
     839,
-    852,
-    846
+    833,
+    971
    ],
    "X": [
     846,
@@ -1061,7 +1098,8 @@
     846
    ]
   },
-  "note": "NOTES: *Receives only one turn per Round. Assists GE 44 until GE 44 becomes inactive or is not in hex, at which time put Special Reaction X in effect for GE 23."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE24": {
   "lato": "GE",
@@ -1069,7 +1107,10 @@
   "lettera": "M",
   "ruolo": "Veteran Infantry",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 2 Grenades",
+  "note": "",
+  "pv_inattivo": true,
   "IN": 3,
   "PC": 5,
   "WS": 0,
@@ -1079,7 +1120,6 @@
    "pistol"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1118,7 +1158,8 @@
     859
    ]
   },
-  "note": ""
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE25": {
   "lato": "GE",
@@ -1126,7 +1167,9 @@
   "lettera": "L",
   "ruolo": "Panzergrenadier",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; Grenade; Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 3,
   "PC": 6,
   "WS": 1,
@@ -1136,7 +1179,6 @@
    "pzf"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1193,7 +1235,8 @@
     892
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE26": {
   "lato": "GE",
@@ -1201,7 +1244,9 @@
   "lettera": "S",
   "ruolo": "Panzergrenadier",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; Grenade; Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 3,
   "PC": 5,
   "WS": 0,
@@ -1211,7 +1256,6 @@
    "pzf"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1268,7 +1312,8 @@
     888
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE27": {
   "lato": "GE",
@@ -1276,7 +1321,9 @@
   "lettera": "N",
   "ruolo": "Major",
   "pv": 3,
-  "pv_cattura": 0,
+  "pv_testo": "+ 3 VP",
+  "armi_testo": "Machine Pistol; Pistol (Luger); Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 4,
   "PC": 8,
   "WS": 1,
@@ -1287,7 +1334,6 @@
    "pzf"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1344,7 +1390,8 @@
     882
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE28": {
   "lato": "GE",
@@ -1352,6 +1399,9 @@
   "lettera": "T",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 3,
   "PC": 7,
@@ -1423,8 +1473,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE29": {
   "lato": "GE",
@@ -1432,6 +1481,9 @@
   "lettera": "S",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 3,
   "PC": 6,
@@ -1503,8 +1555,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE33": {
   "lato": "GE",
@@ -1512,7 +1563,9 @@
   "lettera": "U",
   "ruolo": "Panzergrenadier",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; Grenade; Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 3,
   "PC": 6,
   "WS": 0,
@@ -1522,7 +1575,6 @@
    "pzf"
   ],
   "granate": 1,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1579,7 +1631,8 @@
     885
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE34": {
   "lato": "GE",
@@ -1587,7 +1640,9 @@
   "lettera": "T",
   "ruolo": "Sergeant",
   "pv": 2,
-  "pv_cattura": 0,
+  "pv_testo": "+ 2 VP",
+  "armi_testo": "Machine Pistol; Pistol (Luger); Panzerfaust",
+  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981.",
   "IN": 3,
   "PC": 7,
   "WS": 0,
@@ -1598,7 +1653,6 @@
    "pzf"
   ],
   "granate": 0,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1655,7 +1709,8 @@
     892
    ]
   },
-  "note": "NOTES: On first turn, conduct 809. Panzerfaust can be fired only once and is not affected by 981."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE35": {
   "lato": "GE",
@@ -1663,7 +1718,9 @@
   "lettera": "W",
   "ruolo": "Machinegunner",
   "pv": 1,
-  "pv_cattura": 0,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "NOTES: On first turn, use 815. Assists GE 17 in firing MG unless GE 17 is wounded or incapacitated. If GE 17 is wounded or incapacitated, GE 35 fires MG.",
   "IN": 2,
   "PC": 3,
   "WS": 0,
@@ -1672,7 +1729,6 @@
    "bolt"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -1705,7 +1761,8 @@
     833
    ]
   },
-  "note": "NOTES: On first turn, use 815. Assists GE 17 in firing MG unless GE 17 is wounded or incapacitated. If GE 17 is wounded or incapacitated, GE 35 fires MG."
+  "pv_cattura": 0,
+  "esplosivi": 0
  },
  "GE36": {
   "lato": "GE",
@@ -1713,6 +1770,9 @@
   "lettera": "N",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 5,
   "PC": 9,
@@ -1784,8 +1844,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE37": {
   "lato": "GE",
@@ -1793,6 +1852,9 @@
   "lettera": "M",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 4,
   "PC": 5,
@@ -1864,8 +1926,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE38": {
   "lato": "GE",
@@ -1873,6 +1934,9 @@
   "lettera": "X",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 4,
   "PC": 5,
@@ -1944,8 +2008,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE39": {
   "lato": "GE",
@@ -1953,6 +2016,9 @@
   "lettera": "L",
   "ruolo": "Commando",
   "pv": 2,
+  "pv_testo": "+ 2 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Grenade; 1 Explosive",
+  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German.",
   "pv_cattura": 2,
   "IN": 3,
   "PC": 6,
@@ -2024,8 +2090,7 @@
     538,
     538
    ]
-  },
-  "note": "NOTES: The explosive can never be used by US soldiers or “taken” from an inactive German."
+  }
  },
  "GE40": {
   "lato": "GE",
@@ -2033,6 +2098,9 @@
   "lettera": "N",
   "ruolo": "Officer",
   "pv": 1,
+  "pv_testo": "+ 1 VP (+ 2 VP if captured)",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 2 Grenades",
+  "note": "NOTES: On first turn, conduct 866.",
   "pv_cattura": 2,
   "IN": 5,
   "PC": 8,
@@ -2043,7 +2111,6 @@
    "pistol"
   ],
   "granate": 2,
-  "esplosivi": 0,
   "gruppi": [
    [
     0,
@@ -2082,6 +2149,2287 @@
     712
    ]
   },
-  "note": "NOTES: On first turn, conduct 866."
+  "esplosivi": 0
+ },
+ "GE41": {
+  "lato": "GE",
+  "num": 41,
+  "lettera": "M",
+  "ruolo": "Soldier",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "On first turn, conduct  866",
+  "IN": 3,
+  "PC": 7,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    866,
+    750,
+    865,
+    864
+   ],
+   "S": [
+    839,
+    859,
+    833,
+    812
+   ],
+   "L": [
+    869,
+    808,
+    801,
+    818
+   ]
+  }
+ },
+ "GE42": {
+  "lato": "GE",
+  "num": 42,
+  "lettera": "X",
+  "ruolo": "Soldier",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle (Scope); 2 Grenades",
+  "note": "On first turn, conduct  866",
+  "IN": 4,
+  "PC": 6,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "scoped"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    865,
+    866,
+    750,
+    862
+   ],
+   "S": [
+    859,
+    839,
+    812,
+    833
+   ],
+   "L": [
+    818,
+    801,
+    800,
+    869
+   ]
+  }
+ },
+ "GE43": {
+  "lato": "GE",
+  "num": 43,
+  "lettera": "LL",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if knocked out)",
+  "armi_testo": "",
+  "note": "Enters open, cannon prepared. When open, 3 crew exposed. On first turn, conduct 923.",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "3": {
+    "IN": 3,
+    "PC": 5,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     923,
+     923,
+     923,
+     923,
+     923,
+     909,
+     909,
+     909,
+     909,
+     909
+    ]
+   },
+   "2": {
+    "IN": 2,
+    "PC": 3,
+    "WS": -1,
+    "DS": 4,
+    "valori": [
+     921,
+     921,
+     921,
+     921,
+     921,
+     923,
+     923,
+     923,
+     923,
+     923
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 1,
+    "WS": -2,
+    "DS": 2,
+    "valori": [
+     923,
+     923,
+     923,
+     923,
+     923,
+     921,
+     921,
+     921,
+     921,
+     921
+    ]
+   },
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 2,
+    "DS": 8,
+    "valori": [
+     907,
+     907,
+     907,
+     905,
+     905,
+     925,
+     925,
+     925,
+     925,
+     925
+    ]
+   },
+   "4": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     925,
+     925,
+     925,
+     905,
+     905,
+     925,
+     925,
+     925,
+     925,
+     925
+    ]
+   }
+  },
+  "primo_turno": 923
+ },
+ "GE44": {
+  "lato": "GE",
+  "num": 44,
+  "lettera": "L",
+  "ruolo": "Soldier",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "On first turn, conduct 809.",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    4,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    840,
+    866,
+    862,
+    750
+   ],
+   "S": [
+    839,
+    859,
+    833,
+    812
+   ],
+   "L": [
+    801,
+    801,
+    869,
+    802
+   ]
+  }
+ },
+ "GE45": {
+  "lato": "GE",
+  "num": 45,
+  "lettera": "S",
+  "ruolo": "Soldier",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "On first turn, conduct 803.",
+  "IN": 3,
+  "PC": 5,
+  "WS": 0,
+  "MPA": 4,
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    866,
+    865,
+    750,
+    821
+   ],
+   "S": [
+    833,
+    839,
+    812,
+    859
+   ],
+   "L": [
+    802,
+    801,
+    800,
+    869
+   ]
+  }
+ },
+ "GE48": {
+  "lato": "GE",
+  "num": 48,
+  "lettera": "V",
+  "ruolo": "Motorcycle and Driver",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Pistol (Luger); Grenade",
+  "note": "* Conducts 826. If motorcycle is disabled, put Special reaction B in effect for GE 48. Ignore Self Preservation while in active vehicle.",
+  "pv_inattivo": true,
+  "IN": 1,
+  "PC": 1,
+  "WS": -2,
+  "MPA": 3,
+  "DS": 8,
+  "armi": [
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-4": [
+    826,
+    826,
+    826,
+    826
+   ],
+   "S": [
+    859,
+    833,
+    839,
+    971
+   ],
+   "A": [
+    624,
+    624,
+    627,
+    627
+   ],
+   "B": [
+    661,
+    661,
+    661,
+    661
+   ],
+   "C": [
+    659,
+    659,
+    659,
+    659
+   ]
+  }
+ },
+ "GE49": {
+  "lato": "GE",
+  "num": 49,
+  "lettera": "W",
+  "ruolo": "Scout",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Bolt Rifle (Scope); 2 Grenades",
+  "note": "If vehicle disabled, put Special Reaction B in effect for GE 49. Ignore Self Preservation while in active vehicle.",
+  "pv_inattivo": true,
+  "IN": 2,
+  "PC": 5,
+  "WS": 0,
+  "MPA": 4,
+  "armi": [
+   "scoped"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    4,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    801,
+    802,
+    829,
+    808
+   ],
+   "4": [
+    855,
+    855,
+    855,
+    855
+   ],
+   "S": [
+    971,
+    839,
+    833,
+    859
+   ],
+   "A": [
+    627,
+    627,
+    624,
+    624
+   ],
+   "B": [
+    661,
+    661,
+    661,
+    661
+   ],
+   "C": [
+    659,
+    659,
+    659,
+    659
+   ]
+  }
+ },
+ "GE50": {
+  "lato": "GE",
+  "num": 50,
+  "lettera": "L",
+  "ruolo": "Sniper",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Bolt Rifle (Scope); 2 Grenades",
+  "note": "",
+  "pv_inattivo": true,
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "scoped"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    808,
+    829,
+    801,
+    825
+   ],
+   "2": [
+    721,
+    840,
+    715,
+    710
+   ],
+   "3": [
+    731,
+    731,
+    715,
+    710
+   ],
+   "4": [
+    780,
+    783,
+    785,
+    804
+   ],
+   "S": [
+    971,
+    859,
+    839,
+    833
+   ],
+   "L": [
+    866,
+    865,
+    864,
+    801
+   ],
+   "Q": [
+    817,
+    817,
+    801,
+    869
+   ]
+  }
+ },
+ "GE52": {
+  "lato": "GE",
+  "num": 52,
+  "lettera": "U",
+  "ruolo": "Staff Car and Driver",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 2 Grenades",
+  "note": "On first turn, conduct 814. Ignore Self Preservation while in active vehicle.",
+  "pv_inattivo": true,
+  "IN": 3,
+  "PC": 7,
+  "WS": 1,
+  "MPA": 4,
+  "DS": 8,
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    872,
+    872,
+    876,
+    876
+   ],
+   "4": [
+    881,
+    881,
+    886,
+    886
+   ],
+   "S": [
+    833,
+    971,
+    839,
+    859
+   ],
+   "L": [
+    889,
+    893,
+    898,
+    889
+   ]
+  }
+ },
+ "GE53": {
+  "lato": "GE",
+  "num": 53,
+  "lettera": "N",
+  "ruolo": "SS Courier",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Pistol; Sealed Pouch",
+  "note": "Ignore Self Preservation while in active vehicle. If an active US soldier opens pouch, see 652 immediately.",
+  "pv_inattivo": true,
+  "IN": 4,
+  "PC": 8,
+  "WS": 2,
+  "MPA": 4,
+  "DS": 6,
+  "armi": [
+   "pistol"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    919,
+    341,
+    343,
+    343
+   ],
+   "4": [
+    350,
+    358,
+    363,
+    350
+   ],
+   "S": [
+    813,
+    971,
+    839,
+    800
+   ],
+   "L": [
+    809,
+    834,
+    867,
+    864
+   ],
+   "D": [
+    916,
+    916,
+    918,
+    918
+   ]
+  }
+ },
+ "GE55": {
+  "lato": "GE",
+  "num": 55,
+  "lettera": "X",
+  "ruolo": "Major",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Heavy Machinegun; Pistol; 2 Grenades",
+  "note": "Fires Heavy MG until inactive.",
+  "pv_inattivo": true,
+  "IN": 4,
+  "PC": 7,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "pistol",
+   "hmg"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    959,
+    815,
+    848,
+    815
+   ],
+   "3": [
+    771,
+    769,
+    761,
+    848
+   ],
+   "4": [
+    804,
+    785,
+    783,
+    780
+   ],
+   "S": [
+    833,
+    971,
+    859,
+    839
+   ]
+  }
+ },
+ "GE56": {
+  "lato": "GE",
+  "num": 56,
+  "lettera": "P",
+  "ruolo": "Machinegunner",
+  "pv": 1,
+  "pv_testo": "+ 1 VP when inactive",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "Assists firing Heavy MG until GE 55 becomes wounded, inactive, or moves away, at which time GE 56 fires Heavy MG.",
+  "pv_inattivo": true,
+  "IN": 1,
+  "PC": 2,
+  "WS": 1,
+  "MPA": 3,
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    815,
+    815,
+    801,
+    818
+   ],
+   "3": [
+    800,
+    761,
+    829,
+    771
+   ],
+   "4": [
+    785,
+    804,
+    780,
+    783
+   ],
+   "S": [
+    859,
+    839,
+    971,
+    833
+   ]
+  }
+ },
+ "GE57": {
+  "lato": "GE",
+  "num": 57,
+  "lettera": "LL",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if knocked out)",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 923.",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "2": {
+    "IN": 3,
+    "PC": 4,
+    "WS": -1,
+    "DS": 4,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "1": {
+    "IN": 2,
+    "PC": 3,
+    "WS": -2,
+    "DS": 2,
+    "valori": [
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937
+    ]
+   },
+   "5": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     914
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 6,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     914,
+     914,
+     914,
+     914,
+     914,
+     914,
+     909,
+     909,
+     909,
+     909
+    ]
+   },
+   "3": {
+    "IN": 4,
+    "PC": 5,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   }
+  },
+  "primo_turno": 923
+ },
+ "GE58": {
+  "lato": "GE",
+  "num": 58,
+  "lettera": "MM",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if knocked out)",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 923.",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     914,
+     914
+    ]
+   },
+   "4": {
+    "IN": 3,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     909,
+     914,
+     914
+    ]
+   },
+   "3": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "2": {
+    "IN": 2,
+    "PC": 3,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 1,
+    "WS": -1,
+    "DS": 2,
+    "valori": [
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937
+    ]
+   }
+  },
+  "primo_turno": 923
+ },
+ "GE59": {
+  "lato": "GE",
+  "num": 59,
+  "lettera": "NN",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if knocked out)",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 923.",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "3": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "2": {
+    "IN": 2,
+    "PC": 5,
+    "WS": -1,
+    "DS": 4,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 4,
+    "WS": -2,
+    "DS": 2,
+    "valori": [
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937
+    ]
+   },
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 2,
+    "DS": 8,
+    "valori": [
+     914,
+     914,
+     914,
+     914,
+     914,
+     909,
+     909,
+     909,
+     909,
+     909
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     914,
+     914,
+     914,
+     914,
+     914,
+     909,
+     909,
+     909,
+     909,
+     909
+    ]
+   }
+  },
+  "primo_turno": 923
+ },
+ "GE60": {
+  "lato": "GE",
+  "num": 60,
+  "lettera": "PP",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if knocked out)",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 923.",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 4,
+    "PC": 9,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     914,
+     909,
+     909,
+     909,
+     914,
+     914,
+     914,
+     909,
+     909,
+     909
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 8,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     914,
+     909,
+     909,
+     909,
+     914,
+     914,
+     914,
+     909,
+     909,
+     909
+    ]
+   },
+   "3": {
+    "IN": 2,
+    "PC": 6,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "2": {
+    "IN": 2,
+    "PC": 4,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932,
+     932
+    ]
+   },
+   "1": {
+    "IN": 2,
+    "PC": 3,
+    "WS": -1,
+    "DS": 2,
+    "valori": [
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937,
+     937
+    ]
+   }
+  },
+  "primo_turno": 923
+ },
+ "GE61": {
+  "lato": "GE",
+  "num": 61,
+  "lettera": "R",
+  "ruolo": "Sentry",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle (Scope); 2 Grenades",
+  "note": "",
+  "IN": 2,
+  "PC": 5,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "scoped"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    3
+   ],
+   [
+    4,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    403,
+    403,
+    411,
+    428
+   ],
+   "2-4": [
+    825,
+    800,
+    573,
+    858
+   ],
+   "S": [
+    839,
+    800,
+    971,
+    971
+   ],
+   "A": [
+    825,
+    800,
+    808,
+    829
+   ]
+  }
+ },
+ "GE62": {
+  "lato": "GE",
+  "num": 62,
+  "lettera": "N",
+  "ruolo": "Naval Officer",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 3 VP if captured)",
+  "armi_testo": "Pistol (Luger); 2 Grenades",
+  "note": "",
+  "pv_cattura": 3,
+  "IN": 5,
+  "PC": 8,
+  "WS": 2,
+  "MPA": 5,
+  "armi": [
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    832,
+    801,
+    825,
+    824
+   ],
+   "3-4": [
+    573,
+    801,
+    869,
+    832
+   ],
+   "S": [
+    971,
+    971,
+    971,
+    971
+   ]
+  }
+ },
+ "GE63": {
+  "lato": "GE",
+  "num": 63,
+  "lettera": "L",
+  "ruolo": "Naval Garrison Machinegunner",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Light Machinegun; Pistol (Luger); 2 Grenades",
+  "note": "Fires Light MG until wounded, at which time GE 63 assists GE 64 firing Light MG.",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "pistol",
+   "lmg"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    815,
+    815,
+    877,
+    883
+   ],
+   "3": [
+    883,
+    877,
+    884,
+    895
+   ],
+   "4": [
+    895,
+    884,
+    883,
+    877
+   ],
+   "S": [
+    833,
+    971,
+    839,
+    971
+   ]
+  }
+ },
+ "GE64": {
+  "lato": "GE",
+  "num": 64,
+  "lettera": "P",
+  "ruolo": "Naval Garrison",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "note": "Assists GE 63 firing Light MG until GE 63 becomes wounded or inactive, at which time GE 64 fires Light MG.",
+  "IN": 1,
+  "PC": 3,
+  "WS": 0,
+  "MPA": 4,
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    815,
+    815,
+    877,
+    877
+   ],
+   "3": [
+    883,
+    877,
+    884,
+    895
+   ],
+   "4": [
+    895,
+    884,
+    883,
+    877
+   ],
+   "S": [
+    971,
+    800,
+    840,
+    833
+   ]
+  }
+ },
+ "GE65": {
+  "lato": "GE",
+  "num": 65,
+  "lettera": "M",
+  "ruolo": "Naval Garrison",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Machine Pistol; Pistol (Luger); 2 Grenades",
+  "note": "",
+  "IN": 4,
+  "PC": 7,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    573,
+    802,
+    800,
+    869
+   ],
+   "3-4": [
+    825,
+    824,
+    800,
+    808
+   ],
+   "S": [
+    971,
+    971,
+    833,
+    833
+   ]
+  }
+ },
+ "GE66": {
+  "lato": "GE",
+  "num": 66,
+  "lettera": "T",
+  "ruolo": "Naval Garrison",
+  "pv": 1,
+  "pv_testo": "+ 1 VP",
+  "armi_testo": "Bolt Rifle; Pistol (Luger); 2 Grenades",
+  "note": "",
+  "IN": 2,
+  "PC": 4,
+  "WS": 1,
+  "MPA": 4,
+  "armi": [
+   "pistol",
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    801,
+    825,
+    800,
+    842
+   ],
+   "3-4": [
+    802,
+    825,
+    711,
+    801
+   ],
+   "S": [
+    840,
+    800,
+    833,
+    971
+   ]
+  }
+ },
+ "GE67": {
+  "lato": "GE",
+  "num": 67,
+  "lettera": "LL",
+  "ruolo": "E Boat",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 10 VP if sunk)",
+  "armi_testo": "",
+  "note": "",
+  "pv_distrutto": 10,
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     733,
+     733,
+     736,
+     736,
+     736,
+     747,
+     747,
+     758,
+     758,
+     758
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     758,
+     758,
+     747,
+     747,
+     747,
+     736,
+     736,
+     733,
+     733,
+     733
+    ]
+   },
+   "3": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 1,
+    "DS": 6,
+    "valori": [
+     763,
+     763,
+     763,
+     763,
+     763,
+     776,
+     776,
+     776,
+     776,
+     776
+    ]
+   },
+   "2": {
+    "IN": 3,
+    "PC": 4,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     847,
+     847,
+     847,
+     847,
+     847,
+     849,
+     849,
+     849,
+     849,
+     849
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 3,
+    "WS": -2,
+    "DS": 2,
+    "valori": [
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873
+    ]
+   }
+  },
+  "primo_turno": 0
+ },
+ "GE68": {
+  "lato": "GE",
+  "num": 68,
+  "lettera": "MM",
+  "ruolo": "E Boat",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 10 VP if sunk)",
+  "armi_testo": "",
+  "note": "",
+  "pv_distrutto": 10,
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 2,
+    "DS": 8,
+    "valori": [
+     758,
+     758,
+     758,
+     747,
+     747,
+     747,
+     736,
+     736,
+     733,
+     733
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     733,
+     733,
+     733,
+     736,
+     736,
+     736,
+     747,
+     747,
+     758,
+     758
+    ]
+   },
+   "3": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     776,
+     776,
+     776,
+     776,
+     776,
+     776,
+     763,
+     763,
+     763,
+     763
+    ]
+   },
+   "2": {
+    "IN": 3,
+    "PC": 4,
+    "WS": -2,
+    "DS": 4,
+    "valori": [
+     849,
+     849,
+     849,
+     849,
+     849,
+     849,
+     847,
+     847,
+     847,
+     847
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 2,
+    "WS": -2,
+    "DS": 2,
+    "valori": [
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873,
+     873
+    ]
+   }
+  },
+  "primo_turno": 0
+ },
+ "GE69": {
+  "lato": "GE",
+  "num": 69,
+  "lettera": "NN",
+  "ruolo": "Panzer IV",
+  "pv": 2,
+  "pv_testo": "+ 2 VP (+ 5 VP if  knocked out)",
+  "armi_testo": "",
+  "note": "Enters open; cannon not prepared. When open, 3 crew exposed. On first turn, conduct 826",
+  "pv_distrutto": 5,
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     907,
+     907,
+     907,
+     907,
+     814,
+     905,
+     905,
+     902,
+     902,
+     902
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     906,
+     906,
+     906,
+     906,
+     827,
+     902,
+     902,
+     905,
+     905,
+     905
+    ]
+   },
+   "3": {
+    "IN": 3,
+    "PC": 6,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     905,
+     905,
+     905,
+     905,
+     826,
+     907,
+     907,
+     906,
+     906,
+     906
+    ]
+   },
+   "2": {
+    "IN": 1,
+    "PC": 4,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     908,
+     908,
+     908,
+     908,
+     814,
+     910,
+     910,
+     910,
+     910,
+     910
+    ]
+   },
+   "1": {
+    "IN": 0,
+    "PC": 1,
+    "WS": -1,
+    "DS": 2,
+    "valori": [
+     874,
+     874,
+     874,
+     874,
+     874,
+     874,
+     874,
+     874,
+     874,
+     874
+    ]
+   }
+  },
+  "primo_turno": 826
+ },
+ "US1": {
+  "lato": "US",
+  "num": 1,
+  "lettera": "AA",
+  "ruolo": "Sherman Tank",
+  "pv": 0,
+  "pv_testo": "",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 944",
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 4,
+    "PC": 8,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     939,
+     939,
+     939,
+     939,
+     946,
+     946,
+     946,
+     946,
+     946,
+     946
+    ]
+   },
+   "4": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     946,
+     946,
+     946,
+     946,
+     939,
+     939,
+     939,
+     939,
+     939,
+     939
+    ]
+   },
+   "3": {
+    "IN": 4,
+    "PC": 6,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "2": {
+    "IN": 3,
+    "PC": 5,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "1": {
+    "IN": 2,
+    "PC": 4,
+    "WS": -1,
+    "DS": 4,
+    "valori": [
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969
+    ]
+   }
+  },
+  "primo_turno": 944
+ },
+ "US2": {
+  "lato": "US",
+  "num": 2,
+  "lettera": "BB",
+  "ruolo": "Sherman Tank",
+  "pv": 0,
+  "pv_testo": "",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 944",
+  "veicolo": true,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 9,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     946,
+     939,
+     939,
+     939,
+     946,
+     946,
+     946,
+     939,
+     939,
+     939
+    ]
+   },
+   "4": {
+    "IN": 5,
+    "PC": 8,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     946,
+     946,
+     946,
+     946,
+     939,
+     939,
+     939,
+     939,
+     939,
+     939
+    ]
+   },
+   "3": {
+    "IN": 4,
+    "PC": 7,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "2": {
+    "IN": 3,
+    "PC": 4,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "1": {
+    "IN": 0,
+    "PC": 0,
+    "WS": 0,
+    "DS": 4,
+    "valori": [
+     969,
+     969,
+     969,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   }
+  },
+  "primo_turno": 944
+ },
+ "US4": {
+  "lato": "US",
+  "num": 4,
+  "lettera": "J",
+  "ruolo": "Depot Guard",
+  "pv": 0,
+  "pv_testo": "",
+  "armi_testo": "Semi Automatic Rifle M-1 with 4 ammo clips",
+  "note": "This soldier is a member of your squad for the remainder of the Mission. He is automatically aware and In Command on Round 1.",
+  "IN": 1,
+  "PC": 3,
+  "WS": -2,
+  "MPA": 3,
+  "armi": [
+   "sar"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    9
+   ]
+  ],
+  "colonne": {
+   "?": [
+    null
+   ]
+  }
+ },
+ "US5": {
+  "lato": "US",
+  "num": 5,
+  "lettera": "AA",
+  "ruolo": "Driver and Truck",
+  "pv": 0,
+  "pv_testo": "",
+  "armi_testo": "Pistol with 2 ammo clips",
+  "note": "This truck is a valid target for German fire combat. The driver cannot leave the truck.",
+  "IN": 1,
+  "PC": 0,
+  "WS": -2,
+  "MPA": 3,
+  "DS": 6,
+  "armi": [
+   "pistol"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    9
+   ]
+  ],
+  "colonne": {
+   "?": [
+    null
+   ]
+  }
+ },
+ "US3": {
+  "lato": "US",
+  "num": 3,
+  "lettera": "CC",
+  "ruolo": "Sherman Tank",
+  "pv": 0,
+  "pv_testo": "",
+  "armi_testo": "",
+  "note": "Enters open; cannon prepared. When open, 3 crew exposed. On first turn, conduct 944.",
+  "veicolo": true,
+  "primo_turno": 944,
+  "equipaggio": {
+   "5": {
+    "IN": 5,
+    "PC": 6,
+    "WS": 1,
+    "DS": 8,
+    "valori": [
+     946,
+     946,
+     946,
+     946,
+     939,
+     939,
+     939,
+     939,
+     939,
+     946
+    ]
+   },
+   "4": {
+    "IN": 3,
+    "PC": 3,
+    "WS": 0,
+    "DS": 8,
+    "valori": [
+     939,
+     939,
+     939,
+     939,
+     946,
+     946,
+     946,
+     946,
+     946,
+     939
+    ]
+   },
+   "3": {
+    "IN": 2,
+    "PC": 2,
+    "WS": 0,
+    "DS": 8,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "2": {
+    "IN": 1,
+    "PC": 1,
+    "WS": 0,
+    "DS": 8,
+    "valori": [
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956,
+     956
+    ]
+   },
+   "1": {
+    "IN": 1,
+    "PC": 0,
+    "WS": 0,
+    "DS": 6,
+    "valori": [
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969,
+     969
+    ]
+   }
+  }
  }
 }

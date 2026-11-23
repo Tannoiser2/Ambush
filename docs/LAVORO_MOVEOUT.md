@@ -81,8 +81,12 @@ Ordine scelto: M11, M10, M12, M9.
   (`/home/claude/strumenti/rossi2.py`) e controllati a vista; la carta 6 della missione 18 è trascritta a mano
   (correzioni in `tools/correzioni_carte.json`). Uscita: `data/carte/missione13..18.json`.
 - Paragrafi inglesi: `tools/paragrafi_ph_en.json` (OCR del libretto; mancano per scelta del libretto 636, 637, 647…).
-- Carte tedesche: `tools/carte_ph.json` (GE04–GE40 dal foglio del mod). **Mancano i tedeschi 41–69 e le carte dei mezzi**:
-  il mod TTS non li contiene (servono alle missioni 13, 14, 17, 18).
+- Carte tedesche e dei mezzi: `tools/carte_ph.json` (tutte le 60: GE04–GE69 e US01–US05), costruito da
+  `tools/carte_ph_da_programma.py` unendo il database del programma d’aiuto «ePurpleHeart» (Purple_Heart.zip, FileMaker 5,
+  letto con `tools/fm5.py`), il foglio del mod TTS (`tools/carte_ph_foglio.json`, OCR verificato) e le correzioni a vista
+  dal foglio stampato bgg9583.pdf (PM, guida dei mezzi, carte con dati incompleti nel database).
+- Le carte Condizione sono anche allineate ai dati del programma (`tools/carte_ph_programma.json`,
+  `tools/allinea_carte_ph.py`, 77 correzioni). Testo dei paragrafi del programma: `tools/paragrafi_ph_programma.json`.
 - Mappe: `tools/prepara_mappe_ph.py` (immagini nel reticolo del gioco, anche realistiche) e `tools/costruisci_mappe_ph.py`
   (terreno: `tools/terreno_c.json`, `terreno_d.json`, `terreno_e.json`, colore + correzioni a vista).
   Mappe del gioco: `C`, `AD` (A + mezza D, base navale), `BE` (B + mezza E, città). Muretti di pietra, scarpate e creste

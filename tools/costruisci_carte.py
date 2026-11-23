@@ -86,3 +86,6 @@ for mis, nomi in CARTE.items():
 print("dubbi:", len(dubbi))
 for d in dubbi:
     print(d)
+
+from allinea_carte_ph import allinea
+allinea()
