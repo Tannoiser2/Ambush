@@ -8,6 +8,7 @@ const T = preload("res://scripts/motore/tabelle.gd")
 const TerrenoScript = preload("res://scripts/motore/terreno.gd")
 const TedeschiScript = preload("res://scripts/motore/tedeschi.gd")
 const VeicoliScript = preload("res://scripts/motore/veicoli.gd")
+const MissioniMOScript = preload("res://scripts/motore/missioni_mo.gd")
 
 signal aggiornata
 
@@ -17,6 +18,9 @@ var paragrafi: Dictionary
 var terreno: Terreno
 var ia: RefCounted
 var veicoli: RefCounted
+## Regole delle missioni di Move Out! (9–12).
+var mo: RefCounted
+var _paragrafi_base: Dictionary
 var rng := RandomNumberGenerator.new()
 ## Voci di cronaca prodotte dall’ultimo comando (per la scheda dei paragrafi).
 var recenti: Array = []
@@ -32,7 +36,9 @@ var _stampa := OS.get_environment("AMBUSH_CRONACA") == "1"
 var numero := 1
 
 func _init(n := 1) -> void:
-	paragrafi = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi.json"))
+	_paragrafi_base = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi.json"))
+	paragrafi = _paragrafi_base
+	mo = MissioniMOScript.new(self)
 	ia = TedeschiScript.new(self)
 	veicoli = VeicoliScript.new(self)
 	imposta_missione(n)
@@ -40,7 +46,7 @@ func _init(n := 1) -> void:
 ## Missioni con i dati pronti (le altre compaiono nel menu come «in preparazione»).
 static func disponibili() -> Array:
 	var out: Array = []
-	for n in range(1, 9):
+	for n in range(1, 13):
 		if FileAccess.file_exists("res://data/missione%d.json" % n):
 			out.append(n)
 	return out
@@ -51,6 +57,12 @@ func imposta_missione(n: int) -> void:
 		return
 	numero = n
 	missione = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
+	if str(missione.get("libro", "")) == "mo":
+		# Move Out! ha un libretto suo (400–1000): i suoi paragrafi prendono il posto di quelli base con lo stesso numero.
+		paragrafi = _paragrafi_base.duplicate()
+		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_mo.json")), true)
+	else:
+		paragrafi = _paragrafi_base
 	terreno = TerrenoScript.new("res://data/mappa_%s.json" % str(missione.get("mappa", "A")).to_lower())
 	_alture_cache = []
 	_applica_regole_terreno()
@@ -149,6 +161,12 @@ func schiera(ids: Array, h: String) -> Dictionary:
 		return {"ok": false, "errore": "Lo schieramento è già concluso."}
 	if h != "" and not (h in esagoni_ingresso()):
 		return {"ok": false, "errore": "Si entra solo %s." % testo_ingresso()}
+	if h != "" and bool(regola("sentinella", false)):
+		for x in americani():
+			if x.hex != "" and not (x.id in ids.map(func(y): return str(y))):
+				return {"ok": false, "errore": "Solo la sentinella è sveglia: %s è già in %s." % [nome(x), x.hex]}
+		if ids.size() > 1:
+			return {"ok": false, "errore": "Solo la sentinella è sveglia: schiera un soldato solo."}
 	if h != "" and bool(regola("uno_per_esagono", false)):
 		if ids.size() > 1:
 			return {"ok": false, "errore": "Nel lancio si mette un solo soldato per esagono."}
@@ -188,6 +206,10 @@ func inizia_missione() -> Dictionary:
 		return {"ok": false, "errore": "Schiera almeno un soldato %s." % testo_ingresso()}
 	_inizio_comando()
 	s.fase = "operazioni"
+	if bool(regola("sentinella", false)):
+		for a in americani():
+			if a.stato == "fuori":
+				a.stato = "dorme"
 	var esagoni: Array = gruppi.keys()
 	esagoni.sort()
 	var parti: Array = []
@@ -899,7 +921,8 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			if not gn.is_empty():
 				gn.no_auto = true
 		_:
-			_log("errore", "Istruzione sconosciuta: %s" % o.op)
+			if not mo.op(o, ctx):
+				_log("errore", "Istruzione sconosciuta: %s" % o.op)
 
 func _test(t: Dictionary, ctx: Dictionary) -> bool:
 	if t.has("s"):
@@ -2490,6 +2513,8 @@ func prosegui() -> void:
 func _avvia_round() -> void:
 	var r: Dictionary = s.round
 	r.n = int(r.n) + 1
+	s.round_tot = int(s.get("round_tot", 0)) + 1
+	mo.inizio_round()
 	r.sparato_prec = r.get("sparato", [])
 	r.sparato = []
 	r.slot_azione = ""
@@ -2506,6 +2531,7 @@ func _avvia_round() -> void:
 			if attivo(a) or a.stato == "fuori":
 				a.consapevole = true
 		_log("info", "Dal Round 3 tutti i soldati sono consapevoli.")
+	s.erase("mo_consapevoli")
 	# 2. Evento (non nel Round 1).
 	if r.n >= 2:
 		var pe := _passo("evento", {"n": r.n})
@@ -2525,7 +2551,11 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 		if a.consapevole:
 			righe.append({"id": a.id, "esito": "gia"})
 			continue
-		if a.stato == "fuori" and r.n == 1:
+		if s.get("mo_consapevoli", false) and (attivo(a) or a.stato == "fuori"):
+			a.consapevole = true
+			righe.append({"id": a.id, "esito": "auto"})
+			continue
+		if a.stato == "fuori" and r.n == 1 and not bool(regola("sveglia", false)):
 			righe.append({"id": a.id, "esito": "fuori"})
 			continue  # 6/10: fuori mappa durante il Round 1
 		if r.n == 1 and (r.get("tutti_consapevoli", false) or (str(r.get("consapevoli_vede", "")) != "" and attivo(a) and terreno.vede(a.hex, str(r.consapevoli_vede), a.postura, "standing"))):
@@ -3025,6 +3055,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		if a.stato == "fuori":
 			a.stato = "attivo"
 		_controlla_tanica(a, da_hex, verso)
+		a.hex_prec = a.hex
 		a.hex = verso
 		a.sul_ponte = sul_ponte
 		nomi.append(a.lettera)
@@ -3130,6 +3161,10 @@ func scegli_azione(id: String, azione: String) -> Dictionary:
 	var t := _turno_di(a)
 	if t.azione != "":
 		return _errore("Azione già scelta.")
+	if azione == "muovi" and (mo.prepara(a) or mo.esci_bloccato(a)):
+		_termina_azione(a)
+		_fine_comando()
+		return OK
 	match azione:
 		"muovi":
 			if veicoli.e_autista(a):
@@ -4719,6 +4754,9 @@ func termina_missione(modo: String) -> Dictionary:
 	return OK
 
 func _controlla_fine_automatica() -> void:
+	if s.fase == "fine":
+		return
+	mo.controlla()
 	if s.fase == "fine":
 		return
 	if bool(regola("fine_ponti", false)) and int(s.condizione) >= 4 and tedeschi_attivi().filter(func(g): return attivo(g)).is_empty() \

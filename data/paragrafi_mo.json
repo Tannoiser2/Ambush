@@ -1,0 +1,478 @@
+{
+ "401": {
+  "id": "401",
+  "it": "Metti un segnalino Evento. Effettua un controllo di percezione: se riesce, vedi 404; se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "404"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "404": {
+  "id": "404",
+  "it": "[s0] La sentinella sente il rumore di motori d’aereo che si avvicinano a bassa quota. Effettua un controllo di percezione: se riesce, vedi 406.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "406"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "406": {
+  "id": "406",
+  "it": "Il soldato capisce che gli aerei arrivano da est (se fossero bombardieri alleati che tornano a casa, perché volerebbero così bassi?).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "409": {
+  "id": "409",
+  "it": "[s1] Paracadutisti tedeschi sbucano dalle nuvole! Devono prendere il ponte sul fiume (appena fuori mappa a ovest) per le colonne corazzate di una grande controffensiva. Se la sentinella riesce a entrare nell’edificio in T8, vedi 411; se viene uccisa o incapacitata prima, vedi 414. Si attivano i tedeschi 29, 39, 42, 43, 45, 47, 48 e 49, uno a caso in ciascuno degli esagoni A16, A17, A18, A19, B19, C19, D19 ed E19. Poi vedi 422.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "lancio_tedeschi",
+    "g": [
+     29,
+     39,
+     42,
+     43,
+     45,
+     47,
+     48,
+     49
+    ],
+    "hex": [
+     "A16",
+     "A17",
+     "A18",
+     "A19",
+     "B19",
+     "C19",
+     "D19",
+     "E19"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "411": {
+  "id": "411",
+  "it": "La sentinella usa il telefono del casello e dà l’allarme al resto della squadra. Guadagni 4 PV. All’inizio del prossimo Round tutti gli americani sono consapevoli. I soldati entrano in Y8 dopo aver speso 2 azioni fuori mappa (al terzo turno). Quando entra l’ultimo soldato attivo si passa alla Condizione 3. Vedi 416 per i PV e la fine della missione.",
+  "ops": [
+   {
+    "op": "vp",
+    "n": 4
+   },
+   {
+    "op": "sveglia",
+    "azioni": 2,
+    "consapevoli": true
+   },
+   {
+    "op": "goto",
+    "p": "416"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "414": {
+  "id": "414",
+  "it": "La sentinella non è riuscita a usare il telefono del casello in T8. All’inizio del prossimo Round tutti gli americani sono inconsapevoli e fanno subito i controlli di consapevolezza; dal terzo Round sono tutti consapevoli. I soldati consapevoli entrano in Y8 dopo aver speso 4 azioni fuori mappa (al quinto turno). Quando entra l’ultimo soldato attivo si passa alla Condizione 3. Vedi 416 per i PV e la fine della missione.",
+  "ops": [
+   {
+    "op": "sveglia",
+    "azioni": 4,
+    "consapevoli": false,
+    "round_consapevoli": 3
+   },
+   {
+    "op": "goto",
+    "p": "416"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "416": {
+  "id": "416",
+  "it": "Oltre ai PV per l’attivazione e la cattura dei tedeschi, ricevi 2 PV per ogni soldato attivo che esce dal bordo ovest tra A1 e A19. Gli incapacitati portati fuori dal bordo ovest non costano PV. La missione finisce appena non ci sono più soldati americani attivi sulla mappa; i tedeschi attivi rimasti non contano.",
+  "ops": [
+   {
+    "op": "nota",
+    "chiave": "mo416"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "422": {
+  "id": "422",
+  "it": "Per ogni paracadutista: deriva un esagono alla volta (423) finché la carta non dice «Atterra», poi si stabilisce l’atterraggio (424). Quando sono tutti a terra si passa alla Condizione 2 e iniziano i Round, che restano finché c’è un tedesco attivo.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "423": {
+  "id": "423",
+  "it": "Deriva: 0–6 un esagono a nord-est, 7–8 a nord, 9 a sud-est (se esce dalla mappa si ritira). Nel nuovo esagono si legge la carta: con «Atterra» il paracadutista tocca terra.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "424": {
+  "id": "424",
+  "it": "All’atterraggio il terreno decide come va (425). Il paracadutista è a terra, prono, col paracadute addosso (2 azioni per toglierlo).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "425": {
+  "id": "425",
+  "it": "Fiume ghiacciato: 0–8 bene; 9 il ghiaccio cede e annega (si mette un guado). Libero o strada: 0–8 bene; 9 ferito. Copertura o cespugli: 0–8 bene; 9 nuovo dado, 0–4 ferito, 5–9 incapacitato. Bosco: 0–4 bene; 5–9 nuovo dado: 0–5 niente, 6–8 ferito, 9 nuovo dado (0–4 ferito, 5–9 incapacitato). Vedi 426 per il paracadute.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "426": {
+  "id": "426",
+  "it": "I paracadutisti sono proni e devono togliersi il paracadute prima di fare altro (si ignora l’autoconservazione): da accovacciati o in piedi, due azioni anche non consecutive.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "428": {
+  "id": "428",
+  "it": "Questo edificio è un casello abbandonato. Dentro ci sono una scrivania e un telefono.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "431": {
+  "id": "431",
+  "it": "Il ghiaccio scricchiola! Tira un dado e togli 1 per ogni soldato nell’esagono: con 0 il ghiaccio cede (si mette un guado). Ogni soldato nell’esagono fa subito un controllo di percezione: se fallisce cade nel fiume (non si muove più in questo turno, perde le armi nelle caselle di porto ed è bagnato fino alla fine); se riesce torna prono nell’esagono da cui era entrato e perde il resto del turno. Uscire dal fiume costa un’azione. Nei guadi si entra normalmente, ma ci si bagna.",
+  "ops": [
+   {
+    "op": "ghiaccio"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "435": {
+  "id": "435",
+  "it": "Tira due dadi: con 0, 9 o 18 un soldato in terreno libero o di copertura cade prono in un cumulo di neve, perde una granata e il resto del turno (nei Round gli serve un’azione per uscirne; nelle Operazioni perde solo la granata). Chi è prono nella neve è −2 da colpire.",
+  "ops": [
+   {
+    "op": "neve"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "439": {
+  "id": "439",
+  "it": "[s3] Il soldato sente in lontananza il rumore di cannoni contraerei.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "441": {
+  "id": "441",
+  "it": "L’arma di un soldato si inceppa per il gran freddo. Dado pari: un tedesco a caso; dispari: un americano a caso. Se è accovacciato o in piedi prova subito a sbloccarla, senza spendere azioni.",
+  "ops": [
+   {
+    "op": "inceppa_freddo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "444": {
+  "id": "444",
+  "it": "Un soldato prono si scalda le mani e riceve un solo turno in questo Round, anche se l’iniziativa gliene darebbe due. Dado pari: un americano; dispari: un tedesco.",
+  "ops": [
+   {
+    "op": "mani_fredde"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "447": {
+  "id": "447",
+  "it": "Una raffica gelida di vento e neve riduce la visibilità a un esagono per tutto questo Round. Non può capitare in due Round di fila.",
+  "ops": [
+   {
+    "op": "bufera"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "449": {
+  "id": "449",
+  "it": "Un americano caduto nel fiume viene incapacitato dal freddo. Capita una volta sola per missione.",
+  "ops": [
+   {
+    "op": "assiderato"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "450": {
+  "id": "450",
+  "it": "1. Se l’avvistamento 4 non è avvenuto, vedi 452. 2. Se non è avvenuto il 5, vedi 454. 3. Se non è avvenuto il 6, vedi 456. 4. Se non è avvenuto il 7, vedi 457. 5. Altrimenti vedi 460.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "452"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 5
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "454"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 6
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "456"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 7
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "457"
+           }
+          ],
+          "else": [
+           {
+            "op": "goto",
+            "p": "460"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "452": {
+  "id": "452",
+  "it": "[s4] Attiva il tedesco 28 in W1, in piedi. Iniziano i Round. Il tedesco 28 riceve 2 turni in questo Round. È atterrato fuori mappa: vedi 463 per la qualità dell’atterraggio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "atterraggio_fuori",
+    "g": 28,
+    "hex": "W1"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "454": {
+  "id": "454",
+  "it": "[s5] Attiva il tedesco 38 in G1, in piedi. Iniziano i Round. Il tedesco 38 riceve 2 turni in questo Round. È atterrato fuori mappa: vedi 463 per la qualità dell’atterraggio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "atterraggio_fuori",
+    "g": 38,
+    "hex": "G1"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "456": {
+  "id": "456",
+  "it": "[s6] Attiva il tedesco 44 in A8, in piedi. Iniziano i Round. Il tedesco 44 riceve 2 turni in questo Round. È atterrato fuori mappa: vedi 463 per la qualità dell’atterraggio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "atterraggio_fuori",
+    "g": 44,
+    "hex": "A8"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "457": {
+  "id": "457",
+  "it": "[s7] Attiva il tedesco 46 in B19, in piedi. Iniziano i Round. Il tedesco 46 riceve 2 turni in questo Round. È atterrato fuori mappa: vedi 463 per la qualità dell’atterraggio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "atterraggio_fuori",
+    "g": 46,
+    "hex": "B19"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "460": {
+  "id": "460",
+  "it": "Se non ci sono americani attivi a sud della riga 10 (compresa), passa alla Condizione 4; se non ce ne sono a nord della riga 10, alla Condizione 5; altrimenti alla Condizione 6. In ogni caso si toglie la reazione speciale Z a tutti i tedeschi.",
+  "ops": [
+   {
+    "op": "condizione_righe",
+    "riga": 10,
+    "sud": 4,
+    "nord": 5,
+    "altrimenti": 6
+   },
+   {
+    "op": "togli_reazioni",
+    "r": [
+     "Z"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "463": {
+  "id": "463",
+  "it": "Tira un dado per il terreno in cui è atterrato: 0–3 libero o strada, 4–6 copertura o cespugli, 7–8 bosco, 9 fiume ghiacciato; poi vedi 425. Se non è ucciso né incapacitato, entra in gioco nell’esagono indicato.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "466": {
+  "id": "466",
+  "it": "Si accovaccia e comincia o continua a togliersi il paracadute. Se l’ha già tolto, vedi 865.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "469": {
+  "id": "469",
+  "it": "Si accovaccia e comincia o continua a togliersi il paracadute. Se l’ha già tolto, vedi 863.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "471": {
+  "id": "471",
+  "it": "Si accovaccia e comincia o continua a togliersi il paracadute. Se l’ha già tolto, vedi 864.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "476": {
+  "id": "476",
+  "it": "Se c’è un tedesco attivo nello stesso esagono o adiacente, si accovaccia e cede un turno a quello che ne ha meno (a parità, a chi ha l’abilità con le armi più alta); se hanno tutti due turni, vedi 466. Altrimenti vedi 466.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "477": {
+  "id": "477",
+  "it": "Metti in vigore la reazione speciale Z per questo tedesco.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "Z"
+   }
+  ],
+  "tipo": "azione"
+ },
+ "485": {
+  "id": "485",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "de",
+    "chiave": "mo485"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "623": {
+  "id": "623",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "us",
+    "chiave": "mo623"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "935": {
+  "id": "935",
+  "it": "Un americano incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "us",
+    "chiave": "mo935"
+   }
+  ],
+  "tipo": "missione"
+ }
+}

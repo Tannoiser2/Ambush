@@ -32,3 +32,14 @@ Ordine scelto: M11, M10, M12, M9.
 2. Azioni tedesche Move Out!: `scripts/motore/tedeschi_mo.gd` (esegui per numero), chiamato da `tedeschi.esegui`.
 3. `tools/costruisci_missioni.py`: MISSIONI[9..12] con `libro: "mo"` e tedeschi da carte_moveout.json.
 4. `tedeschi.colonna`: chiavi con virgole («1,2,4»).
+
+## Stato (23 novembre 2026)
+- Infrastruttura fatta: `libro: "mo"` → `partita.paragrafi` = base + data/paragrafi_mo.json (i numeri MO sostituiscono
+  quelli base). Regole e operazioni MO in `scripts/motore/missioni_mo.gd`, azioni tedesche MO in
+  `scripts/motore/tedeschi_mo.gd`. Builder: `tools/costruisci_moveout.py` (+ `tools/paragrafi_moNN.py`).
+- M11 FATTA: sentinella, 409 paracadutisti con deriva/atterraggio (423/425), 411/414 risveglio con attese fuori
+  mappa, C3 quando entra l’ultimo, 450→452/454/456/457 (463) →460, ghiaccio 431, neve 435, 441, 444, 447, 449,
+  reazione Z (477, anche nei movimenti rossi), uscita ovest +2 PV. Test: tests/missione11.gd, simula 11, fuzzer UI.
+  Limiti: −2 al tiro contro chi è prono nella neve non applicato; 36 movimenti rossi del foglio Excel scartati
+  perché non adiacenti (il tedesco resta fermo).
+- Colonne con virgole: non servono per M11; da fare per M9/M10/M12 se compaiono.

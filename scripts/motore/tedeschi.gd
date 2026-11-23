@@ -11,8 +11,11 @@ var _mp := 0
 var _fermo := false
 var _reazione_cambiata := false
 
+var mo: RefCounted
+
 func _init(partita: Partita) -> void:
 	p = partita
+	mo = preload("res://scripts/motore/tedeschi_mo.gd").new(self)
 
 # ------------------------------------------------------------------ turno
 func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
@@ -66,6 +69,8 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 	var colonne: Dictionary = p.missione.tedeschi[str(int(g.num))].colonne
 	if g.get("solo_S", false):
 		return "S"
+	if int(g.get("paracadute", 0)) > 0:
+		ignora_s = true  # Move Out! 426: col paracadute addosso si ignora l’autoconservazione
 	if not ignora_s and not g.no_auto and _vicino_ad_americani(g) and colonne.has("S"):
 		return "S"
 	var r: String = g.get("reazione", "")
@@ -109,6 +114,8 @@ func esegui(n: int) -> void:
 	var chiave := "%03d" % n
 	if n != 816 and p.paragrafi.has(chiave):
 		p._log("par", p.paragrafi[chiave].it, {"id": chiave, "tedesco": g.id})
+	if p.mo.attiva() and mo.esegui(n):
+		return
 	match n:
 		800:
 			_prono()

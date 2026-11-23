@@ -27,6 +27,8 @@ func _init() -> void:
 		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
 		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
+	elif missione == 11:
+		obiettivi = ["S12", "T8", "M6", "A8", "A12", "K13", "T8"]
 	elif missione == 4:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
 	for i in n:
@@ -40,7 +42,11 @@ func _init() -> void:
 
 func gioca(seme: int) -> void:
 	var p = PartitaScript.new(missione)
-	if bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0 or int(p.regola("schieramento_ruscello", 0)) > 0:
+	if bool(p.regola("sentinella", false)):
+		p.nuova(seme, true)
+		p.schiera([p.americani()[0].id], "Y8")
+		p.inizia_missione()
+	elif bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0 or int(p.regola("schieramento_ruscello", 0)) > 0:
 		p.nuova(seme, true)
 		var ingressi: Array = p.esagoni_ingresso()
 		var i := 0
@@ -87,6 +93,9 @@ func gioca(seme: int) -> void:
 		p.termina_missione("ritirata")
 	if OS.get_environment("AMBUSH_CRONACA") == "1":
 		print(JSON.stringify(p.s.fine))
+	if OS.get_environment("AMBUSH_CODA") != "":
+		for v in p.s.cronaca.slice(-int(OS.get_environment("AMBUSH_CODA"))):
+			print("  [%s] %s" % [v.t, str(v.x).left(160)])
 	for v in p.s.cronaca:
 		if v.t == "par" and OS.get_environment("AMBUSH_PAR") == "1":
 			var k := str(v.get("id", ""))
@@ -205,7 +214,10 @@ func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Di
 				return
 	if a.stato == "fuori":
 		p.scegli_azione(a.id, "muovi")
-		var r: Dictionary = p.muovi([a.id], "%s1" % char(65 + rng.randi_range(0, 9)))
+		if p.s.turno.is_empty() or p.s.turno.get("id", "") != a.id:
+			return
+		var ingr: Array = p.esagoni_ingresso()
+		var r: Dictionary = p.muovi([a.id], ingr[rng.randi_range(0, ingr.size() - 1)])
 		if not r.ok:
 			p.passa(a.id)
 		elif not p.s.turno.is_empty():

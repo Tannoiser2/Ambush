@@ -299,6 +299,7 @@ func _costruisci_rilievo() -> void:
 		acqua_mi.material_override = ma
 	var mat_a: ShaderMaterial = acqua_mi.material_override
 	mat_a.set_shader_parameter("velo", velo_vp.get_texture())
+	mat_a.set_shader_parameter("ghiaccio", 1.0 if mappa2d.partita != null and bool(mappa2d.partita.regola("ghiaccio", false)) else 0.0)
 	if ResourceLoader.exists(percorso_m):
 		mat_a.set_shader_parameter("maschere", load(percorso_m))
 	if idx_a.is_empty():

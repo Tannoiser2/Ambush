@@ -550,11 +550,11 @@ func _aggiorna_mappa() -> void:
 						ev[g.hex] = Color("e0503c")
 						var testo := "%s %d%%" % [g.lettera, (int(pr.prob) + 1) * 10]
 						etichette[g.hex] = (str(etichette[g.hex]) + "  " + testo) if etichette.has(g.hex) else testo
-		elif modo in ["granata", "satchel"]:
+		elif modo in ["granata", "satchel"] and a.hex != "":
 			for h in E.tutti():
 				if E.distanza(a.hex, h) <= 6 and p.probabilita_lancio(a, modo, h).ok:
 					ev[h] = Color("e08a3c") if not p.unita_in(h, "de").is_empty() else Color(0.9, 0.55, 0.25, 0.5)
-		elif modo == "trascina":
+		elif modo == "trascina" and a.hex != "":
 			for v in E.vicini(a.hex):
 				if p.terreno.costo_movimento(a.hex, v) >= 0:
 					ev[v] = Color("8fd16a")
@@ -628,7 +628,7 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nome.clip_text = true
 	r1.add_child(nome)
-	var dove := ("da schierare" if _S().get("fase", "") == "schieramento" else "fuori mappa") if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else str(a.hex))
+	var dove := ("da schierare" if _S().get("fase", "") == "schieramento" else "fuori mappa") if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else ("dorme" if a.stato == "dorme" else str(a.hex)))
 	r1.add_child(Tema.etichetta(dove, Tema.stencil, 14, Tema.INCHIOSTRO_TENUE))
 	vb.add_child(r1)
 	var righe: Array = []
@@ -963,7 +963,7 @@ func _azioni_equipaggiamento(a: Dictionary) -> void:
 	for arma in a.armi:
 		if arma.inceppata:
 			_b("Disinceppa: " + T.ARMI[arma.tipo].breve, func(): _esito(p.disinceppa(a.id, arma.tipo)))
-	var inattivi: Array = p.unita_in(a.hex, "us", false).filter(func(x): return x.stato in ["incapacitato", "morto"])
+	var inattivi: Array = [] if a.hex == "" else p.unita_in(a.hex, "us", false).filter(func(x): return x.stato in ["incapacitato", "morto"])
 	if not inattivi.is_empty():
 		_b("Trascina " + inattivi[0].lettera, func(): modo = "trascina"; _aggiorna_tutto(), "Poi tocca l’esagono adiacente. Il soldato deve essere in piedi.")
 		if p.e_uscita(a.hex):
@@ -1029,6 +1029,18 @@ func _azioni_round(a: Dictionary) -> void:
 	var turni := int(a.turni)
 	aiuto_azioni.text = "%s ha %d turn%s: in ogni turno un cambio di postura%s e una sola azione.%s" % [a.nome, turni, "o" if turni == 1 else "i",
 		" gratuito" if cambio else " (1 PM, è ferito)", (" Nella stessa casella possono agire anche " + ", ".join(altri) + ": scegli tu l’ordine.") if not altri.is_empty() else ""]
+	if a.stato == "fuori" and int(a.get("attesa", 0)) > 0:
+		_gruppo("FUORI MAPPA")
+		_b("Si prepara (ancora %d azion%s)" % [int(a.attesa), "e" if int(a.attesa) == 1 else "i"], func(): _esito(p.scegli_azione(a.id, "muovi")), "Si sta svegliando e vestendo: ogni azione spesa fuori mappa lo avvicina all’ingresso in Y8.")
+		_gruppo("FINE")
+		_b("Passa", func(): _esito(p.passa(a.id)))
+		return
+	if str(a.get("bloccato", "")) != "":
+		_gruppo("MOVIMENTO")
+		_b("Esci %s" % ("dall’acqua" if a.bloccato == "acqua" else "dalla neve"), func(): _esito(p.scegli_azione(a.id, "muovi")), "Serve un’azione intera; poi il soldato agisce normalmente.")
+		_gruppo("FINE")
+		_b("Passa", func(): _esito(p.passa(a.id)))
+		return
 	if a.stato == "fuori":
 		_gruppo("MOVIMENTO")
 		_b("Entra sulla mappa", func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento per il primo esagono d’ingresso (%s)." % p.testo_ingresso())
@@ -2145,9 +2157,11 @@ func _chiedi_nuova() -> void:
 
 ## Elenco delle missioni: quelle pronte si giocano, le altre sono «in preparazione».
 const NOMI_MISSIONI := ["Sangue a Saint-Michaux", "Avanzata su Chasoul", "Un freddo mattino in Belgio", "Lancio notturno nel D-Day",
-	"Operazione Borseggio", "Gita in canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre"]
+	"Operazione Borseggio", "Gita in canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre",
+	"Le prime luci dell’alba", "Assalto per uccidere", "La nebbia della guerra", "Per la cruna dell’ago"]
 const DATE_MISSIONI := ["Normandia, giugno 1944", "Francia, agosto 1944", "Belgio, inverno 1944", "Normandia, 6 giugno 1944",
-	"Olanda, 4 luglio 1944", "Germania, gennaio 1945", "Mortain, 8 agosto 1944", "Belgio, settembre 1944"]
+	"Olanda, 4 luglio 1944", "Germania, gennaio 1945", "Mortain, 8 agosto 1944", "Belgio, settembre 1944",
+	"Aquisgrana, 11 settembre 1944", "Saint-Lô, giugno 1944", "Ardenne, dicembre 1944", "Parigi, 16 agosto 1944"]
 var pagina_missioni: Control
 
 ## Pagina delle missioni: a tutto schermo, una scheda illustrata per ciascuna delle 8 missioni.
@@ -2229,7 +2243,12 @@ func _mostra_missione_scelta(n: int) -> void:
 	var pronte := Partita.disponibili()
 	for c in _elenco_missioni.get_children():
 		c.queue_free()
-	for i in 8:
+	for i in NOMI_MISSIONI.size():
+		if i == 8:
+			var esp := Tema.etichetta("ESPANSIONE MOVE OUT!", Tema.testo_bold, 12, Tema.ROSSO)
+			esp.custom_minimum_size = Vector2(160, 0)
+			esp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			_elenco_missioni.add_child(esp)
 		_elenco_missioni.add_child(_voce_missione(i + 1, i + 1 in pronte, i + 1 == n))
 	for c in _pannello_ordine.get_children():
 		c.queue_free()
