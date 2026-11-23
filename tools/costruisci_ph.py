@@ -61,7 +61,7 @@ CANE = {"lettera": "", "ruolo": "Cane da guardia", "pv": 0, "armi": [], "granate
 
 
 # Primo turno dalle note (la colonna della Missione 15; le note OCR sono troncate: valori dal database del programma).
-PRIMO_TURNO_DA_NOTE = {4, 6, 8, 9, 10, 11, 12, 14, 15, 16}
+PRIMO_TURNO_DA_NOTE = {4, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 35, 40, 41, 42, 44, 45}
 PRIMO_FISSO = {4: 814, 6: 814, 8: 814, 16: 814, 9: 840, 10: 840, 11: 840, 12: 840, 14: 840, 15: 840}
 
 
@@ -131,6 +131,25 @@ MISSIONI = {
         "testo_fine": "",
         "germani": [61, 62, 63, 64, 65, 66, 67, 68, 69, 91, 92],
     },
+    14: {
+        "titolo": "Ricognizione in forze", "titolo_originale": "Reconnaissance in Force",
+        "data": "A sud di Caen, 22 luglio 1944", "mappa": "C", "nord": "a destra (in alto è ovest)", "libro": "ph",
+        "briefing": "22 luglio 1944, a sud di Caen. In vista di una grande offensiva alleata la squadra parte per una ricognizione in "
+                    "forze lungo il perimetro, per scoprire le posizioni tedesche. L’appuntamento è con la squadra 2 della compagnia "
+                    "Baker all’incrocio J8, un nodo stradale importante: bisogna arrivarci il prima possibile e ricongiungersi.",
+        "ingresso": "Mappa C, in alto è ovest. La squadra, caricata sulle due jeep (quattro uomini per jeep), entra dal bordo nord in Y7. "
+                    "Ricevi una radio, portata dal sergente.",
+        "regole_testo": "[b]Fiume.[/b] Il corso d’acqua dal lago a Y15 è un fiume: si attraversa solo sui ponti intatti. [b]Jeep.[/b] Due "
+                        "jeep sotto il tuo controllo, quattro uomini ciascuna. [b]Radio.[/b] La porta il sergente A: è presidiata "
+                        "finché lui è attivo in mappa.",
+        "ingresso_breve": "bordo nord, Y7 (sulle jeep)", "uscita_breve": "bordo nord, Y1–Y19",
+        "ingresso_esagoni": ["Y7"], "uscita_esagoni": ["Y%d" % r for r in range(1, 20)],
+        "vittoria_pv": 20, "attivazione": {"1": 1, "2": 6, "3": 8}, "obiettivi": [],
+        "regole": {"fiume": True, "jeep_caricate": 2, "radio_portata_ph": True},
+        "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b]",
+        "testo_fine": "",
+        "germani": [17, 35, 40, 41, 42, 43, 44, 45],
+    },
     15: {
         "titolo": "Ritorno a casa", "titolo_originale": "Homecoming",
         "data": "Valle del Rodano, 25 agosto 1944", "mappa": "C", "nord": "a destra (in alto è ovest)", "libro": "ph",
@@ -195,6 +214,9 @@ def main():
         if n == 13:
             for g in d["tedeschi"].values():
                 g.pop("pv_cattura", None) if g.get("ruolo") == "Cane da guardia" else None
+        if n == 14:
+            # lettura della carta: W18 rimanda a 449 (paragrafo d’altra missione); come X15 è la reazione speciale L (499)
+            d["condizioni"]["3"]["movimenti"]["W18"] = "499"
         if n == 16:
             vic = [f"{c}{r}" for c in COL for r in range(1, 20) if any(distanza(f"{c}{r}", a) <= 10 for a in ANGOLI)]
             d["ingresso_esagoni"] = [h for h in vic if h not in DEPOSITO_16]

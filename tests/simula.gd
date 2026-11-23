@@ -144,6 +144,8 @@ func gioca(seme: int) -> void:
 			letti[k] = int(letti.get(k, 0)) + 1
 		if v.t == "errore":
 			statistiche.errori += 1
+			if OS.get_environment("AMBUSH_ERRORI") == "1":
+				print("ERRORE CRONACA: ", str(v.x).left(200))
 			print("ERRORE [seme %d]: %s" % [seme, v.x])
 	statistiche.attivazioni += p.s.attivati.size()
 	statistiche.passi += passi

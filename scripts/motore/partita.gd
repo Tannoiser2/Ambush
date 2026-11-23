@@ -254,6 +254,7 @@ func inizia_missione() -> Dictionary:
 	_log("azione", "La squadra entra in mappa: %s." % "; ".join(parti))
 	if bool(regola("jeep", false)) and not s.get("veicoli", {}).has("vjeep"):
 		_jeep_di_squadra(esagoni)
+	ph.dopo_ingresso(esagoni)
 	if int(regola("mine_anticarro", 0)) > 0 and not s.has("mine_at"):
 		_piazza_mine_anticarro(esagoni)
 	if bool(regola("bazooka_pronti", false)):
@@ -2113,6 +2114,8 @@ func distruggi_ponte(h: String, come: String) -> void:
 func radio_presidiata() -> bool:
 	if mo.radio_portata():
 		return mo.radio_funziona()
+	if ph.radio_portata():
+		return ph.radio_funziona()
 	if not bool(regola("radio", false)):
 		return false
 	var h: String = s.get("radio_hex", "")
@@ -4297,6 +4300,7 @@ func trascina(id: String, ferito_id: String, verso: String) -> Dictionary:
 			_log("dado", "Trascinamento: %d → sopravvive." % r)
 	if uscita:
 		var da_u: String = a.hex
+		ph.uscita(a, da_u)
 		a.stato = "uscito"
 		a.hex = ""
 		f.hex = ""

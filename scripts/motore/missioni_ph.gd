@@ -137,6 +137,31 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			_st().fine_senza_tedeschi = true
 		"inciampo_vigna":
 			_inciampo_vigna()
+		"macerie":
+			p.s.modifiche[str(o.hex)] = "rubble"
+			p.terreno.imposta_modifiche(p.s.modifiche)
+		"radio_618":
+			_st().radio_618 = int(_st().get("radio_618", 0)) + 1
+			var nr: int = int(_st().radio_618)
+			if nr <= 3:
+				p._log("info", ["La radio gracchia: «Che diavolo state aspettando? Raggiungete J8 di corsa!»",
+					"Il comandante minaccia di degradare il sergente.",
+					"Ultimo avviso: senza la vittoria il sergente torna a casa caporale e tutta la squadra fa quattro settimane di corvé!"][nr - 1])
+		"superstiti":
+			_superstiti(o.ids, str(ctx.get("hex", "")))
+		"ripiegamento_14":
+			if not _st().get("ripiegamento", false):
+				_st().ripiegamento = true
+				_st().pv_uscita_us = 2
+				p._log("info", "Ripiegamento: ogni soldato che esce dal bordo nord (Y1–Y19) vale 2 PV; gli incapacitati portati fuori non costano PV.")
+		"artiglieria_383":
+			var c: int = p.d10() + p.d10() + 2
+			var r: int = p.d10() + p.d10()
+			p._log("dado", "Artiglieria: colonna %d, riga %d." % [c, r])
+			if c < 1 or c > 25 or r < 1 or r > 19:
+				p._log("info", "Il colpo cade fuori dalla mappa.")
+			else:
+				p._op_artiglieria_esagoni(["%s%d" % [char(64 + c), r]])
 		"camion":
 			p._log("info", "La colonna di camion è in arrivo, ma in questa versione i camion non entrano in mappa: la difesa del deposito resta il compito della squadra.")
 		_:
@@ -164,6 +189,9 @@ func test(t: Dictionary, ctx: Dictionary) -> Variant:
 		return _esplosivi_interi_in_edificio().size() > 0
 	if t.has("nw_fiume"):
 		return bool(_st().get("nw_fiume", false)) == bool(t.nw_fiume)
+	if t.has("tedeschi_o_s6"):
+		var in_mappa: bool = p.tedeschi_attivi().any(func(g): return p.attivo(g) and p.in_mappa(g))
+		return (in_mappa and bool(p.s.avvistamenti[6])) == bool(t.tedeschi_o_s6)
 	if t.has("ponte_s9"):
 		return ponte_s9() == bool(t.ponte_s9)
 	if t.has("fiume_allagato"):
@@ -414,6 +442,8 @@ func turni_tedesco(g: Dictionary, es: Dictionary) -> Dictionary:
 func uscita(a: Dictionary, h: String) -> void:
 	if not attiva():
 		return
+	if int(_st().get("pv_uscita_us", 0)) > 0 and E.colonna(h) == 24 and not a.get("superstite_ph", false) and p.attivo(a):
+		p._pv(int(_st().pv_uscita_us), "%s esce dal bordo nord" % p.nome(a))
 	var v: Dictionary = p.veicoli.di(a)
 	if not v.is_empty() and v.id == "vscialuppa" and E.colonna(h) == 0 and not _st().get("scialuppa_uscita", false):
 		_st().scialuppa_uscita = true
@@ -776,14 +806,21 @@ func blocca_fine() -> bool:
 	return attiva() and _st().fine_esplosivi and not _st().esplosivi.is_empty()
 
 func righe_fine(righe: Array) -> int:
-	if not attiva() or deposito().is_empty():
+	if not attiva():
 		return 0
+	var tot_s := 0
+	for x in p.americani():
+		if x.get("superstite_ph", false) and (x.stato == "uscito" or x.get("uscito", false)):
+			righe.append(["Superstite %s portato in salvo" % x.id, 2])
+			tot_s += 2
+	if deposito().is_empty():
+		return tot_s
 	var distrutti: int = _st().deposito_distrutto.size()
 	var intatti: int = deposito().size() - distrutti
 	righe.append(["Esagoni del deposito intatti (%d)" % intatti, intatti])
 	if distrutti > 0:
 		righe.append(["Esagoni del deposito distrutti (%d)" % distrutti, -2 * distrutti])
-	return intatti - 2 * distrutti
+	return tot_s + intatti - 2 * distrutti
 
 ## Schieramento della Missione 16: almeno due uomini entro 10 esagoni da ogni angolo.
 func verifica_schieramento() -> String:
@@ -902,6 +939,50 @@ func _inciampo_vigna() -> void:
 	var l: String = T.lettera_danno(T.ARMI.pistol.danni, rd)
 	p._log("dado", "Danno della caduta (colonna Pistola): %d → %s" % [rd, p._nome_danno(l)])
 	p._applica_danno(a, l, {})
+
+## Missione 14: superstiti della squadra 2, incapacitati e senza carta.
+func _superstiti(ids: Array, h: String) -> void:
+	if h == "" or _st().get("superstiti_fatto", false):
+		return
+	_st().superstiti_fatto = true
+	for id in ids:
+		if not p.u(str(id)).is_empty():
+			continue
+		var x: Dictionary = p._nuovo_americano({"id": str(id), "nome": "Superstite", "IN": 0, "PC": 0, "WS": 0, "DS": 0, "MPA": 0,
+			"comandante": false, "porte": [], "munizioni": {}})
+		x.stato = "incapacitato"
+		x.hex = h
+		x.postura = "prone"
+		x.senza_carta = true
+		x.ferito = true
+		x.superstite_ph = true
+		p.s.unita[str(id)] = x
+		p._fx("compare", {"id": str(id), "a": h, "amico": true})
+	p._log("info", "Superstiti in %s: %s. Trascinali fuori dal bordo nord con la squadra: 2 PV ciascuno." % [h, ", ".join(ids)])
+
+## Missione 14: la squadra entra in Y7 sulle due jeep, quattro uomini per jeep.
+func dopo_ingresso(esagoni: Array) -> void:
+	if not attiva() or int(p.regola("jeep_caricate", 0)) <= 0 or p.s.get("veicoli", {}).has("vjeep1"):
+		return
+	var h: String = str(esagoni[0])
+	var squadra: Array = p.americani().filter(func(a): return p.attivo(a) and a.hex == h)
+	p.s.imbarco = true
+	for i in int(p.regola("jeep_caricate", 0)):
+		var v: Dictionary = p.veicoli.crea("vjeep%d" % (i + 1), "jeep", h, "us")
+		v.nome = "Jeep %d" % (i + 1)
+		for k in 4:
+			var j: int = i * 4 + k
+			if j < squadra.size():
+				p.veicoli.sali(squadra[j], v)
+		p._log("info", "La %s entra in %s con %s." % [v.nome, h, ", ".join(p.veicoli.occupanti(v).map(func(x): return x.id))])
+	p.s.imbarco = false
+
+func radio_portata() -> bool:
+	return attiva() and bool(p.regola("radio_portata_ph", false))
+
+func radio_funziona() -> bool:
+	var a: Dictionary = p.u("A")
+	return not a.is_empty() and p.attivo(a) and p.in_mappa(a)
 
 func tedesco_uscito(x: Dictionary, h: String) -> void:
 	if not attiva() or int(_st().get("pv_uscita", 0)) <= 0 or h == "":

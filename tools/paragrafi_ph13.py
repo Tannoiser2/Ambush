@@ -217,12 +217,6 @@ az("895", "Se non vede bersagli e l’antenna è intatta, trasmette al comando c
           "sola). Altrimenti non fa nulla.")
 az("874", "Si arrende.")
 az("826", "Se il mezzo è già stato bersagliato va veloce, altrimenti lento.")
-az("900", "Con 3 o più bersagli in vista, o se il mezzo è stato bersagliato, si chiude (se è già chiuso vedi 901). Con 1 o 2 bersagli "
-          "vedi 903. Senza bersagli si apre (se è già aperto vedi 903).")
-az("901", "Tiro mirato con la mitragliatrice di scafo al più vicino; cannone contro un mezzo americano o un bersaglio in un edificio "
-          "(altrimenti lo carica); con il cannone carico e senza bersagli, tiro mirato con la coassiale al secondo più vicino.")
-az("903", "Avanza lento; cannone contro un mezzo americano o un bersaglio in un edificio (altrimenti lo carica); con il cannone carico e "
-          "senza bersagli tiro rapido con la coassiale al secondo più vicino; tiro rapido con la mitragliatrice di scafo al più vicino.")
 for pid, it in (("733", "Avanza lento. Tiro mirato con la mitragliatrice pesante al più vicino, tiro rapido con la leggera al secondo."),
                 ("736", "Avanza lento. Tiri rapidi con la mitragliatrice leggera e con la pesante."),
                 ("747", "Avanza veloce. Tiro mirato con la pesante al secondo più vicino, tiro rapido con la leggera al più vicino."),

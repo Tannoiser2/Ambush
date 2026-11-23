@@ -15,6 +15,28 @@ func _ph():
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	match n:
+		590:
+			var vicini3 := _bersaglio_entro(g, 0, 3)
+			var lontani := _bersaglio_entro(g, 4, 6)
+			if int(g.munizioni.get("granata", 0)) > 0 and vicini3:
+				t._accovacciati()
+				t._lancia_granata(3)
+				t._prono_se_libero()
+			elif int(g.munizioni.get("granata", 0)) > 0 and lontani:
+				t._alzati()
+				t._lancia_granata(6)
+				t._prono_se_libero()
+			else:
+				var d: int = t.p.d10()
+				t.p._log("dado", "Dado %d: il %s esegue %d." % [d, t.p.nome(g), 815 if d <= 4 else 840])
+				t.esegui(815 if d <= 4 else 840)
+		750:
+			if int(g.munizioni.get("granata", 0)) > 0 and _bersaglio_entro(g, 0, 6):
+				t._alzati()
+				t._lancia_granata(6)
+				t._prono_se_libero()
+			else:
+				t.p._log("tedesco", "Il %s non ha granate o bersagli a tiro: non fa nulla." % t.p.nome(g))
 		613, 626:
 			var vg: Dictionary = t.p.veicoli.di(g)
 			var nb: int = t.bersagli(g).size()
@@ -299,32 +321,94 @@ func _cane(g: Dictionary) -> void:
 		p._applica_danno(bersaglio, "I", {})
 
 # ------------------------------------------------------------------ carri e motosiluranti
+const CARRO_PH := [826, 900, 901, 902, 903, 905, 906, 907, 908, 909, 910, 911, 921, 923, 925, 927, 929,
+	733, 736, 747, 758, 763, 776, 847, 849, 873, 874]
+
 func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
+	if not (n in CARRO_PH):
+		return false
 	var vv = t.p.veicoli
 	var b: Array = vv.bersagli_carro(g)
+	if t.p.paragrafi.has(str(n)):
+		t.p._log("par", t.p.paragrafi[str(n)].it, {"id": str(n), "tedesco": g.id})
 	match n:
 		826:
 			vv._guida(veic, bool(veic.get("bersagliato", false)), g)
-		900:
+		900, 921:
+			# 900/921: con 3 o più bersagli (o se bersagliato) chiude i portelli; 1–2 bersagli 903/927; nessuno apre.
+			var chiuso_poi := 901 if n == 900 else 925
+			var con_b := 903 if n == 900 else 927
+			var senza := 903 if n == 900 else 929
 			if b.size() >= 3 or veic.get("bersagliato", false):
 				if veic.get("chiuso", false):
-					vv.esegui_carro(910, g, veic)
+					esegui_carro(chiuso_poi, g, veic)
 				else:
 					vv._apri_chiudi(veic, true)
 			elif not b.is_empty():
-				esegui_carro(903, g, veic)
+				esegui_carro(con_b, g, veic)
 			elif not veic.get("chiuso", false):
-				esegui_carro(903, g, veic)
+				esegui_carro(senza, g, veic)
 			else:
 				vv._apri_chiudi(veic, false)
-		901:
-			vv.esegui_carro(910, g, veic)
+		901, 910, 927:
+			vv._mg(g, veic, "scafo", true, 0)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "coax", true, 1)
+		902:
+			if not b.is_empty():
+				if veic.get("chiuso", false):
+					esegui_carro(900, g, veic)
+				else:
+					vv._apri_chiudi(veic, true)
+			else:
+				esegui_carro(906, g, veic)
 		903:
 			vv._guida(veic, false, g)
 			vv._cannone_o_carica(g, veic)
 			if veic.cannone_pronto and not vv._sparato_cannone:
 				vv._mg(g, veic, "coax", false, 1)
 			vv._mg(g, veic, "scafo", false, 0)
+		905, 907:
+			var molti := 900 if n == 905 else 910
+			if b.size() >= 3:
+				if veic.get("chiuso", false):
+					esegui_carro(molti, g, veic)
+				else:
+					vv._apri_chiudi(veic, true)
+			elif not b.is_empty():
+				esegui_carro(910 if n == 905 else 903, g, veic)
+			elif not veic.get("chiuso", false):
+				esegui_carro(906 if n == 905 else 903, g, veic)
+			else:
+				vv._apri_chiudi(veic, false)
+		906:
+			vv._guida(veic, true, g)
+			vv._mg(g, veic, "scafo", false, 0)
+			vv._carica(veic)
+		908:
+			vv._mg(g, veic, "scafo", true, 0)
+		909:
+			if _est_del_fiume(veic.hex) and not veic.get("chiuso", false):
+				esegui_carro(911, g, veic)
+			else:
+				esegui_carro(900, g, veic)
+		911:
+			vv._guida(veic, true, g)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "scafo", true, 0)
+		923:
+			vv._guida(veic, true, g)
+			vv._mg(g, veic, "coax", false, 0)
+			vv._carica(veic)
+			vv._mg(g, veic, "scafo", false, 1)
+		925:
+			vv._guida(veic, false, g)
+			vv._mg(g, veic, "scafo", false, 0)
+			vv._cannone_o_carica(g, veic)
+		929:
+			vv._guida(veic, true, g)
 		733:
 			vv._guida(veic, false, g)
 			vv._mg(g, veic, "scafo", true, 0)
@@ -356,6 +440,21 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
 		_:
 			return false
 	return true
+
+func _bersaglio_entro(g: Dictionary, da: int, a: int) -> bool:
+	for x in t.bersagli(g):
+		var d: int = E.distanza(x.hex, g.hex)
+		if d >= da and d <= a:
+			return true
+	return false
+
+## Mappa C (in alto è ovest): a est del fiume = riga più alta del ruscello nella stessa colonna.
+func _est_del_fiume(h: String) -> bool:
+	var righe: Array = []
+	for x in t.p.terreno.esagoni:
+		if E.colonna(x) == E.colonna(h) and t.p.terreno.esagoni[x].get("t", "") == "stream":
+			righe.append(E.riga(x))
+	return not righe.is_empty() and E.riga(h) > righe.max()
 
 func _altro_tedesco_in_vista(g: Dictionary) -> bool:
 	for x in t.p.tedeschi_attivi():

@@ -116,6 +116,20 @@ Ordine scelto: M11, M10, M12, M9.
   della sentinella 61 in E11 (648, 3–4), colpi al faro con le armi (si distrugge solo con un esplosivo).
 - Il bot delle simulazioni non usa gli esplosivi: perde sempre, ma serve a cercare errori (0 in 20 partite).
 
+## Missione 14 «Ricognizione in forze» (mappa C, in alto è ovest)
+- Ingresso in Y7 sulle due jeep (regola jeep_caricate: vjeep1/vjeep2, quattro uomini ciascuna); radio portata dal
+  sergente A (regola radio_portata_ph: presidiata finché A è attivo in mappa).
+- Condizione 1: 618 (radio, messaggio diverso a ogni lettura), mine (539), trappole (581), relitti, 331 (massacro della
+  squadra 2, macerie in J8); 340/684 → 348/690/355 → 541/562 (superstiti J e K incapacitati, op superstiti: +2 PV se
+  trascinati fuori) → 362/368 (ripiegamento: +2 PV per soldato uscito dal bordo nord Y1–Y19; anche trascinando) e
+  Condizione 2.
+- Condizione 2: artiglieria (383 a due dadi, 544, 592, 555 con dispersione semplificata attorno a K9), 378 (ponte S9).
+- Condizione 3: 398 → 17/35 in U19; eventi 462/467/476 → 438 (40–42), 445 (Panzer IV 43), 453 (44–45), 575.
+- Carta C3: W18 rimandava a 449 (paragrafo della Missione 16): corretto in 499 (reazione L) nel costruttore.
+- Paragrafi dei carri di Purple Heart (900–911, 921–929) riscritti in tedeschi_ph.esegui_carro: sono diversi da quelli
+  del gioco base (valgono anche per il Panzer IV della Missione 13). 909: «a est del fiume» = riga più alta del ruscello.
+- Non gestito: la mitragliatrice media montata sulla jeep (non c’è l’acquisto dell’equipaggiamento).
+
 ## Missione 15 «Ritorno a casa» (mappa C, in alto è ovest)
 - Avvio (regola diga): letto N6–Y15 asciutto = copertura (s.modifiche "cover", S9 resta ponte), diga N5 "clear" con
   terreno.accessi {N5: [O5, M6]}; tabella delle munizioni consumate (regola munizioni_consumate) tirata in automatico.
