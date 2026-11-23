@@ -1120,6 +1120,8 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			_b("Fai saltare %s (%s)" % [nome_i, hi], func(): _esito(p.demolisci(a.id, hh2)), "Nelle Operazioni la carica si piazza a mano; nei Round va lanciata nell’esagono.")
 	if int(a.get("documenti", 0)) > 0:
 		_b("Porta i documenti fuori mappa", Callable(), "Valgono %d PV quando questo soldato esce dalla mappa." % int(a.documenti), false)
+	if p.ph.attiva() and p.ph.esplosivo(a.hex) > 0:
+		_b("Disinnesca l’esplosivo (%d/2)" % (2 - p.ph.esplosivo(a.hex)), func(): _esito(p.disinnesca_esplosivo(a.id)), "Due azioni in tutto, anche di soldati diversi; ogni esplosivo disinnescato vale 2 PV.")
 	if bool(p.regola("disinnesco", false)) and p.ponti().has(a.hex) and p.ponte_intatto(a.hex) and not p.ponte_stato(a.hex).get("catturato", false):
 		_b("Stacca le cariche del ponte (%d/4)" % int(p.ponte_stato(a.hex).get("disinnesco", 0)), func(): _esito(p.disinnesca_ponte(a.id)), "Quattro turni in tutto, anche di soldati diversi; nelle Operazioni costa un controllo Evento.")
 	for x in p.azioni_ponte(a):

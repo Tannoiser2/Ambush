@@ -451,8 +451,17 @@ func _draw() -> void:
 				extra = " (GOMMA A TERRA)"
 			_marcatore(str(veic.hex), str(veic.nome).to_upper() + extra, Vector2(0.0, 0.66), col)
 	for h in s.oggetti:
-		if not s.oggetti[h].is_empty():
-			_segnalino(h, "mitra" if s.oggetti[h][0].tipo == "smg" else "arma", Vector2(0.5, 0.5), 0.45)
+		var armi_a_terra: Array = s.oggetti[h].filter(func(o): return not (str(o.get("tipo", "")) in ["barca", "esplosivo", "incendio"]))
+		if not armi_a_terra.is_empty():
+			_segnalino(h, "mitra" if armi_a_terra[0].tipo == "smg" else "arma", Vector2(0.5, 0.5), 0.45)
+		for o in s.oggetti[h]:
+			match str(o.get("tipo", "")):
+				"barca":
+					_marcatore(h, "BATTELLO", Vector2(0.0, 0.66), Color("4a5560"))
+				"esplosivo":
+					_marcatore(h, "ESPLOSIVO %d" % int(s.get("ph", {}).get("esplosivi", {}).get(h, 2)), Vector2(0.0, -0.62), Color("8a2b1c"))
+				"incendio":
+					_marcatore(h, "IN FIAMME", Vector2(0.0, 0.3), Color("a04a12"))
 	# Pedine
 	# Tracce dei movimenti dell’ultima sequenza
 	for tr in tracce:

@@ -9,6 +9,7 @@ const TerrenoScript = preload("res://scripts/motore/terreno.gd")
 const TedeschiScript = preload("res://scripts/motore/tedeschi.gd")
 const VeicoliScript = preload("res://scripts/motore/veicoli.gd")
 const MissioniMOScript = preload("res://scripts/motore/missioni_mo.gd")
+const MissioniPHScript = preload("res://scripts/motore/missioni_ph.gd")
 
 signal aggiornata
 
@@ -20,6 +21,7 @@ var ia: RefCounted
 var veicoli: RefCounted
 ## Regole delle missioni di Move Out! (9–12).
 var mo: RefCounted
+var ph: RefCounted
 var _paragrafi_base: Dictionary
 var rng := RandomNumberGenerator.new()
 ## Voci di cronaca prodotte dall’ultimo comando (per la scheda dei paragrafi).
@@ -39,6 +41,7 @@ func _init(n := 1) -> void:
 	_paragrafi_base = JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi.json"))
 	paragrafi = _paragrafi_base
 	mo = MissioniMOScript.new(self)
+	ph = MissioniPHScript.new(self)
 	ia = TedeschiScript.new(self)
 	veicoli = VeicoliScript.new(self)
 	imposta_missione(n)
@@ -46,7 +49,7 @@ func _init(n := 1) -> void:
 ## Missioni con i dati pronti (le altre compaiono nel menu come «in preparazione»).
 static func disponibili() -> Array:
 	var out: Array = []
-	for n in range(1, 13):
+	for n in range(1, 25):
 		if FileAccess.file_exists("res://data/missione%d.json" % n):
 			out.append(n)
 	return out
@@ -57,7 +60,11 @@ func imposta_missione(n: int) -> void:
 		return
 	numero = n
 	missione = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
-	if str(missione.get("libro", "")) == "mo":
+	if str(missione.get("libro", "")) == "ph":
+		# Purple Heart ha un libretto suo (300–999): i suoi paragrafi prendono il posto di quelli base con lo stesso numero.
+		paragrafi = _paragrafi_base.duplicate()
+		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_ph.json")), true)
+	elif str(missione.get("libro", "")) == "mo":
 		# Move Out! ha un libretto suo (400–1000): i suoi paragrafi prendono il posto di quelli base con lo stesso numero.
 		paragrafi = _paragrafi_base.duplicate()
 		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_mo.json")), true)
@@ -226,6 +233,9 @@ func inizia_missione() -> Dictionary:
 			gruppi[a.hex].append(a.id)
 	if gruppi.is_empty():
 		return {"ok": false, "errore": "Schiera almeno un soldato %s." % testo_ingresso()}
+	var e_ph: String = ph.verifica_schieramento()
+	if e_ph != "":
+		return {"ok": false, "errore": e_ph}
 	_inizio_comando()
 	s.fase = "operazioni"
 	if bool(regola("sentinella", false)):
@@ -1002,7 +1012,7 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			if not gn.is_empty():
 				gn.no_auto = true
 		_:
-			if not mo.op(o, ctx):
+			if not mo.op(o, ctx) and not ph.op(o, ctx):
 				_log("errore", "Istruzione sconosciuta: %s" % o.op)
 
 func _test(t: Dictionary, ctx: Dictionary) -> bool:
@@ -1164,6 +1174,9 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 			if terreno.vede(str(t.us_visible_from), a.hex, "standing", a.postura):
 				return true
 		return false
+	var tp = ph.test(t, ctx)
+	if tp != null:
+		return bool(tp)
 	return mo.test(t, ctx)
 
 func _hex_test(v, ctx: Dictionary) -> String:
@@ -1997,6 +2010,25 @@ func disinnesca_ponte(id: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Purple Heart: disinnesco di un esplosivo dei commando (due azioni; nelle Operazioni in un colpo solo, con un controllo Evento).
+func disinnesca_esplosivo(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	if ph.esplosivo(a.hex) == 0:
+		return _errore("Qui non c’è un esplosivo.")
+	if s.fase == "operazioni":
+		evento_casuale({"hex": a.hex, "ids": [a.id]})
+		while ph.esplosivo(a.hex) > 0 and attivo(a):
+			ph.disinnesca(a)
+	else:
+		ph.disinnesca(a)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
 # =================================================================== Missione 3: ponti, radio, staffette
 func ponte_stato(h: String) -> Dictionary:
 	if not s.has("ponti"):
@@ -2535,6 +2567,8 @@ func _crea_tedesco(num: int, h: String, postura: String) -> Dictionary:
 		"hex_attivazione": h, "solo_S": false, "guardia": "", "rimuovi_fine_round": false,
 		"bersagli_round": [], "cambio_libero": true,
 	}
+	if int(d.get("esplosivi", 0)) > 0:
+		g.esplosivi = int(d.esplosivi)
 	if not vecchio.is_empty():
 		g.armi = vecchio.armi
 		g.munizioni = vecchio.munizioni
@@ -2603,6 +2637,7 @@ func _avvia_round() -> void:
 	r.n = int(r.n) + 1
 	s.round_tot = int(s.get("round_tot", 0)) + 1
 	mo.inizio_round()
+	ph.inizio_round()
 	r.sparato_prec = r.get("sparato", [])
 	r.sparato = []
 	r.slot_azione = ""
@@ -3495,6 +3530,8 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
 	fx.esito = "colpito" if colpito else "mancato"
+	if not colpito and str(tiratore.get("lato", "")) == "us":
+		ph.tiro_mancato(bersaglio)
 	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
 	if not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)) and veicoli.di(bersaglio).modello != "chiatta":
@@ -3811,6 +3848,7 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		fx.esito = "inesploso"
 		return
 	mo.esplosione(tipo, arrivo)
+	ph.esplosione(tipo, arrivo)
 	if tipo == "satchel":
 		_colpisci_installazione(arrivo)
 		if s.get("bunker", {}).has(arrivo):
@@ -4877,7 +4915,8 @@ func _controlla_fine_automatica() -> void:
 	if s.fase == "fine":
 		return
 	mo.controlla()
-	if s.fase == "fine" or mo.blocca_fine():
+	ph.controlla()
+	if s.fase == "fine" or mo.blocca_fine() or ph.blocca_fine():
 		return
 	if bool(regola("fine_ponti", false)) and int(s.condizione) >= 4 and tedeschi_attivi().filter(func(g): return attivo(g)).is_empty() \
 			and not americani_attivi_in_mappa().is_empty():
@@ -4937,6 +4976,7 @@ func _calcola_fine(modo: String) -> void:
 			bonus += int(a.pv_attivo_fine)
 			righe.append(["%s attivo alla fine" % nome(a), int(a.pv_attivo_fine)])
 	bonus += mo.righe_fine(righe)
+	bonus += ph.righe_fine(righe)
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

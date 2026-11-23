@@ -35,6 +35,8 @@ func _init() -> void:
 		obiettivi = ["S13", "O9", "M12", "R14", "I13", "T8"]
 	elif missione == 11:
 		obiettivi = ["S12", "T8", "M6", "A8", "A12", "K13", "T8"]
+	elif missione == 16:
+		obiettivi = ["V12", "W14", "U15", "S14", "T11", "W16"]
 	elif missione == 4:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
 	for i in n:
@@ -73,6 +75,15 @@ func gioca(seme: int) -> void:
 		for a in p.americani_attivi_in_mappa():
 			p.veicoli.scendi(a)
 			a.hex = "B6"
+	elif p.missione.get("regole", {}).has("angoli"):
+		# Missione 16: due soldati per angolo, il resto vicino al deposito.
+		p.nuova(seme, true)
+		var angoli := ["B2", "B18", "X2", "X18"]
+		var i16 := 0
+		for a in p.americani():
+			p.schiera([a.id], angoli[i16 % 4] if i16 < 8 else "S12")
+			i16 += 1
+		p.inizia_missione()
 	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
 		p.schiera([p.americani()[0].id], "Y8")

@@ -12,10 +12,12 @@ var _fermo := false
 var _reazione_cambiata := false
 
 var mo: RefCounted
+var ph: RefCounted
 
 func _init(partita: Partita) -> void:
 	p = partita
 	mo = preload("res://scripts/motore/tedeschi_mo.gd").new(self)
+	ph = preload("res://scripts/motore/tedeschi_ph.gd").new(self)
 
 # ------------------------------------------------------------------ turno
 func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
@@ -120,6 +122,8 @@ func esegui(n: int) -> void:
 	if n != 816 and p.paragrafi.has(chiave):
 		p._log("par", p.paragrafi[chiave].it, {"id": chiave, "tedesco": g.id})
 	if p.mo.attiva() and mo.esegui(n):
+		return
+	if p.ph.attiva() and ph.esegui(n):
 		return
 	match n:
 		800:

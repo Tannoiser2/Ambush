@@ -73,3 +73,36 @@ Ordine scelto: M11, M10, M12, M9.
   Sherman Z + jeep con J e K comandati dal giocatore, +5 PV per mezzo uscito da Y8, contrattacco 892 coi Panzerfaust
   (823–827 anche come riferimenti di movimento), Panzerbüchse (806/807/809), azioni MO 803–821, 901–904, 932–933.
   Limiti: la colonna la comanda il giocatore; «assiste» dei Gioventù hitleriana non gestito; razzo senza segnalino 2D.
+
+# Purple Heart (missioni 13–18)
+
+## Dati
+- Carte Condizione: OCR delle 26 carte del mod TTS (`tools/letture/m13_c1.json`…), riferimenti rossi riletti
+  (`/home/claude/strumenti/rossi2.py`) e controllati a vista; la carta 6 della missione 18 è trascritta a mano
+  (correzioni in `tools/correzioni_carte.json`). Uscita: `data/carte/missione13..18.json`.
+- Paragrafi inglesi: `tools/paragrafi_ph_en.json` (OCR del libretto; mancano per scelta del libretto 636, 637, 647…).
+- Carte tedesche: `tools/carte_ph.json` (GE04–GE40 dal foglio del mod). **Mancano i tedeschi 41–69 e le carte dei mezzi**:
+  il mod TTS non li contiene (servono alle missioni 13, 14, 17, 18).
+- Mappe: `tools/prepara_mappe_ph.py` (immagini nel reticolo del gioco, anche realistiche) e `tools/costruisci_mappe_ph.py`
+  (terreno: `tools/terreno_c.json`, `terreno_d.json`, `terreno_e.json`, colore + correzioni a vista).
+  Mappe del gioco: `C`, `AD` (A + mezza D, base navale), `BE` (B + mezza E, città). Muretti di pietra, scarpate e creste
+  di C, D, E non sono ancora trascritti; i lati degli edifici sono tutti finestre.
+- Nuovi terreni: acqua (vietata), spiaggia (2 PM), banchina, base dei sottomarini, serbatoi e monumento (pieni, bloccano la
+  vista), vigna (come copertura, vietata ai mezzi a ruote: per ora solo costo 2 per i mezzi); muretto di pietra come lato
+  («stonewall»: +1 PM, copre il soldato prono).
+
+## Motore
+- `missione.libro == "ph"`: si caricano `data/paragrafi_ph.json` (costruito da `tools/costruisci_ph.py` con i file
+  `tools/paragrafi_ph<n>.py`), `scripts/motore/missioni_ph.gd` (op, test, agganci) e `scripts/motore/tedeschi_ph.gd`
+  (paragrafi d’azione propri di Purple Heart).
+
+## Missione 16 «In guardia» (mappa C)
+- Schieramento: almeno due soldati entro 10 esagoni da ogni angolo, nessuno nel deposito (U15, U16, V12–V15, W13–W15).
+- Battelli d’assalto (432): s.ph.barche; i tedeschi a bordo hanno `barca`; 522 muove il battello (lento 4, veloce 6) seguendo
+  i paragrafi «sbarca/il battello entra»; 531/538 fanno sbarcare. Non gestiti: −2 al tiro dal battello, colpi al battello.
+- Esplosivi (619): il commando fermo piazza un esplosivo (lato 2); il giocatore lo disinnesca in due azioni (+2 PV);
+  638/651/660/669/679 per le esplosioni a tempo; deposito (414): ogni esplosione nel deposito e i tiri americani mancati
+  (0–3) fanno saltare il carburante; fine: +1 PV per esagono intatto, −2 per esagono distrutto.
+- «Al prossimo Round» (al_prossimo_round): l’arrivo del secondo gruppo; «secondo turno del Round 1» è approssimato col Round 2.
+- Non gestiti: camion della colonna (717, US 05), soldato J della carta US 04 (501), regola «in allerta», entrata nei
+  depositi in fiamme (414.2), seconda jeep.
