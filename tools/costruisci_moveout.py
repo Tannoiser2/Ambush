@@ -27,7 +27,10 @@ SOSTITUZIONI_PAR = {835: 833}  # 835 manca dal libretto: si usa 833 (stessa fami
 def pulisci_rif(v):
     """Ripulisce le letture del foglio Excel: EVENT', NONE-, 435R, NOME..."""
     v = str(v).strip()
-    v = {"s5:147": "s5:647", "S3-'490": "s3:490"}.get(v, v)
+    v = {"s5:147": "s5:647", "S3-'490": "s3:490", "s7:555": "s7:655", "s7:564": "s7:664"}.get(v, v)
+    m0 = re.match(r"^[sS](\d)\W*(\d{3})\W*$", v)
+    if m0:
+        v = f"s{m0.group(1)}:{m0.group(2)}"
     if v.startswith("T-"):
         v = v[2:]  # paragrafi «T» della galleria (Missione 12): l’elenco è in regole.paragrafi_t
     m = re.match(r"^(s\d:)?(\d{3,4})", v)
@@ -60,7 +63,7 @@ def pulisci_mov(h, v):
         return "USCITA"
     # «O» letta come «0»/«C0»/«ON»/«OR»: correzioni verificate sull’adiacenza
     v = {("D2", "CO"): "C2", ("D5", "CO"): "C5", ("P5", "ON"): "O5", ("P6", "OR"): "O6"}.get((h, v), v)
-    v = v.replace("_", "")
+    v = v.replace("_", "").replace(" ", "")
     if re.match(r"^[A-Y]-?I\d$", v):
         v = v[0] + "1" + v[-1]
     m = re.match(r"^(\d{3})-?$", v)
@@ -84,11 +87,17 @@ MODELLI_CARRO = {"Panzer IV": "panzer4", "Jagdpanther": "jagdpanther"}
 
 def carro(n, c):
     """Carta di un carro di Move Out! nel formato dei carri del gioco base."""
-    r5 = c["equipaggio"]["5"]
-    return {"lettera": c["lettera"], "ruolo": c["ruolo"], "pv": 0, "armi": [], "granate": 0,
+    eq = dict(c["equipaggio"])
+    if "5" not in eq:
+        # Jagdpanther immobilizzato (GE12): un solo equipaggio di due uomini, si ripete la riga per ogni livello.
+        riga = eq[max(eq, key=int)]
+        eq = {str(k): riga for k in range(1, 6)}
+    r5 = eq["5"]
+    return {"lettera": c["lettera"], "ruolo": c["ruolo"], "pv": int(c.get("pv") or 0), "armi": [], "granate": 0,
             "IN": r5["IN"], "PC": r5["PC"], "WS": r5["WS"], "DS": r5["DS"], "MPA": 6,
             "gruppi": [[0, 9]], "colonne": {"1-6": [800]},
-            "carro": {"modello": MODELLI_CARRO.get(c["ruolo"], "panzer4"), "gruppi": c["gruppi"], "righe": c["equipaggio"],
+            "carro": {"modello": MODELLI_CARRO.get(c["ruolo"].replace("Immobile ", ""), "panzer4"), "gruppi": c["gruppi"], "righe": eq,
+                      "immobile": "Immobile" in c["ruolo"],
                       "pv_distrutto": int(c.get("pv_distrutto", 0)), "primo_turno": 0, "testo": c.get("note", "")}}
 
 
@@ -109,7 +118,8 @@ def tedeschi(nums):
             d["colonne"][col] = [SOSTITUZIONI_PAR.get(int(x), int(x)) for x in v]
         if c["ruolo"] in COMANDANTI:
             d["comandante"] = True
-        for k in ("primo_turno", "equipaggio", "veicolo", "pv_veicolo", "carro", "pv_uscita_prigioniero"):
+        for k in ("primo_turno", "equipaggio", "veicolo", "pv_veicolo", "carro", "pv_uscita_prigioniero", "un_turno",
+                  "solo_granate", "pzb_colpi", "pzf_pronto"):
             if k in c:
                 d[k] = c[k]
         out[str(n)] = d
@@ -136,6 +146,31 @@ def ruscelli(mappa):
 
 
 MISSIONI = {
+    9: {
+        "titolo": "Le prime luci dell’alba", "titolo_originale": "The Dawn’s Early Light",
+        "data": "Aquisgrana, 11 settembre 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
+        "briefing": "11 settembre 1944. L’inseguimento attraverso la Francia è arrivato alla temuta Linea Sigfrido. Fuori "
+                    "Aquisgrana c’è un doppio muro di fortificazioni e un numero sconosciuto di difensori. Il corpo d’armata deve "
+                    "sfondare e prendere la città. La squadra parte alle due di notte per liberare la strada principale da ogni "
+                    "ostacolo: fra poche ore avanzerà la colonna corazzata. I soldati stanchi pensano solo a una cosa: «A casa "
+                    "per Natale».",
+        "ingresso": "Mappa A, nord in alto. La squadra entra dal bordo ovest, da A1 ad A19. Ci sono crateri in D11, G5, H13, "
+                    "K17, Q8, Q14, S16, T12, V7 e V13. Oltre all’equipaggiamento ricevi gratis due cariche da demolizione, un "
+                    "bazooka con quattro razzi in più e una radio (la porta il caposquadra A).",
+        "regole_testo": "[b]Ruscello.[/b] Il corso d’acqua da H1 a O19 si attraversa ovunque, coi costi della tabella. "
+                        "[b]Bunker.[/b] Valgono le regole dei bunker. [b]Notte.[/b] Si vede solo fino a quattro esagoni. "
+                        "[b]Radio.[/b] Se chi la porta è ferito, incapacitato o ucciso, c’è un 25% che la radio si rompa.",
+        "ingresso_breve": "bordo ovest, A1–A19", "uscita_breve": "Y8 (strada est) o bordo ovest",
+        "ingresso_esagoni": ["A%d" % i for i in range(1, 20)], "uscita_esagoni": ["Y8"] + ["A%d" % i for i in range(1, 20)],
+        "vittoria_pv": 30, "attivazione": {"1": 3, "2": 4, "3": 5, "4": 6, "5": 7, "6": 8}, "obiettivi": [],
+        "regole": {"vista": 4, "radio_portata": True, "pv_uscita_mezzi": 5},
+        "vittoria_testo": "[b]Vittoria: 30 PV.[/b] Valgono le attivazioni dei tedeschi e 6 PV per ogni bunker messo fuori "
+                          "combattimento; altri PV saranno rivelati durante il gioco. Ogni mezzo della colonna che esce da Y8 "
+                          "vale 5 PV. La missione finisce quando tutta la squadra attiva è uscita: da Y8 se non restano tedeschi "
+                          "attivi, dal bordo ovest se ne restano (gli incapacitati vanno portati fuori per non perdere PV).",
+        "testo_fine": "",
+        "germani": [12, 20, 21, 30, 31, 32, 33, 40, 41, 50, 51, 52, 53],
+    },
     12: {
         "titolo": "Per la cruna dell’ago", "titolo_originale": "Through the Eye of the Needle",
         "data": "Parigi, 16 agosto 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
@@ -251,6 +286,12 @@ def main():
             d["modifiche_iniziali"] = {h: "clear" for h in ruscelli("A")}
         if n == 12:
             d["modifiche_iniziali"] = {"M12": "stream"}
+        if n == 9:
+            d["modifiche_iniziali"] = {h: "crater" for h in ["D11", "G5", "H13", "K17", "Q8", "Q14", "S16", "T12", "V7", "V13"]}
+            for a in d["squadra"]:
+                if "bazooka" in a["porte"]:
+                    a["munizioni"]["bazooka"] = int(a["munizioni"].get("bazooka", 0)) + 4
+                    break
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         mancanti = set()
         for c in d["condizioni"].values():

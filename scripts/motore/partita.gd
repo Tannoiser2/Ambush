@@ -2046,6 +2046,8 @@ func distruggi_ponte(h: String, come: String) -> void:
 
 ## La radio resta nell’edificio dove si è schierato il comandante: è presidiata se c’è un americano attivo.
 func radio_presidiata() -> bool:
+	if mo.radio_portata():
+		return mo.radio_funziona()
 	if not bool(regola("radio", false)):
 		return false
 	var h: String = s.get("radio_hex", "")
@@ -2746,7 +2748,7 @@ func _iniziativa(r: Dictionary) -> void:
 			g.turni = 0
 			g.slot = "inattivo"
 			continue
-		var es := T.esito_turni(int(g.IN), dt, false, true, g.ferito)
+		var es: Dictionary = mo.turni_tedesco(g, T.esito_turni(int(g.IN), dt, false, true, g.ferito))
 		if g.id in r.get("due_turni_de", []):
 			es = {"turni": 1 if g.ferito else 2, "panico": false, "paragrafo": true}
 		pi.righe.append({"id": g.id, "turni": es.turni, "panico": es.panico, "ferito": g.ferito, "paragrafo": es.get("paragrafo", false)})
@@ -3008,8 +3010,9 @@ func _costo_passo(a: Dictionary, da_hex: String, verso: String) -> int:
 	if veicoli.e_autista(a):
 		return veicoli.costo(veicoli.di(a), da_hex, verso)
 	if da_hex == "":
-		return terreno.costo_movimento(verso, verso) if false else _costo_ingresso(verso)
-	return terreno.costo_movimento(da_hex, verso)
+		return _costo_ingresso(verso) + mo.costo_extra(a, verso)
+	var c := terreno.costo_movimento(da_hex, verso)
+	return c + mo.costo_extra(a, verso) if c >= 0 else c
 
 func _costo_ingresso(h: String) -> int:
 	match terreno.tipo(h):
@@ -3127,6 +3130,11 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	if e2 != "":
 		return _errore(e2)
 	var da_hex: String = primo.hex
+	if mo.impigliato(ids):
+		if fase_round() and not s.turno.is_empty():
+			_termina_azione(primo)
+		_fine_comando()
+		return OK
 	var costo := _costo_passo(primo, da_hex, verso)
 	var controllo_veicolo := false
 	if s.fase == "round":
@@ -3194,6 +3202,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	# Fermarsi in un esagono con un nemico attivo.
 	if s.fase == "round" and not s.turno.is_empty() and not unita_in(verso, "de").is_empty():
 		s.turno.fermo = true
+	mo.dopo_ingresso(ids, verso)
 	_ingresso(verso, ids, sul_ponte)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
@@ -3611,6 +3620,7 @@ func imposta_postura(x: Dictionary, postura: String) -> void:
 	_fx("postura", {"id": x.id})
 
 func _ferisci(x: Dictionary) -> void:
+	mo.colpito(x)
 	x.ferito = true
 	_log("danno", "%s è FERITO." % nome(x))
 	_cade_prono(x)
@@ -3637,6 +3647,7 @@ func _ferisci(x: Dictionary) -> void:
 			_log("info", "%s lascia cadere: %s." % [nome(x), T.ARMI[lasciata.tipo].nome])
 
 func _incapacita(x: Dictionary) -> void:
+	mo.colpito(x)
 	x.stato = "incapacitato"
 	x.turni = 0
 	x.slot = "inattivo"
@@ -3647,6 +3658,7 @@ func _incapacita(x: Dictionary) -> void:
 	_dopo_perdita(x)
 
 func _uccidi(x: Dictionary, come: String) -> void:
+	mo.colpito(x)
 	if x.stato == "morto":
 		return
 	x.stato = "morto"
@@ -3798,6 +3810,7 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		_log("dado", "Percentuale %02d: ordigno inesploso." % pd)
 		fx.esito = "inesploso"
 		return
+	mo.esplosione(tipo, arrivo)
 	if tipo == "satchel":
 		_colpisci_installazione(arrivo)
 		if s.get("bunker", {}).has(arrivo):
@@ -4254,6 +4267,7 @@ func esci(id: String) -> Dictionary:
 			var dp: Dictionary = missione.tedeschi.get(str(int(p.num)), {})
 			if dp.has("pv_uscita_prigioniero"):
 				_pv(int(dp.pv_uscita_prigioniero), "%s portato fuori mappa prigioniero" % nome(p))
+	mo.uscita(a, a.hex)
 	var pvu: Dictionary = regola("pv_uscita", {})
 	if pvu.has(a.hex) and not a.get("carro_us", false):
 		_pv(int(pvu[a.hex]), "%s esce da %s" % [nome(a), a.hex])

@@ -27,6 +27,8 @@ func _init() -> void:
 		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
 		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
+	elif missione == 9:
+		obiettivi = ["M7", "O15", "S17", "W15", "Y8"]
 	elif missione == 12:
 		obiettivi = ["G13", "Q8", "R7", "S13", "A10"]
 	elif missione == 10:

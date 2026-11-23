@@ -365,6 +365,9 @@ func _draw() -> void:
 			al_piano[x.hex].append(str(x.lettera) if x.lato == "us" else "%s%d" % [x.lettera, int(x.num)])
 	for h in al_piano:
 		_marcatore(str(h), "PIANO SUP.: " + ", ".join(al_piano[h]), Vector2(0.0, -0.66), Color("5b3a22"))
+	# Missione 9: filo spinato
+	for hf in s.get("filo", []):
+		_marcatore(str(hf), "FILO SPINATO", Vector2(0.0, 0.62), Color("4a4033"))
 	# Missione 12: soldati nella galleria
 	for x in s.unita.values():
 		if x.get("galleria", false) and str(x.get("hex", "")) != "" and x.get("stato", "") == "attivo":

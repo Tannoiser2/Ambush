@@ -33,6 +33,11 @@ const ARMI := {
 	"bazooka": {"nome": "Bazooka", "breve": "Bazooka", "gittate": [4, 8, 14], "inc": [5, 5], "mun": 100, "auto": false,
 		"danni": "IIKKKKKKKK", "porte": 1, "esplosivo": true},
 	"satchel": {"nome": "Carica da demolizione", "breve": "Carica", "porte": 1},
+	# Move Out!: armi anticarro tedesche (Missione 9).
+	"pzf":     {"nome": "Panzerfaust", "breve": "Panzerfaust", "gittate": [2, 3, 3], "inc": [0, 0], "mun": 0, "auto": false,
+		"danni": "IIIIKKKKKK", "porte": 1, "esplosivo": true},
+	"pzb":     {"nome": "Panzerbüchse", "breve": "Panzerbüchse", "gittate": [5, 9, 16], "inc": [0, 0], "mun": 0, "auto": false,
+		"danni": "IIIIKKKKKK", "porte": 1, "esplosivo": true},
 	"tanica":  {"nome": "Tanica di carburante", "breve": "Tanica", "porte": 1},
 	"cannone": {"nome": "Cannone del carro", "breve": "Cannone", "gittate": [99, 99, 99], "inc": [5, 5], "mun": 100, "auto": false,
 		"danni": "KKKKKKKKKK", "porte": 0, "esplosivo": true},
@@ -49,6 +54,7 @@ const PENETRAZIONE := {
 	"pistol": "--------LL", "bolt": "------LLLL", "scoped": "-----LLLLL", "sar": "------LLLL", "carbine": "-------LLL",
 	"mp": "-------LLL", "smg": "-----LLLLL", "ar": "----LLLLLL", "lmg": "---LLLLLLL", "mmg": "---LLLLLLL",
 	"hmg": "-LLLLLLLMM", "bazooka": "LLLLLMMMHH", "cannone": "MMHHHHHHHH",
+	"pzf": "LLLMMMHHHH", "pzb": "LLLLMMMHHH",
 }
 
 static func penetrazione(arma: String, dado: int) -> String:

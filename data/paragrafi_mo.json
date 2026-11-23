@@ -1,4 +1,3175 @@
 {
+ "400": {
+  "id": "400",
+  "it": "Metti un segnalino Evento. Un razzo illuminante tedesco! Un dado decide dove cade: 0: B8, 1: A13, 2: A13, 3: B17, 4: B17, 5: C11, 6: C11, 7: C15, 8: C15, 9: E11. Illumina quell’esagono e i sei intorno. Se nessun soldato è illuminato non succede nulla; altrimenti ogni soldato illuminato fa un controllo di percezione: se riesce si butta prono, se fallisce resta com’è. Poi vedi 405.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "razzo",
+    "tab": [
+     "B8",
+     "A13",
+     "A13",
+     "B17",
+     "B17",
+     "C11",
+     "C11",
+     "C15",
+     "C15",
+     "E11"
+    ],
+    "poi": "405"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "408": {
+  "id": "408",
+  "it": "Metti un segnalino Evento. Un razzo illuminante tedesco! Un dado decide dove cade: 0: F18, 1: G16, 2: G16, 3: H13, 4: H13, 5: J12, 6: J12, 7: J15, 8: J15, 9: J18. Illumina quell’esagono e i sei intorno. Se nessun soldato è illuminato non succede nulla; altrimenti ogni soldato illuminato fa un controllo di percezione: se riesce si butta prono, se fallisce resta com’è. Poi vedi 410.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "razzo",
+    "tab": [
+     "F18",
+     "G16",
+     "G16",
+     "H13",
+     "H13",
+     "J12",
+     "J12",
+     "J15",
+     "J15",
+     "J18"
+    ],
+    "poi": "410"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "413": {
+  "id": "413",
+  "it": "Metti un segnalino Evento. Un razzo illuminante tedesco! Un dado decide dove cade: 0: F2, 1: F4, 2: F4, 3: J6, 4: J6, 5: H3, 6: H3, 7: I6, 8: I6, 9: I8. Illumina quell’esagono e i sei intorno. Se nessun soldato è illuminato non succede nulla; altrimenti ogni soldato illuminato fa un controllo di percezione: se riesce si butta prono, se fallisce resta com’è. Poi vedi 417.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "razzo",
+    "tab": [
+     "F2",
+     "F4",
+     "F4",
+     "J6",
+     "J6",
+     "H3",
+     "H3",
+     "I6",
+     "I6",
+     "I8"
+    ],
+    "poi": "417"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "419": {
+  "id": "419",
+  "it": "Metti un segnalino Evento. Un razzo illuminante tedesco! Un dado decide dove cade: 0: A6, 1: B2, 2: B2, 3: B4, 4: B4, 5: D7, 6: D7, 7: E7, 8: E7, 9: B6. Illumina quell’esagono e i sei intorno. Se nessun soldato è illuminato non succede nulla; altrimenti ogni soldato illuminato fa un controllo di percezione: se riesce si butta prono, se fallisce resta com’è. Poi vedi 418.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "razzo",
+    "tab": [
+     "A6",
+     "B2",
+     "B2",
+     "B4",
+     "B4",
+     "D7",
+     "D7",
+     "E7",
+     "E7",
+     "B6"
+    ],
+    "poi": "418"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "405": {
+  "id": "405",
+  "it": "Tira un dado: 0–6 un tedesco nascosto spara di rapido a un soldato illuminato scelto a caso (i Round non cominciano): gittata media, fucile, abilità +0. 7–9 come sopra, ma tiro mirato. Si toglie il razzo e si passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "fuoco_nascosto",
+    "soglia": 6,
+    "gittata": "media",
+    "arma": "bolt",
+    "ws": 0
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "410": {
+  "id": "410",
+  "it": "Tira un dado: 0–8 un tedesco nascosto spara di rapido a un soldato illuminato scelto a caso (i Round non cominciano): gittata corta, fucile, abilità +1. 9–9 come sopra, ma tiro mirato. Si toglie il razzo e si passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "fuoco_nascosto",
+    "soglia": 8,
+    "gittata": "corta",
+    "arma": "bolt",
+    "ws": 1
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "417": {
+  "id": "417",
+  "it": "Tira un dado: 0–5 un tedesco nascosto spara di rapido a un soldato illuminato scelto a caso (i Round non cominciano): gittata corta, fucile, abilità +0. 6–9 come sopra, ma tiro mirato. Si toglie il razzo e si passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "fuoco_nascosto",
+    "soglia": 5,
+    "gittata": "corta",
+    "arma": "bolt",
+    "ws": 0
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "418": {
+  "id": "418",
+  "it": "Tira un dado: 0–6 un tedesco nascosto spara di rapido a un soldato illuminato scelto a caso (i Round non cominciano): gittata lunga, pistola mitragliatrice, abilità +1. 7–9 come sopra, ma tiro mirato. Si toglie il razzo e si passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "fuoco_nascosto",
+    "soglia": 6,
+    "gittata": "lunga",
+    "arma": "mp",
+    "ws": 1
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "420": {
+  "id": "420",
+  "it": "Tira un dado. 0–4: controllo di attivazione, se riesce vedi 427, se fallisce vedi 430. 5–9: controllo di percezione, se riesce vedi 438, se fallisce vedi 437.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "427"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "430"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "438"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "437"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "430": {
+  "id": "430",
+  "it": "Controllo di percezione: se riesce vedi 432, se fallisce vedi 437.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "432"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "437"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "427": {
+  "id": "427",
+  "it": "[s0] Attiva il tedesco 20 in O4, il tedesco 40 in N4, il tedesco 41 in P3, accovacciati. Iniziano i Round. Vantaggio tedesco. I tedeschi 20, 40 e 41 ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O4"
+     ],
+     [
+      40,
+      "N4"
+     ],
+     [
+      41,
+      "P3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     20,
+     40,
+     41
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "432": {
+  "id": "432",
+  "it": "[s0] Attiva il tedesco 20 in O4, il tedesco 40 in N4, il tedesco 41 in P3, accovacciati. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O4"
+     ],
+     [
+      40,
+      "N4"
+     ],
+     [
+      41,
+      "P3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "437": {
+  "id": "437",
+  "it": "[s0] Attiva il tedesco 20 in O4, il tedesco 40 in N4, il tedesco 41 in P3, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O4"
+     ],
+     [
+      40,
+      "N4"
+     ],
+     [
+      41,
+      "P3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "438": {
+  "id": "438",
+  "it": "[s0] Attiva il tedesco 20 in O4, il tedesco 40 in N4, il tedesco 41 in P3, accovacciati. Iniziano i Round. Vantaggio americano. I soldati consapevoli ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O4"
+     ],
+     [
+      40,
+      "N4"
+     ],
+     [
+      41,
+      "P3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "440": {
+  "id": "440",
+  "it": "[s0] Attiva il tedesco 20 in M5, il tedesco 40 in M6, il tedesco 41 in N4, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M5"
+     ],
+     [
+      40,
+      "M6"
+     ],
+     [
+      41,
+      "N4"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "443": {
+  "id": "443",
+  "it": "[s0] Attiva il tedesco 20 in M5, il tedesco 40 in M6, il tedesco 41 in M7, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M5"
+     ],
+     [
+      40,
+      "M6"
+     ],
+     [
+      41,
+      "M7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "445": {
+  "id": "445",
+  "it": "Tira un dado. 0–6: controllo di attivazione, se riesce vedi 448, se fallisce vedi 451. 7–9: controllo di percezione, se riesce vedi 458, se fallisce vedi 455.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      6,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "448"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "451"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      7,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "458"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "455"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "451": {
+  "id": "451",
+  "it": "Controllo di percezione: se riesce vedi 453, se fallisce vedi 455.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "453"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "455"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "448": {
+  "id": "448",
+  "it": "[s0] Attiva il tedesco 20 in M8, il tedesco 40 in M7, il tedesco 41 in M6, accovacciati. Iniziano i Round. Vantaggio tedesco. I tedeschi 20, 40 e 41 ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M8"
+     ],
+     [
+      40,
+      "M7"
+     ],
+     [
+      41,
+      "M6"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     20,
+     40,
+     41
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "453": {
+  "id": "453",
+  "it": "[s0] Attiva il tedesco 20 in M8, il tedesco 40 in M7, il tedesco 41 in M6, accovacciati. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M8"
+     ],
+     [
+      40,
+      "M7"
+     ],
+     [
+      41,
+      "M6"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "455": {
+  "id": "455",
+  "it": "[s0] Attiva il tedesco 20 in M8, il tedesco 40 in M7, il tedesco 41 in M6, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M8"
+     ],
+     [
+      40,
+      "M7"
+     ],
+     [
+      41,
+      "M6"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "458": {
+  "id": "458",
+  "it": "[s0] Attiva il tedesco 20 in M8, il tedesco 40 in M7, il tedesco 41 in M6, accovacciati. Iniziano i Round. Vantaggio americano. I soldati consapevoli ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M8"
+     ],
+     [
+      40,
+      "M7"
+     ],
+     [
+      41,
+      "M6"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "459": {
+  "id": "459",
+  "it": "[s0] Attiva il tedesco 20 in M10, il tedesco 40 in M8, il tedesco 41 in N11, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "M10"
+     ],
+     [
+      40,
+      "M8"
+     ],
+     [
+      41,
+      "N11"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "462": {
+  "id": "462",
+  "it": "[s0] Attiva il tedesco 20 in N10, il tedesco 40 in M10, il tedesco 41 in N11, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "N10"
+     ],
+     [
+      40,
+      "M10"
+     ],
+     [
+      41,
+      "N11"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "464": {
+  "id": "464",
+  "it": "[s0] Attiva il tedesco 20 in O12, il tedesco 40 in N11, il tedesco 41 in O14, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O12"
+     ],
+     [
+      40,
+      "N11"
+     ],
+     [
+      41,
+      "O14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "467": {
+  "id": "467",
+  "it": "Tira un dado. 0–5: controllo di attivazione, se riesce vedi 470, se fallisce vedi 472. 6–9: controllo di percezione, se riesce vedi 480, se fallisce vedi 478.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "470"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "472"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "480"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "478"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "472": {
+  "id": "472",
+  "it": "Controllo di percezione: se riesce vedi 475, se fallisce vedi 478.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "475"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "478"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "470": {
+  "id": "470",
+  "it": "[s0] Attiva il tedesco 20 in O16, il tedesco 40 in O17, il tedesco 41 in O15, accovacciati. Iniziano i Round. Vantaggio tedesco. I tedeschi 20, 40 e 41 ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O16"
+     ],
+     [
+      40,
+      "O17"
+     ],
+     [
+      41,
+      "O15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     20,
+     40,
+     41
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "475": {
+  "id": "475",
+  "it": "[s0] Attiva il tedesco 20 in O16, il tedesco 40 in O17, il tedesco 41 in O15, accovacciati. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O16"
+     ],
+     [
+      40,
+      "O17"
+     ],
+     [
+      41,
+      "O15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "478": {
+  "id": "478",
+  "it": "[s0] Attiva il tedesco 20 in O16, il tedesco 40 in O17, il tedesco 41 in O15, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O16"
+     ],
+     [
+      40,
+      "O17"
+     ],
+     [
+      41,
+      "O15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "480": {
+  "id": "480",
+  "it": "[s0] Attiva il tedesco 20 in O16, il tedesco 40 in O17, il tedesco 41 in O15, accovacciati. Iniziano i Round. Vantaggio americano. I soldati consapevoli ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "O16"
+     ],
+     [
+      40,
+      "O17"
+     ],
+     [
+      41,
+      "O15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "481": {
+  "id": "481",
+  "it": "Tira un dado. 0–5: controllo di attivazione, se riesce vedi 483, se fallisce vedi 486. 6–9: controllo di percezione, se riesce vedi 495, se fallisce vedi 492.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "483"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "486"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "495"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "492"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "486": {
+  "id": "486",
+  "it": "Controllo di percezione: se riesce vedi 488, se fallisce vedi 492.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "488"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "492"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "483": {
+  "id": "483",
+  "it": "[s0] Attiva il tedesco 20 in P17, il tedesco 40 in P19, il tedesco 41 in O17, accovacciati. Iniziano i Round. Vantaggio tedesco. I tedeschi 20, 40 e 41 ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "P17"
+     ],
+     [
+      40,
+      "P19"
+     ],
+     [
+      41,
+      "O17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     20,
+     40,
+     41
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "488": {
+  "id": "488",
+  "it": "[s0] Attiva il tedesco 20 in P17, il tedesco 40 in P19, il tedesco 41 in O17, accovacciati. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "P17"
+     ],
+     [
+      40,
+      "P19"
+     ],
+     [
+      41,
+      "O17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "492": {
+  "id": "492",
+  "it": "[s0] Attiva il tedesco 20 in P17, il tedesco 40 in P19, il tedesco 41 in O17, accovacciati. Iniziano i Round. Vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "P17"
+     ],
+     [
+      40,
+      "P19"
+     ],
+     [
+      41,
+      "O17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "495": {
+  "id": "495",
+  "it": "[s0] Attiva il tedesco 20 in P17, il tedesco 40 in P19, il tedesco 41 in O17, accovacciati. Iniziano i Round. Vantaggio americano. I soldati consapevoli che non sono nel panico ricevono 2 turni. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      20,
+      "P17"
+     ],
+     [
+      40,
+      "P19"
+     ],
+     [
+      41,
+      "O17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "497": {
+  "id": "497",
+  "it": "[s5] Il soldato vede una fila di filo spinato da K5 a K9. Nelle Operazioni il filo si attraversa normalmente. Nei Round entrare costa 1 PM in più e ci si deve buttare proni; uscendo si tira un dado: con 0 il soldato è ferito, resta prono e perde i turni del Round. Non ostacola i tedeschi; una carica da demolizione che esplode nell’esagono lo toglie.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "filo",
+    "hex": [
+     "K5",
+     "K6",
+     "K7",
+     "K8",
+     "K9"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "600": {
+  "id": "600",
+  "it": "[s6] Il soldato vede una fila di filo spinato da M14 a M19. Nelle Operazioni il filo si attraversa normalmente. Nei Round entrare costa 1 PM in più e ci si deve buttare proni; uscendo si tira un dado: con 0 il soldato è ferito, resta prono e perde i turni del Round. Non ostacola i tedeschi; una carica da demolizione che esplode nell’esagono lo toglie.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "filo",
+    "hex": [
+     "M14",
+     "M15",
+     "M16",
+     "M17",
+     "M18",
+     "M19"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "604": {
+  "id": "604",
+  "it": "[s6] Il soldato vede una fila di filo spinato in N6, O6, P5, Q5, R4 e S4. Nelle Operazioni il filo si attraversa normalmente. Nei Round entrare costa 1 PM in più e ci si deve buttare proni; uscendo si tira un dado: con 0 il soldato è ferito, resta prono e perde i turni del Round. Non ostacola i tedeschi; una carica da demolizione che esplode nell’esagono lo toglie.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "filo",
+    "hex": [
+     "N6",
+     "O6",
+     "P5",
+     "Q5",
+     "R4",
+     "S4"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "601": {
+  "id": "601",
+  "it": "Per i bombardamenti a tappeto le fondamenta di questa casa sono debolissime. Ogni soldato nell’edificio fa subito un controllo di percezione: chi riesce torna nell’esagono da cui è entrato; chi fallisce vede il tetto crollare e tira per i danni come da pistola. Ogni esagono dell’edificio diventa macerie e i superstiti restano proni sulle macerie. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "crollo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "606": {
+  "id": "606",
+  "it": "[s4] Attiva il tedesco 21 in R5, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      21,
+      "R5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "608": {
+  "id": "608",
+  "it": "[s4] Attiva il tedesco 21 in O7, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      21,
+      "O7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "611": {
+  "id": "611",
+  "it": "[s4] Attiva il tedesco 21 in S7, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      21,
+      "S7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "613": {
+  "id": "613",
+  "it": "[s4] Attiva il tedesco 21 in X7, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      21,
+      "X7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "615": {
+  "id": "615",
+  "it": "Tira un dado. 0–5: controllo di attivazione, se riesce vedi 620, se fallisce vedi 624. 6–9: controllo di percezione, se riesce vedi 629, se fallisce vedi 627.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "620"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "624"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "629"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "627"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "624": {
+  "id": "624",
+  "it": "Controllo di percezione: se riesce vedi 625, se fallisce vedi 627.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "625"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "627"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "620": {
+  "id": "620",
+  "it": "[s7] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Iniziano i Round. Vantaggio tedesco. Il tedesco 50 riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     50
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "625": {
+  "id": "625",
+  "it": "[s7] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "627": {
+  "id": "627",
+  "it": "[s7] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Iniziano i Round. Vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "629": {
+  "id": "629",
+  "it": "[s7] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Iniziano i Round. Vantaggio americano. I soldati consapevoli che non sono nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "631": {
+  "id": "631",
+  "it": "Tira un dado. 0–6: controllo di attivazione, se riesce vedi 633, se fallisce vedi 635. 7–9: controllo di percezione, se riesce vedi 642, se fallisce vedi 639.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      6,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "633"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "635"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      7,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "642"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "639"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "635": {
+  "id": "635",
+  "it": "Controllo di percezione: se riesce vedi 637, se fallisce vedi 639.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "637"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "639"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "633": {
+  "id": "633",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio tedesco. I tedeschi 50 e 12 ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     50,
+     12
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "637": {
+  "id": "637",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "639": {
+  "id": "639",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "642": {
+  "id": "642",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio americano. I soldati consapevoli che non sono nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "655": {
+  "id": "655",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio tedesco. I tedeschi 12 e 50 ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     50,
+     12
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "664": {
+  "id": "664",
+  "it": "[s7 e s9] Attiva i tedeschi 50 e 51 in S17, accovacciati dentro un bunker con la porta verso T17. Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "bunker",
+    "hex": "S17",
+    "porta": "T17"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "S17"
+     ],
+     [
+      51,
+      "S17"
+     ],
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "644": {
+  "id": "644",
+  "it": "Tira un dado. 0–5: controllo di attivazione, se riesce vedi 646, se fallisce vedi 648. 6–9: controllo di percezione, se riesce vedi 653, se fallisce vedi 650.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "646"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "648"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "653"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "650"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "648": {
+  "id": "648",
+  "it": "Controllo di percezione: se riesce vedi 649, se fallisce vedi 650.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "649"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "650"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "646": {
+  "id": "646",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round. Vantaggio tedesco. Il tedesco 52 riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     52
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "649": {
+  "id": "649",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round. Vantaggio americano. Il soldato che ha fatto il controllo è consapevole.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "650": {
+  "id": "650",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round. Vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "653": {
+  "id": "653",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round. Vantaggio americano. I soldati consapevoli che non sono nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "660": {
+  "id": "660",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round. Vantaggio tedesco. I tedeschi 52 e 53 ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     52,
+     53
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "665": {
+  "id": "665",
+  "it": "[s8] Attiva i tedeschi 52 e 53 in W15, accovacciati dentro un bunker con la porta verso W16. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "bunker",
+    "hex": "W15",
+    "porta": "W16"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "W15"
+     ],
+     [
+      53,
+      "W15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "657": {
+  "id": "657",
+  "it": "Il soldato con la percezione più alta fa un controllo di percezione: se riesce, vedi 658.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "658"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "658": {
+  "id": "658",
+  "it": "[s3] Il soldato nota uno strano bagliore in direzione di U16.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "662": {
+  "id": "662",
+  "it": "Campo minato! Si applica la procedura del campo minato.",
+  "ops": [
+   {
+    "op": "minefield"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "668": {
+  "id": "668",
+  "it": "[s2] Il soldato vede uno squarcio nel fianco sinistro del Jagdpanther! Dentro si vedono i due uomini dell’equipaggio che caricano e sparano. Lo squarcio vale come un’apertura per il tiro e per le granate; l’equipaggio è accovacciato. Se un membro dell’equipaggio viene colpito, l’equipaggio si arrende e il carro è fuori uso.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "squarcio"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "936": {
+  "id": "936",
+  "it": "[s9] Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio tedesco. Il tedesco 12 riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     12
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "939": {
+  "id": "939",
+  "it": "[s9] Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round. Vantaggio americano. Chi vede U16 è consapevole e riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   },
+   {
+    "op": "consapevoli_vede",
+    "hex": "U16"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "941": {
+  "id": "941",
+  "it": "[s9] Attiva il Jagdpanther (tedesco 12) in U16, rivolto verso T15. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      12,
+      "U16"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "fronte",
+    "g": 12,
+    "verso": "T15"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "937": {
+  "id": "937",
+  "it": "Tira un dado. 0–4: controllo di attivazione, se riesce vedi 936, se fallisce vedi 938. 5–9: controllo di percezione, se riesce vedi 939, se fallisce vedi 941.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "936"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "938"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "939"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "941"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "938": {
+  "id": "938",
+  "it": "Controllo di percezione: se riesce vedi 939, se fallisce vedi 941.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "939"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "941"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "870": {
+  "id": "870",
+  "it": "Se uno degli avvistamenti 7, 8 o 9 è avvenuto, vedi 874; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "any_s": [
+      7,
+      8,
+      9
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "874"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "872": {
+  "id": "872",
+  "it": "Nelle Operazioni vedi 874; nei Round nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "in_round": true
+    },
+    "then": [],
+    "else": [
+     {
+      "op": "goto",
+      "p": "874"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "874": {
+  "id": "874",
+  "it": "L’alba! La visibilità sale a dieci esagoni. Si passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "visibilita",
+    "n": 10
+   },
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "876": {
+  "id": "876",
+  "it": "Nei Round vedi 878; nelle Operazioni nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "in_round": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "878"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "878": {
+  "id": "878",
+  "it": "Un americano con iniziativa 3 o meno, scelto a caso, va nel panico e cade prono: perde i turni di questo Round. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "panico_mo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "880": {
+  "id": "880",
+  "it": "Se il soldato che porta la radio è in bosco, cespugli o macerie, inciampa e cade prono. Un dado: con 0 la radio è distrutta; altrimenti il soldato tira per i danni come da pistola. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "radio_inciampa"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "883": {
+  "id": "883",
+  "it": "Pieno giorno: il sole sorge e la visibilità torna piena per il resto della partita. Si passa alla Condizione 5.",
+  "ops": [
+   {
+    "op": "visibilita",
+    "n": 0
+   },
+   {
+    "op": "condition",
+    "n": 5
+   }
+  ],
+  "tipo": "missione"
+ },
+ "885": {
+  "id": "885",
+  "it": "Se la radio è presidiata e funziona, il comando di divisione chiede se la colonna può avanzare: puoi chiamarla adesso o quando vuoi (vedi 887). Se la radio non funziona o non è presidiata, vedi 889.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "radio": true
+    },
+    "then": [
+     {
+      "op": "scelta_attiva",
+      "par": "887",
+      "testo": "Chiama la colonna corazzata (paragrafo 887)"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "889"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "887": {
+  "id": "887",
+  "it": "La colonna americana entra in A6! Si passa alla Condizione 6 e il sole sorge: visibilità piena. (Nel gioco da tavolo Sherman e jeep si muovono con le loro carte; qui li comandi tu: lo Sherman è Z, la jeep ha l’autista J e il mitragliere K.)",
+  "ops": [
+   {
+    "op": "colonna",
+    "hex": "A6"
+   },
+   {
+    "op": "visibilita",
+    "n": 0
+   },
+   {
+    "op": "condition",
+    "n": 6
+   }
+  ],
+  "tipo": "missione"
+ },
+ "889": {
+  "id": "889",
+  "it": "La colonna americana entra in A6! Si passa alla Condizione 6. Questo evento sostituisce ogni altro riferimento alla colonna: non si può più rimandare.",
+  "ops": [
+   {
+    "op": "colonna",
+    "hex": "A6"
+   },
+   {
+    "op": "condition",
+    "n": 6
+   }
+  ],
+  "tipo": "missione"
+ },
+ "890": {
+  "id": "890",
+  "it": "Tira due dadi: con 9 o meno vedi 892; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "due_dadi",
+    "max": 9,
+    "p": "892"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "892": {
+  "id": "892",
+  "it": "Un contrattacco tedesco! Attiva i tedeschi 30, 31, 32 e 33 in Q19, in piedi. Si continua coi Round, vantaggio tedesco; ricevono 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      30,
+      "Q19"
+     ],
+     [
+      31,
+      "Q19"
+     ],
+     [
+      32,
+      "Q19"
+     ],
+     [
+      33,
+      "Q19"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [
+     30,
+     31,
+     32,
+     33
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "894": {
+  "id": "894",
+  "it": "Se almeno due degli avvistamenti 7, 8 e 9 sono avvenuti, vedi 883; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "almeno_s": [
+      2,
+      7,
+      8,
+      9
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "883"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "461": {
+  "id": "461",
+  "it": "Un tedesco incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "de",
+    "chiave": "mo461"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "485": {
+  "id": "485",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "de",
+    "chiave": "mo485"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "623": {
+  "id": "623",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "us",
+    "chiave": "mo623"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "672": {
+  "id": "672",
+  "it": "Il tedesco 30 entra in P19, il 31 in P18, il 32 in Q18, il 33 in R18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num": 30
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P19"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_num": 31
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "P18"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "g_num": 32
+        },
+        "then": [
+         {
+          "op": "g_enter",
+          "hex": "Q18"
+         }
+        ],
+        "else": [
+         {
+          "op": "g_enter",
+          "hex": "R18"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "803": {
+  "id": "803",
+  "it": "Se non vede bersagli per il buio ma c’è un americano attivo entro sei esagoni, si alza e lancia una granata (−3 perché il bersaglio non è in vista); poi prono se può. Se ha un bersaglio in vista e una granata, si alza e la lancia; poi prono se può. Se ha un bersaglio in vista ma niente granate, vedi 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "804": {
+  "id": "804",
+  "it": "Con un solo bersaglio in vista si accovaccia e fa il miglior tiro con la mitragliatrice; con due o più vedi 805; senza bersagli non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "805": {
+  "id": "805",
+  "it": "Con un bersaglio entro tre esagoni si accovaccia e lancia una granata nell’esagono con più americani, poi prono se può. Con un bersaglio entro cinque esagoni si alza e spara di rapido a quanti più bersagli può, poi prono se può. Altrimenti vedi 815.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "806": {
+  "id": "806",
+  "it": "Se vede un mezzo americano attivo, prepara il Panzerbüchse e spara allo Sherman, poi alla jeep. Altrimenti vedi 805.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "807": {
+  "id": "807",
+  "it": "Se vede un mezzo americano attivo, prepara il Panzerbüchse e spara allo Sherman, poi alla jeep. Altrimenti vedi 815.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "809": {
+  "id": "809",
+  "it": "Se vede un mezzo americano attivo, prepara il Panzerbüchse e spara allo Sherman, poi alla jeep. Altrimenti vedi 810.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "810": {
+  "id": "810",
+  "it": "Con un americano attivo entro cinque esagoni si alza e fa il miglior tiro al più vicino, poi prono se può. Altrimenti vedi 815.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "811": {
+  "id": "811",
+  "it": "Con un americano attivo entro sei esagoni si alza e lancia una granata (esagono a caso se più d’uno), poi prono se può. Altrimenti si butta prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "813": {
+  "id": "813",
+  "it": "Se il tedesco 50 è attivo non fa nulla; altrimenti si accovaccia e lancia una granata in un esagono adiacente al bunker.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "816": {
+  "id": "816",
+  "it": "Ignora la reazione di autoconservazione: nuovo numero d’azione sulla colonna che userebbe altrimenti.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "818": {
+  "id": "818",
+  "it": "Se il tedesco 52 è attivo non fa nulla; altrimenti si accovaccia e lancia una granata in un esagono adiacente al bunker.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "820": {
+  "id": "820",
+  "it": "Se il tedesco 50 non è più attivo si arrende; altrimenti non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "821": {
+  "id": "821",
+  "it": "Se il tedesco 52 non è più attivo si arrende; se non ci sono altri tedeschi attivi nello stesso esagono o accanto si butta prono; altrimenti non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "823": {
+  "id": "823",
+  "it": "Se ha il Panzerfaust e un mezzo americano è entro tre esagoni, si accovaccia e spara allo Sherman, poi alla jeep; poi prono se può. Se il mezzo è in vista ma più lontano, vedi 801. Altrimenti corre verso J13 e vedi 868.",
+  "ops": [
+   {
+    "op": "azione_tedesca",
+    "n": 823
+   }
+  ],
+  "tipo": "azione"
+ },
+ "825": {
+  "id": "825",
+  "it": "Come 823, ma corre verso N13.",
+  "ops": [
+   {
+    "op": "azione_tedesca",
+    "n": 825
+   }
+  ],
+  "tipo": "azione"
+ },
+ "826": {
+  "id": "826",
+  "it": "Come 823, ma corre verso S12.",
+  "ops": [
+   {
+    "op": "azione_tedesca",
+    "n": 826
+   }
+  ],
+  "tipo": "azione"
+ },
+ "827": {
+  "id": "827",
+  "it": "Come 823, ma corre verso T12.",
+  "ops": [
+   {
+    "op": "azione_tedesca",
+    "n": 827
+   }
+  ],
+  "tipo": "azione"
+ },
+ "901": {
+  "id": "901",
+  "it": "Se vede un mezzo americano attivo carica il cannone e spara allo Sherman, poi alla jeep; altrimenti vedi 902.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "902": {
+  "id": "902",
+  "it": "Se ha un bersaglio in vista fa il miglior tiro con la mitragliatrice di scafo al più facile; altrimenti nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "903": {
+  "id": "903",
+  "it": "Se vede un mezzo americano attivo carica il cannone e spara allo Sherman, poi alla jeep; altrimenti vedi 904.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "904": {
+  "id": "904",
+  "it": "Se quattro o più americani attivi sono nel suo esagono, l’equipaggio si arrende; altrimenti vedi 902.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "932": {
+  "id": "932",
+  "it": "Se due o più americani attivi sono nell’esagono si arrende; altrimenti si alza e fa il miglior tiro al più vicino, poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "933": {
+  "id": "933",
+  "it": "Con un bersaglio entro tre esagoni si alza e lancia una granata nell’esagono con più americani (entro tre esagoni dal bunker); altrimenti si alza e spara con l’arma personale al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
  "402": {
   "id": "402",
   "it": "Controllo di percezione: se riesce, vedi 407.",
@@ -2734,30 +5905,6 @@
   ],
   "tipo": "missione"
  },
- "485": {
-  "id": "485",
-  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "de",
-    "chiave": "mo485"
-   }
-  ],
-  "tipo": "missione"
- },
- "623": {
-  "id": "623",
-  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "us",
-    "chiave": "mo623"
-   }
-  ],
-  "tipo": "missione"
- },
  "953": {
   "id": "953",
   "it": "Tira un dado: 0–6 entra in L11; 7–9 entra in L10.",
@@ -4392,18 +7539,6 @@
    {
     "op": "condition",
     "n": 4
-   }
-  ],
-  "tipo": "missione"
- },
- "461": {
-  "id": "461",
-  "it": "Un tedesco incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "morte_incapacitato",
-    "lato": "de",
-    "chiave": "mo461"
    }
   ],
   "tipo": "missione"

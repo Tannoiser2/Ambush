@@ -70,6 +70,47 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			_faro(str(o.da), o.tab)
 		"partigiano":
 			_partigiano()
+		"azione_tedesca":
+			var ga: Dictionary = p.u(str(ctx.get("g", "")))
+			if not ga.is_empty() and p.ia._g.get("id", "") == ga.id:
+				p.ia._fermo = true
+				p.ia.mo.esegui(int(o.n))
+		"razzo":
+			_razzo(o)
+		"fuoco_nascosto":
+			_fuoco_nascosto(o)
+		"filo":
+			if not p.s.has("filo"):
+				p.s.filo = []
+			for h in o.hex:
+				if not (str(h) in p.s.filo):
+					p.s.filo.append(str(h))
+			p._log("info", "Filo spinato in %s." % ", ".join(o.hex))
+		"crollo":
+			_crollo(ctx)
+		"fronte":
+			_fronte(o)
+		"squarcio":
+			var vj: Dictionary = p.veicoli.v("v12")
+			if not vj.is_empty():
+				vj.squarcio = true
+		"visibilita":
+			p.s.vista = int(o.n)
+			p._applica_regole_terreno()
+			p._log("info", "Visibilità: %s." % ("piena" if int(o.n) == 0 else "%d esagoni" % int(o.n)))
+		"panico_mo":
+			_panico()
+		"radio_inciampa":
+			_radio_inciampa()
+		"colonna":
+			_colonna(str(o.hex))
+		"due_dadi":
+			var somma: int = p.d10() + p.d10()
+			p._log("dado", "Due dadi: %d." % somma)
+			if somma <= int(o.max):
+				p.leggi(str(o.p), ctx)
+			else:
+				p._log("info", "Nessun evento.")
 		"tutti_consapevoli":
 			if p.s.has("round") and not p.s.round.is_empty():
 				p.s.round.tutti_consapevoli = true
@@ -236,6 +277,12 @@ func _sveglia(o: Dictionary) -> void:
 func controlla() -> void:
 	if not attiva() or p.s.fase == "fine":
 		return
+	if radio_portata() and p.s.fase != "schieramento":
+		if not p.s.has("radio_porta"):
+			p.s.radio_porta = "A"
+			p._log("info", "La radio la porta %s." % p.nome(p.u("A")))
+		var rp: Dictionary = p.u(str(p.s.radio_porta))
+		p.s.radio_hex = rp.hex if radio_funziona() else ""
 	controlla_m12()
 	if sbarramento() and int(p.s.condizione) == 1 and p.s.fase != "schieramento" and not p.s.get("mo_c2", false):
 		if p.tedeschi_attivi().filter(func(g): return p.in_mappa(g)).is_empty():
@@ -449,6 +496,20 @@ func test(t: Dictionary, ctx: Dictionary) -> bool:
 		var cl: Dictionary = p.u("J")
 		return not cl.is_empty() and p.attivo(cl) and cl.hex == h \
 			and p.unita_in(h, "us").filter(func(x): return x.id != "J").size() >= 1
+	if t.has("any_s"):
+		for n in t.any_s:
+			if p.s.avvistamenti[int(n)]:
+				return true
+		return false
+	if t.has("almeno_s"):
+		var lista: Array = t.almeno_s
+		var c := 0
+		for n in lista.slice(1):
+			if p.s.avvistamenti[int(n)]:
+				c += 1
+		return c >= int(lista[0])
+	if t.has("in_round"):
+		return p.fase_round()
 	if t.has("spari"):
 		var r: Dictionary = p.s.get("round", {})
 		return not r.get("sparato", []).is_empty() or not r.get("sparato_prec", []).is_empty()
@@ -958,3 +1019,217 @@ func righe_fine_m12(righe: Array) -> int:
 	if n > 0:
 		righe.append(["%d compagni liberati e portati fuori" % n, 5 * n])
 	return 5 * n
+
+# ================================================================== Missione 9: notte sulla Linea Sigfrido
+## 400/408/413/419: razzo illuminante.
+func _razzo(o: Dictionary) -> void:
+	var r: int = p.d10("Dove cade il razzo")
+	var h := str(o.tab[r])
+	var luce: Array = [h] + E.vicini(h)
+	p._fx("esplosione", {"a": h, "razzo": true})
+	var visti: Array = p.americani_attivi_in_mappa().filter(func(a): return a.hex in luce)
+	p._log("info", "Il razzo illumina %s e gli esagoni intorno." % h)
+	if visti.is_empty():
+		p._log("info", "Nessun soldato illuminato: nessun evento.")
+		return
+	for a in visti:
+		if p.controllo_pc(a, 0, "razzo"):
+			a.postura = "prone"
+			p._log("info", "%s si butta a terra." % p.nome(a))
+		else:
+			p._log("info", "%s resta immobile nella luce." % p.nome(a))
+	p.s.mo_illuminati = visti.map(func(a): return a.id)
+	p.leggi(str(o.poi), {"hex": h, "ids": []})
+
+## 405/410/417/418: un tedesco nascosto spara a un soldato illuminato (senza Round).
+func _fuoco_nascosto(o: Dictionary) -> void:
+	var ids: Array = p.s.get("mo_illuminati", [])
+	var lista: Array = ids.map(func(id): return p.u(str(id))).filter(func(a): return not a.is_empty() and p.attivo(a))
+	if lista.is_empty():
+		return
+	var b: Dictionary = lista[p.rng.randi_range(0, lista.size() - 1)]
+	var mirato: bool = p.d10("Tiro rapido o mirato") > int(o.soglia)
+	var base: int = {"corta": 5, "media": 4, "lunga": 3}.get(str(o.gittata), 4)
+	var prob: int = base + int(o.ws) - (0 if mirato else 2)
+	p._log("info", "Un tedesco nascosto spara %s a %s." % ["mirando" if mirato else "di rapido", p.nome(b)])
+	p.risolvi_tiro({"lato": "cecchino", "WS": int(o.ws)}, {"tipo": str(o.arma), "inceppata": false}, b, mirato, maxi(0, prob))
+	p.s.erase("mo_illuminati")
+
+## Filo spinato (497, 600, 604).
+func filo(h: String) -> bool:
+	return h in p.s.get("filo", [])
+
+func costo_extra(a: Dictionary, verso: String) -> int:
+	return 1 if attiva() and p.fase_round() and filo(verso) and not p.veicoli.attivo(p.veicoli.di(a)) else 0
+
+## Chi esce da un esagono col filo spinato nei Round rischia di restare impigliato: true se resta fermo.
+func impigliato(ids: Array) -> bool:
+	if not attiva() or not p.fase_round():
+		return false
+	var fermo := false
+	for id in ids:
+		var a: Dictionary = p.u(str(id))
+		if a.is_empty() or not filo(a.hex) or p.veicoli.attivo(p.veicoli.di(a)):
+			continue
+		if p.d10("%s esce dal filo spinato" % p.nome(a)) == 0:
+			p._log("danno", "%s resta impigliato nel filo spinato." % p.nome(a))
+			p._ferisci(a)
+			a.postura = "prone"
+			fermo = true
+	return fermo
+
+func dopo_ingresso(ids: Array, h: String) -> void:
+	if not attiva() or not p.fase_round() or not filo(h):
+		return
+	for id in ids:
+		var a: Dictionary = p.u(str(id))
+		if not a.is_empty() and a.postura != "prone" and not p.veicoli.attivo(p.veicoli.di(a)):
+			a.postura = "prone"
+			p._log("info", "%s si butta sotto il filo spinato." % p.nome(a))
+
+func esplosione(tipo: String, h: String) -> void:
+	if tipo == "satchel" and filo(h):
+		p.s.filo.erase(h)
+		p._log("info", "La carica apre un varco nel filo spinato in %s." % h)
+
+## 601: crollo della casa pericolante (una volta).
+func _crollo(ctx: Dictionary) -> void:
+	if p.s.get("mo_crollo", false):
+		return
+	var h: String = str(ctx.get("hex", ""))
+	if h == "" or not p.terreno.edificio(h):
+		return
+	p.s.mo_crollo = true
+	var casa: Array = [h]
+	var i := 0
+	while i < casa.size():
+		for v in E.vicini(casa[i]):
+			if not (v in casa) and p.terreno.edificio(v) and p.terreno.tipo_lato(casa[i], v) == "":
+				casa.append(v)
+		i += 1
+	for x in p.americani_attivi_in_mappa().filter(func(a): return a.hex in casa):
+		if p.controllo_pc(x, 0, "crollo") and str(x.get("hex_prec", "")) != "" and not (str(x.hex_prec) in casa):
+			x.hex = str(x.hex_prec)
+			p._log("info", "%s esce di corsa in %s." % [p.nome(x), x.hex])
+		else:
+			p._applica_danno(x, T.lettera_danno(T.ARMI.pistol.danni, p.d10("Crollo su %s" % p.nome(x))), {})
+			x.postura = "prone"
+	for c in casa:
+		p.s.modifiche[c] = "rubble"
+	p.terreno.imposta_modifiche(p.s.modifiche)
+	p._fx("esplosione", {"a": h, "grande": true})
+	p._log("danno", "Il tetto crolla: %s diventano macerie." % ", ".join(casa))
+
+## Radio portata a mano (Move Out!, regola 5).
+func radio_portata() -> bool:
+	return attiva() and bool(p.regola("radio_portata", false))
+
+func radio_funziona() -> bool:
+	if p.s.get("radio_rotta", false):
+		return false
+	var a: Dictionary = p.u(str(p.s.get("radio_porta", "")))
+	return not a.is_empty() and p.attivo(a) and p.in_mappa(a)
+
+func colpito(x: Dictionary) -> void:
+	if not radio_portata() or str(x.get("id", "")) != str(p.s.get("radio_porta", "")) or p.s.get("radio_rotta", false):
+		return
+	var r: int = p.d10() * 10 + p.d10()
+	if r <= 25:
+		p.s.radio_rotta = true
+		p._log("danno", "La radio di %s è distrutta (%02d)." % [p.nome(x), r])
+
+func _radio_inciampa() -> void:
+	if p.s.get("mo_radio_inciampa", false):
+		return
+	p.s.mo_radio_inciampa = true
+	var a: Dictionary = p.u(str(p.s.get("radio_porta", "")))
+	if a.is_empty() or not p.in_mappa(a) or not (p.terreno.tipo(a.hex) in ["woods", "brush", "rubble"]):
+		p._log("info", "Nessun effetto.")
+		return
+	a.postura = "prone"
+	if p.d10("%s inciampa con la radio" % p.nome(a)) == 0:
+		p.s.radio_rotta = true
+		p._log("danno", "La radio è distrutta.")
+	else:
+		p._applica_danno(a, T.lettera_danno(T.ARMI.pistol.danni, p.d10("Danni della caduta")), {})
+
+func _panico() -> void:
+	if p.s.get("mo_panico", false):
+		return
+	var lista: Array = p.americani_attivi_in_mappa().filter(func(a): return int(a.IN) <= 3 and not a.get("carro_us", false))
+	if lista.is_empty() or not p.fase_round():
+		p._log("info", "Nessun effetto.")
+		return
+	p.s.mo_panico = true
+	var a: Dictionary = lista[p.rng.randi_range(0, lista.size() - 1)]
+	a.postura = "prone"
+	a.panico = true
+	a.turni = 0
+	a.slot = "panico"
+	p._log("danno", "%s va nel panico e si butta a terra." % p.nome(a))
+
+## 887/889: la colonna americana (Sherman Z e jeep con J e K) entra in gioco; la comandi tu.
+func _colonna(h: String) -> void:
+	if p.s.get("mo_colonna", false):
+		return
+	p.s.mo_colonna = true
+	if p.s.has("scelte"):
+		p.s.scelte.erase("887")
+	_sherman(h)
+	var z: Dictionary = p.u("Z")
+	if not z.is_empty():
+		z.colonna = true
+	var j: Dictionary = p._nuovo_americano({"id": "J", "nome": "Autista", "IN": 3, "PC": 4, "WS": 0, "DS": 8, "MPA": 4,
+		"comandante": false, "porte": ["pistol"], "munizioni": {"pistol": 5, "granata": 0}})
+	var k: Dictionary = p._nuovo_americano({"id": "K", "nome": "Mitragliere", "IN": 4, "PC": 6, "WS": 1, "DS": 4, "MPA": 4,
+		"comandante": false, "porte": ["carbine"], "munizioni": {"carbine": 5, "granata": 0}})
+	var v: Dictionary = p.veicoli.crea("vcolonna", "jeep", h, "us")
+	v.mg = {"tipo": "mmg", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "scarica": false, "montata": true}
+	v.mg_munizioni = 10
+	for x in [j, k]:
+		x.stato = "attivo"
+		x.hex = h
+		x.postura = "crouching"
+		x.consapevole = true
+		x.colonna = true
+		p.s.unita[x.id] = x
+		p.s.imbarco = true
+		p.veicoli.sali(x, v)
+		p.s.imbarco = false
+	p._log("info", "La jeep della colonna entra in %s con l’autista J e il mitragliere K." % h)
+
+## Uscita: ogni mezzo della colonna che esce da Y8 vale 5 PV.
+func uscita(a: Dictionary, h: String) -> void:
+	if not attiva() or not a.get("colonna", false):
+		return
+	var v: Dictionary = p.veicoli.di(a)
+	var mezzo: String = "vsherman" if a.get("carro_us", false) else str(v.get("id", ""))
+	if mezzo == "" or p.s.get("mo_usciti", []).has(mezzo):
+		return
+	if not p.s.has("mo_usciti"):
+		p.s.mo_usciti = []
+	p.s.mo_usciti.append(mezzo)
+	var veic: Dictionary = p.veicoli.v(mezzo)
+	if not veic.is_empty():
+		for x in p.veicoli.occupanti(veic):
+			if x.id != a.id and p.attivo(x):
+				x.stato = "uscito"
+				x.hex = ""
+		veic.stato = "uscito"
+		veic.hex = ""
+	if h == "Y8" and int(p.regola("pv_uscita_mezzi", 0)) > 0:
+		p._pv(int(p.regola("pv_uscita_mezzi", 0)), "%s esce da Y8" % ("lo Sherman" if mezzo == "vsherman" else "la jeep della colonna"))
+
+func turni_tedesco(g: Dictionary, es: Dictionary) -> Dictionary:
+	if attiva() and bool(p.missione.tedeschi.get(str(int(g.num)), {}).get("un_turno", false)) and int(es.get("turni", 0)) > 1:
+		es.turni = 1
+	return es
+
+func _fronte(o: Dictionary) -> void:
+	var v: Dictionary = p.veicoli.v("v%d" % int(o.g))
+	if v.is_empty():
+		return
+	var d: int = E.direzione(v.hex, str(o.verso))
+	if d >= 0:
+		v.fronte = d
+	v.immobile = true

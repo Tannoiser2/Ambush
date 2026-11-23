@@ -65,3 +65,11 @@ Ordine scelto: M11, M10, M12, M9.
   scale: 1 PM in piedi nei Round, libere nelle Operazioni (`cambia_piano`); i tedeschi scendono pagando 1 PM.
   Paragrafi: base 069/496/471/477/636 (`al_piano`), 265 e MO 980 (`scala_tedesco`), MO 651/652/898, 969, faro 948.
   Test: tests/piani.gd.
+- M9 FATTA: razzi illuminanti (400/408/413/419 → fuoco nascosto 405/410/417/418 → C2), sentinelle 20/40/41
+  (terne → C3), filo spinato (497/600/604: +1 PM e proni nei Round, 0 = ferito uscendo, la carica lo apre), casa
+  che crolla (601), tedesco 21, bunker S17 e W15 (6 PV, già nel motore), Jagdpanther immobile in U16 (GE12, carro
+  con «immobile», squarcio 668 → l’equipaggio si arrende), alba 874 (vista 10, C4), pieno giorno 883 (C5), radio portata
+  da A (25% di rompersi se ferito), 885 colonna chiamabile con la radio (scelta) o 889 obbligata, colonna 887 =
+  Sherman Z + jeep con J e K comandati dal giocatore, +5 PV per mezzo uscito da Y8, contrattacco 892 coi Panzerfaust
+  (823–827 anche come riferimenti di movimento), Panzerbüchse (806/807/809), azioni MO 803–821, 901–904, 932–933.
+  Limiti: la colonna la comanda il giocatore; «assiste» dei Gioventù hitleriana non gestito; razzo senza segnalino 2D.

@@ -381,6 +381,13 @@ func aggiorna_equipaggio(veic: Dictionary, g: Dictionary) -> void:
 
 ## Effetti di un colpo andato a segno contro il veicolo.
 func colpito(veic: Dictionary, arma: String, tiratore: Dictionary, mirato: bool, fx: Dictionary) -> void:
+	if veic.get("squarcio", false) and attivo(veic):
+		# Move Out! 668: dallo squarcio si colpisce l’equipaggio, che si arrende.
+		p._log("danno", "Il colpo entra dallo squarcio: l’equipaggio del %s si arrende." % veic.nome)
+		disabilita(veic, "equipaggio arreso")
+		for x in occupanti(veic):
+			x.stato = "arreso"
+		return
 	if bool(MODELLI[veic.modello].get("carro", false)):
 		colpito_carro(veic, arma, tiratore, mirato, fx)
 		return
@@ -452,6 +459,7 @@ func imbarca_carro(g: Dictionary, carro: Dictionary) -> void:
 		veic.cannone_pronto = not ("cannon not" in str(carro.get("testo", "")))
 		veic.pv_distrutto = int(carro.get("pv_distrutto", 0))
 		veic.primo_turno = int(carro.get("primo_turno", 0))
+		veic.immobile = bool(carro.get("immobile", false))
 		var rif: String = p.movimento_rosso(g.hex)
 		if E.valido(rif) and E.adiacenti(g.hex, rif):
 			veic.fronte = E.direzione(g.hex, rif)
@@ -669,6 +677,8 @@ func _apri_chiudi(veic: Dictionary, chiudi: bool) -> void:
 	p._log("tedesco", "Il %s %s i portelli." % [veic.nome, "chiude" if chiudi else "apre"])
 
 func _guida(veic: Dictionary, veloce: bool, g: Dictionary) -> void:
+	if veic.get("immobile", false):
+		return
 	if veic.get("immobilizzato", false) or veic.get("cingolo", false) or veic.get("fermo_sempre", false) or g.get("reazione", "") == "B" and int(g.num) == 55:
 		p._log("tedesco", "Il %s non si muove." % veic.nome)
 		return

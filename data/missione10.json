@@ -756,6 +756,7 @@
       ]
      }
     },
+    "immobile": false,
     "pv_distrutto": 4,
     "primo_turno": 0,
     "testo": "Condizione 1: entra aperto, 3 esposti; poi chiuso; cannone pronto"
@@ -866,6 +867,7 @@
       ]
      }
     },
+    "immobile": false,
     "pv_distrutto": 4,
     "primo_turno": 0,
     "testo": "come il Panzer IV"
