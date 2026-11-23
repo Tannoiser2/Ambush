@@ -72,7 +72,9 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 	if g.get("solo_S", false):
 		return "S"
 	if int(g.get("paracadute", 0)) > 0:
-		ignora_s = true  # Move Out! 426: col paracadute addosso si ignora l’autoconservazione
+		ignora_s = true
+	if bool(p.missione.tedeschi[str(int(g.num))].get("ignora_s_veicolo", false)) and str(g.get("veicolo", "")) != "" and p.veicoli.attivo(p.veicoli.di(g)):
+		ignora_s = true  # Purple Heart: «ignora l’autoconservazione a bordo di un mezzo attivo»  # Move Out! 426: col paracadute addosso si ignora l’autoconservazione
 	if not ignora_s and not g.no_auto and _vicino_ad_americani(g) and colonne.has("S"):
 		return "S"
 	var r: String = g.get("reazione", "")

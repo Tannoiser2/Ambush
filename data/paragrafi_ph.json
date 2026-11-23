@@ -1268,7 +1268,7 @@
  },
  "447": {
   "id": "447",
-  "it": "Un soldato americano a caso con IN 3 o meno va nel panico e cade prono: si riprende solo quando un altro soldato entra nel suo esagono e spende un’azione. Una volta sola per missione.",
+  "it": "Un soldato americano a caso con IN 3 o meno va nel panico e cade prono. Una volta sola per missione.",
   "ops": [
    {
     "op": "panico_mo"
@@ -1614,6 +1614,2101 @@
  "873": {
   "id": "873",
   "it": "Si arrende (la motosilurante si arena sulla spiaggia più vicina).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "373": {
+  "id": "373",
+  "it": "[s0] Un soldato vede un Jagdpanther distrutto e tre americani morti: il relitto è in O15, i caduti in N14. Per perquisire i caduti entra nel loro esagono (vedi 380).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "relitto",
+    "hex": "O15",
+    "nome": "Jagdpanther distrutto"
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "N14",
+    "p": "380"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "386": {
+  "id": "386",
+  "it": "[s0] Un soldato vede un Jagdpanther distrutto e tre americani morti: il relitto è in M16, i caduti in M14. Per perquisire i caduti entra nel loro esagono (vedi 380).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "relitto",
+    "hex": "M16",
+    "nome": "Jagdpanther distrutto"
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "M14",
+    "p": "380"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "397": {
+  "id": "397",
+  "it": "[s0] Un soldato vede un Jagdpanther distrutto e tre americani morti: il relitto è in O10, i caduti in P9. Per perquisire i caduti entra nel loro esagono (vedi 380).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "relitto",
+    "hex": "O10",
+    "nome": "Jagdpanther distrutto"
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "P9",
+    "p": "380"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "380": {
+  "id": "380",
+  "it": "C’è un bazooka con 2 razzi, un BAR con un caricatore e 2 granate: si possono raccogliere.",
+  "ops": [
+   {
+    "op": "bottino",
+    "hex": null,
+    "oggetti": [
+     {
+      "arma": "bazooka"
+     },
+     {
+      "mun": "bazooka",
+      "n": 2
+     },
+     {
+      "arma": "ar"
+     },
+     {
+      "mun": "ar",
+      "n": 1
+     },
+     {
+      "mun": "granata",
+      "n": 2
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "302": {
+  "id": "302",
+  "it": "Metti un segnalino Evento. Effettua un controllo di percezione:\n• se riesce, vedi 308;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "308"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "314": {
+  "id": "314",
+  "it": "Metti un segnalino Evento. Effettua un controllo di percezione:\n• se riesce, vedi 321;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "321"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "330": {
+  "id": "330",
+  "it": "Metti un segnalino Evento. Effettua un controllo di percezione:\n• se riesce, vedi 336;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "336"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "344": {
+  "id": "344",
+  "it": "Metti un segnalino Evento. Effettua un controllo di percezione:\n• se riesce, vedi 353;\n• se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "353"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "308": {
+  "id": "308",
+  "it": "[s3] Il soldato vede uno Sherman distrutto in R17 e due tedeschi morti in S16, ciascuno con un fucile a otturatore. Nello Sherman c’è ancora un carrista vivo con un messaggio per la squadra: entrando in R17 vedi 361.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "relitto",
+    "hex": "R17",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "bottino",
+    "hex": "S16",
+    "oggetti": [
+     {
+      "arma": "bolt"
+     },
+     {
+      "arma": "bolt"
+     }
+    ]
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "R17",
+    "p": "361"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "321": {
+  "id": "321",
+  "it": "[s3] Il soldato vede uno Sherman distrutto in T14 e due tedeschi morti in T13, ciascuno con un fucile a otturatore. Nello Sherman c’è ancora un carrista vivo con un messaggio per la squadra: entrando in T14 vedi 361.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "relitto",
+    "hex": "T14",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "bottino",
+    "hex": "T13",
+    "oggetti": [
+     {
+      "arma": "bolt"
+     },
+     {
+      "arma": "bolt"
+     }
+    ]
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "T14",
+    "p": "361"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "336": {
+  "id": "336",
+  "it": "[s3] Il soldato vede uno Sherman distrutto in S10 e due tedeschi morti in T10, ciascuno con un fucile a otturatore. Nello Sherman c’è ancora un carrista vivo con un messaggio per la squadra: entrando in S10 vedi 361.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "relitto",
+    "hex": "S10",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "bottino",
+    "hex": "T10",
+    "oggetti": [
+     {
+      "arma": "bolt"
+     },
+     {
+      "arma": "bolt"
+     }
+    ]
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "S10",
+    "p": "361"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "353": {
+  "id": "353",
+  "it": "[s3] Il soldato vede uno Sherman distrutto in S8 e due tedeschi morti in S7, ciascuno con un fucile a otturatore. Nello Sherman c’è ancora un carrista vivo con un messaggio per la squadra: entrando in S8 vedi 361.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "relitto",
+    "hex": "S8",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "bottino",
+    "hex": "S7",
+    "oggetti": [
+     {
+      "arma": "bolt"
+     },
+     {
+      "arma": "bolt"
+     }
+    ]
+   },
+   {
+    "op": "leggi_entrando",
+    "hex": "S8",
+    "p": "361"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "361": {
+  "id": "361",
+  "it": "Il carrista racconta che stamattina i tedeschi hanno contrattaccato e respinto la divisione di dieci miglia: la squadra è di nuovo dietro le linee nemiche! Il carrista muore; ha una pistola con tre caricatori.",
+  "ops": [
+   {
+    "op": "bottino",
+    "hex": null,
+    "oggetti": [
+     {
+      "arma": "pistol"
+     },
+     {
+      "mun": "pistol",
+      "n": 3
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "405": {
+  "id": "405",
+  "it": "[s6] In questo esagono ci sono un americano e due tedeschi morti. Perquisendo l’esagono (vedi 415) si trovano armi.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "goto",
+    "p": "415"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "415": {
+  "id": "415",
+  "it": "Ci sono due fucili a otturatore, una granata e un M-1 con due caricatori: si possono raccogliere.",
+  "ops": [
+   {
+    "op": "bottino",
+    "hex": null,
+    "oggetti": [
+     {
+      "arma": "bolt"
+     },
+     {
+      "arma": "bolt"
+     },
+     {
+      "mun": "granata",
+      "n": 1
+     },
+     {
+      "arma": "sar"
+     },
+     {
+      "mun": "sar",
+      "n": 2
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "425": {
+  "id": "425",
+  "it": "[s9] In questo esagono ci sono due americani morti, disarmati.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   }
+  ],
+  "tipo": "missione"
+ },
+ "431": {
+  "id": "431",
+  "it": "[s7] Tutti i soldati in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in G15, un Panzer IV distrutto in K15 e due Sherman distrutti in J14 e J15.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "G15",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "K15",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "J14",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "J15",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "442": {
+  "id": "442",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in H13, un Panzer IV distrutto in I12 e due Sherman distrutti in J13 e K13.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "H13",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "I12",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "J13",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "K13",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "450": {
+  "id": "450",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in J9, un Panzer IV distrutto in L9 e due Sherman distrutti in K8 e J10.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "J9",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "L9",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "K8",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "J10",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "459": {
+  "id": "459",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in J7, un Panzer IV distrutto in I8 e due Sherman distrutti in H6 e I6.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "J7",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "I8",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "H6",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "I6",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "469": {
+  "id": "469",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in F6, un Panzer IV distrutto in G6 e due Sherman distrutti in G6 e F5.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "F6",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "G6",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "G6",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "F5",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "477": {
+  "id": "477",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in C5, un Panzer IV distrutto in D4 e due Sherman distrutti in D4 e C4.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "C5",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "D4",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "D4",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "C4",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "482": {
+  "id": "482",
+  "it": "[s7] Un soldato in questo esagono vede i resti di una battaglia furiosa: una jeep distrutta in A4, un Panzer IV distrutto in B3 e due Sherman distrutti in B4 e A3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "relitto",
+    "hex": "A4",
+    "nome": "Jeep distrutta"
+   },
+   {
+    "op": "relitto",
+    "hex": "B3",
+    "nome": "Panzer IV distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "B4",
+    "nome": "Sherman distrutto"
+   },
+   {
+    "op": "relitto",
+    "hex": "A3",
+    "nome": "Sherman distrutto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "599": {
+  "id": "599",
+  "it": "Il soldato vede che il cannone e la mitragliatrice di scafo del Jagdpanther sono intatti (in questa versione il relitto non si può usare).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "491": {
+  "id": "491",
+  "it": "• Se s8 non è avvenuto, vedi 498.\n• Se s8 è avvenuto, vedi 505.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 8
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "498"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "505"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "498": {
+  "id": "498",
+  "it": "[s8] I soldati sentono il fragore di una battaglia che infuria verso sud.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   }
+  ],
+  "tipo": "missione"
+ },
+ "505": {
+  "id": "505",
+  "it": "Il caposquadra vuole saperne di più e manda un uomo in cima a una collina: appena un soldato occupa la cima di una collina di livello 4, vedi 519 (una volta sola).",
+  "ops": [
+   {
+    "op": "collina_505"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "519": {
+  "id": "519",
+  "it": "[s4] Sulla vasta pianura a sud il soldato vede una grande battaglia di carri: gli Alleati contrattaccano e i tedeschi sembrano ritirarsi da questa parte!\n1. Se il soldato A è attivo, tira un dado e aggiungi il suo PC: con 10 o più vedi 532, con 9 o meno vedi 550.\n2. Se il soldato A non è attivo, vedi 550.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "sergente_519"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "532": {
+  "id": "532",
+  "it": "Passa alla Condizione 2. Il sergente capisce che la sua è l’unica forza combattente efficiente della zona! E capisce anche che, aprendo le chiuse della diga, si taglierebbe la ritirata ai tedeschi. Vedi 479 per sapere dove sono i comandi delle chiuse.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 2
+   },
+   {
+    "op": "goto",
+    "p": "479"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "550": {
+  "id": "550",
+  "it": "Passa alla Condizione 3. La squadra è l’unica forza efficiente tra i tedeschi in ritirata e il Vallo occidentale!",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "479": {
+  "id": "479",
+  "it": "Tira un dado per sapere dove sono i comandi delle chiuse:\n0–2: V12\n3–4: J8\n5–6: L6\n7–8: N5\n9: O5\nEntrando nell’esagono indicato, vedi 606.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      2,
+      [
+       {
+        "op": "chiuse",
+        "hex": "V12"
+       }
+      ]
+     ],
+     [
+      3,
+      4,
+      [
+       {
+        "op": "chiuse",
+        "hex": "J8"
+       }
+      ]
+     ],
+     [
+      5,
+      6,
+      [
+       {
+        "op": "chiuse",
+        "hex": "L6"
+       }
+      ]
+     ],
+     [
+      7,
+      8,
+      [
+       {
+        "op": "chiuse",
+        "hex": "N5"
+       }
+      ]
+     ],
+     [
+      9,
+      9,
+      [
+       {
+        "op": "chiuse",
+        "hex": "O5"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "606": {
+  "id": "606",
+  "it": "Nei Round servono 4 azioni per aprire le chiuse (anche divise tra più soldati); nelle Operazioni si aprono dopo un controllo degli eventi casuali. Usa l’azione «Apri le chiuse». Quando sono aperte, vedi 565.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "565": {
+  "id": "565",
+  "it": "L’acqua sfonda le chiuse! Il segnalino Piena parte da N5. Iniziano i Round. All’inizio di ogni Round la piena avanza di quattro esagoni del letto asciutto del fiume (in questa versione: quattro per Round) finché esce dalla mappa: allora vedi 542. Ogni esagono attraversato si allaga e resta impraticabile; soldati e mezzi che lo occupano sono travolti (uccisi o distrutti); il ponte travolto crolla. Si continua nei Round finché la piena esce, poi si torna alle Operazioni se non ci sono tedeschi attivi.",
+  "ops": [
+   {
+    "op": "piena"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "542": {
+  "id": "542",
+  "it": "Passa alla Condizione 4. Guadagni 5 PV per aver aperto le chiuse!",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   },
+   {
+    "op": "vp",
+    "n": 5,
+    "why": "chiuse aperte"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "588": {
+  "id": "588",
+  "it": "Tira un dado:\n0–7: vedi 593.\n8–9: nessun evento.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      7,
+      [
+       {
+        "op": "goto",
+        "p": "593"
+       }
+      ]
+     ],
+     [
+      8,
+      9,
+      []
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "593": {
+  "id": "593",
+  "it": "[s2] Una colonna motorizzata tedesca entra in mappa! Attiva il tedesco 4 e il tedesco 6, ciascuno su una motocicletta, in A3. Iniziano i Round, vantaggio tedesco; i tedeschi 4 e 6 ricevono 2 turni in questo Round. Tutti i soldati americani che vedono A3 sono consapevoli. All’inizio del secondo Round, al posto del controllo degli eventi casuali (o prima, se questi tedeschi sono fuori combattimento), vedi 598. Vedi 600 per le motociclette.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "colonna_ph",
+    "mezzi": [
+     [
+      "moto",
+      4,
+      []
+     ],
+     [
+      "moto",
+      6,
+      []
+     ]
+    ],
+    "hex": "A3",
+    "two": [
+     4,
+     6
+    ]
+   },
+   {
+    "op": "consapevoli_vede",
+    "hex": "A3"
+   },
+   {
+    "op": "attesa_598"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "600": {
+  "id": "600",
+  "it": "Le motociclette con sidecar sono piccole e non contano nel limite di due mezzi per esagono. Una motocicletta che investe un soldato attivo fa subito un controllo d’incidente (−2 all’abilità di guida).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "598": {
+  "id": "598",
+  "it": "Attiva i tedeschi 8, 9, 10 e 11 su una Kübelwagen e 12, 14, 15 e 16 su un’auto comando, in A3. Iniziano i Round, vantaggio tedesco. Se sei nella Condizione 2 vedi 698; nella Condizione 3 vedi 709. (Alla guida: 8 e 16; il tedesco 12 è il feldmaresciallo.)",
+  "ops": [
+   {
+    "op": "colonna_ph",
+    "mezzi": [
+     [
+      "kubelwagen",
+      8,
+      [
+       9,
+       10,
+       11
+      ]
+     ],
+     [
+      "auto_comando",
+      16,
+      [
+       12,
+       14,
+       15
+      ]
+     ]
+    ],
+    "hex": "A3",
+    "two": []
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      2
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "698"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "709"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "698": {
+  "id": "698",
+  "it": "Ti servono 3 PV per vincere. Perdi 5 PV per ogni tedesco che esce dalla mappa. La missione finisce, nella Condizione 2, 3 o 4, quando non ci sono tedeschi attivi in mappa. Non si perdono PV per i soldati americani incapacitati.",
+  "ops": [
+   {
+    "op": "regole_fine_15",
+    "uscita": 5
+   }
+  ],
+  "tipo": "missione"
+ },
+ "709": {
+  "id": "709",
+  "it": "Ti servono 3 PV per vincere. I PV vengono dalle attivazioni dei tedeschi e da quanto rivelano i paragrafi. Perdi 3 PV per ogni tedesco che esce dalla mappa. La missione finisce, nella Condizione 2, 3 o 4, quando non ci sono tedeschi attivi in mappa. Non si perdono PV per i soldati americani incapacitati.",
+  "ops": [
+   {
+    "op": "regole_fine_15",
+    "uscita": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "984": {
+  "id": "984",
+  "it": "Un soldato americano attivo in piedi in una vigna inciampa e cade: danni sulla colonna Pistola della tabella dei danni. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "inciampo_vigna"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "303": {
+  "id": "303",
+  "it": "• Se si muove un mezzo, entra in Q14.\n• Altrimenti entra in P15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "305": {
+  "id": "305",
+  "it": "• Se si muove un mezzo, entra in R14.\n• Altrimenti entra in Q15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "309": {
+  "id": "309",
+  "it": "• Se si muove un mezzo, entra in S14.\n• Altrimenti entra in R15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "311": {
+  "id": "311",
+  "it": "• Se si muove un mezzo, entra in T14.\n• Altrimenti entra in S15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "313": {
+  "id": "313",
+  "it": "• Se si muove un mezzo, entra in Q9.\n• Altrimenti entra in R10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "315": {
+  "id": "315",
+  "it": "• Se si muove un mezzo, entra in P8.\n• Altrimenti entra in Q10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "316": {
+  "id": "316",
+  "it": "• Se si muove un mezzo, entra in O8.\n• Altrimenti entra in P9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "319": {
+  "id": "319",
+  "it": "• Se si muove un mezzo, entra in N8.\n• Altrimenti entra in O9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "525": {
+  "id": "525",
+  "it": "• Se si muove un mezzo, entra in I9.\n• Altrimenti entra in J8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "716": {
+  "id": "716",
+  "it": "• Se si muove un mezzo, entra in N14.\n• Altrimenti entra in M16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "722": {
+  "id": "722",
+  "it": "• Se si muove un mezzo, entra in L15.\n• Altrimenti entra in K16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "728": {
+  "id": "728",
+  "it": "• Se si muove un mezzo, entra in M15.\n• Altrimenti entra in L16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "L16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "737": {
+  "id": "737",
+  "it": "• Se si muove un mezzo, entra in K15.\n• Altrimenti entra in K14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "741": {
+  "id": "741",
+  "it": "• Se si muove un mezzo, entra in J14.\n• Altrimenti entra in K14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "746": {
+  "id": "746",
+  "it": "• Se si muove un mezzo, entra in J13.\n• Altrimenti entra in J12.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J12"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "751": {
+  "id": "751",
+  "it": "• Se si muove un mezzo, entra in I13.\n• Altrimenti entra in J12.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J12"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "757": {
+  "id": "757",
+  "it": "• Se si muove un mezzo, entra in I12.\n• Altrimenti entra in J11.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J11"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "765": {
+  "id": "765",
+  "it": "• Se si muove un mezzo, entra in I11.\n• Altrimenti entra in J10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "773": {
+  "id": "773",
+  "it": "• Se si muove un mezzo, entra in K9.\n• Altrimenti entra in K10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "896": {
+  "id": "896",
+  "it": "• Se si muove un mezzo, entra in U13.\n• Altrimenti entra in V14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "988": {
+  "id": "988",
+  "it": "• Se si muove un mezzo, entra in K15.\n• Altrimenti entra in J15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "989": {
+  "id": "989",
+  "it": "• Se si muove un mezzo, entra in L15.\n• Altrimenti entra in M15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "991": {
+  "id": "991",
+  "it": "• Se si muove un mezzo, entra in M15.\n• Altrimenti entra in L16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "L16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "993": {
+  "id": "993",
+  "it": "• Se si muove un mezzo, entra in N14.\n• Altrimenti entra in M16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "996": {
+  "id": "996",
+  "it": "• Se si muove un mezzo, entra in O15.\n• Altrimenti entra in N15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "998": {
+  "id": "998",
+  "it": "• Se si muove un mezzo, entra in P14.\n• Altrimenti entra in O16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "899": {
+  "id": "899",
+  "it": "• Se si muove un soldato che vede un bersaglio attivo, entra in E6.\n• Altrimenti entra in F5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "g_vede_us": true
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "E6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "F5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "922": {
+  "id": "922",
+  "it": "• Se si muove un soldato che vede un bersaglio attivo, entra in F6.\n• Altrimenti entra in G6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "g_vede_us": true
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "F6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "G6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "928": {
+  "id": "928",
+  "it": "• Se si muove un soldato che vede un bersaglio attivo, entra in G7.\n• Altrimenti entra in H6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "g_vede_us": true
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "G7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "940": {
+  "id": "940",
+  "it": "• Se si muove un soldato che vede un bersaglio attivo, entra in H7.\n• Altrimenti entra in I7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "g_vede_us": true
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "973": {
+  "id": "973",
+  "it": "• Se si muove un soldato che vede un bersaglio attivo, entra in J8.\n• Altrimenti entra in K8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "g_vede_us": true
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "K8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "515": {
+  "id": "515",
+  "it": "Tira un dado: 0–4 entra in J7; 5–9 entra in I8.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "g_enter",
+        "hex": "J7"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "I8"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "527": {
+  "id": "527",
+  "it": "Tira un dado: 0–4 entra in T15; 5–9 entra in U14.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "g_enter",
+        "hex": "T15"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "U14"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "614": {
+  "id": "614",
+  "it": "• Se il ponte non è intatto, passa alla Condizione 4 e continua il movimento normale.\n• Altrimenti entra in S9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_s9": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S9"
+     }
+    ],
+    "else": [
+     {
+      "op": "condition",
+      "n": 4
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "694": {
+  "id": "694",
+  "it": "• Se il letto del fiume è allagato, passa alla Condizione 4 e continua a muovere questo tedesco.\n• Altrimenti entra in V11.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "fiume_allagato": true
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 4
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V11"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "778": {
+  "id": "778",
+  "it": "• Se il ponte in S9 è intatto, entra in Q9.\n• Altrimenti entra in P10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_s9": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "787": {
+  "id": "787",
+  "it": "• Se si muove un mezzo, entra in T7.\n• Altrimenti tira un dado: 0–4 entra in U8; 5–9 entra in U9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T7"
+     }
+    ],
+    "else": [
+     {
+      "op": "die",
+      "b": [
+       [
+        0,
+        4,
+        [
+         {
+          "op": "g_enter",
+          "hex": "U8"
+         }
+        ]
+       ],
+       [
+        5,
+        9,
+        [
+         {
+          "op": "g_enter",
+          "hex": "U9"
+         }
+        ]
+       ]
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "794": {
+  "id": "794",
+  "it": "• Se non vede bersagli attivi, entra in O17.\n• Altrimenti entra in O18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O18"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O17"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "890": {
+  "id": "890",
+  "it": "• Se non vede bersagli attivi, entra in Q14.\n• Altrimenti entra in P13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "613": {
+  "id": "613",
+  "it": "1. Se il mezzo è stato bersagliato o danneggiato, vedi 620.\n2. Con 3 o più bersagli attivi in vista, vedi 620.\n3. Con 1 o 2 bersagli in vista, vedi 828 (guida veloce).\n4. Senza bersagli in vista, vedi 814 (guida lenta).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "620": {
+  "id": "620",
+  "it": "Scende dal mezzo (1 PM) e si muove il più rapidamente possibile; alla fine cade prono se è in un esagono scoperto e vede un bersaglio attivo. Alla fine del movimento perde la reazione speciale W.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "626": {
+  "id": "626",
+  "it": "1. Se il suo mezzo è stato bersagliato o danneggiato, vedi 620.\n2. Con 3 o più bersagli attivi in vista, vedi 802.\n3. Con 1 o 2 bersagli in vista, vedi 801.\n4. Senza bersagli in vista, vedi 840.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "322": {
+  "id": "322",
+  "it": "• Se il tedesco 12 vede un altro tedesco attivo, vedi 658.\n• Altrimenti esegue 809.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "324": {
+  "id": "324",
+  "it": "• Se il tedesco 12 è attivo e questo soldato lo vede, vedi 635.\n• Altrimenti esegue 866.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "326": {
+  "id": "326",
+  "it": "• Se il tedesco 12 è attivo e questo soldato lo vede, vedi 635.\n• Altrimenti esegue 867.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "327": {
+  "id": "327",
+  "it": "• Se il tedesco 12 è attivo e questo soldato lo vede, vedi 635.\n• Altrimenti esegue 800.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "328": {
+  "id": "328",
+  "it": "• Se il tedesco 12 è attivo e questo soldato lo vede, vedi 635.\n• Altrimenti esegue 863.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "635": {
+  "id": "635",
+  "it": "1. Nell’esagono del tedesco 12 con un bersaglio in vista: vedi 640.\n2. Nell’esagono del tedesco 12 senza bersagli: esegue 809.\n3. Fuori dal suo esagono ma vedendo sia il tedesco 12 sia un bersaglio: vedi 650.\n4. Altrimenti vedi 665.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "640": {
+  "id": "640",
+  "it": "Se il tedesco 12 non è prono, si accovaccia, lo spinge a terra (1 PM) e spara un tiro rapido al bersaglio più vicino; se il tedesco 12 è già prono, si accovaccia e fa il miglior tiro al più vicino. Non cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "650": {
+  "id": "650",
+  "it": "Si accovaccia e fa il miglior tiro al bersaglio più vicino al tedesco 12; poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "658": {
+  "id": "658",
+  "it": "1. Con un tedesco 13 o superiore nell’esagono e un bersaglio in vista: cade prono e cede un turno al soldato non ferito con meno turni nello stesso esagono o in uno adiacente (se tutti hanno 2 turni, vedi 802).\n2. Con un tedesco 13 o superiore nell’esagono e nessun bersaglio in vista: esegue 809.\n3. Altrimenti si muove il più rapidamente possibile, fermandosi in un esagono con un tedesco attivo; alla fine cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "665": {
+  "id": "665",
+  "it": "Si muove il più rapidamente possibile verso il tedesco 12 e, se lo raggiunge, si accovaccia nel suo esagono; altrimenti cade prono nel primo esagono non scoperto.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "675": {
+  "id": "675",
+  "it": "• Con un altro tedesco attivo nell’esagono, o da solo con un americano attivo, vedi 839.\n• Da solo con 2 o più americani attivi, si arrende.\n• Altrimenti esegue 802.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "680": {
+  "id": "680",
+  "it": "• Nell’esagono del tedesco 12, vedi 833.\n• Altrimenti vedi 812.",
   "ops": [],
   "tipo": "azione"
  },

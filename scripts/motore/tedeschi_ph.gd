@@ -15,6 +15,105 @@ func _ph():
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	match n:
+		613, 626:
+			var vg: Dictionary = t.p.veicoli.di(g)
+			var nb: int = t.bersagli(g).size()
+			if vg.is_empty() or not t.p.veicoli.attivo(vg):
+				esegui(620)
+			elif bool(vg.get("bersagliato", false)) or vg.stato != "attivo":
+				esegui(620)
+			elif n == 613:
+				t.esegui(620 if nb >= 3 else (828 if nb > 0 else 814))
+			else:
+				t.esegui(802 if nb >= 3 else (801 if nb > 0 else 840))
+		620:
+			var vg2: Dictionary = t.p.veicoli.di(g)
+			if not vg2.is_empty():
+				t.p.veicoli.scendi(g)
+				t._mp = maxi(0, t._mp - 1)
+				t.p._log("tedesco", "Il %s scende %s." % [t.p.nome(g), t.p.veicoli.di_art(vg2)])
+			g.reazione = ""
+			t._muovi_rapido(false)
+			if t.p.in_mappa(g) and t.p.terreno.scoperto(g.hex) and not t.bersagli(g).is_empty():
+				t._prono()
+		322:
+			var vede := false
+			for x in t.p.tedeschi_attivi():
+				if x.id != g.id and t.p.in_mappa(x) and t.p.terreno.vede(g.hex, x.hex):
+					vede = true
+					break
+			t.esegui(658 if vede else 809)
+		324, 326, 327, 328:
+			var g12: Dictionary = t.p.u("g12")
+			if not g12.is_empty() and t.p.attivo(g12) and t.p.in_mappa(g12) and t.p.terreno.vede(g.hex, g12.hex):
+				esegui(635)
+			else:
+				t.esegui({324: 866, 326: 867, 327: 800, 328: 863}[n])
+		635:
+			var g12b: Dictionary = t.p.u("g12")
+			var c12: bool = not g12b.is_empty() and t.p.attivo(g12b) and t.p.in_mappa(g12b)
+			var b: Array = t.bersagli(g)
+			if c12 and g12b.hex == g.hex and not b.is_empty():
+				esegui(640)
+			elif c12 and g12b.hex == g.hex:
+				t.esegui(809)
+			elif c12 and t.p.terreno.vede(g.hex, g12b.hex) and not b.is_empty():
+				esegui(650)
+			else:
+				esegui(665)
+		640:
+			var g12c: Dictionary = t.p.u("g12")
+			t._accovacciati()
+			if not g12c.is_empty() and g12c.postura != "prone":
+				t.p.imposta_postura(g12c, "prone")
+				t._mp = maxi(0, t._mp - 1)
+				t.p._log("tedesco", "Il %s spinge a terra il feldmaresciallo." % t.p.nome(g))
+				g._snap_forzato = true
+			t._miglior_tiro("vicino")
+		650:
+			t._accovacciati()
+			t._miglior_tiro("vicino")
+			t._prono_se_libero()
+		658:
+			var guardie: Array = t.p.unita_in(g.hex, "de").filter(func(x): return x.id != g.id and t.p.attivo(x) and int(x.get("num", 0)) >= 13)
+			if not guardie.is_empty() and not t.bersagli(g).is_empty():
+				if t._cedi_turno(1):
+					t._prono()
+				else:
+					t.esegui(802)
+			elif not guardie.is_empty():
+				t.esegui(809)
+			else:
+				var meta := ""
+				for x in t.p.tedeschi_attivi():
+					if x.id != g.id and t.p.in_mappa(x) and E.distanza(x.hex, g.hex) <= 3 and (meta == "" or E.distanza(x.hex, g.hex) < E.distanza(meta, g.hex)):
+						meta = x.hex
+				if meta != "":
+					t._corri_verso(meta)
+				else:
+					t._muovi_rapido(false)
+				t._prono()
+		665:
+			var g12d: Dictionary = t.p.u("g12")
+			if not g12d.is_empty() and t.p.attivo(g12d) and t.p.in_mappa(g12d) and t._corri_verso(g12d.hex):
+				t._accovacciati()
+			elif not g12d.is_empty() and t.p.attivo(g12d) and t.p.in_mappa(g12d):
+				if not t.p.terreno.scoperto(g.hex):
+					t._prono()
+			else:
+				t._muovi_rapido(false, true)
+		675:
+			var altri: Array = t.p.unita_in(g.hex, "de").filter(func(x): return x.id != g.id and t.p.attivo(x))
+			var us: Array = t.p.unita_in(g.hex, "us").filter(func(x): return t.p.attivo(x))
+			if not altri.is_empty() or us.size() == 1:
+				t.esegui(839)
+			elif us.size() >= 2:
+				t._arrenditi()
+			else:
+				t.esegui(802)
+		680:
+			var g12e: Dictionary = t.p.u("g12")
+			t.esegui(833 if not g12e.is_empty() and g12e.hex == g.hex and t.p.attivo(g12e) else 812)
 		509:
 			if str(g.get("barca", "")) != "":
 				esegui(513)

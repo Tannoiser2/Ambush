@@ -116,6 +116,21 @@ Ordine scelto: M11, M10, M12, M9.
   della sentinella 61 in E11 (648, 3–4), colpi al faro con le armi (si distrugge solo con un esplosivo).
 - Il bot delle simulazioni non usa gli esplosivi: perde sempre, ma serve a cercare errori (0 in 20 partite).
 
+## Missione 15 «Ritorno a casa» (mappa C, in alto è ovest)
+- Avvio (regola diga): letto N6–Y15 asciutto = copertura (s.modifiche "cover", S9 resta ponte), diga N5 "clear" con
+  terreno.accessi {N5: [O5, M6]}; tabella delle munizioni consumate (regola munizioni_consumate) tirata in automatico.
+- Condizione 1: relitti (s.punti), caduti da perquisire (leggi_entrando + bottino a terra), 491 → 498/505; 505 annota la
+  collina: un americano su quota 4 → 519 → 532 (Condizione 2, chiuse 479) o 550 (Condizione 3).
+- Chiuse (azione «Apri le chiuse»): 4 azioni nei Round, un controllo eventi nelle Operazioni → 565: piena di 4 esagoni
+  all’inizio di ogni Round (approssimazione: il libro dice ogni turno), allaga (water), travolge, crolla il ponte S9;
+  i Round restano obbligati finché la piena è in mappa; uscita → 542 (Condizione 4, +5 PV).
+- Colonna (593/598, op colonna_ph): motociclette (modello moto, velocità ipotizzate 5/10), Kübelwagen 8–11, auto comando
+  16, 12, 14, 15; reazione W (613 autisti, 626 passeggeri, 620 scendono); primo turno 814/840; a bordo ignorano
+  l’autoconservazione (ignora_s_veicolo). 598 arriva al secondo Round al posto del controllo eventi o prima se 4 e 6 sono
+  fuori combattimento. 698/709: −5/−3 PV per tedesco uscito, fine quando non ci sono tedeschi attivi in mappa, niente PV
+  persi per gli incapacitati. Feldmaresciallo 12: cattura +15 PV; guardie 14/15 con 635/640/650/665/680.
+- Non gestiti: Jagdpanther utilizzabile (599), le motociclette che investono i soldati (600).
+
 ## Missione 16 «In guardia» (mappa C)
 - Schieramento: almeno due soldati entro 10 esagoni da ogni angolo, nessuno nel deposito (U15, U16, V12–V15, W13–W15).
 - Battelli d’assalto (432): s.ph.barche; i tedeschi a bordo hanno `barca`; 522 muove il battello (lento 4, veloce 6) seguendo

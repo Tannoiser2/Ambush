@@ -15,6 +15,7 @@ const MODELLI := {
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 1, "carro": true, "torretta": true},
 	"eboat": {"art": "La", "nome": "Motosilurante", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 0, "carro": true, "torretta": false, "nave": true},
+	"moto": {"art": "La", "nome": "Motocicletta", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 2, "moto": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 
@@ -182,7 +183,9 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 	c += int(p.s.get("nebbia_veicoli", 0))
 	if t == "woods" and not bool(MODELLI[veic.modello].piccolo):
 		return -1
-	if p.s.modifiche.has(verso):
+	if p.s.modifiche.has(verso) and str(p.s.modifiche[verso]) != "cover":
+		return -1
+	if p.terreno.accessi.has(verso) and not (da in p.terreno.accessi[verso]):
 		return -1
 	var tl := p.terreno.tipo_lato(da, verso)
 	match tl:
@@ -842,7 +845,11 @@ func _esce(veic: Dictionary) -> void:
 		x.slot = "inattivo"
 		ids.append(x.id)
 	if veic.lato == "de" and not occupanti(veic).is_empty():
-		p.tedesco_uscito(occupanti(veic)[0], da)
+		if p.ph.attiva():
+			for x in occupanti(veic):
+				p.tedesco_uscito(x, da)
+		else:
+			p.tedesco_uscito(occupanti(veic)[0], da)
 	veic.hex = ""
 	p._log("tedesco", "%s esce dalla mappa." % nome_art(veic))
 	p._fx("sparisce", {"ids": ids, "da": da, "motivo": "uscito"})

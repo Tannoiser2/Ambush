@@ -1126,6 +1126,9 @@ func _bottoni_ponte(a: Dictionary) -> void:
 		_b("Piazza esplosivo al plastico (%d)" % int(a.esplosivi_ph), func(): _esito(p.azione_ph(a.id, "piazza")), "Nei Round salta all’inizio del secondo Round; nelle Operazioni quando la squadra si è allontanata. Edificio distrutto: 2 PV.")
 	if p.ph.attiva() and a.hex in ["W12", "X12"] and p.s.get("ph", {}).get("magazzino", false):
 		_b("Fai saltare il cannone costiero", func(): _esito(p.azione_ph(a.id, "cannone")), "Serve una carica da demolizione; il cannone distrutto vale 4 PV.")
+	if p.ph.puo_aprire_chiuse(a):
+		var fatte: int = int(p.s.ph.chiuse.get("azioni", 0))
+		_b("Apri le chiuse della diga (%d/4)" % fatte if p.fase_round() else "Apri le chiuse della diga", func(): _esito(p.azione_ph(a.id, "chiuse")), "Nei Round servono quattro azioni, anche di soldati diversi; nelle Operazioni costa un controllo degli eventi casuali.")
 	if p.ph.attiva() and p.ph.esplosivo(a.hex) > 0:
 		_b("Disinnesca l’esplosivo (%d/2)" % (2 - p.ph.esplosivo(a.hex)), func(): _esito(p.disinnesca_esplosivo(a.id)), "Due azioni in tutto, anche di soldati diversi; ogni esplosivo disinnescato vale 2 PV.")
 	if bool(p.regola("disinnesco", false)) and p.ponti().has(a.hex) and p.ponte_intatto(a.hex) and not p.ponte_stato(a.hex).get("catturato", false):

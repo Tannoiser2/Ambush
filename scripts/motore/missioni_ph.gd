@@ -105,6 +105,38 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 				p._log("info", "Il %s si arrende." % p.nome(gx))
 		"solo_testo":
 			p._log("info", str(o.get("testo", "In questa versione l’evento non ha effetti.")))
+		"relitto":
+			_relitto(str(o.hex), str(o.nome))
+		"leggi_entrando":
+			if not p.s.has("da_leggere"):
+				p.s.da_leggere = {}
+			p.s.da_leggere[str(o.hex)] = str(o.p)
+		"bottino":
+			_bottino(str(o.hex) if o.get("hex") != null else str(ctx.get("hex", "")), o.oggetti)
+		"collina_505":
+			if not _st().has("collina"):
+				_st().collina = "attesa"
+				p._log("info", "Annotato: quando un soldato occupa la cima di una collina di livello 4 si legge il paragrafo 519.")
+		"sergente_519":
+			_sergente_519()
+		"chiuse":
+			_st().chiuse = {"hex": str(o.hex), "azioni": 0, "aperte": false}
+			p.s.punti[str(o.hex)] = "comandi chiuse"
+			p._log("info", "I comandi delle chiuse sono in %s: entra nell’esagono e usa l’azione «Apri le chiuse»." % o.hex)
+		"piena":
+			_st().piena = {"indice": 0, "fuori": false}
+			p._log("info", "La piena parte dalla diga in N5 e scende il letto del fiume.")
+			if not p.fase_round():
+				p._inizia_round_da_attivazione([], {"adv": null, "two": [], "us_two": false}, "")
+		"colonna_ph":
+			_colonna(o, ctx)
+		"attesa_598":
+			_st().attesa_598 = int(p.s.get("round", {}).get("n", 0)) + 1 if p.fase_round() else 1
+		"regole_fine_15":
+			_st().pv_uscita = int(o.uscita)
+			_st().fine_senza_tedeschi = true
+		"inciampo_vigna":
+			_inciampo_vigna()
 		"camion":
 			p._log("info", "La colonna di camion è in arrivo, ma in questa versione i camion non entrano in mappa: la difesa del deposito resta il compito della squadra.")
 		_:
@@ -132,6 +164,10 @@ func test(t: Dictionary, ctx: Dictionary) -> Variant:
 		return _esplosivi_interi_in_edificio().size() > 0
 	if t.has("nw_fiume"):
 		return bool(_st().get("nw_fiume", false)) == bool(t.nw_fiume)
+	if t.has("ponte_s9"):
+		return ponte_s9() == bool(t.ponte_s9)
+	if t.has("fiume_allagato"):
+		return bool(_st().get("piena", {}).get("fuori", false)) == bool(t.fiume_allagato)
 	if t.has("barca_mossa"):
 		var g2: Dictionary = p.u(ctx.get("g", ""))
 		return not g2.is_empty() and p.ia.ph.barca_gia_mossa(g2)
@@ -317,6 +353,8 @@ func tiro_mancato(b: Dictionary) -> void:
 # ================================================================== Missione 13 «Dispersi»
 ## Lancio (controllo della qualità dell’atterraggio) prima della missione.
 func dopo_nuova() -> void:
+	if attiva() and bool(p.regola("diga", false)):
+		_prepara_15()
 	if not attiva() or not bool(p.regola("atterraggio_ph", false)):
 		return
 	var terreni := ["libero", "libero", "libero", "libero", "macchia", "macchia", "macchia", "bosco", "bosco", "fiume"]
@@ -644,6 +682,12 @@ func _eboat_662(ctx: Dictionary) -> void:
 func inizio_round() -> void:
 	if not attiva():
 		return
+	_avanza_piena()
+	var n598 := int(_st().get("attesa_598", 0))
+	if n598 > 0 and int(p.s.round.get("n", 0)) >= n598 + 1:
+		_st().attesa_598 = 0
+		_st().salta_evento = true
+		p.leggi("598", {})
 	var cariche: Dictionary = _st().get("cariche_us", {})
 	for h in cariche.keys():
 		if int(cariche[h]) == 2:
@@ -668,6 +712,26 @@ func controlla() -> void:
 				_detona_us(h)
 	if _st().has("faro") or _st().has("fuoco_visibile"):
 		_illumina()
+	if str(_st().get("collina", "")) == "attesa":
+		for a in p.americani_attivi_in_mappa():
+			if p.terreno.quota(a.hex) >= 4 and str(a.get("veicolo", "")) == "":
+				_st().collina = "fatto"
+				p._log("info", "%s raggiunge la cima della collina in %s." % [p.nome(a), a.hex])
+				p.leggi("519", {"hex": a.hex, "ids": [a.id]})
+				break
+	if int(_st().get("attesa_598", 0)) > 0 and p.fase_round():
+		var g4: Dictionary = p.u("g4")
+		var g6: Dictionary = p.u("g6")
+		if not (p.attivo(g4) and p.in_mappa(g4)) and not (p.attivo(g6) and p.in_mappa(g6)):
+			_st().attesa_598 = 0
+			p._log("info", "Le motociclette sono fuori combattimento: arriva il resto della colonna.")
+			p.leggi("598", {})
+	if bool(_st().get("fine_senza_tedeschi", false)) and int(p.s.condizione) >= 2 and p.s.fase != "fine" and not round_obbligati():
+		var in_mappa: Array = p.tedeschi_attivi().filter(func(g): return p.attivo(g) and p.in_mappa(g))
+		if in_mappa.is_empty() and int(_st().get("attesa_598", 0)) == 0:
+			p._log("info", "Non restano tedeschi attivi in mappa: la missione termina.")
+			p._calcola_fine("obiettivo")
+			return
 	if bool(p.regola("atterraggio_ph", false)) and not _st().get("nw_fiume", false):
 		for a in p.americani_attivi_in_mappa():
 			var r := E.riga(a.hex)
@@ -690,6 +754,23 @@ func controlla() -> void:
 				_st().erase("telefono")
 				p.leggi("381", {"hex": "J8", "ids": [a.id]})
 				break
+
+func niente_pv_incapacitati() -> bool:
+	return attiva() and bool(_st().get("fine_senza_tedeschi", false))
+
+func salta_evento() -> bool:
+	if attiva() and bool(_st().get("salta_evento", false)):
+		_st().salta_evento = false
+		p._log("info", "Al posto del controllo degli eventi casuali arriva il resto della colonna (paragrafo 598).")
+		return true
+	return false
+
+## Missione 15: i Round continuano finché la piena non è uscita dalla mappa.
+func round_obbligati() -> bool:
+	if not attiva():
+		return false
+	var pn: Dictionary = _st().get("piena", {})
+	return not pn.is_empty() and not bool(pn.get("fuori", false))
 
 func blocca_fine() -> bool:
 	return attiva() and _st().fine_esplosivi and not _st().esplosivi.is_empty()
@@ -715,3 +796,168 @@ func verifica_schieramento() -> String:
 		if n < 2:
 			return "Servono almeno due soldati entro 10 esagoni dall’angolo %s." % c
 	return ""
+
+# ================================================================== Missione 15 «Ritorno a casa»
+const LETTO_15 := ["N6", "O7", "P7", "Q8", "R8", "S9", "S10", "T10", "U11", "V11", "W12", "X12", "X13", "X14", "Y15"]
+## Munizioni consumate prima della missione: perdita per dado 0–9 (-99: esaurite).
+const MUN_CARICATORI := [0, 0, 0, -1, -1, -2, -2, -3, -3, -99]
+const MUN_GRANATE := [0, 0, 0, 0, 0, -1, -1, -2, -99, -99]
+const MUN_BAZOOKA := [0, 0, 0, 0, 0, 0, -1, -2, -3, -99]
+const MUN_CARICHE := [0, 0, 0, 0, 0, 0, 0, 0, 0, -1]
+
+## Diga in N5: vi si entra e se ne esce solo da O5 e M6.
+func regole_terreno() -> void:
+	if attiva() and bool(p.regola("diga", false)):
+		p.terreno.accessi["N5"] = ["O5", "M6"]
+
+func ponte_s9() -> bool:
+	return str(p.s.modifiche.get("S9", "")) != "water"
+
+func _prepara_15() -> void:
+	for h in LETTO_15:
+		if h != "S9":
+			p.s.modifiche[h] = "cover"
+	p.s.modifiche["N5"] = "clear"
+	p.s.punti["N5"] = "diga"
+	p.terreno.imposta_modifiche(p.s.modifiche)
+	p._log("info", "La diga è in N5; il letto del fiume da N6 a Y15 è asciutto e vale come copertura (il ponte in S9 è intatto).")
+	if bool(p.regola("munizioni_consumate", false)):
+		for a in p.americani():
+			for k in a.munizioni.keys():
+				if int(a.munizioni[k]) <= 0:
+					continue
+				var tab: Array = MUN_GRANATE if k == "granata" else (MUN_BAZOOKA if k == "bazooka" else (MUN_CARICHE if k == "satchel" else MUN_CARICATORI))
+				var d: int = p.d10()
+				var perdita: int = int(tab[d])
+				if perdita == 0:
+					continue
+				var prima := int(a.munizioni[k])
+				a.munizioni[k] = 0 if perdita == -99 else maxi(0, prima + perdita)
+				var cosa: String = "granate" if k == "granata" else ("razzi del bazooka" if k == "bazooka" else ("cariche" if k == "satchel" else "caricatori (" + str(T.ARMI.get(k, {}).get("breve", k)) + ")"))
+				p._log("dado", "Munizioni consumate da %s, %s: dado %d → %d su %d." % [p.nome(a), cosa, d, int(a.munizioni[k]), prima])
+
+func _relitto(h: String, nome: String) -> void:
+	p.s.punti[h] = nome
+	p._log("info", "%s in %s." % [nome, h])
+
+func _bottino(h: String, oggetti: Array) -> void:
+	if h == "":
+		return
+	var testi: Array = []
+	for o in oggetti:
+		if o.has("arma"):
+			p._lascia_oggetto(h, {"tipo": str(o.arma), "inceppata": false, "rotta": false, "preparata": false, "catturata": false})
+			testi.append(str(T.ARMI.get(str(o.arma), {}).get("nome", o.arma)))
+		else:
+			for i in int(o.get("n", 1)):
+				p._lascia_oggetto(h, {"tipo": "mun:" + str(o.mun)})
+			testi.append("%d × %s" % [int(o.get("n", 1)), "granata" if str(o.mun) == "granata" else ("razzo" if str(o.mun) == "bazooka" else "caricatore " + str(T.ARMI.get(str(o.mun), {}).get("breve", o.mun)))])
+	p._log("info", "In %s si possono raccogliere: %s." % [h, ", ".join(testi)])
+
+func _sergente_519() -> void:
+	var a: Dictionary = p.u("A")
+	if not a.is_empty() and p.attivo(a):
+		var d: int = p.d10()
+		var tot: int = d + int(a.PC)
+		p._log("dado", "Il sergente valuta la situazione: %d + PC %d = %d." % [d, int(a.PC), tot])
+		p.leggi("532" if tot >= 10 else "550", {})
+	else:
+		p.leggi("550", {})
+
+## Colonna motorizzata: ogni mezzo con il suo autista (primo della lista) e i passeggeri, in reazione speciale W.
+func _colonna(o: Dictionary, ctx: Dictionary) -> void:
+	var h := str(o.hex)
+	var coppie: Array = []
+	for m in o.mezzi:
+		coppie.append([int(m[1]), h])
+		for x in m[2]:
+			coppie.append([int(x), h])
+	p._op_attiva({"op": "activate", "g": coppie, "stance": "crouching", "adv": "de", "two": o.get("two", []), "us_two": false,
+		"aware": false, "reaction": "W", "rounds": true}, ctx)
+	p.s.imbarco = true
+	for m in o.mezzi:
+		var vid := "v%d" % int(m[1])
+		if not p.veicoli.v(vid).is_empty():
+			continue
+		var veic: Dictionary = p.veicoli.crea(vid, str(m[0]), h, "de")
+		for num in [int(m[1])] + Array(m[2]):
+			var g: Dictionary = p.u("g%d" % int(num))
+			if not g.is_empty() and p.attivo(g) and g.hex == h:
+				p.veicoli.sali(g, veic)
+		p._log("attivazione", "%s entra in %s con a bordo %s." % [p.veicoli.nome_art(veic), h, ", ".join(p.veicoli.occupanti(veic).map(func(x): return str(int(x.num))))])
+	p.s.imbarco = false
+	_st().colonna = true
+
+func _inciampo_vigna() -> void:
+	if _st().get("inciampo", false):
+		return
+	var lista: Array = p.americani_attivi_in_mappa().filter(func(a): return a.postura == "standing" and p.terreno.tipo(a.hex) == "vineyard")
+	if lista.is_empty():
+		p._log("info", "Nessun soldato in piedi in una vigna: nessun evento.")
+		return
+	_st().inciampo = true
+	var a: Dictionary = lista[p.rng.randi_range(0, lista.size() - 1)]
+	p._log("info", "%s inciampa tra i filari e cade." % p.nome(a))
+	var rd: int = p.d10()
+	var l: String = T.lettera_danno(T.ARMI.pistol.danni, rd)
+	p._log("dado", "Danno della caduta (colonna Pistola): %d → %s" % [rd, p._nome_danno(l)])
+	p._applica_danno(a, l, {})
+
+func tedesco_uscito(x: Dictionary, h: String) -> void:
+	if not attiva() or int(_st().get("pv_uscita", 0)) <= 0 or h == "":
+		return
+	p._pv(-int(_st().pv_uscita), "%s esce dalla mappa" % p.nome(x))
+
+## Chiuse della diga: 4 azioni nei Round (anche di più soldati); nelle Operazioni un controllo degli eventi casuali.
+func apri_chiuse(a: Dictionary) -> String:
+	var ch: Dictionary = _st().get("chiuse", {})
+	if ch.is_empty() or a.hex != str(ch.hex):
+		return "I comandi delle chiuse non sono in questo esagono."
+	if bool(ch.aperte):
+		return "Le chiuse sono già aperte."
+	if p.fase_round():
+		ch.azioni = int(ch.azioni) + 1
+		p._log("azione", "%s lavora ai comandi delle chiuse (%d/4)." % [p.nome(a), int(ch.azioni)])
+		if int(ch.azioni) < 4:
+			return ""
+	else:
+		p._log("azione", "%s manovra i comandi delle chiuse: intanto si fa un controllo degli eventi casuali." % p.nome(a))
+		p.evento_casuale({"hex": a.hex})
+	ch.aperte = true
+	p.s.punti.erase(str(ch.hex))
+	p.leggi("565", {"hex": a.hex})
+	return ""
+
+func puo_aprire_chiuse(a: Dictionary) -> bool:
+	var ch: Dictionary = _st().get("chiuse", {})
+	return attiva() and not ch.is_empty() and not bool(ch.aperte) and a.get("hex", "") == str(ch.hex)
+
+func _avanza_piena() -> void:
+	var pn: Dictionary = _st().get("piena", {})
+	if pn.is_empty() or bool(pn.get("fuori", false)):
+		return
+	for k in 4:
+		var i := int(pn.indice)
+		if i >= LETTO_15.size():
+			pn.fuori = true
+			p.s.punti.erase(LETTO_15[LETTO_15.size() - 1])
+			p._log("info", "La piena esce dalla mappa.")
+			p.leggi("542", {})
+			return
+		var h: String = LETTO_15[i]
+		pn.indice = i + 1
+		p.s.modifiche[h] = "water"
+		for x in p.s.unita.values():
+			if str(x.get("hex", "")) == h and x.stato in ["attivo", "incapacitato"]:
+				x.stato = "morto"
+				p._log("danno", "%s è travolto dalla piena." % p.nome(x))
+		for v in p.veicoli.in_esagono(h):
+			if v.stato == "attivo":
+				p.veicoli.disabilita(v, "travolto dalla piena")
+		if h == "S9":
+			p._log("info", "La piena travolge il ponte in S9.")
+		if i > 0:
+			p.s.punti.erase(LETTO_15[i - 1])
+		p.s.punti[h] = "piena"
+	p.terreno.imposta_modifiche(p.s.modifiche)
+	p._log("info", "La piena avanza fino a %s." % LETTO_15[int(pn.indice) - 1])

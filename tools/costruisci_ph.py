@@ -60,6 +60,11 @@ CANE = {"lettera": "", "ruolo": "Cane da guardia", "pv": 0, "armi": [], "granate
         "gruppi": [[0, 9]], "colonne": {"1-6": [391], "S": [391], "A": [391]}}
 
 
+# Primo turno dalle note (la colonna della Missione 15; le note OCR sono troncate: valori dal database del programma).
+PRIMO_TURNO_DA_NOTE = {4, 6, 8, 9, 10, 11, 12, 14, 15, 16}
+PRIMO_FISSO = {4: 814, 6: 814, 8: 814, 16: 814, 9: 840, 10: 840, 11: 840, 12: 840, 14: 840, 15: 840}
+
+
 def tedeschi(nums):
     out = {}
     for n in nums:
@@ -75,12 +80,23 @@ def tedeschi(nums):
              "gruppi": c["gruppi"], "colonne": {}}
         if c.get("pv_cattura"):
             d["pv_cattura"] = c["pv_cattura"]
+        if c.get("DS") is not None:
+            d["DS"] = c["DS"]
         if c.get("esplosivi"):
             d["esplosivi"] = c["esplosivi"]
+        nota = c.get("note") or ""
+        m = re.search(r"first turn,\s*(?:use|conduct)\s*(\d{3})", nota)
+        if m and n in PRIMO_TURNO_DA_NOTE:
+            d["primo_turno"] = int(m.group(1))
+        if "while in active vehicle" in nota:
+            d["ignora_s_veicolo"] = True
         for col, v in c["colonne"].items():
             d["colonne"][col] = [int(x) if x is not None else 816 for x in v]
         if c["ruolo"] in COMANDANTI:
             d["comandante"] = True
+        if n in PRIMO_FISSO:
+            d["primo_turno"] = PRIMO_FISSO[n]
+            d["ignora_s_veicolo"] = True
         out[str(n)] = d
     return out
 
@@ -115,6 +131,26 @@ MISSIONI = {
         "testo_fine": "",
         "germani": [61, 62, 63, 64, 65, 66, 67, 68, 69, 91, 92],
     },
+    15: {
+        "titolo": "Ritorno a casa", "titolo_originale": "Homecoming",
+        "data": "Valle del Rodano, 25 agosto 1944", "mappa": "C", "nord": "a destra (in alto è ovest)", "libro": "ph",
+        "briefing": "25 agosto 1944, valle del Rodano. Durante un’incursione in profondità dietro le linee la squadra è rimasta tagliata "
+                    "fuori e isolata. Dopo dodici ore di combattimenti è finalmente uscita dall’accerchiamento: ora gli uomini tornano "
+                    "al campo, stremati ma fieri di una missione ben riuscita.",
+        "ingresso": "Mappa C, in alto è ovest. Prima della missione si tira, per ogni soldato e ogni tipo di munizione, sulla tabella "
+                    "delle munizioni consumate (in automatico). La squadra entra dal bordo nord tra Y15 e Y19; il campo è oltre il "
+                    "bordo sud. La diga è in N5. Non ci sono livelli di attivazione.",
+        "regole_testo": "[b]Diga.[/b] In N5 si entra e se ne esce solo da O5 e M6. [b]Letto asciutto.[/b] Per via della diga il fiume da N6 "
+                        "a Y15 è asciutto e vale come copertura (il ponte in S9 è intatto). [b]Munizioni.[/b] Una parte delle munizioni "
+                        "è stata consumata nei combattimenti del giorno prima.",
+        "ingresso_breve": "bordo nord, Y15–Y19", "uscita_breve": "nessuna",
+        "ingresso_esagoni": ["Y15", "Y16", "Y17", "Y18", "Y19"],
+        "vittoria_pv": 3, "attivazione": {}, "obiettivi": [],
+        "regole": {"diga": True, "munizioni_consumate": True},
+        "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b]",
+        "testo_fine": "",
+        "germani": [4, 6, 8, 9, 10, 11, 12, 14, 15, 16],
+    },
     16: {
         "titolo": "In guardia", "titolo_originale": "On Guard",
         "data": "Valle del Rodano, 3 settembre 1944", "mappa": "C", "nord": "a sinistra (in alto è est)", "libro": "ph",
@@ -142,10 +178,13 @@ MISSIONI = {
 
 def main():
     tutti = {}
+    for n in MISSIONI:
+        for k, v in importlib.import_module(f"paragrafi_ph{n}").P.items():
+            if k in tutti and tutti[k]["ops"] != v["ops"]:
+                print("ATTENZIONE: paragrafo", k, "definito in modo diverso da più missioni")
+            tutti.setdefault(k, v)
     for n, meta in MISSIONI.items():
         mod = importlib.import_module(f"paragrafi_ph{n}")
-        for k, v in mod.P.items():
-            tutti[k] = v
         meta = dict(meta)
         d = {"id": n}
         nums = meta.pop("germani")
@@ -165,12 +204,12 @@ def main():
         for c in d["condizioni"].values():
             for v in list(c["esagoni"].values()) + list(c["evento"].values()) + list(c["movimenti"].values()):
                 p = v.split(":")[-1]
-                if p.isdigit() and p not in mod.P:
+                if p.isdigit() and p not in tutti:
                     mancanti.add(p)
         for g in d["tedeschi"].values():
             for v in g["colonne"].values():
                 for x in v:
-                    if str(x) not in mod.P and not (800 <= x <= 999):
+                    if str(x) not in tutti and not (800 <= x <= 999):
                         mancanti.add(str(x))
         print(n, len(d["condizioni"]), "carte,", len(d["tedeschi"]), "tedeschi; mancanti:", sorted(mancanti))
     (R / "data/paragrafi_ph.json").write_text(json.dumps(tutti, ensure_ascii=False, indent=1))

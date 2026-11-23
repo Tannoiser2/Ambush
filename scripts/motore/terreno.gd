@@ -115,6 +115,10 @@ func costo_movimento(a: String, b: String) -> int:
 	var tl := tipo_lato(a, b)
 	if tl == "wall":
 		return -1
+	if accessi.has(b) and not (a in accessi[b]):
+		return -1
+	if accessi.has(a) and not (b in accessi[a]):
+		return -1
 	if bunker.has(b) and str(bunker[b].get("porta", "")) != a:
 		return -1
 	if bunker.has(a) and str(bunker[a].get("porta", "")) != b:
@@ -368,6 +372,8 @@ var illuminati: Dictionary = {}
 var fiume := false
 ## Acqua aperta (mare): vietata salvo indicazione della missione o di un paragrafo.
 var acqua_ammessa := false
+## Esagoni in cui si entra (e da cui si esce) solo da certi vicini: {esagono: [vicini]} (diga della Missione 15).
+var accessi: Dictionary = {}
 
 func vede(a: String, b: String, postura_a := "standing", postura_b := "standing", piano_a := 0, piano_b := 0) -> bool:
 	return bool(vista(a, b, postura_a, postura_b, piano_a, piano_b).ok)

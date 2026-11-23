@@ -113,6 +113,9 @@ func _applica_regole_terreno() -> void:
 			for h in E.tutti():
 				if E.distanza(h, str(c)) <= 3:
 					terreno.illuminati[h] = true
+	terreno.accessi = {}
+	if ph != null and not s.is_empty():
+		ph.regole_terreno()
 	terreno._cache_los.clear()
 
 func titolo_missione() -> String:
@@ -1317,6 +1320,7 @@ func aspetta_tedeschi(da_comando := true) -> Dictionary:
 ## Un tedesco o un veicolo tedesco esce dal bordo ovest: perdi il doppio del suo valore in PV.
 func tedesco_uscito(x: Dictionary, h: String) -> void:
 	mo.tedesco_uscito(x, h)
+	ph.tedesco_uscito(x, h)
 	var lato := str(regola("uscita_tedeschi", ""))
 	if lato == "" or h == "" or h.substr(0, 1) != lato:
 		return
@@ -2031,6 +2035,10 @@ func azione_ph(id: String, tipo: String) -> Dictionary:
 			var err: String = ph.fai_saltare_cannone(a)
 			if err != "":
 				return _errore(err)
+		"chiuse":
+			var err2: String = ph.apri_chiuse(a)
+			if err2 != "":
+				return _errore(err2)
 	_chiudi_azione_semplice(a)
 	_fine_comando()
 	return OK
@@ -2681,7 +2689,7 @@ func _avvia_round() -> void:
 		_log("info", "Dal Round 3 tutti i soldati sono consapevoli.")
 	s.erase("mo_consapevoli")
 	# 2. Evento (non nel Round 1).
-	if r.n >= 2 and not mo.salta_evento():
+	if r.n >= 2 and not mo.salta_evento() and not ph.salta_evento():
 		var pe := _passo("evento", {"n": r.n})
 		_log("info", "Fase Evento.")
 		evento_casuale({"hex": "", "ids": []}, pe)
@@ -2931,7 +2939,7 @@ func _fine_round() -> void:
 			g.rimuovi_fine_round = false
 			if not in_vista_americani(g):
 				ia.rimuovi_evasivo(g)
-	if tedeschi_attivi().is_empty():
+	if tedeschi_attivi().is_empty() and not ph.round_obbligati():
 		_torna_operazioni()
 		return
 	s.pausa = "inizio_round"
@@ -4982,6 +4990,8 @@ func _calcola_fine(modo: String) -> void:
 		if a.stato == "morto":
 			perdite -= 2
 			righe.append(["%s ucciso" % nome(a), -2])
+		elif a.stato == "incapacitato" and (bool(regola("niente_pv_incapacitati", false)) or ph.niente_pv_incapacitati()):
+			continue
 		elif a.stato == "incapacitato":
 			var salvo: bool = a.get("uscito", false) or a.get("salvo_mo", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))
 			if bool(regola("niente_salvataggio", false)):

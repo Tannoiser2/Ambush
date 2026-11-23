@@ -592,6 +592,23 @@ func _aggiorna_oggetti() -> void:
 			mc.material_override = _materiale_dipinto("cratere")
 			mc.position = punto3d(centro_px(str(h)), -0.02)
 			_dinamici.add_child(mc)
+		elif tipo == "water":
+			# Purple Heart 15: esagono allagato dalla piena.
+			var ma := MeshInstance3D.new()
+			var cil := CylinderMesh.new()
+			cil.radial_segments = 6
+			cil.rings = 1
+			cil.top_radius = RAGGIO_PX * 1.12 * K
+			cil.bottom_radius = cil.top_radius
+			cil.height = 0.04
+			ma.mesh = cil
+			var mat := _materiale(Color(0.28, 0.45, 0.62), 0.25)
+			mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			mat.albedo_color.a = 0.78
+			ma.material_override = mat
+			ma.rotation.y = PI / 6.0
+			ma.position = punto3d(centro_px(str(h)), 0.05)
+			_dinamici.add_child(ma)
 	# Rocce degli esagoni accidentati
 	for h in E.tutti():
 		if t.tipo(h) == "rough":
@@ -1243,11 +1260,13 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	var nome_mesh := "kubelwagen" if modello == "auto_comando" else ("canoa" if modello == "chiatta" else modello)
+	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto"] else ("canoa" if modello == "chiatta" else modello)
 	corpo.mesh = _mesh_mezzo(nome_mesh)
 	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else Color.WHITE))
 	if modello == "auto_comando":
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
+	if modello == "moto":
+		corpo.scale = Vector3(0.55, 0.8, 0.6)
 	if modello == "chiatta":
 		corpo.scale = Vector3(1.9, 1.2, 1.6)  # la chiatta: una grossa barca da dieci posti
 	n.add_child(corpo)
