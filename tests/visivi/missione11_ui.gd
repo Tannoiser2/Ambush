@@ -24,7 +24,7 @@ func scatta(percorso: String) -> void:
 
 func _scatti(dir: String, tag: String) -> void:
 	await aspetta(30)
-	ui._mostra_missione_scelta(11)
+	ui._mostra_missione_scelta(int(OS.get_environment("M") if OS.get_environment("M") != "" else "11"))
 	await aspetta(20)
 	await scatta("%s/m11_menu_%s.png" % [dir, tag])
 	ui._avvia_missione(11, false, false)

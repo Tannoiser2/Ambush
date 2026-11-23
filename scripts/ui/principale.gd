@@ -2158,10 +2158,19 @@ func _chiedi_nuova() -> void:
 ## Elenco delle missioni: quelle pronte si giocano, le altre sono «in preparazione».
 const NOMI_MISSIONI := ["Sangue a Saint-Michaux", "Avanzata su Chasoul", "Un freddo mattino in Belgio", "Lancio notturno nel D-Day",
 	"Operazione Borseggio", "Gita in canoa fino al Vallo occidentale", "Esca per la trappola", "Corsa verso la Sambre",
-	"Le prime luci dell’alba", "Assalto per uccidere", "La nebbia della guerra", "Per la cruna dell’ago"]
+	"Le prime luci dell’alba", "Assalto per uccidere", "La nebbia della guerra", "Per la cruna dell’ago",
+	"Dispersi", "Ricognizione in forze", "Ritorno a casa", "In guardia", "Sul filo del rasoio", "Il mattino dopo",
+	"Fradici", "Facile come bere un bicchier d’acqua", "Sorpresa, sorpresa!", "Un altro ponte di troppo?",
+	"Sconosciuti nella notte", "Il blues del mulattiere"]
 const DATE_MISSIONI := ["Normandia, giugno 1944", "Francia, agosto 1944", "Belgio, inverno 1944", "Normandia, 6 giugno 1944",
 	"Olanda, 4 luglio 1944", "Germania, gennaio 1945", "Mortain, 8 agosto 1944", "Belgio, settembre 1944",
-	"Aquisgrana, 11 settembre 1944", "Saint-Lô, giugno 1944", "Ardenne, dicembre 1944", "Parigi, 16 agosto 1944"]
+	"Aquisgrana, 11 settembre 1944", "Saint-Lô, 21 giugno 1944", "Ardenne, dicembre 1944", "Parigi, 16 agosto 1944",
+	"Francia del nord, 6 giugno 1944", "A sud di Caen, 22 luglio 1944", "Valle del Rodano, 25 agosto 1944",
+	"Valle del Rodano, 3 settembre 1944", "Germania occidentale, 15 marzo 1945", "Ardenne, 20 dicembre 1944",
+	"Messina, agosto 1943", "Cassino, Natale 1943", "Gela, 19 luglio 1943", "Monte Cassino, gennaio 1944",
+	"Linea Gotica, settembre 1944", "Napoli, ottobre 1943"]
+## Intestazioni delle espansioni nell’elenco delle missioni (indice della prima missione → titolo).
+const ESPANSIONI := {8: "ESPANSIONE MOVE OUT!", 12: "ESPANSIONE PURPLE HEART", 18: "ESPANSIONE SILVER STAR"}
 var pagina_missioni: Control
 
 ## Pagina delle missioni: a tutto schermo, una scheda illustrata per ciascuna delle 8 missioni.
@@ -2244,8 +2253,8 @@ func _mostra_missione_scelta(n: int) -> void:
 	for c in _elenco_missioni.get_children():
 		c.queue_free()
 	for i in NOMI_MISSIONI.size():
-		if i == 8:
-			var esp := Tema.etichetta("ESPANSIONE MOVE OUT!", Tema.testo_bold, 12, Tema.ROSSO)
+		if ESPANSIONI.has(i):
+			var esp := Tema.etichetta(ESPANSIONI[i], Tema.testo_bold, 12, Tema.ROSSO)
 			esp.custom_minimum_size = Vector2(160, 0)
 			esp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			_elenco_missioni.add_child(esp)
@@ -2265,8 +2274,19 @@ func _mostra_missione_scelta(n: int) -> void:
 	bb.add_theme_constant_override("separation", 8)
 	_pannello_ordine.add_child(bb)
 	if not n in pronte:
-		_intestazione(testo, "MISSIONE %d" % n, NOMI_MISSIONI[n - 1].to_upper())
-		_paragrafo(testo, "Questa missione è ancora in preparazione.", 16)
+		_intestazione(testo, "MISSIONE %d" % n, "%s · %s" % [NOMI_MISSIONI[n - 1].to_upper(), DATE_MISSIONI[n - 1].to_upper()])
+		var percorso_img := "res://assets/missioni/missione%d.jpg" % n
+		if ResourceLoader.exists(percorso_img):
+			var img := TextureRect.new()
+			img.texture = load(percorso_img)
+			img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			img.custom_minimum_size = Vector2(0, clampf(size.y * 0.42, 160.0, 420.0))
+			img.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			img.clip_contents = true
+			testo.add_child(img)
+		var esp := "Move Out!" if n <= 12 else ("Purple Heart" if n <= 18 else "Silver Star")
+		_paragrafo(testo, "Missione dell’espansione %s, ancora in preparazione." % esp if n > 8 else "Questa missione è ancora in preparazione.", 16)
 		return
 	var m: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
 	_ordine_missione(testo, m, n, clampf(size.y * 0.26, 120.0, 260.0))
