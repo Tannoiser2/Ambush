@@ -1106,6 +1106,8 @@ func _aggiorna_pedine() -> void:
 			_figure[id] = fig
 		var pos2: Vector2 = posti[id]
 		fig.position = punto3d(pos2)
+		if int(x.get("piano", 0)) > 0 and mappa2d.partita != null and mappa2d.partita.piano(x) > 0:
+			fig.position.y += ALTEZZA_CASA * 0.95  # al piano superiore del campanile
 		var nome := modello_per(x)
 		var ang_mezzo := INF
 		# a bordo di un mezzo: seduti in fila lungo il mezzo

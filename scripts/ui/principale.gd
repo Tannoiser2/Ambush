@@ -632,7 +632,7 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 	nome.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nome.clip_text = true
 	r1.add_child(nome)
-	var dove := ("da schierare" if _S().get("fase", "") == "schieramento" else "fuori mappa") if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else ("dorme" if a.stato == "dorme" else str(a.hex)))
+	var dove := ("da schierare" if _S().get("fase", "") == "schieramento" else "fuori mappa") if a.stato == "fuori" else ("uscito" if a.stato == "uscito" else ("dorme" if a.stato == "dorme" else str(a.hex) + (" sopra" if p.piano(a) > 0 else "")))
 	r1.add_child(Tema.etichetta(dove, Tema.stencil, 14, Tema.INCHIOSTRO_TENUE))
 	vb.add_child(r1)
 	var righe: Array = []
@@ -810,7 +810,7 @@ func _aggiorna_azioni() -> void:
 		return
 	var a := p.u(selezione[0])
 	var nomi: Array = selezione.map(func(id): return p.u(id).lettera)
-	var dove: String = "fuori mappa" if a.stato == "fuori" else a.hex
+	var dove: String = "fuori mappa" if a.stato == "fuori" else a.hex + (" (piano superiore)" if p.piano(a) > 0 else "")
 	var prefisso := ""
 	if p.fase_round() and p.puo_agire(a, true) == "":
 		prefisso = "TOCCA A TE: "
@@ -942,7 +942,8 @@ func _azioni_operazioni(a: Dictionary) -> void:
 	if a.hex != "" and selezione.size() == 1:
 		_azioni_posture(a)
 	if a.hex != "":
-		var compagni: Array = p.unita_in(a.hex, "us").filter(func(x): return x.postura == a.postura and p.veicoli.di(x).is_empty() == p.veicoli.di(a).is_empty())
+		var compagni: Array = p.unita_in(a.hex, "us").filter(func(x): return x.postura == a.postura and p.veicoli.di(x).is_empty() == p.veicoli.di(a).is_empty() \
+			and p.piano(x) == p.piano(a) and x.get("galleria", false) == a.get("galleria", false))
 		if compagni.size() > 1:
 			_gruppo("GRUPPO")
 			if selezione.size() > 1:
@@ -1189,6 +1190,14 @@ func _annulla_carica(a: Dictionary) -> void:
 	_esito(p.fine_azione(a.id))
 
 func _azioni_missione() -> void:
+	# Scale del campanile (S13, mappa B): si sale e si scende.
+	if not selezione.is_empty() and p.s.fase in ["operazioni", "round"]:
+		var ap: Dictionary = p.u(selezione[0])
+		if not ap.is_empty() and p.puo_agire(ap) == "" and p.terreno.ha_piani(str(ap.hex)) and not p.veicoli.attivo(p.veicoli.di(ap)):
+			_gruppo("SCALE")
+			var su: bool = p.piano(ap) == 0
+			_b("Sali al piano superiore" if su else "Scendi al pianterreno", func(): _esito(p.cambia_piano(ap.id)),
+				"Nei Round costa 1 punto movimento e bisogna essere in piedi; nelle Operazioni è libero. Dal piano superiore si vede più lontano; tra i due piani non ci si vede e non ci si spara, ma una granata si può lanciare su o giù.")
 	# Missione 12: galleria e compagni da slegare.
 	if not selezione.is_empty() and p.mo.attiva() and p.s.fase in ["operazioni", "round"]:
 		var a: Dictionary = p.u(selezione[0])

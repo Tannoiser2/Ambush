@@ -58,3 +58,10 @@ Ordine scelto: M11, M10, M12, M9.
   mappa B; +5 PV per compagno liberato uscito; incapacitati della C1 senza malus.
   Limiti: 474 si sceglie sempre di aprire il fuoco; piani degli edifici non rappresentati; filo spinato (497/600/604)
   non raggiungibile dalle carte e non implementato.
+- PIANI DEGLI EDIFICI (tutte le missioni): l’unico edificio a due piani di Ambush! e Move Out! è il campanile di S13
+  sulla mappa B (`mappa_b.json` «campanile» → `terreno.torri`). Campo `piano` delle unità (0/1, `partita.piano(x)`):
+  linea di vista dal piano superiore a quota +1 e senza muri; il campanile blocca le linee di livello 2; tra i due piani
+  non ci si vede né ci si spara né ci si assalta; granate su/giù come esagono adiacente, esplodono su un piano solo;
+  scale: 1 PM in piedi nei Round, libere nelle Operazioni (`cambia_piano`); i tedeschi scendono pagando 1 PM.
+  Paragrafi: base 069/496/471/477/636 (`al_piano`), 265 e MO 980 (`scala_tedesco`), MO 651/652/898, 969, faro 948.
+  Test: tests/piani.gd.

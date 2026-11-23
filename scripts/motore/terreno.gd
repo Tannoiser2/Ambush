@@ -21,12 +21,24 @@ var modifiche: Dictionary = {}
 var _cache_los: Dictionary = {}
 
 var alture: Array = []
+## Edifici con un piano superiore (il campanile di S13 sulla mappa B): esagono → livelli in più.
+var torri: Dictionary = {}
 
 func _init(percorso := "res://data/mappa_a.json") -> void:
 	var dati: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(percorso))
 	esagoni = dati.esagoni
 	lati = dati.lati
 	alture = dati.get("alture_obiettivo", [])
+	if str(dati.get("campanile", "")) != "":
+		torri[str(dati.campanile)] = 1
+
+## Vero se l’esagono ha un piano superiore.
+func ha_piani(h: String) -> bool:
+	return torri.has(h) and not modifiche.has(h)
+
+## Quota che conta per bloccare la vista (il campanile è alto due livelli).
+func quota_blocco(h: String) -> int:
+	return quota(h) + (int(torri[h]) if ha_piani(h) else 0)
 
 func imposta_modifiche(m: Dictionary) -> void:
 	modifiche = m
@@ -207,10 +219,8 @@ func percorso_vista(a: String, b: String) -> Dictionary:
 				bisecati.append([h, n])
 	return {"esagoni": attraversati, "lati": lati_incrociati, "bisecati": bisecati}
 
-func _blocca_esagono(h: String, a: String, b: String) -> String:
-	var qa := quota(a)
-	var qb := quota(b)
-	var qh := quota(h)
+func _blocca_esagono(h: String, a: String, b: String, qa: int, qb: int) -> String:
+	var qh := quota_blocco(h)
 	var basso := mini(qa, qb)
 	var alto := maxi(qa, qb)
 	if qh > alto:
@@ -278,23 +288,26 @@ func _vista_edificio(h: String, altro: String, postura_h: String, postura_altro:
 	return ""
 
 ## Linea di vista tra due esagoni con le posture degli osservatori. Restituisce {ok, motivo}.
-func vista(a: String, b: String, postura_a := "standing", postura_b := "standing") -> Dictionary:
+func vista(a: String, b: String, postura_a := "standing", postura_b := "standing", piano_a := 0, piano_b := 0) -> Dictionary:
 	if a == "" or b == "" or not E.valido(a) or not E.valido(b):
 		return {"ok": false, "motivo": "fuori mappa"}
 	if a == b:
+		if piano_a != piano_b:
+			return {"ok": false, "motivo": "sono su piani diversi"}
 		return {"ok": true, "motivo": ""}
 	if limite_vista > 0 and E.distanza(a, b) > limite_vista and not illuminati.has(b):
 		return {"ok": false, "motivo": "oltre la visibilità (%d esagoni)" % limite_vista}
-	var chiave := "%s>%s>%s>%s" % [a, b, postura_a, postura_b]
+	var chiave := "%s>%s>%s>%s>%d>%d" % [a, b, postura_a, postura_b, piano_a, piano_b]
 	if _cache_los.has(chiave):
 		return _cache_los[chiave]
-	var r := _calcola_vista(a, b, postura_a, postura_b)
+	var r := _calcola_vista(a, b, postura_a, postura_b, piano_a, piano_b)
 	_cache_los[chiave] = r
 	return r
 
-func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String) -> Dictionary:
-	var m := _vista_edificio(a, b, postura_a, postura_b)
-	if m == "":
+func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String, piano_a := 0, piano_b := 0) -> Dictionary:
+	# Dal piano superiore (la cella campanaria) si vede da tutti i lati: niente muri.
+	var m := _vista_edificio(a, b, postura_a, postura_b) if piano_a == 0 else ""
+	if m == "" and piano_b == 0:
 		m = _vista_edificio(b, a, postura_b, postura_a)
 	if m != "":
 		return {"ok": false, "motivo": m}
@@ -304,17 +317,17 @@ func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String) 
 			return {"ok": false, "motivo": "una cresta separa i due esagoni"}
 		return {"ok": true, "motivo": ""}
 	var p := percorso_vista(a, b)
+	var qa := quota(a) + piano_a
+	var qb := quota(b) + piano_b
 	for h in p.esagoni:
-		var mot := _blocca_esagono(h, a, b)
+		var mot := _blocca_esagono(h, a, b, qa, qb)
 		if mot != "":
 			return {"ok": false, "motivo": mot}
 	for coppia in p.bisecati:
-		var m1 := _blocca_esagono(coppia[0], a, b)
-		var m2 := _blocca_esagono(coppia[1], a, b)
+		var m1 := _blocca_esagono(coppia[0], a, b, qa, qb)
+		var m2 := _blocca_esagono(coppia[1], a, b, qa, qb)
 		if m1 != "" and m2 != "":
 			return {"ok": false, "motivo": m1}
-	var qa := quota(a)
-	var qb := quota(b)
 	for k in p.lati:
 		var tl := str(lati.get(k, ""))
 		if tl == "crest":
@@ -340,5 +353,5 @@ var illuminati: Dictionary = {}
 ## Fiume: il corso d’acqua si attraversa solo sui ponti (Missioni 3, 4, 5, 6, 8).
 var fiume := false
 
-func vede(a: String, b: String, postura_a := "standing", postura_b := "standing") -> bool:
-	return bool(vista(a, b, postura_a, postura_b).ok)
+func vede(a: String, b: String, postura_a := "standing", postura_b := "standing", piano_a := 0, piano_b := 0) -> bool:
+	return bool(vista(a, b, postura_a, postura_b, piano_a, piano_b).ok)

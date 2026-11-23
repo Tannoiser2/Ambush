@@ -904,7 +904,7 @@ func _faro(da: String, tab: Array) -> void:
 	var meta := str(tab[r])
 	var luce: Array = []
 	for h in E.linea(da, meta):
-		if h == da or p.terreno.vede(da, h, "standing", "standing"):
+		if h == da or p.terreno.vede(da, h, "standing", "standing", 1, 0):
 			luce.append(h)
 	p._log("info", "Il faro punta verso %s: illuminati %s." % [meta, ", ".join(luce)])
 	var visti: Array = p.americani_attivi_in_mappa().filter(func(a): return a.hex in luce and not a.get("galleria", false))

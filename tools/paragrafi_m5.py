@@ -106,14 +106,14 @@ par("464", "Tira un dado:\n0–4: controllo di attivazione (+1); se riesce, vedi
 par("465", "Se un soldato americano attivo vede l’esagono N5, passa alla Condizione 2.", [if_({"see_hex": "N5"}, [cond(2)])])
 par("466", "Se un soldato americano vede l’esagono K7, vedi 080.", [if_({"see_hex": "K7"}, [see("080")])])
 par("471", "[s3 e s7] Attiva il tedesco 40 in S9, accovacciato, e il tedesco 12 al piano superiore dell’edificio in S13, accovacciato. Iniziano i Round. Vantaggio tedesco. I tedeschi 12 e 40 ricevono 2 turni in questo Round.",
-    sighting(3, 7) + [activate([(40, "S9"), (12, "S13")], "crouching", adv="de", two=[12, 40])])
+    sighting(3, 7) + [activate([(40, "S9"), (12, "S13")], "crouching", adv="de", two=[12, 40]), {"op": "al_piano", "g": [12]}])
 par("472", "[s3] Attiva il tedesco 40 nell’esagono S9, accovacciato. Iniziano i Round. Vantaggio tedesco. Il tedesco 40 riceve 2 turni in questo Round.",
     sighting(3) + [activate([(40, "S9")], "crouching", adv="de", two=[40])])
 par("473", "Il soldato vede un guado nell’esagono F10.", [guado("F10")])
 par("475", "Il soldato americano con la percezione più alta che vede l’esagono I4 fa un controllo di percezione. Se riesce, vedi 049.",
     [{"op": "best_pc", "hex": "I4", "mod": 0, "ok": [see("049")]}])
 par("477", "[s7] Attiva il tedesco 12 al piano superiore dell’edificio in S13, accovacciato. Iniziano i Round. Vantaggio tedesco.",
-    sighting(7) + [activate([(12, "S13")], "crouching", adv="de")])
+    sighting(7) + [activate([(12, "S13")], "crouching", adv="de"), {"op": "al_piano", "g": [12]}])
 par("478", "[s6] Attiva il tedesco 7 nell’esagono P5, in piedi. Iniziano i Round. Vantaggio americano.",
     sighting(6) + [activate([(7, "P5")], "standing", adv="us")])
 par("479", "• Se c’è stato s0, vedi 487.\n• Altrimenti segna s0: attiva i tedeschi 24 e 42 in S14, accovacciati. Iniziano i Round. Vantaggio americano. Tutti i soldati americani attivi che vedono S14 sono automaticamente consapevoli; i consapevoli che non cadono nel panico ricevono 2 turni. Vedi 487.",
@@ -161,7 +161,7 @@ par("634", "[s3] Attiva il tedesco 40 nell’esagono S9, accovacciato. Iniziano 
 par("635", "[s8] Nell’esagono S6 c’è una torre a traliccio di metallo su una piattaforma di cemento: metti il segnaposto della rampa. Distruggerla vale 2 PV: lancia una carica da demolizione nel suo esagono.",
     sighting(8) + [inst("rampa", 2, "S6")])
 par("636", "[s7] Attiva il tedesco 12 al piano superiore dell’edificio in S13, accovacciato. Iniziano i Round. Vantaggio tedesco. Il tedesco 12 riceve automaticamente 2 turni in questo Round.",
-    sighting(7) + [activate([(12, "S13")], "crouching", adv="de", two=[12])])
+    sighting(7) + [activate([(12, "S13")], "crouching", adv="de", two=[12]), {"op": "al_piano", "g": [12]}])
 par("638", "Il soldato vede un luccichio d’acciaio nell’esagono I4.", [])
 par("639", "Quando la carica esplode, esplode anche il razzo: una gigantesca palla di fuoco erutta dal campanile come il Vesuvio. Tutti i soldati in S13 muoiono; S13 e S14 diventano macerie. Chi è entro 2 esagoni da S13 subisce i danni di una granata all’aperto; nei Round, chi è entro 3 esagoni cade nel panico.",
     [{"op": "esplosione_v2"}])

@@ -7798,8 +7798,8 @@
   "it": "Se sei al piano superiore, scendi al piano inferiore. Se sei al piano inferiore e c’è un soldato americano attivo al piano superiore, sali. Se sei al piano inferiore e non c’è nessun americano al piano superiore, entra in S14.",
   "ops": [
    {
-    "op": "g_enter",
-    "hex": "S14"
+    "op": "scala_tedesco",
+    "altrimenti": "S14"
    }
   ],
   "tipo": "movimento"
@@ -8713,6 +8713,12 @@
    {
     "op": "consapevoli_vede",
     "hex": "S13"
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     6
+    ]
    }
   ],
   "tipo": "missione"
@@ -9483,6 +9489,12 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     6
+    ]
    }
   ],
   "tipo": "missione"
@@ -12781,6 +12793,12 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     12
+    ]
    }
   ],
   "tipo": "missione"
@@ -12868,6 +12886,12 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     12
+    ]
    }
   ],
   "tipo": "missione"
@@ -13634,6 +13658,12 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     12
+    ]
    }
   ],
   "tipo": "missione"

@@ -26,6 +26,8 @@ def flag(k):
 
 
 SE_C4 = [if_({"cond_in": [4]}, [cond(5)])]
+# I mitraglieri 18 e 19 sono al piano superiore del campanile di S13.
+PIANO = {k: [{"op": "al_piano", "g": [18, 19]}] for k in ("651", "652", "898")}
 TESTO_C4 = " Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3."
 
 
@@ -51,10 +53,10 @@ def att_doppia(pid, de, us_, s, gs, h, testo):
     par(pid, f"Tira un dado: 0–5 vedi {de}; 6–9 vedi {us_}.", [die([0, 5, [see(de)]], [6, 9, [see(us_)]])])
     coppie = [(g, h) for g in gs]
     par(de, f"[s{s}] Attiva {testo} in {h}, accovacciat{'i' if len(gs) > 1 else 'o'}. Iniziano i Round con vantaggio tedesco." + TESTO_C4,
-        sighting(s) + [activate(coppie, "crouching", adv="de")] + SE_C4)
+        sighting(s) + [activate(coppie, "crouching", adv="de")] + PIANO.get(de, []) + SE_C4)
     par(us_, f"[s{s}] Attiva {testo} in {h}, accovacciat{'i' if len(gs) > 1 else 'o'}. Iniziano i Round con vantaggio americano: "
              "i soldati consapevoli ricevono 2 turni in questo Round." + TESTO_C4,
-        sighting(s) + [activate(coppie, "crouching", adv="us", us_two=True)] + SE_C4)
+        sighting(s) + [activate(coppie, "crouching", adv="us", us_two=True)] + PIANO.get(us_, []) + SE_C4)
 
 
 # ------------------------------------------------------------------ Condizione 1, mappa A
@@ -153,7 +155,7 @@ for pid, s, gs, h, st in [("696", 3, [11], "K7", "standing"), ("698", 4, [57], "
                           ("940", 8, [17], "L10", "crouching"), ("942", 7, [55], "R7", "crouching")]:
     nomi = " e ".join(f"il tedesco {g}" for g in gs)
     par(pid, f"[s{s}] Attiva {nomi} in {h}, {'in piedi' if st == 'standing' else 'accovacciat' + ('i' if len(gs) > 1 else 'o')}. "
-             "Iniziano i Round.", sighting(s) + [activate([(g, h) for g in gs], st)])
+             "Iniziano i Round.", sighting(s) + [activate([(g, h) for g in gs], st)] + PIANO.get(pid, []))
 for pid, tab in [("944", ["A1", "D1", "H1", "L1", "P1", "T1", "X1", "Y4", "Y8", "Y12"]),
                  ("945", ["Y16", "X18", "T19", "P19", "L19", "H19", "D19", "A18", "A14", "A10"]),
                  ("946", ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A11"])]:
@@ -176,4 +178,4 @@ for pid, a, b, soglia in [("953", "L11", "L10", 6), ("955", "L7", "L6", 4), ("96
         [die([0, soglia, [enter(a)]], [soglia + 1, 9, [enter(b)]])])
 par("967", "Mette in vigore la reazione speciale L per questo tedesco (togliendo quella che aveva).", [{"op": "g_reaction", "r": "L"}], "azione")
 par("969", "Se non ha bersagli attivi in vista lascia la mitragliatrice al suo posto, scende al pianterreno e mette in vigore la "
-    "reazione speciale A.", [if_({"g_vede_almeno": 1}, [], [{"op": "g_reaction", "r": "A"}])], "azione")
+    "reazione speciale A.", [if_({"g_vede_almeno": 1}, [], [{"op": "g_reaction", "r": "A"}, {"op": "g_pianterreno"}])], "azione")

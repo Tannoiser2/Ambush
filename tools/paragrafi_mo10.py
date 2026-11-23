@@ -87,8 +87,8 @@ soldato("962", "U10", "T8")
 soldato("964", "U8", "T6")
 mov("966", "Se si muove il tedesco 26 entra in V6; altrimenti entra in V5.",
     [if_({"g_num": 26}, [enter("V6")], [enter("V5")])])
-mov("980", "Se c’è un americano attivo nell’edificio sale e lo assalta; altrimenti entra in T13. "
-    "(I piani degli edifici non sono rappresentati: il tedesco entra in T13.)", [enter("T13")])
+mov("980", "Se è al piano superiore scende al pianterreno. Se è al pianterreno e c’è un americano attivo al piano "
+    "superiore, sale e lo carica per ucciderlo. Altrimenti entra in T13.", [{"op": "scala_tedesco", "altrimenti": "T13"}])
 mezzo("981", "L4", "L5")
 mezzo("982", "O4", "O5")
 mezzo("983", "P4", "O5")

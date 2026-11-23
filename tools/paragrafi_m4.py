@@ -55,7 +55,7 @@ par("063", "Effettua un controllo di percezione (−1). Se riesce, vedi 633.", [
 par("065", "Effettua un controllo di percezione (+1):\n• se riesce, vedi 744;\n• se fallisce, vedi 586.", [pc(1, [see("744")], [see("586")])])
 par("066", "Effettua un controllo di attivazione (+1):\n• se riesce, vedi 496;\n• se fallisce, vedi 568.", [act(1, [see("496")], [see("568")])])
 par("069", "[s2] Attiva il tedesco 6 al piano superiore dell’esagono S13, accovacciato. Iniziano i Round. Vantaggio americano. Tutti i soldati americani che vedono S13 sono automaticamente consapevoli.",
-    sighting(2) + [activate([(6, "S13")], "crouching", adv="us"), {"op": "consapevoli_vede", "hex": "S13"}])
+    sighting(2) + [activate([(6, "S13")], "crouching", adv="us"), {"op": "consapevoli_vede", "hex": "S13"}, {"op": "al_piano", "g": [6]}])
 par("073", "[s8] Attiva il tedesco 62 nel primo esagono dell’elenco visto dagli americani e non occupato da un americano attivo. Iniziano i Round. Vantaggio tedesco.",
     sighting(8) + [activate([(62, "@indicato")], "crouching", adv="de")])
 par("077", "1. Se non c’è stato s5, vedi 497.\n2. Se non c’è stato s7, vedi 631.\n3. Se non c’è stato s8, vedi 988.\n4. Se non c’è stato s2, vedi 069.\n5. Passa alla Condizione 4.",
@@ -92,7 +92,7 @@ par("488", "Effettua un controllo di percezione (+1):\n• se riesce, vedi 703;\
 par("489", "• Se il ponte in G14 è saltato, entra in F15.\n• Altrimenti entra in G14.",
     [if_({"bridge_intact": "G14"}, [enter("G14")], [enter("F15")])], "movimento")
 par("496", "[s2] Attiva il tedesco 6 al piano superiore dell’esagono S13, accovacciato. Iniziano i Round. Vantaggio tedesco. Il tedesco 6 riceve 2 turni in questo Round.",
-    sighting(2) + [activate([(6, "S13")], "crouching", adv="de", two=[6])])
+    sighting(2) + [activate([(6, "S13")], "crouching", adv="de", two=[6]), {"op": "al_piano", "g": [6]}])
 par("497", "Effettua un controllo di attivazione:\n• se riesce, vedi 590;\n• se fallisce, vedi 637.", [act(0, [see("590")], [see("637")])])
 par("498", "Effettua un controllo di percezione. Se riesce, vedi 133.", [pc(0, [see("133")])])
 par("551", "Effettua un controllo di percezione (−1):\n• se riesce, vedi 620;\n• se fallisce, vedi 701.", [pc(-1, [see("620")], [see("701")])])

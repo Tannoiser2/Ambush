@@ -477,7 +477,47 @@ func vede_unita(osservatore: Dictionary, bersaglio: Dictionary) -> bool:
 		return false
 	if osservatore.get("galleria", false) or bersaglio.get("galleria", false):
 		return osservatore.get("galleria", false) and bersaglio.get("galleria", false) and osservatore.hex == bersaglio.hex
-	return terreno.vede(osservatore.hex, bersaglio.hex, osservatore.postura, bersaglio.postura)
+	return terreno.vede(osservatore.hex, bersaglio.hex, osservatore.postura, bersaglio.postura, piano(osservatore), piano(bersaglio))
+
+## Piano su cui si trova un soldato: 0 a terra, 1 al piano superiore (campanile di S13, mappa B).
+func piano(x: Dictionary) -> int:
+	return int(x.get("piano", 0)) if terreno.ha_piani(str(x.get("hex", ""))) else 0
+
+## Vero se due soldati sono davvero nello stesso posto (stesso esagono e stesso piano).
+func stesso_posto(a: Dictionary, b: Dictionary) -> bool:
+	return str(a.get("hex", "")) == str(b.get("hex", "")) and piano(a) == piano(b)
+
+## Sale o scende la scala del campanile: nelle Operazioni è libero, nei Round costa 1 PM a un soldato in piedi.
+func cambia_piano(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	if not terreno.ha_piani(a.hex):
+		return _errore("Qui non ci sono scale.")
+	if veicoli.attivo(veicoli.di(a)):
+		return _errore("Prima bisogna scendere dal veicolo.")
+	if fase_round():
+		if a.postura != "standing":
+			return _errore("Per salire o scendere le scale bisogna essere in piedi.")
+		var t := _turno_di(a)
+		if t.azione == "":
+			t.azione = "muovi"
+			_log("azione", "%s: movimento." % nome(a))
+		elif not (t.azione in ["muovi", "muovi_spara"]):
+			return _errore("Le scale fanno parte del movimento.")
+		if int(t.mp) < 1:
+			return _errore("Non restano punti movimento.")
+		t.mp = int(t.mp) - 1
+		t.mosso = true
+	else:
+		a.postura = "standing" if a.postura == "prone" else a.postura
+	a.piano = 0 if piano(a) > 0 else 1
+	_log("azione", "%s %s in %s." % [nome(a), "sale al piano superiore" if a.piano == 1 else "scende al pianterreno", a.hex])
+	_fx("postura", {"id": a.id, "a": a.hex})
+	_fine_comando()
+	return OK
 
 func qualcuno_vede_hex(h: String) -> bool:
 	for a in americani_attivi_in_mappa():
@@ -725,6 +765,20 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 					s.da_leggere = {}
 				s.da_leggere[ctx.hex] = str(o.p)
 				_log("info", "Annotato sulla scheda: leggere il paragrafo %s quando in %s restano attivi solo i tuoi soldati." % [str(o.p), ctx.hex])
+		"al_piano":
+			# Tedeschi attivati al piano superiore di un edificio con le scale (campanile di S13).
+			for num in o.g:
+				var gp := u("g%d" % int(num))
+				if not gp.is_empty() and terreno.ha_piani(gp.hex):
+					gp.piano = int(o.get("piano", 1))
+					_log("info", "%s è al piano superiore di %s." % [nome(gp), gp.hex])
+		"scala_tedesco":
+			ia.scala(ctx, str(o.altrimenti))
+		"g_pianterreno":
+			var gt := u(str(ctx.get("g", "")))
+			if not gt.is_empty() and piano(gt) > 0:
+				gt.piano = 0
+				_log("tedesco", "Il %s scende al pianterreno." % nome(gt))
 		"nota":
 			if not s.has("note"):
 				s.note = {}
@@ -2964,6 +3018,8 @@ func _costo_ingresso(h: String) -> int:
 	return 1
 
 func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> String:
+	if piano(a) > 0 and verso != a.hex:
+		return "%s è al piano superiore: prima deve scendere le scale." % nome(a)
 	var e_mo: String = mo.verifica_passo(a, verso)
 	if e_mo != "":
 		return e_mo
@@ -3318,7 +3374,9 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		return {"ok": false, "motivo": "da prono non si spara"}
 	var dist := E.distanza(tiratore.hex, bersaglio.hex)
 	if dist > 0 and not vede_unita(tiratore, bersaglio):
-		return {"ok": false, "motivo": terreno.vista(tiratore.hex, bersaglio.hex, tiratore.postura, bersaglio.postura).motivo}
+		return {"ok": false, "motivo": terreno.vista(tiratore.hex, bersaglio.hex, tiratore.postura, bersaglio.postura, piano(tiratore), piano(bersaglio)).motivo}
+	if dist == 0 and piano(tiratore) != piano(bersaglio):
+		return {"ok": false, "motivo": "è su un altro piano"}
 	# Non si spara in un esagono con un amico attivo (salvo stesso esagono).
 	if dist > 0:
 		for x in unita_in(bersaglio.hex, tiratore.lato):
@@ -3685,7 +3743,9 @@ func probabilita_lancio(lanciatore: Dictionary, tipo: String, h: String) -> Dict
 	if tipo == "satchel" and lanciatore.postura != "standing":
 		return {"ok": false, "motivo": "la carica si lancia solo in piedi"}
 	var dist := E.distanza(lanciatore.hex, h)
-	if dist == 0:
+	if dist == 0 and terreno.ha_piani(h):
+		dist = 1  # al piano di sopra o di sotto: conta come adiacente
+	elif dist == 0:
 		return {"ok": false, "motivo": "non nel proprio esagono"}
 	var massimo := 3 if (tipo == "satchel" or lanciatore.postura == "crouching") else 6
 	if dist > massimo:
@@ -3744,6 +3804,10 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 			s.bunker[arrivo].carica = true
 			_log("combattimento", "La carica esplode dentro il bunker in %s." % arrivo)
 	var presenti: Array = unita_in(arrivo, "", false).filter(func(x): return x.stato in ["attivo", "incapacitato", "catturato"])
+	if terreno.ha_piani(arrivo):
+		# Nel campanile esplode su un piano solo: quello dell’altro piano se lanciata dall’interno, altrimenti il pianterreno.
+		var piano_scoppio: int = (1 - piano(lanciatore)) if arrivo == lanciatore.hex else 0
+		presenti = presenti.filter(func(x): return piano(x) == piano_scoppio)
 	for x in presenti:
 		if x.lato == "de":
 			x.granata_subita = true
@@ -3919,6 +3983,8 @@ func assalta(id: String, bersaglio_id: String, intento: String) -> Dictionary:
 	var b := u(bersaglio_id)
 	if b.is_empty() or not attivo(b) or b.hex != a.hex:
 		return _errore("Il bersaglio deve essere nello stesso esagono.")
+	if piano(b) != piano(a):
+		return _errore("Il bersaglio è su un altro piano: prima bisogna salire o scendere le scale.")
 	var t := _turno_di(a)
 	var carica: bool = t.azione == "carica"
 	if not carica and t.azione != "":

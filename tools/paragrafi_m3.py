@@ -99,7 +99,7 @@ par("264", "Attiva i tedeschi 61, 64 e 72 nell’esagono che si stava controllan
          [activate([(61, "@indicato"), (64, "@indicato"), (72, "@indicato")], "standing", adv="us", us_two=True, aware=True)]),
      activate([(90, "A5"), (91, "A5"), (92, "A5")], "standing", adv="us"), cond(3)])
 par("265", "Se sei al piano superiore, scendi al piano inferiore. Se sei al piano inferiore e c’è un soldato americano attivo al piano superiore, sali. Se sei al piano inferiore e non c’è nessun americano al piano superiore, entra in S14.",
-    [enter("S14")], "movimento")
+    [{"op": "scala_tedesco", "altrimenti": "S14"}], "movimento")
 par("266", "Una staffetta del comando di battaglione entra in gioco in A17 (carta americana 01). Puoi usarla come vuoi e conta per la tua squadra ai fini dei PV, ma cerca un comandante di squadra. Se i Round sono in corso, la staffetta è automaticamente consapevole.",
     [{"op": "staffetta", "carta": 1}])
 par("267", "Ogni soldato americano in un esagono scoperto o di strada che vede l’esagono J1 fa un controllo di percezione (−2):\n• se almeno uno riesce, vedi 272;\n• se falliscono tutti, vedi 020;\n• se non si fa nessun controllo, nessun evento.",

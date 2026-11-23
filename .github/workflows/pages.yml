@@ -60,6 +60,7 @@ jobs:
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 4 1 8
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione10.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 3 1 10
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/piani.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione12.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 3 1 12
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione11.gd

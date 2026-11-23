@@ -1108,6 +1108,13 @@ func _passo(verso: String, strisciando: bool) -> bool:
 	var costo: int = p.terreno.costo_movimento(g.hex, verso)
 	if costo < 0:
 		return false
+	if p.piano(g) > 0:
+		# Dal piano superiore si scende prima la scala (1 PM).
+		if _mp < 1 or strisciando:
+			return false
+		_mp -= 1
+		g.piano = 0
+		p._log("tedesco", "Il %s scende le scale in %s." % [p.nome(g), g.hex])
 	if strisciando:
 		if not p.terreno.strisciare_possibile(g.hex, verso):
 			return false
@@ -1147,6 +1154,26 @@ func _segui_riferimento(rif: String, strisciando: bool) -> bool:
 		p.leggi(rif, ctx)
 		return not _fermo and not _reazione_cambiata and p.in_mappa(g) and not strisciando
 	return _passo(rif, strisciando) and not _fermo and not strisciando
+
+## Paragrafi 265 (gioco base) e 980 (Move Out!): il tedesco nel campanile di S13.
+## Dal piano superiore scende; dal pianterreno sale ad assaltare un americano attivo di sopra; altrimenti entra in «altrimenti».
+func scala(ctx: Dictionary, altrimenti: String) -> void:
+	if _g.is_empty() or ctx.get("g", "") != _g.id:
+		return
+	var g := _g
+	if p.piano(g) > 0:
+		g.piano = 0
+		p._log("tedesco", "Il %s scende al pianterreno di %s." % [p.nome(g), g.hex])
+		_fermo = true
+		return
+	var sopra: Array = p.unita_in(g.hex, "us").filter(func(a): return p.piano(a) > 0)
+	if p.terreno.ha_piani(g.hex) and not sopra.is_empty():
+		g.piano = 1
+		p._log("tedesco", "Il %s sale le scale di %s e carica." % [p.nome(g), g.hex])
+		_fermo = true
+		_assalta(sopra[p.rng.randi_range(0, sopra.size() - 1)], true)
+		return
+	entra_da_paragrafo(ctx, altrimenti)
 
 func entra_da_paragrafo(ctx: Dictionary, h: String) -> void:
 	if _g.is_empty() or ctx.get("g", "") != _g.id:
@@ -1430,7 +1457,7 @@ func _arrenditi() -> void:
 		p._fx("danno", {"id": g.id, "tipo": "arreso"})
 
 func _bersaglio_assalto() -> Dictionary:
-	var lista: Array = p.unita_in(_g.hex, "us")
+	var lista: Array = p.unita_in(_g.hex, "us").filter(func(a): return p.piano(a) == p.piano(_g))
 	if lista.is_empty():
 		return {}
 	var deboli := lista.filter(func(a): return a.postura == "prone" or a.ferito)

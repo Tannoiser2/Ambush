@@ -356,6 +356,15 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Piano superiore (campanile di S13): segnalino sotto il soldato
+	var al_piano := {}
+	for x in s.unita.values():
+		if int(x.get("piano", 0)) > 0 and partita.piano(x) > 0 and x.get("stato", "") in ["attivo", "incapacitato"]:
+			if not al_piano.has(x.hex):
+				al_piano[x.hex] = []
+			al_piano[x.hex].append(str(x.lettera) if x.lato == "us" else "%s%d" % [x.lettera, int(x.num)])
+	for h in al_piano:
+		_marcatore(str(h), "PIANO SUP.: " + ", ".join(al_piano[h]), Vector2(0.0, -0.66), Color("5b3a22"))
 	# Missione 12: soldati nella galleria
 	for x in s.unita.values():
 		if x.get("galleria", false) and str(x.get("hex", "")) != "" and x.get("stato", "") == "attivo":

@@ -1442,6 +1442,13 @@
     "rounds": true
    },
    {
+    "op": "al_piano",
+    "g": [
+     18,
+     19
+    ]
+   },
+   {
     "op": "if",
     "t": {
      "cond_in": [
@@ -1486,6 +1493,13 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     18,
+     19
+    ]
    },
    {
     "op": "if",
@@ -2550,6 +2564,13 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     18,
+     19
+    ]
    }
   ],
   "tipo": "missione"
@@ -2890,6 +2911,9 @@
      {
       "op": "g_reaction",
       "r": "A"
+     },
+     {
+      "op": "g_pianterreno"
      }
     ]
    }
@@ -3687,11 +3711,11 @@
  },
  "980": {
   "id": "980",
-  "it": "Se c’è un americano attivo nell’edificio sale e lo assalta; altrimenti entra in T13. (I piani degli edifici non sono rappresentati: il tedesco entra in T13.)",
+  "it": "Se è al piano superiore scende al pianterreno. Se è al pianterreno e c’è un americano attivo al piano superiore, sale e lo carica per ucciderlo. Altrimenti entra in T13.",
   "ops": [
    {
-    "op": "g_enter",
-    "hex": "T13"
+    "op": "scala_tedesco",
+    "altrimenti": "T13"
    }
   ],
   "tipo": "movimento"
