@@ -356,6 +356,10 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 12: soldati nella galleria
+	for x in s.unita.values():
+		if x.get("galleria", false) and str(x.get("hex", "")) != "" and x.get("stato", "") == "attivo":
+			_marcatore(str(x.hex), "GALLERIA", Vector2(0.0, -0.62), Color("3a3326"))
 	# Missione 10: colpi dei mortai
 	var marcatori: Array = s.get("art_marcatori", [])
 	for k in marcatori.size():

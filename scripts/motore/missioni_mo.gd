@@ -51,6 +51,28 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			_caduta()
 		"sherman_mo":
 			_sherman(str(o.hex))
+		"claude":
+			_claude(str(o.hex))
+		"chiatta":
+			_chiatta(str(o.hex))
+		"chiatta_mappa_b":
+			_chiatta_mappa_b(str(o.hex))
+		"galleria":
+			p.s.mo_galleria = true
+		"botola":
+			if not p.s.has("mo_botole"):
+				p.s.mo_botole = []
+			if not (str(o.hex) in p.s.mo_botole):
+				p.s.mo_botole.append(str(o.hex))
+		"prigionieri_trovati":
+			_prigionieri_trovati(ctx)
+		"faro":
+			_faro(str(o.da), o.tab)
+		"partigiano":
+			_partigiano()
+		"tutti_consapevoli":
+			if p.s.has("round") and not p.s.round.is_empty():
+				p.s.round.tutti_consapevoli = true
 		_:
 			return false
 	return true
@@ -214,6 +236,7 @@ func _sveglia(o: Dictionary) -> void:
 func controlla() -> void:
 	if not attiva() or p.s.fase == "fine":
 		return
+	controlla_m12()
 	if sbarramento() and int(p.s.condizione) == 1 and p.s.fase != "schieramento" and not p.s.get("mo_c2", false):
 		if p.tedeschi_attivi().filter(func(g): return p.in_mappa(g)).is_empty():
 			_condizione_2_m10()
@@ -417,6 +440,18 @@ func test(t: Dictionary, ctx: Dictionary) -> bool:
 		return not g.is_empty() and int(g.num) >= int(t.g_num_min)
 	if t.has("g_num"):
 		return not g.is_empty() and int(g.num) == int(t.g_num)
+	if t.has("flag"):
+		return p.s.get("note", {}).has(str(t.flag))
+	if t.has("in_galleria"):
+		return in_galleria(ctx.get("ids", []))
+	if t.has("claude_qui"):
+		var h: String = str(ctx.get("hex", ""))
+		var cl: Dictionary = p.u("J")
+		return not cl.is_empty() and p.attivo(cl) and cl.hex == h \
+			and p.unita_in(h, "us").filter(func(x): return x.id != "J").size() >= 1
+	if t.has("spari"):
+		var r: Dictionary = p.s.get("round", {})
+		return not r.get("sparato", []).is_empty() or not r.get("sparato_prec", []).is_empty()
 	return false
 
 ## Avvio della Missione 10: niente schieramento, i tedeschi sulla riga 19, i mortai al posto della squadra.
@@ -451,6 +486,8 @@ func inizia_sbarramento() -> void:
 
 ## I mortai non vanno in panico e non sono mai inconsapevoli.
 func turni_artiglieria(a: Dictionary, es: Dictionary) -> Dictionary:
+	if a.get("legato", false):
+		return {"turni": 0, "panico": false, "rosso": false}
 	if not a.get("artiglieria", false):
 		return es
 	return {"turni": maxi(1, int(es.get("turni", 1))), "panico": false, "rosso": false}
@@ -667,7 +704,7 @@ func tedesco_uscito(x: Dictionary, h: String) -> void:
 ## Righe del conto finale proprie di Move Out!; restituisce i PV da aggiungere.
 func righe_fine(righe: Array) -> int:
 	if not sbarramento():
-		return 0
+		return righe_fine_m12(righe) if attiva() else 0
 	var tot := 0
 	for g in p.tedeschi():
 		if not p.attivo(g) or g.hex == "":
@@ -695,3 +732,229 @@ func _sherman(h: String) -> void:
 	p.s.sherman_hex = h
 	p.entra_sherman()
 	p.s.sherman_hex = ingresso_vecchio
+
+# ================================================================== Missione 12: prigionieri, Claude, chiatta, galleria
+## Inizio della partita: A è libero, B e tre altri a caso sono prigionieri (senza armi).
+func dopo_nuova() -> void:
+	if not attiva() or not bool(p.regola("prigionieri_mo", false)):
+		return
+	var altri: Array = p.americani().filter(func(a): return not (a.id in ["A", "B"]))
+	for i in range(altri.size() - 1, 0, -1):
+		var j: int = p.rng.randi_range(0, i)
+		var t = altri[i]
+		altri[i] = altri[j]
+		altri[j] = t
+	var presi: Array = [p.u("B")] + altri.slice(0, 3)
+	for a in presi:
+		a.stato = "dorme"
+		a.prigioniero_mo = true
+		a.armi = []
+		a.munizioni = {"granata": 0}
+	p._log("info", "Prigionieri dei tedeschi: %s. Gli altri partono a cercarli." % ", ".join(presi.map(func(a): return p.nome(a))))
+
+func in_galleria(ids: Array) -> bool:
+	if ids.is_empty():
+		return false
+	for id in ids:
+		if not p.u(str(id)).get("galleria", false):
+			return false
+	return true
+
+func paragrafi_galleria() -> Array:
+	return p.regola("paragrafi_t", []) if attiva() else []
+
+## Esagoni della galleria: da G13 (sotto il ponte) lungo la linea H12–R7.
+func esagoni_galleria() -> Array:
+	var out: Array = ["G13"]
+	for h in E.linea("H12", "R7"):
+		if not (h in out):
+			out.append(h)
+	return out
+
+func verifica_passo(a: Dictionary, verso: String) -> String:
+	if not attiva():
+		return ""
+	if a.get("galleria", false) and not (verso in esagoni_galleria()):
+		return "Nella galleria si va solo lungo il tunnel (G13–R7)."
+	return ""
+
+func puo_entrare_galleria(a: Dictionary) -> bool:
+	return attiva() and p.s.get("mo_galleria", false) and p.attivo(a) and a.hex == "G13" and not a.get("galleria", false) \
+		and not p.veicoli.attivo(p.veicoli.di(a))
+
+func puo_uscire_galleria(a: Dictionary) -> bool:
+	return a.get("galleria", false) and (a.hex == "G13" or a.hex in p.s.get("mo_botole", []))
+
+## Entra o esce dalla galleria (un punto movimento: nelle Operazioni è libero, nei Round costa l’azione).
+func galleria(id: String, entra: bool) -> Dictionary:
+	p._inizio_comando()
+	var a: Dictionary = p.u(id)
+	var e: String = p.puo_agire(a)
+	if e != "":
+		return p._errore(e)
+	if entra and not puo_entrare_galleria(a):
+		return p._errore("Nella galleria si entra solo da sotto il ponte in G13, dopo il paragrafo 487.")
+	if not entra and not puo_uscire_galleria(a):
+		return p._errore("Si esce solo da G13 o da una botola scoperta.")
+	a.galleria = entra
+	a.postura = "crouching"
+	p._log("azione", "%s %s in %s." % [p.nome(a), "entra nella galleria" if entra else "sale dalla galleria", a.hex])
+	if not entra and a.hex == "R7" and not p.s.avvistamenti[7]:
+		p.leggi("687", {"hex": "R7", "ids": [a.id]})
+	if p.fase_round():
+		p._termina_azione(a)
+	p._fine_comando()
+	return {"ok": true}
+
+## Slega un compagno prigioniero nello stesso esagono (un’azione nei Round).
+func slega(id: String, pid: String) -> Dictionary:
+	p._inizio_comando()
+	var a: Dictionary = p.u(id)
+	var x: Dictionary = p.u(pid)
+	var e: String = p.puo_agire(a)
+	if e != "":
+		return p._errore(e)
+	if x.is_empty() or not x.get("legato", false) or x.hex != a.hex:
+		return p._errore("Qui non c’è nessuno da slegare.")
+	x.legato = false
+	x.consapevole = true
+	p._log("azione", "%s slega %s." % [p.nome(a), p.nome(x)])
+	if p.fase_round():
+		x.turni = 1
+		x.slot = "turni"
+		p._termina_azione(a)
+	p._fine_comando()
+	return {"ok": true}
+
+func legati_qui(a: Dictionary) -> Array:
+	return p.americani().filter(func(x): return x.get("legato", false) and x.hex == a.hex and x.hex != "")
+
+## Coltelli di Claude: quello lanciato non si recupera.
+func dopo_tiro(a: Dictionary, arma: Dictionary, b: Dictionary) -> void:
+	if str(arma.get("tipo", "")) != "knife" or b.is_empty() or E.distanza(a.hex, str(b.get("hex", a.hex))) == 0:
+		return
+	a.munizioni.knife = maxi(0, int(a.munizioni.get("knife", 0)) - 1)
+	if int(a.munizioni.knife) <= 0:
+		a.armi = a.armi.filter(func(w): return w.tipo != "knife")
+		p._log("info", "%s ha lanciato l’ultimo coltello." % p.nome(a))
+
+func _claude(h: String) -> void:
+	if not p.u("J").is_empty():
+		return
+	var d := {"id": "J", "nome": "Claude", "IN": 3, "PC": 8, "WS": 1, "DS": 0, "MPA": 4, "comandante": false,
+		"porte": ["pistol", "knife"], "munizioni": {"pistol": 5, "knife": 2, "granata": 0}}
+	var c: Dictionary = p._nuovo_americano(d)
+	c.stato = "attivo"
+	c.hex = h
+	c.postura = "crouching"
+	c.consapevole = true
+	c.claude = true
+	p.s.unita["J"] = c
+	p.s.mo_claude = true
+	p._log("info", "Claude, partigiano francese, si unisce alla squadra in %s (pistola e due coltelli da lancio)." % h)
+	p._fx("compare", {"id": "J", "a": h, "amico": true})
+
+func _chiatta(h: String) -> void:
+	if p.veicoli.v("chiatta").is_empty():
+		var v: Dictionary = p.veicoli.crea("chiatta", "chiatta", h, "us")
+		v.chiuso = false
+		p._log("info", "La chiatta di Claude è in %s: salite a bordo (almeno due ai remi) e scendete il fiume fino a O19." % h)
+
+## La chiatta esce da O19: Condizione 2 sulla mappa B, la chiatta entra in A6 con chi è a bordo.
+func _chiatta_mappa_b(h: String) -> void:
+	var v: Dictionary = p.veicoli.v("chiatta")
+	var a_bordo: Array = p.veicoli.occupanti(v) if not v.is_empty() else []
+	for a in p.americani():
+		if a.get("prigioniero_mo", false) and a.stato == "dorme":
+			continue
+		if a.stato == "incapacitato":
+			a.salvo_mo = true  # gli incapacitati della Condizione 1 non costano PV
+		if p.attivo(a) and a.hex != "" and not (a in a_bordo):
+			p._log("info", "%s resta sulla mappa A e torna alle linee." % p.nome(a))
+			a.stato = "rimosso"
+			a.hex = ""
+	p.cambia_mappa("B")
+	if not v.is_empty():
+		v.hex = h
+		for a in a_bordo:
+			a.hex = h
+	p._log("info", "La chiatta scivola fuori dalla mappa A ed entra nel villaggio (mappa B) in %s." % h)
+
+func _prigionieri_trovati(ctx: Dictionary) -> void:
+	var h: String = str(ctx.get("hex", "Q8"))
+	if h == "":
+		h = "Q8"
+	var trovati: Array = p.americani().filter(func(a): return a.get("prigioniero_mo", false) and a.stato == "dorme")
+	for a in trovati:
+		a.stato = "attivo"
+		a.hex = h
+		a.postura = "prone"
+		a.ferito = true
+		a.legato = p.fase_round()
+		a.consapevole = not p.fase_round()
+		a.turni = 0
+		a.slot = "completo" if p.fase_round() else ""
+		p._fx("compare", {"id": a.id, "a": h, "amico": true})
+	p._log("info", "Prigionieri liberati in %s: %s." % [h, ", ".join(trovati.map(func(a): return p.nome(a)))] if not trovati.is_empty()
+		else "Qui non c’è più nessuno.")
+
+## 944–948: il faro dal primo piano di S13.
+func _faro(da: String, tab: Array) -> void:
+	var r: int = p.d10("Direzione del faro")
+	var meta := str(tab[r])
+	var luce: Array = []
+	for h in E.linea(da, meta):
+		if h == da or p.terreno.vede(da, h, "standing", "standing"):
+			luce.append(h)
+	p._log("info", "Il faro punta verso %s: illuminati %s." % [meta, ", ".join(luce)])
+	var visti: Array = p.americani_attivi_in_mappa().filter(func(a): return a.hex in luce and not a.get("galleria", false))
+	if visti.is_empty():
+		p._log("info", "Nessun americano nella luce.")
+		return
+	var c := int(p.s.condizione)
+	if c == 2:
+		p.cambia_condizione(3)
+	elif c == 4:
+		p.cambia_condizione(5)
+	visti.sort_custom(func(x, y): return E.distanza(da, x.hex) < E.distanza(da, y.hex))
+	var b: Dictionary = visti[0]
+	var base: int = T.base_per_distanza("lmg", E.distanza(da, b.hex))
+	if base < 0:
+		p._log("info", "La mitragliatrice non arriva fin là.")
+		return
+	p._log("info", "La mitragliatrice del campanile spara su %s." % p.nome(b))
+	p.risolvi_tiro({"lato": "cecchino", "WS": 0}, {"tipo": "lmg", "inceppata": false}, b, false, maxi(0, base - 2))
+
+## 947: un partigiano nascosto spara a un tedesco in terreno aperto.
+func _partigiano() -> void:
+	var lista: Array = p.tedeschi_attivi().filter(func(g): return p.terreno.tipo(g.hex) in ["clear", "road"])
+	if lista.is_empty():
+		p._log("info", "Nessun tedesco allo scoperto: nessun effetto.")
+		return
+	var g: Dictionary = lista[p.rng.randi_range(0, lista.size() - 1)]
+	p._log("info", "Un partigiano nascosto spara sul %s." % p.nome(g))
+	p.risolvi_tiro({"lato": "cecchino", "WS": -2}, {"tipo": "pistol", "inceppata": false}, g, false, 0)
+
+## Controlli della Missione 12 dopo ogni comando.
+func controlla_m12() -> void:
+	if not attiva() or not bool(p.regola("prigionieri_mo", false)):
+		return
+	if p.s.get("mo_claude", false) and p.veicoli.v("chiatta").is_empty() and p.lettera_mappa() == "A":
+		for a in p.americani_attivi_in_mappa():
+			if a.hex == "M12":
+				p.leggi("442", {"hex": "M12", "ids": [a.id]})
+				break
+	var v: Dictionary = p.veicoli.v("chiatta")
+	if not v.is_empty() and p.lettera_mappa() == "A" and v.hex == "O19" and p.veicoli.attivo(v):
+		p.leggi("465", {"hex": "O19", "ids": []})
+
+func righe_fine_m12(righe: Array) -> int:
+	if not bool(p.regola("prigionieri_mo", false)):
+		return 0
+	var n := 0
+	for a in p.americani():
+		if a.get("prigioniero_mo", false) and a.stato == "uscito":
+			n += 1
+	if n > 0:
+		righe.append(["%d compagni liberati e portati fuori" % n, 5 * n])
+	return 5 * n

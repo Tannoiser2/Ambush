@@ -1113,9 +1113,11 @@ func _aggiorna_pedine() -> void:
 		if not vm.is_empty() and _mezzi.has(str(vm.id)):
 			var nm: Node3D = _mezzi[str(vm.id)]
 			var posto: int = vm.occupanti.find(str(id))
-			var lung := 0.5 if str(vm.modello) == "canoa" else 0.35
+			var lung := 0.5 if str(vm.modello) == "canoa" else (0.8 if str(vm.modello) == "chiatta" else 0.35)
 			var loc := Vector3(0, 0.1, (float(posto) - (vm.occupanti.size() - 1) / 2.0) * lung / maxf(1.0, vm.occupanti.size() - 1.0) * -1.0)
-			if str(vm.modello) != "canoa":
+			if str(vm.modello) == "chiatta":
+				loc.x = -0.08 if posto % 2 == 0 else 0.08
+			elif str(vm.modello) != "canoa":
 				loc = Vector3(-0.1 if posto % 2 == 0 else 0.1, 0.12, 0.1 - 0.25 * (posto / 2))
 			fig.position = nm.position + nm.basis * loc
 			ang_mezzo = nm.rotation.y
@@ -1239,11 +1241,13 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	var nome_mesh := "kubelwagen" if modello == "auto_comando" else modello
+	var nome_mesh := "kubelwagen" if modello == "auto_comando" else ("canoa" if modello == "chiatta" else modello)
 	corpo.mesh = _mesh_mezzo(nome_mesh)
-	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else Color.WHITE)
+	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else Color.WHITE))
 	if modello == "auto_comando":
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
+	if modello == "chiatta":
+		corpo.scale = Vector3(1.9, 1.2, 1.6)  # la chiatta: una grossa barca da dieci posti
 	n.add_child(corpo)
 	var et := Label3D.new()
 	et.name = "etichetta"
@@ -1305,7 +1309,7 @@ func _aggiorna_mezzi() -> void:
 				k = k * k * (3.0 - 2.0 * k)
 				c = centro_px(str(m.da)).lerp(centro_px(str(m.a)), k)
 				break
-		var acqua := str(veic.modello) == "canoa" and p.terreno.tipo(str(veic.hex)) == "stream"
+		var acqua := str(veic.modello) in ["canoa", "chiatta"] and p.terreno.tipo(str(veic.hex)) == "stream"
 		n.position = punto3d(c)
 		if acqua:
 			n.position.y = (_quota_base(c) - 1.0) * LIVELLO - 0.1

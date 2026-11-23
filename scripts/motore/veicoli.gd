@@ -11,6 +11,7 @@ const MODELLI := {
 	"kubelwagen": {"art": "La", "nome": "Kübelwagen", "piccolo": true, "lenta": 5, "veloce": 9, "posti": 4},
 	"auto_comando": {"art": "L’", "nome": "Auto comando", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 5},
 	"canoa": {"art": "La", "nome": "Canoa", "piccolo": true, "lenta": 4, "veloce": 4, "posti": 3, "canoa": true},
+	"chiatta": {"art": "La", "nome": "Chiatta", "piccolo": false, "lenta": 4, "veloce": 4, "posti": 10, "canoa": true},
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 1, "carro": true, "torretta": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},

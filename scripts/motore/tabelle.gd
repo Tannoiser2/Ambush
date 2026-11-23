@@ -11,6 +11,9 @@ const ROSSI := [[1, 4, 6, 8, 9], [3, 4, 5, 7], [0, 2, 3, 8], [6, 7, 9], [2, 5], 
 ## Armi: gittate massime (corta, media, lunga), inceppamento mirato/rapido (%), munizioni (%),
 ## danni sul personale per dado 0–9: P panico, W ferita, I incapacitato, K ucciso.
 const ARMI := {
+	# Move Out!: coltello di Claude (si lancia fino a 3 esagoni e non si recupera).
+	"knife":   {"nome": "Coltello", "breve": "Coltello", "gittate": [2, 2, 3], "inc": [0, 0], "mun": 0, "auto": false,
+		"danni": "PPPPWWWWIK", "porte": 0},
 	"pistol":  {"nome": "Pistola", "breve": "Pistola", "gittate": [3, 5, 20], "inc": [5, 5], "mun": 25, "auto": false,
 		"danni": "PPPWWWWWIK", "porte": 0},
 	"bolt":    {"nome": "Fucile a otturatore", "breve": "Fucile", "gittate": [6, 14, 99], "inc": [5, 5], "mun": 25, "auto": false,

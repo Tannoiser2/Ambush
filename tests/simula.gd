@@ -27,6 +27,8 @@ func _init() -> void:
 		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
 		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
+	elif missione == 12:
+		obiettivi = ["G13", "Q8", "R7", "S13", "A10"]
 	elif missione == 10:
 		obiettivi = ["S13", "O9", "M12", "R14", "I13", "T8"]
 	elif missione == 11:
@@ -47,6 +49,28 @@ func gioca(seme: int) -> void:
 	if bool(p.regola("sbarramento", false)):
 		p.nuova(seme, true)
 		p.inizia_missione()
+	elif bool(p.regola("prigionieri_mo", false)):
+		# Missione 12: la parte sulla mappa A è un percorso obbligato (Claude, chiatta); si simula la mappa B.
+		p.nuova(seme, true)
+		for a in p.americani().filter(func(x): return x.stato == "fuori"):
+			p.schiera([a.id], "S1")
+		p.inizia_missione()
+		p.leggi("433", {"hex": "P11", "ids": []})
+		for a in p.americani_attivi_in_mappa():
+			a.hex = "M12"
+		p._controlla_fine_automatica()
+		var ch: Dictionary = p.veicoli.v("chiatta")
+		p.s.imbarco = true
+		for a in p.americani_attivi_in_mappa():
+			p.veicoli.sali(a, ch)
+		p.s.imbarco = false
+		ch.hex = "O19"
+		for a in p.veicoli.occupanti(ch):
+			a.hex = "O19"
+		p._controlla_fine_automatica()
+		for a in p.americani_attivi_in_mappa():
+			p.veicoli.scendi(a)
+			a.hex = "B6"
 	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
 		p.schiera([p.americani()[0].id], "Y8")

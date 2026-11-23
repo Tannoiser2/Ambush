@@ -50,3 +50,11 @@ Ordine scelto: M11, M10, M12, M9.
   malus per uscite dal bordo nord e per chi resta in mappa a fine missione. Carri MO convertiti nel formato «carro»;
   azioni 919–931, 968–973 in tedeschi_mo.esegui_carro. Limiti: 893 lo Sherman lo comanda il giocatore (come in M8);
   980 senza piani degli edifici.
+- M12 FATTA: prigionieri iniziali (B + 3 a caso, stato «dorme», senz’armi), Claude (unità J, pistola + coltello
+  `knife` in tabelle), chiatta (modello «chiatta», canoa da 10, non si buca) in M12 dopo il 433, uscita da O19 → 465
+  mappa B in A6; sentinella 11 (terne di paragrafi), villaggio (647–681), 682 → 487 galleria (G13 + linea H12–R7,
+  invisibili ai tedeschi, solo paragrafi T 976/977, botole N9/R7), 687–690 generale SS, 692 prigionieri legati
+  (slegare = un’azione), faro 944–948, partigiano 947, 949/694. Fine: dalla C3 quando l’ultimo esce da A1–A19 sulla
+  mappa B; +5 PV per compagno liberato uscito; incapacitati della C1 senza malus.
+  Limiti: 474 si sceglie sempre di aprire il fuoco; piani degli edifici non rappresentati; filo spinato (497/600/604)
+  non raggiungibile dalle carte e non implementato.

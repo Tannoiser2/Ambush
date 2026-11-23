@@ -1,4 +1,2901 @@
 {
+ "402": {
+  "id": "402",
+  "it": "Controllo di percezione: se riesce, vedi 407.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "407"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "407": {
+  "id": "407",
+  "it": "[s0] Il soldato sente una radio che suona verso sud.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   }
+  ],
+  "tipo": "missione"
+ },
+ "415": {
+  "id": "415",
+  "it": "[s1] Il soldato vede una luce nell’edificio in T8.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   }
+  ],
+  "tipo": "missione"
+ },
+ "436": {
+  "id": "436",
+  "it": "Il soldato vede una piccola baracca di una stanza: due sedie, un tavolo e un letto. Una radio suona.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "429": {
+  "id": "429",
+  "it": "Il soldato vede una luce lampeggiare in P11 e sente sussurrare con accento francese: «Psst! Di qua. Non sparate.» Da ora si ignorano gli altri rimandi a questo paragrafo.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "flag": "mo429"
+    },
+    "then": [],
+    "else": [
+     {
+      "op": "nota",
+      "chiave": "mo429"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "433": {
+  "id": "433",
+  "it": "[s2] Un partigiano francese contatta la squadra in P11: è Claude (carta americana 06). Sa dove sono i compagni scomparsi e lo dirà appena avrà una sigaretta americana. Dopo una lunga boccata racconta che sono tenuti in un piccolo villaggio a sud: la zona è minata e non ci si arriva via terra. Ha una chiatta nascosta in M12 e conosce la strada. Quando un soldato entra in M12, vedi 442. Claude è bravo coi coltelli e fa parte della squadra fino alla fine; se viene ucciso o incapacitato e resta in mappa perdi 2 PV come per gli altri.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "claude",
+    "hex": "P11"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "442": {
+  "id": "442",
+  "it": "In M12 c’è la chiatta (vale come una canoa da dieci posti, con tutto l’equipaggiamento: si affonda solo con una penetrazione pesante). Claude mette il timone controcorrente e la squadra ai remi. Seguite il fiume finché la chiatta esce da O19: allora vedi 465.",
+  "ops": [
+   {
+    "op": "chiatta",
+    "hex": "M12"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "446": {
+  "id": "446",
+  "it": "Tra lo sciabordio dei remi, la squadra sente in lontananza voci tedesche.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "465": {
+  "id": "465",
+  "it": "Si passa alla Condizione 2: si toglie la mappa A e si prende la mappa B, nord in alto; il corso d’acqua è lo stesso fiume. La chiatta entra in A6. La missione finisce nelle Condizioni 3, 4 o 5 quando l’ultimo americano attivo esce dal bordo ovest, tra A1 e A19.",
+  "ops": [
+   {
+    "op": "chiatta_mappa_b",
+    "hex": "A6"
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "934": {
+  "id": "934",
+  "it": "Campo minato! Si applica la procedura del campo minato. Nella Condizione 2 si passa alla 3; nella 4 alla 5.",
+  "ops": [
+   {
+    "op": "minefield"
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      2
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 3
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "cond_in": [
+        4
+       ]
+      },
+      "then": [
+       {
+        "op": "condition",
+        "n": 5
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "473": {
+  "id": "473",
+  "it": "Controllo di percezione: se riesce vedi 474, se fallisce vedi 482.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "474"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "482"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "474": {
+  "id": "474",
+  "it": "Il soldato vede la sagoma di una sentinella tedesca in K9 e la squadra apre il fuoco per prima: vedi 479. (Nel gioco da tavolo potresti anche proseguire di nascosto.)",
+  "ops": [
+   {
+    "op": "goto",
+    "p": "479"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "479": {
+  "id": "479",
+  "it": "[s3] Attiva il tedesco 11 in K9, in piedi. Iniziano i Round con vantaggio americano: tutti gli americani sono consapevoli e ricevono 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K9"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "tutti_consapevoli"
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "482": {
+  "id": "482",
+  "it": "Controllo di attivazione: se riesce, vedi 484; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "484"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "484": {
+  "id": "484",
+  "it": "[s3] Attiva il tedesco 11 in K9, in piedi. Iniziano i Round con vantaggio tedesco. Claude è consapevole nel Round 1. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K9"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "490": {
+  "id": "490",
+  "it": "Tira un dado. 0–5: controllo di percezione, se riesce vedi 491, se fallisce vedi 493. 6–9: controllo di attivazione, se riesce vedi 494, se fallisce vedi 496.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "491"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "493"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "494"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "496"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "498": {
+  "id": "498",
+  "it": "Tira un dado. 0–4: controllo di percezione, se riesce vedi 491, se fallisce vedi 493. 5–9: controllo di attivazione, se riesce vedi 494, se fallisce vedi 496.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "491"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "493"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "494"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "496"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "493": {
+  "id": "493",
+  "it": "Controllo di attivazione: se riesce vedi 494, se fallisce vedi 496.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "494"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "496"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "491": {
+  "id": "491",
+  "it": "[s3] Attiva il tedesco 11 in K7, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "494": {
+  "id": "494",
+  "it": "[s3] Attiva il tedesco 11 in K7, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "496": {
+  "id": "496",
+  "it": "[s3] Attiva il tedesco 11 in K7, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "499": {
+  "id": "499",
+  "it": "Tira un dado. 0–5: controllo di percezione, se riesce vedi 602, se fallisce vedi 603. 6–9: controllo di attivazione, se riesce vedi 605, se fallisce vedi 607.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "602"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "603"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "605"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "607"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "603": {
+  "id": "603",
+  "it": "Controllo di attivazione: se riesce vedi 605, se fallisce vedi 607.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "605"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "607"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "602": {
+  "id": "602",
+  "it": "[s3] Attiva il tedesco 11 in L5, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "605": {
+  "id": "605",
+  "it": "[s3] Attiva il tedesco 11 in L5, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "607": {
+  "id": "607",
+  "it": "[s3] Attiva il tedesco 11 in L5, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "609": {
+  "id": "609",
+  "it": "Tira un dado. 0–5: controllo di percezione, se riesce vedi 610, se fallisce vedi 412. 6–9: controllo di attivazione, se riesce vedi 612, se fallisce vedi 614.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "610"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "412"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "612"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "614"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "412": {
+  "id": "412",
+  "it": "Controllo di attivazione: se riesce vedi 612, se fallisce vedi 614.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "612"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "614"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "610": {
+  "id": "610",
+  "it": "[s3] Attiva il tedesco 11 in O5, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "O5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "612": {
+  "id": "612",
+  "it": "[s3] Attiva il tedesco 11 in O5, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "O5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "614": {
+  "id": "614",
+  "it": "[s3] Attiva il tedesco 11 in O5, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "O5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "616": {
+  "id": "616",
+  "it": "Tira un dado. 0–5: controllo di percezione, se riesce vedi 617, se fallisce vedi 618. 6–9: controllo di attivazione, se riesce vedi 619, se fallisce vedi 622.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "617"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "618"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "619"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "622"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "618": {
+  "id": "618",
+  "it": "Controllo di attivazione: se riesce vedi 619, se fallisce vedi 622.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "619"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "622"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "617": {
+  "id": "617",
+  "it": "[s3] Attiva il tedesco 11 in J13, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "J13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "619": {
+  "id": "619",
+  "it": "[s3] Attiva il tedesco 11 in J13, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "J13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "622": {
+  "id": "622",
+  "it": "[s3] Attiva il tedesco 11 in J13, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "J13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "626": {
+  "id": "626",
+  "it": "Tira un dado. 0–4: controllo di percezione, se riesce vedi 628, se fallisce vedi 630. 5–9: controllo di attivazione, se riesce vedi 632, se fallisce vedi 634.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "628"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "630"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "632"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "634"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "630": {
+  "id": "630",
+  "it": "Controllo di attivazione: se riesce vedi 632, se fallisce vedi 634.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "632"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "634"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "628": {
+  "id": "628",
+  "it": "[s3] Attiva il tedesco 11 in L12, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "632": {
+  "id": "632",
+  "it": "[s3] Attiva il tedesco 11 in L12, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "634": {
+  "id": "634",
+  "it": "[s3] Attiva il tedesco 11 in L12, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "L12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "636": {
+  "id": "636",
+  "it": "Tira un dado. 0–4: controllo di percezione, se riesce vedi 638, se fallisce vedi 640. 5–9: controllo di attivazione, se riesce vedi 641, se fallisce vedi 643.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "638"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "640"
+         }
+        ]
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "641"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "643"
+         }
+        ]
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "640": {
+  "id": "640",
+  "it": "Controllo di attivazione: se riesce vedi 641, se fallisce vedi 643.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "641"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "643"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "638": {
+  "id": "638",
+  "it": "[s3] Attiva il tedesco 11 in K15, accovacciato. Iniziano i Round con vantaggio americano: chi lo vede è consapevole e riceve 2 turni in questo Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "641": {
+  "id": "641",
+  "it": "[s3] Attiva il tedesco 11 in K15, accovacciato. Iniziano i Round con vantaggio tedesco. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "643": {
+  "id": "643",
+  "it": "[s3] Attiva il tedesco 11 in K15, accovacciato. Iniziano i Round. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "647": {
+  "id": "647",
+  "it": "Tira un dado: 0–5 vedi 651; 6–9 vedi 652.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "651"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "652"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "651": {
+  "id": "651",
+  "it": "[s5] Attiva i mitraglieri 18 e 19 (al primo piano) in S13, accovacciati. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "S13"
+     ],
+     [
+      19,
+      "S13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "652": {
+  "id": "652",
+  "it": "[s5] Attiva i mitraglieri 18 e 19 (al primo piano) in S13, accovacciati. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "S13"
+     ],
+     [
+      19,
+      "S13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "654": {
+  "id": "654",
+  "it": "Tira un dado: 0–5 vedi 656; 6–9 vedi 659.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "656"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "659"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "656": {
+  "id": "656",
+  "it": "[s9] Attiva il tedesco 56 in S9, accovacciato. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      56,
+      "S9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "659": {
+  "id": "659",
+  "it": "[s9] Attiva il tedesco 56 in S9, accovacciato. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      56,
+      "S9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "661": {
+  "id": "661",
+  "it": "Tira un dado: 0–5 vedi 663; 6–9 vedi 666.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "663"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "666"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "663": {
+  "id": "663",
+  "it": "[s7] Attiva l’ufficiale SS 55 in R7, accovacciato. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "R7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "666": {
+  "id": "666",
+  "it": "[s7] Attiva l’ufficiale SS 55 in R7, accovacciato. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "R7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "667": {
+  "id": "667",
+  "it": "Tira un dado: 0–5 vedi 669; 6–9 vedi 670.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "669"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "670"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "669": {
+  "id": "669",
+  "it": "[s6] Attiva il tedesco 54 in P9, accovacciato. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "P9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "670": {
+  "id": "670",
+  "it": "[s6] Attiva il tedesco 54 in P9, accovacciato. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "P9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "671": {
+  "id": "671",
+  "it": "Tira un dado: 0–5 vedi 673; 6–9 vedi 675.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "673"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "675"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "673": {
+  "id": "673",
+  "it": "[s4] Attiva il tedesco 57 in P5, accovacciato. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      57,
+      "P5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "675": {
+  "id": "675",
+  "it": "[s4] Attiva il tedesco 57 in P5, accovacciato. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      57,
+      "P5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "677": {
+  "id": "677",
+  "it": "Tira un dado: 0–5 vedi 679; 6–9 vedi 681.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "goto",
+        "p": "679"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "681"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "679": {
+  "id": "679",
+  "it": "[s8] Attiva il tedesco 17 in L10, accovacciato. Iniziano i Round con vantaggio tedesco. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      17,
+      "L10"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "681": {
+  "id": "681",
+  "it": "[s8] Attiva il tedesco 17 in L10, accovacciato. Iniziano i Round con vantaggio americano: i soldati consapevoli ricevono 2 turni in questo Round. Se si è nella Condizione 4 si passa alla 5; nella 3 si resta nella 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      17,
+      "L10"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      4
+     ]
+    },
+    "then": [
+     {
+      "op": "condition",
+      "n": 5
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "682": {
+  "id": "682",
+  "it": "Se Claude e almeno un altro americano attivo sono in questo esagono, vedi 487; altrimenti si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "claude_qui": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "487"
+     }
+    ],
+    "else": [
+     {
+      "op": "condition",
+      "n": 3
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "487": {
+  "id": "487",
+  "it": "Si passa alla Condizione 4. Claude rivela che sotto questo ponte comincia una galleria che va dritta fino a R7, scavata dalla Resistenza durante l’occupazione: i tedeschi non ne sanno nulla. Si entra solo da sotto il ponte in G13 (un punto movimento in più per entrare o uscire); in galleria si leggono solo i paragrafi segnati con la T e nessun tedesco può vedere chi ci cammina.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   },
+   {
+    "op": "galleria"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "976": {
+  "id": "976",
+  "it": "Se il soldato è nella galleria vedi 683; altrimenti si ignora.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "in_galleria": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "683"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "977": {
+  "id": "977",
+  "it": "Se il soldato è nella galleria vedi 685; altrimenti vedi 661.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "in_galleria": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "685"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "661"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "683": {
+  "id": "683",
+  "it": "Qui una botola si apre sul pianterreno: i soldati possono salire (senza controllo del paragrafo all’uscita) o proseguire nella galleria. Salire o scendere costa un punto movimento.",
+  "ops": [
+   {
+    "op": "botola",
+    "hex": "N9"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "685": {
+  "id": "685",
+  "it": "La galleria finisce qui, sotto un’altra botola che dà sul pianterreno. Salire o scendere costa un punto movimento; si può salire o tornare indietro. Se si sale e l’avvistamento 7 non è avvenuto, vedi subito 687.",
+  "ops": [
+   {
+    "op": "botola",
+    "hex": "R7"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "687": {
+  "id": "687",
+  "it": "Tira un dado: 0–4 vedi 689; 5–9 vedi 690.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "goto",
+        "p": "689"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "goto",
+        "p": "690"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "689": {
+  "id": "689",
+  "it": "[s7] Sorprendete un generale delle SS nel sonno! Attiva il tedesco 55 in R7, prono. Iniziano i Round con vantaggio americano: chi è nella stanza col generale è consapevole e ha 2 turni. Si passa alla Condizione 5.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "R7"
+     ]
+    ],
+    "stance": "prone",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 5
+   }
+  ],
+  "tipo": "missione"
+ },
+ "690": {
+  "id": "690",
+  "it": "[s7] Attiva il tedesco 55 in R7, in piedi. Iniziano i Round con vantaggio tedesco e il 55 riceve 2 turni; chi è nella stanza col generale è consapevole. Si passa alla Condizione 5.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "R7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [
+     55
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 5
+   }
+  ],
+  "tipo": "missione"
+ },
+ "692": {
+  "id": "692",
+  "it": "Avete trovato i compagni! Sono legati e imbavagliati sul pavimento, torturati. Mettili in questo esagono, proni e feriti. Nei Round serve un’azione per slegare ciascuno; nelle Operazioni possono muoversi subito. Nei Round, chi viene slegato è consapevole e riceve un turno.",
+  "ops": [
+   {
+    "op": "prigionieri_trovati"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "694": {
+  "id": "694",
+  "it": "1. Se l’avvistamento 3 non è avvenuto vedi 696. 2. Se non è avvenuto il 4 vedi 698. 3. Se non è avvenuto il 9 vedi 699. 4. Se non è avvenuto il 6 vedi 896. 5. Se non è avvenuto il 5 vedi 898. 6. Se non è avvenuto l’8 vedi 940. 7. Se non è avvenuto il 7 vedi 942. 8. Nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 3
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "696"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 4
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "698"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 9
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "699"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 6
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "896"
+           }
+          ],
+          "else": [
+           {
+            "op": "if",
+            "t": {
+             "not": {
+              "s": 5
+             }
+            },
+            "then": [
+             {
+              "op": "goto",
+              "p": "898"
+             }
+            ],
+            "else": [
+             {
+              "op": "if",
+              "t": {
+               "not": {
+                "s": 8
+               }
+              },
+              "then": [
+               {
+                "op": "goto",
+                "p": "940"
+               }
+              ],
+              "else": [
+               {
+                "op": "if",
+                "t": {
+                 "not": {
+                  "s": 7
+                 }
+                },
+                "then": [
+                 {
+                  "op": "goto",
+                  "p": "942"
+                 }
+                ],
+                "else": []
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "696": {
+  "id": "696",
+  "it": "[s3] Attiva il tedesco 11 in K7, in piedi. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      11,
+      "K7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "698": {
+  "id": "698",
+  "it": "[s4] Attiva il tedesco 57 in P5, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      57,
+      "P5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "699": {
+  "id": "699",
+  "it": "[s9] Attiva il tedesco 56 in S9, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      56,
+      "S9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "896": {
+  "id": "896",
+  "it": "[s6] Attiva il tedesco 54 in P9, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "P9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "898": {
+  "id": "898",
+  "it": "[s5] Attiva il tedesco 18 e il tedesco 19 in S13, accovacciati. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "S13"
+     ],
+     [
+      19,
+      "S13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "940": {
+  "id": "940",
+  "it": "[s8] Attiva il tedesco 17 in L10, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      17,
+      "L10"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "942": {
+  "id": "942",
+  "it": "[s7] Attiva il tedesco 55 in R7, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "R7"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "944": {
+  "id": "944",
+  "it": "Un faro! Una fotoelettrica tedesca al primo piano di S13 spazza la zona. Un dado decide dove punta: 0: A1, 1: D1, 2: H1, 3: L1, 4: P1, 5: T1, 6: X1, 7: Y4, 8: Y8, 9: Y12. Poi vedi 948.",
+  "ops": [
+   {
+    "op": "faro",
+    "da": "S13",
+    "tab": [
+     "A1",
+     "D1",
+     "H1",
+     "L1",
+     "P1",
+     "T1",
+     "X1",
+     "Y4",
+     "Y8",
+     "Y12"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "945": {
+  "id": "945",
+  "it": "Un faro! Una fotoelettrica tedesca al primo piano di S13 spazza la zona. Un dado decide dove punta: 0: Y16, 1: X18, 2: T19, 3: P19, 4: L19, 5: H19, 6: D19, 7: A18, 8: A14, 9: A10. Poi vedi 948.",
+  "ops": [
+   {
+    "op": "faro",
+    "da": "S13",
+    "tab": [
+     "Y16",
+     "X18",
+     "T19",
+     "P19",
+     "L19",
+     "H19",
+     "D19",
+     "A18",
+     "A14",
+     "A10"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "946": {
+  "id": "946",
+  "it": "Un faro! Una fotoelettrica tedesca al primo piano di S13 spazza la zona. Un dado decide dove punta: 0: A1, 1: A2, 2: A3, 3: A4, 4: A5, 5: A6, 6: A7, 7: A8, 8: A9, 9: A11. Poi vedi 948.",
+  "ops": [
+   {
+    "op": "faro",
+    "da": "S13",
+    "tab": [
+     "A1",
+     "A2",
+     "A3",
+     "A4",
+     "A5",
+     "A6",
+     "A7",
+     "A8",
+     "A9",
+     "A11"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "948": {
+  "id": "948",
+  "it": "Si traccia una linea dritta da S13 all’esagono puntato: ogni esagono della linea in vista dal primo piano di S13 è illuminato per un momento. Se un americano è nella luce, si passa subito dalla Condizione 2 alla 3 (o dalla 4 alla 5) e la mitragliatrice spara un tiro rapido (abilità 0) al bersaglio illuminato più vicino.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "947": {
+  "id": "947",
+  "it": "Un partigiano nascosto spara a un tedesco scelto a caso in un esagono aperto: tiro rapido, gittata media, pistola, abilità −2.",
+  "ops": [
+   {
+    "op": "partigiano"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "949": {
+  "id": "949",
+  "it": "Se in questo Round si è sparato, vedi 694; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "spari": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "694"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "485": {
+  "id": "485",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "de",
+    "chiave": "mo485"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "623": {
+  "id": "623",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "us",
+    "chiave": "mo623"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "953": {
+  "id": "953",
+  "it": "Tira un dado: 0–6 entra in L11; 7–9 entra in L10.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      6,
+      [
+       {
+        "op": "g_enter",
+        "hex": "L11"
+       }
+      ]
+     ],
+     [
+      7,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "L10"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "955": {
+  "id": "955",
+  "it": "Tira un dado: 0–4 entra in L7; 5–9 entra in L6.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "g_enter",
+        "hex": "L7"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "L6"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "961": {
+  "id": "961",
+  "it": "Tira un dado: 0–4 entra in R7; 5–9 entra in Q9.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      4,
+      [
+       {
+        "op": "g_enter",
+        "hex": "R7"
+       }
+      ]
+     ],
+     [
+      5,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "Q9"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "963": {
+  "id": "963",
+  "it": "Tira un dado: 0–5 entra in J11; 6–9 entra in K13.",
+  "ops": [
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      5,
+      [
+       {
+        "op": "g_enter",
+        "hex": "J11"
+       }
+      ]
+     ],
+     [
+      6,
+      9,
+      [
+       {
+        "op": "g_enter",
+        "hex": "K13"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "967": {
+  "id": "967",
+  "it": "Mette in vigore la reazione speciale L per questo tedesco (togliendo quella che aveva).",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "L"
+   }
+  ],
+  "tipo": "azione"
+ },
+ "969": {
+  "id": "969",
+  "it": "Se non ha bersagli attivi in vista lascia la mitragliatrice al suo posto, scende al pianterreno e mette in vigore la reazione speciale A.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [],
+    "else": [
+     {
+      "op": "g_reaction",
+      "r": "A"
+     }
+    ]
+   }
+  ],
+  "tipo": "azione"
+ },
  "828": {
   "id": "828",
   "it": "Se si muove il tedesco 25 o uno con numero più basso entra in F17; altrimenti entra in G18.",
@@ -1483,30 +4380,6 @@
     "op": "morte_incapacitato",
     "lato": "de",
     "chiave": "mo461"
-   }
-  ],
-  "tipo": "missione"
- },
- "485": {
-  "id": "485",
-  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "de",
-    "chiave": "mo485"
-   }
-  ],
-  "tipo": "missione"
- },
- "623": {
-  "id": "623",
-  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "us",
-    "chiave": "mo623"
    }
   ],
   "tipo": "missione"

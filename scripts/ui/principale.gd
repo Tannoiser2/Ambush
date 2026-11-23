@@ -1189,6 +1189,22 @@ func _annulla_carica(a: Dictionary) -> void:
 	_esito(p.fine_azione(a.id))
 
 func _azioni_missione() -> void:
+	# Missione 12: galleria e compagni da slegare.
+	if not selezione.is_empty() and p.mo.attiva() and p.s.fase in ["operazioni", "round"]:
+		var a: Dictionary = p.u(selezione[0])
+		if not a.is_empty() and p.puo_agire(a) == "":
+			var legati: Array = p.mo.legati_qui(a)
+			var galleria_si: bool = p.mo.puo_entrare_galleria(a)
+			var galleria_no: bool = p.mo.puo_uscire_galleria(a)
+			if not legati.is_empty() or galleria_si or galleria_no:
+				_gruppo("MISSIONE")
+			for x in legati:
+				if x.id != a.id:
+					_b("Slega %s" % x.lettera, func(): _esito(p.mo.slega(a.id, x.id)), "Nei Round costa un’azione; chi viene slegato riceve un turno.")
+			if galleria_si:
+				_b("Entra nella galleria", func(): _esito(p.mo.galleria(a.id, true)), "Sotto il ponte: in galleria i tedeschi non ti vedono e si leggono solo i paragrafi T.")
+			if galleria_no:
+				_b("Sali dalla botola" if a.hex != "G13" else "Esci dalla galleria", func(): _esito(p.mo.galleria(a.id, false)))
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:
 		_gruppo("MISSIONE")
 		var b := _b("Missione compiuta: termina", func(): _conferma("Terminare la missione?", str(p.missione.get("testo_fine", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.")), func(): _esito(p.termina_missione("obiettivo"))))

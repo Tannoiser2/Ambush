@@ -27,6 +27,9 @@ SOSTITUZIONI_PAR = {835: 833}  # 835 manca dal libretto: si usa 833 (stessa fami
 def pulisci_rif(v):
     """Ripulisce le letture del foglio Excel: EVENT', NONE-, 435R, NOME..."""
     v = str(v).strip()
+    v = {"s5:147": "s5:647", "S3-'490": "s3:490"}.get(v, v)
+    if v.startswith("T-"):
+        v = v[2:]  # paragrafi «T» della galleria (Missione 12): l’elenco è in regole.paragrafi_t
     m = re.match(r"^(s\d:)?(\d{3,4})", v)
     if m:
         return (m.group(1) or "") + m.group(2)
@@ -100,10 +103,13 @@ def tedeschi(nums):
              "granate": c["granate"], "IN": c["IN"], "PC": c["PC"], "WS": c["WS"], "MPA": c["MPA"],
              "gruppi": c["gruppi"], "colonne": {}}
         for col, v in c["colonne"].items():
-            d["colonne"][col.replace("*", "")] = [SOSTITUZIONI_PAR.get(int(x), int(x)) for x in v]
+            col = col.replace("*", "").strip()
+            if re.match(r"^[\d ,]+$", col) and ("," in col or " " in col):
+                col = ",".join(ch for ch in col if ch.isdigit())
+            d["colonne"][col] = [SOSTITUZIONI_PAR.get(int(x), int(x)) for x in v]
         if c["ruolo"] in COMANDANTI:
             d["comandante"] = True
-        for k in ("primo_turno", "equipaggio", "veicolo", "pv_veicolo", "carro"):
+        for k in ("primo_turno", "equipaggio", "veicolo", "pv_veicolo", "carro", "pv_uscita_prigioniero"):
             if k in c:
                 d[k] = c[k]
         out[str(n)] = d
@@ -130,6 +136,28 @@ def ruscelli(mappa):
 
 
 MISSIONI = {
+    12: {
+        "titolo": "Per la cruna dell’ago", "titolo_originale": "Through the Eye of the Needle",
+        "data": "Parigi, 16 agosto 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
+        "briefing": "16 agosto 1944. Durante una pattuglia di routine alla periferia di Parigi metà della squadra è stata "
+                    "catturata. Quando i soldati non si sono presentati all’ora stabilita, il caposquadra ha deciso di sua "
+                    "iniziativa di cercarli e, se possibile, liberarli.",
+        "ingresso": "Mappa A, nord in alto. A è libero; B e altri tre soldati estratti a caso sono prigionieri e senz’armi. "
+                    "I quattro rimasti entrano dal bordo nord, tra Q1 e W1. Il ponte in M12 è distrutto.",
+        "regole_testo": "[b]Fiume.[/b] Il corso d’acqua da H1 a O19 è un fiume: si attraversa solo sui ponti intatti. "
+                        "[b]Notte.[/b] È mezzanotte: si vede solo fino a quattro esagoni. [b]Galleria.[/b] Se il paragrafo "
+                        "lo rivela, nella galleria si leggono solo i paragrafi T e nessun tedesco vede chi ci cammina.",
+        "ingresso_breve": "bordo nord, Q1–W1", "uscita_breve": "mappa B, bordo ovest (A1–A19)",
+        "ingresso_esagoni": ["Q1", "R1", "S1", "T1", "U1", "V1", "W1"], "uscita_esagoni": ["A%d" % i for i in range(1, 20)],
+        "vittoria_pv": 19, "attivazione": {"1": 0, "2": 1, "3": 6, "4": 1, "5": 8}, "obiettivi": [],
+        "regole": {"prigionieri_mo": True, "vista": 4, "fiume": True, "fine_condizione": 3, "uscita_mappa": "B",
+                   "paragrafi_t": ["976", "977"]},
+        "vittoria_testo": "[b]Vittoria: 19 PV.[/b] Valgono le attivazioni dei tedeschi e 5 PV per ogni compagno liberato e "
+                          "portato fuori alla fine. Gli incapacitati della Condizione 1 non costano PV; nelle altre Condizioni "
+                          "le perdite contano come sempre. Il modo in cui finisce la missione sarà rivelato durante il gioco.",
+        "testo_fine": "",
+        "germani": [11, 17, 18, 19, 54, 55, 56, 57],
+    },
     10: {
         "titolo": "Assalto per uccidere", "titolo_originale": "Assault to Kill",
         "data": "Saint-Lô, 21 giugno 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
@@ -221,6 +249,8 @@ def main():
                     break
         if n == 11:
             d["modifiche_iniziali"] = {h: "clear" for h in ruscelli("A")}
+        if n == 12:
+            d["modifiche_iniziali"] = {"M12": "stream"}
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         mancanti = set()
         for c in d["condizioni"].values():

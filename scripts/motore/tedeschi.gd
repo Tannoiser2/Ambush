@@ -80,6 +80,11 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 	for k in colonne:
 		if not str(k).substr(0, 1).is_valid_int():
 			continue
+		if "," in str(k):
+			# Move Out!: colonne per Condizioni sparse («1,2,4»).
+			if str(c) in str(k).split(","):
+				return k
+			continue
 		var parti: PackedStringArray = str(k).split("-")
 		var lo := int(parti[0])
 		var hi := int(parti[parti.size() - 1])

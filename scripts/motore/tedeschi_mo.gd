@@ -18,6 +18,8 @@ func esegui(n: int) -> bool:
 		476:
 			if not t._cedi_turno(1):
 				esegui(466)
+		967, 969:
+			t.p.leggi(str(n), {"g": g.id, "hex": g.hex})
 		477:
 			g.reazione = "Z"
 			t._reazione_cambiata = true

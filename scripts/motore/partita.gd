@@ -129,6 +129,7 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 	for d in missione.squadra:
 		var u := _nuovo_americano(d)
 		s.unita[u.id] = u
+	mo.dopo_nuova()
 	for hm in missione.get("modifiche_iniziali", {}):
 		s.modifiche[hm] = missione.modifiche_iniziali[hm]
 	terreno.imposta_modifiche(s.modifiche)
@@ -163,6 +164,8 @@ func e_ingresso(h: String) -> bool:
 
 ## Esagoni da cui si esce dalla mappa (di solito gli stessi dell’ingresso).
 func e_uscita(h: String) -> bool:
+	if str(regola("uscita_mappa", "")) != "" and lettera_mappa() != str(regola("uscita_mappa", "")):
+		return false
 	if bool(regola("uscita_bordo", false)):
 		return E.colonna(h) == 0 or E.colonna(h) == E.COLONNE - 1 or E.riga(h) == 1 or E.riga(h) == E.RIGHE
 	if missione.has("uscita_esagoni"):
@@ -472,6 +475,8 @@ func esagoni_strada() -> Array[String]:
 func vede_unita(osservatore: Dictionary, bersaglio: Dictionary) -> bool:
 	if not in_mappa(osservatore) or bersaglio.hex == "":
 		return false
+	if osservatore.get("galleria", false) or bersaglio.get("galleria", false):
+		return osservatore.get("galleria", false) and bersaglio.get("galleria", false) and osservatore.hex == bersaglio.hex
 	return terreno.vede(osservatore.hex, bersaglio.hex, osservatore.postura, bersaglio.postura)
 
 func qualcuno_vede_hex(h: String) -> bool:
@@ -2327,6 +2332,9 @@ func controllo_paragrafo(h: String, ids: Array, opzioni := {}) -> void:
 		_log("info", "%s ha già un segnalino Evento: nessun controllo." % h)
 		return
 	var rif := riferimento(h)
+	if mo.in_galleria(ids) and not (rif.split(":")[-1] in mo.paragrafi_galleria()):
+		_log("info", "%s: nella galleria si leggono solo i paragrafi T." % h)
+		return
 	if rif == "EVENT":
 		if s.fase == "operazioni" and not opzioni.get("cambio", false):
 			_log("info", "%s: controllo Evento." % h)
@@ -2850,8 +2858,12 @@ func puo_agire(a: Dictionary, consenti_paracadute := false) -> String:
 		return "La missione è terminata."
 	if s.pausa != "":
 		return "Premi «Continua»."
+	if a.is_empty():
+		return "Nessun soldato scelto."
 	if not (attivo(a) or a.stato == "fuori"):
 		return "%s non può agire." % nome(a)
+	if a.get("legato", false):
+		return "%s è legato: un compagno nello stesso esagono deve slegarlo." % nome(a)
 	if s.fase == "round":
 		if _azione_in_corso(a):
 			return ""  # regola 6/6: chi ha attivato un tedesco con la propria azione la porta a termine
@@ -2952,6 +2964,9 @@ func _costo_ingresso(h: String) -> int:
 	return 1
 
 func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> String:
+	var e_mo: String = mo.verifica_passo(a, verso)
+	if e_mo != "":
+		return e_mo
 	if bool(regola("xxx", false)) and riferimento(verso) == "XXX":
 		return "Esagono vietato (XXX sulla carta)."
 	var veic: Dictionary = veicoli.di(a)
@@ -3415,7 +3430,7 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	fx.esito = "colpito" if colpito else "mancato"
 	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
-	if not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)):
+	if not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)) and veicoli.di(bersaglio).modello != "chiatta":
 		var rc := d10()
 		if rc % 2 == 0:
 			var vc: Dictionary = veicoli.di(bersaglio)
@@ -3652,6 +3667,7 @@ func tiro(id: String, tipo_arma: String, bersaglio_id: String, mirato: bool) -> 
 		t.azione = "mirato"
 	t.spari = int(t.spari) + 1
 	risolvi_tiro(a, arma, b, mirato)
+	mo.dopo_tiro(a, arma, b)
 	if attivo(a) and not s.turno.is_empty():
 		if mirato or (t.azione == "rapido" and int(t.spari) >= 2):
 			_termina_azione(a)
@@ -4822,7 +4838,7 @@ func _calcola_fine(modo: String) -> void:
 			perdite -= 2
 			righe.append(["%s ucciso" % nome(a), -2])
 		elif a.stato == "incapacitato":
-			var salvo: bool = a.get("uscito", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))
+			var salvo: bool = a.get("uscito", false) or a.get("salvo_mo", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))
 			if bool(regola("niente_salvataggio", false)):
 				salvo = false
 			if not salvo:
