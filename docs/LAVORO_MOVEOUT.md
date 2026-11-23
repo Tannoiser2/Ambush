@@ -43,3 +43,10 @@ Ordine scelto: M11, M10, M12, M9.
   Limiti: −2 al tiro contro chi è prono nella neve non applicato; 36 movimenti rossi del foglio Excel scartati
   perché non adiacenti (il tedesco resta fermo).
 - Colonne con virgole: non servono per M11; da fare per M9/M10/M12 se compaiono.
+- M10 FATTA: C1 sulla mappa A con i mortai (unità «MOR» del giocatore, IN 3, due colpi per turno, diagrammi di
+  dispersione), 14 tedeschi sulla riga 19 con 2 turni e vantaggio; fine C1 quando nessun tedesco attivo in mappa →
+  `partita.cambia_mappa("B")` (anche nel salvataggio: `s.mappa`), squadra da Y1–Y19; 871 → 875…888 riattivano gli usciti;
+  873 colpo pesante a caso; PV solo per perdite inflitte (pv_eliminato, pv_cattura ufficiali, pv_distrutto carri) e
+  malus per uscite dal bordo nord e per chi resta in mappa a fine missione. Carri MO convertiti nel formato «carro»;
+  azioni 919–931, 968–973 in tedeschi_mo.esegui_carro. Limiti: 893 lo Sherman lo comanda il giocatore (come in M8);
+  980 senza piani degli edifici.

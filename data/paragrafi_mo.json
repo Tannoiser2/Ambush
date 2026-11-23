@@ -1,4 +1,1538 @@
 {
+ "828": {
+  "id": "828",
+  "it": "Se si muove il tedesco 25 o uno con numero più basso entra in F17; altrimenti entra in G18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 25
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "F17"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "G18"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "830": {
+  "id": "830",
+  "it": "Se si muove il tedesco 23 o uno con numero più basso entra in E7; altrimenti entra in D7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 23
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "E7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "D7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "834": {
+  "id": "834",
+  "it": "Se si muove il tedesco 15 o uno con numero più basso entra in I11; altrimenti entra in J10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 15
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "836": {
+  "id": "836",
+  "it": "Se si muove il tedesco 13 o uno con numero più basso entra in L11; altrimenti entra in J11.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 13
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J11"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "837": {
+  "id": "837",
+  "it": "Se si muove il tedesco 15 o uno con numero più basso entra in J7; altrimenti entra in H7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 15
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "838": {
+  "id": "838",
+  "it": "Se si muove il tedesco 13 o uno con numero più basso entra in L10; altrimenti entra in M12.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 13
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L10"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M12"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "841": {
+  "id": "841",
+  "it": "Se si muove il tedesco 13 o uno con numero più basso entra in K2; altrimenti entra in M2.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 13
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M2"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "842": {
+  "id": "842",
+  "it": "Se si muove il tedesco 27 o uno con numero più basso entra in S11; altrimenti entra in R10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 27
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "843": {
+  "id": "843",
+  "it": "Se si muove il tedesco 27 o uno con numero più basso entra in T7; altrimenti entra in S7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 27
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "844": {
+  "id": "844",
+  "it": "Se si muove il tedesco 27 o uno con numero più basso entra in U7; altrimenti entra in T6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 27
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "T6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "845": {
+  "id": "845",
+  "it": "Se si muove il tedesco 27 o uno con numero più basso entra in W6; altrimenti entra in V5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 27
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "W6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "846": {
+  "id": "846",
+  "it": "Se si muove il tedesco 27 o uno con numero più basso entra in Y5; altrimenti entra in X4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 27
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Y5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "X4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "847": {
+  "id": "847",
+  "it": "Se si muove il tedesco 35 o uno con numero più basso entra in U14; altrimenti entra in V14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_max": 35
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "849": {
+  "id": "849",
+  "it": "Se non ha bersagli attivi in vista entra in C3; altrimenti entra in C2.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "C2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "C3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "850": {
+  "id": "850",
+  "it": "Se non ha bersagli attivi in vista entra in M3; altrimenti entra in N1.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N1"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "851": {
+  "id": "851",
+  "it": "Se si muove il tedesco 36 o uno con numero più alto entra in U4; altrimenti entra in U3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num_min": 36
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "852": {
+  "id": "852",
+  "it": "Se non ha bersagli attivi in vista entra in M9; altrimenti entra in M10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M10"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "853": {
+  "id": "853",
+  "it": "Se non ha bersagli attivi in vista entra in P10; altrimenti entra in O9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "854": {
+  "id": "854",
+  "it": "Se non ha bersagli attivi in vista entra in H16; altrimenti entra in I17.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I17"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "855": {
+  "id": "855",
+  "it": "Se non ha bersagli americani attivi entro sette esagoni entra in M13; altrimenti entra in M14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_entro": 7
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "621": {
+  "id": "621",
+  "it": "Se si muove un mezzo entra in S9; se si muove un soldato entra in T8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "T8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "950": {
+  "id": "950",
+  "it": "Se non ha bersagli attivi in vista entra in R14; altrimenti entra in R13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_almeno": 1
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "951": {
+  "id": "951",
+  "it": "Un soldato senza bersagli in vista entra in T14, con bersagli in vista in S14; un mezzo entra in T15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T15"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_almeno": 1
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "S14"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "T14"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "952": {
+  "id": "952",
+  "it": "Se si muove il tedesco 26 entra in T5; altrimenti entra in R5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num": 26
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "954": {
+  "id": "954",
+  "it": "Se si muove un soldato entra in O8; altrimenti entra in O9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "956": {
+  "id": "956",
+  "it": "Se si muove un soldato entra in P9; altrimenti entra in P8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "958": {
+  "id": "958",
+  "it": "Se si muove un soldato entra in Q8; altrimenti entra in Q9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "960": {
+  "id": "960",
+  "it": "Se si muove un soldato entra in S9; altrimenti entra in S10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S10"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "962": {
+  "id": "962",
+  "it": "Se si muove un soldato entra in U10; altrimenti entra in T8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T8"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "964": {
+  "id": "964",
+  "it": "Se si muove un soldato entra in U8; altrimenti entra in T6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U8"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "966": {
+  "id": "966",
+  "it": "Se si muove il tedesco 26 entra in V6; altrimenti entra in V5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num": 26
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "V6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "980": {
+  "id": "980",
+  "it": "Se c’è un americano attivo nell’edificio sale e lo assalta; altrimenti entra in T13. (I piani degli edifici non sono rappresentati: il tedesco entra in T13.)",
+  "ops": [
+   {
+    "op": "g_enter",
+    "hex": "T13"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "981": {
+  "id": "981",
+  "it": "Se si muove un mezzo entra in L4; se si muove un soldato entra in L5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "L5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "982": {
+  "id": "982",
+  "it": "Se si muove un mezzo entra in O4; se si muove un soldato entra in O5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "983": {
+  "id": "983",
+  "it": "Se si muove un mezzo entra in P4; se si muove un soldato entra in O5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "984": {
+  "id": "984",
+  "it": "Se si muove un mezzo entra in S5; se si muove un soldato entra in S4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "985": {
+  "id": "985",
+  "it": "Se si muove un mezzo entra in I13; se si muove un soldato entra in I14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "986": {
+  "id": "986",
+  "it": "Se si muove un mezzo entra in N11; se si muove un soldato entra in N10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "987": {
+  "id": "987",
+  "it": "Se si muove un mezzo entra in K12; se si muove un soldato entra in J13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "K12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "988": {
+  "id": "988",
+  "it": "Se si muove un mezzo entra in R14; se si muove un soldato entra in S13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R14"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "919": {
+  "id": "919",
+  "it": "Se l’artiglieria è caduta nel suo esagono o in uno adiacente chiude i portelli (se già chiuso avanza piano); se è aperto e non è caduta artiglieria vicino avanza veloce.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "920": {
+  "id": "920",
+  "it": "Se è aperto chiude i portelli; se è chiuso avanza piano.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "921": {
+  "id": "921",
+  "it": "Avanza piano. Tiro rapido con la mitragliatrice di scafo al bersaglio più vicino. Spara col cannone a un bersaglio in un edificio o a un mezzo americano in vista; se non può, carica il cannone.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "923": {
+  "id": "923",
+  "it": "Nella Condizione 1 vedi 919; nelle Condizioni 2–4 vedi 910.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "925": {
+  "id": "925",
+  "it": "Nella Condizione 1 vedi 919; nelle Condizioni 2–4 vedi 921.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "926": {
+  "id": "926",
+  "it": "Nella Condizione 1 vedi 919; nelle Condizioni 2–4 vedi 900.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "927": {
+  "id": "927",
+  "it": "Nella Condizione 1 vedi 919; nelle Condizioni 2–4 vedi 924.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "928": {
+  "id": "928",
+  "it": "Nella Condizione 1 vedi 920; nelle Condizioni 2–4 vedi 814.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "929": {
+  "id": "929",
+  "it": "Nella Condizione 1 vedi 920; nelle Condizioni 2–4 vedi 908.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "930": {
+  "id": "930",
+  "it": "Nella Condizione 1 vedi 920; nelle Condizioni 2–4 vedi 968.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "931": {
+  "id": "931",
+  "it": "Nella Condizione 1 vedi 920; nelle Condizioni 2–4 vedi 970.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "968": {
+  "id": "968",
+  "it": "Spara col cannone a un mezzo nemico in vista o a un bersaglio in un edificio; se non può, carica il cannone. Spara con la mitragliatrice di scafo al bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "970": {
+  "id": "970",
+  "it": "Spara col cannone a un bersaglio in un edificio o a un mezzo nemico in vista; se non può, carica il cannone. Spara con la mitragliatrice di scafo al bersaglio più facile.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "972": {
+  "id": "972",
+  "it": "Tiro rapido con la mitragliatrice di scafo al bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "973": {
+  "id": "973",
+  "it": "Tiro rapido con la mitragliatrice coassiale al bersaglio più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "871": {
+  "id": "871",
+  "it": "1. Se l’avvistamento 4 non è avvenuto, vedi 875. 2. Se non è avvenuto l’1, vedi 877. 3. Se non è avvenuto il 5, vedi 879. 4. Se non è avvenuto lo 0, vedi 881. 5. Se non è avvenuto il 2, vedi 882. 6. Se non è avvenuto il 3, vedi 884. 7. Se non è avvenuto il 6, vedi 886. 8. Se non è avvenuto il 7, vedi 888. 9. Altrimenti vedi 893.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "875"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "877"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 5
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "879"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 0
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "881"
+           }
+          ],
+          "else": [
+           {
+            "op": "if",
+            "t": {
+             "not": {
+              "s": 2
+             }
+            },
+            "then": [
+             {
+              "op": "goto",
+              "p": "882"
+             }
+            ],
+            "else": [
+             {
+              "op": "if",
+              "t": {
+               "not": {
+                "s": 3
+               }
+              },
+              "then": [
+               {
+                "op": "goto",
+                "p": "884"
+               }
+              ],
+              "else": [
+               {
+                "op": "if",
+                "t": {
+                 "not": {
+                  "s": 6
+                 }
+                },
+                "then": [
+                 {
+                  "op": "goto",
+                  "p": "886"
+                 }
+                ],
+                "else": [
+                 {
+                  "op": "if",
+                  "t": {
+                   "not": {
+                    "s": 7
+                   }
+                  },
+                  "then": [
+                   {
+                    "op": "goto",
+                    "p": "888"
+                   }
+                  ],
+                  "else": [
+                   {
+                    "op": "if",
+                    "t": {
+                     "not": {
+                      "s": 8
+                     }
+                    },
+                    "then": [
+                     {
+                      "op": "goto",
+                      "p": "893"
+                     }
+                    ],
+                    "else": []
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "873": {
+  "id": "873",
+  "it": "Colpo d’artiglieria! Un dado per la colonna (0 P, 1 Q, 2 R, 3 S, 4 T, 5 U, 6 V, 7 W, 8 X, 9 Y), due dadi sommati per la riga. Nell’esagono colpito si mette un cratere: chiunque vi si trovi (anche tedesco) muore e i mezzi sono fuori uso.",
+  "ops": [
+   {
+    "op": "colpo_casuale"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "875": {
+  "id": "875",
+  "it": "[s4] Attiva il tedesco 34 in A1 e il tedesco 35 in A1, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 877.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      34,
+      "A1"
+     ],
+     [
+      35,
+      "A1"
+     ]
+    ],
+    "altrimenti": "877"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "877": {
+  "id": "877",
+  "it": "[s1] Attiva il tedesco 14 in A19 e il tedesco 16 in A18, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 879.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      14,
+      "A19"
+     ],
+     [
+      16,
+      "A18"
+     ]
+    ],
+    "altrimenti": "879"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "879": {
+  "id": "879",
+  "it": "[s5] Attiva il tedesco 36 in A2 e il tedesco 37 in A2, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 881.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      36,
+      "A2"
+     ],
+     [
+      37,
+      "A2"
+     ]
+    ],
+    "altrimenti": "881"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "881": {
+  "id": "881",
+  "it": "[s0] Attiva il tedesco 13 in A17 e il tedesco 15 in A16, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 882.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      13,
+      "A17"
+     ],
+     [
+      15,
+      "A16"
+     ]
+    ],
+    "altrimenti": "882"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "882": {
+  "id": "882",
+  "it": "[s2] Attiva il tedesco 22 in A12 e il tedesco 24 in A13, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 884.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      22,
+      "A12"
+     ],
+     [
+      24,
+      "A13"
+     ]
+    ],
+    "altrimenti": "884"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "884": {
+  "id": "884",
+  "it": "[s3] Attiva il tedesco 23 in A10 e il tedesco 25 in A7, in piedi. Iniziano i Round, vantaggio tedesco, e ricevono 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 886. Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      23,
+      "A10"
+     ],
+     [
+      25,
+      "A7"
+     ]
+    ],
+    "altrimenti": "886"
+   },
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "886": {
+  "id": "886",
+  "it": "[s6] Attiva il tedesco 26 in A5, in piedi. Iniziano i Round, vantaggio tedesco, e riceve 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 888.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      26,
+      "A5"
+     ]
+    ],
+    "altrimenti": "888"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "888": {
+  "id": "888",
+  "it": "[s7] Attiva il tedesco 27 in A17, in piedi. Iniziano i Round, vantaggio tedesco, e riceve 2 turni in questo Round. Chi è stato messo fuori combattimento nella Condizione 1 si ignora; se nessuno può entrare, vedi 922.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "riattiva",
+    "g": [
+     [
+      27,
+      "A17"
+     ]
+    ],
+    "altrimenti": "922"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "893": {
+  "id": "893",
+  "it": "[s8] Arriva uno Sherman americano! Entra in Y5 e passa alla Condizione 4. (Nel gioco da tavolo lo muove la sua carta; qui lo comandi tu, come lo Sherman della Missione 8.)",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "sherman_mo",
+    "hex": "Y5"
+   },
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "922": {
+  "id": "922",
+  "it": "Si passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "461": {
+  "id": "461",
+  "it": "Un tedesco incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "de",
+    "chiave": "mo461"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "485": {
+  "id": "485",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "de",
+    "chiave": "mo485"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "623": {
+  "id": "623",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "lato": "us",
+    "chiave": "mo623"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "935": {
+  "id": "935",
+  "it": "Un americano incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "lato": "us",
+    "chiave": "mo935"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "645": {
+  "id": "645",
+  "it": "Un americano in terreno accidentato, scelto a caso, cade: controllo di percezione; se fallisce è colpito come da un colpo di pistola. Una volta sola per missione.",
+  "ops": [
+   {
+    "op": "caduta"
+   }
+  ],
+  "tipo": "missione"
+ },
  "401": {
   "id": "401",
   "it": "Metti un segnalino Evento. Effettua un controllo di percezione: se riesce, vedi 404; se fallisce, nessun evento.",
@@ -438,41 +1972,5 @@
    }
   ],
   "tipo": "azione"
- },
- "485": {
-  "id": "485",
-  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "de",
-    "chiave": "mo485"
-   }
-  ],
-  "tipo": "missione"
- },
- "623": {
-  "id": "623",
-  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "dissanguamento",
-    "lato": "us",
-    "chiave": "mo623"
-   }
-  ],
-  "tipo": "missione"
- },
- "935": {
-  "id": "935",
-  "it": "Un americano incapacitato, scelto a caso, muore per le ferite. Una volta sola per missione.",
-  "ops": [
-   {
-    "op": "morte_incapacitato",
-    "lato": "us",
-    "chiave": "mo935"
-   }
-  ],
-  "tipo": "missione"
  }
 }

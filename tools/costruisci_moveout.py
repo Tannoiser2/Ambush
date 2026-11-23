@@ -53,6 +53,13 @@ def pulisci_mov(h, v):
     v = str(v).strip()
     if v.upper().startswith("LAND"):
         return "LAND"
+    if v.upper() == "USCITA":
+        return "USCITA"
+    # «O» letta come «0»/«C0»/«ON»/«OR»: correzioni verificate sull’adiacenza
+    v = {("D2", "CO"): "C2", ("D5", "CO"): "C5", ("P5", "ON"): "O5", ("P6", "OR"): "O6"}.get((h, v), v)
+    v = v.replace("_", "")
+    if re.match(r"^[A-Y]-?I\d$", v):
+        v = v[0] + "1" + v[-1]
     m = re.match(r"^(\d{3})-?$", v)
     if m:
         return m.group(1) if v != "005" else ""
@@ -69,10 +76,26 @@ def pulisci_mov(h, v):
     return ""
 
 
+MODELLI_CARRO = {"Panzer IV": "panzer4", "Jagdpanther": "jagdpanther"}
+
+
+def carro(n, c):
+    """Carta di un carro di Move Out! nel formato dei carri del gioco base."""
+    r5 = c["equipaggio"]["5"]
+    return {"lettera": c["lettera"], "ruolo": c["ruolo"], "pv": 0, "armi": [], "granate": 0,
+            "IN": r5["IN"], "PC": r5["PC"], "WS": r5["WS"], "DS": r5["DS"], "MPA": 6,
+            "gruppi": [[0, 9]], "colonne": {"1-6": [800]},
+            "carro": {"modello": MODELLI_CARRO.get(c["ruolo"], "panzer4"), "gruppi": c["gruppi"], "righe": c["equipaggio"],
+                      "pv_distrutto": int(c.get("pv_distrutto", 0)), "primo_turno": 0, "testo": c.get("note", "")}}
+
+
 def tedeschi(nums):
     out = {}
     for n in nums:
         c = CARTE["GE%d" % n]
+        if c.get("veicolo") is True and "equipaggio" in c:
+            out[str(n)] = carro(n, c)
+            continue
         d = {"lettera": c["lettera"], "ruolo": RUOLI.get(c["ruolo"], c["ruolo"]), "pv": c["pv"], "armi": c["armi"],
              "granate": c["granate"], "IN": c["IN"], "PC": c["PC"], "WS": c["WS"], "MPA": c["MPA"],
              "gruppi": c["gruppi"], "colonne": {}}
@@ -107,6 +130,40 @@ def ruscelli(mappa):
 
 
 MISSIONI = {
+    10: {
+        "titolo": "Assalto per uccidere", "titolo_originale": "Assault to Kill",
+        "data": "Saint-Lô, 21 giugno 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
+        "briefing": "È il D-Day più quindici e i tedeschi contrattaccano ancora le linee alleate vicino alla città strategica di "
+                    "Saint-Lô. La squadra fa da osservatore avanzato per l’artiglieria; se l’assalto tedesco sfonda, deve "
+                    "avanzare in città e tenerla il più a lungo possibile, ripiegando solo se la posizione diventa insostenibile. "
+                    "Dal comando di divisione arriverà poco aiuto: gli assalitori sono probabilmente della Panzer Lehr.",
+        "ingresso": "Nella Condizione 1 la squadra non è in mappa: sulla mappa A (nord in alto) quattordici tedeschi partono "
+                    "dalla riga 19, in piedi, e tu dirigi i mortai. Quando l’ultimo tedesco attivo è uscito dalla mappa A o è "
+                    "fuori combattimento si passa alla Condizione 2 sulla mappa B (in alto c’è l’ovest): la squadra entra dal "
+                    "bordo nord, da Y1 a Y19. Ricevi gratis un bazooka con quattro razzi in più.",
+        "regole_testo": "[b]Mortai.[/b] Nella Condizione 1 comandi due colpi di mortaio per turno (abilità 3, niente panico). "
+                        "Tocca un esagono: se il colpo è nuovo si disperde secondo il diagramma del colpo di aggiustamento "
+                        "(percentuale), se è entro due esagoni dal colpo precedente lo «sposti» col diagramma più stretto (un "
+                        "dado), se tocchi lo stesso esagono mantieni il tiro senza dispersione. I tedeschi nell’esagono colpito "
+                        "tirano per i danni come da granata (dentro, in terreno libero, strada, copertura o ruscello; fuori, in "
+                        "cespugli, bosco o edificio); i carri tirano un dado. [b]Ruscello.[/b] Si attraversa ovunque, al costo "
+                        "della tabella del movimento. Nella Condizione 1 non ci sono eventi casuali.",
+        "ingresso_breve": "mappa B, bordo nord (Y1–Y19), dalla Condizione 2", "uscita_breve": "bordo nord, Y1–Y19 (per mettere in salvo gli incapacitati)",
+        "ingresso_esagoni": ["Y%d" % i for i in range(1, 20)], "uscita_esagoni": ["Y%d" % i for i in range(1, 20)],
+        "vittoria_pv": 10, "attivazione": {}, "obiettivi": [],
+        "regole": {"sbarramento": True, "fine_condizione": 4, "mappa_2": "B",
+                   "tedeschi_iniziali": {"22": "A19", "24": "B19", "23": "D19", "25": "E19", "26": "F19", "13": "H19",
+                                         "15": "I19", "14": "J19", "16": "K19", "27": "L19", "34": "Q19", "36": "R19",
+                                         "35": "S19", "37": "T19"}},
+        "vittoria_testo": "[b]Vittoria: 10 PV.[/b] Si parte da zero e le attivazioni non valgono nulla: guadagni i PV dei "
+                          "tedeschi uccisi o incapacitati, degli ufficiali catturati e dei mezzi messi fuori uso; perdi i PV dei "
+                          "soldati americani uccisi o incapacitati (gli incapacitati portati fuori dal bordo nord, Y1–Y19, non "
+                          "costano) e il valore di ogni tedesco o mezzo che esce dal bordo nord. La missione finisce solo nella "
+                          "Condizione 4, appena non ci sono più americani attivi in mappa; i tedeschi rimasti in mappa contano "
+                          "come usciti (tranne i mezzi immobilizzati).",
+        "testo_fine": "",
+        "germani": [13, 14, 15, 16, 22, 23, 24, 25, 26, 27, 34, 35, 36, 37],
+    },
     11: {
         "titolo": "La nebbia della guerra", "titolo_originale": "The Fog of War",
         "data": "Ardenne, dicembre 1944", "mappa": "A", "nord": "in alto", "libro": "mo",
@@ -147,6 +204,21 @@ def main():
         d["squadra"] = json.loads(json.dumps(M1["squadra"]))
         d["tedeschi"] = tedeschi(nums)
         d["condizioni"] = condizioni(n)
+        if n == 10:
+            # Niente PV per le attivazioni: valgono le perdite inflitte (e le catture degli ufficiali).
+            for g in d["tedeschi"].values():
+                if "carro" in g:
+                    g["pv_valore"] = g["carro"]["pv_distrutto"]
+                    continue
+                g["pv_valore"] = g["pv"]
+                g["pv_eliminato"] = g["pv"]
+                if g.get("comandante"):
+                    g["pv_cattura"] = g["pv"]
+                g["pv"] = 0
+            for a in d["squadra"]:
+                if "bazooka" in a["porte"]:
+                    a["munizioni"]["bazooka"] = int(a["munizioni"].get("bazooka", 0)) + 4
+                    break
         if n == 11:
             d["modifiche_iniziali"] = {h: "clear" for h in ruscelli("A")}
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))

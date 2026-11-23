@@ -475,6 +475,8 @@ func _unita_vis(lato: String) -> Array:
 
 # =================================================================== aggiornamento
 func _aggiorna_tutto(ricostruisci_log := false) -> void:
+	if p != null and mappa.lettera_mappa != "" and mappa.lettera_mappa != p.lettera_mappa().to_lower():
+		mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
 	_pulisci_selezione()
 	_aggiorna_pannelli()
 	_aggiorna_azioni()
@@ -588,6 +590,8 @@ func _aggiorna_squadra() -> void:
 	var in_round: bool = _S().get("fase", "") == "round"
 	var di_turno: Array = [] if riproducendo else p.americani_di_turno().map(func(a): return a.id)
 	for a in _unita_vis("us"):
+		if a.get("artiglieria", false) and a.stato == "rimosso":
+			continue
 		lista_squadra.add_child(_riga_soldato(a, a.id in selezione and not riproducendo, a.id in di_turno, in_round))
 
 func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Control:
@@ -821,6 +825,8 @@ func _aggiorna_azioni() -> void:
 		aiuto_azioni.text = err
 	elif int(a.get("paracadute", 0)) > 0:
 		_azioni_paracadute(a)
+	elif a.get("artiglieria", false):
+		_azioni_mortai(a)
 	else:
 		_azioni_round(a)
 	_azioni_missione()
@@ -884,6 +890,15 @@ func _maiuscola(t: String) -> String:
 
 ## Schieramento iniziale: si dispongono i soldati sul margine nord, poi si dà il via.
 func _azioni_schieramento() -> void:
+	if p.mo.sbarramento():
+		titolo_azioni.text = "CONDIZIONE 1 · LO SBARRAMENTO"
+		aiuto_azioni.text = "La squadra non entra subito: quattordici tedeschi avanzano sulla mappa A dalla riga 19 e tu " \
+			+ "dirigi i mortai, due colpi per turno. Quando i tedeschi saranno usciti o fuori combattimento, la squadra " \
+			+ "entrerà in città sulla mappa B."
+		_gruppo("VIA")
+		var via_m := _b("Inizia la missione", func(): _esito(p.inizia_missione()))
+		via_m.custom_minimum_size = Vector2(220, 44)
+		return
 	var tutti: Array = p.americani().filter(func(x): return x.stato in ["attivo", "fuori"])
 	var fuori: Array = tutti.filter(func(x): return x.hex == "")
 	var dentro := tutti.size() - fuori.size()
@@ -1202,6 +1217,21 @@ func _imposta_modo(a: Dictionary, m: String) -> void:
 		b.custom_minimum_size = Vector2(0, 48)
 		flusso_azioni.move_child(b, 0)
 
+## Turno dei mortai (Missione 10): due colpi, ognuno su un esagono toccato.
+func _azioni_mortai(a: Dictionary) -> void:
+	var usati: Array = p.s.turno.get("colpi", []) if not p.s.turno.is_empty() and p.s.turno.id == a.id else []
+	var marc: Array = p.s.get("art_marcatori", ["", ""])
+	aiuto_azioni.text = "Scegli un colpo e tocca l’esagono bersaglio. Un colpo nuovo si disperde molto; entro due esagoni dal " \
+		+ "colpo precedente si sposta con poca dispersione; sullo stesso esagono mantiene il tiro senza dispersione."
+	_gruppo("MORTAI")
+	for k in 2:
+		if k in usati:
+			continue
+		var dove := " (ora in %s)" % marc[k] if str(marc[k]) != "" else ""
+		_b("Colpo %d%s" % [k + 1, dove], func(): modo = "mortaio%d" % k; _aggiorna_tutto(), "Poi tocca l’esagono bersaglio.")
+	_gruppo("FINE")
+	_b("Fine del fuoco", func(): _esito(p.passa(a.id)))
+
 # =================================================================== mappa: clic e passaggio
 func _clic_mappa(h: String, _tasto: int) -> void:
 	if riproducendo or p.s.pausa != "" or p.s.fase == "fine" or finestra.visible:
@@ -1236,6 +1266,11 @@ func _clic_mappa(h: String, _tasto: int) -> void:
 				return
 			"granata", "satchel":
 				_esito(p.lancia(a.id, modo, h))
+				return
+			"mortaio0", "mortaio1":
+				var k := 0 if modo == "mortaio0" else 1
+				modo = ""
+				_esito(p.mo.colpo(a.id, k, h))
 				return
 			"trascina":
 				var f: Array = p.unita_in(a.hex, "us", false).filter(func(x): return x.stato in ["incapacitato", "morto"])
@@ -2489,7 +2524,8 @@ func _scegli_grafica(chiave: String, valore: bool) -> void:
 	_mostra_grafica()
 
 func _applica_grafica() -> void:
-	if mappa.mappa_realistica != bool(_pref_grafica.mappa) or mappa.pedine_nuove != bool(_pref_grafica.pedine):
+	if mappa.mappa_realistica != bool(_pref_grafica.mappa) or mappa.pedine_nuove != bool(_pref_grafica.pedine) \
+			or (p != null and mappa.lettera_mappa != p.lettera_mappa().to_lower()):
 		mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
 	mappa.mostra_comando = bool(_pref_grafica.comando)
 	mappa.queue_redraw()

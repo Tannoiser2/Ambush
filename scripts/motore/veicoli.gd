@@ -543,6 +543,8 @@ func bersagli_carro(g: Dictionary) -> Array:
 func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> void:
 	if not attivo(veic):
 		return
+	if p.mo.attiva() and p.ia.mo.esegui_carro(n, g, veic):
+		return
 	p._log("par", p.paragrafi[str(n)].it, {"id": str(n), "tedesco": g.id})
 	var b := bersagli_carro(g)
 	match n:

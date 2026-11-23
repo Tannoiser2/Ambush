@@ -110,7 +110,7 @@ func _init() -> void:
 ## Costruisce (o ricostruisce) la scena per la mappa della missione in corso.
 func prepara(m2d) -> void:
 	mappa2d = m2d
-	var l := str(mappa2d.partita.missione.get("mappa", "A")).to_lower() if mappa2d.partita != null else "a"
+	var l: String = mappa2d.partita.lettera_mappa().to_lower() if mappa2d.partita != null else "a"
 	if l == lettera and terreno_mi != null:
 		_aggiorna_tessitura()
 		return

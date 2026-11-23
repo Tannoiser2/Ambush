@@ -27,6 +27,8 @@ func _init() -> void:
 		obiettivi = ["K8", "K11", "H16", "T13", "M12", "J10"]
 	elif missione == 5:
 		obiettivi = ["S6", "S13", "K7", "J13", "N9", "X10", "A14", "G12"]
+	elif missione == 10:
+		obiettivi = ["S13", "O9", "M12", "R14", "I13", "T8"]
 	elif missione == 11:
 		obiettivi = ["S12", "T8", "M6", "A8", "A12", "K13", "T8"]
 	elif missione == 4:
@@ -42,7 +44,10 @@ func _init() -> void:
 
 func gioca(seme: int) -> void:
 	var p = PartitaScript.new(missione)
-	if bool(p.regola("sentinella", false)):
+	if bool(p.regola("sbarramento", false)):
+		p.nuova(seme, true)
+		p.inizia_missione()
+	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
 		p.schiera([p.americani()[0].id], "Y8")
 		p.inizia_missione()
@@ -198,6 +203,15 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 		p.muovi([a.id], verso)
 
 func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Dictionary) -> void:
+	if a.get("artiglieria", false):
+		var bers: Array = p.tedeschi_attivi()
+		if bers.is_empty():
+			p.passa(a.id)
+			return
+		var k := 0 if p.s.turno.is_empty() or not (0 in p.s.turno.get("colpi", [])) else 1
+		if not p.mo.colpo(a.id, k, bers[rng.randi_range(0, bers.size() - 1)].hex).get("ok", false):
+			p.passa(a.id)
+		return
 	if int(a.get("paracadute", 0)) > 0:
 		if a.postura == "prone":
 			p.cambia_postura(a.id, "crouching")

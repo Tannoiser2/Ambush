@@ -67,6 +67,22 @@ func imposta_missione(n: int) -> void:
 	_alture_cache = []
 	_applica_regole_terreno()
 
+## Lettera della mappa in uso: quella della missione, o quella su cui la missione è passata (Move Out! 9 e 10).
+func lettera_mappa() -> String:
+	return str(s.get("mappa", missione.get("mappa", "A")))
+
+## Passa a un’altra mappa a metà missione: nuovo terreno, nessun segnalino della mappa precedente.
+func cambia_mappa(l: String) -> void:
+	s.mappa = l
+	s.modifiche = {}
+	s.guadi = []
+	s.erase("blocchi")
+	terreno = TerrenoScript.new("res://data/mappa_%s.json" % l.to_lower())
+	terreno.imposta_modifiche(s.modifiche)
+	_alture_cache = []
+	_applica_regole_terreno()
+	_log("info", "Si passa alla mappa %s." % l)
+
 func regola(k: String, def = null):
 	return missione.get("regole", {}).get(k, def)
 
@@ -196,6 +212,9 @@ func schiera(ids: Array, h: String) -> Dictionary:
 func inizia_missione() -> Dictionary:
 	if s.fase != "schieramento":
 		return {"ok": false, "errore": "La missione è già cominciata."}
+	if mo.sbarramento():
+		mo.inizia_sbarramento()
+		return {"ok": true}
 	var gruppi := {}
 	for a in americani():
 		if a.stato == "attivo" and a.hex != "":
@@ -284,6 +303,9 @@ func carica(dati: Dictionary) -> bool:
 	# vanno riportati a interi, altrimenti le ricerche per Condizione e per numero falliscono.
 	s = _interi(dati.duplicate(true))
 	imposta_missione(int(s.get("missione", 1)))
+	if s.has("mappa") and str(s.mappa) != str(missione.get("mappa", "A")):
+		terreno = TerrenoScript.new("res://data/mappa_%s.json" % str(s.mappa).to_lower())
+		_alture_cache = []
 	rng.seed = int(s.seme)
 	if s.has("rng_stato"):
 		rng.state = int(s.rng_stato)
@@ -1083,7 +1105,7 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 			if terreno.vede(str(t.us_visible_from), a.hex, "standing", a.postura):
 				return true
 		return false
-	return false
+	return mo.test(t, ctx)
 
 func _hex_test(v, ctx: Dictionary) -> String:
 	return str(ctx.get("hex", "")) if str(v) == "@hex" else str(v)
@@ -1126,14 +1148,15 @@ func entra_sherman() -> Dictionary:
 		return _errore("Lo Sherman non può ancora entrare.")
 	var d := {"id": "Z", "nome": "Sherman", "IN": 3, "PC": 6, "WS": 1, "DS": 8, "MPA": 6, "comandante": false,
 		"porte": ["cannone", "mmg"], "munizioni": {"cannone": 20, "mmg": 10}}
+	var hz: String = str(s.get("sherman_hex", "A6"))
 	var z := _nuovo_americano(d)
 	z.stato = "attivo"
-	z.hex = "A6"
+	z.hex = hz
 	z.postura = "crouching"
 	z.carro_us = true
 	z.consapevole = true
 	s.unita["Z"] = z
-	var v: Dictionary = veicoli.crea("vsherman", "sherman", "A6", "us")
+	var v: Dictionary = veicoli.crea("vsherman", "sherman", hz, "us")
 	v.equipaggio = 5
 	v.chiuso = false
 	v.cannone_pronto = true
@@ -1143,8 +1166,8 @@ func entra_sherman() -> Dictionary:
 	s.imbarco = false
 	for a in z.armi:
 		a.preparata = true
-	_log("info", "Lo Sherman entra in A6. Lo comandi come un soldato (Z): guida, cannone e mitragliatrice.")
-	_fx("compare", {"id": "Z", "a": "A6", "amico": true})
+	_log("info", "Lo Sherman entra in %s. Lo comandi come un soldato (Z): guida, cannone e mitragliatrice." % hz)
+	_fx("compare", {"id": "Z", "a": hz, "amico": true})
 	_fine_comando()
 	return OK
 
@@ -1220,6 +1243,7 @@ func aspetta_tedeschi(da_comando := true) -> Dictionary:
 
 ## Un tedesco o un veicolo tedesco esce dal bordo ovest: perdi il doppio del suo valore in PV.
 func tedesco_uscito(x: Dictionary, h: String) -> void:
+	mo.tedesco_uscito(x, h)
 	var lato := str(regola("uscita_tedeschi", ""))
 	if lato == "" or h == "" or h.substr(0, 1) != lato:
 		return
@@ -2533,7 +2557,7 @@ func _avvia_round() -> void:
 		_log("info", "Dal Round 3 tutti i soldati sono consapevoli.")
 	s.erase("mo_consapevoli")
 	# 2. Evento (non nel Round 1).
-	if r.n >= 2:
+	if r.n >= 2 and not mo.salta_evento():
 		var pe := _passo("evento", {"n": r.n})
 		_log("info", "Fase Evento.")
 		evento_casuale({"hex": "", "ids": []}, pe)
@@ -2551,7 +2575,7 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 		if a.consapevole:
 			righe.append({"id": a.id, "esito": "gia"})
 			continue
-		if s.get("mo_consapevoli", false) and (attivo(a) or a.stato == "fuori"):
+		if a.get("artiglieria", false) or (s.get("mo_consapevoli", false) and (attivo(a) or a.stato == "fuori")):
 			a.consapevole = true
 			righe.append({"id": a.id, "esito": "auto"})
 			continue
@@ -2643,7 +2667,7 @@ func _iniziativa(r: Dictionary) -> void:
 			a.slot = "inconsapevole"
 			continue
 		var comando := in_comando(a)
-		var es := T.esito_turni(int(a.IN), du, true, comando, a.ferito)
+		var es: Dictionary = mo.turni_artiglieria(a, T.esito_turni(int(a.IN), du, true, comando, a.ferito))
 		if r.n == 1 and r.get("due_turni_us", false) and not es.panico:
 			es.turni = 1 if a.ferito else 2
 		pi.righe.append({"id": a.id, "turni": es.turni, "panico": es.panico, "rosso": es.rosso, "comando": comando, "ferito": a.ferito})
@@ -3569,7 +3593,7 @@ func _dopo_perdita(x: Dictionary) -> void:
 		_log("info", "I documenti che portava %s restano a terra in %s." % [nome(x), x.hex])
 		x.documenti = 0
 	if x.lato == "de":
-		if int(x.num) == 34:
+		if int(x.num) == 34 and not mo.attiva():
 			cambia_condizione(4)
 		if numero == 8 and int(x.num) in [3, 11] and int(s.condizione) == 1:
 			cambia_condizione(2)
@@ -4757,7 +4781,7 @@ func _controlla_fine_automatica() -> void:
 	if s.fase == "fine":
 		return
 	mo.controlla()
-	if s.fase == "fine":
+	if s.fase == "fine" or mo.blocca_fine():
 		return
 	if bool(regola("fine_ponti", false)) and int(s.condizione) >= 4 and tedeschi_attivi().filter(func(g): return attivo(g)).is_empty() \
 			and not americani_attivi_in_mappa().is_empty():
@@ -4816,6 +4840,7 @@ func _calcola_fine(modo: String) -> void:
 		if int(a.get("pv_attivo_fine", 0)) > 0 and a.stato in ["attivo", "uscito"]:
 			bonus += int(a.pv_attivo_fine)
 			righe.append(["%s attivo alla fine" % nome(a), int(a.pv_attivo_fine)])
+	bonus += mo.righe_fine(righe)
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

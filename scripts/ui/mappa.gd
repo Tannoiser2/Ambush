@@ -16,6 +16,8 @@ const ZOOM_AZIONE := 0.5
 
 var partita: Partita
 var mappa: Texture2D
+## Lettera della mappa disegnata (per accorgersi del cambio di mappa a metà missione).
+var lettera_mappa := ""
 var trame := {}
 ## Grafica a scelta: mappa originale o «realistica», pedine originali o ridisegnate.
 var mappa_realistica := false
@@ -120,7 +122,8 @@ func imposta_grafica(realistica: bool, nuove: bool) -> void:
 	pedine_nuove = nuove
 	var lettera := "a"
 	if partita != null:
-		lettera = str(partita.missione.get("mappa", "A")).to_lower()
+		lettera = partita.lettera_mappa().to_lower()
+	lettera_mappa = lettera
 	mappa = load("res://assets/maps/mappa_%s%s.jpg" % [lettera, "_realistica" if realistica else ""])
 	trame.clear()
 	# Le pedine originali non hanno tutte le lettere tedesche: quelle mancanti vengono dalla serie ridisegnata.
@@ -353,6 +356,12 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		else:
 			_segnalino(h, "cratere" if s.modifiche[h] == "crater" else "macerie", Vector2(-0.55, -0.55), 0.62)
+	# Missione 10: colpi dei mortai
+	var marcatori: Array = s.get("art_marcatori", [])
+	for k in marcatori.size():
+		if str(marcatori[k]) != "":
+			draw_arc(centro_schermo(str(marcatori[k])), RAGGIO * zoom * 0.7, 0.0, TAU, 32, Color(0.85, 0.25, 0.15, 0.9), maxf(2.0, 4.0 * zoom))
+			_marcatore(str(marcatori[k]), "MORTAIO %d" % (k + 1), Vector2(0.0, 0.55 - 0.3 * k), Color("8f2a1e"))
 	# Missione 8: blocchi stradali
 	for h in s.get("blocchi", []):
 		_marcatore(str(h), "BLOCCO STRADALE", Vector2(0.0, -0.62), Color("5b4a33"))

@@ -110,6 +110,10 @@ func _gioca(m: int, n: int, seme: int) -> void:
 					continue
 			var b: Button = lista[rng.randi_range(0, lista.size() - 1)]
 			b.emit_signal("pressed")
+			# Mortai (Missione 10): si tocca l’esagono di un tedesco.
+			if str(ui.modo).begins_with("mortaio"):
+				var bers: Array = p.tedeschi_attivi()
+				ui._clic_mappa(bers[rng.randi_range(0, bers.size() - 1)].hex if not bers.is_empty() else "M10", 1)
 			# Tiro o lancio in modalità: si sceglie un bersaglio a caso.
 			if str(ui.modo) in ["mirato", "rapido", "granata"] and not ui.selezione.is_empty():
 				var tedeschi: Array = p.tedeschi_attivi()
