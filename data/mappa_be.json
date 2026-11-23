@@ -1,0 +1,2161 @@
+{
+"mappa": "BE",
+"esagoni": {
+"A1": {
+"t": "woods",
+"q": 3
+},
+"B1": {
+"t": "woods",
+"q": 3
+},
+"C1": {
+"t": "woods",
+"q": 3
+},
+"D1": {
+"t": "woods",
+"q": 3
+},
+"E1": {
+"t": "woods",
+"q": 3
+},
+"F1": {
+"t": "woods",
+"q": 3
+},
+"G1": {
+"t": "woods",
+"q": 3
+},
+"H1": {
+"t": "woods",
+"q": 3
+},
+"I1": {
+"t": "woods",
+"q": 3
+},
+"A2": {
+"t": "brush",
+"q": 3
+},
+"B2": {
+"t": "clear",
+"q": 3
+},
+"C2": {
+"t": "brush",
+"q": 3
+},
+"D2": {
+"t": "brush",
+"q": 3
+},
+"E2": {
+"t": "brush",
+"q": 3
+},
+"F2": {
+"t": "brush",
+"q": 3
+},
+"G2": {
+"t": "woods",
+"q": 3
+},
+"H2": {
+"t": "clear",
+"q": 3
+},
+"A3": {
+"t": "rough",
+"q": 3
+},
+"B3": {
+"t": "rough",
+"q": 1
+},
+"C3": {
+"t": "rough",
+"q": 1
+},
+"D3": {
+"t": "clear",
+"q": 3
+},
+"E3": {
+"t": "brush",
+"q": 3
+},
+"F3": {
+"t": "brush",
+"q": 3
+},
+"G3": {
+"t": "brush",
+"q": 3
+},
+"H3": {
+"t": "cover",
+"q": 3
+},
+"A4": {
+"t": "rough",
+"q": 1
+},
+"B4": {
+"t": "road",
+"q": 1
+},
+"C4": {
+"t": "road",
+"q": 1
+},
+"D4": {
+"t": "road",
+"q": 1
+},
+"E4": {
+"t": "brush",
+"q": 3
+},
+"F4": {
+"t": "clear",
+"q": 3
+},
+"G4": {
+"t": "cover",
+"q": 3
+},
+"H4": {
+"t": "brush",
+"q": 3
+},
+"A5": {
+"t": "road",
+"q": 1
+},
+"B5": {
+"t": "stream",
+"q": 1
+},
+"C5": {
+"t": "stream",
+"q": 1
+},
+"D5": {
+"t": "stream",
+"q": 1
+},
+"E5": {
+"t": "road",
+"q": 1
+},
+"F5": {
+"t": "road",
+"q": 1
+},
+"G5": {
+"t": "clear",
+"q": 2
+},
+"H5": {
+"t": "brush",
+"q": 2
+},
+"A6": {
+"t": "stream",
+"q": 1
+},
+"B6": {
+"t": "clear",
+"q": 3
+},
+"C6": {
+"t": "clear",
+"q": 3
+},
+"D6": {
+"t": "clear",
+"q": 3
+},
+"E6": {
+"t": "stream",
+"q": 1
+},
+"F6": {
+"t": "stream",
+"q": 1
+},
+"G6": {
+"t": "road",
+"q": 1
+},
+"H6": {
+"t": "road",
+"q": 1
+},
+"J1": {
+"t": "woods",
+"q": 3
+},
+"K1": {
+"t": "woods",
+"q": 3
+},
+"L1": {
+"t": "woods",
+"q": 3
+},
+"M1": {
+"t": "woods",
+"q": 3
+},
+"N1": {
+"t": "woods",
+"q": 3
+},
+"O1": {
+"t": "woods",
+"q": 3
+},
+"P1": {
+"t": "woods",
+"q": 3
+},
+"Q1": {
+"t": "brush",
+"q": 3
+},
+"R1": {
+"t": "brush",
+"q": 3
+},
+"I2": {
+"t": "clear",
+"q": 3
+},
+"J2": {
+"t": "brush",
+"q": 3
+},
+"K2": {
+"t": "brush",
+"q": 3
+},
+"L2": {
+"t": "woods",
+"q": 3
+},
+"M2": {
+"t": "brush",
+"q": 3
+},
+"N2": {
+"t": "clear",
+"q": 3
+},
+"O2": {
+"t": "brush",
+"q": 3
+},
+"P2": {
+"t": "clear",
+"q": 3
+},
+"Q2": {
+"t": "woods",
+"q": 3
+},
+"R2": {
+"t": "woods",
+"q": 3
+},
+"I3": {
+"t": "clear",
+"q": 3
+},
+"J3": {
+"t": "clear",
+"q": 3
+},
+"K3": {
+"t": "clear",
+"q": 3
+},
+"L3": {
+"t": "clear",
+"q": 3
+},
+"M3": {
+"t": "clear",
+"q": 3
+},
+"N3": {
+"t": "clear",
+"q": 3
+},
+"O3": {
+"t": "clear",
+"q": 3
+},
+"P3": {
+"t": "clear",
+"q": 3
+},
+"Q3": {
+"t": "brush",
+"q": 3
+},
+"R3": {
+"t": "cover",
+"q": 1
+},
+"I4": {
+"t": "cover",
+"q": 3
+},
+"J4": {
+"t": "clear",
+"q": 2
+},
+"K4": {
+"t": "clear",
+"q": 2
+},
+"L4": {
+"t": "clear",
+"q": 2
+},
+"M4": {
+"t": "clear",
+"q": 2
+},
+"N4": {
+"t": "clear",
+"q": 1
+},
+"O4": {
+"t": "clear",
+"q": 1
+},
+"P4": {
+"t": "clear",
+"q": 1
+},
+"Q4": {
+"t": "clear",
+"q": 1
+},
+"R4": {
+"t": "clear",
+"q": 1
+},
+"I5": {
+"t": "clear",
+"q": 2
+},
+"J5": {
+"t": "clear",
+"q": 2
+},
+"K5": {
+"t": "clear",
+"q": 2
+},
+"L5": {
+"t": "stone_building",
+"q": 2
+},
+"M5": {
+"t": "stone_building",
+"q": 2
+},
+"N5": {
+"t": "clear",
+"q": 1
+},
+"O5": {
+"t": "clear",
+"q": 1
+},
+"P5": {
+"t": "wood_building",
+"q": 1
+},
+"Q5": {
+"t": "wood_building",
+"q": 1
+},
+"R5": {
+"t": "road",
+"q": 1
+},
+"I6": {
+"t": "clear",
+"q": 2
+},
+"J6": {
+"t": "road",
+"q": 2
+},
+"K6": {
+"t": "road",
+"q": 2
+},
+"L6": {
+"t": "road",
+"q": 2
+},
+"M6": {
+"t": "stone_building",
+"q": 2
+},
+"N6": {
+"t": "clear",
+"q": 1
+},
+"O6": {
+"t": "wood_building",
+"q": 1
+},
+"P6": {
+"t": "road",
+"q": 1
+},
+"Q6": {
+"t": "road",
+"q": 1
+},
+"S1": {
+"t": "clear",
+"q": 3
+},
+"T1": {
+"t": "clear",
+"q": 3
+},
+"U1": {
+"t": "clear",
+"q": 3
+},
+"V1": {
+"t": "clear",
+"q": 3
+},
+"W1": {
+"t": "clear",
+"q": 3
+},
+"X1": {
+"t": "clear",
+"q": 3
+},
+"Y1": {
+"t": "clear",
+"q": 3
+},
+"S2": {
+"t": "brush",
+"q": 3
+},
+"T2": {
+"t": "woods",
+"q": 3
+},
+"U2": {
+"t": "clear",
+"q": 3
+},
+"V2": {
+"t": "clear",
+"q": 3
+},
+"W2": {
+"t": "clear",
+"q": 3
+},
+"X2": {
+"t": "clear",
+"q": 3
+},
+"Y2": {
+"t": "clear",
+"q": 3
+},
+"S3": {
+"t": "woods",
+"q": 1
+},
+"T3": {
+"t": "rough",
+"q": 1
+},
+"U3": {
+"t": "woods",
+"q": 3
+},
+"V3": {
+"t": "rough",
+"q": 3
+},
+"W3": {
+"t": "clear",
+"q": 3
+},
+"X3": {
+"t": "clear",
+"q": 1
+},
+"Y3": {
+"t": "clear",
+"q": 3
+},
+"S4": {
+"t": "clear",
+"q": 1
+},
+"T4": {
+"t": "clear",
+"q": 1
+},
+"U4": {
+"t": "rough",
+"q": 1
+},
+"V4": {
+"t": "clear",
+"q": 1
+},
+"W4": {
+"t": "clear",
+"q": 1
+},
+"X4": {
+"t": "clear",
+"q": 1
+},
+"Y4": {
+"t": "clear",
+"q": 1
+},
+"S5": {
+"t": "road",
+"q": 1
+},
+"T5": {
+"t": "road",
+"q": 1
+},
+"U5": {
+"t": "clear",
+"q": 1
+},
+"V5": {
+"t": "clear",
+"q": 1
+},
+"W5": {
+"t": "clear",
+"q": 1
+},
+"X5": {
+"t": "clear",
+"q": 1
+},
+"Y5": {
+"t": "clear",
+"q": 1
+},
+"R6": {
+"t": "clear",
+"q": 1
+},
+"S6": {
+"t": "clear",
+"q": 1
+},
+"T6": {
+"t": "brush",
+"q": 2
+},
+"U6": {
+"t": "road",
+"q": 1
+},
+"V6": {
+"t": "road",
+"q": 2
+},
+"W6": {
+"t": "clear",
+"q": 1
+},
+"X6": {
+"t": "clear",
+"q": 1
+},
+"Y6": {
+"t": "clear",
+"q": 1
+},
+"A7": {
+"t": "brush",
+"q": 3
+},
+"B7": {
+"t": "brush",
+"q": 3
+},
+"C7": {
+"t": "clear",
+"q": 3
+},
+"D7": {
+"t": "clear",
+"q": 3
+},
+"E7": {
+"t": "clear",
+"q": 1
+},
+"F7": {
+"t": "clear",
+"q": 1
+},
+"G7": {
+"t": "stream",
+"q": 1
+},
+"H7": {
+"t": "clear",
+"q": 1
+},
+"A8": {
+"t": "woods",
+"q": 3
+},
+"B8": {
+"t": "woods",
+"q": 3
+},
+"C8": {
+"t": "brush",
+"q": 3
+},
+"D8": {
+"t": "brush",
+"q": 3
+},
+"E8": {
+"t": "clear",
+"q": 1
+},
+"F8": {
+"t": "brush",
+"q": 1
+},
+"G8": {
+"t": "stream",
+"q": 1
+},
+"H8": {
+"t": "clear",
+"q": 1
+},
+"A9": {
+"t": "woods",
+"q": 3
+},
+"B9": {
+"t": "brush",
+"q": 3
+},
+"C9": {
+"t": "brush",
+"q": 3
+},
+"D9": {
+"t": "clear",
+"q": 3
+},
+"E9": {
+"t": "brush",
+"q": 2
+},
+"F9": {
+"t": "stream",
+"q": 1
+},
+"G9": {
+"t": "stream",
+"q": 1
+},
+"H9": {
+"t": "clear",
+"q": 1
+},
+"J7": {
+"t": "clear",
+"q": 2
+},
+"K7": {
+"t": "stone_building",
+"q": 2
+},
+"L7": {
+"t": "clear",
+"q": 2
+},
+"M7": {
+"t": "road",
+"q": 2
+},
+"N7": {
+"t": "road",
+"q": 2
+},
+"O7": {
+"t": "road",
+"q": 1
+},
+"P7": {
+"t": "clear",
+"q": 1
+},
+"Q7": {
+"t": "clear",
+"q": 1
+},
+"J8": {
+"t": "clear",
+"q": 2
+},
+"K8": {
+"t": "clear",
+"q": 2
+},
+"L8": {
+"t": "clear",
+"q": 2
+},
+"M8": {
+"t": "road",
+"q": 2
+},
+"N8": {
+"t": "clear",
+"q": 2
+},
+"O8": {
+"t": "road",
+"q": 1
+},
+"P8": {
+"t": "road",
+"q": 1
+},
+"Q8": {
+"t": "stone_building",
+"q": 1
+},
+"J9": {
+"t": "clear",
+"q": 2
+},
+"K9": {
+"t": "clear",
+"q": 2
+},
+"L9": {
+"t": "road",
+"q": 1
+},
+"M9": {
+"t": "clear",
+"q": 2
+},
+"N9": {
+"t": "stone_building",
+"q": 2
+},
+"O9": {
+"t": "clear",
+"q": 1
+},
+"P9": {
+"t": "wood_building",
+"q": 1
+},
+"Q9": {
+"t": "clear",
+"q": 1
+},
+"R7": {
+"t": "stone_building",
+"q": 1
+},
+"S7": {
+"t": "clear",
+"q": 1
+},
+"T7": {
+"t": "brush",
+"q": 2
+},
+"U7": {
+"t": "brush",
+"q": 2
+},
+"V7": {
+"t": "woods",
+"q": 3
+},
+"W7": {
+"t": "road",
+"q": 3
+},
+"X7": {
+"t": "road",
+"q": 3
+},
+"Y7": {
+"t": "clear",
+"q": 1
+},
+"R8": {
+"t": "clear",
+"q": 1
+},
+"S8": {
+"t": "clear",
+"q": 1
+},
+"T8": {
+"t": "clear",
+"q": 2
+},
+"U8": {
+"t": "woods",
+"q": 2
+},
+"V8": {
+"t": "woods",
+"q": 3
+},
+"W8": {
+"t": "brush",
+"q": 3
+},
+"X8": {
+"t": "brush",
+"q": 3
+},
+"Y8": {
+"t": "road",
+"q": 3
+},
+"R9": {
+"t": "road",
+"q": 1
+},
+"S9": {
+"t": "wood_building",
+"q": 1
+},
+"T9": {
+"t": "clear",
+"q": 1
+},
+"U9": {
+"t": "clear",
+"q": 2
+},
+"V9": {
+"t": "clear",
+"q": 3
+},
+"W9": {
+"t": "woods",
+"q": 3
+},
+"X9": {
+"t": "woods",
+"q": 3
+},
+"Y9": {
+"t": "clear",
+"q": 3
+},
+"I7": {
+"t": "road",
+"q": 2
+},
+"I8": {
+"t": "clear",
+"q": 1
+},
+"I9": {
+"t": "clear",
+"q": 1
+},
+"A10": {
+"t": "woods",
+"q": 1
+},
+"A11": {
+"t": "clear",
+"q": 1
+},
+"A12": {
+"t": "clear",
+"q": 1
+},
+"A13": {
+"t": "clear",
+"q": 1
+},
+"A14": {
+"t": "clear",
+"q": 1
+},
+"A15": {
+"t": "clear",
+"q": 1
+},
+"A16": {
+"t": "clear",
+"q": 1
+},
+"A17": {
+"t": "clear",
+"q": 1
+},
+"A18": {
+"t": "clear",
+"q": 1
+},
+"A19": {
+"t": "clear",
+"q": 1
+},
+"B10": {
+"t": "clear",
+"q": 1
+},
+"B11": {
+"t": "stone_building",
+"q": 1
+},
+"B12": {
+"t": "clear",
+"q": 1
+},
+"B13": {
+"t": "wood_building",
+"q": 1
+},
+"B14": {
+"t": "clear",
+"q": 1
+},
+"B15": {
+"t": "wood_building",
+"q": 1
+},
+"B16": {
+"t": "clear",
+"q": 1
+},
+"B17": {
+"t": "road",
+"q": 1
+},
+"B18": {
+"t": "clear",
+"q": 1
+},
+"B19": {
+"t": "clear",
+"q": 1
+},
+"C10": {
+"t": "clear",
+"q": 1
+},
+"C11": {
+"t": "stone_building",
+"q": 1
+},
+"C12": {
+"t": "clear",
+"q": 1
+},
+"C13": {
+"t": "road",
+"q": 1
+},
+"C14": {
+"t": "road",
+"q": 1
+},
+"C15": {
+"t": "clear",
+"q": 1
+},
+"C16": {
+"t": "clear",
+"q": 1
+},
+"C17": {
+"t": "road",
+"q": 1
+},
+"C18": {
+"t": "stone_building",
+"q": 1
+},
+"C19": {
+"t": "clear",
+"q": 1
+},
+"D10": {
+"t": "clear",
+"q": 1
+},
+"D11": {
+"t": "clear",
+"q": 1
+},
+"D12": {
+"t": "clear",
+"q": 1
+},
+"D13": {
+"t": "wood_building",
+"q": 1
+},
+"D14": {
+"t": "stone_building",
+"q": 1
+},
+"D15": {
+"t": "stone_building",
+"q": 1
+},
+"D16": {
+"t": "road",
+"q": 1
+},
+"D17": {
+"t": "stone_building",
+"q": 1
+},
+"D18": {
+"t": "wood_building",
+"q": 1
+},
+"D19": {
+"t": "clear",
+"q": 1
+},
+"E10": {
+"t": "clear",
+"q": 1
+},
+"E11": {
+"t": "wood_building",
+"q": 1
+},
+"E12": {
+"t": "clear",
+"q": 1
+},
+"E13": {
+"t": "road",
+"q": 1
+},
+"E14": {
+"t": "clear",
+"q": 1
+},
+"E15": {
+"t": "stone_building",
+"q": 1
+},
+"E16": {
+"t": "road",
+"q": 1
+},
+"E17": {
+"t": "clear",
+"q": 1
+},
+"E18": {
+"t": "clear",
+"q": 1
+},
+"E19": {
+"t": "clear",
+"q": 1
+},
+"F10": {
+"t": "stream",
+"q": 1
+},
+"F11": {
+"t": "stream",
+"q": 1
+},
+"F12": {
+"t": "road",
+"q": 1
+},
+"F13": {
+"t": "road",
+"q": 1
+},
+"F14": {
+"t": "stone_building",
+"q": 1
+},
+"F15": {
+"t": "stone_building",
+"q": 1
+},
+"F16": {
+"t": "clear",
+"q": 1
+},
+"F17": {
+"t": "clear",
+"q": 1
+},
+"F18": {
+"t": "clear",
+"q": 1
+},
+"F19": {
+"t": "clear",
+"q": 1
+},
+"G10": {
+"t": "stream",
+"q": 1
+},
+"G11": {
+"t": "stream",
+"q": 1,
+"ponte": true
+},
+"G12": {
+"t": "clear",
+"q": 1
+},
+"G13": {
+"t": "stone_building",
+"q": 1
+},
+"G14": {
+"t": "road",
+"q": 1
+},
+"G15": {
+"t": "clear",
+"q": 1
+},
+"G16": {
+"t": "wood_building",
+"q": 1
+},
+"G17": {
+"t": "clear",
+"q": 1
+},
+"G18": {
+"t": "road",
+"q": 1
+},
+"G19": {
+"t": "clear",
+"q": 1
+},
+"H10": {
+"t": "clear",
+"q": 1
+},
+"H11": {
+"t": "stream",
+"q": 1
+},
+"H12": {
+"t": "clear",
+"q": 1
+},
+"H13": {
+"t": "stone_building",
+"q": 1
+},
+"H14": {
+"t": "road",
+"q": 1
+},
+"H15": {
+"t": "road",
+"q": 1
+},
+"H16": {
+"t": "road",
+"q": 1
+},
+"H17": {
+"t": "road",
+"q": 1
+},
+"H18": {
+"t": "stone_building",
+"q": 1
+},
+"H19": {
+"t": "clear",
+"q": 1
+},
+"I10": {
+"t": "brush",
+"q": 2
+},
+"I11": {
+"t": "stream",
+"q": 1
+},
+"I12": {
+"t": "clear",
+"q": 1
+},
+"I13": {
+"t": "stone_building",
+"q": 1
+},
+"I14": {
+"t": "stone_building",
+"q": 1
+},
+"I15": {
+"t": "woods",
+"q": 1
+},
+"I16": {
+"t": "woods",
+"q": 1
+},
+"I17": {
+"t": "road",
+"q": 1
+},
+"I18": {
+"t": "stone_building",
+"q": 1
+},
+"I19": {
+"t": "clear",
+"q": 1
+},
+"J10": {
+"t": "road",
+"q": 1
+},
+"J11": {
+"t": "stream",
+"q": 1,
+"ponte": true
+},
+"J12": {
+"t": "road",
+"q": 1
+},
+"J13": {
+"t": "road",
+"q": 1
+},
+"J14": {
+"t": "road",
+"q": 1
+},
+"J15": {
+"t": "road",
+"q": 1
+},
+"J16": {
+"t": "road",
+"q": 1
+},
+"J17": {
+"t": "road",
+"q": 1
+},
+"J18": {
+"t": "stone_building",
+"q": 1
+},
+"J19": {
+"t": "clear",
+"q": 1
+},
+"K10": {
+"t": "road",
+"q": 1
+},
+"K11": {
+"t": "stream",
+"q": 1
+},
+"K12": {
+"t": "clear",
+"q": 1
+},
+"K13": {
+"t": "wood_building",
+"q": 1
+},
+"K14": {
+"t": "wood_building",
+"q": 1
+},
+"K15": {
+"t": "wood_building",
+"q": 1
+},
+"K16": {
+"t": "wood_building",
+"q": 1
+},
+"K17": {
+"t": "wood_building",
+"q": 1
+},
+"K18": {
+"t": "road",
+"q": 1
+},
+"K19": {
+"t": "road",
+"q": 1
+},
+"L10": {
+"t": "clear",
+"q": 1
+},
+"L11": {
+"t": "stream",
+"q": 1
+},
+"L12": {
+"t": "road",
+"q": 1
+},
+"L13": {
+"t": "road",
+"q": 1
+},
+"L14": {
+"t": "road",
+"q": 1
+},
+"L15": {
+"t": "road",
+"q": 1
+},
+"L16": {
+"t": "road",
+"q": 1
+},
+"L17": {
+"t": "road",
+"q": 1
+},
+"L18": {
+"t": "wood_building",
+"q": 1
+},
+"L19": {
+"t": "clear",
+"q": 1
+},
+"M10": {
+"t": "clear",
+"q": 1
+},
+"M11": {
+"t": "stream",
+"q": 1
+},
+"M12": {
+"t": "road",
+"q": 1
+},
+"M13": {
+"t": "stone_building",
+"q": 1
+},
+"M14": {
+"t": "stone_building",
+"q": 1
+},
+"M15": {
+"t": "clear",
+"q": 1
+},
+"M16": {
+"t": "road",
+"q": 1
+},
+"M17": {
+"t": "stone_building",
+"q": 1
+},
+"M18": {
+"t": "stone_building",
+"q": 1
+},
+"M19": {
+"t": "clear",
+"q": 1
+},
+"N10": {
+"t": "stream",
+"q": 1
+},
+"N11": {
+"t": "road",
+"q": 1
+},
+"N12": {
+"t": "road",
+"q": 1
+},
+"N13": {
+"t": "clear",
+"q": 1
+},
+"N14": {
+"t": "clear",
+"q": 1
+},
+"N15": {
+"t": "wood_building",
+"q": 1
+},
+"N16": {
+"t": "clear",
+"q": 1
+},
+"N17": {
+"t": "clear",
+"q": 1
+},
+"N18": {
+"t": "clear",
+"q": 1
+},
+"N19": {
+"t": "clear",
+"q": 1
+},
+"O10": {
+"t": "stream",
+"q": 1
+},
+"O11": {
+"t": "road",
+"q": 1
+},
+"O12": {
+"t": "wood_building",
+"q": 1
+},
+"O13": {
+"t": "road",
+"q": 1
+},
+"O14": {
+"t": "wood_building",
+"q": 1
+},
+"O15": {
+"t": "clear",
+"q": 1
+},
+"O16": {
+"t": "woods",
+"q": 1
+},
+"O17": {
+"t": "clear",
+"q": 1
+},
+"O18": {
+"t": "stone_building",
+"q": 1
+},
+"O19": {
+"t": "clear",
+"q": 1
+},
+"P10": {
+"t": "stream",
+"q": 1
+},
+"P11": {
+"t": "road",
+"q": 1
+},
+"P12": {
+"t": "wood_building",
+"q": 1
+},
+"P13": {
+"t": "road",
+"q": 1
+},
+"P14": {
+"t": "road",
+"q": 1
+},
+"P15": {
+"t": "road",
+"q": 1
+},
+"P16": {
+"t": "wood_building",
+"q": 1
+},
+"P17": {
+"t": "wood_building",
+"q": 1
+},
+"P18": {
+"t": "stone_building",
+"q": 1
+},
+"P19": {
+"t": "clear",
+"q": 1
+},
+"Q10": {
+"t": "clear",
+"q": 1
+},
+"Q11": {
+"t": "stream",
+"q": 1
+},
+"Q12": {
+"t": "road",
+"q": 1
+},
+"Q13": {
+"t": "woods",
+"q": 1
+},
+"Q14": {
+"t": "stone_building",
+"q": 1
+},
+"Q15": {
+"t": "stone_building",
+"q": 1
+},
+"Q16": {
+"t": "road",
+"q": 1
+},
+"Q17": {
+"t": "wood_building",
+"q": 1
+},
+"Q18": {
+"t": "road",
+"q": 1
+},
+"Q19": {
+"t": "clear",
+"q": 1
+},
+"R10": {
+"t": "stream",
+"q": 1,
+"ponte": true
+},
+"R11": {
+"t": "road",
+"q": 1
+},
+"R12": {
+"t": "road",
+"q": 1
+},
+"R13": {
+"t": "road",
+"q": 1
+},
+"R14": {
+"t": "road",
+"q": 1
+},
+"R15": {
+"t": "road",
+"q": 1
+},
+"R16": {
+"t": "road",
+"q": 1
+},
+"R17": {
+"t": "road",
+"q": 1
+},
+"R18": {
+"t": "monument",
+"q": 1
+},
+"R19": {
+"t": "road",
+"q": 1
+},
+"S10": {
+"t": "stream",
+"q": 1
+},
+"S11": {
+"t": "clear",
+"q": 1
+},
+"S12": {
+"t": "woods",
+"q": 1
+},
+"S13": {
+"t": "woods",
+"q": 1
+},
+"S14": {
+"t": "woods",
+"q": 1
+},
+"S15": {
+"t": "woods",
+"q": 1
+},
+"S16": {
+"t": "woods",
+"q": 1
+},
+"S17": {
+"t": "woods",
+"q": 1
+},
+"S18": {
+"t": "road",
+"q": 1
+},
+"S19": {
+"t": "clear",
+"q": 1
+},
+"T10": {
+"t": "stream",
+"q": 1
+},
+"T11": {
+"t": "road",
+"q": 1
+},
+"T12": {
+"t": "woods",
+"q": 1
+},
+"T13": {
+"t": "woods",
+"q": 1
+},
+"T14": {
+"t": "water",
+"q": 1
+},
+"T15": {
+"t": "water",
+"q": 1
+},
+"T16": {
+"t": "woods",
+"q": 1
+},
+"T17": {
+"t": "clear",
+"q": 1
+},
+"T18": {
+"t": "woods",
+"q": 1
+},
+"T19": {
+"t": "woods",
+"q": 1
+},
+"U10": {
+"t": "clear",
+"q": 2
+},
+"U11": {
+"t": "stream",
+"q": 1
+},
+"U12": {
+"t": "road",
+"q": 1
+},
+"U13": {
+"t": "woods",
+"q": 1
+},
+"U14": {
+"t": "woods",
+"q": 1
+},
+"U15": {
+"t": "woods",
+"q": 1
+},
+"U16": {
+"t": "woods",
+"q": 1
+},
+"U17": {
+"t": "clear",
+"q": 1
+},
+"U18": {
+"t": "woods",
+"q": 1
+},
+"U19": {
+"t": "clear",
+"q": 1
+},
+"V10": {
+"t": "clear",
+"q": 2
+},
+"V11": {
+"t": "stream",
+"q": 1
+},
+"V12": {
+"t": "road",
+"q": 1
+},
+"V13": {
+"t": "road",
+"q": 1
+},
+"V14": {
+"t": "road",
+"q": 1
+},
+"V15": {
+"t": "road",
+"q": 1
+},
+"V16": {
+"t": "road",
+"q": 1
+},
+"V17": {
+"t": "woods",
+"q": 1
+},
+"V18": {
+"t": "clear",
+"q": 1
+},
+"V19": {
+"t": "clear",
+"q": 1
+},
+"W10": {
+"t": "brush",
+"q": 1
+},
+"W11": {
+"t": "clear",
+"q": 2
+},
+"W12": {
+"t": "stream",
+"q": 1
+},
+"W13": {
+"t": "clear",
+"q": 2
+},
+"W14": {
+"t": "stone_building",
+"q": 2
+},
+"W15": {
+"t": "stone_building",
+"q": 2
+},
+"W16": {
+"t": "stone_building",
+"q": 2
+},
+"W17": {
+"t": "woods",
+"q": 1
+},
+"W18": {
+"t": "clear",
+"q": 2
+},
+"W19": {
+"t": "clear",
+"q": 1
+},
+"X10": {
+"t": "clear",
+"q": 2
+},
+"X11": {
+"t": "stream",
+"q": 1
+},
+"X12": {
+"t": "clear",
+"q": 2
+},
+"X13": {
+"t": "woods",
+"q": 2
+},
+"X14": {
+"t": "stone_building",
+"q": 2
+},
+"X15": {
+"t": "stone_building",
+"q": 2
+},
+"X16": {
+"t": "woods",
+"q": 2
+},
+"X17": {
+"t": "clear",
+"q": 2
+},
+"X18": {
+"t": "clear",
+"q": 2
+},
+"X19": {
+"t": "clear",
+"q": 1
+},
+"Y10": {
+"t": "clear",
+"q": 2
+},
+"Y11": {
+"t": "stream",
+"q": 1
+},
+"Y12": {
+"t": "clear",
+"q": 2
+},
+"Y13": {
+"t": "woods",
+"q": 1
+},
+"Y14": {
+"t": "brush",
+"q": 2
+},
+"Y15": {
+"t": "brush",
+"q": 2
+},
+"Y16": {
+"t": "brush",
+"q": 2
+},
+"Y17": {
+"t": "clear",
+"q": 2
+},
+"Y18": {
+"t": "clear",
+"q": 2
+},
+"Y19": {
+"t": "clear",
+"q": 2
+}
+},
+"lati": {
+"B6|C7": "crest",
+"B6|B7": "crest",
+"A7|B7": "crest",
+"A8|B7": "crest",
+"A8|B8": "crest",
+"A8|A9": "crest",
+"U8|V7": "crest",
+"V7|V8": "crest",
+"V9|W9": "crest",
+"I9|J9": "embankment",
+"J8|J9": "embankment",
+"J8|K9": "embankment",
+"K8|K9": "embankment",
+"U8|V8": "embankment",
+"U9|V9": "embankment",
+"K5|L5": "window",
+"K6|L5": "window",
+"M6|N6": "window",
+"M6|M7": "window",
+"M5|N5": "window",
+"J6|K7": "window",
+"K7|L7": "window",
+"K7|K8": "window",
+"Q5|R4": "window",
+"N6|O6": "window",
+"N8|N9": "window",
+"P8|P9": "window",
+"R7|S7": "window",
+"R7|S8": "window",
+"Q8|Q9": "window",
+"S9|T8": "window",
+"S9|T9": "window",
+"M4|M5": "door",
+"K6|K7": "door",
+"P4|P5": "door",
+"O6|P6": "door",
+"P5|Q6": "door",
+"Q5|R5": "door",
+"N9|O9": "door",
+"R6|R7": "door",
+"P8|Q8": "door",
+"B10|B11": "window",
+"B11|C12": "window",
+"B11|B12": "window",
+"A12|B11": "window",
+"A11|B11": "window",
+"B12|B13": "window",
+"B13|C13": "window",
+"B13|C14": "window",
+"B13|B14": "window",
+"A14|B13": "window",
+"A13|B13": "window",
+"B14|B15": "window",
+"B15|C15": "window",
+"B15|C16": "window",
+"B15|B16": "window",
+"A16|B15": "window",
+"A15|B15": "window",
+"C10|C11": "window",
+"C11|D10": "window",
+"C11|D11": "window",
+"C11|C12": "window",
+"B10|C11": "window",
+"C17|C18": "window",
+"C18|C19": "window",
+"B18|C18": "window",
+"B17|C18": "window",
+"D12|D13": "window",
+"D13|E13": "window",
+"D13|E14": "window",
+"C14|D13": "window",
+"C13|D13": "window",
+"D14|E14": "window",
+"C15|D14": "window",
+"C14|D14": "window",
+"D15|E16": "window",
+"D15|D16": "window",
+"C16|D15": "window",
+"C15|D15": "window",
+"D16|D17": "window",
+"D17|E17": "window",
+"D17|E18": "window",
+"C17|D17": "window",
+"D18|E18": "window",
+"D18|E19": "window",
+"D18|D19": "window",
+"C19|D18": "window",
+"E10|E11": "window",
+"E11|F10": "window",
+"E11|F11": "window",
+"E11|E12": "window",
+"D11|E11": "window",
+"D10|E11": "window",
+"E14|E15": "window",
+"E15|E16": "window",
+"F13|F14": "window",
+"F14|G14": "window",
+"F14|G15": "window",
+"E14|F14": "window",
+"F15|G15": "window",
+"F15|F16": "window",
+"E16|F15": "window",
+"G12|G13": "window",
+"G13|H12": "window",
+"G13|G14": "window",
+"F13|G13": "window",
+"F12|G13": "window",
+"G15|G16": "window",
+"G16|H15": "window",
+"G16|H16": "window",
+"G16|G17": "window",
+"F16|G16": "window",
+"H12|H13": "window",
+"H13|H14": "window",
+"G14|H13": "window",
+"H17|H18": "window",
+"H18|I19": "window",
+"H18|H19": "window",
+"G19|H18": "window",
+"G18|H18": "window",
+"I12|I13": "window",
+"I13|J12": "window",
+"I13|J13": "window",
+"H12|I13": "window",
+"I14|J13": "window",
+"I14|J14": "window",
+"I14|I15": "window",
+"H14|I14": "window",
+"I17|I18": "window",
+"I18|J17": "window",
+"I18|I19": "window",
+"H17|I18": "window",
+"J17|J18": "window",
+"J18|K18": "window",
+"J18|K19": "window",
+"J18|J19": "window",
+"I19|J18": "window",
+"K12|K13": "window",
+"K13|L12": "window",
+"K13|L13": "window",
+"J13|K13": "window",
+"J12|K13": "window",
+"K14|L13": "window",
+"K14|L14": "window",
+"J14|K14": "window",
+"J13|K14": "window",
+"K15|L14": "window",
+"K15|L15": "window",
+"J15|K15": "window",
+"J14|K15": "window",
+"K16|L15": "window",
+"K16|L16": "window",
+"J16|K16": "window",
+"J15|K16": "window",
+"K17|L16": "window",
+"K17|L17": "window",
+"K17|K18": "window",
+"J17|K17": "window",
+"J16|K17": "window",
+"L17|L18": "window",
+"L18|M19": "window",
+"L18|L19": "window",
+"K19|L18": "window",
+"K18|L18": "window",
+"M12|M13": "window",
+"M13|N12": "window",
+"M13|N13": "window",
+"L13|M13": "window",
+"L12|M13": "window",
+"M14|N13": "window",
+"M14|N14": "window",
+"M14|M15": "window",
+"L14|M14": "window",
+"L13|M14": "window",
+"M16|M17": "window",
+"M17|N16": "window",
+"M17|N17": "window",
+"L17|M17": "window",
+"L16|M17": "window",
+"M18|N17": "window",
+"M18|N18": "window",
+"M18|M19": "window",
+"L17|M18": "window",
+"N14|N15": "window",
+"N15|O15": "window",
+"N15|O16": "window",
+"N15|N16": "window",
+"M16|N15": "window",
+"M15|N15": "window",
+"O11|O12": "window",
+"O12|P11": "window",
+"O12|O13": "window",
+"N12|O12": "window",
+"N11|O12": "window",
+"O13|O14": "window",
+"O14|P13": "window",
+"O14|P14": "window",
+"O14|O15": "window",
+"N14|O14": "window",
+"N13|O14": "window",
+"O17|O18": "window",
+"O18|O19": "window",
+"N18|O18": "window",
+"N17|O18": "window",
+"P11|P12": "window",
+"P12|Q12": "window",
+"P12|Q13": "window",
+"P12|P13": "window",
+"O13|P12": "window",
+"P15|P16": "window",
+"P16|Q16": "window",
+"O17|P16": "window",
+"O16|P16": "window",
+"P17|Q18": "window",
+"O17|P17": "window",
+"P18|Q18": "window",
+"P18|Q19": "window",
+"P18|P19": "window",
+"O19|P18": "window",
+"Q13|Q14": "window",
+"Q14|R13": "window",
+"Q14|R14": "window",
+"P14|Q14": "window",
+"P13|Q14": "window",
+"Q15|R14": "window",
+"Q15|R15": "window",
+"Q15|Q16": "window",
+"P15|Q15": "window",
+"P14|Q15": "window",
+"Q16|Q17": "window",
+"Q17|R16": "window",
+"Q17|R17": "window",
+"Q17|Q18": "window",
+"W13|W14": "window",
+"W14|X13": "window",
+"V14|W14": "window",
+"V13|W14": "window",
+"V15|W15": "window",
+"V14|W15": "window",
+"W16|X16": "window",
+"W16|W17": "window",
+"V16|W16": "window",
+"V15|W16": "window",
+"X13|X14": "window",
+"X14|Y14": "window",
+"X14|Y15": "window",
+"X15|Y15": "window",
+"X15|Y16": "window",
+"X15|X16": "window"
+},
+"alture_obiettivo": [],
+"note": "Mappa B con la mezza mappa E (città) sulle righe 10–19: terreno di E letto per colore e corretto a vista."
+}

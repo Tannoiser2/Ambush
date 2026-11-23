@@ -5,13 +5,17 @@ extends RefCounted
 const E = preload("res://scripts/motore/esagoni.gd")
 
 const BLOCCANTI := ["woods", "brush", "rough", "rubble"]
-const SCOPERTI := ["clear", "road", "stream", "bridge", "ford"]
+const SCOPERTI := ["clear", "road", "stream", "bridge", "ford", "beach", "wharf", "subpen", "water"]
+## Esagoni pieni (serbatoi, monumento): non si entra e bloccano la vista come un edificio.
+const PIENI := ["fuel_tank", "monument"]
 const EDIFICI := ["stone_building", "wood_building", "bunker"]
 const NOMI := {
 	"clear": "terreno libero", "road": "strada", "cover": "copertura", "brush": "macchia",
 	"woods": "bosco", "rough": "terreno accidentato", "stream": "ruscello", "bridge": "ponte",
 	"stone_building": "edificio in pietra", "wood_building": "edificio in legno",
 	"crater": "cratere", "rubble": "macerie", "bunker": "bunker",
+	"water": "acqua", "beach": "spiaggia", "wharf": "banchina", "subpen": "base dei sottomarini",
+	"fuel_tank": "serbatoio di carburante", "monument": "monumento", "vineyard": "vigna",
 }
 
 var esagoni: Dictionary = {}
@@ -117,14 +121,18 @@ func costo_movimento(a: String, b: String) -> int:
 		return -1
 	var t := tipo(b)
 	var c := 1
+	if t in PIENI or (t == "water" and not acqua_ammessa):
+		return -1
 	match t:
-		"rough", "brush", "woods", "rubble", "ford":
+		"rough", "brush", "woods", "rubble", "ford", "beach":
 			c = 2
 		"stream":
 			if fiume and not (ponte(b) and a in capi_ponte(b)) and not guado(b):
 				return -1
 			c = 1 if (ponte(b) and a in capi_ponte(b)) else 2
 	if tl in ["door", "window"]:
+		c += 1
+	elif tl == "stonewall":
 		c += 1
 	elif tl == "crest":
 		c += 1
@@ -234,7 +242,7 @@ func _blocca_esagono(h: String, a: String, b: String, qa: int, qb: int) -> Strin
 		else:
 			if (E.adiacenti(h, a) and qh >= qa) or (E.adiacenti(h, b) and qh >= qb):
 				return "%s (%s) adiacente blocca la vista" % [NOMI.get(tipo(h), tipo(h)), h]
-	elif edificio(h):
+	elif edificio(h) or tipo(h) in PIENI:
 		if qa == qb:
 			return "l’edificio in %s blocca la vista" % h
 		var basso_h := a if qa < qb else b
@@ -313,6 +321,8 @@ func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String, 
 		return {"ok": false, "motivo": m}
 	if E.adiacenti(a, b):
 		var tl := tipo_lato(a, b)
+		if tl == "stonewall" and (postura_a == "prone" or postura_b == "prone"):
+			return {"ok": false, "motivo": "un muretto copre il soldato a terra"}
 		if tl == "crest":
 			return {"ok": false, "motivo": "una cresta separa i due esagoni"}
 		return {"ok": true, "motivo": ""}
@@ -330,6 +340,10 @@ func _calcola_vista(a: String, b: String, postura_a: String, postura_b: String, 
 			return {"ok": false, "motivo": m1}
 	for k in p.lati:
 		var tl := str(lati.get(k, ""))
+		if tl == "stonewall":
+			var pp: PackedStringArray = k.split("|")
+			if (a in pp and postura_a == "prone") or (b in pp and postura_b == "prone"):
+				return {"ok": false, "motivo": "un muretto copre il soldato a terra"}
 		if tl == "crest":
 			return {"ok": false, "motivo": "una cresta blocca la vista"}
 		if tl == "embankment" and qa != qb:
@@ -352,6 +366,8 @@ var limite_vista := 0
 var illuminati: Dictionary = {}
 ## Fiume: il corso d’acqua si attraversa solo sui ponti (Missioni 3, 4, 5, 6, 8).
 var fiume := false
+## Acqua aperta (mare): vietata salvo indicazione della missione o di un paragrafo.
+var acqua_ammessa := false
 
 func vede(a: String, b: String, postura_a := "standing", postura_b := "standing", piano_a := 0, piano_b := 0) -> bool:
 	return bool(vista(a, b, postura_a, postura_b, piano_a, piano_b).ok)

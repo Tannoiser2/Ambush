@@ -124,7 +124,10 @@ func imposta_grafica(realistica: bool, nuove: bool) -> void:
 	if partita != null:
 		lettera = partita.lettera_mappa().to_lower()
 	lettera_mappa = lettera
-	mappa = load("res://assets/maps/mappa_%s%s.jpg" % [lettera, "_realistica" if realistica else ""])
+	var percorso_mappa := "res://assets/maps/mappa_%s%s.jpg" % [lettera, "_realistica" if realistica else ""]
+	if not ResourceLoader.exists(percorso_mappa):
+		percorso_mappa = "res://assets/maps/mappa_%s.jpg" % lettera
+	mappa = load(percorso_mappa)
 	trame.clear()
 	# Le pedine originali non hanno tutte le lettere tedesche: quelle mancanti vengono dalla serie ridisegnata.
 	if nuove:

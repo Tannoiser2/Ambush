@@ -65,10 +65,12 @@ const INCIDENTE_AUTO := ["schianto", "schianto", "distrutta", "distrutta", "perd
 const INCIDENTE_CARRO := ["cingolo", "cingolo", "perde_turno", "perde_turno", "perde_turno", "ferma", "ferma", "ferma", "nessuno", "nessuno"]
 ## Costo in PM di un veicolo per entrare in un esagono (-1 vietato). Boschi: vietati ai veicoli grandi.
 const COSTO_VEICOLO := {"clear": 1, "road": 1, "cover": 2, "rough": 3, "brush": 2, "woods": 3, "crater": -1, "rubble": -1,
-	"stream": 3, "bridge": 1, "ford": -1, "stone_building": -1, "wood_building": -1}
+	"stream": 3, "bridge": 1, "ford": -1, "stone_building": -1, "wood_building": -1,
+	"water": -1, "beach": 2, "wharf": -1, "subpen": 1, "fuel_tank": -1, "monument": -1, "vineyard": 2}
 ## Modificatori del tiro contro un veicolo (piccolo, grande) per terreno.
 const MOD_VEICOLO := {"clear": [2, 3], "road": [2, 3], "stream": [2, 3], "bridge": [2, 3], "ford": [2, 3],
-	"cover": [1, 2], "brush": [1, 3], "rough": [0, 1], "woods": [0, 1]}
+	"cover": [1, 2], "brush": [1, 3], "rough": [0, 1], "woods": [0, 1],
+	"beach": [2, 3], "wharf": [2, 3], "subpen": [2, 3], "water": [2, 3], "vineyard": [1, 2]}
 
 ## Granate e cariche: danni per dado 0–9 (P panico, Q ferita/se prono panico, W, I, K).
 const GRANATA_DENTRO := "PPPQQWWIIK"
@@ -90,6 +92,8 @@ const MOD_TERRENO := {
 	"clear": [1, 0, -1], "road": [1, 0, -1], "stream": [1, 0, -1], "bridge": [1, 0, -1], "ford": [1, 0, -1],
 	"cover": [0, -1, -3], "brush": [0, -1, -2], "rough": [-1, -2, -3], "rubble": [-1, -2, -3],
 	"crater": [-1, -2, -3], "woods": [-2, -3, -4],
+	# Purple Heart: spiaggia, banchina, base sottomarini e acqua come terreno libero; vigna come copertura.
+	"beach": [1, 0, -1], "wharf": [1, 0, -1], "subpen": [1, 0, -1], "water": [1, 0, -1], "vineyard": [0, -1, -3],
 }
 const MOD_INTERNO_LONTANO := [-2, -4, 99]   # 99: tiro vietato
 const MOD_INTERNO_VICINO := [-1, -2, -3]
