@@ -28,6 +28,7 @@ var velo   # seconda istanza della mappa 2D che disegna solo le cose sopra il te
 var mat_terreno: ShaderMaterial
 
 var lettera := ""
+var _chiave_rilievo := ""
 var dim_px := Vector2(4200, 3840)
 var gw := 0
 var gh := 0
@@ -111,9 +112,18 @@ func _init() -> void:
 func prepara(m2d) -> void:
 	mappa2d = m2d
 	var l: String = mappa2d.partita.lettera_mappa().to_lower() if mappa2d.partita != null else "a"
-	if l == lettera and terreno_mi != null:
+	# Il letto asciutto (Purple Heart 15) cambia il rilievo: fa parte della chiave.
+	var secchi: Array = []
+	if mappa2d.partita != null and not mappa2d.partita.s.is_empty():
+		for hm in mappa2d.partita.s.get("modifiche", {}):
+			if str(mappa2d.partita.s.modifiche[hm]) == "cover":
+				secchi.append(str(hm))
+	secchi.sort()
+	var chiave := l + str(secchi)
+	if chiave == _chiave_rilievo and terreno_mi != null:
 		_aggiorna_tessitura()
 		return
+	_chiave_rilievo = chiave
 	lettera = l
 	_crea_velo()
 	_costruisci_rilievo()
@@ -221,6 +231,11 @@ func _costruisci_rilievo() -> void:
 	gw = int(dim_px.x / PASSO_GRIGLIA) + 1
 	gh = int(dim_px.y / PASSO_GRIGLIA) + 1
 	alt.resize(gw * gh)
+	var secco := {}
+	if mappa2d.partita != null and not mappa2d.partita.s.is_empty():
+		for hm in mappa2d.partita.s.get("modifiche", {}):
+			if str(mappa2d.partita.s.modifiche[hm]) == "cover":
+				secco[str(hm)] = true
 	var acqua := PackedFloat32Array()
 	acqua.resize(gw * gh)
 	for j in gh:
@@ -229,6 +244,8 @@ func _costruisci_rilievo() -> void:
 			var y := (_quota_base(p) - 1.0) * LIVELLO
 			var a := _maschera(p, 0)
 			var c := _maschera(p, 1)
+			if not secco.is_empty() and secco.has(esagono_px(p)):
+				a = 0.0  # Purple Heart 15: letto del fiume asciutto per la diga
 			acqua[j * gw + i] = a
 			y -= 0.2 * smoothstep(0.05, 0.6, a)
 			y += 0.045 * c
@@ -462,6 +479,63 @@ func _costruisci_vegetazione() -> void:
 		tm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s * rng.randf_range(0.8, 1.6), s)), punto3d(p, 0.06 * s)))
 		tm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.13, 0.19), rng.randf_range(0.3, 0.45), rng.randf_range(0.5, 0.65)))
 	_aggiungi_mm(tm, false)
+	# Vigne (Purple Heart): una fila di piccole piante per ogni filare disegnato
+	var lv: Array = d.get("vigne", [])
+	if not lv.is_empty():
+		var piante: Array = []
+		for f in lv:
+			var a := Vector2(float(f[0]), float(f[1]))
+			var b := Vector2(float(f[2]), float(f[3]))
+			var nn := maxi(2, int(a.distance_to(b) / 11.0))
+			for k in nn + 1:
+				piante.append(a.lerp(b, float(k) / nn))
+		var vite := SphereMesh.new()
+		vite.radius = 1.0
+		vite.height = 1.6
+		vite.radial_segments = 6
+		vite.rings = 3
+		vite.material = _materiale(Color.WHITE, 1.0, true)
+		var vm := _multimesh(vite, piante.size(), true)
+		for i in piante.size():
+			var pv: Vector2 = piante[i]
+			var r := rng.randf_range(0.026, 0.036)
+			vm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * 1.3, r)), punto3d(pv, r * 1.1)))
+			vm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.2, 0.28), rng.randf_range(0.45, 0.62), rng.randf_range(0.34, 0.46)))
+		_aggiungi_mm(vm, false)
+	# Serbatoi di carburante e monumenti (Purple Heart)
+	for c in d.get("serbatoi", []):
+		var cp := Vector2(float(c[0]), float(c[1]))
+		var cil := CylinderMesh.new()
+		cil.top_radius = RAGGIO_PX * 0.62 * K
+		cil.bottom_radius = cil.top_radius
+		cil.height = 0.55
+		cil.radial_segments = 24
+		var ms := MeshInstance3D.new()
+		ms.mesh = cil
+		ms.material_override = _materiale(Color("a7aaa2"), 0.6)
+		ms.position = punto3d(cp, 0.275)
+		oggetti.add_child(ms)
+		var tetto := CylinderMesh.new()
+		tetto.top_radius = 0.05
+		tetto.bottom_radius = cil.top_radius
+		tetto.height = 0.12
+		tetto.radial_segments = 24
+		var mt := MeshInstance3D.new()
+		mt.mesh = tetto
+		mt.material_override = _materiale(Color("6f726b"), 0.7)
+		mt.position = punto3d(cp, 0.61)
+		oggetti.add_child(mt)
+	for c in d.get("monumenti", []):
+		var cp := Vector2(float(c[0]), float(c[1]))
+		var pietra_m := _materiale(Color("b9b4a8"), 0.9)
+		_scatola(oggetti, punto3d(cp, 0.09), Vector3(0.42, 0.18, 0.42), 0.0, pietra_m)
+		_scatola(oggetti, punto3d(cp, 0.3), Vector3(0.26, 0.24, 0.26), 0.0, pietra_m)
+		var cav := _oggetto("kubelwagen", Color("5b4d33"))
+		cav.mesh = SphereMesh.new()
+		(cav.mesh as SphereMesh).radius = 0.13
+		(cav.mesh as SphereMesh).height = 0.34
+		cav.position = punto3d(cp, 0.58)
+		oggetti.add_child(cav)
 	# I muri disegnati servono solo per le case ridotte in macerie (vedi _aggiorna_oggetti)
 	_muri_rovine = d.get("muri", [])
 
@@ -523,7 +597,8 @@ func _aggiorna_oggetti() -> void:
 	if p == null or p.s.is_empty():
 		return
 	var firma := str([p.s.get("radio_hex", ""), p.s.get("modifiche", {}), p.s.get("bunker", {}).keys(), p.s.get("bunker", {}).values().map(func(b): return b.get("distrutto", false)),
-		p.s.get("blocchi", []), p.s.get("ponti", {}).values().map(func(b): return b.get("distrutto", false)), lettera])
+		p.s.get("blocchi", []), p.s.get("ponti", {}).values().map(func(b): return b.get("distrutto", false)), lettera,
+		p.s.get("punti", {}), _oggetti_ph(p)])
 	if firma == _firma_oggetti:
 		return
 	_firma_oggetti = firma
@@ -627,6 +702,7 @@ func _aggiorna_oggetti() -> void:
 			mb.position = punto3d(c + Vector2(cos(ang), -sin(ang)).rotated(PI / 2.0) * 22.0 * k)
 			mb.rotation.y = ang
 			_dinamici.add_child(mb)
+	_costruisci_ph(p, cemento)
 	# Missione 3: radio presidiata e deposito di carburante
 	var rh := str(p.s.get("radio_hex", ""))
 	if rh != "":
@@ -643,6 +719,117 @@ func _aggiorna_oggetti() -> void:
 			mt.position = punto3d(centro_px(dep) + Vector2((i % 5) * 13 - 26, (i / 5) * 18 - 30 + rng_t.randf() * 4))
 			mt.rotation.y = rng_t.randf_range(-0.2, 0.2)
 			_dinamici.add_child(mt)
+
+## Firma degli oggetti di Purple Heart che cambiano durante la partita.
+func _oggetti_ph(p) -> Array:
+	var out: Array = []
+	for h in p.s.get("oggetti", {}):
+		for o in p.s.oggetti[h]:
+			if str(o.get("tipo", "")) in ["faro", "antenna", "cannone_costiero"]:
+				out.append([h, o.tipo])
+	var st: Dictionary = p.s.get("ph", {})
+	out.append([st.get("faro", {}).get("attivo", true), st.get("cannone_W12", false), st.get("cannone_X12", false), st.get("antenna_distrutta", false)])
+	return out
+
+const MEZZI_RELITTO := {"jagdpanther": "jagdpanther", "sherman": "sherman", "panzer": "panzer4", "jeep": "jeep"}
+
+## Purple Heart: diga, faro, antenna, cannoni costieri e relitti dei mezzi.
+func _costruisci_ph(p, cemento: Material) -> void:
+	var t: Terreno = p.terreno
+	if bool(p.regola("diga", false)):
+		var a := centro_px("M6")
+		var b := centro_px("O5")
+		var c := centro_px("N5")
+		var dir := (b - a).normalized()
+		var ang := -atan2(dir.y, dir.x)
+		_scatola(_dinamici, punto3d(c, 0.18) + Vector3(0, 0, 0), Vector3(RAGGIO_PX * 2.1 * K, 0.36, 0.34), ang, cemento)
+		# il muro della diga verso il lago
+		var n := dir.orthogonal()
+		_scatola(_dinamici, punto3d(c - n * RAGGIO_PX * 0.25, 0.32), Vector3(RAGGIO_PX * 2.1 * K, 0.64, 0.12), ang, cemento)
+	var st: Dictionary = p.s.get("ph", {})
+	for h in p.s.get("oggetti", {}):
+		for o in p.s.oggetti[h]:
+			var tipo := str(o.get("tipo", ""))
+			var c := centro_px(str(h))
+			match tipo:
+				"faro":
+					if bool(st.get("faro", {}).get("attivo", true)):
+						var torre := CylinderMesh.new()
+						torre.top_radius = 0.12
+						torre.bottom_radius = 0.2
+						torre.height = 1.6
+						torre.radial_segments = 14
+						var mt := MeshInstance3D.new()
+						mt.mesh = torre
+						mt.material_override = _materiale(Color("e4e0d6"), 0.7)
+						mt.position = punto3d(c, 0.8)
+						_dinamici.add_child(mt)
+						var cima := CylinderMesh.new()
+						cima.top_radius = 0.0
+						cima.bottom_radius = 0.16
+						cima.height = 0.26
+						cima.radial_segments = 14
+						var mc := MeshInstance3D.new()
+						mc.mesh = cima
+						mc.material_override = _materiale(Color("8e2b22"), 0.6)
+						mc.position = punto3d(c, 1.73)
+						_dinamici.add_child(mc)
+						var luce := OmniLight3D.new()
+						luce.light_color = Color(1.0, 0.92, 0.7)
+						luce.light_energy = 0.8
+						luce.omni_range = 2.5
+						luce.position = punto3d(c, 1.55)
+						_dinamici.add_child(luce)
+					else:
+						_macerie(_dinamici, c, 12, cemento)
+				"antenna":
+					if not bool(st.get("antenna_distrutta", false)):
+						var asta := CylinderMesh.new()
+						asta.top_radius = 0.012
+						asta.bottom_radius = 0.035
+						asta.height = 2.2
+						asta.radial_segments = 6
+						var ma := MeshInstance3D.new()
+						ma.mesh = asta
+						ma.material_override = _materiale(Color("5c5f5a"), 0.5)
+						ma.position = punto3d(c, 1.1)
+						_dinamici.add_child(ma)
+						for k in 3:
+							_scatola(_dinamici, punto3d(c, 0.6 + k * 0.55), Vector3(0.36 - k * 0.08, 0.015, 0.015), k * 1.0, ma.material_override)
+				"cannone_costiero":
+					if bool(st.get("cannone_" + str(h), false)):
+						_macerie(_dinamici, c, 16, cemento)
+					else:
+						var mb := _oggetto("bunker", Color("8a8b82"))
+						mb.position = punto3d(c)
+						mb.rotation.y = PI * 0.75
+						mb.scale = Vector3(1.25, 1.25, 1.25)
+						_dinamici.add_child(mb)
+						var canna := CylinderMesh.new()
+						canna.top_radius = 0.035
+						canna.bottom_radius = 0.05
+						canna.height = 0.9
+						canna.radial_segments = 8
+						var mca := MeshInstance3D.new()
+						mca.mesh = canna
+						mca.material_override = _materiale(Color("3f423d"), 0.5)
+						mca.position = punto3d(c + Vector2(-0.45, -0.45) * RAGGIO_PX * 0.9, 0.28)
+						mca.rotation = Vector3(0, PI * 0.75, PI / 2.0 - 0.08)
+						_dinamici.add_child(mca)
+	# Relitti dei mezzi (Missione 15): mesh del mezzo, scuro e di traverso
+	var rng := RandomNumberGenerator.new()
+	for h in p.s.get("punti", {}):
+		var nome := str(p.s.punti[h]).to_lower()
+		if not "distrutt" in nome:
+			continue
+		for k in MEZZI_RELITTO:
+			if k in nome:
+				rng.seed = hash(str(h))
+				var mr := _oggetto(MEZZI_RELITTO[k], Color("3b3632"))
+				mr.position = punto3d(centro_px(str(h)) + Vector2(rng.randf_range(-20, 20), rng.randf_range(-20, 20)))
+				mr.rotation = Vector3(rng.randf_range(-0.08, 0.08), rng.randf() * TAU, rng.randf_range(-0.1, 0.1))
+				_dinamici.add_child(mr)
+				break
 
 func _oggetto(nome: String, colore: Color) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
@@ -1111,6 +1298,10 @@ func _aggiorna_pedine() -> void:
 	var visti := {}
 	for id in posti:
 		var x: Dictionary = stati[id]
+		# equipaggio di un carro o di una motosilurante: lo rappresenta il mezzo (vedi _aggiorna_mezzi)
+		var vx: Dictionary = mappa2d.partita.s.get("veicoli", {}).get(str(x.get("veicolo", "")), {})
+		if not vx.is_empty() and str(vx.get("modello", "")) in ["panzer4", "sherman", "jagdpanther", "eboat"]:
+			continue
 		# carri e mezzi corazzati: per ora restano segnalini sul terreno (miniature da aggiungere)
 		if str(x.get("nome", "")) in ["Panzer IV", "Jagdpanther"] or x.get("carro_us", false):
 			_carro_unita(str(id), x, posti[id])
@@ -1267,6 +1458,32 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
 	if modello == "moto":
 		corpo.scale = Vector3(0.55, 0.8, 0.6)
+	if modello == "eboat":
+		# Motosilurante (Purple Heart 13): scafo affusolato, plancia e due tubi lanciasiluri, costruiti qui.
+		corpo.mesh = null
+		var grigio := _materiale(Color("7b8083"), 0.6)
+		var scafo := PrismMesh.new()
+		scafo.size = Vector3(0.36, 0.16, 1.5)
+		scafo.left_to_right = 0.5
+		var ms := MeshInstance3D.new()
+		ms.mesh = scafo
+		ms.material_override = grigio
+		ms.rotation = Vector3(PI, 0, 0)
+		ms.position = Vector3(0, 0.1, 0)
+		corpo.add_child(ms)
+		_scatola(corpo, Vector3(0, 0.17, 0.1), Vector3(0.34, 0.05, 1.2), 0.0, grigio)
+		_scatola(corpo, Vector3(0, 0.27, 0.05), Vector3(0.2, 0.16, 0.3), 0.0, _materiale(Color("62686b"), 0.6))
+		for k in [-1, 1]:
+			var tubo := CylinderMesh.new()
+			tubo.top_radius = 0.035
+			tubo.bottom_radius = 0.035
+			tubo.height = 0.5
+			var mt := MeshInstance3D.new()
+			mt.mesh = tubo
+			mt.material_override = _materiale(Color("4b4f50"), 0.5)
+			mt.rotation = Vector3(PI / 2.0, 0, 0)
+			mt.position = Vector3(0.11 * k, 0.22, -0.35)
+			corpo.add_child(mt)
 	if modello == "chiatta":
 		corpo.scale = Vector3(1.9, 1.2, 1.6)  # la chiatta: una grossa barca da dieci posti
 	n.add_child(corpo)
@@ -1342,6 +1559,14 @@ func _aggiorna_mezzi() -> void:
 		var et: Label3D = n.get_node("etichetta")
 		et.text = str(veic.nome).to_upper() + (" FUORI USO" if fuori_uso else "")
 		et.visible = fuori_uso or sopra == str(veic.hex)
+		if str(veic.modello) in ["panzer4", "jagdpanther", "eboat"] and str(veic.lato) == "de":
+			# carro o motosilurante di una carta: si mostra la lettera e il numero dell'equipaggio
+			for oid in veic.occupanti:
+				var ox: Dictionary = p.s.unita.get(str(oid), {})
+				if not ox.is_empty() and str(ox.get("lettera", "")) != "":
+					et.text = "%s %d%s" % [str(ox.lettera), int(ox.get("num", 0)) % 100, " FUORI USO" if fuori_uso else ""]
+					et.visible = true
+					break
 	for vid in _mezzi.keys():
 		if not visti.has(vid):
 			if is_instance_valid(_mezzi[vid]):

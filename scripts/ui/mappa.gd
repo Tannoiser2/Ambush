@@ -359,7 +359,7 @@ func _draw() -> void:
 			_marcatore(h, "PONTE DISTRUTTO", Vector2(0.0, -0.62), Color("7a2e22"))
 		elif s.modifiche[h] == "cover":
 			# Purple Heart 15: letto del fiume asciutto (copertura).
-			draw_colored_polygon(poligono(h, 0.96), Color(0.55, 0.43, 0.27, 0.30))
+			draw_colored_polygon(poligono(h, 0.96), Color(0.74, 0.62, 0.44, 0.62))
 		elif s.modifiche[h] == "water":
 			# Purple Heart 15: esagono allagato dalla piena.
 			draw_colored_polygon(poligono(h, 0.96), Color(0.22, 0.48, 0.85, 0.50))
