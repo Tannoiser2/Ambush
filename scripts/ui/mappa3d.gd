@@ -573,16 +573,24 @@ func _aggiorna_oggetti() -> void:
 		var bk: Dictionary = p.s.bunker[h]
 		var c := centro_px(str(h))
 		var b3 := Vector3(c.x * K, altezza_px(c), c.y * K)
+		var mb := MeshInstance3D.new()
+		mb.mesh = _mesh_mezzo("bunker")
+		mb.material_override = _materiale_dipinto("bunker", Color(0.35, 0.33, 0.3) if bk.get("distrutto", false) else Color.WHITE)
+		mb.position = b3
+		_dinamici.add_child(mb)
 		if bk.get("distrutto", false):
 			_macerie(_dinamici, c, 9, cemento)
-		else:
-			_scatola(_dinamici, b3 + Vector3(0, 0.22, 0), Vector3(0.95, 0.44, 0.95), 0.0, cemento)
-			_scatola(_dinamici, b3 + Vector3(0, 0.3, 0), Vector3(0.97, 0.05, 0.97), 0.0, _materiale(Color("2d2f2b")))
 	# Crateri e macerie
 	for h in p.s.get("modifiche", {}):
 		var tipo := str(p.s.modifiche[h])
 		if tipo == "rubble":
 			_macerie(_dinamici, centro_px(str(h)), 14, pietra)
+		elif tipo == "crater":
+			var mc := MeshInstance3D.new()
+			mc.mesh = _mesh_mezzo("cratere")
+			mc.material_override = _materiale_dipinto("cratere")
+			mc.position = punto3d(centro_px(str(h)), -0.02)
+			_dinamici.add_child(mc)
 	# Rocce degli esagoni accidentati
 	for h in E.tutti():
 		if t.tipo(h) == "rough":
@@ -1228,26 +1236,14 @@ func _veicolo_di(x: Dictionary) -> Dictionary:
 
 func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
-	var colore := Color("5f6339") if lato == "us" else Color("6c7068")
-	if modello in ["panzer4", "jagdpanther"]:
-		colore = Color("7a7259")   # giallo scuro tedesco di fine guerra
-	if modello == "canoa":
-		colore = Color("6b5236")
-	if modello == "auto_comando":
-		colore = Color("3c3f3d")
-	var mat := _materiale(colore, 0.8)
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	corpo.material_override = mat
+	var nome_mesh := "kubelwagen" if modello == "auto_comando" else modello
+	corpo.mesh = _mesh_mezzo(nome_mesh)
+	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else Color.WHITE)
+	if modello == "auto_comando":
+		corpo.scale = Vector3(1.08, 1.05, 1.12)
 	n.add_child(corpo)
-	match modello:
-		"panzer4":
-			_scafo_panzer4(n, mat)
-		"auto_comando":
-			corpo.mesh = _mesh_mezzo("kubelwagen")
-			corpo.scale = Vector3(1.1, 1.05, 1.15)
-		_:
-			corpo.mesh = _mesh_mezzo(modello)
 	var et := Label3D.new()
 	et.name = "etichetta"
 	et.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -1266,30 +1262,18 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	_mezzi_nodo.add_child(n)
 	return n
 
-## Panzer IV: scafo con cingoli e gonne laterali, torretta dal kit, cannone lungo.
-func _scafo_panzer4(n: Node3D, mat: Material) -> void:
-	var scuro := _materiale(Color("2e2c26"), 0.9)
-	_scatola(n, Vector3(0, 0.2, 0), Vector3(0.62, 0.22, 1.35), 0.0, mat)
-	_scatola(n, Vector3(0, 0.36, -0.05), Vector3(0.52, 0.12, 1.05), 0.0, mat)
-	for lato: float in [-1.0, 1.0]:
-		_scatola(n, Vector3(lato * 0.33, 0.12, 0), Vector3(0.14, 0.2, 1.42), 0.0, scuro)
-		_scatola(n, Vector3(lato * 0.41, 0.27, -0.02), Vector3(0.02, 0.2, 1.1), 0.0, mat)
-	var tor := MeshInstance3D.new()
-	tor.mesh = _mesh_mezzo("pz4_torretta")
-	tor.material_override = mat
-	tor.position = Vector3(0, 0.42, -0.08)
-	n.add_child(tor)
-	var can := CylinderMesh.new()
-	can.top_radius = 0.025
-	can.bottom_radius = 0.03
-	can.height = 0.8
-	can.radial_segments = 8
-	var mc := MeshInstance3D.new()
-	mc.mesh = can
-	mc.material_override = mat
-	mc.rotation.x = PI / 2.0
-	mc.position = Vector3(0, 0.55, 0.55)
-	n.add_child(mc)
+## Materiale con la tessitura dipinta del modulo TTS (assets/mezzi3d/<nome>.jpg).
+var _mat_dipinti: Dictionary = {}
+
+func _materiale_dipinto(nome: String, tinta := Color.WHITE) -> StandardMaterial3D:
+	var k := nome + tinta.to_html()
+	if _mat_dipinti.has(k):
+		return _mat_dipinti[k]
+	var m := _materiale(tinta, 0.8)
+	if ResourceLoader.exists(DIR_MEZZI + nome + ".jpg"):
+		m.albedo_texture = load(DIR_MEZZI + nome + ".jpg")
+	_mat_dipinti[k] = m
+	return m
 
 func _angolo_fronte(h: String, fronte: int) -> float:
 	var v := E.vicino(h, clampi(fronte, 0, 5))
@@ -1327,7 +1311,8 @@ func _aggiorna_mezzi() -> void:
 		n.rotation.y = _angolo_fronte(str(veic.hex), int(veic.get("fronte", 0)))
 		var corpo: MeshInstance3D = n.get_node("corpo")
 		var fuori_uso := str(veic.stato) != "attivo"
-		corpo.material_override = _materiale(Color("2b2824"), 0.95) if fuori_uso else corpo.material_override
+		if fuori_uso:
+			corpo.material_override = _materiale_dipinto(("kubelwagen" if str(veic.modello) == "auto_comando" else str(veic.modello)), Color(0.3, 0.28, 0.26))
 		var et: Label3D = n.get_node("etichetta")
 		et.text = str(veic.nome).to_upper() + (" FUORI USO" if fuori_uso else "")
 		et.visible = fuori_uso or sopra == str(veic.hex)
@@ -1353,7 +1338,7 @@ func _carro_unita(id: String, x: Dictionary, pos: Vector2) -> void:
 	et.text = "%s %d%s" % [str(x.get("lettera", "")), int(x.get("num", 0)) % 100, " DISTRUTTO" if morto else ""]
 	et.visible = true
 	if morto:
-		(n.get_node("corpo") as MeshInstance3D).material_override = _materiale(Color("2b2824"), 0.95)
+		(n.get_node("corpo") as MeshInstance3D).material_override = _materiale_dipinto(modello, Color(0.3, 0.28, 0.26))
 
 # ================================================================== paracadute (missione 4)
 var _mesh_vela: Mesh

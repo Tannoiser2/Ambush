@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c7ruyydjt5k2f"
-path="res://.godot/imported/pz4_torretta.glb-8bfe781ff1b6d4ae43c4a405c8b67b0e.scn"
+uid="uid://bdcetwjewrsrq"
+path="res://.godot/imported/bunker.glb-a4d5aee59ddff52aac7cb3f83012ca06.scn"
 
 [deps]
 
-source_file="res://assets/mezzi3d/pz4_torretta.glb"
-dest_files=["res://.godot/imported/pz4_torretta.glb-8bfe781ff1b6d4ae43c4a405c8b67b0e.scn"]
+source_file="res://assets/mezzi3d/bunker.glb"
+dest_files=["res://.godot/imported/bunker.glb-a4d5aee59ddff52aac7cb3f83012ca06.scn"]
 
 [params]
 
