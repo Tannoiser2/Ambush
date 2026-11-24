@@ -2729,7 +2729,7 @@ func _mostra_grafica() -> void:
 	vb.add_theme_constant_override("separation", 10)
 	_intestazione(vb, "GRAFICA", "Scegli l’aspetto della mappa e delle pedine: le regole non cambiano")
 	var voci := [
-		["MAPPA", "mappa", "Originale del 1983", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa (A o B): stessi esagoni, stesso terreno."],
+		["MAPPA", "mappa", "Originale", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa, per tutte le missioni (anche Purple Heart, Move Out e Silver Star): stessi esagoni, stesso terreno."],
 		["PEDINE", "pedine", "Originali", "Ridisegnate", "Le pedine ridisegnate mostrano il soldato in piedi oppure accovacciato secondo la postura."],
 		["COMANDO", "comando", "Nascosto", "Mostrato", "Mostra sulla mappa chi è in comando e gli esagoni entro due dal comandante."],
 	]

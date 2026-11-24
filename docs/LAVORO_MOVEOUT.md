@@ -374,3 +374,9 @@ Ordine scelto: M11, M10, M12, M9.
   Compatibility), glow leggero, niente bianchi bruciati.
 - Scatti: `tests/visivi/effetti3d.gd`.
 
+## Mappe realistiche di Silver Star
+- `tools/costruisci_mappe_ss.py --realistiche <FH> <FG>`: i ridisegni moderni di F+H e F+G (`tools/mappe_ss/realistiche/`,
+  stessa inquadratura delle scansioni TTS) portati nel reticolo del gioco; F e G+H si compongono come le mappe originali.
+  Ora tutte le mappe del gioco (A, B, C, A+D, B+E, F, F+H, F+G, G+H) hanno la versione realistica (menu «Grafica»).
+- Scatti: `tests/visivi/realistiche.gd`.
+

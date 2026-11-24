@@ -68,6 +68,24 @@ def immagini(f, fh, fg):
         print("scritta", f"mappa_{k}.jpg")
 
 
+def realistiche(fh_real, fg_real):
+    """Versioni realistiche (ridisegni moderni, 1318x1193, stessa inquadratura delle scansioni TTS «F w/G» e «F w/H»):
+    si portano alla risoluzione della scansione (2900x2625) e poi nel reticolo del gioco; F e G+H si compongono come
+    per le mappe originali. Uso: costruisci_mappe_ss.py --realistiche <FH realistica.png> <FG realistica.png>"""
+    out = {}
+    for k, src in (("fh", fh_real), ("fg", fg_real)):
+        im = Image.open(src).convert("RGB").resize((2900, 2625), Image.LANCZOS)
+        out[k] = porta(im, GRIGLIE[k])
+    m = maschera_h()
+    fh = np.asarray(out["fh"]); fg = np.asarray(out["fg"])
+    f = fh.copy(); f[m] = fg[m]          # F: dalla FG la parte di F (in alto), dalla FH la parte di F (in basso)
+    gh = fg.copy(); gh[m] = fh[m]        # G+H: H (il lago) in alto dalla FH, G in basso dalla FG
+    out["f"] = Image.fromarray(f); out["gh"] = Image.fromarray(gh)
+    for k, im in out.items():
+        im.save(R / "assets/maps" / f"mappa_{k}_realistica.jpg", quality=88)
+        print("scritta", f"mappa_{k}_realistica.jpg")
+
+
 NOTE = {"f": "Mappa F (Silver Star)", "fh": "Mappa F con mezza mappa H (Silver Star)",
         "fg": "Mappa F con mezza mappa G (Silver Star)", "gh": "Mezze mappe G e H (Silver Star)"}
 
@@ -133,6 +151,9 @@ def vegetazione():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 4 and sys.argv[1] == "--realistiche":
+        realistiche(sys.argv[2], sys.argv[3])
+        sys.exit(0)
     if len(sys.argv) == 4:
         immagini(*sys.argv[1:4])
     dati()
