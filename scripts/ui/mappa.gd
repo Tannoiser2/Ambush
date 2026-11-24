@@ -450,7 +450,7 @@ func _draw() -> void:
 				"deposito": "CARBURANTE", "kubelwagen": "KÜBELWAGEN", "avviso_mine": "MINEN!", "rifiuti": "RIFIUTI", "radar": "RADAR", "sherman": "SHERMAN DISTRUTTO"}.get(nome_p, nome_p.to_upper()), Vector2(0.0, -0.62), Color("5b4a33"))
 	# Veicoli
 	for veic in ({} if senza_pedine else s.get("veicoli", {})).values():
-		if str(veic.hex) != "":
+		if str(veic.hex) != "" and not veic.get("fuori_mappa_ph", false):
 			var col := Color("4a5d32") if veic.lato == "us" else Color("5d5f63")
 			if veic.stato != "attivo":
 				col = Color("3a3a3a")
@@ -488,6 +488,8 @@ func _draw() -> void:
 		if mobili.has(id):
 			continue
 		var d: Dictionary = stati[id]
+		if d.get("fuori_mappa_ph", false):
+			continue  # Missione 18: carri in attesa fuori mappa
 		if not per_hex.has(d.hex):
 			per_hex[d.hex] = []
 		per_hex[d.hex].append(d)

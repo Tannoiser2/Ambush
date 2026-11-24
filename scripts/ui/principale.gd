@@ -674,11 +674,18 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 		stati.add_child(_chip("paracadute %d" % int(a.paracadute), Color("5a4f7a")))
 	if int(a.get("documenti", 0)) > 0:
 		stati.add_child(_chip("documenti", Color("7a6226")))
-	if a.stato == "attivo" or a.stato == "fuori":
+	if a.get("carro_us", false):
+		if a.get("ia_sherman", false):
+			stati.add_child(_chip("non ai tuoi ordini", Color("5a4f7a")))
+		if a.stato == "fuori" and a.has("ingresso_18"):
+			stati.add_child(_chip("entra da %s" % str(a.ingresso_18), Color("50604a")))
+	elif a.stato == "attivo" or a.stato == "fuori":
 		stati.add_child(_chip(T.NOMI_POSTURA[a.postura], Color("6b6248")))
+	if a.get("in_jagd", false):
+		stati.add_child(_chip("nel Jagdpanther", Color("50604a")))
 	if a.ferito and a.stato == "attivo":
 		stati.add_child(_chip("FERITO", Tema.ROSSO))
-	if a.stato == "attivo" and a.hex != "" and not riproducendo and not a.get("panico", false) and not a.get("senza_carta", false):
+	if a.stato == "attivo" and a.hex != "" and not riproducendo and not a.get("panico", false) and not a.get("senza_carta", false) and not a.get("carro_us", false):
 		var vivo := p.u(str(a.id))
 		if not vivo.is_empty() and vivo.stato == "attivo":
 			if p.in_comando(vivo):
@@ -791,10 +798,21 @@ func _aggiorna_azioni() -> void:
 		# Si arriva qui solo riprendendo una partita salvata a metà di una sequenza.
 		var testi := {"inizio_round": ["IL NEMICO È IN VISTA", "Sta per iniziare il prossimo Round: consapevolezza, evento, iniziativa e poi i turni."],
 			"azioni_tedesche": ["I TEDESCHI HANNO AGITO", "Il Round prosegue con la casella successiva della pista."],
+			"azioni_sherman": ["GLI SHERMAN HANNO AGITO", "Gli Sherman di rinforzo non sono ai tuoi ordini: hanno seguito i loro paragrafi. Ora tocca ai tuoi soldati."],
 			"fine_round": ["FINE DEL ROUND", "Si chiude il Round e si controlla se restano tedeschi attivi."]}
 		var tx: Array = testi.get(s.pausa, ["IN PAUSA", ""])
 		titolo_azioni.text = tx[0]
 		aiuto_azioni.text = tx[1]
+		if s.pausa == "inizio_round" and p.ph.m18.decisione_pendente():
+			titolo_azioni.text = "LA DECISIONE"
+			aiuto_azioni.text = "Si può respingere l’assalto tedesco o la squadra deve ripiegare sulle linee americane a ovest? Decidi prima di cominciare il Round."
+			_gruppo("DECISIONE")
+			var t1 := _b("Tieni la posizione (992)", func(): _esito(p.esegui_scelta("992")), "Condizione 5: 36 PV per vincere; 1 PV per ogni americano attivo a est del fiume alla fine.")
+			t1.custom_minimum_size = Vector2(240, 44)
+			var t2 := _b("Ripiega verso ovest (994)", func(): _esito(p.esegui_scelta("994")), "Condizione 6: 30 PV per vincere; 2 PV per ogni americano che esce dal bordo ovest (A19–Y19).")
+			t2.custom_minimum_size = Vector2(240, 44)
+			_azioni_missione()
+			return
 		var c := _b("Prosegui", _prosegui, "Spazio o Invio")
 		c.custom_minimum_size = Vector2(190, 44)
 		_azioni_missione()
@@ -924,7 +942,7 @@ func _azioni_schieramento() -> void:
 
 func _aggiungi_prossimo() -> void:
 	for x in p.americani():
-		if x.stato == "fuori" and not (x.id in selezione):
+		if x.stato == "fuori" and not (x.id in selezione) and not x.get("carro_us", false):
 			selezione.append(x.id)
 			break
 	_aggiorna_tutto()
@@ -951,7 +969,7 @@ func _azioni_operazioni(a: Dictionary) -> void:
 			else:
 				_b("Tutti quelli nell’esagono (%d)" % compagni.size(), func(): selezione = compagni.map(func(x): return x.id); _aggiorna_tutto(), "Muovi insieme i soldati nello stesso esagono e nella stessa postura")
 	else:
-		var fuori: Array = p.americani().filter(func(x): return x.stato == "fuori")
+		var fuori: Array = p.americani().filter(func(x): return x.stato == "fuori" and not x.get("carro_us", false))
 		if fuori.size() > 1:
 			_gruppo("GRUPPO")
 			if selezione.size() > 1:
@@ -1225,10 +1243,42 @@ func _azioni_missione() -> void:
 				_b("Entra nella galleria", func(): _esito(p.mo.galleria(a.id, true)), "Sotto il ponte: in galleria i tedeschi non ti vedono e si leggono solo i paragrafi T.")
 			if galleria_no:
 				_b("Sali dalla botola" if a.hex != "G13" else "Esci dalla galleria", func(): _esito(p.mo.galleria(a.id, false)))
+	_azioni_missione_18()
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:
 		_gruppo("MISSIONE")
 		var b := _b("Missione compiuta: termina", func(): _conferma("Terminare la missione?", str(p.missione.get("testo_fine", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.")), func(): _esito(p.termina_missione("obiettivo"))))
 		b.add_theme_color_override("font_color", Tema.OTTONE)
+
+## Missione 18: ingresso degli Sherman di rinforzo, Jagdpanther da servire.
+func _azioni_missione_18() -> void:
+	if not p.ph.m18.attiva() or not (p.s.fase in ["operazioni", "round"]):
+		return
+	var da_piazzare: Array = p.ph.m18.sherman_da_piazzare()
+	if not da_piazzare.is_empty():
+		_gruppo("SHERMAN")
+		for id in da_piazzare:
+			var sid: String = id
+			_b("Sherman %s: entra da %s (cambia)" % [sid, str(p.u(sid).get("ingresso_18", "K19"))], func(): p.ph.m18.cambia_ingresso(sid); _aggiorna_tutto(),
+				"Gli Sherman entrano da soli al loro primo turno, accanto a B19, F19, K19, N19 o R19: scegli tu dove.")
+	if selezione.is_empty():
+		return
+	var a: Dictionary = p.u(selezione[0])
+	if a.is_empty() or p.puo_agire(a) != "":
+		return
+	var j: Dictionary = p.ph.m18.jagd()
+	if j.is_empty() or a.hex != str(j.hex):
+		return
+	_gruppo("JAGDPANTHER")
+	if p.ph.m18.puo_salire_jagd(a):
+		_b("Sali sul Jagdpanther (%d/2)" % j.equipaggio.size(), func(): _esito(p.jagd_sali(a.id)), "Con due soldati a bordo si usano il cannone (4 colpi) e la mitragliatrice di scafo, verso est, con abilità −1. Il Jagdpanther non è mai un bersaglio.")
+	elif a.get("in_jagd", false):
+		var can: Dictionary = {}
+		for w in a.armi:
+			if w.get("jagd", false) and w.tipo == "cannone":
+				can = w
+		if not can.is_empty() and not can.preparata and int(a.munizioni.get("cannone", 0)) > 0:
+			_b("Carica il cannone (%d colpi)" % int(a.munizioni.get("cannone", 0)), func(): _esito(p.prepara(a.id, "cannone")), "Un’azione: poi il cannone spara una volta.")
+		_b("Scendi dal Jagdpanther", func(): _esito(p.jagd_scendi(a.id)))
 
 func _imposta_modo(a: Dictionary, m: String) -> void:
 	modo = m if modo != m else ""
@@ -1276,7 +1326,7 @@ func _clic_mappa(h: String, _tasto: int) -> void:
 		if h in p.esagoni_ingresso() and not selezione.is_empty():
 			p.schiera(selezione, h)
 			# pronto il prossimo soldato ancora fuori
-			var fuori: Array = p.americani().filter(func(x): return x.stato == "fuori")
+			var fuori: Array = p.americani().filter(func(x): return x.stato == "fuori" and not x.get("carro_us", false))
 			if not fuori.is_empty():
 				selezione = [fuori[0].id]
 			_salva()

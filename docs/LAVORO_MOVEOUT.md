@@ -174,3 +174,31 @@ Ordine scelto: M11, M10, M12, M9.
 - «Al prossimo Round» (al_prossimo_round): l’arrivo del secondo gruppo; «secondo turno del Round 1» è approssimato col Round 2.
 - Non gestiti: camion della colonna (717, US 05), soldato J della carta US 04 (501), regola «in allerta», entrata nei
   depositi in fiamme (414.2), seconda jeep.
+
+## Missione 18 «Il mattino dopo» (mappe B + E, in alto è est)
+- Avvio (regola missione_18, scripts/motore/missione18_ph.gd = ph.m18): squadra in K15, un soldato ferito a caso, radio
+  portata dal sergente A (radio_portata_ph), munizioni consumate (ph.munizioni_consumate), macerie B11–P18, guadi I11, O10,
+  V11 (s.guadi; regola guadi_veicoli: i mezzi li passano con 3 PM; il fiume senza guado ferma i mezzi). «A est del fiume» =
+  righe sopra il fiume (regola est_in_alto, vale anche per 909/914).
+- Condizione 1: 507 fa partire i Round senza tedeschi (tutti consapevoli) e al Round 2, al posto degli eventi, il 512: Panzer
+  57–60 fuori mappa accanto ad A5 (fuori_mappa_ph: non si vedono e non vedono; entrano al primo turno pagando l’esagono,
+  veic.mp_ingresso). 699/705 → 714/719/724/730 (carri in mappa, tutti consapevoli). 642/691: Kübelwagen distrutta con
+  l’ufficiale (653, +2 PV; scelte: sigaretta 663 → PC → 677 Luger / 673 esplosione; rifiuto 677; resa = fine). 642 sfonda
+  il muro D16/E17 (terreno.muri_sfondati). 574/621 → 585 → 599 Jagdpanther da servire: due soldati salgono («Sali sul
+  Jagdpanther»), cannone (4 colpi, scarico, si carica con «Carica il cannone») e mitragliatrice di scafo con abilità −1,
+  solo verso est (60°), servono due serventi; il Jagdpanther non è mai un bersaglio (vede_unita). s8: 26 paragrafi
+  (tools/caduti_ph18.json) con semicingolato, tedeschi caduti da perquisire (c18: fucile + caricatore, granata 0–4) e il
+  310; s.da_leggere accetta più paragrafi separati da virgola.
+- Condizioni 2–4: 749/583/703/755 (granatieri 19, 25–27, 33, 34 con Panzerfaust: 806/819/831/836/837/841, 843–854 secondo
+  27 e 34, 861 reazione A che recupera l’arma di un caduto in tre turni, 882–892 reazione B per Condizione); 762 tre Sherman
+  (carte US 01–03 in missione.carri_us) fuori mappa accanto a B19/F19/K19/N19/R19 (ingresso scelto dal giocatore con il
+  pulsante «Sherman AA: entra da …»), guidati dai paragrafi 939–969 (turni_sherman in _flusso, all’inizio della casella
+  americana; numero d’azione proprio) finché il 318 (312 con la radio presidiata) non li mette ai tuoi ordini; i Round
+  restano obbligati finché uno Sherman guidato è in gioco. 981: un’arma tedesca finisce le munizioni (reazione A se non ne
+  restano, il Panzerfaust no). Panzer IV: 909/914/917/921/932/934/935/937.
+- Decisione (306/990 dopo 301/986): all’inizio del Round seguente, al posto degli eventi, la pausa di inizio Round
+  mostra «Tieni la posizione (992)» e «Ripiega verso ovest (994)» e non si prosegue senza scegliere. 992: Condizione 5,
+  36 PV, +1 PV per americano (soldato o mezzo) a est del fiume, fine senza tedeschi attivi, niente perdite per gli
+  incapacitati. 994: Condizione 6, 30 PV, uscita dal bordo ovest A19–Y19 (+2 PV, −2 per tedesco), fine senza americani.
+- Test: tests/missione18.gd, simula 18, tests/visivi/missione18_ui.gd.
+

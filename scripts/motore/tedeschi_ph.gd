@@ -1,5 +1,6 @@
 extends RefCounted
 const E = preload("res://scripts/motore/esagoni.gd")
+const T = preload("res://scripts/motore/tabelle.gd")
 ## Paragrafi d’azione dei tedeschi propri di Purple Heart (quelli identici al gioco base usano tedeschi.gd).
 
 var t  # tedeschi.gd
@@ -15,6 +16,26 @@ func _ph():
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	match n:
+		806, 819, 831, 836, 837, 841:
+			# Purple Heart (granatieri corazzati della Missione 18): prima il Panzerfaust contro un mezzo americano entro 3.
+			if not _panzerfaust(g):
+				t.esegui({806: 864, 819: 865, 831: 866, 836: 867, 837: 858, 841: 834}[n])
+		843, 850, 853, 854:
+			var senza_capi: bool = not _attivo_num(27) and not _attivo_num(34)
+			t.esegui({843: [813, 806], 850: [817, 836], 853: [830, 831], 854: [820, 829]}[n][0 if senza_capi else 1])
+		861:
+			_reazione_a_18(g)
+		882, 885, 888, 892:
+			var c: int = int(t.p.s.condizione)
+			if c <= 4:
+				t.esegui({882: 801, 885: 802, 888: 869, 892: 801}[n])
+			else:
+				g.reazione = ""
+				t.p._log("tedesco", "Il %s toglie la reazione speciale B." % t.p.nome(g))
+				if c == 5:
+					t.esegui({882: 843, 885: 850, 888: 853, 892: 854}[n])
+				else:
+					t.esegui({882: 806, 885: 819, 888: 831, 892: 836}[n])
 		341, 343:
 			if _attivo_num(52):
 				t.esegui(801 if n == 341 else 825)
@@ -473,7 +494,8 @@ func _cane(g: Dictionary) -> void:
 
 # ------------------------------------------------------------------ carri e motosiluranti
 const CARRO_PH := [826, 900, 901, 902, 903, 905, 906, 907, 908, 909, 910, 911, 921, 923, 925, 927, 929,
-	733, 736, 747, 758, 763, 776, 847, 849, 873, 874]
+	733, 736, 747, 758, 763, 776, 847, 849, 873, 874,
+	914, 917, 932, 934, 935, 937, 939, 943, 944, 946, 949, 951, 953, 956, 958, 965, 967, 969]
 
 func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
 	if not (n in CARRO_PH):
@@ -584,6 +606,82 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
 			vv._guida(veic, false, g)
 		849:
 			vv._guida(veic, true, g)
+		914:
+			if _est_del_fiume(veic.hex) and not veic.get("chiuso", false):
+				esegui_carro(917, g, veic)
+			else:
+				esegui_carro(921, g, veic)
+		917:
+			vv._guida(veic, true, g)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "coax", false, 0)
+		932:
+			if not b.is_empty():
+				if veic.get("chiuso", false):
+					esegui_carro(934, g, veic)
+				else:
+					vv._apri_chiudi(veic, true)
+			elif not veic.get("chiuso", false):
+				esegui_carro(935, g, veic)
+			else:
+				vv._apri_chiudi(veic, false)
+		934:
+			vv._mg(g, veic, "scafo", false, 0)
+			vv._cannone_o_carica(g, veic)
+		935, 967:
+			vv._guida(veic, true, g)
+		937:
+			if not b.is_empty():
+				t.p._log("danno", "L’equipaggio del %s si arrende." % veic.nome)
+				vv.disabilita(veic, "equipaggio arreso")
+				g.stato = "arreso"
+		# ---- Sherman della Missione 18 (carte americane 01–03), finché non passano ai tuoi ordini
+		939:
+			if b.size() >= 3:
+				_chiudi_o(veic, g, 943)
+			elif not b.is_empty():
+				_chiudi_o(veic, g, 944)
+			elif not veic.get("chiuso", false):
+				esegui_carro(944, g, veic)
+			else:
+				vv._apri_chiudi(veic, false)
+		946, 956:
+			var molti := 949 if n == 946 else 958
+			var uno := 951 if n == 946 else 965
+			var nessuno := 953 if n == 946 else 967
+			if b.size() >= 2:
+				_chiudi_o(veic, g, molti)
+			elif b.size() == 1:
+				_chiudi_o(veic, g, uno)
+			elif not veic.get("chiuso", false):
+				esegui_carro(nessuno, g, veic)
+			else:
+				vv._apri_chiudi(veic, false)
+		943, 949:
+			vv._mg(g, veic, "scafo", true, 0)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "coax", true, 1)
+		944:
+			vv._guida(veic, false, g)
+			vv._cannone_o_carica(g, veic)
+			if veic.cannone_pronto and not vv._sparato_cannone:
+				vv._mg(g, veic, "coax", false, 1)
+			vv._mg(g, veic, "scafo", false, 0)
+		951, 965:
+			vv._mg(g, veic, "scafo", false, 0)
+			vv._cannone_o_carica(g, veic)
+		953:
+			vv._guida(veic, true, g)
+			vv._cannone_o_carica(g, veic)
+			vv._mg(g, veic, "coax", false, 1)
+			vv._mg(g, veic, "coax", false, 0)
+		958:
+			vv._mg(g, veic, "scafo", true, 0)
+			vv._cannone_o_carica(g, veic)
+		969:
+			vv._mg(g, veic, "coax", true, 0)
 		873, 874:
 			t.p._log("danno", "L’equipaggio della %s si arrende." % veic.nome)
 			vv.disabilita(veic, "equipaggio arreso")
@@ -591,6 +689,91 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
 		_:
 			return false
 	return true
+
+## Chiude i portelli; se sono già chiusi esegue il paragrafo indicato.
+func _chiudi_o(veic: Dictionary, g: Dictionary, poi: int) -> void:
+	if veic.get("chiuso", false):
+		esegui_carro(poi, g, veic)
+	else:
+		t.p.veicoli._apri_chiudi(veic, true)
+
+## Panzerfaust (Purple Heart 18): se vede un mezzo americano attivo entro 3 esagoni si accovaccia e lo spara al più vicino.
+func _panzerfaust(g: Dictionary) -> bool:
+	var armi: Array = g.armi.filter(func(w): return w.tipo == "pzf" and not w.get("rotta", false))
+	if armi.is_empty():
+		return false
+	var mezzi: Array = []
+	for a in t.p.americani_attivi_in_mappa():
+		var v: Dictionary = t.p.veicoli.di(a)
+		if (a.get("carro_us", false) or t.p.veicoli.attivo(v)) and not a.get("in_jagd", false) and E.distanza(a.hex, g.hex) <= 3 and t.p.vede_unita(g, a):
+			if not mezzi.any(func(x): return t.p.veicoli.di(x).get("id", "") == v.get("id", "-")):
+				mezzi.append(a)
+	if mezzi.is_empty():
+		return false
+	mezzi.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
+	var b: Dictionary = mezzi[0]
+	t._accovacciati()
+	var base: int = T.base_per_distanza("pzf", E.distanza(g.hex, b.hex))
+	if base < 0:
+		return false
+	t.p._log("tedesco", "Il %s spara il Panzerfaust contro %s." % [t.p.nome(g), t.p.veicoli.nome_art(t.p.veicoli.di(b)) if not t.p.veicoli.di(b).is_empty() else t.p.nome(b)])
+	t.p.risolvi_tiro(g, armi[0], b, true, maxi(0, base))
+	g.armi.erase(armi[0])
+	return true
+
+## 861, reazione speciale A (Missione 18): il tedesco senza munizioni recupera l’arma di un caduto entro 2 esagoni.
+func _reazione_a_18(g: Dictionary) -> void:
+	var rec: Dictionary = g.get("recupero_18", {})
+	if not rec.is_empty():
+		if int(rec.fase) == 2:
+			t._accovacciati()
+			var presa := _prendi_arma_da(g, str(rec.hex))
+			if presa:
+				rec.fase = 3
+			else:
+				g.erase("recupero_18")
+			return
+		if int(rec.fase) == 3:
+			g.erase("recupero_18")
+			t._alzati()
+			t._corri_verso(str(rec.ritorno))
+			t._prono_se_libero()
+			t.p.ph.m18.arma_trovata(g)
+			return
+	if t.bersagli(g).is_empty():
+		var vittima := ""
+		for x in t.p.s.unita.values():
+			if x.hex == "" or not (x.stato in ["morto", "incapacitato"]) or E.distanza(x.hex, g.hex) > 2:
+				continue
+			if x.armi.any(func(w): return not w.get("rotta", false) and T.ARMI.get(w.tipo, {}).has("gittate") and w.tipo != "pzf"):
+				vittima = x.hex
+				break
+		if vittima != "":
+			var da: String = g.hex
+			t._alzati()
+			t._corri_verso(vittima)
+			t._prono()
+			if g.hex == vittima:
+				g.recupero_18 = {"fase": 2, "hex": vittima, "ritorno": da}
+				t.p._log("tedesco", "Il %s raggiunge il caduto in %s per prenderne l’arma." % [t.p.nome(g), vittima])
+				return
+	if _panzerfaust(g):
+		return
+	t.esegui(868)
+
+func _prendi_arma_da(g: Dictionary, h: String) -> bool:
+	for x in t.p.s.unita.values():
+		if x.hex != h or not (x.stato in ["morto", "incapacitato"]):
+			continue
+		for a in x.armi:
+			if not a.get("rotta", false) and T.ARMI.get(a.tipo, {}).has("gittate") and a.tipo != "pzf":
+				x.armi.erase(a)
+				a.catturata = x.lato != "de"
+				a.preparata = true
+				g.armi.append(a)
+				t.p._log("tedesco", "Il %s prende l’arma (%s) di %s." % [t.p.nome(g), T.ARMI[a.tipo].nome.to_lower(), t.p.nome(x)])
+				return true
+	return false
 
 func _attivo_num(num: int) -> bool:
 	var x: Dictionary = t.p.u("g%d" % num)
@@ -689,7 +872,10 @@ func _bersaglio_entro(g: Dictionary, da: int, a: int) -> bool:
 	return false
 
 ## Mappa C (in alto è ovest): a est del fiume = riga più alta del ruscello nella stessa colonna.
+## Missione 18 (in alto è est): righe sopra il fiume.
 func _est_del_fiume(h: String) -> bool:
+	if bool(t.p.regola("est_in_alto", false)):
+		return t.p.ph.m18.est_del_fiume(h)
 	var righe: Array = []
 	for x in t.p.terreno.esagoni:
 		if E.colonna(x) == E.colonna(h) and t.p.terreno.esagoni[x].get("t", "") == "stream":

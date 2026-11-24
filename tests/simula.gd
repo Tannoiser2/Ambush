@@ -114,6 +114,13 @@ func gioca(seme: int) -> void:
 	var ultimo_n := -1
 	while p.s.fase != "fine" and passi < 2500:
 		passi += 1
+		if p.ph.m18.decisione_pendente() and rng.randf() < 0.5:
+			p.esegui_scelta(["992", "994"][rng.randi_range(0, 1)])
+			continue
+		if not p.s.get("scelte", {}).is_empty() and rng.randf() < 0.05:
+			var ks: Array = p.s.scelte.keys()
+			p.esegui_scelta(str(ks[rng.randi_range(0, ks.size() - 1)]))
+			continue
 		if p.s.pausa != "":
 			p.prosegui()
 			continue

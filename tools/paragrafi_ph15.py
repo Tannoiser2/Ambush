@@ -85,8 +85,6 @@ battaglia("459", "J7", "I8", "H6", "I6")
 battaglia("469", "F6", "G6", "G6", "F5")
 battaglia("477", "C5", "D4", "D4", "C4")
 battaglia("482", "A4", "B3", "B4", "A3")
-par("599", "Il soldato vede che il cannone e la mitragliatrice di scafo del Jagdpanther sono intatti (in questa versione il relitto "
-           "non si può usare).", [])
 
 # ------------------------------------------------------------------ la collina, la diga e le chiuse
 par("491", "• Se s8 non è avvenuto, vedi 498.\n• Se s8 è avvenuto, vedi 505.", [if_(NOT(S(8)), [see("498")], [see("505")])])

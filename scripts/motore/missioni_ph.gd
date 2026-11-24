@@ -6,9 +6,11 @@ const E = preload("res://scripts/motore/esagoni.gd")
 const T = preload("res://scripts/motore/tabelle.gd")
 
 var p  # Partita
+var m18  # Missione 18 «Il mattino dopo»
 
 func _init(partita) -> void:
 	p = partita
+	m18 = preload("res://scripts/motore/missione18_ph.gd").new(partita, self)
 
 func attiva() -> bool:
 	return str(p.missione.get("libro", "")) == "ph"
@@ -25,7 +27,17 @@ func _st() -> Dictionary:
 func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva():
 		return false
+	if str(o.op).begins_with("m18_"):
+		return m18.op(o, ctx)
 	match str(o.op):
+		"relitto_qui":
+			_relitto(str(ctx.get("hex", "")), str(o.nome))
+		"muro_sfondato":
+			if not p.s.has("muri_sfondati"):
+				p.s.muri_sfondati = []
+			p.s.muri_sfondati.append([str(o.a), str(o.b)])
+			p.terreno.muri_sfondati = p.s.muri_sfondati
+			p._log("info", "Il muro tra %s e %s è sfondato: si attraversa come un lato libero." % [str(o.a), str(o.b)])
 		"imbarca":
 			_imbarca(o)
 		"barca":
@@ -213,6 +225,9 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 	return true
 
 func test(t: Dictionary, ctx: Dictionary) -> Variant:
+	var t18 = m18.test(t, ctx)
+	if t18 != null:
+		return t18
 	if not attiva():
 		return null
 	if t.has("g_esplosivo"):
@@ -438,6 +453,8 @@ func dopo_nuova() -> void:
 		_prepara_15()
 	if attiva() and bool(p.regola("fine_ponti_17", false)):
 		_prepara_17()
+	if m18.attiva():
+		m18.prepara()
 	if not attiva() or not bool(p.regola("atterraggio_ph", false)):
 		return
 	var terreni := ["libero", "libero", "libero", "libero", "macchia", "macchia", "macchia", "bosco", "bosco", "fiume"]
@@ -499,6 +516,7 @@ func turni_tedesco(g: Dictionary, es: Dictionary) -> Dictionary:
 func uscita(a: Dictionary, h: String) -> void:
 	if not attiva():
 		return
+	m18.uscita(a, h)
 	if int(_st().get("pv_uscita_us", 0)) > 0 and E.colonna(h) == 24 and not a.get("superstite_ph", false) and p.attivo(a):
 		p._pv(int(_st().pv_uscita_us), "%s esce dal bordo nord" % p.nome(a))
 	var v: Dictionary = p.veicoli.di(a)
@@ -770,6 +788,7 @@ func _eboat_662(ctx: Dictionary) -> void:
 func inizio_round() -> void:
 	if not attiva():
 		return
+	m18.inizio_round()
 	_avanza_piena()
 	_timer_ponti()
 	var nt := int(_st().get("treno_round", 0))
@@ -800,6 +819,9 @@ func inizio_round() -> void:
 
 func controlla() -> void:
 	if not attiva():
+		return
+	m18.controlla()
+	if p.s.fase == "fine":
 		return
 	var cariche: Dictionary = _st().get("cariche_us", {})
 	if not p.fase_round():
@@ -856,12 +878,14 @@ func controlla() -> void:
 				break
 
 func niente_pv_incapacitati() -> bool:
-	return attiva() and (bool(_st().get("fine_senza_tedeschi", false)) or int(_st().get("fine_modo", 0)) in [1, 2])
+	return attiva() and (m18.niente_pv_incapacitati() or bool(_st().get("fine_senza_tedeschi", false)) or int(_st().get("fine_modo", 0)) in [1, 2])
 
 func niente_controlli_round() -> bool:
 	return attiva() and bool(_st().get("niente_controlli_round", false))
 
 func salta_evento() -> bool:
+	if m18.salta_evento():
+		return true
 	if attiva() and bool(_st().get("salta_evento", false)):
 		_st().salta_evento = false
 		p._log("info", "Al posto del controllo degli eventi casuali arriva il resto della colonna (paragrafo 598).")
@@ -872,6 +896,8 @@ func salta_evento() -> bool:
 func round_obbligati() -> bool:
 	if not attiva():
 		return false
+	if m18.round_obbligati():
+		return true
 	if str(_st().get("treno", {}).get("stato", "")) == "attivo" or int(_st().get("treno_round", 0)) > 0:
 		return true
 	var pn: Dictionary = _st().get("piena", {})
@@ -883,7 +909,7 @@ func blocca_fine() -> bool:
 func righe_fine(righe: Array) -> int:
 	if not attiva():
 		return 0
-	var tot_s := 0
+	var tot_s: int = m18.righe_fine(righe)
 	for x in p.americani():
 		if x.get("superstite_ph", false) and (x.stato == "uscito" or x.get("uscito", false)):
 			righe.append(["Superstite %s portato in salvo" % x.id, 2])
@@ -935,6 +961,10 @@ func _prepara_15() -> void:
 	p.s.punti["N5"] = "diga"
 	p.terreno.imposta_modifiche(p.s.modifiche)
 	p._log("info", "La diga è in N5; il letto del fiume da N6 a Y15 è asciutto e vale come copertura (il ponte in S9 è intatto).")
+	munizioni_consumate()
+
+## Munizioni consumate nei combattimenti dei giorni prima (Missioni 15 e 18): un dado per soldato e tipo di munizione.
+func munizioni_consumate() -> void:
 	if bool(p.regola("munizioni_consumate", false)):
 		for a in p.americani():
 			for k in a.munizioni.keys():
@@ -1062,6 +1092,7 @@ func radio_funziona() -> bool:
 	return not a.is_empty() and p.attivo(a) and p.in_mappa(a)
 
 func tedesco_uscito(x: Dictionary, h: String) -> void:
+	m18.tedesco_uscito(x, h)
 	if not attiva() or int(_st().get("pv_uscita", 0)) <= 0 or h == "":
 		return
 	p._pv(-int(_st().pv_uscita), "%s esce dalla mappa" % p.nome(x))

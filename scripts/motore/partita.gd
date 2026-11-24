@@ -114,6 +114,7 @@ func _applica_regole_terreno() -> void:
 				if E.distanza(h, str(c)) <= 3:
 					terreno.illuminati[h] = true
 	terreno.accessi = {}
+	terreno.muri_sfondati = s.get("muri_sfondati", []) if not s.is_empty() else []
 	if ph != null and not s.is_empty():
 		ph.regole_terreno()
 	terreno._cache_los.clear()
@@ -175,6 +176,8 @@ func e_ingresso(h: String) -> bool:
 
 ## Esagoni da cui si esce dalla mappa (di solito gli stessi dell’ingresso).
 func e_uscita(h: String) -> bool:
+	if ph != null and ph.m18.uscita_vietata(h):
+		return false
 	if str(regola("uscita_mappa", "")) != "" and lettera_mappa() != str(regola("uscita_mappa", "")):
 		return false
 	if bool(regola("uscita_bordo", false)):
@@ -490,6 +493,11 @@ func esagoni_strada() -> Array[String]:
 func vede_unita(osservatore: Dictionary, bersaglio: Dictionary) -> bool:
 	if not in_mappa(osservatore) or bersaglio.hex == "":
 		return false
+	# Purple Heart 18: i mezzi fuori mappa non vedono e non si vedono; il Jagdpanther non è mai un bersaglio.
+	if osservatore.get("fuori_mappa_ph", false) or bersaglio.get("fuori_mappa_ph", false):
+		return false
+	if bersaglio.get("in_jagd", false) and osservatore.get("lato", "") == "de":
+		return false
 	if osservatore.get("galleria", false) or bersaglio.get("galleria", false):
 		return osservatore.get("galleria", false) and bersaglio.get("galleria", false) and osservatore.hex == bersaglio.hex
 	return terreno.vede(osservatore.hex, bersaglio.hex, osservatore.postura, bersaglio.postura, piano(osservatore), piano(bersaglio))
@@ -602,6 +610,9 @@ func armi_da_fuoco(un: Dictionary) -> Array:
 		if un.lato == "us":
 			if a.tipo == "bazooka":
 				if not a.preparata:
+					continue
+			elif a.get("jagd", false) and a.tipo == "cannone":
+				if not a.preparata or munizioni_arma(un, a.tipo) <= 0:
 					continue
 			elif munizioni_arma(un, a.tipo) <= 0:
 				continue
@@ -2661,8 +2672,13 @@ func prosegui() -> void:
 	s.pausa = ""
 	match p:
 		"inizio_round":
+			if ph.m18.decisione_pendente():
+				s.pausa = p
+				_log("info", "Prima di proseguire devi prendere la decisione: tenere la posizione (992) o ripiegare (994).")
+				aggiornata.emit()
+				return
 			_avvia_round()
-		"azioni_tedesche", "":
+		"azioni_tedesche", "azioni_sherman", "":
 			_flusso()
 		"fine_round":
 			_fine_round()
@@ -2749,7 +2765,7 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 func in_comando(un: Dictionary) -> bool:
 	var tot := 0
 	for o in americani():
-		if not (attivo(o) or o.stato == "fuori"):
+		if not (attivo(o) or o.stato == "fuori") or o.get("carro_us", false):
 			continue
 		var stesso: bool = o.hex == un.hex
 		var vicino: bool = un.hex != "" and o.hex != "" and E.distanza(un.hex, o.hex) <= 2
@@ -2803,7 +2819,7 @@ func _iniziativa(r: Dictionary) -> void:
 			a.turni = 0
 			a.slot = "inconsapevole"
 			continue
-		var comando := in_comando(a)
+		var comando: bool = in_comando(a) or bool(a.get("carro_us", false))
 		var es: Dictionary = mo.turni_artiglieria(a, T.esito_turni(int(a.IN), du, true, comando, a.ferito))
 		if r.n == 1 and r.get("due_turni_us", false) and not es.panico:
 			es.turni = 1 if a.ferito else 2
@@ -2873,7 +2889,7 @@ func americani_di_turno() -> Array:
 		return []
 	var out: Array = []
 	for a in americani():
-		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori"):
+		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori") and not a.get("ia_sherman", false):
 			out.append(a)
 	return out
 
@@ -2886,6 +2902,11 @@ func _flusso() -> void:
 			_fine_round()
 			return
 		if c[1] == "us":
+			# Missione 18: gli Sherman non ancora ai tuoi ordini agiscono da soli, all’inizio della casella.
+			if ph.m18.turni_sherman(c[0]):
+				if s.fase == "round" and s.pausa == "":
+					s.pausa = "azioni_sherman"
+				return
 			return  # attende il giocatore
 		# Turno tedesco: nuovo numero d’azione all’inizio della casella.
 		var chiave := "%d%s" % [c[0], c[1]]
@@ -2991,6 +3012,8 @@ func puo_agire(a: Dictionary, consenti_paracadute := false) -> String:
 		return "Nessun soldato scelto."
 	if not (attivo(a) or a.stato == "fuori"):
 		return "%s non può agire." % nome(a)
+	if ph.m18.sherman_ia(a):
+		return "Lo Sherman %s non è ai tuoi ordini: muove e spara secondo i suoi paragrafi." % a.id
 	if a.get("legato", false):
 		return "%s è legato: un compagno nello stesso esagono deve slegarlo." % nome(a)
 	if s.fase == "round":
@@ -3470,12 +3493,20 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		return {"ok": false, "motivo": "fuori gittata"}
 	if tipo == "bazooka" and not mirato:
 		return {"ok": false, "motivo": "il bazooka non spara di rapido"}
+	if arma.get("jagd", false):
+		# Purple Heart 599: cannone e mitragliatrice del Jagdpanther, armi di squadra verso il fronte (est).
+		if not ph.m18.fronte_jagd(tiratore, bersaglio.hex):
+			return {"ok": false, "motivo": "fuori dall’arco frontale del Jagdpanther"}
+		if ph.m18.jagd().get("equipaggio", []).size() < 2:
+			return {"ok": false, "motivo": "servono due serventi a bordo"}
 	if mirato and tiratore.get("lato", "") == "us" and bool(T.ARMI[tipo].get("squadra", false)) and not tiratore.get("carro_us", false):
 		var compagni := unita_in(tiratore.hex, "us").filter(func(x): return x.id != tiratore.id and not x.panico)
 		if compagni.is_empty():
 			return {"ok": false, "motivo": "da solo la mitragliatrice spara solo di rapido"}
 	var mods: Array = []
 	var ws := int(tiratore.WS) - (1 if arma.get("catturata", false) else 0)
+	if arma.get("jagd", false):
+		ws = -1
 	if ws != 0:
 		mods.append(["abilità", ws])
 	if not mirato:
@@ -3598,6 +3629,8 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	if tiratore.get("lato", "") == "us":
 		if tipo == "bazooka":
 			_consuma_bazooka(tiratore, arma)
+		elif arma.get("jagd", false) and tipo == "cannone":
+			ph.m18.sparato_jagd(arma)
 		else:
 			var pm := percentuale()
 			if pm <= int(info.mun) and arma.get("montata", false):
@@ -4129,6 +4162,31 @@ func prepara(id: String, tipo: String) -> Dictionary:
 		return _errore("Nessun razzo per il bazooka.")
 	arma.preparata = true
 	_log("azione", "%s prepara: %s." % [nome(a), T.ARMI[tipo].nome])
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
+## Missione 18 (599): sale sul Jagdpanther da servire o ne scende (nei Round è un’azione).
+func jagd_sali(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	var err: String = ph.m18.sali_jagd(a)
+	if err != "":
+		return _errore(err)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
+func jagd_scendi(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	ph.m18.scendi_jagd(a)
 	_chiudi_azione_semplice(a)
 	_fine_comando()
 	return OK
@@ -4821,8 +4879,9 @@ func _controlla_da_leggere() -> void:
 		if unita_in(h, "de").is_empty() and not unita_in(h, "us").is_empty():
 			var pid := str(dl[h])
 			dl.erase(h)
-			_log("info", "In %s ci sono solo i tuoi soldati: si legge il paragrafo annotato %s." % [h, pid])
-			leggi(pid, {"hex": h, "ids": unita_in(h, "us").map(func(x): return x.id)})
+			for pp in pid.split(","):
+				_log("info", "In %s ci sono solo i tuoi soldati: si legge il paragrafo annotato %s." % [h, pp])
+				leggi(pp, {"hex": h, "ids": unita_in(h, "us").map(func(x): return x.id)})
 
 func _niente_controlli_round() -> bool:
 	return s.fase == "round" and (bool(missione.get("regole", {}).get("niente_controlli_round", false)) or ph.niente_controlli_round())
@@ -4983,7 +5042,7 @@ func _controlla_fine_automatica() -> void:
 	var vivi_in_mappa := americani_attivi_in_mappa().filter(func(x): return not x.get("pilota", false) and not x.get("carro_us", false))
 	if int(regola("fine_condizione", 0)) > 0 and int(s.condizione) < int(regola("fine_condizione", 0)) and not vivi_in_mappa.is_empty():
 		return
-	var da_entrare := americani().filter(func(x): return x.stato == "fuori")
+	var da_entrare := americani().filter(func(x): return x.stato == "fuori" and not x.get("carro_us", false))
 	if vivi_in_mappa.is_empty() and da_entrare.is_empty():
 		var usciti := americani().filter(func(x): return x.stato == "uscito")
 		_calcola_fine("ritirata" if not usciti.is_empty() else "annientata")

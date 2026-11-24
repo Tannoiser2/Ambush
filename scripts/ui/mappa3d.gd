@@ -1324,7 +1324,7 @@ func _aggiorna_pedine() -> void:
 	var per_hex := {}
 	for id in stati:
 		var d: Dictionary = stati[id]
-		if mappa2d.mobili.has(id):
+		if mappa2d.mobili.has(id) or d.get("fuori_mappa_ph", false):
 			continue
 		if not per_hex.has(d.hex):
 			per_hex[d.hex] = []
@@ -1581,7 +1581,7 @@ func _aggiorna_mezzi() -> void:
 	var vista_v: Dictionary = p.s.get("veicoli", {})
 	var visti := {}
 	for veic in vista_v.values():
-		if str(veic.hex) == "" or str(veic.stato) == "uscito":
+		if str(veic.hex) == "" or str(veic.stato) == "uscito" or veic.get("fuori_mappa_ph", false):
 			continue
 		var vid := str(veic.id)
 		visti[vid] = true

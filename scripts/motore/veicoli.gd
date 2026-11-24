@@ -178,6 +178,11 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 	if p.terreno.ponte(verso):
 		return 1 if da in p.terreno.capi_ponte(verso) else -1
 	var c: int = int(T.COSTO_VEICOLO.get(t, 1))
+	if t == "stream" and p.terreno.guado(verso):
+		# Purple Heart 18: solo in questa missione i mezzi attraversano i guadi (3 PM).
+		c = int(p.regola("guadi_veicoli", -1))
+	elif t == "stream" and p.terreno.fiume:
+		return -1
 	if c < 0:
 		return -1
 	c += int(p.s.get("nebbia_veicoli", 0))
@@ -259,6 +264,12 @@ func disabilita(veic: Dictionary, motivo: String) -> void:
 		p._pv(int(veic.pv_distrutto), "%s fuori uso" % veic.nome)
 	for x in occupanti(veic):
 		scendi(x)
+		if x.get("carro_us", false) and p.ph.m18.attiva():
+			# Missione 18: lo Sherman fuori uso esce di scena con il suo equipaggio.
+			x.stato = "rimosso"
+			x.turni = 0
+			x.slot = "inattivo"
+			continue
 		if p.attivo(x):
 			x.postura = "prone"
 			x.turni = 0
@@ -377,10 +388,10 @@ func riduci_equipaggio(veic: Dictionary, n: int) -> void:
 		aggiorna_equipaggio(veic, g)
 
 func aggiorna_equipaggio(veic: Dictionary, g: Dictionary) -> void:
-	var d: Dictionary = p.missione.tedeschi.get(str(int(g.get("num", 0))), {})
-	if not d.has("carro"):
+	var dc: Dictionary = carta_carro(g)
+	if dc.is_empty():
 		return
-	var riga: Dictionary = d.carro.righe.get(str(int(veic.equipaggio)), {})
+	var riga: Dictionary = dc.righe.get(str(int(veic.equipaggio)), {})
 	for k in ["IN", "PC", "WS", "DS"]:
 		if riga.has(k):
 			g[k] = int(riga[k])
@@ -524,8 +535,11 @@ var _ia = null
 ## guida lenta 2, veloce 3, aprire o chiudere tutti.
 func turno_carro(ia, g: Dictionary, veic: Dictionary) -> void:
 	_ia = ia
-	var d: Dictionary = p.missione.tedeschi[str(int(g.num))].carro
+	var d: Dictionary = carta_carro(g)
 	var numero := int(p.s.round.get("numero_azione", p.d10()))
+	if g.lato == "us":
+		numero = p.d10()  # gli Sherman guidati dai paragrafi tirano il proprio numero d’azione
+	veic.mp_ingresso = p.ph.m18.entra_dal_bordo(veic)
 	var riga: Dictionary = d.righe.get(str(int(veic.equipaggio)), {})
 	if riga.is_empty():
 		return
@@ -543,14 +557,22 @@ func turno_carro(ia, g: Dictionary, veic: Dictionary) -> void:
 	_caricato = false
 	p._passo("tedesco", {"id": g.id, "colonna": "equipaggio %d" % int(veic.equipaggio), "numero": numero, "paragrafo": par,
 		"motivo": "carro", "casella": "", "numero_tirato": false, "vede": bersagli_carro(g).map(func(a): return a.id)})
-	p._log("tedesco", "Turno del %s: equipaggio %d, numero d’azione %d → paragrafo %d (%d punti equipaggio)." % [veic.nome, int(veic.equipaggio), numero, par, _cp])
+	p._log("tedesco" if g.lato == "de" else "info", "Turno del %s%s: equipaggio %d, numero d’azione %d → paragrafo %d (%d punti equipaggio)." % [veic.nome, (" " + str(g.id)) if g.lato == "us" else "", int(veic.equipaggio), numero, par, _cp])
 	p._fx("attore", {"id": g.id, "a": g.hex})
 	esegui_carro(par, g, veic)
+	veic.mp_ingresso = 0
+
+## Carta del carro: dei tedeschi o, per gli Sherman della Missione 18, delle carte americane 01–03.
+func carta_carro(g: Dictionary) -> Dictionary:
+	if g.get("lato", "") == "us":
+		return p.missione.get("carri_us", {}).get(str(int(g.get("num", 0))), {}).get("carro", {})
+	return p.missione.tedeschi.get(str(int(g.get("num", 0))), {}).get("carro", {})
 
 func bersagli_carro(g: Dictionary) -> Array:
 	var out: Array = []
-	for a in p.americani_attivi_in_mappa():
-		if p.vede_unita(g, a):
+	var nemici: Array = p.tedeschi_attivi() if g.get("lato", "de") == "us" else p.americani_attivi_in_mappa()
+	for a in nemici:
+		if p.attivo(a) and p.vede_unita(g, a):
 			out.append(a)
 	out.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
 	return out
@@ -741,7 +763,7 @@ func _cannone_o_carica(g: Dictionary, veic: Dictionary) -> void:
 	if not colpito:
 		return
 	p._fx("esplosione", {"a": bersaglio.hex, "grande": true})
-	for x in p.unita_in(bersaglio.hex, "us"):
+	for x in p.unita_in(bersaglio.hex, "de" if g.get("lato", "de") == "us" else "us"):
 		var soglia: int = {"prone": 0, "crouching": 1, "standing": 2}.get(x.postura, 1)
 		var rr := p.d10()
 		if rr <= int(soglia):
@@ -797,7 +819,8 @@ func guida_tedesca(veic: Dictionary, veloce: bool) -> void:
 		veloce = false
 	var lenta: int = int(MODELLI[veic.modello].lenta)
 	var mp: int = int(MODELLI[veic.modello].veloce if veloce else lenta)
-	var spesi := 0
+	var spesi := int(veic.get("mp_ingresso", 0))
+	veic.mp_ingresso = 0
 	var passi := 0
 	var controllato := false
 	while attivo(veic) and passi < 15:

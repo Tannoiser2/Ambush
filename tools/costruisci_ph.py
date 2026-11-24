@@ -222,6 +222,31 @@ MISSIONI[17] = {
     "germani": [22, 23, 24, 48, 49, 50, 52, 53, 55, 56],
 }
 
+MISSIONI[18] = {
+    "titolo": "Il mattino dopo", "titolo_originale": "The Morning After",
+    "data": "Ardenne, 20 dicembre 1944", "mappa": "BE", "nord": "a sinistra (in alto è est)", "libro": "ph",
+    "briefing": "20 dicembre 1944, Ardenne. Da giorni i tedeschi dilagano dove prima c’erano le linee alleate. Il reggimento, isolato, "
+                "ha dato l’ordine di resistere. All’alba gli uomini si svegliano nel paesino che difendono da giorni: i rifornimenti "
+                "scarseggiano, la squadra è stremata e lungo tutto il fronte si contano le munizioni chiedendosi quanto si potrà resistere.",
+    "ingresso": "Mappe B ed E, in alto è est. La squadra comincia in K15. Un soldato a caso comincia ferito; la radio è gratis (la porta "
+                "il sergente A). Prima della missione si tira, per ogni soldato e ogni tipo di munizione, sulla tabella delle munizioni "
+                "consumate (in automatico). Macerie in B11, C11, E11, D13, G13, G16, O18 e P18; guadi in I11, O10 e V11. Non ci sono "
+                "livelli di attivazione.",
+    "regole_testo": "[b]Fiume.[/b] Il corso d’acqua da A6 a Y11 è un fiume: si entra nei suoi esagoni solo dai ponti intatti o dai guadi. "
+                    "[b]Guadi.[/b] Solo in questa missione i mezzi attraversano i guadi spendendo 3 PM. [b]Munizioni.[/b] Una parte delle "
+                    "munizioni è stata consumata nei giorni precedenti.",
+    "ingresso_breve": "K15", "uscita_breve": "bordo ovest, A19–Y19 (solo dopo l’ordine di ripiegare)",
+    "ingresso_esagoni": ["K15"],
+    "uscita_esagoni": ["%s19" % c for c in COL],
+    "vittoria_pv": 0, "attivazione": {}, "obiettivi": [],
+    "regole": {"fiume": True, "munizioni_consumate": True, "macerie_iniziali": ["B11", "C11", "E11", "D13", "G13", "G16", "O18", "P18"],
+               "guadi_iniziali": ["I11", "O10", "V11"], "guadi_veicoli": 3, "radio_portata_ph": True, "ferito_casuale": True,
+               "est_in_alto": True, "missione_18": True},
+    "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b]",
+    "testo_fine": "",
+    "germani": [19, 25, 26, 27, 33, 34, 57, 58, 59, 60],
+}
+
 
 BINARIO_BE = ["Y5", "X4", "W5", "V4", "U5", "T4", "S5", "R5", "Q6", "P6", "O7", "N7", "M8", "L8", "K9", "J9", "I10", "H10", "G11",
               "F11", "E12", "D12", "C13", "B12", "A13"]
@@ -261,6 +286,15 @@ def main():
             for k, v in ev.items():
                 if v == "634":
                     ev[k] = "639"  # lettura della carta: 634 è un evento della Missione 13 (faro); 577 rimanda a 639
+        if n == 18:
+            d["carri_us"] = {str(k): mezzo(CARTE["US%d" % k]) for k in (1, 2, 3)}
+            for k, c in d["carri_us"].items():
+                for r in c["carro"]["righe"].values():
+                    r["par"] = [x if x is not None else 969 for x in r["par"]]
+                c["carro"]["primo_turno"] = 944
+            for g in d["tedeschi"].values():
+                if g.get("carro"):
+                    g["carro"]["primo_turno"] = 923
         if n == 14:
             # lettura della carta: W18 rimanda a 449 (paragrafo d’altra missione); come X15 è la reazione speciale L (499)
             d["condizioni"]["3"]["movimenti"]["W18"] = "499"

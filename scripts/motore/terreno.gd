@@ -86,6 +86,8 @@ func capi_ponte(h: String) -> Array[String]:
 
 ## Bunker (Missione 6): {esagono: {porta: esagono davanti alla porta, sfondata: bool}}. Tutti i lati sono feritoie.
 var bunker: Dictionary = {}
+## Muri sfondati da un paragrafo (Purple Heart 642): coppie di esagoni il cui lato non fa più da muro.
+var muri_sfondati: Array = []
 
 func tipo_lato(a: String, b: String) -> String:
 	if bunker.has(a) or bunker.has(b):
@@ -97,6 +99,9 @@ func tipo_lato(a: String, b: String) -> String:
 			return "door"
 		return "window"
 	var k := E.lato(a, b)
+	for m in muri_sfondati:
+		if (str(m[0]) == a and str(m[1]) == b) or (str(m[0]) == b and str(m[1]) == a):
+			return ""
 	if lati.has(k):
 		return str(lati[k])
 	# Muro: lato tra un edificio e un esagono che non fa parte dello stesso edificio.

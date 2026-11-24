@@ -111,7 +111,6 @@ par("701", "• Se tutti gli 8 soldati americani sono attivi e i ponti sono salt
 par("707", "Tutti i tedeschi rimasti si arrendono! Guadagni 5 PV per il lavoro ben fatto. La missione finisce subito.", [{"op": "resa_generale"}])
 par("652", "I documenti rivelano le formule segrete per produrre carburante sintetico. Guadagni 5 PV.",
     [{"op": "vp", "n": 5, "why": "documenti della borsa sigillata"}])
-par("585", "Il Jagdpanther sembra solo parzialmente fuori uso (in questa versione non si può usare).", [])
 
 # ------------------------------------------------------------------ movimenti
 mov("369", "• Se si muove un mezzo, entra in R12.\n• Altrimenti entra in R10.", [if_({"vehicle_moving": True}, [enter("R12")], [enter("R10")])])
