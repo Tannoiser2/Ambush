@@ -162,6 +162,50 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 				p._log("info", "Il colpo cade fuori dalla mappa.")
 			else:
 				p._op_artiglieria_esagoni(["%s%d" % [char(64 + c), r]])
+		"pc_tutti":
+			var riusciti := 0
+			for a in p.americani_attivi_in_mappa():
+				if p.controllo_pc(a, 0):
+					riusciti += 1
+					ctx.ultimo_pc = a.id
+			p._esegui(o.ok if riusciti > 0 else o.ko, ctx)
+		"treno_in_arrivo":
+			if not p.fase_round():
+				p._inizia_round_da_attivazione([], {"adv": "de", "two": [], "us_two": false}, "")
+				_st().treno_round = 2
+			else:
+				_st().treno_round = int(p.s.round.get("n", 0)) + 1
+			p._log("info", "Il treno arriverà all’inizio del Round %d, al posto del controllo degli eventi casuali." % int(_st().treno_round))
+		"treno":
+			_avvia_treno()
+		"louvre":
+			if not _st().get("louvre", false):
+				_st().louvre = true
+				p._esegui([{"op": "sighting", "s": 9}, {"op": "vp", "n": 10, "why": "tesori del Louvre"}], ctx)
+		"cratere_hex":
+			p.s.modifiche[str(o.hex)] = "crater"
+			p.terreno.imposta_modifiche(p.s.modifiche)
+		"reazione_nums":
+			for num in o.nums:
+				var gr: Dictionary = p.u("g%d" % int(num))
+				if not gr.is_empty() and p.attivo(gr):
+					gr.reazione = str(o.r)
+			p._log("tedesco", "Reazione speciale %s per i tedeschi %s." % [str(o.r), ", ".join(o.nums.map(func(x): return str(int(x))))])
+		"ferma_g":
+			p.ia.ferma()
+		"niente_controlli_round":
+			_st().niente_controlli_round = true
+		"resa_generale":
+			for g in p.tedeschi_attivi():
+				if p.attivo(g) and p.in_mappa(g):
+					g.stato = "arreso"
+					g.turni = 0
+					g.slot = "inattivo"
+			p._pv(5, "tutti i tedeschi si arrendono")
+			_st().fine_modo = 1
+			p._calcola_fine("obiettivo")
+		"tedesco_sotto_ponte":
+			_tedesco_sotto_ponte(ctx)
 		"camion":
 			p._log("info", "La colonna di camion è in arrivo, ma in questa versione i camion non entrano in mappa: la difesa del deposito resta il compito della squadra.")
 		_:
@@ -192,6 +236,15 @@ func test(t: Dictionary, ctx: Dictionary) -> Variant:
 	if t.has("tedeschi_o_s6"):
 		var in_mappa: bool = p.tedeschi_attivi().any(func(g): return p.attivo(g) and p.in_mappa(g))
 		return (in_mappa and bool(p.s.avvistamenti[6])) == bool(t.tedeschi_o_s6)
+	if t.has("ponti_distrutti"):
+		return p.ponti().all(func(h): return not p.ponte_intatto(h)) == bool(t.ponti_distrutti)
+	if t.has("ponte_ok"):
+		return p.ponte_intatto(str(t.ponte_ok))
+	if t.has("ponte_minato"):
+		return _st().get("timer_ponti", {}).has(str(t.ponte_minato)) or int(p.ponte_stato(str(t.ponte_minato)).cariche) > 0
+	if t.has("tutti_attivi_ponti"):
+		var tutti: bool = p.americani().filter(func(a): return not a.get("senza_carta", false)).all(func(a): return p.attivo(a))
+		return (tutti and p.ponti().all(func(h): return not p.ponte_intatto(h))) == bool(t.tutti_attivi_ponti)
 	if t.has("ponte_s9"):
 		return ponte_s9() == bool(t.ponte_s9)
 	if t.has("fiume_allagato"):
@@ -383,6 +436,8 @@ func tiro_mancato(b: Dictionary) -> void:
 func dopo_nuova() -> void:
 	if attiva() and bool(p.regola("diga", false)):
 		_prepara_15()
+	if attiva() and bool(p.regola("fine_ponti_17", false)):
+		_prepara_17()
 	if not attiva() or not bool(p.regola("atterraggio_ph", false)):
 		return
 	var terreni := ["libero", "libero", "libero", "libero", "macchia", "macchia", "macchia", "bosco", "bosco", "fiume"]
@@ -437,6 +492,8 @@ func dopo_nuova() -> void:
 func turni_tedesco(g: Dictionary, es: Dictionary) -> Dictionary:
 	if attiva() and g.get("cane", false):
 		return {"turni": 1 if g.ferito else 2, "panico": false}
+	if attiva() and bool(p.missione.tedeschi.get(str(int(g.get("num", 0))), {}).get("un_turno", false)) and int(es.get("turni", 0)) > 1:
+		return {"turni": 1, "panico": es.get("panico", false)}
 	return es
 
 func uscita(a: Dictionary, h: String) -> void:
@@ -469,7 +526,8 @@ func _cane_recupera() -> void:
 			c.slot = "completo"
 			p._log("info", "Un cane da guardia si rialza, ferito, e riparte all’attacco!")
 			return
-	p._log("info", "Nessun cane può riprendersi (il treno del paragrafo 486 non è previsto in questa missione).")
+	p._log("info", "Nessun cane può riprendersi: vedi 485.")
+	p.leggi("485", {})
 
 ## 495: la mezza mappa D sopra la mappa A.
 func _mappa_d() -> void:
@@ -713,6 +771,14 @@ func inizio_round() -> void:
 	if not attiva():
 		return
 	_avanza_piena()
+	_timer_ponti()
+	var nt := int(_st().get("treno_round", 0))
+	if nt > 0 and int(p.s.round.get("n", 0)) >= nt:
+		_st().treno_round = 0
+		_st().salta_evento = true
+		p.leggi("486", {})
+	elif str(_st().get("treno", {}).get("stato", "")) == "attivo":
+		_muovi_treno(12)
 	var n598 := int(_st().get("attesa_598", 0))
 	if n598 > 0 and int(p.s.round.get("n", 0)) >= n598 + 1:
 		_st().attesa_598 = 0
@@ -756,6 +822,10 @@ func controlla() -> void:
 			_st().attesa_598 = 0
 			p._log("info", "Le motociclette sono fuori combattimento: arriva il resto della colonna.")
 			p.leggi("598", {})
+	if bool(p.regola("fine_ponti_17", false)):
+		_controlla_17()
+		if p.s.fase == "fine":
+			return
 	if bool(_st().get("fine_senza_tedeschi", false)) and int(p.s.condizione) >= 2 and p.s.fase != "fine" and not round_obbligati():
 		var in_mappa: Array = p.tedeschi_attivi().filter(func(g): return p.attivo(g) and p.in_mappa(g))
 		if in_mappa.is_empty() and int(_st().get("attesa_598", 0)) == 0:
@@ -786,7 +856,10 @@ func controlla() -> void:
 				break
 
 func niente_pv_incapacitati() -> bool:
-	return attiva() and bool(_st().get("fine_senza_tedeschi", false))
+	return attiva() and (bool(_st().get("fine_senza_tedeschi", false)) or int(_st().get("fine_modo", 0)) in [1, 2])
+
+func niente_controlli_round() -> bool:
+	return attiva() and bool(_st().get("niente_controlli_round", false))
 
 func salta_evento() -> bool:
 	if attiva() and bool(_st().get("salta_evento", false)):
@@ -799,6 +872,8 @@ func salta_evento() -> bool:
 func round_obbligati() -> bool:
 	if not attiva():
 		return false
+	if str(_st().get("treno", {}).get("stato", "")) == "attivo" or int(_st().get("treno_round", 0)) > 0:
+		return true
 	var pn: Dictionary = _st().get("piena", {})
 	return not pn.is_empty() and not bool(pn.get("fuori", false))
 
@@ -813,6 +888,8 @@ func righe_fine(righe: Array) -> int:
 		if x.get("superstite_ph", false) and (x.stato == "uscito" or x.get("uscito", false)):
 			righe.append(["Superstite %s portato in salvo" % x.id, 2])
 			tot_s += 2
+	if bool(p.regola("fine_ponti_17", false)):
+		return tot_s + _righe_fine_17(righe)
 	if deposito().is_empty():
 		return tot_s
 	var distrutti: int = _st().deposito_distrutto.size()
@@ -910,7 +987,7 @@ func _colonna(o: Dictionary, ctx: Dictionary) -> void:
 		for x in m[2]:
 			coppie.append([int(x), h])
 	p._op_attiva({"op": "activate", "g": coppie, "stance": "crouching", "adv": "de", "two": o.get("two", []), "us_two": false,
-		"aware": false, "reaction": "W", "rounds": true}, ctx)
+		"aware": false, "reaction": str(o.get("reazione", "W")), "rounds": true}, ctx)
 	p.s.imbarco = true
 	for m in o.mezzi:
 		var vid := "v%d" % int(m[1])
@@ -1042,3 +1119,217 @@ func _avanza_piena() -> void:
 		p.s.punti[h] = "piena"
 	p.terreno.imposta_modifiche(p.s.modifiche)
 	p._log("info", "La piena avanza fino a %s." % LETTO_15[int(pn.indice) - 1])
+
+# ================================================================== Missione 17 «Sul filo del rasoio»
+func _prepara_17() -> void:
+	for h in p.regola("macerie_iniziali", []):
+		p.s.modifiche[str(h)] = "rubble"
+	p.terreno.imposta_modifiche(p.s.modifiche)
+	var n := int(p.regola("cariche_gratis", 0))
+	var dati: Array = []
+	for i in n:
+		var squadra: Array = p.americani().filter(func(a): return p.porte_usate(a) < p.porte_massime(a))
+		if squadra.is_empty():
+			break
+		squadra.sort_custom(func(a, b): return p.porte_usate(a) < p.porte_usate(b))
+		var a: Dictionary = squadra[0]
+		a.armi.append({"tipo": "satchel", "inceppata": false, "rotta": false, "preparata": false, "catturata": false})
+		dati.append(a.id)
+	p._log("info", "Gli edifici a ovest del fiume sono macerie. Cariche da demolizione gratis a: %s." % ", ".join(dati))
+
+## Piazzate le cariche necessarie, il timer fa saltare il ponte all’inizio del Round indicato (0: nelle Operazioni, appena la squadra si allontana).
+func arma_ponte(h: String, rounds: int) -> void:
+	var tp: Dictionary = _st().get("timer_ponti", {})
+	var n := int(p.s.get("round", {}).get("n", 0)) if p.fase_round() else 0
+	tp[h] = {"round": n + rounds if rounds > 0 else 0}
+	_st().timer_ponti = tp
+	if rounds > 0:
+		p._log("azione", "Timer del ponte in %s: salta all’inizio del Round %d." % [h, n + rounds])
+	else:
+		p._log("azione", "Cariche del ponte in %s innescate: saltano appena la squadra si è allontanata." % h)
+
+func ponte_armato(h: String) -> bool:
+	return _st().get("timer_ponti", {}).has(h)
+
+func _timer_ponti() -> void:
+	var tp: Dictionary = _st().get("timer_ponti", {})
+	var n := int(p.s.round.get("n", 0))
+	for h in tp.keys():
+		if int(tp[h].round) > 0 and n >= int(tp[h].round):
+			tp.erase(h)
+			p.distruggi_ponte(h, "cariche a tempo")
+
+func _tedesco_sotto_ponte(ctx: Dictionary) -> void:
+	var g: Dictionary = p.u(str(ctx.get("g", "")))
+	if g.is_empty():
+		return
+	var h: String = g.hex
+	var us: Array = p.unita_in(h, "us").filter(func(x): return p.attivo(x))
+	if p.ponti().has(h) and (ponte_armato(h) or int(p.ponte_stato(h).cariche) > 0):
+		if not us.is_empty():
+			p.ia._assalta(us[0])
+		else:
+			var st: Dictionary = p.ponte_stato(h)
+			st.cariche = maxi(0, int(st.cariche) - 1)
+			_st().get("timer_ponti", {}).erase(h)
+			p._log("tedesco", "Il %s getta nel fiume una carica del ponte in %s: il ponte non è più minato." % [p.nome(g), h])
+		p.ia.ferma()
+	else:
+		ctx.verso = "Q10"
+		p.ia.entra_da_paragrafo(ctx, "Q10")
+		g.reazione = "Q"
+
+# ------------------------------------------------------------------ il treno
+func _avvia_treno() -> void:
+	if _st().has("treno"):
+		return
+	var vagoni := ["vagone merci", "vagone merci", "vagone merci", "cisterna"]
+	for i in range(vagoni.size() - 1, 0, -1):
+		var j: int = p.rng.randi_range(0, i)
+		var x = vagoni[i]
+		vagoni[i] = vagoni[j]
+		vagoni[j] = x
+	_st().treno = {"pezzi": ["locomotiva"] + vagoni, "idx": 0, "stato": "attivo"}
+	if not p.fase_round():
+		p._inizia_round_da_attivazione([], {"adv": "de", "two": [], "us_two": false}, "")
+	_segna_treno()
+	p._log("info", "Il treno entra in %s: locomotiva, poi %s." % [_binario()[0], ", ".join(vagoni)])
+
+func _binario() -> Array:
+	return p.regola("binario", [])
+
+func _posizioni_treno() -> Array:
+	var tr: Dictionary = _st().get("treno", {})
+	var out: Array = []
+	var b := _binario()
+	for i in tr.pezzi.size():
+		var k: int = int(tr.idx) - i
+		out.append(b[k] if k >= 0 and k < b.size() else "")
+	return out
+
+func _segna_treno() -> void:
+	for h in p.s.punti.keys():
+		if str(p.s.punti[h]) in ["locomotiva", "vagone merci", "cisterna"]:
+			p.s.punti.erase(h)
+	var tr: Dictionary = _st().get("treno", {})
+	var pos := _posizioni_treno()
+	for i in pos.size():
+		if pos[i] != "":
+			p.s.punti[pos[i]] = str(tr.pezzi[i]) if tr.stato == "attivo" else ("vagone rovesciato" if tr.pezzi[i] != "cisterna" else "cisterna rovesciata")
+
+func _muovi_treno(passi: int) -> void:
+	var tr: Dictionary = _st().treno
+	var b := _binario()
+	for k in passi:
+		tr.idx = int(tr.idx) + 1
+		var pos := _posizioni_treno()
+		if pos.all(func(x): return x == ""):
+			tr.stato = "uscito"
+			_segna_treno()
+			p._log("info", "Il treno esce dalla mappa.")
+			_fine_treno()
+			return
+		for i in pos.size():
+			var h: String = pos[i]
+			if h == "":
+				continue
+			if p.ponti().has(h) and not p.ponte_intatto(h):
+				_deraglia()
+				return
+			for a in p.unita_in(h, "us").filter(func(x): return p.attivo(x)):
+				if p.controllo_pc(a, 0):
+					for v in E.vicini(h):
+						if not (v in b) and p.terreno.costo_movimento(h, v) >= 0:
+							a.hex = v
+							p._log("info", "%s si butta di lato in %s." % [p.nome(a), v])
+							break
+				else:
+					p._uccidi(a, "travolto dal treno")
+	_segna_treno()
+	p._log("info", "Il treno avanza: la locomotiva è in %s." % (_posizioni_treno()[0] if _posizioni_treno()[0] != "" else "fuori mappa"))
+
+func _deraglia() -> void:
+	var tr: Dictionary = _st().treno
+	tr.idx = int(tr.idx) - 1
+	tr.stato = "deragliato"
+	_segna_treno()
+	p._fx("esplosione", {"a": _posizioni_treno()[0], "grande": true})
+	p._log("combattimento", "Il treno entra nel ponte distrutto e deraglia! Locomotiva e vagoni si rovesciano.")
+	var pos := _posizioni_treno()
+	if not p.s.has("da_leggere"):
+		p.s.da_leggere = {}
+	for i in pos.size():
+		if pos[i] != "" and str(tr.pezzi[i]) == "vagone merci":
+			p.s.da_leggere[pos[i]] = "595"
+	_fine_treno()
+
+func _fine_treno() -> void:
+	if int(p.s.condizione) < 3:
+		p.cambia_condizione(3)
+
+# ------------------------------------------------------------------ fine della missione
+func _controlla_17() -> void:
+	# il 23 assiste la mitragliatrice del 22 finché il 22 è attivo nel suo esagono, poi passa alla reazione X
+	for g in p.tedeschi():
+		var ass := int(p.missione.tedeschi.get(str(int(g.num)), {}).get("assiste", 0))
+		if ass > 0 and p.attivo(g) and p.in_mappa(g) and str(g.get("reazione", "")) == "":
+			var mg: Dictionary = p.u("g%d" % ass)
+			if mg.is_empty() or not p.attivo(mg) or mg.hex != g.hex:
+				g.reazione = "X"
+				p._log("tedesco", "Il %s non ha più la mitragliatrice da assistere: reazione speciale X." % p.nome(g))
+	# borsa sigillata del corriere SS (53)
+	var g53: Dictionary = p.u("g53")
+	if not g53.is_empty() and not p.attivo(g53) and str(g53.get("hex", "")) != "" and not _st().get("borsa", false):
+		_st().borsa = true
+		p._lascia_oggetto(g53.hex, {"tipo": "documenti", "n": 0, "par": "652"})
+		p._log("info", "Il corriere SS è fuori combattimento: la sua borsa sigillata è a terra in %s." % g53.hex)
+	# cariche innescate nelle Operazioni
+	if not p.fase_round():
+		var tp: Dictionary = _st().get("timer_ponti", {})
+		for h in tp.keys():
+			if int(tp[h].round) == 0 and p.americani_attivi_in_mappa().all(func(a): return E.distanza(a.hex, h) > 1):
+				tp.erase(h)
+				p.distruggi_ponte(h, "cariche innescate")
+	if int(p.s.condizione) < 3 or p.s.fase == "fine" or round_obbligati():
+		return
+	var g_attivi: Array = p.tedeschi_attivi().filter(func(g): return p.attivo(g) and p.in_mappa(g))
+	var us: Array = p.americani_attivi_in_mappa()
+	if us.is_empty():
+		return
+	var tutti_fatti: bool = p.ponti().all(func(h): return not p.ponte_intatto(h) or ponte_armato(h))
+	var cariche := 0
+	for a in p.americani():
+		cariche += a.armi.filter(func(w): return w.tipo == "satchel").size()
+	if g_attivi.is_empty() and (tutti_fatti or cariche == 0):
+		_st().fine_modo = 1
+		p._log("info", "Nessun tedesco attivo e tutti i ponti minati o distrutti (o finite le cariche): la missione termina.")
+		p._calcola_fine("obiettivo")
+		return
+	if p.ponti().all(func(h): return not p.ponte_intatto(h)):
+		var vista := false
+		for a in us:
+			for g in g_attivi:
+				if p.vede_unita(a, g) or p.vede_unita(g, a):
+					vista = true
+		if not vista:
+			_st().fine_modo = 2
+			p._log("info", "I tre ponti sono distrutti e nessuno si vede più: la missione termina.")
+			p._calcola_fine("obiettivo")
+
+func _righe_fine_17(righe: Array) -> int:
+	var tot := 0
+	var distrutti := 0
+	for h in p.ponti():
+		if not p.ponte_intatto(h) or ponte_armato(h) or int(_st().get("fine_modo", 0)) == 1:
+			distrutti += 1
+	if distrutti > 0:
+		righe.append(["Ponti distrutti (%d)" % distrutti, 10 * distrutti])
+		tot += 10 * distrutti
+	var perdite := 0
+	for g in p.tedeschi():
+		if g.stato in ["morto", "incapacitato", "catturato", "arreso"] and not g.get("cane", false):
+			perdite += 1
+	if perdite > 0:
+		righe.append(["Tedeschi uccisi, catturati o incapacitati (%d)" % perdite, perdite])
+		tot += perdite
+	return tot

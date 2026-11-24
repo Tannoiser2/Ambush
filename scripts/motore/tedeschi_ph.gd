@@ -15,6 +15,157 @@ func _ph():
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	match n:
+		341, 343:
+			if _attivo_num(52):
+				t.esegui(801 if n == 341 else 825)
+			else:
+				esegui(913)
+		350, 358, 363:
+			t.esegui(840 if _est_del_fiume(g.hex) else {350: 825, 358: 808, 363: 801}[n])
+		624, 627:
+			_moto_ph(n, g)
+		659:
+			_moto_659(g)
+		661:
+			if t.p.ponti().any(func(h): return t.p.ponte_intatto(h)):
+				var d: int = t.p.d10()
+				var x: int = 862 if d <= 1 else (863 if d <= 3 else (864 if d <= 5 else (865 if d <= 7 else (866 if d == 8 else 840))))
+				t.p._log("dado", "Dado %d: il %s esegue %d." % [d, t.p.nome(g), x])
+				t.esegui(x)
+			else:
+				t.esegui(820)
+		710, 715, 721:
+			if not _tiro_ponte(g, ""):
+				t.esegui({710: 801, 715: 825, 721: 808}[n])
+		731:
+			g.reazione = "L"
+			t._reazione_cambiata = true
+			t.p._log("tedesco", "Reazione speciale L per il %s: si ritira il numero d’azione." % t.p.nome(g))
+		761, 769, 771:
+			var mg := _mg_di(g)
+			if not _tiro_ponte(g, mg):
+				if n == 761:
+					t._accovacciati()
+					t._miglior_tiro("facile", -1, false, _arma_personale(g))
+					t._prono_se_libero()
+				elif n == 769:
+					if t.bersagli(g).is_empty():
+						t.p._log("tedesco", "Il %s non ha bersagli." % t.p.nome(g))
+					else:
+						t._accovacciati()
+						t._miglior_tiro("vicino", -1, false, mg)
+						t._prono_se_libero()
+				else:
+					if t.bersagli(g).is_empty():
+						t._accovacciati()
+					else:
+						t._accovacciati()
+						t._tiri_rapidi()
+						t._prono_se_libero()
+		780, 783, 785:
+			var raggio: int = {780: 8, 783: 6, 785: 3}[n]
+			if t._tedesco_vicino(raggio):
+				if n == 780:
+					t.esegui(869)
+				elif n == 785:
+					t.esegui(829)
+				else:
+					t._accovacciati()
+					t._miglior_tiro("vicino")
+			else:
+				t._prono()
+		804:
+			if _altro_tedesco_in_vista(g):
+				t._accovacciati()
+				t._tiri_rapidi()
+			else:
+				t._prono()
+		834:
+			var con_mezzo := false
+			for v in t.p.veicoli.in_esagono(g.hex):
+				if v.lato == "de" and v.stato == "attivo":
+					con_mezzo = true
+			if con_mezzo:
+				t._accovacciati()
+				t._miglior_tiro("facile")
+				t._prono_se_libero()
+			else:
+				t.esegui(803)
+		846:
+			var nb: int = t.bersagli(g).size()
+			if nb >= 3:
+				t._prono()
+			elif nb == 2:
+				t.esegui(815)
+			elif nb == 1:
+				t._alzati()
+				t._miglior_tiro("facile", -1, false, _arma_personale(g))
+				t._prono_se_libero()
+		848:
+			if int(g.munizioni.get("granata", 0)) > 0 and _bersaglio_entro(g, 0, 6):
+				esegui(590)
+			else:
+				t._prono()
+		852:
+			var nb2: int = t.bersagli(g).size()
+			if nb2 >= 1 and nb2 <= 2:
+				t._alzati()
+				t._tiri_rapidi()
+			else:
+				t._prono()
+		855:
+			if _est_del_fiume(g.hex):
+				t.esegui(840)
+			else:
+				var d2: int = t.p.d10()
+				var x2: int = 802 if d2 <= 2 else (840 if d2 <= 5 else (869 if d2 <= 7 else 801))
+				t.p._log("dado", "Dado %d: il %s esegue %d." % [d2, t.p.nome(g), x2])
+				t.esegui(x2)
+		872, 876:
+			var vg: Dictionary = t.p.veicoli.di(g)
+			if vg.is_empty() or not t.p.veicoli.attivo(vg):
+				if not vg.is_empty():
+					t.p.veicoli.scendi(g)
+				t._prono()
+				g.reazione = "L"
+			elif not bool(vg.get("bersagliato", false)):
+				t.p.veicoli.guida_tedesca(vg, false)
+			else:
+				t.p.veicoli.guida_tedesca(vg, true)
+				g._snap_forzato = true
+				t._miglior_tiro("vicino")
+		881, 886:
+			var vg2: Dictionary = t.p.veicoli.di(g)
+			if not vg2.is_empty() and t.p.veicoli.attivo(vg2):
+				t.p.veicoli.guida_tedesca(vg2, n == 881 and not _est_del_fiume(vg2.hex))
+				if n == 886:
+					g._snap_forzato = true
+					t._miglior_tiro("vicino")
+		889, 893, 898:
+			var g53: Dictionary = t.p.u("g53")
+			if not g53.is_empty() and not t.p.attivo(g53) and g53.hex == g.hex and _prendi_borsa(g):
+				t._accovacciati()
+			else:
+				t.esegui({889: 864, 893: 865, 898: 866}[n])
+		913:
+			var vg3: Dictionary = t.p.veicoli.di(g)
+			g.reazione = "D" if not vg3.is_empty() and t.p.veicoli.attivo(vg3) else "L"
+			t.p._log("tedesco", "Reazione speciale %s per il %s." % [g.reazione, t.p.nome(g)])
+		916, 918:
+			var vg4: Dictionary = t.p.veicoli.di(g)
+			if not vg4.is_empty() and t.p.veicoli.attivo(vg4):
+				if t.p.veicoli.autista(vg4).get("id", "") != g.id:
+					vg4.occupanti.erase(g.id)
+					vg4.occupanti.push_front(g.id)
+					t._mp = maxi(0, t._mp - 1)
+					t.p._log("tedesco", "Il %s passa al posto di guida." % t.p.nome(g))
+				else:
+					t.p.veicoli.guida_tedesca(vg4, true)
+			g._snap_forzato = true
+			t._miglior_tiro("vicino", -1, false, "pistol")
+		919:
+			if not _attivo_num(52):
+				esegui(913)
 		590:
 			var vicini3 := _bersaglio_entro(g, 0, 3)
 			var lontani := _bersaglio_entro(g, 4, 6)
@@ -440,6 +591,95 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> bool:
 		_:
 			return false
 	return true
+
+func _attivo_num(num: int) -> bool:
+	var x: Dictionary = t.p.u("g%d" % num)
+	return not x.is_empty() and t.p.attivo(x) and t.p.in_mappa(x)
+
+func _mg_di(g: Dictionary) -> String:
+	for w in g.armi:
+		if str(w.tipo) in ["lmg", "mmg", "hmg"]:
+			return str(w.tipo)
+	return ""
+
+func _arma_personale(g: Dictionary) -> String:
+	for w in g.armi:
+		if not (str(w.tipo) in ["lmg", "mmg", "hmg"]):
+			return str(w.tipo)
+	return ""
+
+## Miglior tiro al più vicino tra i bersagli su un ponte o accanto; false se non ce ne sono.
+func _tiro_ponte(g: Dictionary, arma: String) -> bool:
+	var lista: Array = t.bersagli(g).filter(func(a): return t.p.ponti().any(func(h): return E.distanza(a.hex, h) <= 1))
+	if lista.is_empty():
+		return false
+	lista.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
+	t._accovacciati()
+	var m: Array = t._migliore_arma(g, lista[0], true, arma)
+	if m.is_empty():
+		return false
+	t.p.risolvi_tiro(g, m[0], lista[0], true)
+	t._prono_se_libero()
+	return true
+
+func _auto_passata() -> bool:
+	if not t.p.s.avvistamenti[6]:
+		return false
+	var v: Dictionary = t.p.veicoli.v("v52")
+	return v.is_empty() or not t.p.veicoli.attivo(v) or v.hex == "" or _est_del_fiume(v.hex)
+
+## 624/627: motociclista 48 e passeggero 49.
+func _moto_ph(n: int, g: Dictionary) -> void:
+	var vg: Dictionary = t.p.veicoli.di(g)
+	if vg.is_empty():
+		g.reazione = "C"
+		t.p._log("tedesco", "Il %s è a piedi: reazione speciale C." % t.p.nome(g))
+		return
+	if not t.p.veicoli.attivo(vg):
+		t.p.veicoli.scendi(g)
+		t._prono()
+		g.reazione = "C"
+		return
+	if not t.p.s.avvistamenti[6]:
+		t._miglior_tiro("facile" if n == 624 else "vicino")
+	elif not _auto_passata():
+		if not _tiro_ponte(g, ""):
+			var d: int = t.p.d10()
+			var x: int
+			if n == 624:
+				x = 801 if d <= 3 else (829 if d <= 6 else 840)
+			else:
+				x = 825 if d <= 3 else (802 if d <= 6 else (840 if d == 7 else 818))
+			t.p._log("dado", "Dado %d: il %s esegue %d." % [d, t.p.nome(g), x])
+			t.esegui(x)
+	else:
+		g.reazione = ""
+		if int(g.num) == 48:
+			t.p.veicoli.guida_tedesca(vg, true)
+		elif n == 624:
+			t.esegui(802)
+
+## 659: reazione speciale C.
+func _moto_659(g: Dictionary) -> void:
+	if not t.p.s.avvistamenti[6]:
+		var d: int = t.p.d10()
+		t.esegui(808 if d <= 4 else (829 if d <= 7 else 801))
+	elif not _auto_passata():
+		if not _tiro_ponte(g, ""):
+			var d2: int = t.p.d10()
+			t.esegui(801 if d2 <= 3 else (829 if d2 <= 6 else 840))
+	else:
+		g.reazione = "B"
+		t.esegui(868)
+
+func _prendi_borsa(g: Dictionary) -> bool:
+	var lista: Array = t.p.s.oggetti.get(g.hex, [])
+	for o in lista:
+		if str(o.get("tipo", "")) == "documenti" and str(o.get("par", "")) == "652":
+			lista.erase(o)
+			t.p._log("tedesco", "Il %s prende la borsa sigillata del corriere." % t.p.nome(g))
+			return true
+	return false
 
 func _bersaglio_entro(g: Dictionary, da: int, a: int) -> bool:
 	for x in t.bersagli(g):

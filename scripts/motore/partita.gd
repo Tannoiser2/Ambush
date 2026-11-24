@@ -2083,6 +2083,8 @@ func ponti() -> Array:
 	return out
 
 func ponte_di_pietra(h: String) -> bool:
+	if h in regola("ponti_pietra", []):
+		return true
 	return terreno.tipo(h) == "road" or terreno.esagoni.get(h, {}).get("t", "") == "road"
 
 ## Un tedesco che lascia un ponte dal lato opposto lo ha «attraversato» (paragrafi 251, 260, 275, 280).
@@ -4199,6 +4201,8 @@ func prendi(id: String, voce: Dictionary) -> Dictionary:
 		s.oggetti[a.hex].remove_at(int(voce.indice))
 		a.documenti = int(a.get("documenti", 0)) + int(dv.get("n", 1))
 		_log("azione", "%s raccoglie i documenti." % nome(a))
+		if str(dv.get("par", "")) != "":
+			leggi(str(dv.par), {"hex": a.hex, "ids": [a.id]})
 		_chiudi_azione_semplice(a)
 		_fine_comando()
 		return OK
@@ -4417,7 +4421,15 @@ func azioni_ponte(a: Dictionary) -> Array:
 		if a.hex == h and not carica.is_empty() and carica.preparata:
 			out.append({"azione": "carica", "hex": h, "testo": "Piazza una carica sul ponte (%s)" % h})
 		var servono := 2 if ponte_di_pietra(h) else 1
-		if int(st.cariche) >= servono and (E.distanza(a.hex, h) <= 1 or terreno.vede(a.hex, h, a.postura, "standing")):
+		if bool(regola("ponti_timer", false)):
+			# Purple Heart 17: sul ponte, con le cariche piazzate, si arma il timer (1–4 Round; nelle Operazioni si innesca).
+			if a.hex == h and int(st.cariche) >= servono and not ph.ponte_armato(h):
+				if fase_round():
+					for k in [1, 2, 3, 4]:
+						out.append({"azione": "timer%d" % k, "hex": h, "testo": "Timer: salta tra %d Round (%s)" % [k, h]})
+				else:
+					out.append({"azione": "timer0", "hex": h, "testo": "Innesca le cariche del ponte (%s)" % h})
+		elif int(st.cariche) >= servono and (E.distanza(a.hex, h) <= 1 or terreno.vede(a.hex, h, a.postura, "standing")):
 			out.append({"azione": "brilla", "hex": h, "testo": "Fai saltare il ponte %s (%s)" % [nome_p, h]})
 		if not ponte_di_pietra(h) and st.carburante and E.distanza(a.hex, h) == 1:
 			out.append({"azione": "fuoco", "hex": h, "testo": "Dai fuoco al ponte di legno (%s)" % h})
@@ -4448,6 +4460,8 @@ func azione_ponte(id: String, azione: String, h: String) -> Dictionary:
 			a.armi.erase(c)
 			st.cariche = int(st.cariche) + 1
 			_log("azione", "%s piazza una carica da demolizione sul ponte in %s (%d)." % [nome(a), h, int(st.cariche)])
+		"timer0", "timer1", "timer2", "timer3", "timer4":
+			ph.arma_ponte(h, int(azione.substr(5)))
 		"brilla":
 			_log("azione", "%s fa brillare le cariche." % nome(a))
 			distruggi_ponte(h, "cariche da demolizione")
@@ -4811,7 +4825,7 @@ func _controlla_da_leggere() -> void:
 			leggi(pid, {"hex": h, "ids": unita_in(h, "us").map(func(x): return x.id)})
 
 func _niente_controlli_round() -> bool:
-	return s.fase == "round" and bool(missione.get("regole", {}).get("niente_controlli_round", false))
+	return s.fase == "round" and (bool(missione.get("regole", {}).get("niente_controlli_round", false)) or ph.niente_controlli_round())
 
 ## Missione 2: 1 PV per ogni esagono di edificio in cui entra un soldato.
 func _edificio_raggiunto(h: String) -> void:

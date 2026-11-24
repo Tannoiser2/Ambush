@@ -200,7 +200,11 @@ func esegui(n: int) -> void:
 			var nuovo := p.d10()
 			p._log("dado", "Nuovo numero d’azione per il %s: %d" % [p.nome(g), nuovo])
 			var col := colonna(g, true)
-			esegui(paragrafo_da_carta(g, col, nuovo))
+			var nuovo_par := paragrafo_da_carta(g, col, nuovo)
+			if nuovo_par == 816:
+				p._log("tedesco", "La carta del %s non dà un’azione per questa colonna: non fa nulla." % p.nome(g))
+			else:
+				esegui(nuovo_par)
 		824:
 			_accovacciati()
 			_miglior_tiro("facile", -1, true)

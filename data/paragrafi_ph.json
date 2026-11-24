@@ -764,18 +764,12 @@
  },
  "649": {
   "id": "649",
-  "it": "Se un cane da guardia era stato incapacitato, uno si riprende (ferito) e riparte verso l’americano attivo più vicino. Una volta sola per missione. Se entrambi i cani sono morti, vedi 486.",
+  "it": "Se un cane da guardia era stato incapacitato, uno si riprende (ferito) e riparte verso l’americano attivo più vicino. Una volta sola per missione. Se nessun cane può riprendersi, vedi 485.",
   "ops": [
    {
     "op": "cane_recupera"
    }
   ],
-  "tipo": "missione"
- },
- "486": {
-  "id": "486",
-  "it": "[s8] Un treno tedesco… (in questa missione il treno non è previsto: nessun effetto).",
-  "ops": [],
   "tipo": "missione"
  },
  "655": {
@@ -1224,22 +1218,6 @@
    },
    {
     "op": "scialuppa"
-   }
-  ],
-  "tipo": "missione"
- },
- "595": {
-  "id": "595",
-  "it": "[s9] I tesori del Louvre! Guadagni 10 PV.",
-  "ops": [
-   {
-    "op": "sighting",
-    "s": 9
-   },
-   {
-    "op": "vp",
-    "n": 10,
-    "why": "tesori del Louvre"
    }
   ],
   "tipo": "missione"
@@ -7863,6 +7841,1421 @@
  "576": {
   "id": "576",
   "it": "Se nel suo esagono c’è un americano attivo, assalta per uccidere. Altrimenti, se è in un edificio vedi 816, se no vedi 868.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "377": {
+  "id": "377",
+  "it": "Effettua un controllo di attivazione:\n• se riesce, vedi 387;\n• se fallisce, vedi 394.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "387"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "394"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "394": {
+  "id": "394",
+  "it": "Effettua un controllo di percezione:\n• se riesce, vedi 400;\n• se fallisce, vedi 409.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "400"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "409"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "387": {
+  "id": "387",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in E11, accovacciati. Iniziano i Round, vantaggio tedesco; il tedesco 22 riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "E11"
+     ],
+     [
+      23,
+      "E11"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     22
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "400": {
+  "id": "400",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in E11, accovacciati. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "E11"
+     ],
+     [
+      23,
+      "E11"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "409": {
+  "id": "409",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in E11, accovacciati. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "E11"
+     ],
+     [
+      23,
+      "E11"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "417": {
+  "id": "417",
+  "it": "Effettua un controllo di attivazione:\n• se riesce, vedi 423;\n• se fallisce, vedi 429.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "423"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "429"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "429": {
+  "id": "429",
+  "it": "Effettua un controllo di percezione:\n• se riesce, vedi 437;\n• se fallisce, vedi 444.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "437"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "444"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "423": {
+  "id": "423",
+  "it": "[s3] Attiva i tedeschi 55 e 56 in O12, accovacciati. Iniziano i Round, vantaggio tedesco; ricevono 2 turni. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "O12"
+     ],
+     [
+      56,
+      "O12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     55,
+     56
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "437": {
+  "id": "437",
+  "it": "[s3] Attiva i tedeschi 55 e 56 in O12, accovacciati. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "O12"
+     ],
+     [
+      56,
+      "O12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "444": {
+  "id": "444",
+  "it": "[s3] Attiva i tedeschi 55 e 56 in O12, accovacciati. Iniziano i Round. Passa alla Condizione 2.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      55,
+      "O12"
+     ],
+     [
+      56,
+      "O12"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "condition",
+    "n": 2
+   }
+  ],
+  "tipo": "missione"
+ },
+ "335": {
+  "id": "335",
+  "it": "Effettua un controllo di attivazione:\n• se riesce, vedi 337;\n• se fallisce, vedi 346.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "337"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "346"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "346": {
+  "id": "346",
+  "it": "Effettua un controllo di percezione:\n• se riesce, vedi 356;\n• se fallisce, vedi 367.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "356"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "367"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "337": {
+  "id": "337",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "X14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     50
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "356": {
+  "id": "356",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "X14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "367": {
+  "id": "367",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "X14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "514": {
+  "id": "514",
+  "it": "Effettua un controllo di attivazione:\n• se riesce, vedi 523;\n• se fallisce, vedi 570.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "523"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "570"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "570": {
+  "id": "570",
+  "it": "Effettua un controllo di percezione:\n• se riesce, vedi 529;\n• se fallisce, vedi 535.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "529"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "535"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "523": {
+  "id": "523",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in I13, accovacciati. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "I13"
+     ],
+     [
+      23,
+      "I13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "529": {
+  "id": "529",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in I13, accovacciati. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "I13"
+     ],
+     [
+      23,
+      "I13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "535": {
+  "id": "535",
+  "it": "[s0] Attiva i tedeschi 22 e 23 in I13, accovacciati. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      22,
+      "I13"
+     ],
+     [
+      23,
+      "I13"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "455": {
+  "id": "455",
+  "it": "• Se s1 non è avvenuto, vedi 463.\n• Se s1 è avvenuto, vedi 486.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 1
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "463"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "486"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "463": {
+  "id": "463",
+  "it": "Ogni soldato fa subito un controllo di percezione:\n• se almeno uno riesce, vedi 471;\n• se falliscono tutti, vedi 486.",
+  "ops": [
+   {
+    "op": "pc_tutti",
+    "ok": [
+     {
+      "op": "goto",
+      "p": "471"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "486"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "471": {
+  "id": "471",
+  "it": "[s1] Il soldato sente un treno che arriva da nord. All’inizio del prossimo Round, al posto del controllo degli eventi casuali, vedi 486. Se sei nelle Operazioni iniziano subito i Round (anche senza tedeschi in mappa) e 486 si legge all’inizio del secondo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "treno_in_arrivo"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "486": {
+  "id": "486",
+  "it": "[s8] Un treno tedesco entra in Y5! Iniziano i Round, vantaggio tedesco. Vedi 493. Appena il treno esce dalla mappa o deraglia, passa alla Condizione 3; si resta nei Round finché il treno è in mappa.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "treno"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "493": {
+  "id": "493",
+  "it": "Il treno: locomotiva, tre vagoni merci e una cisterna (in ordine casuale dietro la locomotiva). Avanza di 6 esagoni di binario per turno, due turni per Round (qui: 12 esagoni all’inizio di ogni Round). Non si sale sul treno. Un vagone che entra nell’esagono di un soldato attivo: controllo di percezione, se riesce si sposta in un esagono vicino, altrimenti muore. Vedi 497 per farlo deragliare.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "497": {
+  "id": "497",
+  "it": "Il treno deraglia se entra nel ponte di legno G11 distrutto (vedi 506). In questa versione i binari non si possono far saltare e il treno non si può distruggere a colpi di bazooka.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "506": {
+  "id": "506",
+  "it": "Deragliamento: locomotiva e vagoni si rovesciano dove si trovano (in questa versione senza la procedura di scivolamento). Passa alla Condizione 3 e torna alle Operazioni se non ci sono tedeschi attivi. Un soldato americano attivo che entra in un vagone merci rovesciato: vedi 595.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "595": {
+  "id": "595",
+  "it": "[s9] I tesori del Louvre! I vagoni contengono centinaia di casse marcate Picasso, Rembrandt, Michelangelo. Guadagni 10 PV per aver salvato il patrimonio della Francia!",
+  "ops": [
+   {
+    "op": "louvre"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "645": {
+  "id": "645",
+  "it": "Un soldato americano a caso in un esagono di terreno accidentato cade: controllo di percezione; se fallisce, danni come da un colpo di pistola. Una volta sola.",
+  "ops": [
+   {
+    "op": "caduta_accidentato"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "543": {
+  "id": "543",
+  "it": "1. Se s2 non è avvenuto, vedi 551.\n2. Se s4 non è avvenuto, vedi 559.\n3. Se s6 non è avvenuto, vedi 566.\n4. Vedi 577.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "551"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 4
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "559"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 6
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "566"
+         }
+        ],
+        "else": [
+         {
+          "op": "goto",
+          "p": "577"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "551": {
+  "id": "551",
+  "it": "[s2] Attiva il tedesco 24 in B9, accovacciato in un cratere (metti il segnalino). Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "cratere_hex",
+    "hex": "B9"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      24,
+      "B9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     24
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "559": {
+  "id": "559",
+  "it": "[s4] Attiva i tedeschi 48 e 49 su una motocicletta in W1. Iniziano i Round, vantaggio tedesco; ricevono 2 turni.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "colonna_ph",
+    "mezzi": [
+     [
+      "moto",
+      48,
+      [
+       49
+      ]
+     ]
+    ],
+    "hex": "W1",
+    "two": [
+     48,
+     49
+    ],
+    "reazione": ""
+   }
+  ],
+  "tipo": "missione"
+ },
+ "566": {
+  "id": "566",
+  "it": "[s6] Attiva i tedeschi 52 e 53 su un’auto comando in W1. Iniziano i Round, vantaggio tedesco; ricevono 2 turni. Il tedesco 53 è un corriere delle SS con una borsa sigillata.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "colonna_ph",
+    "mezzi": [
+     [
+      "auto_comando",
+      52,
+      [
+       53
+      ]
+     ]
+    ],
+    "hex": "W1",
+    "two": [
+     52,
+     53
+    ],
+    "reazione": ""
+   }
+  ],
+  "tipo": "missione"
+ },
+ "577": {
+  "id": "577",
+  "it": "• Se tutti i ponti sono distrutti, vedi 587.\n• Altrimenti vedi 639.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponti_distrutti": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "587"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "639"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "587": {
+  "id": "587",
+  "it": "Passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "missione"
+ },
+ "706": {
+  "id": "706",
+  "it": "Da ora in poi, durante i Round, non si fanno più controlli dei paragrafi. Tornando alle Operazioni si controllano normalmente.",
+  "ops": [
+   {
+    "op": "niente_controlli_round"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "701": {
+  "id": "701",
+  "it": "• Se tutti gli 8 soldati americani sono attivi e i ponti sono saltati, vedi 707.\n• Altrimenti vedi 641.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "tutti_attivi_ponti": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "707"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "641"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "707": {
+  "id": "707",
+  "it": "Tutti i tedeschi rimasti si arrendono! Guadagni 5 PV per il lavoro ben fatto. La missione finisce subito.",
+  "ops": [
+   {
+    "op": "resa_generale"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "652": {
+  "id": "652",
+  "it": "I documenti rivelano le formule segrete per produrre carburante sintetico. Guadagni 5 PV.",
+  "ops": [
+   {
+    "op": "vp",
+    "n": 5,
+    "why": "documenti della borsa sigillata"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "585": {
+  "id": "585",
+  "it": "Il Jagdpanther sembra solo parzialmente fuori uso (in questa versione non si può usare).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "369": {
+  "id": "369",
+  "it": "• Se si muove un mezzo, entra in R12.\n• Altrimenti entra in R10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "603": {
+  "id": "603",
+  "it": "• Se si muovono i tedeschi 48 e 49, entra in V5.\n• Altrimenti entra in U5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "V5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "611": {
+  "id": "611",
+  "it": "• Se un ponte è ancora intatto, si ferma e mette la reazione speciale A per i tedeschi 48 e 49.\n• Se tutti i ponti sono distrutti, entra in W9 e passa alla Condizione 4 alla fine del Round.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponti_distrutti": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "W9"
+     },
+     {
+      "op": "condition",
+      "n": 4
+     }
+    ],
+    "else": [
+     {
+      "op": "reazione_nums",
+      "nums": [
+       48,
+       49
+      ],
+      "r": "A"
+     },
+     {
+      "op": "ferma_g"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "676": {
+  "id": "676",
+  "it": "Passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 4
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "686": {
+  "id": "686",
+  "it": "• Se il ponte in R10 è intatto, entra in R9.\n• Altrimenti entra in Q9.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_ok": "R10"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R9"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q9"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "693": {
+  "id": "693",
+  "it": "• Se il ponte in J11 è intatto, entra in J11.\n• Altrimenti entra in I10.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_ok": "J11"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J11"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I10"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "697": {
+  "id": "697",
+  "it": "• Se il ponte in G11 è intatto, entra in H10.\n• Altrimenti entra in I9 e passa alla Condizione 4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_ok": "G11"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H10"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "I9"
+     },
+     {
+      "op": "condition",
+      "n": 4
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "738": {
+  "id": "738",
+  "it": "Scende al pianterreno ed entra in W14.",
+  "ops": [
+   {
+    "op": "g_pianterreno"
+   },
+   {
+    "op": "g_enter",
+    "hex": "W14"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "748": {
+  "id": "748",
+  "it": "• Se il ponte in R10 è minato (o lo si sta minando), entra in R11.\n• Se il ponte è saltato, reazione speciale Q.\n• Altrimenti toglie la reazione speciale L.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ponte_minato": "R10"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R11"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "ponte_ok": "R10"
+      },
+      "then": [
+       {
+        "op": "g_reaction",
+        "r": ""
+       }
+      ],
+      "else": [
+       {
+        "op": "g_reaction",
+        "r": "Q"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "756": {
+  "id": "756",
+  "it": "• Se si muove un mezzo, entra in R11.\n• Altrimenti vedi 759.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R11"
+     }
+    ],
+    "else": [
+     {
+      "op": "goto",
+      "p": "759"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "759": {
+  "id": "759",
+  "it": "Il tedesco sul ponte: se le cariche sono innescate e non ci sono americani nell’esagono, ne getta via una (il ponte non è più minato); se ci sono americani, li assalta. Altrimenti entra in Q10, toglie la reazione L e mette la reazione Q.",
+  "ops": [
+   {
+    "op": "tedesco_sotto_ponte"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "341": {
+  "id": "341",
+  "it": "• Se il tedesco 52 è attivo, esegue 801.\n• Altrimenti vedi 913.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "343": {
+  "id": "343",
+  "it": "• Se il tedesco 52 è attivo, esegue 825.\n• Altrimenti vedi 913.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "350": {
+  "id": "350",
+  "it": "• A est del fiume esegue 840.\n• A ovest del fiume esegue 825.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "358": {
+  "id": "358",
+  "it": "• A est del fiume esegue 840.\n• A ovest del fiume esegue 808.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "363": {
+  "id": "363",
+  "it": "• A est del fiume esegue 840.\n• A ovest del fiume esegue 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "624": {
+  "id": "624",
+  "it": "Motociclista: fuori dal mezzo passa alla reazione C; con la moto fuori uso scende, cade prono e passa alla reazione C. Prima dell’auto comando (s6) fa il miglior tiro al più facile; poi, finché l’auto non ha passato il fiume, spara a chi è su un ponte o accanto (altrimenti dado: 0–3 801, 4–6 829, 7–9 840); quando l’auto è passata, il 48 corre in U9 e il 49 esegue 802.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "627": {
+  "id": "627",
+  "it": "Come 624 ma con il bersaglio più vicino; senza bersagli sul ponte dado: 0–3 825, 4–6 802, 7 840, 8–9 818; quando l’auto è passata, il 48 corre in U9 e il 49 non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "659": {
+  "id": "659",
+  "it": "Prima di s6 tira un dado: 0–4 808, 5–7 829, 8–9 801. Poi, finché l’auto comando non ha passato il fiume, spara a chi è su un ponte o accanto (altrimenti dado: 0–3 801, 4–6 829, 7–9 840). Quando è passata: toglie la reazione C, esegue 868 verso U9 e al turno seguente passa alla reazione B.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "661": {
+  "id": "661",
+  "it": "• Se un ponte è intatto, tira un dado: 0–1 862, 2–3 863, 4–5 864, 6–7 865, 8 866, 9 840.\n• Se tutti i ponti sono saltati, vedi 820.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "710": {
+  "id": "710",
+  "it": "Miglior tiro a chi è su un ponte o accanto (il più vicino), poi prono se può; altrimenti esegue 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "715": {
+  "id": "715",
+  "it": "Miglior tiro a chi è su un ponte o accanto (il più vicino), poi prono se può; altrimenti esegue 825.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "721": {
+  "id": "721",
+  "it": "Miglior tiro a chi è su un ponte o accanto (il più vicino), poi prono se può; altrimenti esegue 808.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "731": {
+  "id": "731",
+  "it": "Mette la reazione speciale L e ritira il numero d’azione.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "761": {
+  "id": "761",
+  "it": "Con la mitragliatrice: miglior tiro a chi è su un ponte o accanto, poi prono se può; altrimenti miglior tiro al più facile con l’arma personale.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "769": {
+  "id": "769",
+  "it": "Con la mitragliatrice: miglior tiro a chi è su un ponte o accanto; altrimenti miglior tiro al più vicino; poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "771": {
+  "id": "771",
+  "it": "Con la mitragliatrice: miglior tiro a chi è su un ponte o accanto; altrimenti tiri rapidi al più vicino e al secondo; poi prono se può. Senza bersagli si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "780": {
+  "id": "780",
+  "it": "• Entro 8 esagoni da un altro tedesco attivo esegue 869.\n• Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "783": {
+  "id": "783",
+  "it": "• Entro 6 esagoni da un altro tedesco attivo si accovaccia e fa il miglior tiro al più vicino.\n• Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "785": {
+  "id": "785",
+  "it": "• Entro 3 esagoni da un altro tedesco attivo esegue 829.\n• Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "804": {
+  "id": "804",
+  "it": "• Se vede un altro tedesco attivo, tiri rapidi a quanti più bersagli può.\n• Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "834": {
+  "id": "834",
+  "it": "• Nell’esagono di un mezzo tedesco attivo si accovaccia e fa il miglior tiro al più facile, poi prono se può.\n• Altrimenti vedi 803.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "846": {
+  "id": "846",
+  "it": "• Con 3 o più bersagli in vista cade prono.\n• Con 2 bersagli esegue 815.\n• Con 1 bersaglio si alza e fa il miglior tiro con l’arma personale, poi prono se può.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "848": {
+  "id": "848",
+  "it": "1. Con una granata e un bersaglio entro 3 esagoni si accovaccia e la lancia; poi prono se può.\n2. Con una granata e un bersaglio tra 4 e 6 esagoni si alza e la lancia; poi prono se può.\n3. Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "852": {
+  "id": "852",
+  "it": "• Con uno o due bersagli in vista si alza e spara di rapido a ciascuno.\n• Altrimenti cade prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "855": {
+  "id": "855",
+  "it": "• A est del fiume esegue 840.\n• A ovest tira un dado: 0–2 802, 3–5 840, 6–7 869, 8–9 801.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "872": {
+  "id": "872",
+  "it": "• Mezzo fuori uso: scende, cade prono e passa alla reazione L.\n• Mai bersagliato: guida lento.\n• Bersagliato: guida veloce e tiro rapido al più vicino con il mitra.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "876": {
+  "id": "876",
+  "it": "• Mezzo fuori uso: scende, cade prono e passa alla reazione L.\n• Mai bersagliato: guida lento.\n• Bersagliato: guida veloce e tiro rapido al più vicino con la pistola.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "881": {
+  "id": "881",
+  "it": "• A est del fiume guida lento.\n• A ovest del fiume guida veloce.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "886": {
+  "id": "886",
+  "it": "Guida lento e spara un tiro rapido al più vicino con il mitra.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "889": {
+  "id": "889",
+  "it": "• Se il tedesco 53 è fuori combattimento nell’esagono, prende la borsa sigillata.\n• Altrimenti esegue 864.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "893": {
+  "id": "893",
+  "it": "• Se il tedesco 53 è fuori combattimento nell’esagono, prende la borsa sigillata.\n• Altrimenti esegue 865.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "898": {
+  "id": "898",
+  "it": "• Se il tedesco 53 è fuori combattimento nell’esagono, prende la borsa sigillata.\n• Altrimenti esegue 866.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "913": {
+  "id": "913",
+  "it": "• Se il mezzo è intatto, reazione speciale D.\n• Se è fuori uso, reazione speciale L.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "916": {
+  "id": "916",
+  "it": "Passa al posto di guida (o, se c’è già, guida veloce); tiro rapido con la pistola al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "918": {
+  "id": "918",
+  "it": "Passa al posto di guida (o, se c’è già, guida veloce); tiro rapido con la pistola al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "919": {
+  "id": "919",
+  "it": "• Se il tedesco 52 è attivo non fa nulla.\n• Altrimenti vedi 913.",
   "ops": [],
   "tipo": "azione"
  }

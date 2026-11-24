@@ -61,7 +61,7 @@ CANE = {"lettera": "", "ruolo": "Cane da guardia", "pv": 0, "armi": [], "granate
 
 
 # Primo turno dalle note (la colonna della Missione 15; le note OCR sono troncate: valori dal database del programma).
-PRIMO_TURNO_DA_NOTE = {4, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 35, 40, 41, 42, 44, 45}
+PRIMO_TURNO_DA_NOTE = {4, 6, 8, 9, 10, 11, 12, 14, 15, 16, 17, 35, 40, 41, 42, 44, 45, 52}
 PRIMO_FISSO = {4: 814, 6: 814, 8: 814, 16: 814, 9: 840, 10: 840, 11: 840, 12: 840, 14: 840, 15: 840}
 
 
@@ -194,6 +194,39 @@ MISSIONI = {
     },
 }
 
+MISSIONI[17] = {
+    "titolo": "Sul filo del rasoio", "titolo_originale": "The Racer’s Edge",
+    "data": "Germania occidentale, 15 marzo 1945", "mappa": "BE", "nord": "a destra (in alto è ovest)", "libro": "ph",
+    "briefing": "15 marzo 1945, Germania occidentale. In testa a una delle tenaglie alleate, la squadra ha raggiunto la Mosella! Gli "
+                "ordini: distruggere tutti i ponti sul fiume, tagliare la ritirata ai resti tedeschi e chiudere la sacca.",
+    "ingresso": "Mappe B ed E, in alto è ovest. La squadra entra da un esagono dei bordi sud e ovest tra A5 e H1. Ponte di legno in G11, "
+                "ponti di pietra in J11 e R10; gli edifici a ovest del fiume sono macerie. Ricevi 5 cariche da demolizione gratis.",
+    "regole_testo": "[b]Fiume.[/b] Il fiume da A6 a Y11 si attraversa solo sui ponti intatti. [b]Ponti.[/b] Sul ponte, carica da "
+                    "demolizione pronta: una carica basta per il ponte di legno, due per quelli di pietra. Poi si arma il timer da 1 a 4 "
+                    "Round: il ponte salta all’inizio del Round indicato (nelle Operazioni appena la squadra si è allontanata). Chi è sul "
+                    "ponte muore. (Scendere sotto il ponte non è gestito.) [b]Vittoria: 28 PV.[/b] Niente PV per le attivazioni: 10 PV "
+                    "per ogni ponte distrutto e 1 PV per ogni tedesco ucciso, catturato o incapacitato.",
+    "ingresso_breve": "bordi sud e ovest, A5–H1", "uscita_breve": "bordi sud e ovest, A5–H1 (dalla Condizione 3)",
+    "ingresso_esagoni": ["A1", "A2", "A3", "A4", "A5"] + ["%s1" % c for c in "BCDEFGH"],
+    "uscita_esagoni": ["A1", "A2", "A3", "A4", "A5"] + ["%s1" % c for c in "BCDEFGH"],
+    "vittoria_pv": 28, "attivazione": {"1": 4, "2": 5, "3": 7, "4": 8}, "obiettivi": [],
+    "regole": {"fiume": True, "ponti_pietra": ["J11", "R10"], "ponti_timer": True, "cariche_gratis": 5, "macerie_iniziali": [],
+               "fine_ponti_17": True, "binario": []},
+    "vittoria_testo": "[b]Vittoria: 28 PV.[/b] Niente PV per le attivazioni dei tedeschi: 10 PV per ogni ponte distrutto e 1 PV per ogni "
+                      "tedesco ucciso, catturato o incapacitato; altri PV si scoprono in gioco. La missione finisce nelle Condizioni 3 o 4: "
+                      "1. senza tedeschi attivi in mappa e con tutti e tre i ponti minati o distrutti (o senza più cariche): tutti i ponti "
+                      "contano come distrutti; 2. con i tre ponti distrutti e nessuna linea di vista tra americani e tedeschi attivi; 3. "
+                      "quando non ci sono più americani attivi in mappa (si esce da A5–H1). Nei primi due casi non si perdono PV per gli "
+                      "incapacitati.",
+    "testo_fine": "",
+    "germani": [22, 23, 24, 48, 49, 50, 52, 53, 55, 56],
+}
+
+
+BINARIO_BE = ["Y5", "X4", "W5", "V4", "U5", "T4", "S5", "R5", "Q6", "P6", "O7", "N7", "M8", "L8", "K9", "J9", "I10", "H10", "G11",
+              "F11", "E12", "D12", "C13", "B12", "A13"]
+MACERIE_17 = ["L5", "M5", "M6", "K7", "N9", "O6", "P5", "Q5", "Q8", "R7", "P9", "S9"]
+
 
 def main():
     tutti = {}
@@ -214,6 +247,20 @@ def main():
         if n == 13:
             for g in d["tedeschi"].values():
                 g.pop("pv_cattura", None) if g.get("ruolo") == "Cane da guardia" else None
+        if n == 17:
+            d["regole"]["macerie_iniziali"] = MACERIE_17
+            d["regole"]["binario"] = BINARIO_BE
+            for g in d["tedeschi"].values():
+                g["pv"] = 0
+                g.pop("pv_cattura", None)
+            # il 23 non ha colonne di Condizione: assiste la mitragliatrice del 22 (poi reazione speciale X), un turno per Round
+            d["tedeschi"]["23"]["colonne"]["1-4"] = [840, 840, 840, 840]
+            d["tedeschi"]["23"]["assiste"] = 22
+            d["tedeschi"]["23"]["un_turno"] = True
+            ev = d["condizioni"]["4"]["evento"]
+            for k, v in ev.items():
+                if v == "634":
+                    ev[k] = "639"  # lettura della carta: 634 è un evento della Missione 13 (faro); 577 rimanda a 639
         if n == 14:
             # lettura della carta: W18 rimanda a 449 (paragrafo d’altra missione); come X15 è la reazione speciale L (499)
             d["condizioni"]["3"]["movimenti"]["W18"] = "499"

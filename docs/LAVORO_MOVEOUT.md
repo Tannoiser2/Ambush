@@ -116,6 +116,25 @@ Ordine scelto: M11, M10, M12, M9.
   della sentinella 61 in E11 (648, 3–4), colpi al faro con le armi (si distrugge solo con un esplosivo).
 - Il bot delle simulazioni non usa gli esplosivi: perde sempre, ma serve a cercare errori (0 in 20 partite).
 
+## Missione 17 «Sul filo del rasoio» (mappe B + E, in alto è ovest)
+- Avvio (regola fine_ponti_17): macerie negli edifici a ovest del fiume, 5 cariche gratis; ponti G11 (legno), J11 e R10
+  (pietra, regola ponti_pietra). Niente PV per le attivazioni (pv 0 nel costruttore).
+- Ponti (regola ponti_timer): sul ponte si piazzano le cariche (1 legno, 2 pietra), poi «Timer: salta tra N Round» (1–4,
+  s.ph.timer_ponti, esplode all’inizio del Round) o, nelle Operazioni, «Innesca» (salta appena nessun americano è entro un
+  esagono). Il 759 fa gettare una carica al tedesco sul ponte. Non gestiti: scendere sotto il ponte e le sue regole di tiro.
+- Treno (471/486, s.ph.treno): locomotiva + 3 vagoni + cisterna su BINARIO_BE (Y5 → A13), 12 esagoni all’inizio di ogni
+  Round; travolge chi non supera il controllo di percezione; deraglia sul ponte G11 distrutto (vagoni rovesciati: 595,
+  +10 PV una volta); uscita o deragliamento → Condizione 3; i Round restano obbligati finché il treno è in mappa. Non
+  gestiti: binari fatti saltare e treno colpito dal bazooka, scivolamento dei vagoni.
+- Motocicletta 48/49 (559) e auto comando 52/53 (566) con colonna_ph senza reazione W; corriere SS 53: fuori combattimento
+  lascia la borsa sigillata (oggetto documenti con par 652: +5 PV a chi la raccoglie).
+- Paragrafi d’azione di Purple Heart diversi dal gioco base (341–363, 624–661, 710–785, 804, 834, 846–919): in
+  tedeschi_ph.esegui. Il 23 non ha colonne di Condizione: assiste la mitragliatrice del 22, poi reazione X, un turno per Round.
+- Fine (Condizioni 3–4): 1. niente tedeschi attivi e tutti i ponti minati o distrutti (o finite le cariche): tutti e tre
+  valgono 10 PV; 2. ponti distrutti e nessuna linea di vista; 3. nessun americano attivo. +1 PV per tedesco fuori combattimento.
+- Correzioni: la carta C4 rimandava a 634 (evento del faro della Missione 13): sostituito con 639; nel 649 della Missione 13
+  il rimando corretto è 485 (non 486, che è il treno).
+
 ## Missione 14 «Ricognizione in forze» (mappa C, in alto è ovest)
 - Ingresso in Y7 sulle due jeep (regola jeep_caricate: vjeep1/vjeep2, quattro uomini ciascuna); radio portata dal
   sergente A (regola radio_portata_ph: presidiata finché A è attivo in mappa).

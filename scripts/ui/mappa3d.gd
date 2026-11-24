@@ -816,6 +816,57 @@ func _costruisci_ph(p, cemento: Material) -> void:
 						mca.position = punto3d(c + Vector2(-0.45, -0.45) * RAGGIO_PX * 0.9, 0.28)
 						mca.rotation = Vector3(0, PI * 0.75, PI / 2.0 - 0.08)
 						_dinamici.add_child(mca)
+	# Treno (Missione 17): locomotiva, vagoni e cisterna lungo il binario
+	var binario: Array = p.regola("binario", [])
+	for h in p.s.get("punti", {}):
+		var nome_t := str(p.s.punti[h])
+		if not (nome_t in ["locomotiva", "vagone merci", "cisterna", "vagone rovesciato", "cisterna rovesciata"]):
+			continue
+		var i_b := binario.find(str(h))
+		var dir_t := Vector2.RIGHT
+		if i_b >= 0:
+			# direzione media sul tratto di binario (i binari a zig-zag tra le righe vanno lisciati)
+			var a_t := centro_px(str(binario[maxi(0, i_b - 2)]))
+			var b_t := centro_px(str(binario[mini(binario.size() - 1, i_b + 2)]))
+			if a_t.distance_to(b_t) > 1.0:
+				dir_t = (b_t - a_t).normalized()
+		var ang_t := -atan2(dir_t.y, dir_t.x)
+		var rovesciato := "rovesciat" in nome_t
+		var col_t := Color("3c3f3a") if nome_t == "locomotiva" else (Color("6a4a32") if "vagone" in nome_t else Color("4c5458"))
+		var mat_t := _materiale(col_t.darkened(0.35) if rovesciato else col_t, 0.8)
+		var nodo := Node3D.new()
+		var pos_t := centro_px(str(h))
+		if i_b > 0 and i_b + 1 < binario.size():
+			pos_t = (centro_px(str(binario[i_b - 1])) + 2.0 * pos_t + centro_px(str(binario[i_b + 1]))) / 4.0
+		nodo.position = punto3d(pos_t, 0.0)
+		nodo.rotation.y = ang_t + (0.6 if rovesciato else 0.0)
+		if rovesciato:
+			nodo.rotation.x = 1.2
+		_dinamici.add_child(nodo)
+		if "cisterna" in nome_t:
+			var cil := CylinderMesh.new()
+			cil.top_radius = 0.16
+			cil.bottom_radius = 0.16
+			cil.height = RAGGIO_PX * 1.5 * K
+			var mc := MeshInstance3D.new()
+			mc.mesh = cil
+			mc.material_override = mat_t
+			mc.rotation = Vector3(0, 0, PI / 2.0)
+			mc.position = Vector3(0, 0.26, 0)
+			nodo.add_child(mc)
+			_scatola(nodo, Vector3(0, 0.06, 0), Vector3(RAGGIO_PX * 1.55 * K, 0.08, 0.3), 0.0, mat_t)
+		else:
+			_scatola(nodo, Vector3(0, 0.25, 0), Vector3(RAGGIO_PX * 1.55 * K, 0.42 if nome_t == "locomotiva" else 0.38, 0.32), 0.0, mat_t)
+			if nome_t == "locomotiva":
+				var cam := CylinderMesh.new()
+				cam.top_radius = 0.05
+				cam.bottom_radius = 0.06
+				cam.height = 0.2
+				var mcm := MeshInstance3D.new()
+				mcm.mesh = cam
+				mcm.material_override = mat_t
+				mcm.position = Vector3(RAGGIO_PX * 0.5 * K, 0.55, 0)
+				nodo.add_child(mcm)
 	# Relitti dei mezzi (Missione 15): mesh del mezzo, scuro e di traverso
 	var rng := RandomNumberGenerator.new()
 	for h in p.s.get("punti", {}):

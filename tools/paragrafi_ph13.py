@@ -96,8 +96,7 @@ par("634", "Tira un dado:\n0–5: vedi 648.\n6: vedi 461.\n7: vedi 623.\n8: vedi
 par("646", "Tira un dado: 0–4 vedi 655; 5–9 vedi 689.", [die((0, 4, [see("655")]), (5, 9, [see("689")]))])
 par("641", "Un soldato tedesco a caso, non in un mezzo, si arrende. Può accadere più volte.", [{"op": "arresa_casuale"}])
 par("649", "Se un cane da guardia era stato incapacitato, uno si riprende (ferito) e riparte verso l’americano attivo più vicino. Una "
-           "volta sola per missione. Se entrambi i cani sono morti, vedi 486.", [{"op": "cane_recupera"}])
-par("486", "[s8] Un treno tedesco… (in questa missione il treno non è previsto: nessun effetto).", [])
+           "volta sola per missione. Se nessun cane può riprendersi, vedi 485.", [{"op": "cane_recupera"}])
 par("655", "Un soldato tedesco a caso va fuori di testa e carica gli americani… (in questa versione l’evento non ha effetti).",
     [{"op": "solo_testo"}])
 par("689", "Un soldato americano a caso (non un comandante) va fuori di testa e carica i tedeschi… (in questa versione l’evento non ha "
@@ -163,7 +162,6 @@ par("718", "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe esser
            "vara da una spiaggia o da una banchina, si rema di 2 esagoni per turno. Chi è a bordo è accovacciato in copertura. Uscendo "
            "dal bordo ovest in scialuppa guadagni 10 PV. (In questa versione la scialuppa si trova già sulla spiaggia in I18.)",
     sighting(1) + [{"op": "scialuppa"}])
-par("595", "[s9] I tesori del Louvre! Guadagni 10 PV.", sighting(9) + [{"op": "vp", "n": 10, "why": "tesori del Louvre"}])
 
 # ------------------------------------------------------------------ eventi generici
 par("404", "Un soldato americano incapacitato a caso muore per le ferite. Una volta sola per missione.",
