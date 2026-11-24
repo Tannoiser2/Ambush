@@ -11,10 +11,12 @@ const PATTUGLIA := {60: "F5", 61: "K6"}
 
 var p  # Partita
 var m20: RefCounted
+var m21: RefCounted
 
 func _init(partita) -> void:
 	p = partita
 	m20 = preload("res://scripts/motore/missione20_ss.gd").new(partita, self)
+	m21 = preload("res://scripts/motore/missione21_ss.gd").new(partita, self)
 
 func attiva() -> bool:
 	return str(p.missione.get("libro", "")) == "ss"
@@ -65,6 +67,7 @@ func regole_terreno() -> void:
 	if attiva():
 		p.terreno.acqua_ammessa = int(p.missione.id) == 19
 		m20.regole_terreno()
+		m21.regole_terreno()
 
 ## Dopo l’imbarco: i sommozzatori si aggrappano ai fianchi delle canoe (due per canoa).
 func dopo_imbarco() -> void:
@@ -172,6 +175,8 @@ func blocca_tiro(tiratore: Dictionary, tipo: String, mirato: bool) -> String:
 func mod_tiro(tiratore: Dictionary, bersaglio: Dictionary, mods: Array) -> void:
 	if not attiva():
 		return
+	if tiratore.get("calcio_rotto", false):
+		mods.append(["calcio dell’arma rotto", -1])
 	if tiratore.get("esterno_ss", false) and str(tiratore.get("veicolo", "")) != "":
 		mods.append(["aggrappato al camion", -2])
 	if in_acqua(bersaglio):
@@ -545,13 +550,17 @@ func inizio_round() -> void:
 	if not attiva():
 		return
 	m20.inizio_round()
+	m21.inizio_round()
 	for v in p.veicoli.tutti():
-		if v.lato == "de":
+		if v.lato == "de" and m19():
 			v.bersagliato = false
 
 func controlla() -> void:
 	if m20.attiva():
 		m20.controlla()
+		return
+	if m21.attiva():
+		m21.controlla()
 		return
 	if not attiva() or p.s.fase == "fine" or not _st().fine_789:
 		return
@@ -575,23 +584,27 @@ func controlla() -> void:
 			p._calcola_fine("obiettivo")
 
 func niente_pv_incapacitati() -> bool:
-	return attiva() and int(_st().get("fine_modo", 0)) == 2
+	return attiva() and int(_st().get("fine_modo", 0)) == 2 and m19()
 
 func blocca_fine() -> bool:
 	if m20.attiva():
 		return m20.blocca_fine()
+	if m21.attiva():
+		return m21.blocca_fine()
 	return attiva() and not _st().fine_789 and not p.americani_attivi_in_mappa().is_empty()
 
 func uscita_ammessa(h: String) -> bool:
 	if m20.attiva():
 		return m20.uscita_ammessa(h)
+	if m21.attiva():
+		return m21.uscita_ammessa(h)
 	return not attiva() or _st().fine_789
 
 # ------------------------------------------------------------------ operazioni dei paragrafi
 func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva() or not str(o.op).begins_with("ss_"):
 		return false
-	if m20.op(o, ctx):
+	if m20.op(o, ctx) or m21.op(o, ctx):
 		return true
 	match str(o.op):
 		"ss_magazzino":
@@ -625,7 +638,7 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			if not gb.is_empty() and p.fase_round() and bool(o.get("two", false)):
 				p.s.round.get("due_turni_de", []).append(gb.id)
 			if o.has("adv") and p.s.has("round") and not p.s.round.is_empty() and int(p.s.round.get("n", 0)) == 0:
-				p.s.round.adv = str(o.adv)
+				p.s.round.vantaggio_forzato = str(o.adv)
 		"ss_chiatte":
 			var r: int = p.d10()
 			var lista: Array = o.dispari if r % 2 == 1 else o.pari
@@ -633,7 +646,7 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			_piazza_chiatte(lista)
 		"ss_vantaggio":
 			if p.s.has("round") and not p.s.round.is_empty():
-				p.s.round.adv = str(o.lato)
+				p.s.round.vantaggio_forzato = str(o.lato)
 				p._log("info", "Vantaggio %s." % ("americano" if str(o.lato) == "us" else "tedesco"))
 		"ss_esplosivo_prematuro":
 			var lista_e: Array = _st().esplosivi
@@ -686,6 +699,9 @@ func test(t: Dictionary, ctx: Dictionary):
 	var t20 = m20.test(t, ctx)
 	if t20 != null:
 		return t20
+	var t21 = m21.test(t, ctx)
+	if t21 != null:
+		return t21
 	if t.has("ss_sott_acqua"):
 		var chi := _chi(ctx)
 		return (not chi.is_empty() and sott_acqua(chi)) == bool(t.ss_sott_acqua)
@@ -855,3 +871,132 @@ func _chiatta_mov(o: Dictionary, ctx: Dictionary) -> void:
 	p._op({"op": "g_enter", "hex": str(o.s_altrimenti)}, ctx)
 	if str(o.s_reazione) != "":
 		g.reazione = str(o.s_reazione)
+
+# ------------------------------------------------------------------ carri di Silver Star (paragrafi 900–967, 706–707, 814–874)
+## Bivi: [n bersagli minimo per chiudere, paragrafo se già chiuso, soglia «pochi», paragrafo «pochi» (chiude prima se chiudi_pochi),
+## paragrafo se nessuno e già aperto]. Vedi esegui_carro.
+const BIVI := {
+	900: {"tanti": 3, "chiuso": 901, "pochi": 903, "aperto": 906, "bersagliato": true},
+	902: {"tanti": 1, "chiuso": 901, "nessuno_diretto": 906},
+	905: {"tanti": 2, "chiuso": 901, "pochi": 910, "aperto": 906},
+	907: {"tanti": 3, "chiuso": 910, "pochi": 903, "aperto": 906},
+	921: {"tanti": 3, "chiuso": 925, "pochi": 927, "aperto": 929, "bersagliato": true},
+	928: {"tanti": 2, "chiuso": 933, "pochi": 924, "aperto": 922},
+	936: {"tanti": 1, "chiuso": 933, "aperto": 935},
+	939: {"tanti": 3, "chiuso": 943, "pochi_chiude": 944, "aperto": 944},
+	946: {"tanti": 2, "chiuso": 949, "pochi_chiude": 951, "aperto": 953},
+	956: {"tanti": 2, "chiuso": 958, "pochi_chiude": 965, "aperto": 967},
+	707: {"tanti": 1, "chiuso": 934, "aperto": 935},
+}
+
+## Azioni: sequenze di passi. g = guida (piano/veloce/«bersagliato»), m = mitragliatrice (scafo/coax, mirato, quale), c = cannone o
+## carica, k = carica, s = coax mirata/rapida al secondo se il cannone è pronto e non ha sparato.
+const AZIONI := {
+	901: [["m", "scafo", true, 0], ["c"], ["s", true]],
+	910: [["m", "scafo", true, 0], ["c"], ["s", true]],
+	927: [["m", "scafo", true, 0], ["c"], ["s", true]],
+	943: [["m", "scafo", true, 0], ["c"], ["s", true]],
+	949: [["m", "scafo", true, 0], ["c"], ["s", true]],
+	903: [["g", false], ["c"], ["s", false], ["m", "scafo", false, 0]],
+	944: [["g", false], ["c"], ["s", false], ["m", "scafo", false, 0]],
+	906: [["g", true], ["m", "scafo", false, 0], ["k"]],
+	908: [["m", "scafo", true, 0]],
+	922: [["g", true], ["m", "scafo", false, 0], ["k"]],
+	923: [["g", true], ["m", "coax", false, 0], ["k"], ["m", "scafo", false, 1]],
+	924: [["m", "scafo", true, 0], ["c"]],
+	958: [["m", "scafo", true, 0], ["c"]],
+	925: [["g", false], ["m", "scafo", false, 0], ["c"]],
+	934: [["m", "scafo", false, 0], ["c"]],
+	933: [["g", false], ["m", "scafo", false, 0], ["c"]],
+	951: [["m", "scafo", false, 0], ["c"]],
+	965: [["m", "scafo", false, 0], ["c"]],
+	953: [["g", true], ["c"], ["m", "coax", false, 1], ["m", "coax", false, 0]],
+	929: [["g", true]],
+	935: [["g", true]],
+	967: [["g", true]],
+	827: [["g", true]],
+	814: [["g", false]],
+	826: [["g", "bersagliato"]],
+	706: [["m", "coax", true, 0]],
+}
+
+func esegui_carro(n: int, g: Dictionary, veic: Dictionary, vc) -> bool:
+	if not attiva() or not (BIVI.has(n) or AZIONI.has(n) or n in [937, 874, 840, 800]):
+		return false
+	var chiave := str(n)
+	if p.paragrafi.has(chiave):
+		p._log("par", p.paragrafi[chiave].it, {"id": chiave, "tedesco": g.id})
+	var b: Array = vc.bersagli_carro(g)
+	if n in [800, 840]:
+		return true
+	if n == 874 or (n == 937 and not b.is_empty()):
+		p._log("danno", "L’equipaggio del %s si arrende." % veic.nome)
+		vc.disabilita(veic, "equipaggio arreso")
+		g.stato = "arreso"
+		return true
+	if n == 937:
+		return true
+	if BIVI.has(n):
+		var d: Dictionary = BIVI[n]
+		var chiuso: bool = veic.get("chiuso", false)
+		var tanti: bool = b.size() >= int(d.tanti) or (d.get("bersagliato", false) and bool(veic.get("colpito_ss", false)))
+		if tanti:
+			if chiuso:
+				esegui_carro(int(d.chiuso), g, veic, vc)
+			else:
+				vc._apri_chiudi(veic, true)
+		elif not b.is_empty() and (d.has("pochi") or d.has("pochi_chiude")):
+			if d.has("pochi_chiude"):
+				if chiuso:
+					esegui_carro(int(d.pochi_chiude), g, veic, vc)
+				else:
+					vc._apri_chiudi(veic, true)
+			else:
+				esegui_carro(int(d.pochi), g, veic, vc)
+		elif d.has("nessuno_diretto"):
+			esegui_carro(int(d.nessuno_diretto), g, veic, vc)
+		elif chiuso:
+			vc._apri_chiudi(veic, false)
+		else:
+			esegui_carro(int(d.aperto), g, veic, vc)
+		return true
+	for passo in AZIONI[n]:
+		if not vc.attivo(veic):
+			break
+		match str(passo[0]):
+			"g":
+				var veloce: bool = bool(veic.get("colpito_ss", false)) if str(passo[1]) == "bersagliato" else bool(passo[1])
+				if veloce and veic.get("piano_finche_colpito", false) and not veic.get("colpito_ss", false):
+					veloce = false
+				vc._guida(veic, veloce, g)
+			"m":
+				vc._mg(g, veic, str(passo[1]), bool(passo[2]), int(passo[3]))
+			"c":
+				vc._cannone_o_carica(g, veic)
+			"k":
+				vc._carica(veic)
+			"s":
+				if veic.get("cannone_pronto", false) and not vc._sparato_cannone:
+					vc._mg(g, veic, "coax", bool(passo[1]), 1)
+	return true
+
+# ------------------------------------------------------------------ unità americane indipendenti e moduli di missione
+func agisce_da_solo(a: Dictionary) -> bool:
+	return attiva() and (bool(a.get("ia_ss", false)) or (a.get("berserk", false) and p.attivo(a)))
+
+func turni_automatici(n: int) -> bool:
+	if not attiva():
+		return false
+	var agito := false
+	for a in p.americani():
+		if p.s.fase != "round":
+			break
+		if not agisce_da_solo(a) or int(a.turni) != n or a.slot != "turni" or not (p.attivo(a) or a.stato == "fuori"):
+			continue
+		if a.get("berserk", false):
+			p.ph.berserk.turno_americano(a)
+		else:
+			m21.turno_americano(a)
+		p._consuma_turno(a)
+		agito = true
+	return agito

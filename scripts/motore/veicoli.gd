@@ -18,6 +18,8 @@ const MODELLI := {
 	"eboat": {"art": "La", "nome": "Motosilurante", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 0, "carro": true, "torretta": false, "nave": true},
 	"camion": {"art": "Il", "nome": "Camion", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 1},
 	"moto": {"art": "La", "nome": "Motocicletta", "piccolo": true, "lenta": 7, "veloce": 12, "posti": 2, "moto": true},
+	"motovedetta": {"art": "La", "nome": "Motovedetta", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 12, "nave": true},
+	"atg": {"art": "Il", "nome": "Cannone navale", "piccolo": true, "lenta": 0, "veloce": 0, "posti": 2},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 
@@ -158,6 +160,8 @@ func sposta(veic: Dictionary, verso: String) -> void:
 			var pr := p.u(pid)
 			if not pr.is_empty() and pr.stato == "catturato":
 				pr.hex = verso
+	if p.ss != null:
+		ids += p.ss.m21.dopo_sposta(veic, verso)
 	p._fx("muovi", {"ids": ids, "da": da, "a": verso, "veicolo": veic.id})
 
 ## Costo in PM per un veicolo (Tabella dei costi di movimento): -1 se vietato.
@@ -337,6 +341,8 @@ func disabilita(veic: Dictionary, motivo: String) -> void:
 	p._fx("danno", {"id": veic.id, "tipo": "distrutto"})
 	if veic.lato == "de" and int(veic.get("pv_distrutto", 0)) > 0:
 		p._pv(int(veic.pv_distrutto), "%s fuori uso" % veic.nome)
+	if veic.lato == "us" and int(veic.get("pv_distrutto_us", 0)) > 0:
+		p._pv(-int(veic.pv_distrutto_us), "%s fuori uso" % veic.nome)
 	for x in occupanti(veic):
 		scendi(x)
 		if x.get("carro_us", false) and p.ph.m18.attiva():
@@ -765,6 +771,8 @@ func esegui_carro(n: int, g: Dictionary, veic: Dictionary) -> void:
 		return
 	if p.ph.attiva() and p.ia.ph.esegui_carro(n, g, veic):
 		return
+	if p.ss.attiva() and p.ss.esegui_carro(n, g, veic, self):
+		return
 	p._log("par", p.paragrafi[str(n)].it, {"id": str(n), "tedesco": g.id})
 	var b := bersagli_carro(g)
 	match n:
@@ -1009,7 +1017,7 @@ func guida_tedesca(veic: Dictionary, veloce: bool) -> void:
 	var controllato := false
 	while attivo(veic) and passi < 15:
 		passi += 1
-		var rif: String = p.movimento_rosso(veic.hex)
+		var rif: String = p.movimento_veicolo(veic, veic.hex)
 		if rif == "":
 			if passi == 1:
 				p._log("tedesco", "La carta non indica un movimento per %s: la %s resta ferma." % [veic.hex, veic.nome])

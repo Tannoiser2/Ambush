@@ -1171,6 +1171,8 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			var hbs: String = hb
 			if E.distanza(a.hex, hbs) <= 6 and p.terreno.vede(a.hex, hbs, a.postura, "standing"):
 				_b("Bazooka sul blocco in %s" % hbs, func(): _esito(p.azione_ss(a.id, "bazooka_blocco", hbs)), "+2 per colpire; solo una penetrazione pesante lo sgombra.")
+	if p.ss.m21.puo_salire_pb(a):
+		_b("Sali sulla motovedetta", func(): _esito(p.azione_ss(a.id, "motovedetta")), "Un’azione, dallo stesso esagono o da uno adiacente. Quando tutta la squadra è a bordo la motovedetta riparte.")
 	if p.ss.puo_esplosivo(a):
 		_b("Applica l’esplosivo a tempo alla chiatta", func(): _esito(p.azione_ss(a.id, "esplosivo")), "Un’azione. Salta alla fine del Round successivo (nelle Operazioni dopo due spostamenti); ratés 05. Chiatta distrutta: 3 PV.")
 	if p.ss.puo_salire_chiatta(a):

@@ -261,3 +261,25 @@ Ordine scelto: M11, M10, M12, M9.
   il crollo dei lati degli edifici colpiti dal mortaio non è gestito; il gruppo del 47 è tre tedeschi 471–473.
 - Test `tests/missione20.gd`, `simula.gd -- 4 1 20` (la simulazione guida il convoglio lungo la strada), scatti
   `tests/visivi/missione20_ui.gd`.
+
+## Silver Star — Missione 21 «Sorpresa, sorpresa!» (mappa F con mezza H = «FH», in alto è sud)
+- Carte Condizione 1–3 trascritte a vista; i riferimenti neri delle carte 2 e 3 (es. «Q-4/S-3», «Exit») vanno in
+  `cond.neri` e muovono i mezzi americani indipendenti (Sherman US 04, motovedetta US 05: `partita.movimento_veicolo`).
+- Dati: `tools/costruisci_ss.py` (TEDESCHI_21: 22–25, 31–36, carri 21 Jagdpanther e 30 Panzer; `carri_us` 4 Sherman),
+  paragrafi `tools/paragrafi_ss21.py` → `data/paragrafi_ss21.json`.
+- Schieramento: regole `sezioni` (A: 4 uomini in E15–I13, B: 4 negli edifici entro 3 da S14) e `max_per_esagono` 2.
+  Radio, tedeschi solo per evento casuale (`eventi_continui`), PV di attivazione come nelle regole base.
+- Carri SS: `missioni_ss.esegui_carro` interpreta i paragrafi 900–967 di Silver Star (diversi dagli altri libri); i carri
+  vanno piano finché non sono bersagliati (`piano_finche_colpito`, `colpito_ss`).
+- Motore `scripts/motore/missione21_ss.gd` (p.ss.m21): granatieri sui carri in reazione T (seguono il carro con
+  `dopo_sposta`, 425/426/584/585), tedeschi nascosti in reazione H (583/586, senza autoconservazione), cannone navale
+  US 03 con i serventi J e K (474/476/477, carica e spara in turni diversi), Sherman di soccorso (582, −3 PV se fuori
+  uso), motovedetta (587, 704/705/337/255: raccoglie chi è accanto, mitragliatrice pesante, esce quando tutti sono a
+  bordo; bottone «Sali sulla motovedetta»), scelta 366 (582/587), guado H11, cingolo 697, eventi 212/116/117/221/222.
+  Fine: nessun tedesco attivo (feriti gravi in un edificio salvi) o uscita in motovedetta; −2 PV se il cannone resta
+  senza serventi.
+- Correzioni generali: il vantaggio dei paragrafi SS va in `round.vantaggio_forzato`; la regola della Missione 1 sul
+  tedesco 34 (Condizione 4) non vale più nelle altre missioni.
+- Semplificazioni: il settore del cannone navale non si gira; il 250 (bombardamento degli edifici) ferma solo il mezzo;
+  la motovedetta in 3D usa il modello della canoa.
+- Test `tests/missione21.gd`, `simula.gd -- 4 1 21`, scatti `tests/visivi/missione21_ui.gd`.

@@ -22,6 +22,14 @@ func esegui(n: int) -> bool:
 	var p = t.p
 	if p.ss.m20.attiva():
 		return _esegui20(g, n)
+	if p.ss.m21.attiva():
+		match n:
+			425, 426, 584, 585:
+				return p.ss.m21.turno_granatiere(t, g, n)
+			583, 586:
+				p.ss.m21.turno_h(t, g, n)
+				return true
+		return false
 	match n:
 		233, 564:
 			_sub_cerca(g, "F4" if n == 233 else "K6", n == 564)

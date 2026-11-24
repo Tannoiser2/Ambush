@@ -225,6 +225,18 @@ func schiera(ids: Array, h: String) -> Dictionary:
 		for x in americani():
 			if x.hex == h and not (x.id in ids.map(func(y): return str(y))):
 				return {"ok": false, "errore": "In %s c’è già %s: un soldato per esagono." % [h, nome(x)]}
+	var max_hex := int(regola("max_per_esagono", 0))
+	if h != "" and max_hex > 0:
+		var gia: int = americani().filter(func(x): return x.hex == h and not (x.id in ids.map(func(y): return str(y)))).size()
+		if gia + ids.size() > max_hex:
+			return {"ok": false, "errore": "Al massimo %d soldati per esagono." % max_hex}
+	var sezioni: Array = regola("sezioni", [])
+	if h != "" and not sezioni.is_empty():
+		for sez in sezioni:
+			if h in sez.esagoni:
+				var nella: int = americani().filter(func(x): return x.hex in sez.esagoni and not (x.id in ids.map(func(y): return str(y)))).size()
+				if nella + ids.size() > int(sez.n):
+					return {"ok": false, "errore": "In %s vanno %d soldati: %s." % [str(sez.nome), int(sez.n), ", ".join(sez.esagoni)]}
 	var max_ed := int(regola("max_edifici", 0))
 	if h != "" and max_ed > 0:
 		var occupati := {}
@@ -678,6 +690,14 @@ func riferimento(h: String, cond := -1) -> String:
 func riferimento_evento(n: int) -> String:
 	var c: Dictionary = missione.condizioni[str(int(s.condizione))]
 	return str(c.evento.get(str(n), "NONE"))
+
+## Silver Star: i mezzi americani indipendenti seguono i riferimenti neri della carta (se ci sono).
+func movimento_veicolo(veic: Dictionary, h: String) -> String:
+	if str(veic.get("lato", "")) == "us":
+		var c: Dictionary = missione.condizioni[str(int(s.condizione))]
+		if c.has("neri"):
+			return str(c.neri.get(h, ""))
+	return movimento_rosso(h)
 
 func movimento_rosso(h: String) -> String:
 	var c: Dictionary = missione.condizioni[str(int(s.condizione))]
@@ -2178,6 +2198,8 @@ func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 			err = ss.m20.trasferisci(a, parti[0], parti[1]) if parti.size() == 2 else "Trasferimento non valido."
 		"bazooka_blocco":
 			err = ss.m20.bazooka_blocco(a, arg)
+		"motovedetta":
+			err = ss.m21.sali_pb(a)
 	if err != "":
 		return _errore(err)
 	_chiudi_azione_semplice(a)
@@ -3046,7 +3068,7 @@ func americani_di_turno() -> Array:
 		return []
 	var out: Array = []
 	for a in americani():
-		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori") and not ph.agisce_da_solo(a):
+		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori") and not ph.agisce_da_solo(a) and not ss.agisce_da_solo(a):
 			out.append(a)
 	return out
 
@@ -3071,7 +3093,7 @@ func _flusso() -> void:
 			continue
 		if c[1] == "us":
 			# Missione 18: gli Sherman non ancora ai tuoi ordini agiscono da soli, all’inizio della casella.
-			if ph.turni_automatici(c[0]):
+			if ph.turni_automatici(c[0]) or ss.turni_automatici(c[0]):
 				if s.fase == "round" and s.pausa == "":
 					s.pausa = "azioni_sherman"
 				return
@@ -3197,6 +3219,8 @@ func puo_agire(a: Dictionary, consenti_paracadute := false) -> String:
 		return "%s non può agire." % nome(a)
 	if ph.m18.sherman_ia(a):
 		return "Lo Sherman %s non è ai tuoi ordini: muove e spara secondo i suoi paragrafi." % a.id
+	if ss.agisce_da_solo(a):
+		return "%s non è ai tuoi ordini: agisce secondo i suoi paragrafi." % nome(a)
 	if a.get("berserk", false) and attivo(a):
 		return "%s è fuori di testa: agisce da solo finché un compagno non lo placca." % nome(a)
 	if a.get("legato", false):
@@ -3862,6 +3886,9 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 		if not p.ok:
 			return {"ok": false, "motivo": p.motivo}
 	_rendi_consapevoli(bersaglio.hex)
+	var veic_b: Dictionary = veicoli.di(bersaglio)
+	if not veic_b.is_empty():
+		veic_b.colpito_ss = true
 	if bersaglio.get("lato", "") == "de":
 		bersaglio.bersagliato = true
 		if not bersaglio.has("bersagliato_da"):
@@ -4147,7 +4174,7 @@ func _dopo_perdita(x: Dictionary) -> void:
 		_log("info", "I documenti che portava %s restano a terra in %s." % [nome(x), x.hex])
 		x.documenti = 0
 	if x.lato == "de":
-		if int(x.num) == 34 and not mo.attiva():
+		if int(x.num) == 34 and not mo.attiva() and not ss.attiva():
 			cambia_condizione(4)
 		if numero == 8 and int(x.num) in [3, 11] and int(s.condizione) == 1:
 			cambia_condizione(2)
@@ -5431,7 +5458,7 @@ func esagoni_edificio() -> Array:
 
 ## Esagono in cui un incapacitato non costa PV se la missione finisce con l’obiettivo raggiunto.
 func _salvo_a_fine(h: String) -> bool:
-	if numero == 1:
+	if numero == 1 or bool(regola("salvi_in_edificio", false)):
 		return terreno.edificio(h)
 	return h in missione.get("obiettivi", [])
 
@@ -5576,7 +5603,7 @@ func _calcola_fine(modo: String) -> void:
 		righe.append(["Obiettivo raggiunto: strada di Saint-Michaux sotto controllo", 4])
 	var perdite := 0
 	for a in americani():
-		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J") or a.get("carro_us", false) or a.has("autista_camion"):
+		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J") or a.get("carro_us", false) or a.has("autista_camion") or a.get("fuori_conto", false):
 			continue
 		if a.id == "K" and s.get("staffetta_spia", false):
 			continue
@@ -5609,6 +5636,7 @@ func _calcola_fine(modo: String) -> void:
 	bonus += mo.righe_fine(righe)
 	bonus += ph.righe_fine(righe)
 	bonus += ss.m20.righe_fine(righe)
+	bonus += ss.m21.righe_fine(righe)
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

@@ -41,6 +41,8 @@ func _init() -> void:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
 	elif missione == 20:
 		obiettivi = ["F4", "I5", "N4", "S4", "W6", "W10", "X12", "J14", "F16", "B19", "A8"]
+	elif missione == 21:
+		obiettivi = ["S13", "T12", "G14", "H13", "U13", "I13"]
 	elif missione == 19:
 		obiettivi = ["D1", "F4", "J7", "M7", "C6", "I7", "S1", "Q5"]
 	for i in n:
@@ -87,6 +89,16 @@ func gioca(seme: int) -> void:
 		for a in p.americani():
 			p.schiera([a.id], angoli[i16 % 4] if i16 < 8 else "S12")
 			i16 += 1
+		p.inizia_missione()
+	elif not p.regola("sezioni", []).is_empty():
+		p.nuova(seme, true)
+		var sez_i := 0
+		for a in p.americani():
+			var sez: Dictionary = p.regola("sezioni", [])[0 if sez_i < 4 else 1]
+			for h in sez.esagoni:
+				if p.schiera([a.id], h).ok:
+					break
+			sez_i += 1
 		p.inizia_missione()
 	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
@@ -356,6 +368,8 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Dictionary) -> void:
 	if p.ss.m20.attiva() and rng.randf() < 0.7 and _guida_round(p, a):
 		return
+	if p.ss.m21.attiva() and p.veicoli.attivo(p.veicoli.v("vpb")) and str(a.get("veicolo", "")) != "vpb":
+		bersaglio_di[a.id] = p.veicoli.v("vpb").hex
 	if a.get("artiglieria", false):
 		var bers: Array = p.tedeschi_attivi()
 		if bers.is_empty():

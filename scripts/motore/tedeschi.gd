@@ -32,7 +32,7 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 		return
 	if p.veicoli.turno_equipaggio(self, g):
 		return
-	if p.ph.attiva() and p.ph.berserk.turno_tedesco(self, g):
+	if (p.ph.attiva() or p.ss.attiva()) and p.ph.berserk.turno_tedesco(self, g):
 		return
 	var col := colonna(g)
 	var numero: int = int(p.s.round.numero_azione)
@@ -81,6 +81,8 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 		return "S"
 	if int(g.get("paracadute", 0)) > 0:
 		ignora_s = true
+	if str(g.get("reazione", "")) == "H" and p.ss.m21.attiva():
+		ignora_s = true  # Silver Star 21: nella reazione speciale H non vale l’autoconservazione
 	if bool(p.missione.tedeschi[str(int(g.num))].get("ignora_s_veicolo", false)) and str(g.get("veicolo", "")) != "" and p.veicoli.attivo(p.veicoli.di(g)):
 		ignora_s = true  # Purple Heart: «ignora l’autoconservazione a bordo di un mezzo attivo»  # Move Out! 426: col paracadute addosso si ignora l’autoconservazione
 	if not ignora_s and not g.no_auto and _vicino_ad_americani(g) and colonne.has("S"):
@@ -1239,9 +1241,14 @@ func imposta_reazione(ctx: Dictionary, r: String) -> void:
 	var g: Dictionary = p.u(ctx.get("g", ""))
 	if g.is_empty():
 		return
+	var prima: String = str(g.get("reazione", ""))
 	g.reazione = r
 	_reazione_cambiata = true
-	p._log("tedesco", "Reazione speciale %s in vigore per il %s." % [r, p.nome(g)])
+	if r == "":
+		if prima != "":
+			p._log("tedesco", "Il %s toglie la reazione speciale %s." % [p.nome(g), prima])
+	else:
+		p._log("tedesco", "Reazione speciale %s in vigore per il %s." % [r, p.nome(g)])
 
 func _nessun_riferimento() -> void:
 	p._log("tedesco", "La carta della Condizione %d non indica un movimento per %s: il %s resta sul posto." % [int(p.s.condizione), _g.hex, p.nome(_g)])

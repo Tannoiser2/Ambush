@@ -122,6 +122,74 @@ CARTE = {
    17: "N 105 105 s6.578 s6.790 537 X X X N/K-17 N/K-16 795 N s4.137 N s4.536 N E N N E N E N N 995",
   },
  },
+ 21: {
+  1: {
+   0: N25 + " NONE",
+   3: N25 + " 479",
+   6: "N N N N N N N N N N N N N N N N/P-5 N/P-5 N/Q-7 N 702/S-7 N X N X X 475",
+   9: "N/A-8 N/A-9 s9.691/B-9 s9.691/C-9 N N/E-10 N/F-9 s2.581/G-9 s9.691/H-9 s9.691/I-9 N N/M-9 s9.691/N-9 N/O-9 N/O-8 N X X X N/T-8 N/T-9 N/U-9 N/V-9 N/W-9 N 470",
+   12: "X X N X X N X s2.581/143 s2.581/J-12 N/K-13 N/K-11 N N N N N N N/S-12 N/T-11 E N/U-11 N/144 N/X-11 N N 479",
+   15: "N N X N s4.363/E-14 N X N/I-15 N/J-14 N/K-15 N/K-14 N N/N-15 N/O-15 N/P-14 E N/R-14 N N/T-14 s3.361 s3.361 N/U-16 N/146 N/W-15 N 475",
+   18: "N N/C-18 N/D-17 N N/E-17 X X X N/J-17 N N/J-17 N N N N N/P-17 N/P-17 N/Q-18 N/S-17 N N N N X X 470",
+   1: N25 + " 475",
+   4: "N N N N N N N N N N N N N N N N/781 N N/781 N N N N N N N 475",
+   7: "N/781 N N N N N N N N N N N N N N s9.691/693 N/252 X 702/R-6 N/T-6 X N X N N 479",
+   10: "N N N/B-9 N/C-10 N/149 N s2.581/F-9 702/G-10 s2.581 N/J-9 N/250 N/L-9 N X X X X N N N N/U-9 N N N/X-9 N 470",
+   13: "N N X N N s4.363/G-13 N/H-12 s4.363 s4.363/H-12 N N/K-12 N N N N N/Q-13 N/R-12 s3.361 s3.361 N/U-13 696/V-12 E/V-12 N/V-12 N N 475",
+   16: "N X X N N/E-15 N/G-16 N/H-15 N N X N/J-15 N N N N/O-15 N s3.361 N/S-16 N/S-15 N/S-16 N/T-16 N N/W-15 N/W-16 s0.422/X-15 479",
+   19: "N s0.422/B-18 N N N/E-18 N/E-19 N/F-19 s5.507/147 N/I-18 N s5.507/K-18 N N N N s0.422/P-18 N N s5.507/148 N N X X N N NONE",
+   2: N25 + " 479",
+   5: "N N N N N N N N N N N N N N N s9.691/694 N/R-4 N N N N N N N N 475",
+   8: "N/A-7 N N N N N N/G-9 N/G-8 N/I-9 N N N N s9.691 N/P-7 N X N X N/T-7 X X X N N 470",
+   11: "N N N N N X s2.581 s2.581/H-10 X X 702/251 X X X N N N N N N/U-11 N/U-10 N N N/X-10 N 479",
+   14: "X X N N N/F-13 s4.363 s4.363 X X N/K-14 N/141 N/M-15 N N E N/142 N N/S-14 N/T-13 N/U-14 N/U-13 E/V-13 N/W-13 N N 470",
+   17: "N N N N/E-17 N/140 N X X X N/K-17 N/K-16 N N N N/O-16 N/145 N/R-16 N N/R-16 N N N N N N/X-16 475",
+  },
+  2: {
+   0: N25 + " 996",
+   3: "N N N N N N N N N N N N N/N-3 N/O-4 N N/Q-4 N Q-4/S-3 R-3/T-2 N N N V-2/X-3 W-3/Y-4 N 996",
+   6: "N N N N N N N N N N N N N N N/O-5 O-7/P-5 Q-7/P-5 Q-7/Q-7 R-6 S-6/S-7 T-6 X N X X 698",
+   9: "N/A-8 N/A-9 s9.691/B-9 s9.691/C-9 N F-8/E-10 N/781 s2.581/G-9 s9.691/H-9 s9.691/I-9 K-10/L-8 N/M-9 s9.691/N-9 N/O-9 N/O-8 N X X X N/T-8 N/T-9 N/U-9 N/V-9 Y-9/W-9 Exit 478",
+   12: "X X D-11 X X N X s2.581/143 s2.581/J-12 N/K-13 K-13/K-11 N N N N N N N/S-12 N/T-11 N N/U-11 N/144 N/X-11 X-11 N 212",
+   15: "N N X N N/E-14 N X G-16/I-15 H-15/J-14 N/K-15 N/K-14 N N-15/N-15 O-16/O-15 N/P-14 N N/R-14 N N/T-14 N N W-15/U-16 W-14/146 N/W-15 N 998",
+   18: "N A-19/C-18 B-18/D-17 N N/E-17 X X X N/J-17 N N/J-17 N N N N N/P-17 N/P-17 N/Q-18 N/S-17 N N N N X X 998",
+   1: N25 + " 697",
+   4: "N N N N N N N N N N N N N/M-3 N/M-4 N/P-3 N/781 Q-5/R-3 N/781 N N N N N W-5 N/Exit 995",
+   7: "N/781 N N N N N N N N N N N N M-8/O-7 N-7/O-6 s9.691/693 P-6/445 X N/R-6 N/T-6 X N X N N 478",
+   10: "N N N/B-9 N/C-10 F-9/149 N s2.581/F-9 s2.581/G-10 s2.581 N/J-9 K-11/K-9 N/L-9 N X X X X N N N N/U-9 N N X-9/X-9 s6.434/X-10 478",
+   13: "N N X N N N/G-13 N/H-12 N N/H-12 N K-14/K-12 N N N N N/Q-13 N/R-12 N N N/U-13 696/V-12 N/V-12 N/V-12 X-12 N 698",
+   16: "N X X N N/E-15 E-17/G-16 F-16/H-15 N N X N/J-15 N N N P-16/O-15 Q-17 N S-16/S-16 T-16/S-15 U-16/S-16 V-15/T-16 N N/W-15 N/W-16 s6.434/X-15 478",
+   19: "Exit s6.434/B-18 N N N/E-18 N/E-19 N/F-19 s6.434/147 N/I-18 N N/K-18 N N N N s6.434/P-18 N N s6.434/148 N N X X N N NONE",
+   2: "N N N N N N N N N N N N N N N N N N N S-3/U-2 T-2/V-2 U-2/W-3 N N N 993",
+   5: "N N N N N N N N N N N N N N N/N-4 s9.691/694 Q-6/R-4 N N N N U-6 V-5 N N 212",
+   8: "N/A-7 N N N N G-8 H-8/G-9 I-8/G-8 J-8/I-9 K-9 N K-9/M-8 L-8/N-7 s9.699 N/424 N/O-9 X N X N/T-7 X X X N N 478",
+   11: "B-11 C-12 N E-11 E-10 X s2.581 s2.581/H-10 X X K-12/251 X X X N N N N N N/U-11 N/U-10 N N X-10/X-10 N 478",
+   14: "X X N N N/F-13 N N X X I-15/K-14 N/141 M-15/M-15 N N N N/142 N N/S-14 N/T-13 N/U-14 N/U-13 N/V-13 X-13/W-13 N N 997",
+   17: "N N N C-18/E-17 D-17/140 N X X X N/K-17 N/K-16 N N N N/O-16 N/145 R-16/R-16 N N/R-16 N N N N N s6.434/X-16 993",
+  },
+  3: {
+   0: N25 + " 996",
+   3: "N N N C-4 D-3 N G-2 N N N N N N/N-3 N/O-4 N N/Q-4 N N/S-3 N/T-2 N N N N/X-3 N/Y-4 N 996",
+   6: "N N C-7 N N N N N N N N N N N-5 N/O-5 N/695 N/P-5 N/Q-7 N/R-6 N/S-6 N X N X X 698",
+   9: "N/B-8 N/C-8 s9.691/D-8 s9.691/E-9 N/F-8 N/G-9 N/256 N/I-9 s9.691/257 s9.691/K-9 N/L-8 N/M-9 s9.691/N-9 N/O-9 N/O-8 N X X X N/T-8 N/T-9 N/U-9 N/V-9 N/W-9 N 478",
+   12: "X X N X X N X s2.581/143 s2.581/J-12 N/K-13 N/K-11 N N N N N N N/S-12 N/T-11 N N/U-11 N/144 N/X-11 N N 212",
+   15: "N N X N N/E-14 N X N/I-15 N/J-14 N/K-15 N/K-14 N N/N-15 N/O-15 N/P-14 N N/R-14 N N/T-14 N N N/U-16 N/146 N/W-15 N 998",
+   18: "N N/C-18 N/D-17 N N/E-17 X X X N/J-17 N N/J-17 N N N N N/P-17 N/P-17 N/Q-18 N/S-17 N N N N X X 998",
+   1: "B-1 C-1 D-1 E-2 N N N I-2 N K-2 N M-1 N-1 O-2 N 255 N N N N N N N N N 697",
+   4: "N N C-5 N N N G-3 G-4 H-4 I-4 N K-5 N/M-3 N/M-4 N/P-3 N/781 N/R-3 N/781 N N N N N N N/Exit 995",
+   7: "N/B-7 N/C-8 D-7 E-7 F-7 G-7 H-7 I-7 J-7 K-7 L-7 M-7 N-6 N/254 N/O-6 s9.691/693 N/367 X N/R-6 N/T-6 X N X N N 478",
+   10: "N N N/C-9 N/D-9 N/E-9 N s2.581/H-9 s2.581/H-9 s2.581 N/J-9 N/258 N/L-9 N X X X X N N N N/U-9 N N N/X-9 s6.434/X-10 478",
+   13: "N N X N N N/G-13 N/H-12 N N/H-12 N N/K-12 N N N N N/Q-13 N/R-12 N N N/U-13 696/V-12 N/V-12 N/V-12 N N 698",
+   16: "N X X N N/E-15 N/G-16 N/H-15 N N X N/J-15 N N N N/O-15 N N N/S-16 N/S-15 N/S-16 N/T-16 N N/W-15 N/W-16 s6.434/X-15 478",
+   19: "N s6.434/B-18 N N N/E-18 N/E-19 N/F-19 s6.434/147 N/I-18 N N/K-18 N N N N s6.434/P-18 N N s6.434/148 N N X X N N NONE",
+   2: "N N N N E-3 N H-1 N J-1 N L-1 N N N P-1 N N N N N/U-2 N/V-2 N/W-3 N N N 993",
+   5: "N N C-6 N N N N N N N J-4 N L-4 M-5 N/259 s9.691/694 N/R-4 N N N N N N N N 212",
+   8: "N/B-7 N/C-8 N/D-8 N/E-8 N/F-8 N/G-8 N/H-8 N/I-8 N/J-8 N/K-8 N/L-8 N/M-8 N/N-7 s9.699 N/P-7 N X N X N/T-7 X X X N N 478",
+   11: "N N N N N X s2.581 s2.581/H-10 X X N/251 X X X N N N N N N/U-11 N/U-10 N N N/X-10 N 478",
+   14: "X X N N N/F-13 N N X X N/K-14 N/141 N/M-15 N N N N/142 N N/S-14 N/T-13 N/U-14 N/U-13 N/V-13 N/W-13 N N 997",
+   17: "N N N N/E-17 N/140 N X X X N/K-17 N/K-16 N N N N/O-16 N/145 N/R-16 N N/R-16 N N N N N N/X-16 993",
+  },
+ },
 }
 NERI = {"N": "NONE", "E": "EVENT", "X": "XXX"}
 
@@ -129,15 +197,22 @@ NERI = {"N": "NONE", "E": "EVENT", "X": "XXX"}
 def cella(t):
     nero, _, rosso = t.partition("/")
     nero = NERI.get(nero, nero)
+    if re.fullmatch(r"[A-Y]-\d{1,2}", nero) or nero == "Exit":
+        # Riferimento di movimento nero (mezzi americani indipendenti): va in «neri», la casella resta NONE.
+        return "NONE", rosso_norm(rosso), ("USCITA" if nero == "Exit" else nero.replace("-", ""))
     if re.fullmatch(r"T\d{3}", nero):
         nero = "T:" + nero[1:]  # paragrafo letto solo da chi si muove nella galleria
     if re.fullmatch(r"s\d\.\d{3}", nero):
         nero = nero.replace(".", ":")
+    return nero, rosso_norm(rosso), ""
+
+
+def rosso_norm(rosso):
     if rosso:
         rosso = rosso.replace("-", "") if not rosso.isdigit() else rosso
         if rosso.upper().startswith("EX"):
             rosso = "USCITA"
-    return nero, rosso
+    return rosso
 
 
 def costruisci():
@@ -155,10 +230,12 @@ def costruisci():
                     continue
                 for i, t in enumerate(tok[:25]):
                     h = COL[i] + str(r)
-                    nero, rosso = cella(t)
+                    nero, rosso, mov_nero = cella(t)
                     cond["esagoni"][h] = nero
                     if rosso:
                         cond["movimenti"][h] = rosso
+                    if mov_nero:
+                        cond.setdefault("neri", {})[h] = mov_nero
             out[str(c)] = cond
         (R / "data/carte" / f"missione{mis}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
         print("scritta missione", mis, len(out), "condizioni")

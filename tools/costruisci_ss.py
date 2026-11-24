@@ -107,6 +107,63 @@ ARMI_19 = {"A": (["smg"], {"smg": 5, "granata": 2}), "B": (["carbine"], {"carbin
            "E": (["pistol"], {"pistol": 3, "granata": 2}), "F": (["smg"], {"smg": 3, "granata": 2}),
            "G": (["pistol"], {"pistol": 3, "granata": 2}), "H": (["carbine"], {"carbine": 3, "granata": 2})}
 
+C3T = ["1-3", "S", "D", "T"]
+C3H = ["1-3", "S", "D", "H"]
+C3 = ["1-3", "S", "D"]
+G4 = [[0, 4], [5, 5], [6, 8], [9, 9]]
+TEDESCHI_21 = {
+    "22": carta("M", "Granatiere", 1, ["mp", "pistol"], 1, 3, 7, -1, 2, 4, G4, C3T,
+                [[868, 770, 801, 426], [864, 817, 802, 426], [866, 839, 808, 426], [867, 829, 817, 426]]),
+    "23": carta("S", "Granatiere", 1, ["mp"], 2, 3, 5, 1, 4, 4, [[0, 0], [1, 2], [3, 5], [6, 9]], C3T,
+                [[865, 816, 840, 425], [863, 817, 825, 425], [868, 812, 824, 425], [807, 833, 802, 425]]),
+    "24": carta("N", "Soldato", 1, ["bolt"], 2, 5, 6, 0, 4, 5, G4, C3,
+                [[862, 839, 825], [863, 812, 802], [868, 859, 801], [865, 971, 800]]),
+    "25": carta("T", "Soldato", 1, ["bolt"], 2, 2, 4, 0, 2, 4, [[0, 3], [4, 5], [6, 7], [8, 9]], C3,
+                [[866, 817, 770], [867, 812, 825], [865, 833, 802], [864, 859, 824]]),
+    "31": carta("V", "Granatiere", 1, ["mp"], 2, 1, 3, -1, 6, 3, [[0, 3], [4, 6], [7, 8], [9, 9]], C3T,
+                [[862, 833, 801, 584], [863, 817, 860, 584], [864, 825, 869, 584], [807, 859, 802, 584]]),
+    "32": carta("Z", "Granatiere", 1, ["mp"], 2, 4, 7, -1, 4, 4, [[0, 0], [1, 2], [3, 4], [5, 9]], C3T,
+                [[830, 839, 802, 585], [866, 817, 808, 585], [867, 833, 801, 585], [865, 821, 817, 585]]),
+    "33": carta("X", "Soldato nascosto", 1, ["bolt"], 3, 3, 7, 0, 6, 4, [[0, 5], [6, 7], [8, 8], [9, 9]], C3H,
+                [[868, 812, 842, 586], [867, 817, 869, 586], [807, 824, 801, 586], [865, 816, 802, 586]]),
+    "34": carta("Y", "Soldato nascosto", 1, ["mp", "pistol"], 1, 5, 7, 1, 4, 5, [[0, 3], [4, 4], [5, 8], [9, 9]], C3H,
+                [[866, 770, 869, 583], [868, 711, 817, 583], [862, 839, 824, 583], [803, 816, 801, 583]]),
+    "35": carta("U", "Mitragliere", 1, ["lmg", "pistol"], 1, 3, 5, 1, 2, 4, [[0, 3], [4, 6], [7, 8], [9, 9]], C3,
+                [[865, 817, 869], [862, 812, 824], [815, 821, 815], [868, 839, 825]], primo_turno=815, mg_squadra=36),
+    "36": carta("L", "Mitragliere", 1, ["mp"], 0, 3, 6, 0, 4, 4, [[0, 1], [2, 2], [3, 6], [7, 9]], C3,
+                [[862, 817, 770], [865, 833, 840], [865, 839, 841], [815, 812, 815]], primo_turno=841, assiste=35),
+    "30": carta("LL", "Panzer IV", 3, [], 0, 5, 8, 2, 8, 6, [[0, 9]], ["1-3"], [[800]],
+                carro={"modello": "panzer4", "gruppi": [[0, 3], [4, 5], [6, 8], [9, 9]],
+                       "righe": {"5": {"IN": 5, "PC": 8, "WS": 2, "DS": 8, "par": [902, 905, 925, 814]},
+                                 "4": {"IN": 3, "PC": 6, "WS": 1, "DS": 8, "par": [925, 902, 905, 827]},
+                                 "3": {"IN": 3, "PC": 5, "WS": 0, "DS": 6, "par": [906, 907, 707, 826]},
+                                 "2": {"IN": 2, "PC": 3, "WS": -1, "DS": 4, "par": [908, 910, 921, 814]},
+                                 "1": {"IN": 1, "PC": 1, "WS": -2, "DS": 2, "par": [937, 921, 874, 923]}},
+                       "immobile": False, "pv_distrutto": 0, "primo_turno": 0,
+                       "testo": "Enters open; cannon prepared. Drives slow until fired upon."}),
+    "21": carta("MM", "Jagdpanther", 3, [], 0, 4, 7, 1, 8, 6, [[0, 9]], ["1-3"], [[800]],
+                carro={"modello": "jagdpanther", "gruppi": [[0, 1], [2, 6], [7, 7], [8, 9]],
+                       "righe": {"5": {"IN": 4, "PC": 7, "WS": 1, "DS": 8, "par": [928, 936, 928, 936]},
+                                 "4": {"IN": 4, "PC": 7, "WS": 1, "DS": 8, "par": [928, 936, 928, 936]},
+                                 "3": {"IN": 4, "PC": 5, "WS": 0, "DS": 6, "par": [928, 933, 936, 933]},
+                                 "2": {"IN": 3, "PC": 4, "WS": -1, "DS": 4, "par": [933, 924, 840, 924]},
+                                 "1": {"IN": 2, "PC": 3, "WS": -2, "DS": 2, "par": [840, 874, 908, 874]}},
+                       "immobile": False, "pv_distrutto": 0, "primo_turno": 0,
+                       "testo": "Enters open; cannon prepared. Drives slow until fired upon."}),
+}
+CARRI_US_21 = {
+    "4": carta("AA", "Sherman", 0, [], 0, 4, 8, 1, 8, 6, [[0, 9]], ["1-6"], [[800]],
+               carro={"modello": "sherman", "gruppi": [[0, 1], [2, 7], [8, 9]],
+                      "righe": {"5": {"IN": 4, "PC": 8, "WS": 1, "DS": 8, "par": [939, 946, 939]},
+                                "4": {"IN": 4, "PC": 7, "WS": 1, "DS": 8, "par": [946, 939, 946]},
+                                "3": {"IN": 4, "PC": 6, "WS": 0, "DS": 6, "par": [956, 956, 956]},
+                                "2": {"IN": 3, "PC": 5, "WS": 0, "DS": 6, "par": [956, 956, 956]},
+                                "1": {"IN": 2, "PC": 4, "WS": -1, "DS": 4, "par": [706, 706, 706]}},
+                      "immobile": False, "pv_distrutto": 0, "primo_turno": 0, "testo": "Enters open; cannon prepared."}),
+}
+SEZ_A = ["E15", "F14", "G14", "H13", "I13"]
+SEZ_B = ["P15", "Q16", "R13", "S13", "T12", "T15", "U13", "U15", "V13", "V14"]
+
 
 def condizioni(n):
     d = json.loads((R / f"data/carte/missione{n}.json").read_text())
@@ -176,6 +233,37 @@ MISSIONI = {
                           "si scopre durante la missione. Niente PV per l’attivazione dei tedeschi.",
         "testo_fine": "",
     },
+    21: {
+        "titolo": "Sorpresa, sorpresa!", "titolo_originale": "Surprise, Surprise!",
+        "data": "Sicilia, presso Gela, 11 luglio 1943", "mappa": "FH", "nord": "in basso (in alto è sud)", "libro": "ss",
+        "briefing": "Luglio 1943, Sicilia. Dopo lo sbarco la squadra presidia gli accessi a una piccola baia, dove arrivano "
+                    "rifornimenti e rinforzi. Le case sono state appena sgomberate e tutto sembra tranquillo, ma i tedeschi "
+                    "preparano un contrattacco con i carri: tenete la posizione finché il comando non manda aiuto.",
+        "ingresso": "Mezza mappa H sopra la mappa F; in alto è sud. Sezione A (4 uomini) negli esagoni di livello 3 E15, F14, G14, "
+                    "H13, I13; sezione B (4 uomini) al primo piano degli edifici entro 3 esagoni da S14: P15, Q16, R13, S13, T12, "
+                    "T15, U13, U15, V13, V14. Al massimo 2 soldati per esagono. Ponti di pietra intatti in K12 (da K11 a K13) e "
+                    "in T7 (da T6 a T8). La squadra ha la radio. I tedeschi arrivano per evento casuale: niente controlli di "
+                    "attivazione.",
+        "regole_testo": "[b]Dirupi.[/b] Gli esagoni XXX delle carte sono invalicabili. [b]Arrivi.[/b] I tedeschi entrano solo con "
+                        "gli eventi casuali. [b]Carri.[/b] Il Jagdpanther e il Panzer entrano aperti con il cannone pronto e vanno "
+                        "solo piano finché qualcuno non spara loro. I granatieri sui carri (reazione speciale T) si muovono con il "
+                        "carro. [b]Tedeschi nascosti.[/b] Nelle case possono esserci tedeschi rimasti nascosti (reazione speciale H). "
+                        "[b]Mezzi americani.[/b] Il cannone navale, lo Sherman e la motovedetta agiscono da soli con il numero "
+                        "d’azione tedesco; lo Sherman e la motovedetta seguono i riferimenti di movimento neri delle carte. "
+                        "[b]Radio.[/b] È presidiata finché nel suo esagono resta un soldato attivo.",
+        "ingresso_breve": "sezioni A e B", "uscita_breve": "si scopre in gioco",
+        "ingresso_esagoni": SEZ_A + SEZ_B, "uscita_esagoni": [],
+        "vittoria_pv": 8, "attivazione": {"1": 0, "2": 0, "3": 0}, "obiettivi": [],
+        "regole": {"xxx": True, "dirupi": "impassabili", "eventi_continui": True, "radio": True, "max_per_esagono": 2,
+                   "sezioni": [{"nome": "la sezione A", "n": 4, "esagoni": SEZ_A}, {"nome": "la sezione B", "n": 4, "esagoni": SEZ_B}],
+                   "salvi_in_edificio": True, "missione_21": True},
+        "modifiche_iniziali": {},
+        "vittoria_testo": "[b]Servono 8 PV.[/b] +1 per ogni tedesco attivato, +3 per ciascun carro; −3 se lo Sherman o la "
+                          "motovedetta vanno fuori uso, −2 se il cannone navale è distrutto. Come finisce la missione si scopre "
+                          "durante il gioco.",
+        "testo_fine": "",
+        "carri_us": CARRI_US_21,
+    },
 }
 
 
@@ -192,10 +280,10 @@ def main():
                 armi, mun = ARMI_19[a["id"]]
                 a["porte"] = armi
                 a["munizioni"] = mun
-        else:
+        elif n == 20:
             sq += json.loads(json.dumps(CONVOGLIO))
         d["squadra"] = sq
-        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20}[n]
+        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20, 21: TEDESCHI_21}[n]
         d["condizioni"] = condizioni(n)
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         mancanti = set()
