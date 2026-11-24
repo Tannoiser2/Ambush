@@ -124,7 +124,14 @@ func verifica_passo(a: Dictionary, verso: String) -> String:
 	return ""
 
 ## In acqua si nuota: 2 PM per esagono d’acqua; dall’acqua a terra 2 PM.
+func limite_mpa(a: Dictionary, m: int) -> int:
+	if not attiva():
+		return m
+	return m24.limite_mpa(a, m)
+
 func costo_passo(a: Dictionary, da: String, verso: String, base: int) -> int:
+	if m22.attiva():
+		return m22.costo_passo(a, da, verso, base)
 	if m23.attiva():
 		return m23.costo_passo(a, verso, base)
 	if not m19() or p.veicoli.attivo(p.veicoli.di(a)):
@@ -147,10 +154,43 @@ func cambia_postura(a: Dictionary, postura: String) -> String:
 		return "Aggrappato alla canoa resta in superficie."
 	if postura == "crouching":
 		return "In acqua si nuota in superficie (in piedi) o sott’acqua (prono)."
-	if postura == "prone" and not sommozzatore(a):
-		return "Solo i sommozzatori vanno sott’acqua."
 	p._log("azione", "%s %s." % [p.nome(a), "si immerge" if postura == "prone" else "riemerge"])
 	p.imposta_postura(a, postura)
+	bagna_armi(a)
+	return ""
+
+## Silver Star 19: un’arma portata sott’acqua senza impermeabilizzazione si inceppa con 25 o meno finché non la si pulisce.
+const NON_DA_PROTEGGERE := ["satchel", "coltello", "esplosivo"]
+
+func bagna_armi(a: Dictionary) -> void:
+	if not sott_acqua(a):
+		return
+	for w in a.get("armi", []):
+		if not (str(w.tipo) in NON_DA_PROTEGGERE) and not w.get("impermeabile", false) and not w.get("jam25", false):
+			w.jam25 = true
+			p._log("info", "%s porta sott’acqua l’arma (%s) senza protezione: ora si inceppa con 25 o meno." % [p.nome(a), T.ARMI.get(w.tipo, {}).get("breve", w.tipo)])
+
+func puo_impermeabilizzare(a: Dictionary) -> Array:
+	if not m19() or not p.attivo(a) or a.lato != "us" or sott_acqua(a):
+		return []
+	return a.armi.filter(func(w): return not (str(w.tipo) in NON_DA_PROTEGGERE) and T.ARMI.has(w.tipo))
+
+func impermeabilizza(a: Dictionary, tipo: String) -> String:
+	var w: Dictionary = p.arma_di(a, tipo)
+	if w.is_empty():
+		return "Arma non trovata."
+	w.impermeabile = not w.get("impermeabile", false)
+	p._log("azione", "%s %s l’arma (%s)." % [p.nome(a), "impermeabilizza" if w.impermeabile else "toglie la protezione dal", T.ARMI[tipo].breve])
+	return ""
+
+func pulisci(a: Dictionary, tipo: String) -> String:
+	var w: Dictionary = p.arma_di(a, tipo)
+	if w.is_empty() or not w.get("jam25", false):
+		return "L’arma non è bagnata."
+	if w.get("impermeabile", false):
+		return "Prima va tolta la protezione."
+	w.jam25 = false
+	p._log("azione", "%s pulisce e asciuga l’arma (%s)." % [p.nome(a), T.ARMI[tipo].breve])
 	return ""
 
 func dopo_ingresso_acqua(a: Dictionary) -> void:
@@ -158,6 +198,7 @@ func dopo_ingresso_acqua(a: Dictionary) -> void:
 		return
 	if a.postura == "crouching":
 		a.postura = "standing"
+	bagna_armi(a)
 
 # ------------------------------------------------------------------ vista e fuoco
 ## -1: nessuna regola speciale; 0 non vede; 1 vede.
@@ -166,6 +207,8 @@ func vista(oss: Dictionary, ber: Dictionary) -> int:
 		return -1
 	if m20.galleria_attiva():
 		return m20.vista(oss, ber)
+	if m22.attiva():
+		return m22.vista(oss, ber)
 	if sott_acqua(oss) or sott_acqua(ber):
 		return 1 if E.distanza(oss.hex, ber.hex) <= 1 else 0
 	return -1
@@ -324,9 +367,9 @@ func fine_round() -> void:
 		if e.has("round") and int(e.round) <= n:
 			_scoppia(e)
 	for a in p.americani() + p.tedeschi():
-		if a.get("senz_aria", false) and sott_acqua(a):
+		if (a.get("senz_aria", false) or not sommozzatore(a)) and sott_acqua(a):
 			a.postura = "standing"
-			p._log("info", "%s, senz’aria, deve tornare in superficie." % p.nome(a))
+			p._log("info", "%s deve tornare in superficie a respirare." % p.nome(a))
 
 func dopo_mossa_operazioni() -> void:
 	if not attiva() or p.fase_round():
@@ -336,6 +379,14 @@ func dopo_mossa_operazioni() -> void:
 			e.mosse = int(e.mosse) - 1
 			if int(e.mosse) <= 0:
 				_scoppia(e)
+
+func barca_in(h: String) -> bool:
+	if not attiva():
+		return false
+	for g in p.tedeschi():
+		if g.get("barca_ss", false) and p.in_mappa(g) and g.hex == h:
+			return true
+	return false
 
 ## Carica lanciata o granata che esplode nell’esagono di una chiatta o di una barca di guardia.
 func esplosione(tipo: String, h: String) -> void:
@@ -354,9 +405,15 @@ func esplosione(tipo: String, h: String) -> void:
 				distruggi_chiatta(v, "granata")
 	for g in p.tedeschi():
 		if g.get("barca_ss", false) and p.in_mappa(g) and g.hex == h and tipo in ["granata", "satchel"]:
-			var r2: int = p.d10()
-			if r2 % 2 == 0 or tipo == "satchel":
-				p._log("dado", "L’ordigno cade dentro la barca di guardia (%d): la barca è distrutta." % r2)
+			# 674: lanciata dritta nella barca la distrugge; se ci arriva deviando, dado dispari dentro, pari in acqua.
+			var ul: Dictionary = p.s.get("ultimo_lancio", {})
+			var dentro := true
+			if not (bool(ul.get("diretto", true)) and str(ul.get("bersaglio", h)) == h):
+				var r2: int = p.d10()
+				dentro = r2 % 2 == 1
+				p._log("dado", "L’ordigno arriva deviando nell’esagono della barca (%d): %s." % [r2, "cade dentro" if dentro else "cade in acqua"])
+			if dentro:
+				p._log("danno", "L’ordigno cade dentro la barca di guardia: la barca è distrutta e l’equipaggio ucciso.")
 				_elimina_barca(g, "ordigno a bordo")
 
 ## Bazooka contro una chiatta (bersaglio grande allo scoperto).
@@ -371,9 +428,14 @@ func bazooka_chiatta(a: Dictionary, vid: String) -> String:
 	var g: Array = T.ARMI.bazooka.gittate
 	if d > int(g[2]) or not p.terreno.vede(a.hex, v.hex, a.postura, "standing"):
 		return "La chiatta non è in vista o è fuori portata."
-	var prob: int = (6 if d <= int(g[0]) else (4 if d <= int(g[1]) else 2)) + 1 + int(a.WS)
-	if a.ferito:
-		prob -= 2
+	# 237: la chiatta è un mezzo grande allo scoperto; valgono abilità, ferita e razzo difettoso come per ogni tiro.
+	var prob: int = T.base_per_distanza("bazooka", d) + int(T.MOD_VEICOLO.get("clear", [2, 3])[1]) + int(a.WS) - (1 if a.ferito else 0)
+	prob = clampi(prob, 0, 8)
+	var pi: int = p.percentuale()
+	if pi <= int(T.ARMI.bazooka.inc[0]):
+		p._log("dado", "Percentuale %02d: razzo difettoso, nessun effetto." % pi)
+		p._consuma_bazooka(a, bz)
+		return ""
 	var r: int = p.d10()
 	var preso: bool = r == 0 or (r != 9 and r <= prob)
 	p._log("combattimento", "%s spara col bazooka alla %s: serve 0–%d, esce %d → %s." % [p.nome(a), v.nome.to_lower(), prob, r, "COLPITA" if preso else "mancata"])
@@ -562,6 +624,11 @@ func sub_americani() -> Array:
 	return p.americani_attivi_in_mappa().filter(func(a): return sommozzatore(a) and in_acqua(a))
 
 # ------------------------------------------------------------------ inizio Round e controlli
+func evento_sostitutivo() -> bool:
+	if not attiva():
+		return false
+	return m20.evento_sostitutivo() or m21.evento_sostitutivo() or m23.evento_sostitutivo()
+
 func inizio_round() -> void:
 	if not attiva():
 		return

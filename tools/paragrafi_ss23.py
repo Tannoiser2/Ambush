@@ -78,8 +78,11 @@ par("510", "Nessuna attivazione: il segnalino continua ad avanzare.", [])
 par("515", "Nessun evento: si continua. Se un americano arriva dove vede il segnalino, di nuovo 492.", [])
 par("519", "Se s2 non è avvenuto, dado: 0–8 515, 9 388. Se s2 è avvenuto, 515.",
     [if_(NOT(S(2)), [die((0, 8, [see("515")]), (9, 9, [see("388")]))], [see("515")])])
-par("388", "[s8] Terribile errore: non era una pattuglia tedesca ma il superstite di una pattuglia americana. Il superstite (US 06) si "
-           "unisce alla squadra nell’esagono del segnalino.", sighting(8) + [{"op": "ss23_superstite", "hex": "@hex"}])
+par("388", "[s8] Terribile errore: non era una pattuglia tedesca ma il superstite di una pattuglia americana (US 06), accovacciato "
+           "nell’esagono del segnalino (che resta in mappa). Chi ha fallito il controllo del 492 gli spara un tiro rapido gratis: se muore "
+           "−4 PV (2 per la morte, 2 per l’errore); se è incapacitato, la perdita normale. Se sopravvive si unisce alla squadra e si rifà "
+           "il 492, con il controllo di attivazione a −1.",
+    sighting(8) + [{"op": "ss23_superstite", "hex": "@hex", "errore": True}])
 
 # ------------------------------------------------------------------ superstite e soccorsi
 par("414", "[s2] Attiva il superstite americano US 06, prono, in questo esagono: si unisce alla squadra.",

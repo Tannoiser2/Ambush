@@ -118,6 +118,33 @@ func _init() -> void:
 	ok(int(f.s.condizione) == 2 and f.s.ss.fine_789, "789: Condizione 2")
 	f._controlla_fine_automatica()
 	ok(f.s.fase == "fine", "tutti in acqua in A1 senza tedeschi attivi: la missione finisce (%s)" % f.s.fase)
+	# Impermeabilizzazione: le armi protette restano asciutte sott’acqua, le altre si inceppano con 25 o meno.
+	var w = PartitaScript.new(19)
+	w.nuova(11, true)
+	for id in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+		w.schiera([id], "A1")
+	w.inizia_missione()
+	w.s.fase = "operazioni"
+	w.leggi("787", {})
+	var sub: Dictionary = w.u("E")
+	var a1: Dictionary = w.u("A").armi[0].duplicate(true)
+	var a2: Dictionary = w.u("A").armi[0].duplicate(true)
+	var tipi: Array = sub.armi.map(func(x): return x.tipo)
+	for tt in ["pistol", "carbine", "sar", "smg"]:
+		if tt != a1.tipo and not (tt in tipi):
+			a2.tipo = tt
+			break
+	sub.armi.append(a1)
+	sub.armi.append(a2)
+	ok(not w.ss.puo_impermeabilizzare(sub).is_empty(), "fuori dall’acqua profonda si può impermeabilizzare")
+	ok(w.ss.impermeabilizza(sub, a1.tipo) == "" and a1.impermeabile, "arma impermeabilizzata")
+	sub.postura = "prone"
+	w.ss.bagna_armi(sub)
+	ok(not a1.get("jam25", false) and a2.get("jam25", false), "sott’acqua si bagna solo l’arma non protetta")
+	sub.postura = "standing"
+	ok(w.ss.pulisci(sub, a2.tipo) == "" and not a2.jam25, "l’arma bagnata si pulisce")
+	ok(w.ss.pulisci(sub, a1.tipo) != "", "l’arma protetta non va pulita")
+	errori_cronaca(w)
 	errori_cronaca(p)
 	errori_cronaca(t)
 	print("Errori: %d" % errori)

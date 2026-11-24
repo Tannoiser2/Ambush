@@ -73,6 +73,26 @@ func _init() -> void:
 	q.s.round.numero_azione = 5
 	q.ss.m21.turno_americano(j)
 	ok(true, "turno di un servente senza errori")
+	# 253: settore coperto D3–E3–E2; un carro fuori settore fa girare il cannone a entrambi i serventi.
+	ok(q.ss.m21.in_arco("E3") and q.ss.m21.in_arco("D3") and q.ss.m21.in_arco("E2") and not q.ss.m21.in_arco("C2"), "settore iniziale D3, E3, E2")
+	var kk: Dictionary = q.u("K")
+	j.turni = 2
+	kk.turni = 2
+	q.ss.m21._st().atg.carico = true
+	q.ss.m21._st().atg.caricato = -1
+	for g in q.tedeschi_attivi():
+		if q.veicoli.attivo(q.veicoli.di(g)):
+			q.veicoli.di(g).hex = "C2"
+			g.hex = "C2"
+	var vede_c := q.tedeschi_attivi().filter(func(g): return q.veicoli.attivo(q.veicoli.di(g)) and q.vede_unita(j, g)).size() > 0
+	if vede_c:
+		q.ss.m21._atg_spara(j, "vicino")
+		ok(q.ss.m21._st().atg.verso == "C2" and int(kk.turni) == 1, "il cannone ruota verso il bersaglio: il compagno spende un turno")
+	# 250: con nessun bersaglio il carro tedesco bombarda l’edificio più vicino; due colpi lo riducono in macerie (−1 PV).
+	var pv_e: int = q.pv_totali()
+	q.veicoli._colpo_su_edificio(j, "Q16")
+	q.veicoli._colpo_su_edificio(j, "Q16")
+	ok(q.s.modifiche.get("Q16", "") == "rubble" and q.pv_totali() == pv_e - 1, "250: due colpi distruggono l’edificio, −1 PV")
 	# 690 con la radio presidiata: scelta.
 	var r = nuova(7)
 	r.leggi("690", {})

@@ -71,8 +71,13 @@ func _init() -> void:
 	for x in q.americani():
 		q.esci(x.id)
 	ok(q.lettera_mappa() == "F" and int(q.ss.m24._st().parte) == 2 and int(q.s.condizione) == 2, "631: mappa F, Condizione 2")
-	ok(q.americani_attivi_in_mappa().size() == 8 and q.u("A").hex in ["A19", "B19", "C19"], "la squadra rientra fra A19 e C19")
-	ok(not q.ss.m24.muli_attivi().is_empty() and q.ss.m24.muli_attivi()[0].hex in ["A19", "B19", "C19"], "i muli rientrano con la squadra")
+	ok(q.americani().filter(func(x): return x.stato == "fuori").size() == 8 and q.esagoni_ingresso() == ["A19", "B19", "C19"], "la squadra è fuori mappa e rientra fra A19 e C19")
+	var gb: Dictionary = q.u("B")
+	var r_in: Dictionary = q.muovi(["B"], "B19")
+	ok(gb.hex == "B19" and q.ss.m24.muli_di(gb).size() > 0 and q.ss.m24.muli_di(gb)[0].hex == "B19", "B entra in B19 con i muli (%s)" % str(r_in))
+	ok(q.ss.m24.limite_mpa(gb, 4) == 4, "con i muli sani nessun limite")
+	q.ss.m24.muli_di(gb)[0].stato = "ferito"
+	ok(q.ss.m24.limite_mpa(gb, 4) == 2, "527: con un mulo ferito si fanno al massimo 2 PM")
 	# Consegna.
 	q.leggi("637", {})
 	ok(int(q.s.condizione) == 3 and q.ss.m24.uscita_ammessa("Y1") and int(q.missione.vittoria_pv) == 21, "637: Condizione 3, uscita W1–Y3, 21 PV")

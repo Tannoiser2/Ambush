@@ -71,10 +71,24 @@ func esegui(n: int) -> bool:
 				var squadra: Array = [471, 472, 473].filter(func(x): return p.attivo(p.u("g%d" % x)))
 				if squadra.is_empty():
 					g.reazione = "M" if int(p.s.condizione) == 3 else ""
-					t._ritira_e_esegui()
+					if int(p.s.condizione) == 3:
+						t.esegui(t.paragrafo_da_carta(g, "M", int(p.s.round.get("numero_azione", 0))))
+					else:
+						t._ritira_e_esegui()
 				else:
-					t._accovacciati()
-					t._miglior_tiro("vicino")
+					var mh: String = str(p.ss.m20._st().get("mortaio", {}).get("hex", g.hex))
+					var visti: Array = p.americani_attivi_in_mappa().filter(func(a): return p.vede_unita(g, a))
+					var lontani: Array = visti.filter(func(a): return E.distanza(a.hex, mh) > 7)
+					if not lontani.is_empty():
+						lontani.sort_custom(func(a, b): return E.distanza(a.hex, "Y1") < E.distanza(b.hex, "Y1"))
+						t._accovacciati()
+						p.ss.m20.dai_coordinate(str(lontani[0].hex))
+					else:
+						t._accovacciati()
+						var vicino_m: Array = visti.duplicate()
+						vicino_m.sort_custom(func(a, b): return E.distanza(a.hex, mh) < E.distanza(b.hex, mh))
+						if not vicino_m.is_empty():
+							t._miglior_tiro("vicino")
 					t._prono_se_libero()
 				return true
 			501, 502, 503, 504:

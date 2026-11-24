@@ -35,6 +35,21 @@ func muli_attivi() -> Array:
 func muli_in(h: String) -> Array:
 	return muli_attivi().filter(func(m): return str(m.hex) == h)
 
+## Si può scaricare un altro mulo: un soldato in K8, meno di 6 muli scaricati e posto in K8.
+func puo_scaricare(a: Dictionary) -> bool:
+	return attiva() and p.attivo(a) and a.lato == "us" and str(a.hex) == "K8" and int(_st().scaricati) < MAX_MULI \
+		and int(_st().get("parte", 1)) == 1 and muli().size() > 0 \
+		and muli().filter(func(m): return str(m.hex) == "K8" and str(m.stato) != "morto").size() < 4
+
+## 527: chi guida un mulo ferito non gli fa fare più di 2 PM a turno.
+func limite_mpa(a: Dictionary, m: int) -> int:
+	if not attiva():
+		return m
+	for mu in muli_di(a):
+		if str(mu.stato) == "ferito":
+			return mini(m, 2)
+	return m
+
 func muli_di(a: Dictionary) -> Array:
 	return muli_attivi().filter(func(m): return str(m.guida) == str(a.id))
 
@@ -48,7 +63,8 @@ func scarica_muli() -> void:
 		p._log("info", "Per scaricare i muli serve un soldato in K8.")
 		return
 	var tentativi := 0
-	while int(_st().scaricati) < MAX_MULI and tentativi < 12:
+	# 179: in un esagono non stanno più di 4 muli; gli altri si scaricano quando K8 si libera.
+	while int(_st().scaricati) < MAX_MULI and tentativi < 12 and muli().filter(func(m): return str(m.hex) == "K8" and str(m.stato) != "morto").size() < 4:
 		tentativi += 1
 		var r: int = p.d10()
 		var id := "mulo%d" % (muli().size() + 1)
@@ -127,7 +143,7 @@ func dopo_movimento(ids: Array) -> void:
 
 func _controlla_guide() -> void:
 	for m in muli_attivi():
-		if str(m.guida) == "":
+		if str(m.guida) == "" or str(m.hex) == "":
 			continue
 		var a: Dictionary = p.u(str(m.guida))
 		if a.is_empty() or not p.attivo(a) or a.ferito or str(a.hex) != str(m.hex):
@@ -278,21 +294,34 @@ func passa_alla_mappa_f() -> void:
 	_st().erase("pattuglie_prima")
 	ss.m23._st().pattuglie = {}
 	p.cambia_mappa("F")
-	var ingressi := ["A19", "B19", "C19"]
-	var i := 0
+	# 631: la squadra rientra a piedi fra A19 e C19 con i normali controlli di paragrafo degli esagoni d’ingresso.
 	for a in p.americani():
 		if a.stato == "uscito_parte1" or (p.attivo(a) and p.in_mappa(a)):
-			a.stato = "attivo" if a.stato == "uscito_parte1" else a.stato
-			a.hex = ingressi[i % 3]
-			i += 1
+			a.stato = "fuori"
+			a.hex = ""
+			a.erase("veicolo")
 	for m in muli():
-		if str(m.stato) == "uscito_parte1":
-			m.stato = "attivo"
-			var guida: Dictionary = p.u(str(m.guida))
-			m.hex = guida.hex if not guida.is_empty() else "A19"
-			m.percorso = [m.hex]
+		if str(m.stato) in ["uscito_parte1", "attivo", "ferito"]:
+			if str(m.stato) == "uscito_parte1":
+				m.stato = "attivo"
+			m.hex = ""
+			m.percorso = []
+	# I muli rientrano con chi li guidava; quelli senza guida li prende chi ne ha meno di 2.
+	for m in muli_attivi():
+		var gd: Dictionary = p.u(str(m.guida))
+		if gd.is_empty() or gd.stato != "fuori":
+			m.guida = ""
+			for a in p.americani().filter(func(x): return x.stato == "fuori" and not x.ferito):
+				if muli_di(a).size() < 2:
+					m.guida = a.id
+					break
 	p._applica_regole_terreno()
-	p._log("info", "Si passa alla mappa F (in alto è nord): la squadra e i muli entrano fra A19 e C19.")
+	p._log("info", "Si passa alla mappa F (in alto è nord): la squadra e i muli rientrano fra A19 e C19, con i controlli di paragrafo.")
+
+const INGRESSI_F := ["A19", "B19", "C19"]
+
+func esagoni_ingresso() -> Array:
+	return INGRESSI_F.duplicate() if attiva() and int(_st().parte) == 2 else []
 
 ## Uscite: nella prima parte dal bordo nord Y10–Y14 (con il 175), nella terza Condizione dall’angolo nord-est W1–Y3.
 func uscita_ammessa(h: String) -> bool:

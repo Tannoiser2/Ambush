@@ -433,6 +433,7 @@ func esplodi(h: String) -> void:
 		if p.attivo(x) or x.stato in ["ferito", "incapacitato"]:
 			p._uccidi(x, "nell’esplosione")
 	if p.terreno.edificio(h) and not p.s.modifiche.has(h):
+		p.veicoli.crollo_su_carri(h)
 		p.s.modifiche[h] = "rubble"
 		p.terreno.imposta_modifiche(p.s.modifiche)
 		p.s.oggetti[h] = p.s.oggetti.get(h, []) + [{"tipo": "incendio"}]

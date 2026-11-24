@@ -71,9 +71,7 @@ func _init() -> void:
 	ok(r.ss.m23.costo_passo(c, "R12", 1) == (2 if r.fase_round() else 1), "nel filo spinato +1 PM nei Round")
 	r.leggi("271", {})
 	ok(r.u("g59").hex == "T12" and "T12" in r.ss.m23._st().fortificati and int(r.s.condizione) == 3, "271: mitragliatrici nell’edificio fortificato T12, Condizione 3")
-	var mods: Array = []
-	r.ss.m23.mod_tiro(c, r.u("g59"), mods)
-	ok(not mods.is_empty(), "edificio fortificato: −2")
+	ok(r.s.bunker.has("T12") and r.s.bunker.T12.fortificato, "271: il fortificato usa le aperture e la tabella dei colpi (517)")
 	# Panzer nascosto.
 	r.leggi("410", {})
 	ok(not r.veicoli.v("v67").is_empty() and r.veicoli.v("v67").hex == "S13", "410: Panzer 67 in S13")
@@ -98,5 +96,37 @@ func _init() -> void:
 			s._uccidi(g, "prova")
 	s.ss.m23.controlla()
 	ok(s.s.fase == "fine", "fine dopo s7 e s8 senza tedeschi")
+	# 388: chi ha fallito il 492 spara per errore al superstite.
+	var er = nuova(31)
+	er.s.fase = "operazioni"
+	er.ss.m23.piazza_pattuglia("MM", "O14")
+	er.ss.m23._st().corrente = "MM"
+	er.ss.m23._st().falliti_492 = ["A", "B"]
+	er.u("A").hex = "O16"
+	er.u("B").hex = "O16"
+	var pv_er: int = er.pv_totali()
+	er.leggi("388", {"hex": "O16", "ids": []})
+	var jj: Dictionary = er.u("J")
+	ok(not jj.is_empty() and jj.hex == "O14", "388: il superstite compare nell’esagono del segnalino (%s)" % jj.get("hex", ""))
+	ok(jj.stato != "morto" or er.pv_totali() <= pv_er - 4, "388: se muore si perdono 4 PV (%d)" % (er.pv_totali() - pv_er))
+	# 517: edificio fortificato con finestre su tutti i lati e tabella dei colpi; distrutto +2 PV.
+	var fo = nuova(33)
+	fo.s.fase = "operazioni"
+	fo.ss.m23.op({"op": "ss23_fortificato", "hex": "R13", "porta": "R14"}, {})
+	ok(fo.s.bunker.has("R13") and fo.s.bunker.R13.fortificato and fo.terreno.tipo_lato("R13", "Q13") == "window", "517: fortificato in R13, lati come finestre")
+	var pv_fo: int = fo.pv_totali()
+	var att: Dictionary = fo.u("A")
+	var baz: Dictionary = {"tipo": "bazooka", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "scarica": false}
+	var giri := 0
+	while not fo.s.bunker.R13.distrutto and giri < 60:
+		fo._colpo_bunker(att, baz, "R13", fo.s.bunker.R13)
+		giri += 1
+	ok(fo.s.bunker.R13.distrutto and fo.s.modifiche.get("R13", "") == "rubble" and fo.pv_totali() >= pv_fo + 2, "517: distrutto, macerie e +2 PV (%d colpi)" % giri)
+	# 300 sulla mappa F: il Panzer in S13 è in un edificio.
+	var pz23 = nuova(32)
+	pz23.s.fase = "operazioni"
+	pz23.leggi("411", {})
+	var v67: Dictionary = pz23.veicoli.v("v67")
+	ok(v67.is_empty() or pz23.veicoli.in_edificio(v67), "300: il Panzer in S13 è in un edificio")
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)

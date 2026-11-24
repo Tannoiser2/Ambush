@@ -436,6 +436,10 @@ func _draw() -> void:
 	# Missione 6: bunker
 	for h in s.get("bunker", {}):
 		var bk: Dictionary = s.bunker[h]
+		if bk.get("fortificato", false):
+			if not bk.distrutto and bk.sfondata:
+				_marcatore(h, "PORTA SFONDATA", Vector2(0.0, 0.62), Color("4b4f55"))
+			continue
 		var testo_b := "BUNKER DISTRUTTO" if bk.distrutto else ("BUNKER · PORTA SFONDATA" if bk.sfondata else "BUNKER")
 		_marcatore(h, testo_b, Vector2(0.0, -0.62), Color("3a3a3a") if bk.distrutto else Color("4b4f55"))
 		if not bk.distrutto and E.adiacenti(h, str(bk.porta)):

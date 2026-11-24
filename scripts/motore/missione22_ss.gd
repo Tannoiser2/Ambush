@@ -41,6 +41,10 @@ func regole_terreno() -> void:
 			d.erase("ponte")
 			p.terreno.esagoni[h] = d
 	if st.ponte3:
+		if not st.has("terreno_sotto"):
+			st.terreno_sotto = {}
+			for h in PONTE3:
+				st.terreno_sotto[h] = str(p.terreno.esagoni.get(h, {}).get("t", "cliff"))
 		for h in PONTE3:
 			var d2: Dictionary = p.terreno.esagoni.get(h, {}).duplicate()
 			if st.crollato or st.distrutti.has(h):
@@ -58,6 +62,29 @@ func ponte_intatto(h: String) -> bool:
 	if h in ["O4", "V14"]:
 		return true
 	return h in PONTE3 and _st().ponte3 and not _st().crollato
+
+## Silver Star 22: tre livelli del ponte — sopra, fra i sostegni (sotto_ponte) e a terra sotto il ponte (a_terra_sotto).
+func a_terra(x: Dictionary) -> bool:
+	return attiva() and bool(x.get("a_terra_sotto", false)) and ponte_intatto(str(x.get("hex", ""))) and str(x.get("hex", "")) in PONTE3
+
+func livello(x: Dictionary) -> String:
+	if sotto(x):
+		return "sostegni"
+	if a_terra(x):
+		return "terra"
+	return "sopra"
+
+## Terreno sotto il grande ponte (dirupi e massi), per chi ci sta a terra.
+func terreno_sotto(h: String) -> String:
+	return str(_st().get("terreno_sotto", {}).get(h, "cliff"))
+
+## Si sale sul ponte solo dalla strada (H15, L13) o da un altro esagono del ponte stando sopra.
+func entra_sopra(a: Dictionary, da: String, verso: String) -> bool:
+	if not (verso in PONTE3) or not ponte_intatto(verso):
+		return true
+	if da in ["H15", "L13"]:
+		return true
+	return da in PONTE3 and livello(a) == "sopra"
 
 func sotto(x: Dictionary) -> bool:
 	return attiva() and bool(x.get("sotto_ponte", false)) and ponte_intatto(str(x.get("hex", "")))
@@ -79,11 +106,15 @@ func dopo_movimento(ids: Array) -> void:
 			p._pv(1, "squadra in %s" % h)
 		if a.get("sotto_ponte", false) and str(a.get("hex_sotto", "")) != h:
 			a.sotto_ponte = false
+		if not (h in PONTE3):
+			a.erase("a_terra_sotto")
 
 ## Sotto il ponte ci si muove solo da sostegno a sostegno: per uscire si risale.
 func verifica_passo(a: Dictionary, verso: String) -> String:
 	if not attiva():
 		return ""
+	if verso in PONTE3 and ponte_intatto(verso) and not entra_sopra(a, str(a.hex), verso) and p.veicoli.attivo(p.veicoli.di(a)):
+		return "I mezzi non scendono sotto il ponte."
 	if sotto(a) and not (ponte_intatto(verso) and esplosivo(verso) >= 0 and _stesso_ponte(a.hex, verso)):
 		return "%s è sotto il ponte: prima deve risalire (un’azione)." % p.nome(a)
 	return ""
@@ -93,7 +124,58 @@ func _stesso_ponte(a: String, b: String) -> bool:
 
 ## Scendere sotto il ponte o risalire: un’azione (comando del giocatore e dei genieri).
 func puo_scendere(a: Dictionary) -> bool:
-	return attiva() and p.attivo(a) and str(a.get("veicolo", "")) == "" and ponte_intatto(str(a.hex)) and not sotto(a)
+	# Da terra non ci si arrampica fra i sostegni: ci si scende solo dal ponte.
+	return attiva() and p.attivo(a) and str(a.get("veicolo", "")) == "" and ponte_intatto(str(a.hex)) and not sotto(a) and not a_terra(a)
+
+## Costo per entrare in un esagono del grande ponte: sopra è strada, a terra si paga il terreno di sotto.
+func costo_passo(a: Dictionary, da: String, verso: String, base: int) -> int:
+	if not attiva() or not (verso in PONTE3) or not ponte_intatto(verso) or entra_sopra(a, da, verso):
+		return base
+	var t := terreno_sotto(verso)
+	return 2 if t in ["cliff", "boulder", "rough", "brush", "woods"] else 1
+
+## Chi entra da un esagono che non è la strada del ponte finisce a terra sotto il ponte.
+func dopo_passo(a: Dictionary, da: String, verso: String) -> void:
+	if not attiva():
+		return
+	if verso in PONTE3 and ponte_intatto(verso):
+		if entra_sopra(a, da, verso):
+			a.erase("a_terra_sotto")
+		else:
+			a.a_terra_sotto = true
+			p._log("info", "%s è a terra sotto il grande ponte in %s." % [p.nome(a), verso])
+	else:
+		a.erase("a_terra_sotto")
+
+## Vista fra i livelli dello stesso esagono di ponte: chi è sotto (sostegni o terra) vede chi è sopra solo se questi è in piedi
+## e non è su un mezzo; sostegni e terra si vedono. Da fuori, chi è sotto si vede come accovacciato sul ponte.
+func vista(oss: Dictionary, ber: Dictionary) -> int:
+	if not attiva():
+		return -1
+	var lo := livello(oss)
+	var lb := livello(ber)
+	if lo == "sopra" and lb == "sopra":
+		return -1
+	if oss.hex == ber.hex:
+		if lo != "sopra" and lb != "sopra":
+			return 1
+		var su: Dictionary = oss if lo == "sopra" else ber
+		if p.veicoli.attivo(p.veicoli.di(su)) or su.postura != "standing":
+			return 0
+		return 1
+	if lo == "terra" or lb == "terra":
+		var po: String = "crouching" if lo != "sopra" else oss.postura
+		var pb: String = "crouching" if lb != "sopra" else ber.postura
+		return 1 if p.terreno.vede(oss.hex, ber.hex, po, pb) else 0
+	return -1
+
+## Granate e cariche: in un esagono del ponte colpiscono solo il livello di chi lancia (da fuori, solo chi è sopra).
+func livello_esplosione(lanciatore: Dictionary, h: String) -> String:
+	if not attiva() or not ponte_intatto(h):
+		return ""
+	if lanciatore.hex == h or (lanciatore.hex in PONTE3 and h in PONTE3):
+		return livello(lanciatore)
+	return "sopra"
 
 func puo_risalire(a: Dictionary) -> bool:
 	return attiva() and p.attivo(a) and sotto(a)
@@ -286,44 +368,89 @@ func turno_autista(t, g: Dictionary) -> void:
 		g.reazione = ""
 		t._ritira_e_esegui()
 		return
-	var con_esp: Array = _in_dietro(v).filter(func(x): return int(x.get("esplosivi_g", 0)) > 0)
-	if con_esp.is_empty():
-		if ponte_libero(v.hex) == "":
-			g.reazione = "G"
-			p._log("tedesco", "Tutto il ponte è minato: il %s aspetta i genieri (reazione speciale G)." % p.nome(g))
-		else:
-			g.reazione = "G"
-		t._miglior_tiro("facile")
-		return
-	var dest := ponte_libero(v.hex)
-	if dest == "":
-		t._miglior_tiro("vicino")
-		return
+	# 151–157: il semicingolato percorre la strada del ponte un esagono alla volta e segue il riferimento di ogni esagono.
+	var verso: int = int(_st().get("verso_ht", 1))
+	var mp: int = int(p.veicoli.MODELLI.get(str(v.modello), {}).get("lenta", 3))
 	var passi := 0
-	while v.hex != dest and passi < 3:
+	while passi < maxi(mp, 1):
+		var esito := _riferimento_ht(t, g, v, verso)
+		if esito == "fermo":
+			return
 		var i := STRADA_PONTE.find(str(v.hex))
-		var j := STRADA_PONTE.find(dest)
-		var prossimo: String
-		if i < 0:
+		var prossimo := ""
+		if esito != "":
+			prossimo = esito
+		elif i < 0:
 			prossimo = "H15" if E.distanza(v.hex, "H15") < E.distanza(v.hex, "L13") else "L13"
 			var linea: Array = E.linea(v.hex, prossimo)
 			prossimo = str(linea[1]) if linea.size() > 1 else prossimo
 		else:
-			prossimo = STRADA_PONTE[i + (1 if j > i else -1)]
+			var k := i + verso
+			if k < 0 or k >= STRADA_PONTE.size():
+				t._miglior_tiro("vicino")
+				return
+			prossimo = STRADA_PONTE[k]
 		if p.veicoli.costo(v, v.hex, prossimo) < 0:
-			break
+			t._miglior_tiro("vicino")
+			return
 		p.veicoli.sposta(v, prossimo)
 		p._log("tedesco", "Il semicingolato tedesco avanza piano in %s." % prossimo)
 		passi += 1
-	if v.hex == dest:
-		con_esp.sort_custom(func(a, b): return int(a.num) > int(b.num))
-		var x: Dictionary = con_esp[0]
-		p.veicoli.scendi(x)
-		x.hex = dest
-		x.postura = "crouching"
-		x.reazione = "E"
-		x.turni = maxi(0, int(x.get("turni", 0)) - 1)
-		p._log("tedesco", "Il %s scende dal semicingolato sul ponte in %s con l’esplosivo (reazione speciale E)." % [p.nome(x), dest])
+		if prossimo in ["H14", "L14"] and not (prossimo in PONTE3):
+			_riferimento_157(t, g, v)
+			return
+	_riferimento_ht(t, g, v, verso)
+
+## Riferimento dell’esagono in cui si trova il semicingolato: "" = prosegui sulla strada, "fermo" = turno finito,
+## altrimenti l’esagono in cui entrare.
+func _riferimento_ht(t, g: Dictionary, v: Dictionary, verso: int) -> String:
+	var h: String = str(v.hex)
+	if h in ["H15", "L13"]:
+		# 152 / 154: senza esplosivi innescati né tedeschi con l’esplosivo sul ponte si entra sul ponte, altrimenti si va di lato.
+		var minato := false
+		for x in PONTE3:
+			if esplosivo(x) > 0 or not genieri_attivi(x).is_empty():
+				minato = true
+		if not minato:
+			return "I15" if h == "H15" else "K14"
+		return "H14" if h == "H15" else "L14"
+	if not (h in PONTE3):
+		return ""
+	# 151 / 155 / 156: si lascia sul ponte il passeggero con l’esplosivo di numero più alto che ha ancora un turno.
+	var con_esp: Array = _in_dietro(v).filter(func(x): return int(x.get("esplosivi_g", 0)) > 0)
+	if con_esp.is_empty():
+		g.reazione = "H"
+		p._log("tedesco", "Nessun geniere con l’esplosivo a bordo: il %s passa alla reazione speciale H." % p.nome(g))
+		t._miglior_tiro("vicino")
+		return "fermo"
+	var pronti: Array = con_esp.filter(func(x): return int(x.get("turni", 0)) > 0)
+	if pronti.is_empty():
+		p._log("tedesco", "Il semicingolato si ferma sul ponte in %s: l’autista spara di rapido." % h)
+		g._snap_forzato = true
+		t._miglior_tiro("vicino")
+		return "fermo"
+	if str(v.get("lasciato_in", "")) == h:
+		return ""
+	pronti.sort_custom(func(a, b): return int(a.num) > int(b.num))
+	var x: Dictionary = pronti[0]
+	p.veicoli.scendi(x)
+	x.hex = h
+	x.postura = "crouching"
+	x.reazione = "E"
+	x.turni = maxi(0, int(x.get("turni", 0)) - 1)
+	v.lasciato_in = h
+	p._log("tedesco", "Il %s scende dal semicingolato sul ponte in %s con l’esplosivo (reazione speciale E)." % [p.nome(x), h])
+	return ""
+
+## 157: fuori dal ponte l’autista spara se ha passeggeri dietro; chi ha l’esplosivo va a minare (224), gli altri sparano (223).
+func _riferimento_157(t, g: Dictionary, v: Dictionary) -> void:
+	for x in _in_dietro(v):
+		if int(x.get("esplosivi_g", 0)) > 0 and x.get("reazione", "") == "T":
+			x.reazione = ""
+			p.veicoli.scendi(x)
+			x.postura = "standing"
+			p._log("tedesco", "Il %s scende dal semicingolato per andare a minare il ponte (224)." % p.nome(x))
+	t._miglior_tiro("vicino")
 
 ## 217 (GE 40): spara dal mezzo finché c’è; se è fermo o distrutto toglie la T.
 func turno_secondo(t, g: Dictionary) -> void:
@@ -400,9 +527,37 @@ func turno_h(t, g: Dictionary) -> void:
 	g.reazione = ""
 	t._ritira_e_esegui()
 
+## 158: l’ufficiale 40 dà un turno a chi è entro 2 esagoni (prima chi ha l’esplosivo, il più lontano; poi gli altri; poi l’autista),
+## altrimenti 824.
+func _dai_turno_158(t, g: Dictionary) -> bool:
+	var idonei := func(x) -> bool:
+		return x.id != g.id and p.attivo(x) and not x.ferito and not x.get("panico", false) and str(x.get("slot", "")) in ["turni", "completo"] and int(x.get("turni", 0)) < 2
+	var vicini: Array = p.tedeschi_attivi().filter(func(x): return idonei.call(x) and E.distanza(x.hex, g.hex) <= 2)
+	vicini.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) > E.distanza(b.hex, g.hex))
+	var scelto := {}
+	for x in vicini:
+		if int(x.get("esplosivi_g", 0)) > 0:
+			scelto = x
+			break
+	if scelto.is_empty() and not vicini.is_empty():
+		scelto = vicini[0]
+	if scelto.is_empty():
+		var aut: Dictionary = p.u("g41")
+		if not aut.is_empty() and idonei.call(aut):
+			scelto = aut
+	if scelto.is_empty():
+		t.esegui(824)
+		return true
+	scelto.turni = int(scelto.get("turni", 0)) + 1
+	scelto.slot = "turni"
+	p._log("tedesco", "Il %s (158) dà un turno al %s." % [p.nome(g), p.nome(scelto)])
+	return true
+
 ## 158 (40 in G) e 481 (41 in G): aspettano i genieri e sparano; poi riprendono la T.
 func turno_g(t, g: Dictionary) -> void:
 	var v := semicingolato()
+	if int(g.get("num", 0)) == 40 and _dai_turno_158(t, g):
+		return
 	var fuori: Array = p.tedeschi().filter(func(x): return p.attivo(x) and int(x.num) in GENIERI and str(x.get("veicolo", "")) != v.get("id", "-"))
 	if fuori.is_empty() and p.veicoli.attivo(v):
 		g.reazione = "T"

@@ -116,9 +116,8 @@ func costo_passo(a: Dictionary, verso: String, base: int) -> int:
 		return base
 	return base + 1 if verso in _st().filo else base
 
-func mod_tiro(tiratore: Dictionary, bersaglio: Dictionary, mods: Array) -> void:
-	if attiva() and str(bersaglio.get("hex", "")) in _st().fortificati and tiratore.hex != bersaglio.hex:
-		mods.append(["edificio fortificato", -2])
+func mod_tiro(_tiratore: Dictionary, _bersaglio: Dictionary, _mods: Array) -> void:
+	pass  # 517: chi è nel fortificato si colpisce attraverso le aperture (finestre su tutti i lati) con i modificatori normali
 
 # ------------------------------------------------------------------ pattuglie (385, 389, 492, 620, 380, 383)
 func piazza_pattuglia(nome: String, h: String) -> void:
@@ -167,6 +166,15 @@ func _muovi_pattuglie(n: int, mosso: String) -> void:
 			_st().corrente = nome
 			p.leggi("741" if int(p.missione.id) == 24 else "492", {"hex": pt.hex, "ids": [a.id]})
 
+## 328: nel Round successivo si legge il 316 al posto del controllo Evento.
+func evento_sostitutivo() -> bool:
+	if attiva() and _st().get("leggi_316", false):
+		_st().leggi_316 = false
+		p._log("info", "Al posto del controllo Evento si legge il 316.")
+		p.leggi("316", {})
+		return true
+	return false
+
 ## Nei Round i segnalini si muovono all’inizio di ogni Round.
 func inizio_round() -> void:
 	if not pattuglie_attive():
@@ -175,9 +183,7 @@ func inizio_round() -> void:
 		_muovi_pattuglie_round(nome)
 	if not attiva():
 		return
-	if _st().get("leggi_316", false):
-		_st().leggi_316 = false
-		p.leggi("316", {})
+
 
 func _muovi_pattuglie_round(nome: String) -> void:
 	var pm := int(PATTUGLIE[nome].pm)
@@ -223,9 +229,24 @@ func schiera_pattuglia(adv: String) -> void:
 		var g: Dictionary = p.u("g%d" % int(n))
 		if g.is_empty():
 			continue
-		var bonus: int = 2 if not p.unita_in(g.hex, "us").is_empty() else (1 if not p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) == 1).is_empty() else 0)
+		var bonus: int = 0
+		if p.ss.m24.attiva():
+			# 748: +2 nell’esagono di un americano attivo o di un mulo, +1 entro 3 esagoni da uno visibile.
+			var muli: Array = p.ss.m24.muli_attivi()
+			if not p.unita_in(g.hex, "us").filter(func(a): return p.attivo(a)).is_empty() or not muli.filter(func(m): return str(m.hex) == g.hex).is_empty():
+				bonus = 2
+			elif not p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) <= 3 and p.vede_unita(g, a)).is_empty() \
+					or not muli.filter(func(m): return str(m.hex) != "" and E.distanza(str(m.hex), g.hex) <= 3 and p.terreno.vede(g.hex, str(m.hex), g.postura, "standing")).is_empty():
+				bonus = 1
+		else:
+			# 499: +2 nell’esagono di un americano attivo, +1 accanto.
+			bonus = 2 if not p.unita_in(g.hex, "us").filter(func(a): return p.attivo(a)).is_empty() else (1 if not p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) == 1).is_empty() else 0)
 		if not p.controllo_pc(g, bonus, "consapevolezza della pattuglia"):
-			g.sorpreso_ss = true
+			# Inconsapevole per il primo Round: niente turni in questo Round.
+			g.sorpreso_ss = int(p.s.get("round", {}).get("n", 0))
+			g.turni = 0
+			g.slot = "completo"
+			p._log("info", "Il %s non si è accorto di niente: resta inconsapevole per questo Round." % p.nome(g))
 
 # ------------------------------------------------------------------ azioni delle pattuglie (730, 735, 739, 762)
 func turno_pattuglia(t, g: Dictionary, n: int) -> void:
@@ -303,6 +324,43 @@ func superstite(h: String) -> void:
 	p._fx("compare", {"id": "J", "a": h, "amico": true})
 	p._log("info", "Il superstite di una pattuglia americana (US 06) si unisce alla squadra in %s." % h)
 
+## 388: chi ha fallito il controllo del 492 spara un tiro rapido gratis al superstite, accovacciato.
+func _tiri_per_errore(ctx: Dictionary) -> void:
+	var j: Dictionary = p.u("J")
+	if j.is_empty():
+		return
+	j.postura = "crouching"
+	var pv0: int = p.pv_totali()
+	for id in _st().get("falliti_492", []):
+		var a: Dictionary = p.u(str(id))
+		if not p.attivo(a) or not p.attivo(j) or not p.vede_unita(a, j):
+			continue
+		var arma: Dictionary = {}
+		for w in a.armi:
+			if not w.rotta and not w.inceppata and not w.get("scarica", false) and T.ARMI.get(w.tipo, {}).has("gittate") and str(w.tipo) != "bazooka":
+				arma = w
+				break
+		if arma.is_empty():
+			continue
+		p._log("combattimento", "%s, nel buio, spara d’istinto al superstite." % p.nome(a))
+		p.risolvi_tiro(a, arma, j, false)
+	if j.stato == "morto":
+		var perso: int = pv0 - p.pv_totali()
+		if perso < 4:
+			p._pv(-(4 - perso), "superstite ucciso per errore")
+	elif p.attivo(j):
+		p._log("info", "Il superstite è sopravvissuto: si unisce alla squadra; si rifà il 492 con l’attivazione a −1.")
+		_st().mod_492 = -1
+		p.leggi("492", ctx)
+
+func _con_mod_attivazione(x, mod: int):
+	if typeof(x) != TYPE_DICTIONARY:
+		return x
+	var y: Dictionary = x.duplicate(true)
+	if str(y.get("op", "")) == "check" and str(y.get("kind", "")) == "act":
+		y.mod = int(y.get("mod", 0)) + mod
+	return y
+
 func sherman(h: String) -> void:
 	if not p.u("AA").is_empty():
 		return
@@ -358,7 +416,11 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			var riusciti: Array = oss.filter(func(a): return p.controllo_pc(a, 0, "riconoscere la pattuglia"))
 			for a in riusciti:
 				a.consapevole = true
-			for x in (o.ok if not riusciti.is_empty() else o.ko):
+			_st().falliti_492 = oss.filter(func(a): return not (a in riusciti)).map(func(a): return a.id)
+			var ko: Array = o.ko
+			if int(_st().get("mod_492", 0)) != 0:
+				ko = ko.map(func(x): return _con_mod_attivazione(x, int(_st().mod_492)))
+			for x in (o.ok if not riusciti.is_empty() else ko):
 				p._op(x, ctx)
 		"ss23_razzo":
 			var h: String = str(ctx.get("hex", "")) if str(o.get("hex", "")) == "@hex" else str(o.get("hex", ""))
@@ -388,6 +450,13 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			var hf2: String = str(o.hex)
 			if not (hf2 in _st().fortificati):
 				_st().fortificati.append(hf2)
+			# 517: quattro lati come finestre, la porta (murata) verso l’esagono indicato; tabella dei colpi come il bunker.
+			if not p.s.has("bunker"):
+				p.s.bunker = {}
+			if not p.s.bunker.has(hf2):
+				p.s.bunker[hf2] = {"porta": str(o.porta), "sfondata": false, "distrutto": false, "carica": false, "occupanti": [],
+					"pv_dati": true, "fortificato": true}
+				p.terreno.bunker = p.s.bunker
 			p._op({"op": "activate", "g": [[59, hf2], [66, hf2]], "stance": "crouching", "adv": o.get("adv", null),
 				"two": o.get("two", []), "us_two": bool(o.get("us_two", false)), "aware": false, "reaction": "", "rounds": true}, ctx)
 			p._log("info", "Edificio fortificato in %s (porta verso %s): le mitragliatrici 59 e 66 sono dentro." % [hf2, str(o.porta)])
@@ -409,7 +478,13 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			ss.m21._consapevolezza(h4)
 		"ss23_superstite":
 			var h5: String = str(ctx.get("hex", "")) if str(o.hex) == "@hex" else str(o.hex)
+			var marc: Dictionary = _st().pattuglie.get(str(_st().get("corrente", "")), {})
+			if o.get("errore", false) and str(marc.get("hex", "")) != "":
+				h5 = str(marc.hex)
+			var nuovo: bool = p.u("J").is_empty()
 			superstite(h5)
+			if o.get("errore", false) and nuovo:
+				_tiri_per_errore(ctx)
 		"ss23_sherman":
 			var r5: int = p.d10()
 			sherman("B19" if r5 % 2 == 1 else "A8")

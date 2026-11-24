@@ -21,6 +21,8 @@ var vp: SubViewport
 var mondo: Node3D
 var cam: Camera3D
 var luce: DirectionalLight3D
+const Effetti3DScript = preload("res://scripts/ui/effetti3d.gd")
+var effetti
 var terreno_mi: MeshInstance3D
 var acqua_mi: MeshInstance3D
 var oggetti: Node3D
@@ -106,6 +108,9 @@ func _init() -> void:
 	mondo.add_child(we)
 	oggetti = Node3D.new()
 	mondo.add_child(oggetti)
+	effetti = Effetti3DScript.new()
+	mondo.add_child(effetti)
+	effetti.prepara(self, env, luce, riempimento)
 
 ## Costruisce (o ricostruisce) la scena per la mappa della missione in corso.
 func prepara(m2d) -> void:
@@ -126,6 +131,7 @@ func prepara(m2d) -> void:
 	lettera = l
 	_crea_velo()
 	_costruisci_rilievo()
+	effetti.nuova_mappa()
 	_costruisci_vegetazione()
 	_firma_oggetti = ""
 	_aggiorna_oggetti()
@@ -633,9 +639,13 @@ func _aggiorna_oggetti() -> void:
 			for lato: float in [-1.0, 1.0]:
 				var q := c + dir * RAGGIO_PX * 0.7 * lato
 				_scatola(_dinamici, Vector3(q.x * K, quota - 0.04, q.y * K), Vector3(lung * 0.32, 0.07, 0.42), ang + lato * 0.25, pietra)
+	# Silver Star 22: il grande ponte I15–J14–K14 sopra la gola, con i piloni fino a terra.
+	_grande_ponte(p, pietra)
 	# Bunker (missione 6)
 	for h in p.s.get("bunker", {}):
 		var bk: Dictionary = p.s.bunker[h]
+		if bk.get("fortificato", false):
+			continue
 		var c := centro_px(str(h))
 		var b3 := Vector3(c.x * K, altezza_px(c), c.y * K)
 		var mb := MeshInstance3D.new()
@@ -1716,6 +1726,12 @@ func _aggiorna_pedine() -> void:
 		fig.position = punto3d(pos2)
 		if int(x.get("piano", 0)) > 0 and mappa2d.partita != null and mappa2d.partita.piano(x) > 0:
 			fig.position.y += ALTEZZA_CASA * 0.95  # al piano superiore del campanile
+		if _quota_grande_ponte > 0.0 and mappa2d.partita != null and str(x.get("hex", "")) in mappa2d.partita.ss.m22.PONTE3:
+			var liv: String = mappa2d.partita.ss.m22.livello(x)
+			if liv == "sopra":
+				fig.position.y = _quota_grande_ponte
+			elif liv == "sostegni":
+				fig.position.y = _quota_grande_ponte - 0.3
 		var nome := modello_per(x)
 		var ang_mezzo := INF
 		# a bordo di un mezzo: seduti in fila lungo il mezzo
@@ -1900,7 +1916,43 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 			mt.rotation = Vector3(PI / 2.0, 0, 0)
 			mt.position = Vector3(0.11 * k, 0.22, -0.35)
 			corpo.add_child(mt)
-	if modello in ["chiatta", "scialuppa", "motovedetta"]:
+	if modello == "motovedetta":
+		# Motovedetta americana (Silver Star 21): scafo grigio marina a prua affusolata, plancia, albero e mitragliatrice pesante.
+		corpo.mesh = null
+		var grigio_m := _materiale(Color("6f777c"), 0.65)
+		var prua := PrismMesh.new()
+		prua.size = Vector3(0.42, 0.18, 0.5)
+		var mp := MeshInstance3D.new()
+		mp.mesh = prua
+		mp.material_override = grigio_m
+		mp.rotation = Vector3(-PI / 2.0, 0, 0)
+		mp.position = Vector3(0, 0.1, -0.62)
+		corpo.add_child(mp)
+		_scatola(corpo, Vector3(0, 0.1, 0.12), Vector3(0.42, 0.18, 0.98), 0.0, grigio_m)
+		_scatola(corpo, Vector3(0, 0.2, 0.1), Vector3(0.38, 0.02, 1.3), 0.0, _materiale(Color("8a7a62"), 0.85))
+		_scatola(corpo, Vector3(0, 0.31, 0.05), Vector3(0.24, 0.2, 0.32), 0.0, _materiale(Color("5c6468"), 0.6))
+		_scatola(corpo, Vector3(0, 0.37, -0.11), Vector3(0.22, 0.07, 0.02), 0.0, _materiale(Color("2c3a44"), 0.3))
+		var albero := CylinderMesh.new()
+		albero.top_radius = 0.008
+		albero.bottom_radius = 0.012
+		albero.height = 0.45
+		var ma := MeshInstance3D.new()
+		ma.mesh = albero
+		ma.material_override = _materiale(Color("3e4245"), 0.6)
+		ma.position = Vector3(0, 0.62, 0.1)
+		corpo.add_child(ma)
+		var canna := CylinderMesh.new()
+		canna.top_radius = 0.012
+		canna.bottom_radius = 0.012
+		canna.height = 0.22
+		var mc := MeshInstance3D.new()
+		mc.mesh = canna
+		mc.material_override = _materiale(Color("2b2d2e"), 0.4)
+		mc.rotation = Vector3(PI / 2.0, 0, 0)
+		mc.position = Vector3(0, 0.3, -0.3)
+		corpo.add_child(mc)
+		_scatola(corpo, Vector3(0, 0.26, -0.22), Vector3(0.06, 0.08, 0.06), 0.0, _materiale(Color("2b2d2e"), 0.4))
+	elif modello in ["chiatta", "scialuppa"]:
 		corpo.scale = Vector3(1.9, 1.2, 1.6)  # chiatta e scialuppa: grosse barche da dieci posti
 	n.add_child(corpo)
 	var et := Label3D.new()
@@ -1920,6 +1972,51 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 		mondo.add_child(_mezzi_nodo)
 	_mezzi_nodo.add_child(n)
 	return n
+
+var _quota_grande_ponte := -1.0
+
+func _grande_ponte(p, pietra: Material) -> void:
+	_quota_grande_ponte = -1.0
+	if p.ss == null or not p.ss.m22.attiva():
+		return
+	var st: Dictionary = p.ss.m22._st()
+	if not st.get("ponte3", false) or st.get("crollato", false):
+		return
+	var tratto: Array = ["H15", "I15", "J14", "K14", "L13"]
+	var quota := 0.0
+	for h in tratto:
+		quota = maxf(quota, altezza_px(centro_px(h)))
+	quota += 0.38
+	_quota_grande_ponte = quota + 0.04
+	pietra = _materiale(Color("7b7f78"), 0.95)
+	var scuro := _materiale(Color("666a63"), 0.95)
+	for i in tratto.size() - 1:
+		var a: String = tratto[i]
+		var b: String = tratto[i + 1]
+		if (a in p.ss.m22.PONTE3 and st.distrutti.has(a)) or (b in p.ss.m22.PONTE3 and st.distrutti.has(b)):
+			continue
+		var ca := centro_px(a)
+		var cb := centro_px(b)
+		var m := (ca + cb) * 0.5
+		var d := cb - ca
+		var ang := atan2(-d.y, d.x)
+		var lung := d.length() * K
+		_scatola(_dinamici, Vector3(m.x * K, quota, m.y * K), Vector3(lung, 0.08, 0.46), ang, pietra)
+		for lato: float in [-1.0, 1.0]:
+			var off := Vector2(-d.y, d.x).normalized() * 0.21 / K * lato
+			_scatola(_dinamici, Vector3((m.x + off.x) * K, quota + 0.08, (m.y + off.y) * K), Vector3(lung, 0.1, 0.035), ang, scuro)
+	for h in p.ss.m22.PONTE3:
+		if st.distrutti.has(h):
+			continue
+		var c := centro_px(h)
+		var terra := altezza_px(c)
+		var alto := quota - terra
+		if alto <= 0.05:
+			continue
+		for k: float in [-1.0, 1.0]:
+			var q := c + Vector2(0, 14.0 * k)
+			_scatola(_dinamici, Vector3(q.x * K, terra + alto * 0.5, q.y * K), Vector3(0.11, alto, 0.11), 0.0, scuro)
+		_scatola(_dinamici, Vector3(c.x * K, quota - 0.1, c.y * K), Vector3(0.14, 0.14, 0.5), 0.0, scuro)
 
 ## Materiale con la tessitura dipinta del modulo TTS (assets/mezzi3d/<nome>.jpg).
 var _mat_dipinti: Dictionary = {}
@@ -1965,6 +2062,8 @@ func _aggiorna_mezzi() -> void:
 				break
 		var acqua := str(veic.modello) in ["canoa", "chiatta", "scialuppa", "motovedetta"] and p.terreno.tipo(str(veic.hex)) in ["stream", "water"]
 		n.position = punto3d(c)
+		if _quota_grande_ponte > 0.0 and p.ss != null and str(veic.hex) in p.ss.m22.PONTE3:
+			n.position.y = _quota_grande_ponte
 		if acqua:
 			n.position.y = (_quota_base(c) - 1.0) * LIVELLO - 0.1
 		n.rotation.y = _angolo_fronte(str(veic.hex), int(veic.get("fronte", 0)))
@@ -2096,9 +2195,10 @@ func _paracadute(fig: Node3D, id: String, x: Dictionary) -> void:
 		vela.visible = false
 
 # ================================================================== camera
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not visible or mappa2d == null:
 		return
+	effetti.aggiorna(delta)
 	_sincronizza_velo()
 	_aggiorna_oggetti()
 	_aggiorna_mezzi()

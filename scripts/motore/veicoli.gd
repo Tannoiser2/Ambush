@@ -153,6 +153,8 @@ func sposta(veic: Dictionary, verso: String) -> void:
 	if veic.lato == "de":
 		p.segna_passaggio_ponte(da, verso)
 	p.mina_anticarro(veic, verso)
+	if _filo(verso) and bool(MODELLI[veic.modello].get("carro", false)) and attivo(veic):
+		_carro_nel_filo(veic, verso)
 	var ids: Array = []
 	for x in occupanti(veic):
 		x.hex = verso
@@ -182,7 +184,7 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 		return -1
 	if bool(p.regola("argini_veicoli", false)) and p.terreno.tipo_lato(da, verso) == "embankment":
 		return -1
-	if verso in p.s.get("blocchi", []):
+	if verso in p.s.get("blocchi", []) and not p.ss.m20.puo_speronare(veic, verso):
 		return -1
 	if bool(p.regola("xxx", false)) and p.riferimento(verso) == "XXX":
 		return -1
@@ -204,6 +206,8 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 		return -1
 	if p.terreno.accessi.has(verso) and not (da in p.terreno.accessi[verso]):
 		return -1
+	if _filo(verso) and bool(MODELLI[veic.modello].get("carro", false)):
+		c = maxi(c, 2)  # 300: un carro nel filo spinato paga 2 PM e fa un controllo d’incidente
 	var tl := p.terreno.tipo_lato(da, verso)
 	match tl:
 		"wall", "door", "window":
@@ -217,17 +221,64 @@ func costo(veic: Dictionary, da: String, verso: String) -> int:
 
 # ------------------------------------------------------------------ incidenti (17/9)
 ## Controllo d’incidente: dado ≤ abilità di guida dell’autista, nessun incidente.
-func controllo_incidente(veic: Dictionary, motivo: String) -> void:
+func controllo_incidente(veic: Dictionary, motivo: String, mod_tabella := 0) -> bool:
 	var a := autista(veic)
-	var ds := int(a.get("DS", 0)) if not a.is_empty() else -1
+	var ds := int(a.get("DS", veic.get("DS", 0))) if not a.is_empty() else int(veic.get("DS", -1))
 	var r := p.d10()
 	if r <= ds:
 		p._log("dado", "Controllo d’incidente %s (%s, abilità di guida %d): %d → nessun incidente." % [di_art(veic), motivo, ds, r])
-		return
-	var r2 := p.d10()
+		return true
+	var r2 := clampi(p.d10() + mod_tabella, 0, 9)
 	var esito: String = (T.INCIDENTE_CARRO if bool(MODELLI[veic.modello].get("carro", false)) else T.INCIDENTE_AUTO)[r2]
 	p._log("dado", "Controllo d’incidente %s (%s, abilità di guida %d): %d → incidente possibile; tabella degli incidenti %d → %s." % [di_art(veic), motivo, ds, r, r2, _nome_incidente(esito)])
 	applica_incidente(veic, esito)
+	return false
+
+# ------------------------------------------------------------------ 300: carri negli edifici e nel filo spinato
+func _filo(h: String) -> bool:
+	return h in p.s.get("ss", {}).get("m23", {}).get("filo", [])
+
+func _carro_nel_filo(veic: Dictionary, h: String) -> void:
+	var a := autista(veic)
+	var ds := int(a.get("DS", veic.get("DS", 0))) if not a.is_empty() else int(veic.get("DS", 0))
+	var r := p.d10()
+	if r <= ds:
+		p.s.ss.m23.filo.erase(h)
+		p._log("dado", "%s schiaccia il filo spinato in %s (%d, abilità di guida %d): il filo è tolto." % [nome_art(veic), h, r, ds])
+	else:
+		veic.immobilizzato = true
+		p._log("dado", "%s resta impigliato nel filo spinato in %s (%d, abilità di guida %d): immobilizzato." % [nome_art(veic), h, r, ds])
+
+func in_edificio(veic: Dictionary) -> bool:
+	return not veic.is_empty() and bool(MODELLI.get(str(veic.get("modello", "")), {}).get("carro", false)) and p.terreno.edificio(str(veic.hex)) \
+		and not p.s.modifiche.has(str(veic.hex))
+
+## Un carro in un edificio spara solo lungo la fila di esagoni che ha davanti.
+func lungo_fronte(veic: Dictionary, h: String) -> bool:
+	var x: String = str(veic.hex)
+	for i in 40:
+		x = E.vicino(x, int(veic.get("fronte", 0)))
+		if x == "":
+			return false
+		if x == h:
+			return true
+	return false
+
+## L’edificio in cui è il carro crolla: aperto, chi è esposto tira sulla riga della pistola (tranne il panico perde un uomo);
+## chiuso, controllo d’incidente con −2 sulla tabella.
+func crollo_su_carri(h: String) -> void:
+	for veic in in_esagono(h):
+		if not attivo(veic) or not bool(MODELLI[veic.modello].get("carro", false)):
+			continue
+		p._log("danno", "L’edificio crolla addosso %s." % di_art(veic))
+		if veic.get("chiuso", false):
+			controllo_incidente(veic, "edificio crollato", -2)
+		else:
+			var r := p.d10()
+			var l := T.lettera_danno(T.ARMI.pistol.danni, r)
+			p._log("dado", "Equipaggio esposto sulla riga della pistola: %d → %s." % [r, p._nome_danno(l)])
+			if l != "-" and l != "P":
+				riduci_equipaggio(veic, 1)
 
 ## 17/12 (e Purple Heart 600): un mezzo che entra in un esagono con soldati a piedi. Con dei compagni fa un controllo d’incidente
 ## per evitarli; con dei nemici lo fa per investirli. Chi sta per essere investito fa un controllo di percezione: se riesce si
@@ -759,7 +810,11 @@ func carta_carro(g: Dictionary) -> Dictionary:
 func bersagli_carro(g: Dictionary) -> Array:
 	var out: Array = []
 	var nemici: Array = p.tedeschi_attivi() if g.get("lato", "de") == "us" else p.americani_attivi_in_mappa()
+	var mio: Dictionary = di(g)
+	var chiuso_in_edificio := in_edificio(mio)
 	for a in nemici:
+		if chiuso_in_edificio and not lungo_fronte(mio, a.hex):
+			continue
 		if p.attivo(a) and p.vede_unita(g, a):
 			out.append(a)
 	out.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
@@ -926,12 +981,29 @@ func _cannone_o_carica(g: Dictionary, veic: Dictionary) -> void:
 	if veic.get("cannone_distrutto", false):
 		return
 	var bersaglio := {}
-	for a in bersagli_carro(g):
-		if p.terreno.edificio(a.hex) or attivo(di(a)):
+	var bombarda: bool = veic.get("fermo_sempre", false)
+	var candidati: Array = bersagli_carro(g)
+	if bombarda:
+		# 250: prima un mezzo americano, poi il cannone americano (i serventi), poi un americano visibile in un edificio.
+		var prio := func(a) -> int:
+			if attivo(di(a)):
+				return 0
+			if a.get("atg_ss", -1) != -1:
+				return 1
+			return 2 if p.terreno.edificio(a.hex) else 9
+		candidati = candidati.filter(func(a): return prio.call(a) < 9)
+		candidati.sort_custom(func(a, b): return prio.call(a) < prio.call(b) or (prio.call(a) == prio.call(b) and E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex)))
+	for a in candidati:
+		if p.terreno.edificio(a.hex) or attivo(di(a)) or (bombarda and a.get("atg_ss", -1) != -1):
 			if not bool(MODELLI[veic.modello].torretta) and not _davanti(veic, a.hex):
 				continue
 			bersaglio = a
 			break
+	var edificio_vuoto := ""
+	if bersaglio.is_empty() and bombarda:
+		edificio_vuoto = _edificio_piu_vicino(g)
+		if edificio_vuoto != "":
+			bersaglio = {"id": "", "hex": edificio_vuoto}
 	if bersaglio.is_empty() or not veic.get("cannone_pronto", false) or _sparato_coax or _caricato or _cp < 2:
 		_carica(veic)
 		return
@@ -939,7 +1011,7 @@ func _cannone_o_carica(g: Dictionary, veic: Dictionary) -> void:
 	_sparato_cannone = true
 	veic.cannone_pronto = false
 	var arma := {"tipo": "cannone", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "scarica": false}
-	if attivo(di(bersaglio)):
+	if edificio_vuoto == "" and (attivo(di(bersaglio)) or not p.terreno.edificio(bersaglio.hex)):
 		p.risolvi_tiro(g, arma, bersaglio, true)
 		return
 	# Contro un edificio: si spara al muro (+4) e lo scoppio colpisce chi è nell’esagono (13/5).
@@ -953,6 +1025,8 @@ func _cannone_o_carica(g: Dictionary, veic: Dictionary) -> void:
 	if not colpito:
 		return
 	p._fx("esplosione", {"a": bersaglio.hex, "grande": true})
+	if bombarda:
+		_colpo_su_edificio(g, bersaglio.hex)
 	for x in p.unita_in(bersaglio.hex, "de" if g.get("lato", "de") == "us" else "us"):
 		var soglia: int = {"prone": 0, "crouching": 1, "standing": 2}.get(x.postura, 1)
 		var rr := p.d10()
@@ -961,6 +1035,41 @@ func _cannone_o_carica(g: Dictionary, veic: Dictionary) -> void:
 			p._applica_danno(x, "K", g)
 		else:
 			p._log("dado", "Scoppio nell’edificio: %s %d → illeso." % [p.nome(x), rr])
+
+func _edificio_piu_vicino(g: Dictionary) -> String:
+	var migliore := ""
+	for h in E.tutti():
+		if not p.terreno.edificio(h) or p.s.modifiche.has(h):
+			continue
+		if not p.terreno.vede(g.hex, h, "standing", "standing"):
+			continue
+		if migliore == "" or E.distanza(h, g.hex) < E.distanza(migliore, g.hex):
+			migliore = h
+	return migliore
+
+## 250 (Missione 21): il primo colpo sfonda un lato di muro, il secondo riduce l’esagono in macerie (−1 PV).
+func _colpo_su_edificio(g: Dictionary, h: String) -> void:
+	if not p.s.has("colpi_edificio"):
+		p.s.colpi_edificio = {}
+	var n: int = int(p.s.colpi_edificio.get(h, 0)) + 1
+	p.s.colpi_edificio[h] = n
+	if n == 1:
+		var verso := ""
+		for vic in E.vicini(h):
+			if p.terreno.tipo_lato(h, vic) == "wall" and (verso == "" or E.distanza(vic, g.hex) < E.distanza(verso, g.hex)):
+				verso = vic
+		if verso != "":
+			if not p.s.has("muri_sfondati"):
+				p.s.muri_sfondati = []
+			p.s.muri_sfondati.append([h, verso])
+			p.terreno.muri_sfondati = p.s.muri_sfondati
+		p._log("danno", "Il colpo sfonda il muro dell’edificio in %s." % h)
+	elif not p.s.modifiche.has(h):
+		crollo_su_carri(h)
+		p.s.modifiche[h] = "rubble"
+		p.terreno.imposta_modifiche(p.s.modifiche)
+		p._log("danno", "Secondo colpo: l’edificio in %s crolla in macerie." % h)
+		p._pv(-1, "edificio distrutto in %s" % h)
 
 ## Mitragliatrice di scafo (solo bersagli davanti) o coassiale; quale = 0 il più vicino, 1 il secondo.
 func _mg(g: Dictionary, veic: Dictionary, tipo: String, mirato: bool, quale: int) -> void:

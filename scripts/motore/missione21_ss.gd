@@ -144,7 +144,7 @@ func cannone_navale() -> void:
 	k.atg_ss = 1
 	j.fuori_conto = true
 	k.fuori_conto = true
-	_st().atg = {"carico": true, "caricato": -1, "sparato": -1, "hex": "D2", "distrutto": false}
+	_st().atg = {"carico": true, "caricato": -1, "sparato": -1, "hex": "D2", "distrutto": false, "verso": "E3"}
 	p._log("info", "Il cannone navale in D2 (copre D3, E3, E2) entra in gioco con i serventi J e K: agiscono da soli.")
 
 func _turno_corrente() -> int:
@@ -158,12 +158,42 @@ func _atg_spara(a: Dictionary, criterio: String) -> bool:
 	if carri.is_empty():
 		return false
 	carri.sort_custom(func(x, y): return E.distanza(x.hex, a.hex) < E.distanza(y.hex, a.hex))
+	var nell_arco: Array = carri.filter(func(g): return in_arco(g.hex))
+	var mirato := true
+	var bers: Dictionary = {}
+	if not nell_arco.is_empty():
+		bers = nell_arco[0]
+	else:
+		# 253: col bersaglio fuori dal settore i due serventi spendono un’azione ciascuno per girare il cannone
+		# (con un solo servente attivo non si gira); se resta un turno si spara subito, di rapido (−2).
+		var altro: Dictionary = p.u("K" if a.id == "J" else "J")
+		if altro.is_empty() or not p.attivo(altro) or int(altro.get("turni", 0)) <= 0:
+			return false
+		bers = carri[0]
+		atg.verso = bers.hex
+		altro.turni = int(altro.turni) - 1
+		p._log("info", "%s e %s girano il cannone navale verso %s." % [p.nome(a), p.nome(altro), bers.hex])
+		if int(a.get("turni", 0)) <= 1 and int(altro.turni) <= 0:
+			return true
+		mirato = false
 	a.postura = "crouching"
 	atg.carico = false
 	atg.sparato = int(p.s.round.get("n", 0)) * 100 + int(a.get("turni", 0))
-	p._log("info", "%s spara con il cannone navale contro il %s." % [p.nome(a), p.veicoli.di(carri[0]).nome])
-	p.risolvi_tiro(a, {"tipo": "cannone", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "scarica": false}, carri[0], true)
+	p._log("info", "%s spara con il cannone navale contro il %s%s." % [p.nome(a), p.veicoli.di(bers).nome, "" if mirato else " (tiro rapido)"])
+	p.risolvi_tiro(a, {"tipo": "cannone", "inceppata": false, "rotta": false, "preparata": true, "catturata": false, "scarica": false}, bers, mirato)
 	return true
+
+## Settore coperto del cannone navale: i tre lati verso il bersaglio scelto (all’inizio D3, E3, E2), cioè un semipiano.
+func in_arco(h: String) -> bool:
+	var atg: Dictionary = _st().get("atg", {})
+	if atg.is_empty():
+		return false
+	var o: Vector2 = E.centro(str(atg.hex))
+	var c: Vector2 = E.centro(str(atg.get("verso", "E3"))) - o
+	var t: Vector2 = E.centro(h) - o
+	if t.length() < 0.001:
+		return true
+	return absf(rad_to_deg(c.angle_to(t))) <= 90.5
 
 func _atg_carica(a: Dictionary) -> bool:
 	var atg: Dictionary = _st().get("atg", {})
@@ -467,15 +497,22 @@ func blocca_fine() -> bool:
 func uscita_ammessa(h: String) -> bool:
 	return str(_st().get("modo21", "")) == "barca" and _st().get("barca_affondata", false) and h in ["W1", "X1", "Y1"]
 
+## 473: all’inizio del prossimo Round si legge il 690 al posto del controllo Evento.
+func evento_sostitutivo() -> bool:
+	if attiva() and _st().get("leggi_690", false):
+		_st().leggi_690 = false
+		if not bool(p.s.avvistamenti[8]):
+			p._log("info", "Al posto del controllo Evento si legge il 690.")
+			p.leggi("690", {})
+			return true
+	return false
+
 func inizio_round() -> void:
 	if not attiva():
 		return
 	if _st().get("aspetta_471", false) and p.radio_presidiata():
 		_st().aspetta_471 = false
 		p.leggi("471", {})
-	if _st().get("leggi_690", false) and not bool(p.s.avvistamenti[8]):
-		_st().leggi_690 = false
-		p.leggi("690", {})
 
 # ------------------------------------------------------------------ operazioni e test
 func _attiva_carro(num: int, h: String, riders: Array, reazione_riders: String, due: Array) -> void:

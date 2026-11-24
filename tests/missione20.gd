@@ -116,7 +116,45 @@ func _init() -> void:
 		n.ss.m20.esplosione("granata", "A8")
 		tentativi += 1
 	ok(not n.veicoli.attivo(n.veicoli.v("vjeep")), "una granata nell’esagono può mettere fuori uso un mezzo")
-	for q2 in [p, q, f, m, n]:
+	# 113/351: il camion sfonda il blocco andando veloce; la jeep no.
+	var sf = nuova(8)
+	sf.s.fase = "round"
+	sf._op({"op": "ss_blocco", "hex": "E7"}, {})
+	var cs: Dictionary = sf.veicoli.v("vcamion1")
+	var js: Dictionary = sf.veicoli.v("vjeep")
+	cs.hex = "D6"
+	var aut_s: Dictionary = sf.veicoli.autista(cs)
+	sf.s.turno = {"id": aut_s.id, "mp": 6, "spesi": 4, "mp_lenta": 4, "azione": "movimento"}
+	ok(sf.ss.m20.puo_speronare(cs, "E7"), "il camion veloce con PM per uscire può sfondare il blocco")
+	ok(not sf.ss.m20.puo_speronare(js, "E7"), "la jeep non sfonda")
+	sf.s.turno.spesi = 0
+	ok(not sf.ss.m20.puo_speronare(cs, "E7"), "andando piano il camion non sfonda")
+	sf.s.turno.spesi = 4
+	cs.hex = "E7"
+	sf.ss.m20.speronamento(cs, "D6", "E7")
+	if sf.veicoli.attivo(cs):
+		cs.hex = "F7"
+		sf.ss.m20.speronamento(cs, "E7", "F7")
+	ok((not sf.veicoli.attivo(cs) and cs.hex == "E7" and "E7" in sf.s.blocchi) or (sf.veicoli.attivo(cs) and not ("E7" in sf.s.blocchi)),
+		"sfondamento: o il blocco è sgombrato o il camion resta fuori uso nel blocco (%s, %s)" % [cs.hex, str(sf.s.blocchi)])
+	# 791: mortaio su un edificio.
+	var ed = nuova(9)
+	ed.s.fase = "round"
+	var he := ""
+	for col in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+		for rr in range(1, 20):
+			var hh := "%s%d" % [col, rr]
+			if he == "" and ed.terreno.edificio(hh):
+				he = hh
+	var dentro: Dictionary = ed.u("A")
+	dentro.hex = he
+	dentro.erase("veicolo")
+	dentro.turni = 2
+	var muri0: int = ed.s.get("muri_sfondati", []).size()
+	ed.ss.m20._impatto(he)
+	ok(he != "" and (int(dentro.turni) == 1 or ed.s.get("muri_sfondati", []).size() == muri0 + 1 or not ed.attivo(dentro) or dentro.ferito),
+		"mortaio sull’edificio %s: un turno perso o muro sfondato" % he)
+	for q2 in [p, q, f, m, n, sf, ed]:
 		for c in q2.s.cronaca.filter(func(c): return str(c.get("t", "")) == "errore"):
 			print("        ! " + str(c.x))
 	print("Errori: %d" % errori)

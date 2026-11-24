@@ -241,8 +241,11 @@ Ordine scelto: M11, M10, M12, M9.
 - Canoe: 2 (regola «canoe»), sommozzatori E–H aggrappati come occupanti in più (`aggrappato`) fino al 787.
   Chiatte = veicoli «chiatta» `chiatta_ss` (3 PV). Barche di guardia 60/61 = tedeschi `barca_ss` con punti
   equipaggio (`turno_barca`, paragrafi 911–918 semplificati). Camion `camion_ss` con i tedeschi 10–15 (reazione T).
-- Semplificazioni: impermeabilizzazione delle armi (inceppamento 25) non gestita; bazooka sulla chiatta con
-  probabilità propria (`bazooka_chiatta`); granata nella barca di guardia: dado pari = dentro.
+- Regole complete (prima semplificate): impermeabilizzazione delle armi (bottoni «Impermeabilizza», «Togli la protezione»,
+  «Pulisci l’arma»; sott’acqua un’arma non protetta e un’arma ancora protetta che spara si inceppano con 25 o meno); bazooka
+  sulla chiatta con la base per distanza, il modificatore del bersaglio grande allo scoperto, WS, ferito e il controllo del
+  colpo a vuoto; granata nella barca di guardia secondo il 674 (lancio diretto dentro, disperso: dado dispari dentro, pari in
+  acqua; −3 a lanciare da fuori).
 - Test `tests/missione19.gd`, `simula.gd -- 4 1 19`, scatti `tests/visivi/missione19_ui.gd`.
 
 ## Silver Star — Missione 20 «Facile come bere un bicchier d’acqua» (mappa F, in alto è nord)
@@ -257,8 +260,12 @@ Ordine scelto: M11, M10, M12, M9.
   azioni), solo piano con 3 carichi; blocchi stradali (`s.blocchi`, 1 PV, a mano, carica, bazooka pesante); galleria W7–W9
   (strada, vista al buio), ponte O4, strada sotto U13; mortaio 471–473 (549, 502–504, diagrammi A/B di `MO.dispersione`);
   granate sui mezzi; fine 683/685 con uscita dei mezzi dall’autista (+1 camion, +2 per carico) e +1 per tedesco attivo.
-- Semplificazioni: niente sfondamento del blocco col camion; il 685 «al posto del controllo Evento» legge il 790 in più;
-  il crollo dei lati degli edifici colpiti dal mortaio non è gestito; il gruppo del 47 è tre tedeschi 471–473.
+- Regole complete (prima semplificate): sfondamento del blocco col camion (113/351: andando veloce e con i PM per uscire nello
+  stesso turno, due controlli d’incidente; se ne fallisce uno resta fuori uso nel blocco e chi è a bordo tira sulla riga del
+  fucile semiautomatico; con due camion nel blocco: «Aggancia il cavo» e «Traina» dall’esagono accanto); il 685 legge il 790
+  al posto del controllo Evento (`ss.evento_sostitutivo`, anche per il 690 della 21 e il 316 della 23); mortaio sugli edifici
+  (791: riga della granata fuori; ucciso = un lato di muro sfondato a caso e chi è dentro tira sulla riga del fucile
+  semiautomatico, altrimenti chi è dentro perde un turno). Il «tre uomini» del 47 è solo la rappresentazione della squadra.
 - Test `tests/missione20.gd`, `simula.gd -- 4 1 20` (la simulazione guida il convoglio lungo la strada), scatti
   `tests/visivi/missione20_ui.gd`.
 
@@ -280,8 +287,11 @@ Ordine scelto: M11, M10, M12, M9.
   senza serventi.
 - Correzioni generali: il vantaggio dei paragrafi SS va in `round.vantaggio_forzato`; la regola della Missione 1 sul
   tedesco 34 (Condizione 4) non vale più nelle altre missioni.
-- Semplificazioni: il settore del cannone navale non si gira; il 250 (bombardamento degli edifici) ferma solo il mezzo;
-  la motovedetta in 3D usa il modello della canoa.
+- Regole complete (prima semplificate): settore coperto del cannone navale (253: semipiano D3–E3–E2; con il bersaglio
+  fuori settore i due serventi spendono un’azione ciascuno per girarlo, poi tiro rapido se resta un turno; con un solo
+  servente non si gira); 250 (il carro fermo bombarda: mezzo, cannone, americano in edificio, poi l’edificio più vicino con +4;
+  il primo colpo sfonda un muro, il secondo lo riduce in macerie, −1 PV); motovedetta 3D con scafo, plancia, albero e
+  mitragliatrice pesante.
 - Test `tests/missione21.gd`, `simula.gd -- 4 1 21`, scatti `tests/visivi/missione21_ui.gd`.
 
 ## Silver Star — Missione 22 «Un altro ponte di troppo?» (mappa F con mezza G = «FG», in alto è est)
@@ -297,9 +307,14 @@ Ordine scelto: M11, M10, M12, M9.
   crollo → 260, scelta 330/994), 182/191/194/204/225; genieri tedeschi col semicingolato (216/217/218, reazioni T, E 261,
   G 158/481, H 153: l’autista porta i genieri sul ponte e ne lascia uno per esagono senza esplosivo); cecchino 26 col
   detonatore di V14 (599/219/598); panzerfaust (208/209); cannone anticarro (265–268, settore di tiro); fine 269/330/994.
-- Semplificazioni: i tre livelli del ponte sono due (sopra e sotto fra i sostegni); in 3D il grande ponte non si disegna (solo
-  i segnalini); il Panzer in S13 non ha le regole dell’edificio (300); il semicingolato tedesco segue il ponte in modo diretto
-  invece dei riferimenti 151–157; l’ufficiale 40 non dà turni agli altri (158 semplificato).
+- Regole complete (prima semplificate): tre livelli del grande ponte (sopra, fra i sostegni, a terra sotto il ponte: chi entra
+  da un esagono che non è la strada resta a terra e paga il terreno di sotto; vista fra i livelli; granate e cariche solo sul
+  livello di chi lancia); grande ponte disegnato in 3D con piloni e pedine all’altezza giusta; regola 300 dei carri negli
+  edifici e nel filo spinato (in `veicoli.gd`, vale per tutte le missioni); semicingolato tedesco con i riferimenti 151–157
+  (lascia sul ponte il geniere di numero più alto con turni, si ferma e spara se non ne ha, reazione H senza esplosivi;
+  152/154 e 157 agli estremi); l’ufficiale 40 dà i turni secondo il 158.
+- Da verificare: il 411 (Panzer in S13) è un paragrafo della 23; sulla mappa FG l’esagono S13 è torrente: il rimando della
+  carta in X15 è probabilmente letto male.
 - Test `tests/missione22.gd`, `simula.gd -- 4 1 22`, scatti `tests/visivi/missione22_ui.gd`.
 
 ## Silver Star — Missione 23 «Sconosciuti nella notte» (mappa F, in alto è sud)
@@ -317,9 +332,11 @@ Ordine scelto: M11, M10, M12, M9.
   in arrivo (consapevolezza per il rumore); superstite US 06 nella squadra; scelta 442 (Sherman US 07 con 17 PV, o da soli con
   14); fine nella Condizione 3 dopo s7 e s8 senza tedeschi attivi (feriti gravi salvi in un edificio o nella galleria).
 - Azioni base 760 e 761 ora gestite per tutte le missioni Silver Star.
-- Semplificazioni: i diagrammi di schieramento delle pattuglie sono approssimati (esagono del segnalino e intorno); le regole
-  dell’edificio fortificato si riducono al −2; il Panzer in casa non ha le regole del 300; il superstite non si spara addosso per
-  errore (388 lo aggiunge alla squadra).
+- Regole complete (prima semplificate): edificio fortificato 517 (finestre su tutti i lati, porta murata che si sfonda, tiro
+  al muro +4 con la tabella dei colpi dell’appendice B, distrutto = macerie e +2 PV; bottone «Spara all’edificio fortificato»);
+  regola 300 per il Panzer in casa; 388 (chi ha fallito il 492 spara un tiro rapido al superstite: morto −4 PV, vivo si rifà
+  il 492 con l’attivazione a −1); 499 (chi fallisce il controllo è inconsapevole per il primo Round: niente turni).
+- Ancora approssimati: i diagrammi di schieramento 1–4 delle pattuglie, che non sono nelle pagine del libretto disponibili.
 - Test `tests/missione23.gd`, `simula.gd -- 4 1 23`, scatti `tests/visivi/missione23_ui.gd`.
 
 ## Silver Star — Missione 24 «Il blues del mulattiere» (mezze mappe G e H, in alto è ovest; poi mappa F)
@@ -334,6 +351,23 @@ Ordine scelto: M11, M10, M12, M9.
   +1 per tedesco attivo rimasto, −2 per mulo rimasto, 21 PV. Pattuglia 78–81 con i segnalini della 23 (525/741/633/745).
   Mortaio 77 con il codice del mortaio della 20 (501 → 549, 502–504).
 - Azioni base aggiunte per Silver Star: 635, 848, 849, 883, 884, 846, 847, 740, 749, 520, 322.
-- Semplificazioni: i diagrammi della pattuglia sono approssimati; il mortaio non riceve le coordinate dal cecchino 76; il rientro
-  sulla mappa F non legge i paragrafi degli esagoni d’ingresso; i muli feriti non hanno il limite di 2 PM.
+- Regole complete (prima semplificate): coordinate del cecchino 76 al mortaio (520/524, segnalino nell’esagono più vicino a
+  Y1 fuori dalla gittata minima, poi diagramma B); rientro sulla mappa F a piedi da A19–C19 con i normali controlli di
+  paragrafo, muli al seguito; muli feriti a 2 PM; al massimo 4 muli in K8 durante lo scarico (bottone «Scarica i muli»);
+  748 come il 499, con i muli.
+- Ancora approssimati: i diagrammi di schieramento della pattuglia (vedi la 23).
 - Test `tests/missione24.gd`, `simula.gd -- 2 1 24`, scatti `tests/visivi/missione24_ui.gd`.
+
+## Effetti 3D (`scripts/ui/effetti3d.gd`)
+- Notte (missioni 4, 6, 9, 12, 13, 16, 19, 23): luna fredda e debole; una maschera per esagono (`luce_mask`, r = in vista,
+  g = bengala) tiene chiari gli esagoni che la squadra vede e scurisce il resto; i bengala scendono piano con una luce calda
+  che tremola e scaldano gli esagoni illuminati.
+- Nebbia procedurale (missioni 3 e 23): quattro strati di rumore frattale che scorrono (`nebbia3d.gdshader`) più chiazze
+  sul terreno; si apre dove la squadra vede e vicino alla camera; densità dal limite di visibilità.
+- Acqua (`acqua3d.gdshader`): increspature a più ottave che scorrono, normali dal rumore, colore dal bordo torbido al centro
+  profondo, riflesso del cielo con Fresnel, schiuma lungo le sponde.
+- Colpi: vampata alla bocca, traccianti (raffica per le armi automatiche), sbuffo all’arrivo; esplosioni con lampo, fiamma,
+  detriti e fumo; incendi persistenti con fiamme, fumo e luce tremolante; relitti che fumano. Particelle CPU (vanno con GL
+  Compatibility), glow leggero, niente bianchi bruciati.
+- Scatti: `tests/visivi/effetti3d.gd`.
+

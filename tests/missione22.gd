@@ -78,10 +78,26 @@ func _init() -> void:
 	var autista: Dictionary = q.u("g41")
 	q.s.round.numero_azione = 3
 	q.ia._g = autista
+	for n in [42, 43, 44, 45]:
+		q.u("g%d" % n).turni = 1
 	q.ss.m22.turno_autista(q.ia, autista)
 	var scesi: Array = q.tedeschi().filter(func(g): return g.get("reazione", "") == "E")
-	ok(vde.hex == "I15" and scesi.size() == 1 and scesi[0].hex == "I15", "il semicingolato va in I15 e lascia un geniere (%s)" % vde.hex)
+	scesi.sort_custom(func(a, b): return int(a.num) > int(b.num))
+	ok(scesi.size() >= 1 and scesi[0].hex == "I15" and scesi[0].id == "g45", "151: in I15 scende il geniere di numero più alto (%s)" % str(scesi.map(func(x): return [x.id, x.hex])))
+	ok(scesi.size() == 1 or scesi[1].hex == "J14", "155: il semicingolato prosegue in J14 e ne lascia un altro (%s)" % vde.hex)
 	var gen: Dictionary = scesi[0]
+	# Senza turni ai genieri il semicingolato si ferma e l’autista spara.
+	var q2 = nuova(15)
+	q2.s.avvistamenti[4] = true
+	q2.ss.m22._st().ponte3 = true
+	q2.ss.m22.regole_terreno()
+	q2.leggi("617", {})
+	var v2: Dictionary = q2.ss.m22.semicingolato()
+	for n in [42, 43, 44, 45]:
+		q2.u("g%d" % n).turni = 0
+	q2.ia._g = q2.u("g41")
+	q2.ss.m22.turno_autista(q2.ia, q2.u("g41"))
+	ok(v2.hex == "I15" and q2.tedeschi().filter(func(g): return g.get("reazione", "") == "E").is_empty(), "151: genieri senza turni, il mezzo si ferma in I15")
 	q.ia._g = gen
 	q.ss.m22.turno_e(q.ia, gen)
 	ok(gen.get("sotto_ponte", false), "il geniere scende sotto il ponte")
@@ -121,6 +137,15 @@ func _init() -> void:
 	r.leggi("411", {})
 	var pz: Dictionary = r.veicoli.v("v67")
 	ok(not pz.is_empty() and pz.hex == "S13" and int(pz.get("primo_turno", 0)) == 415, "411: Panzer in S13, primo turno 415")
+	# 300: dall’edificio il carro spara solo lungo la fila che ha davanti.
+	ok(r.veicoli.in_edificio(pz) == r.terreno.edificio(pz.hex), "300: regole dell’edificio solo se il carro è in un edificio")
+	var avanti := E.vicino(E.vicino(pz.hex, int(pz.fronte)), int(pz.fronte))
+	var lato := E.vicino(pz.hex, (int(pz.fronte) + 2) % 6)
+	ok(r.veicoli.lungo_fronte(pz, avanti) and not r.veicoli.lungo_fronte(pz, lato), "300: fila davanti sì (%s), di lato no (%s)" % [avanti, lato])
+	pz.chiuso = false
+	var eq0: int = int(pz.get("equipaggio", 0))
+	r.veicoli.crollo_su_carri(pz.hex)
+	ok(int(pz.get("equipaggio", 0)) <= eq0, "300: l’edificio crolla sul carro aperto senza errori")
 	# Fine nella Condizione 2.
 	var f = nuova(11)
 	f.leggi("269", {})
@@ -130,5 +155,32 @@ func _init() -> void:
 			f._uccidi(g, "prova")
 	f.ss.m22.controlla()
 	ok(f.s.fase == "fine", "269: senza tedeschi né esplosivi la missione finisce")
+	# Tre livelli del grande ponte: chi entra da un esagono che non è la strada resta a terra sotto il ponte.
+	var lv = nuova(21)
+	lv.ss.m22._st().ponte3 = true
+	lv.ss.m22.regole_terreno()
+	var x1: Dictionary = lv.u("A")
+	var x2: Dictionary = lv.u("B")
+	x1.hex = "H15"
+	x1.erase("veicolo")
+	lv.ss.m22.dopo_passo(x1, "H15", "I15")
+	x1.hex = "I15"
+	var vic := ""
+	for h in E.vicini("J14"):
+		if not (h in ["I15", "K14", "H15", "L13"]):
+			vic = h
+			break
+	x2.erase("veicolo")
+	x2.hex = "J14"
+	lv.ss.m22.dopo_passo(x2, vic, "J14")
+	ok(lv.ss.m22.livello(x1) == "sopra" and lv.ss.m22.livello(x2) == "terra", "dalla strada si è sopra, da %s si è a terra sotto il ponte" % vic)
+	ok(lv.ss.m22.costo_passo(x2, vic, "J14", 1) == 2, "a terra sotto il ponte si paga il terreno di sotto")
+	ok(not lv.ss.m22.puo_scendere(x2), "da terra non ci si arrampica fra i sostegni")
+	x2.hex = "I15"
+	x1.postura = "crouching"
+	ok(lv.ss.m22.vista(x1, x2) == 0, "chi è sopra accovacciato non vede chi è a terra sotto")
+	x1.postura = "standing"
+	ok(lv.ss.m22.vista(x1, x2) == 1, "chi è sopra in piedi lo vede")
+	ok(lv.ss.m22.livello_esplosione(x1, "I15") == "sopra", "una granata lanciata da sopra colpisce solo chi è sopra")
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)

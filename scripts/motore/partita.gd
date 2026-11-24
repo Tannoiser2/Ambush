@@ -181,6 +181,8 @@ func _testo_livello() -> String:
 
 ## Esagoni da cui la squadra entra (Missione 1: margine nord, A1–J1).
 func esagoni_ingresso() -> Array:
+	if ss != null and not ss.m24.esagoni_ingresso().is_empty():
+		return ss.m24.esagoni_ingresso()
 	if missione.has("ingresso_esagoni"):
 		return missione.ingresso_esagoni.duplicate()
 	var out: Array = []
@@ -1562,7 +1564,7 @@ func controlla_bunker() -> void:
 	_annota_occupanti_bunker()
 	for h in s.get("bunker", {}):
 		var b: Dictionary = s.bunker[h]
-		if b.pv_dati or b.occupanti.is_empty():
+		if b.get("fortificato", false) or b.pv_dati or b.occupanti.is_empty():
 			continue
 		var fuori := true
 		for id in b.occupanti:
@@ -1598,8 +1600,9 @@ func tiro_bunker(id: String, tipo_arma: String, h: String) -> Dictionary:
 	if base < 0:
 		return _errore("Fuori gittata.")
 	t.azione = "mirato"
-	var prob := clampi(base + 2 + int(a.WS) - (1 if a.ferito else 0), 0, 8)
-	_log("combattimento", "%s spara al bunker in %s (serve 0–%d)." % [nome(a), h, prob])
+	var fort: bool = b.get("fortificato", false)
+	var prob := clampi(base + (4 if fort else 2) + int(a.WS) - (1 if a.ferito else 0), 0, 8)
+	_log("combattimento", "%s spara %s in %s (serve 0–%d)." % [nome(a), "all’edificio fortificato" if fort else "al bunker", h, prob])
 	_fx("tiro", {"da": a.hex, "a": h, "tiratore": a.id, "bersaglio": "", "arma": tipo_arma, "mirato": true, "esito": "mancato", "prob": prob})
 	_rendi_consapevoli(h)
 	var r := d10()
@@ -1699,7 +1702,9 @@ func _colpo_bunker(a: Dictionary, arma: Dictionary, h: String, b: Dictionary) ->
 		s.modifiche[h] = "rubble"
 		terreno.imposta_modifiche(s.modifiche)
 		_fx("esplosione", {"a": h, "grande": true})
-		_log("combattimento", "Il bunker in %s è distrutto!" % h)
+		_log("combattimento", "%s in %s è distrutto!" % ["L’edificio fortificato" if b.get("fortificato", false) else "Il bunker", h])
+		if b.get("fortificato", false):
+			_pv(2, "edificio fortificato ridotto in macerie (517)")
 		for x in unita_in(h, "", false):
 			if x.stato in ["attivo", "incapacitato", "catturato", "arreso"]:
 				_uccidi(x, "nel bunker")
@@ -2207,6 +2212,16 @@ func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 			err = ss.m22.risali(a)
 		"disinnesca":
 			err = ss.m22.disinnesca(a)
+		"scarica_mulo":
+			ss.m24.scarica_muli()
+		"aggancia":
+			err = ss.m20.aggancia(a, arg)
+		"traina":
+			err = ss.m20.traina(a, arg)
+		"impermeabilizza":
+			err = ss.impermeabilizza(a, arg)
+		"pulisci":
+			err = ss.pulisci(a, arg)
 		"prendi_muli":
 			err = ss.m24.prendi(a)
 		"lascia_muli":
@@ -2889,8 +2904,11 @@ func _avvia_round() -> void:
 				a.consapevole = true
 		_log("info", "Dal Round 3 tutti i soldati sono consapevoli.")
 	s.erase("mo_consapevoli")
-	# 2. Evento (non nel Round 1).
-	if r.n >= 2 and not mo.salta_evento() and not ph.salta_evento():
+	# 2. Evento (non nel Round 1). Alcuni paragrafi Silver Star lo sostituiscono con una lettura data.
+	if ss.evento_sostitutivo():
+		if s.fase != "round":
+			return
+	elif r.n >= 2 and not mo.salta_evento() and not ph.salta_evento():
 		var pe := _passo("evento", {"n": r.n})
 		_log("info", "Fase Evento.")
 		evento_casuale({"hex": "", "ids": []}, pe)
@@ -3026,6 +3044,10 @@ func _iniziativa(r: Dictionary) -> void:
 		if not in_mappa(g):
 			g.turni = 0
 			g.slot = "inattivo"
+			continue
+		if int(g.get("sorpreso_ss", -1)) == int(r.n):
+			g.turni = 0
+			g.slot = "completo"
 			continue
 		var es: Dictionary = ph.turni_tedesco(g, mo.turni_tedesco(g, T.esito_turni(int(g.IN), dt, false, true, g.ferito)))
 		if g.id in r.get("due_turni_de", []):
@@ -3261,6 +3283,8 @@ func effettivo_mpa(un: Dictionary) -> int:
 		m = mini(m, 2)
 	if un.lato == "us" and not un.get("prigionieri", []).is_empty():
 		m = mini(m, 2)
+	if ss != null:
+		m = ss.limite_mpa(un, m)
 	return m
 
 func _termina_azione(a: Dictionary) -> void:
@@ -3510,6 +3534,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		a.hex_prec = a.hex
 		a.hex = verso
 		a.sul_ponte = sul_ponte
+		ss.m22.dopo_passo(a, da_hex, verso)
 		nomi.append(a.lettera)
 		mossi.append(a.id)
 		for pid in a.prigionieri:
@@ -3540,6 +3565,8 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			veic_m.fermo = false
 			if not s.turno.is_empty():
 				s.turno.mp = 0
+	if veicoli.attivo(veic_m):
+		ss.m20.speronamento(veic_m, da_hex, verso)
 	if controllo_veicolo and veicoli.attivo(veic_m):
 		veicoli.controllo_incidente(veic_m, "guida veloce")
 		if not veicoli.attivo(veic_m) or veic_m.get("fermo", false):
@@ -3821,6 +3848,8 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 			mods.append(["bersagli multipli", extra])
 	var ip := T.indice_postura(bersaglio.postura)
 	var th := terreno.tipo(bersaglio.hex)
+	if ss.m22.a_terra(bersaglio):
+		th = ss.m22.terreno_sotto(bersaglio.hex)  # a terra sotto il ponte: conta il terreno e la postura
 	var veic_b: Dictionary = veicoli.di(bersaglio)
 	if str(tiratore.get("barca", "")) != "":
 		mods.append(["dal battello d’assalto", -2])
@@ -3919,6 +3948,10 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 		tiratore.bersagli_round.append(bersaglio.id)
 	# 1. Inceppamento / colpo a vuoto.
 	var limite_inc: int = info.inc[0 if mirato else 1]
+	if arma.get("jam25", false) or arma.get("impermeabile", false):
+		# Silver Star 19: arma bagnata, o sparata ancora impermeabilizzata: si inceppa con 25 o meno.
+		limite_inc = maxi(limite_inc, 25)
+		arma.jam25 = true
 	var pi := percentuale()
 	if pi <= limite_inc:
 		if tipo == "bazooka":
@@ -4289,6 +4322,8 @@ func probabilita_lancio(lanciatore: Dictionary, tipo: String, h: String) -> Dict
 		mods.append(["bersaglio non in vista", -3])
 	if terreno.edificio(h) and dist > 1:
 		mods.append(["apertura non adiacente", -3])
+	if dist > 0 and ss.barca_in(h):
+		mods.append(["nella barca di guardia, da fuori", -3])
 	var tot := base
 	for m in mods:
 		tot += int(m[1])
@@ -4309,6 +4344,7 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 	_rendi_consapevoli(h)
 	var r := d10()
 	var arrivo := h
+	s.ultimo_lancio = {"diretto": r == 0 or (r != 9 and r <= int(p.prob)), "bersaglio": h}
 	if r == 0 or (r != 9 and r <= int(p.prob)):
 		_log("dado", "Lancio: serve 0–%d, esce %d → nell’esagono." % [int(p.prob), r])
 	else:
@@ -4331,6 +4367,9 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 			s.bunker[arrivo].carica = true
 			_log("combattimento", "La carica esplode dentro il bunker in %s." % arrivo)
 	var presenti: Array = unita_in(arrivo, "", false).filter(func(x): return x.stato in ["attivo", "incapacitato", "catturato"])
+	var liv_ponte: String = ss.m22.livello_esplosione(lanciatore, arrivo)
+	if liv_ponte != "":
+		presenti = presenti.filter(func(x): return ss.m22.livello(x) == liv_ponte)
 	if terreno.ha_piani(arrivo):
 		# Nel campanile esplode su un piano solo: quello dell’altro piano se lanciata dall’interno, altrimenti il pianterreno.
 		var piano_scoppio: int = (1 - piano(lanciatore)) if arrivo == lanciatore.hex else 0

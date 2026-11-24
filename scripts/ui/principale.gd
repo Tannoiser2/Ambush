@@ -1117,7 +1117,8 @@ func _azioni_round(a: Dictionary) -> void:
 		_b("Muovi e spara", func(): _esito(p.scegli_azione(a.id, "muovi_spara")), "Metà dei PM e un tiro rapido, prima o dopo.", a.postura != "prone")
 		_b("Carica d’assalto", func(): _esito(p.scegli_azione(a.id, "carica")), "Muovi con metà dei PM ed entra nell’esagono nemico per assaltare (−3).", a.postura == "standing")
 	_bottoni_fuoco(a, true)
-	_b("Due tiri rapidi", func(): _imposta_modo(a, "rapido"), "Due tiri rapidi (−2 ciascuno), anche a bersagli diversi.", a.postura != "prone" and not p.armi_da_fuoco(a).filter(func(x): return x.tipo != "bazooka").is_empty())
+	if not _armi_con_bersagli(a, p.armi_da_fuoco(a).filter(func(x): return x.tipo != "bazooka"), false).is_empty():
+		_b("Due tiri rapidi", func(): _imposta_modo(a, "rapido"), "Due tiri rapidi (−2 ciascuno), anche a bersagli diversi.", a.postura != "prone")
 	if int(a.munizioni.get("granata", 0)) > 0:
 		_b("Granata (%d)" % int(a.munizioni.granata), func(): _imposta_modo(a, "granata"), "In piedi fino a 6 esagoni, accovacciato fino a 3.", a.postura != "prone")
 	var sc := p.arma_di(a, "satchel")
@@ -1171,6 +1172,24 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			var hbs: String = hb
 			if E.distanza(a.hex, hbs) <= 6 and p.terreno.vede(a.hex, hbs, a.postura, "standing"):
 				_b("Bazooka sul blocco in %s" % hbs, func(): _esito(p.azione_ss(a.id, "bazooka_blocco", hbs)), "+2 per colpire; solo una penetrazione pesante lo sgombra.")
+	if p.ss.m24.puo_scaricare(a):
+		_b("Scarica i muli dalla chiatta", func(): _esito(p.azione_ss(a.id, "scarica_mulo", "")), "In K8 non stanno più di 4 muli: quando qualcuno se ne va si scaricano gli altri.")
+	for vt in p.ss.m20.camion_da_trainare(a):
+		var vid_t: String = vt.id
+		if not vt.get("agganciato", false):
+			_b("Aggancia il cavo al %s" % str(vt.nome).to_lower(), func(): _esito(p.azione_ss(a.id, "aggancia", vid_t)), "Un’azione: poi l’autista di un camion nell’esagono accanto può tirarlo fuori dal blocco.")
+	for vt in p.ss.m20.puo_trainare(a):
+		var vid_tr: String = vt.id
+		_b("Traina il %s" % str(vt.nome).to_lower(), func(): _esito(p.azione_ss(a.id, "traina", vid_tr)), "Un’azione: il camion fuori uso viene tirato nel tuo esagono e il blocco si libera per un altro tentativo.")
+	for w in p.ss.puo_impermeabilizzare(a):
+		var tw: String = w.tipo
+		var nome_w: String = T.ARMI[tw].breve
+		if w.get("impermeabile", false):
+			_b("Togli la protezione (%s)" % nome_w, func(): _esito(p.azione_ss(a.id, "impermeabilizza", tw)), "Un’azione. Sparare con l’arma ancora protetta la fa incepparsi con 25 o meno.")
+		elif w.get("jam25", false):
+			_b("Pulisci l’arma (%s)" % nome_w, func(): _esito(p.azione_ss(a.id, "pulisci", tw)), "Un’azione: l’arma bagnata torna a incepparsi solo col numero normale.")
+		else:
+			_b("Impermeabilizza (%s)" % nome_w, func(): _esito(p.azione_ss(a.id, "impermeabilizza", tw)), "Un’azione. Un’arma portata sott’acqua senza protezione si inceppa con 25 o meno finché non la si pulisce.")
 	if p.ss.m24.puo_prendere(a):
 		_b("Prendi i muli", func(): _esito(p.azione_ss(a.id, "prendi_muli")), "Si prende la corda di uno o due muli incustoditi nello stesso esagono: poi seguono il soldato. Chi guida i muli spara solo di rapido.")
 	if p.ss.m24.puo_lasciare(a):
@@ -1235,6 +1254,24 @@ func _bottoni_veicolo(a: Dictionary) -> void:
 			_b("Sali sulla %s" % v.nome, func(): _esito(p.sali_veicolo(a.id)), "Il primo a bordo guida; gli altri sono passeggeri e possono usare la mitragliatrice. Nei Round costa 1 punto movimento.")
 			return
 
+## Armi con cui il soldato ha almeno un tedesco da colpire (mirato o rapido).
+func _armi_con_bersagli(a: Dictionary, armi: Array, mirato: bool) -> Array:
+	if a.hex == "":
+		return []
+	var nemici: Array = p.tedeschi_attivi().filter(func(g): return p.in_mappa(g))
+	# Da prono si guarda cosa vedrebbe alzandosi (il cambio di postura viene prima del tiro).
+	var prono: bool = a.postura == "prone" and not p.ss.sott_acqua(a)
+	if prono:
+		a.postura = "crouching"
+	var out: Array = armi.filter(func(w):
+		for g in nemici:
+			if p.probabilita_tiro(a, w, g, mirato).ok:
+				return true
+		return false)
+	if prono:
+		a.postura = "prone"
+	return out
+
 func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 	var armi: Array = p.armi_da_fuoco(a)
 	if not mirato:
@@ -1243,6 +1280,14 @@ func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 	if armi.is_empty():
 		_b("Nessuna arma pronta", Callable(), "Arma inceppata, scarica o non preparata.", false)
 		return
+	# Senza bersagli non si propone il tiro ai tedeschi (restano bunker e faro, che sono bersagli fissi).
+	var con_bersagli: Array = _armi_con_bersagli(a, armi, mirato)
+	var fissi: bool = mirato and (not p.bunker_in_vista(a).is_empty() or (p.ph.faro_hex() != "" and a.hex != "" and p.terreno.vede(a.hex, p.ph.faro_hex(), a.postura, "standing")))
+	if con_bersagli.is_empty() and not fissi:
+		_b("Nessun bersaglio in vista", Callable(), "Nessun tedesco visibile e a tiro con le armi pronte: il tiro non serve.", false)
+		return
+	if not con_bersagli.is_empty():
+		armi = con_bersagli
 	if not armi_scelta_valida(a, armi):
 		arma_scelta[a.id] = armi[0].tipo
 	if armi.size() > 1:
@@ -1254,14 +1299,18 @@ func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 	if mirato:
 		for hb in p.bunker_in_vista(a):
 			var hbb: String = hb
-			_b("Spara al bunker in %s" % hb, func(): _esito(p.tiro_bunker(a.id, arma_scelta[a.id], hbb)), "Tiro mirato con +2: poi la tabella dei colpi (muro, feritoia, porta, equipaggio).", a.postura != "prone")
+			if p.s.bunker[hb].get("fortificato", false):
+				_b("Spara all’edificio fortificato in %s" % hb, func(): _esito(p.tiro_bunker(a.id, arma_scelta[a.id], hbb)), "Tiro mirato con +4 (muro): poi la tabella dei colpi (muro, apertura, porta, equipaggio). Distrutto: +2 PV.", a.postura != "prone")
+			else:
+				_b("Spara al bunker in %s" % hb, func(): _esito(p.tiro_bunker(a.id, arma_scelta[a.id], hbb)), "Tiro mirato con +2: poi la tabella dei colpi (muro, feritoia, porta, equipaggio).", a.postura != "prone")
 		var hf: String = p.ph.faro_hex()
 		if hf != "" and a.hex != "" and p.terreno.vede(a.hex, hf, a.postura, "standing"):
 			_b("Spara al faro in %s" % hf, func(): _esito(p.tiro_faro(a.id, arma_scelta[a.id])), "Tiro mirato con +1: con penetrazione leggera o migliore il faro si spegne.", a.postura != "prone")
-		var b := _b("Tiro mirato", func(): _imposta_modo(a, "mirato"), "Un tiro senza malus; il bazooka spara solo mirato.", a.postura != "prone")
-		if modo == "mirato":
-			b.add_theme_color_override("font_color", Tema.OTTONE)
-	elif modo != "rapido":
+		if not con_bersagli.is_empty():
+			var b := _b("Tiro mirato", func(): _imposta_modo(a, "mirato"), "Un tiro senza malus; il bazooka spara solo mirato.", a.postura != "prone")
+			if modo == "mirato":
+				b.add_theme_color_override("font_color", Tema.OTTONE)
+	elif modo != "rapido" and not con_bersagli.is_empty():
 		_b("Tiro rapido", func(): _imposta_modo(a, "rapido"))
 
 func armi_scelta_valida(a: Dictionary, armi: Array) -> bool:

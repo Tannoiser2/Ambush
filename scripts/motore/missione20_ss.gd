@@ -300,6 +300,94 @@ func sgombra(a: Dictionary) -> String:
 	_sgombrato(h, "a mano")
 	return ""
 
+## 113/351: un camion può sfondare un blocco nei Round se ci entra andando veloce e ha i PM per uscirne nello stesso turno;
+## due controlli d’incidente (entrando e uscendo): se ne fallisce uno resta fuori uso nel blocco e chi è a bordo tira i danni
+## del fucile semiautomatico. La jeep non può.
+func puo_speronare(veic: Dictionary, verso: String) -> bool:
+	if not attiva() or not p.fase_round() or str(veic.get("modello", "")) != "camion" or veic.lato != "us":
+		return false
+	var t: Dictionary = p.s.get("turno", {})
+	if t.is_empty() or not p.veicoli.e_autista(p.u(str(t.get("id", "")))) or p.veicoli.di(p.u(str(t.id))).get("id", "") != veic.id:
+		return false
+	var c: int = int(T.COSTO_VEICOLO.get(p.terreno.tipo(verso), 1))
+	var spesi: int = int(t.get("spesi", 0)) + c
+	return spesi > int(t.get("mp_lenta", 99)) and int(t.get("mp", 0)) - c >= 1
+
+func speronamento(veic: Dictionary, da: String, verso: String) -> void:
+	if not attiva() or veic.lato != "us":
+		return
+	var t: Dictionary = p.s.get("turno", {})
+	if verso in p.s.get("blocchi", []):
+		veic.speronando = verso
+		veic.turno_speronata = str(t.get("id", ""))
+		p._log("azione", "%s sfonda il blocco stradale in %s!" % [str(veic.nome), verso])
+		if not _controllo_sfondamento(veic, "entrando nel blocco"):
+			return
+	elif str(veic.get("speronando", "")) == da and da != "":
+		veic.speronando = ""
+		if da in p.s.get("blocchi", []):
+			p.veicoli.sposta(veic, da)
+			if _controllo_sfondamento(veic, "uscendo dal blocco"):
+				p.veicoli.sposta(veic, verso)
+				_sgombrato(da, "sfondato dal camion")
+
+## Cavo di traino: con due camion fuori uso nel blocco, un soldato accanto aggancia il cavo (un’azione) e l’autista di un camion
+## nell’esagono accanto lo tira fuori (un’azione).
+func camion_da_trainare(a: Dictionary) -> Array:
+	if not attiva() or not p.attivo(a):
+		return []
+	var out: Array = []
+	for h in p.s.get("blocchi", []):
+		var fermi: Array = camion().filter(func(v): return v.hex == h and not p.veicoli.attivo(v))
+		if fermi.size() < 2:
+			continue
+		if E.distanza(a.hex, h) <= 1 and a.postura != "prone":
+			out.append(fermi[0])
+	return out
+
+func aggancia(a: Dictionary, vid: String) -> String:
+	var v: Dictionary = p.veicoli.v(vid)
+	if v.is_empty() or not (v in camion_da_trainare(a)):
+		return "Non c’è un camion fuori uso da agganciare qui."
+	v.agganciato = true
+	p._log("azione", "%s aggancia il cavo di traino al %s." % [p.nome(a), str(v.nome).to_lower()])
+	return ""
+
+func puo_trainare(a: Dictionary) -> Array:
+	if not attiva() or not p.veicoli.e_autista(a):
+		return []
+	var mio: Dictionary = p.veicoli.di(a)
+	if not p.veicoli.attivo(mio) or str(mio.modello) != "camion":
+		return []
+	return camion().filter(func(v): return v.get("agganciato", false) and E.distanza(v.hex, mio.hex) == 1)
+
+func traina(a: Dictionary, vid: String) -> String:
+	var v: Dictionary = p.veicoli.v(vid)
+	if v.is_empty() or not (v in puo_trainare(a)):
+		return "Serve un camion fuori uso agganciato nell’esagono accanto."
+	var mio: Dictionary = p.veicoli.di(a)
+	var da: String = v.hex
+	v.hex = mio.hex
+	v.agganciato = false
+	p._log("azione", "%s tira via il %s dal blocco in %s." % [p.nome(a), str(v.nome).to_lower(), da])
+	return ""
+
+func _controllo_sfondamento(veic: Dictionary, quando: String) -> bool:
+	var a: Dictionary = p.veicoli.autista(veic)
+	var ds := int(a.get("DS", 0)) if not a.is_empty() else -1
+	var r: int = p.d10()
+	if r <= ds:
+		p._log("dado", "Controllo d’incidente %s (abilità di guida %d): %d → passa." % [quando, ds, r])
+		return true
+	p._log("danno", "Controllo d’incidente %s (abilità di guida %d): %d → il camion si schianta e resta fuori uso nel blocco." % [quando, ds, r])
+	for x in p.veicoli.occupanti(veic):
+		p._danno_esplosione(x, T.ARMI.sar.danni)
+	p.veicoli.disabilita(veic, "schiantato contro il blocco stradale")
+	veic.speronando = ""
+	if not p.s.turno.is_empty():
+		p.s.turno.mp = 0
+	return false
+
 func _sgombrato(h: String, come: String) -> void:
 	p.s.blocchi.erase(h)
 	p._log("azione", "Il blocco stradale in %s è sgombrato (%s)." % [h, come])
@@ -535,7 +623,23 @@ func _spara(g: Dictionary, m: Dictionary, turno: int) -> void:
 	p._fx("esplosione", {"a": arrivo})
 	_impatto(arrivo)
 
+## Esagono di riferimento per «il più vicino a…»: S10 nella 20 e nella 22, Y1 nella 24 (524).
+func _rif() -> String:
+	return "Y1" if p.ss.m24.attiva() else "S10"
+
+## 520: il cecchino 76 dà le coordinate al mortaio (segnalino nell’esagono più vicino a Y1 fuori dalla gittata minima).
+func dai_coordinate(h: String) -> void:
+	var m: Dictionary = _st().get("mortaio", {})
+	if m.is_empty():
+		return
+	m.coordinate = h
+	p._log("tedesco", "Il cecchino passa al mortaio le coordinate di %s." % h)
+
 func _bersaglio_mortaio(g: Dictionary, m: Dictionary) -> Dictionary:
+	var coord: String = str(m.get("coordinate", ""))
+	if coord != "":
+		m.coordinate = ""
+		return {"h": coord, "b": true}
 	var marc: String = str(m.get("marcatore", ""))
 	var lontano := func(h: String) -> bool: return E.distanza(h, str(m.hex)) > 7
 	var visti_mezzi: Array = mezzi_attivi().filter(func(v): return lontano.call(v.hex) and _vede_hex(g, v.hex))
@@ -546,10 +650,10 @@ func _bersaglio_mortaio(g: Dictionary, m: Dictionary) -> Dictionary:
 				return {"h": marc, "b": true}
 		var vicini: Array = mezzi_attivi().filter(func(v): return E.distanza(v.hex, marc) <= 2)
 		if not vicini.is_empty():
-			vicini.sort_custom(func(a, b): return E.distanza(a.hex, "S10") < E.distanza(b.hex, "S10"))
+			vicini.sort_custom(func(a, b): return E.distanza(a.hex, _rif()) < E.distanza(b.hex, _rif()))
 			return {"h": vicini[0].hex, "b": true}
 		if not visti_mezzi.is_empty():
-			visti_mezzi.sort_custom(func(a, b): return E.distanza(a.hex, "S10") < E.distanza(b.hex, "S10"))
+			visti_mezzi.sort_custom(func(a, b): return E.distanza(a.hex, _rif()) < E.distanza(b.hex, _rif()))
 			return {"h": visti_mezzi[0].hex, "b": false}
 		for a in visti_us:
 			if a.hex == marc:
@@ -559,10 +663,10 @@ func _bersaglio_mortaio(g: Dictionary, m: Dictionary) -> Dictionary:
 			return {"h": _hex_piu_americani(vicini_us), "b": true}
 		var lontani: Array = visti_us.filter(func(a): return lontano.call(a.hex))
 		if not lontani.is_empty():
-			lontani.sort_custom(func(a, b): return E.distanza(a.hex, "S10") < E.distanza(b.hex, "S10"))
+			lontani.sort_custom(func(a, b): return E.distanza(a.hex, _rif()) < E.distanza(b.hex, _rif()))
 			return {"h": lontani[0].hex, "b": false}
 	if not visti_mezzi.is_empty():
-		visti_mezzi.sort_custom(func(a, b): return E.distanza(a.hex, "S10") < E.distanza(b.hex, "S10"))
+		visti_mezzi.sort_custom(func(a, b): return E.distanza(a.hex, _rif()) < E.distanza(b.hex, _rif()))
 		return {"h": visti_mezzi[0].hex, "b": false}
 	var us_lontani: Array = visti_us.filter(func(a): return lontano.call(a.hex))
 	if not us_lontani.is_empty():
@@ -580,7 +684,7 @@ func _hex_piu_americani(lista: Array) -> String:
 		conti[a.hex] = int(conti.get(a.hex, 0)) + 1
 	var migliore := ""
 	for h in conti:
-		if migliore == "" or int(conti[h]) > int(conti[migliore]) or (int(conti[h]) == int(conti[migliore]) and E.distanza(h, "S10") < E.distanza(migliore, "S10")):
+		if migliore == "" or int(conti[h]) > int(conti[migliore]) or (int(conti[h]) == int(conti[migliore]) and E.distanza(h, _rif()) < E.distanza(migliore, _rif())):
 			migliore = h
 	return migliore
 
@@ -601,12 +705,39 @@ func _impatto(h: String) -> void:
 			for x in occ:
 				if p.attivo(x):
 					p._danno_esplosione(x, T.ARMI.pistol.danni)
-	var edificio: bool = p.terreno.edificio(h)
+	var dentro: Array = (p.unita_in(h, "us") + p.unita_in(h, "de")).filter(func(x): return p.attivo(x) and str(x.get("veicolo", "")) == "")
+	if p.terreno.edificio(h):
+		# 791: sull’edificio si tira sulla riga della granata fuori. Se uccide, sfonda un lato di muro a caso e chi è dentro
+		# tira i danni del fucile semiautomatico; altrimenti chi è dentro perde un turno.
+		var r: int = p.d10()
+		var l := T.lettera_danno(T.GRANATA_FUORI, r)
+		p._log("dado", "Mortaio sull’edificio in %s: %d → %s." % [h, r, p._nome_danno(l)])
+		if l == "K":
+			var muri: Array = []
+			for i in 6:
+				var vic := E.vicino(h, i)
+				if vic != "" and p.terreno.tipo_lato(h, vic) == "wall":
+					muri.append(vic)
+			if not muri.is_empty():
+				var vic2: String = muri[p.d10() % muri.size()]
+				if not p.s.has("muri_sfondati"):
+					p.s.muri_sfondati = []
+				p.s.muri_sfondati.append([h, vic2])
+				p.terreno.muri_sfondati = p.s.muri_sfondati
+				p._log("danno", "Il colpo sfonda il muro tra %s e %s." % [h, vic2])
+			for x in dentro:
+				p._danno_esplosione(x, T.ARMI.sar.danni)
+		else:
+			for x in dentro:
+				x.turni = max(0, int(x.get("turni", 0)) - 1)
+				if p.fase_round() and int(x.turni) == 0 and str(x.get("slot", "")) != "completo":
+					x.slot = "completo"
+				p._log("danno", "%s perde un turno per l’esplosione sull’edificio." % p.nome(x))
+		return
 	var t: String = p.terreno.tipo(h)
-	var tab: String = T.GRANATA_FUORI if edificio or not (t in ["clear", "road", "cover", "crater"]) else T.GRANATA_DENTRO
-	for x in p.unita_in(h, "us") + p.unita_in(h, "de"):
-		if p.attivo(x) and str(x.get("veicolo", "")) == "":
-			p._danno_esplosione(x, tab)
+	var tab: String = T.GRANATA_FUORI if not (t in ["clear", "road", "cover", "crater"]) else T.GRANATA_DENTRO
+	for x in dentro:
+		p._danno_esplosione(x, tab)
 
 # ------------------------------------------------------------------ operazioni
 func op(o: Dictionary, ctx: Dictionary) -> bool:
@@ -783,10 +914,17 @@ func test(t: Dictionary, ctx: Dictionary):
 	return null
 
 func inizio_round() -> void:
+	pass
+
+## 685: all’inizio del Round si legge il 790 al posto del controllo Evento.
+func evento_sostitutivo() -> bool:
 	if attiva() and _st().get("leggi_790", false):
 		_st().leggi_790 = false
 		if not bool(p.s.avvistamenti[6]):
+			p._log("info", "Al posto del controllo Evento si legge il 790.")
 			p.leggi("790", {})
+			return true
+	return false
 
 func _riattiva(o: Dictionary) -> void:
 	var r: int = p.d10()
