@@ -19,7 +19,7 @@ const TIPI := [
 	["beach", Color(0.95, 0.85, 0.5)], ["wharf", Color(0.5, 0.5, 0.55)], ["subpen", Color(0.35, 0.35, 0.4)],
 	["stone_building", Color(0.45, 0.6, 0.75)], ["wood_building", Color(0.7, 0.45, 0.2)], ["bunker", Color(0.4, 0.4, 0.38)],
 	["rubble", Color(0.45, 0.4, 0.35)], ["crater", Color(0.35, 0.28, 0.2)], ["fuel_tank", Color(0.7, 0.7, 0.65)],
-	["monument", Color(0.85, 0.8, 0.7)],
+	["monument", Color(0.85, 0.8, 0.7)], ["cliff", Color(0.8, 0.3, 0.15)], ["boulder", Color(0.55, 0.55, 0.6)],
 ]
 const LATI := [
 	["", "nessuno (automatico)", Color(1, 1, 1, 0.0)], ["crest", "cresta", Color(0.55, 0.3, 0.1)],
@@ -716,7 +716,7 @@ func _dipingi_tipo(h: String) -> void:
 				_riempi(h, true)
 			"brush":
 				_riempi(h, false)
-			"clear", "road", "stream", "water", "beach", "wharf", "subpen", "stone_building", "wood_building", "bunker", "fuel_tank", "monument", "crater":
+			"clear", "road", "stream", "water", "beach", "wharf", "subpen", "stone_building", "wood_building", "bunker", "fuel_tank", "monument", "crater", "cliff", "boulder":
 				_svuota(h)
 
 func _dipingi_lato(p: Vector2) -> void:
@@ -1023,7 +1023,7 @@ func _ricostruisci_3d() -> void:
 	if mappa3d_ctrl != null:
 		mappa3d_ctrl.queue_free()
 		mappa3d_ctrl = null
-	var n: int = {"a": 6, "b": 2, "ad": 6, "c": 14, "be": 17}.get(lettera, 6)
+	var n: int = {"a": 6, "b": 2, "ad": 6, "c": 14, "be": 17, "f": 20, "fh": 19, "fg": 21, "gh": 24}.get(lettera, 6)
 	var p := Partita.new(n)
 	p.missione = p.missione.duplicate()
 	p.missione["mappa"] = lettera.to_upper()

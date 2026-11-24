@@ -10,6 +10,10 @@ const MAPPE := {
 	"ad": "Mappa A con D (Move Out!)",
 	"c": "Mappa C (Purple Heart)",
 	"be": "Mappa B con E (Purple Heart)",
+	"f": "Mappa F (Silver Star)",
+	"fh": "Mappa F con H (Silver Star)",
+	"fg": "Mappa F con G (Silver Star)",
+	"gh": "Mezze mappe G e H (Silver Star)",
 }
 
 ## Nei test le modifiche dell'editor non devono contare.

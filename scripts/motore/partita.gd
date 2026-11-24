@@ -3197,6 +3197,8 @@ func cambia_postura(id: String, postura: String) -> Dictionary:
 		return _errore("Nel ruscello non ci si può sdraiare.")
 	if postura == "crouching" and terreno.tipo(a.hex) == "stream" and not a.sul_ponte:
 		return _errore("Nel ruscello si sta soltanto in piedi.")
+	if terreno.tipo(a.hex) == "cliff" and postura != "crouching":
+		return _errore("Nel dirupo si sta soltanto accovacciati.")
 	if s.fase == "round":
 		var t := _turno_di(a)
 		if t.cambio_libero:
@@ -3289,6 +3291,8 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 	var costo := _costo_passo(a, da_hex, verso)
 	if costo < 0:
 		return "Non si può attraversare un muro senza aperture."
+	if terreno.tipo(verso) == "cliff" and a.postura != "crouching":
+		return "Nei dirupi si entra solo accovacciati."
 	if a.postura == "crouching":
 		if da_hex != "" and not terreno.strisciare_possibile(da_hex, verso):
 			return "Strisciando non si entra nel ruscello."
@@ -3453,6 +3457,10 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	if s.fase == "round" and not s.turno.is_empty() and not unita_in(verso, "de").is_empty():
 		s.turno.fermo = true
 	mo.dopo_ingresso(ids, verso)
+	if terreno.dirupi == "ripidi" and (terreno.tipo(verso) == "cliff" or (da_hex != "" and terreno.tipo(da_hex) == "cliff")):
+		for id in ids:
+			if attivo(u(str(id))) and veicoli.di(u(str(id))).is_empty():
+				controllo_appiglio(u(str(id)))
 	if ph.in_fiamme(verso):
 		# 414.2: il deposito in fiamme si attraversa con un controllo di percezione e si finisce proni oltre.
 		for id in ids:
@@ -3952,6 +3960,38 @@ func _applica_danno(x: Dictionary, l: String, fonte: Dictionary) -> void:
 				_incapacita(x)
 		"K":
 			_uccidi(x, "")
+
+## Silver Star 6.1: controllo dell'appiglio salendo o scendendo un dirupo ripido. Con 9 (8–9 se ferito) un
+## controllo di PC; se fallisce il soldato cade in un esagono vicino più basso, va nel panico e subisce un colpo di
+## pistola; se cade in un altro dirupo ripete il controllo.
+func controllo_appiglio(x: Dictionary) -> void:
+	var r := d10()
+	var soglia := 8 if x.ferito else 9
+	_log("dado", "Appiglio di %s sul dirupo: %d%s" % [nome(x), r, " (sicuro)" if r < soglia else ""])
+	if r < soglia:
+		return
+	for _i in 6:
+		if controllo_pc(x, 0, "appiglio"):
+			_log("info", "%s si riprende in tempo." % nome(x))
+			return
+		var q := terreno.quota(x.hex)
+		var bassi: Array = E.vicini(x.hex).filter(func(v): return terreno.quota(v) < q and terreno.tipo(v) != "water" and terreno.costo_movimento(x.hex, v) >= 0)
+		if bassi.is_empty():
+			bassi = E.vicini(x.hex).filter(func(v): return terreno.quota(v) <= q and terreno.tipo(v) != "water")
+		if bassi.is_empty():
+			return
+		var dove: String = bassi[d10() % bassi.size()]
+		_log("danno", "%s perde l'appiglio e cade in %s." % [nome(x), dove])
+		x.hex_prec = x.hex
+		x.hex = dove
+		_fx("muovi", {"ids": [x.id], "a": dove})
+		_applica_danno(x, "P", {})
+		var l := T.lettera_danno(T.ARMI.pistol.danni, d10())
+		if l == "Q":
+			l = "W"
+		_applica_danno(x, l, {})
+		if not attivo(x) or terreno.tipo(dove) != "cliff":
+			return
 
 func _cade_prono(x: Dictionary) -> void:
 	if x.hex != "" and terreno.tipo(x.hex) == "stream" and not x.get("sul_ponte", false):

@@ -479,6 +479,18 @@ func _costruisci_vegetazione() -> void:
 			vm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * 1.7, r)), punto3d(pv, 0.0)))
 			vm.set_instance_color(i, Color(rng.randf_range(0.9, 1.1), rng.randf_range(1.0, 1.15), rng.randf_range(0.7, 0.9)))
 		_aggiungi_mm(vm, false)
+	# Massi (Silver Star): rocce grigie irregolari con la trama della pietra
+	var lm: Array = d.get("massi", [])
+	if not lm.is_empty():
+		var mr := _multimesh(_mesh_masso(), lm.size(), true)
+		for i in lm.size():
+			var c: Array = lm[i]
+			var r := float(c[2]) * K
+			var b := Basis().rotated(Vector3.UP, rng.randf() * TAU).rotated(Vector3.RIGHT, rng.randf_range(-0.3, 0.3))
+			mr.set_instance_transform(i, Transform3D(b.scaled(Vector3(r, r * rng.randf_range(0.55, 0.9), r * rng.randf_range(0.7, 1.1))), punto3d(Vector2(float(c[0]), float(c[1])), -0.01)))
+			var g := rng.randf_range(0.78, 1.0)
+			mr.set_instance_color(i, Color(g, g, g * rng.randf_range(0.95, 1.05)))
+		_aggiungi_mm(mr, false)
 	# Serbatoi di carburante e monumenti (Purple Heart)
 	for c in d.get("serbatoi", []):
 		var cp := Vector2(float(c[0]), float(c[1]))
@@ -1040,6 +1052,39 @@ func _mesh_cespuglio(mat: Material) -> ArrayMesh:
 				st.set_uv(uvs[q])
 				st.add_vertex(vtx)
 	var mesh := st.commit()
+	mesh.surface_set_material(0, mat)
+	return mesh
+
+## Masso di raggio 1: icosfera schiacciata e deformata, pietra grigia.
+func _mesh_masso() -> ArrayMesh:
+	var sf := SphereMesh.new()
+	sf.radius = 1.0
+	sf.height = 2.0
+	sf.radial_segments = 10
+	sf.rings = 6
+	var arr := sf.get_mesh_arrays()
+	var v: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 77
+	var cache := {}
+	for i in v.size():
+		var k := v[i].snapped(Vector3.ONE * 0.01)
+		if not cache.has(k):
+			cache[k] = rng.randf_range(0.8, 1.15)
+		v[i] = v[i] * float(cache[k])
+		v[i].y = maxf(v[i].y, -0.2)
+	arr[Mesh.ARRAY_VERTEX] = v
+	var st := SurfaceTool.new()
+	var m := ArrayMesh.new()
+	m.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
+	st.create_from(m, 0)
+	st.generate_normals()
+	st.generate_tangents()
+	var mesh := st.commit()
+	var mat := _mat_trama("pietra", Color(0.72, 0.72, 0.74), 0.95)
+	mat.vertex_color_use_as_albedo = true
+	mat.uv1_triplanar = true
+	mat.uv1_scale = Vector3(2, 2, 2)
 	mesh.surface_set_material(0, mat)
 	return mesh
 

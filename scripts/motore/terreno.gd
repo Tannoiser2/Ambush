@@ -5,7 +5,7 @@ extends RefCounted
 const E = preload("res://scripts/motore/esagoni.gd")
 const DM = preload("res://scripts/motore/dati_mappe.gd")
 
-const BLOCCANTI := ["woods", "brush", "rough", "rubble"]
+const BLOCCANTI := ["woods", "brush", "rough", "rubble", "boulder"]
 const SCOPERTI := ["clear", "road", "stream", "bridge", "ford", "beach", "wharf", "subpen", "water"]
 ## Esagoni pieni (serbatoi, monumento): non si entra e bloccano la vista come un edificio.
 const PIENI := ["fuel_tank", "monument"]
@@ -17,6 +17,7 @@ const NOMI := {
 	"crater": "cratere", "rubble": "macerie", "bunker": "bunker",
 	"water": "acqua", "beach": "spiaggia", "wharf": "banchina", "subpen": "base dei sottomarini",
 	"fuel_tank": "serbatoio di carburante", "monument": "monumento", "vineyard": "vigna",
+	"cliff": "dirupo", "boulder": "massi",
 }
 
 var esagoni: Dictionary = {}
@@ -92,6 +93,9 @@ var bunker: Dictionary = {}
 var treno: Dictionary = {}
 ## Muri sfondati da un paragrafo (Purple Heart 642): coppie di esagoni il cui lato non fa più da muro.
 var muri_sfondati: Array = []
+## Silver Star 6.1: dirupi «impassabili», «ripidi» (un'azione per salire o scendere e controllo dell'appiglio)
+## o «pendenza» (2 PM). Si entra solo accovacciati. Il valore lo dà la missione.
+var dirupi := "ripidi"
 
 func tipo_lato(a: String, b: String) -> String:
 	if bunker.has(a) or bunker.has(b):
@@ -136,6 +140,10 @@ func costo_movimento(a: String, b: String) -> int:
 	var c := 1
 	if t in PIENI or (t == "water" and not acqua_ammessa):
 		return -1
+	if t == "cliff":
+		if dirupi == "impassabili":
+			return -1
+		c = 2
 	match t:
 		"rough", "brush", "woods", "rubble", "ford", "beach":
 			c = 2
@@ -241,6 +249,8 @@ func percorso_vista(a: String, b: String) -> Dictionary:
 	return {"esagoni": attraversati, "lati": lati_incrociati, "bisecati": bisecati}
 
 func _blocca_esagono(h: String, a: String, b: String, qa: int, qb: int) -> String:
+	if tipo(h) == "cliff":
+		return ""  # Silver Star 6.1: i dirupi non bloccano mai la vista
 	var qh := quota_blocco(h)
 	var basso := mini(qa, qb)
 	var alto := maxi(qa, qb)
