@@ -135,17 +135,7 @@ func _init() -> void:
 	r.ss.m22.turno_atg(r.ia, gp)
 	ok(true, "turno di un servente senza errori")
 	r.leggi("411", {})
-	var pz: Dictionary = r.veicoli.v("v67")
-	ok(not pz.is_empty() and pz.hex == "S13" and int(pz.get("primo_turno", 0)) == 415, "411: Panzer in S13, primo turno 415")
-	# 300: dall’edificio il carro spara solo lungo la fila che ha davanti.
-	ok(r.veicoli.in_edificio(pz) == r.terreno.edificio(pz.hex), "300: regole dell’edificio solo se il carro è in un edificio")
-	var avanti := E.vicino(E.vicino(pz.hex, int(pz.fronte)), int(pz.fronte))
-	var lato := E.vicino(pz.hex, (int(pz.fronte) + 2) % 6)
-	ok(r.veicoli.lungo_fronte(pz, avanti) and not r.veicoli.lungo_fronte(pz, lato), "300: fila davanti sì (%s), di lato no (%s)" % [avanti, lato])
-	pz.chiuso = false
-	var eq0: int = int(pz.get("equipaggio", 0))
-	r.veicoli.crollo_su_carri(pz.hex)
-	ok(int(pz.get("equipaggio", 0)) <= eq0, "300: l’edificio crolla sul carro aperto senza errori")
+	ok(r.veicoli.v("v67").is_empty(), "411 nella 22: errore di stampa della carta, nessun Panzer in S13 (torrente)")
 	# Fine nella Condizione 2.
 	var f = nuova(11)
 	f.leggi("269", {})

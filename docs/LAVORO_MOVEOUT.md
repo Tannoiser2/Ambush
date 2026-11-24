@@ -313,8 +313,9 @@ Ordine scelto: M11, M10, M12, M9.
   edifici e nel filo spinato (in `veicoli.gd`, vale per tutte le missioni); semicingolato tedesco con i riferimenti 151–157
   (lascia sul ponte il geniere di numero più alto con turni, si ferma e spara se non ne ha, reazione H senza esplosivi;
   152/154 e 157 agli estremi); l’ufficiale 40 dà i turni secondo il 158.
-- Da verificare: il 411 (Panzer in S13) è un paragrafo della 23; sulla mappa FG l’esagono S13 è torrente: il rimando della
-  carta in X15 è probabilmente letto male.
+- Carta Condizione 4, X15: il rimando rosso 411 è stampato davvero così sulla carta originale (verificato sulla scansione), ma il
+  411 è un paragrafo della 23 (Panzer nascosto in S13, che sulla mappa FG è torrente): nella 22 è un errore di stampa e non ha
+  effetto. Le regole del 300 sono provate nella 23.
 - Test `tests/missione22.gd`, `simula.gd -- 4 1 22`, scatti `tests/visivi/missione22_ui.gd`.
 
 ## Silver Star — Missione 23 «Sconosciuti nella notte» (mappa F, in alto è sud)
@@ -336,7 +337,9 @@ Ordine scelto: M11, M10, M12, M9.
   al muro +4 con la tabella dei colpi dell’appendice B, distrutto = macerie e +2 PV; bottone «Spara all’edificio fortificato»);
   regola 300 per il Panzer in casa; 388 (chi ha fallito il 492 spara un tiro rapido al superstite: morto −4 PV, vivo si rifà
   il 492 con l’attivazione a −1); 499 (chi fallisce il controllo è inconsapevole per il primo Round: niente turni).
-- Ancora approssimati: i diagrammi di schieramento 1–4 delle pattuglie, che non sono nelle pagine del libretto disponibili.
+- Ancora approssimati: le posizioni A–D dei diagrammi di schieramento 1–4 delle pattuglie (il dado 0–1: 1, 2–3: 2, 4–5: 3,
+  6–7: 4, 8–9 si ritira è quello del libretto). I diagrammi non sono nel libretto, nelle carte, nelle mappe né nelle immagini
+  del mod TTS: servono una foto o una scansione.
 - Test `tests/missione23.gd`, `simula.gd -- 4 1 23`, scatti `tests/visivi/missione23_ui.gd`.
 
 ## Silver Star — Missione 24 «Il blues del mulattiere» (mezze mappe G e H, in alto è ovest; poi mappa F)

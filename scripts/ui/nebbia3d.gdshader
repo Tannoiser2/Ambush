@@ -40,7 +40,7 @@ void fragment() {
 	vec2 uv = mondo.xz / dim;
 	float vis = texture(luce_mask, clamp(uv, vec2(0.0), vec2(1.0))).r;
 	float vicino = smoothstep(0.8, 5.0, -VERTEX.z);
-	float a = densita * n * (0.55 - strato * 0.08) * mix(1.0, 0.5, vis) * vicino;
+	float a = densita * n * (0.75 - strato * 0.1) * mix(1.0, 0.5, vis) * vicino;
 	ALBEDO = colore.rgb * (0.9 + 0.2 * n);
-	ALPHA = clamp(a, 0.0, 0.6);
+	ALPHA = clamp(a, 0.0, 0.7);
 }

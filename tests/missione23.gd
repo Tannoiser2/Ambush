@@ -127,6 +127,14 @@ func _init() -> void:
 	pz23.s.fase = "operazioni"
 	pz23.leggi("411", {})
 	var v67: Dictionary = pz23.veicoli.v("v67")
-	ok(v67.is_empty() or pz23.veicoli.in_edificio(v67), "300: il Panzer in S13 è in un edificio")
+	ok(not v67.is_empty() and pz23.veicoli.in_edificio(v67), "300: il Panzer in S13 è in un edificio")
+	if not v67.is_empty():
+		var avanti: String = E.vicino(E.vicino(v67.hex, int(v67.fronte)), int(v67.fronte))
+		var di_lato: String = E.vicino(v67.hex, (int(v67.fronte) + 2) % 6)
+		ok(pz23.veicoli.lungo_fronte(v67, avanti) and not pz23.veicoli.lungo_fronte(v67, di_lato), "300: spara solo lungo la fila davanti (%s sì, %s no)" % [avanti, di_lato])
+		v67.chiuso = false
+		var eq0: int = int(v67.get("equipaggio", 0))
+		pz23.veicoli.crollo_su_carri(v67.hex)
+		ok(int(v67.get("equipaggio", 0)) <= eq0, "300: l’edificio crolla sul carro aperto")
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)

@@ -710,6 +710,8 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva():
 		return false
 	match str(o.op):
+		"ss_galleria":
+			pass  # 245: nota sulla galleria W7–W9, le regole stanno in `galleria_ss`
 		"ss22_ponte3":
 			_st().ponte3 = true
 			regole_terreno()

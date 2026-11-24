@@ -77,9 +77,9 @@ mov("763", "Se si muove un soldato entra in K15; un mezzo tira un dado: 0–2 en
 mov("262", "Se non ci sono americani attivi a ovest della diagonale P1–Y5, il tedesco esce dalla mappa. Altrimenti, con il numero "
            "d’azione: 0–3 869, 4–6 824, 7–8 825, 9 800.",
     [if_({"ss22_us_ovest_diagonale": True}, NESSUNO, [{"op": "ss22_esce"}])])
-mov("411", "[s4] Attiva il Panzer (tedesco 67) in S13, rivolto verso R13: era nascosto in un edificio (vedi 300). Iniziano i Round; "
-           "gli americani consapevoli che non vanno nel panico ricevono 2 turni.",
-    sighting(4) + [activate([(67, "S13")], "crouching", us_two=True)])
+mov("411", "Riferimento rosso stampato per errore sulla carta (Condizione 4, X15): il 411 è un paragrafo della Missione 23 (il "
+           "Panzer nascosto in S13, che sulla mappa FG è torrente). Nella 22 un mezzo tedesco che entra in X15 prosegue normalmente.",
+    [])
 par("300", "Finché il carro è in un edificio spara solo lungo la fila di esagoni davanti a sé. In un esagono di filo spinato paga 2 PM e "
            "fa un controllo d’incidente (se fallisce resta bloccato).", [])
 

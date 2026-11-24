@@ -641,29 +641,8 @@
  },
  "411": {
   "id": "411",
-  "it": "[s4] Attiva il Panzer (tedesco 67) in S13, rivolto verso R13: era nascosto in un edificio (vedi 300). Iniziano i Round; gli americani consapevoli che non vanno nel panico ricevono 2 turni.",
-  "ops": [
-   {
-    "op": "sighting",
-    "s": 4
-   },
-   {
-    "op": "activate",
-    "g": [
-     [
-      67,
-      "S13"
-     ]
-    ],
-    "stance": "crouching",
-    "adv": null,
-    "two": [],
-    "us_two": true,
-    "aware": false,
-    "reaction": null,
-    "rounds": true
-   }
-  ],
+  "it": "Riferimento rosso stampato per errore sulla carta (Condizione 4, X15): il 411 è un paragrafo della Missione 23 (il Panzer nascosto in S13, che sulla mappa FG è torrente). Nella 22 un mezzo tedesco che entra in X15 prosegue normalmente.",
+  "ops": [],
   "tipo": "movimento"
  },
  "300": {

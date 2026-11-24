@@ -67,7 +67,7 @@ void fragment() {
 	// schiuma lungo le sponde, spezzata dal rumore
 	float bordo = smoothstep(0.25, 0.4, raw) * (1.0 - smoothstep(0.4, 0.55, raw));
 	float sch = bordo * smoothstep(0.55, 0.8, onde(p * 1.7 + 4.0, t * 1.4));
-	col = mix(col, vec3(0.78, 0.80, 0.76), sch * 0.55 * (1.0 - ghiaccio));
+	col = mix(col, vec3(0.74, 0.77, 0.74), sch * 0.3 * (1.0 - ghiaccio));
 	// notte e nebbia
 	float vis = texture(luce_mask, UV).r;
 	col *= mix(1.0, mix(0.35, 0.85, vis), notte);

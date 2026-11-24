@@ -44,9 +44,9 @@ void fragment() {
 	float veli = 0.0;
 	if (nebbia > 0.001) {
 		float n = fbm(mondo.xz * 0.45 + vec2(TIME * 0.02, TIME * 0.008));
-		veli = nebbia * smoothstep(0.2, 0.75, n) * mix(0.75, 0.35, vis);
+		veli = nebbia * smoothstep(0.2, 0.75, n) * mix(0.85, 0.4, vis);
 	}
-	vec3 colore_nebbia = mix(vec3(0.60, 0.62, 0.60), vec3(0.14, 0.17, 0.24), notte);
+	vec3 colore_nebbia = mix(vec3(0.56, 0.58, 0.58), vec3(0.14, 0.17, 0.24), notte);
 	col = mix(col, colore_nebbia, veli);
 	// il velo è disegnato su fondo trasparente: colori già moltiplicati per l'alfa
 	ALBEDO = col * (1.0 - o.a) + o.rgb;

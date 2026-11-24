@@ -108,9 +108,9 @@ func _atmosfera(p) -> void:
 	_env.ambient_light_color = Color(0.72, 0.74, 0.78).lerp(Color(0.30, 0.36, 0.52), notte)
 	_env.ambient_light_energy = lerpf(0.34, 0.22, notte)
 	_env.background_color = Color("2b2f24").lerp(Color("0b0e16"), notte)
-	var col_nebbia := Color(0.62, 0.64, 0.62).lerp(Color(0.16, 0.19, 0.26), notte)
+	var col_nebbia := Color(0.56, 0.58, 0.58).lerp(Color(0.16, 0.19, 0.26), notte)
 	_env.fog_light_color = Color("3a3f31").lerp(col_nebbia, maxf(nebbia, notte * 0.6))
-	_env.fog_density = 0.006 + nebbia * 0.03 + notte * 0.01
+	_env.fog_density = 0.006 + nebbia * 0.055 + notte * 0.01
 	_env.tonemap_exposure = lerpf(0.95, 1.05, notte)
 	for mat in [m3.mat_terreno, m3.acqua_mi.material_override if m3.acqua_mi != null else null]:
 		if mat != null:
