@@ -1,0 +1,3613 @@
+{
+ "100": {
+  "id": "100",
+  "it": "Campo minato! Esegui la procedura del campo minato.",
+  "ops": [
+   {
+    "op": "minefield"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "658": {
+  "id": "658",
+  "it": "Campo minato! Esegui la procedura del campo minato.",
+  "ops": [
+   {
+    "op": "minefield"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "102": {
+  "id": "102",
+  "it": "In questo esagono c’è un blocco stradale con una trappola esplosiva. Esegui la procedura della trappola: se esplode, per sgombrare il blocco basta un’azione. Se s0 non è avvenuto vedi 351; se s1 non è avvenuto vedi 681; se s2 non è avvenuto vedi 461.",
+  "ops": [
+   {
+    "op": "ss_blocco",
+    "hex": "@",
+    "trappola": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 0
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "351"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 1
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "681"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "461"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "103": {
+  "id": "103",
+  "it": "Colloca un segnalino Evento. Controllo di percezione (−1): se riesce vedi 579; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "579"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "104": {
+  "id": "104",
+  "it": "Colloca un segnalino Evento. Controllo di percezione: se riesce vedi 579; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "579"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "105": {
+  "id": "105",
+  "it": "Se non è ancora avvenuto nessun avvistamento, vedi 118. Se ne è avvenuto almeno uno, nessun evento (e da allora si ignora questo paragrafo).",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_nessun_avvistamento": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "118"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "107": {
+  "id": "107",
+  "it": "Controllo di attivazione (+1): se riesce vedi 461; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "461"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "108": {
+  "id": "108",
+  "it": "Controllo di attivazione: se riesce vedi 460; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "460"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "110": {
+  "id": "110",
+  "it": "[s1] Attiva i tedeschi 16 e 17 accovacciati in L3. Iniziano i Round, vantaggio tedesco. Gli americani consapevoli che non vanno in panico ricevono 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      16,
+      "L3"
+     ],
+     [
+      17,
+      "L3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "111": {
+  "id": "111",
+  "it": "[s1] Attiva i tedeschi 16 e 17 accovacciati in L3. Iniziano i Round, vantaggio tedesco. I tedeschi 16 e 17 ricevono 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      16,
+      "L3"
+     ],
+     [
+      17,
+      "L3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [
+     16,
+     17
+    ],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "112": {
+  "id": "112",
+  "it": "Controllo di percezione: se riesce vedi 113. Se fallisce e s5 non è avvenuto, controllo di attivazione: se riesce vedi 220; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "113"
+     }
+    ],
+    "ko": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 5
+       }
+      },
+      "then": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "220"
+         }
+        ],
+        "ko": []
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "119": {
+  "id": "119",
+  "it": "Colloca un segnalino Evento. Controllo di percezione (−1): se riesce vedi 113. Se fallisce e s5 non è avvenuto, controllo di attivazione (−1): se riesce vedi 220; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "113"
+     }
+    ],
+    "ko": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 5
+       }
+      },
+      "then": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "220"
+         }
+        ],
+        "ko": []
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "113": {
+  "id": "113",
+  "it": "[s0] C’è un blocco stradale in I5 (segnalino). Si guadagna 1 PV quando il blocco è sgombrato. Nelle Operazioni basta un soldato nell’esagono e si fanno due controlli Evento. Nei Round lo si sgombra: 1) lanciando una carica da demolizione nell’esagono; 2) con una penetrazione pesante del bazooka (+2 per colpire); 3) spendendo 3 azioni (anche divise fra più soldati) con almeno un soldato accovacciato o in piedi nell’esagono, che lì è in copertura; 4) sfondandolo con un camion lanciato veloce, che deve entrare e uscire dall’esagono nello stesso turno facendo due controlli d’incidente: se ne fallisce uno il camion si ferma distrutto nel blocco e chi è a bordo tira sulla riga del fucile semiautomatico. La jeep è troppo leggera per sfondare.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "ss_blocco",
+    "hex": "I5"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "351": {
+  "id": "351",
+  "it": "[s0] C’è un blocco stradale in K6 (segnalino). Si guadagna 1 PV quando il blocco è sgombrato. Nelle Operazioni basta un soldato nell’esagono e si fanno due controlli Evento. Nei Round lo si sgombra: 1) lanciando una carica da demolizione nell’esagono; 2) con una penetrazione pesante del bazooka (+2 per colpire); 3) spendendo 3 azioni (anche divise fra più soldati) con almeno un soldato accovacciato o in piedi nell’esagono, che lì è in copertura; 4) sfondandolo con un camion lanciato veloce, che deve entrare e uscire dall’esagono nello stesso turno facendo due controlli d’incidente: se ne fallisce uno il camion si ferma distrutto nel blocco e chi è a bordo tira sulla riga del fucile semiautomatico. La jeep è troppo leggera per sfondare.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "ss_blocco",
+    "hex": "K6"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "118": {
+  "id": "118",
+  "it": "1. Se leggi questo paragrafo per la prima volta: cosa ci fate qui a girovagare? Sarà solo il pranzo per la compagnia, ma lo vogliono ancora caldo.\n2. Se lo leggi per la seconda volta: muovetevi, prima che il sergente diventi caporale.\n3. Dalla terza volta in poi: perdi 1 PV ogni volta.",
+  "ops": [
+   {
+    "op": "ss_girovagare"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "130": {
+  "id": "130",
+  "it": "1. Se s1 non è avvenuto, vedi 469.\n2. Se s0 non è avvenuto, vedi 240.\n3. Se s2 non è avvenuto, vedi 108.\n4. Nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 1
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "469"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 0
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "240"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 2
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "108"
+         }
+        ],
+        "else": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "131": {
+  "id": "131",
+  "it": "1. Se s0 non è avvenuto, vedi 351.\n2. Se s1 non è avvenuto, vedi 468.\n3. Se s2 non è avvenuto, vedi 107.\n4. Nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 0
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "351"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "468"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 2
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "107"
+         }
+        ],
+        "else": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "133": {
+  "id": "133",
+  "it": "Il soldato con la percezione più alta fa un controllo di percezione: se riesce vedi 353 (ma 359 se il dado è esattamente uguale alla sua percezione); se fallisce vedi 136.",
+  "ops": [
+   {
+    "op": "ss_pc_esatto",
+    "ok": "353",
+    "esatto": "359",
+    "ko": "136"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "134": {
+  "id": "134",
+  "it": "Colloca un segnalino Evento. Controllo di percezione (−1): se riesce vedi 248; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": -1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "248"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "135": {
+  "id": "135",
+  "it": "1. Se s2 non è avvenuto, tira un dado: dispari vedi 461, pari vedi 460.\n2. Se s1 non è avvenuto, tira un dado: dispari vedi 680, pari vedi 681.\n3. Colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "die",
+      "b": [
+       [
+        0,
+        0,
+        [
+         {
+          "op": "goto",
+          "p": "460"
+         }
+        ]
+       ],
+       [
+        1,
+        1,
+        [
+         {
+          "op": "goto",
+          "p": "461"
+         }
+        ]
+       ],
+       [
+        2,
+        2,
+        [
+         {
+          "op": "goto",
+          "p": "460"
+         }
+        ]
+       ],
+       [
+        3,
+        3,
+        [
+         {
+          "op": "goto",
+          "p": "461"
+         }
+        ]
+       ],
+       [
+        4,
+        4,
+        [
+         {
+          "op": "goto",
+          "p": "460"
+         }
+        ]
+       ],
+       [
+        5,
+        5,
+        [
+         {
+          "op": "goto",
+          "p": "461"
+         }
+        ]
+       ],
+       [
+        6,
+        6,
+        [
+         {
+          "op": "goto",
+          "p": "460"
+         }
+        ]
+       ],
+       [
+        7,
+        7,
+        [
+         {
+          "op": "goto",
+          "p": "461"
+         }
+        ]
+       ],
+       [
+        8,
+        8,
+        [
+         {
+          "op": "goto",
+          "p": "460"
+         }
+        ]
+       ],
+       [
+        9,
+        9,
+        [
+         {
+          "op": "goto",
+          "p": "461"
+         }
+        ]
+       ]
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "die",
+        "b": [
+         [
+          0,
+          0,
+          [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ]
+         ],
+         [
+          1,
+          1,
+          [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ]
+         ],
+         [
+          2,
+          2,
+          [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ]
+         ],
+         [
+          3,
+          3,
+          [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ]
+         ],
+         [
+          4,
+          4,
+          [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ]
+         ],
+         [
+          5,
+          5,
+          [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ]
+         ],
+         [
+          6,
+          6,
+          [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ]
+         ],
+         [
+          7,
+          7,
+          [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ]
+         ],
+         [
+          8,
+          8,
+          [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ]
+         ],
+         [
+          9,
+          9,
+          [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ]
+         ]
+        ]
+       }
+      ],
+      "else": [
+       {
+        "op": "event_marker"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "136": {
+  "id": "136",
+  "it": "Controllo di attivazione: se riesce vedi 249; altrimenti vedi 353.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "249"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "353"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "137": {
+  "id": "137",
+  "it": "Colloca un segnalino Evento. Controllo di percezione: se riesce vedi 248 con vantaggio americano. Se fallisce, controllo di attivazione: se riesce vedi 248 con vantaggio tedesco; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "248"
+     },
+     {
+      "op": "ss_vantaggio",
+      "lato": "us"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "248"
+       },
+       {
+        "op": "ss_vantaggio",
+        "lato": "de"
+       }
+      ],
+      "ko": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "138": {
+  "id": "138",
+  "it": "Controllo di percezione (+1): se riesce vedi 248 con vantaggio americano. Se fallisce, controllo di attivazione (+1): se riesce vedi 248 con vantaggio tedesco; altrimenti vedi 248.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "248"
+     },
+     {
+      "op": "ss_vantaggio",
+      "lato": "us"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": 1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "248"
+       },
+       {
+        "op": "ss_vantaggio",
+        "lato": "de"
+       }
+      ],
+      "ko": [
+       {
+        "op": "goto",
+        "p": "248"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "220": {
+  "id": "220",
+  "it": "[s5] Tira un dado e rimetti in mappa, accovacciati, i tedeschi rimossi fra questi: 18 (dispari E3, pari H7); 19 e 20 (dispari H7, pari E3); 48 (dispari K3, pari H1); 49 (dispari K9, pari I8); 50 (D2). Chi aveva finito le munizioni è rifornito; chi ha usato granate tira un dado: 0–4 nessuna, 5–7 una, 8–9 due (mai più di quante ne aveva all’inizio).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_riattiva",
+    "dispari": {
+     "18": "E3",
+     "19": "H7",
+     "20": "H7",
+     "48": "K3",
+     "49": "K9",
+     "50": "D2"
+    },
+    "pari": {
+     "18": "H7",
+     "19": "E3",
+     "20": "E3",
+     "48": "H1",
+     "49": "I8",
+     "50": "D2"
+    }
+   }
+  ],
+  "tipo": "missione"
+ },
+ "240": {
+  "id": "240",
+  "it": "Controllo di percezione: se riesce vedi 351; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "351"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "242": {
+  "id": "242",
+  "it": "Trappola esplosiva! Esegui la procedura della trappola esplosiva.",
+  "ops": [
+   {
+    "op": "boobytrap"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "245": {
+  "id": "245",
+  "it": "Qui c’è un imbocco della galleria stradale che attraversa la montagna da W7 a W9. Nella galleria si pagano i costi della strada; chi la percorre è nascosto (segnalino prono rovesciato). Per la vista i lati W6/W7 e W9/W10 contano come porte; per il buio, da W6 o W10 si vede un solo esagono dentro la galleria, mentre da W7 o W9 si vede fuori senza limiti. Un mezzo che va veloce in galleria e deve fare un controllo d’incidente (anche per il fuoco) applica il 465. In galleria valgono i paragrafi con la T davanti; quelli senza T sono per chi passa sopra la galleria.",
+  "ops": [
+   {
+    "op": "ss_galleria"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "465": {
+  "id": "465",
+  "it": "Nello spazio stretto della galleria l’incidente si risolve normalmente, ma si toglie 2 al dado dei danni. Se due mezzi si scontrano o restano fuori uso nello stesso esagono della galleria, per aprire un varco servono 6 azioni nei Round o 2 controlli Evento nelle Operazioni; poi uno dei due mezzi (a scelta) si sposta di un esagono verso l’imbocco da cui è entrato.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "248": {
+  "id": "248",
+  "it": "[s4] Nido di mitragliatrici! Attiva i tedeschi 19 e 20 accovacciati: con un dispari in P15, con un pari in O14. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "die",
+    "b": [
+     [
+      0,
+      0,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "O14"
+         ],
+         [
+          20,
+          "O14"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      1,
+      1,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "P15"
+         ],
+         [
+          20,
+          "P15"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      2,
+      2,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "O14"
+         ],
+         [
+          20,
+          "O14"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      3,
+      3,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "P15"
+         ],
+         [
+          20,
+          "P15"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      4,
+      4,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "O14"
+         ],
+         [
+          20,
+          "O14"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      5,
+      5,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "P15"
+         ],
+         [
+          20,
+          "P15"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      6,
+      6,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "O14"
+         ],
+         [
+          20,
+          "O14"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      7,
+      7,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "P15"
+         ],
+         [
+          20,
+          "P15"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      8,
+      8,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "O14"
+         ],
+         [
+          20,
+          "O14"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ],
+     [
+      9,
+      9,
+      [
+       {
+        "op": "activate",
+        "g": [
+         [
+          19,
+          "P15"
+         ],
+         [
+          20,
+          "P15"
+         ]
+        ],
+        "stance": "crouching",
+        "adv": null,
+        "two": [],
+        "us_two": false,
+        "aware": false,
+        "reaction": null,
+        "rounds": true
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "249": {
+  "id": "249",
+  "it": "[s3] Attiva il tedesco 18 in piedi al piano superiore di U13. Iniziano i Round, vantaggio tedesco. Il pavimento del piano superiore sopra la strada conta come un muro di legno per il fuoco; se il bazooka lo colpisce da sotto, chi è al piano di sotto tira i danni come dietro un muro colpito dal bazooka (riga del fucile semiautomatico).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "U13"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "ss_piano",
+    "g": 18
+   }
+  ],
+  "tipo": "missione"
+ },
+ "353": {
+  "id": "353",
+  "it": "[s3] Attiva il tedesco 18 in piedi al piano superiore di U13. Iniziano i Round, vantaggio americano. Il pavimento del piano superiore sopra la strada conta come un muro di legno per il fuoco; se il bazooka lo colpisce da sotto, chi è al piano di sotto tira i danni come dietro un muro colpito dal bazooka (riga del fucile semiautomatico).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "U13"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "ss_piano",
+    "g": 18
+   }
+  ],
+  "tipo": "missione"
+ },
+ "359": {
+  "id": "359",
+  "it": "[s3] Attiva il tedesco 18 in piedi al piano superiore di U13. Iniziano i Round, vantaggio tedesco; l’americano che ha superato il controllo riceve 2 turni in questo Round. Il pavimento del piano superiore sopra la strada conta come un muro di legno per il fuoco; se il bazooka lo colpisce da sotto, chi è al piano di sotto tira i danni come dietro un muro colpito dal bazooka (riga del fucile semiautomatico).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      18,
+      "U13"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": true,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "ss_piano",
+    "g": 18
+   }
+  ],
+  "tipo": "missione"
+ },
+ "300": {
+  "id": "300",
+  "it": "Nota sui carri negli edifici e sul filo spinato (non usata in questa missione).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "334": {
+  "id": "334",
+  "it": "Campo minato! Esegui la procedura del campo minato.\n1. Se superi il controllo di percezione e nessuna mina esplode: se s1 non è avvenuto vedi 681; se s6 non è avvenuto vedi 651; se entrambi sono avvenuti, nessun evento.\n2. Se fallisci il controllo e il soldato subisce la mina ma resta attivo: se s1 non è avvenuto vedi 680; se s6 non è avvenuto vedi 790; altrimenti nessun evento.\n3. Se il soldato è reso inattivo dalla mina, nessun altro evento.",
+  "ops": [
+   {
+    "op": "minefield"
+   },
+   {
+    "op": "if",
+    "t": {
+     "no_mine_blast": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "681"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 6
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "651"
+         }
+        ],
+        "else": []
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "ss_vittima_mina_attiva": true
+      },
+      "then": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 1
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "680"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 6
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "790"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "335": {
+  "id": "335",
+  "it": "Se si muove un mezzo entrato qui direttamente da F4, vedi 641. Se s2 non è avvenuto, vedi 130. Altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "vehicle_moving": true
+      },
+      {
+       "ss_entrato_da": "F4"
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "641"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "130"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "336": {
+  "id": "336",
+  "it": "Se si muove un mezzo entrato qui direttamente da G4, vedi 641. Altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "vehicle_moving": true
+      },
+      {
+       "ss_entrato_da": "G4"
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "641"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "641": {
+  "id": "641",
+  "it": "Tagliare le curve si paga! Controllo d’incidente immediato.",
+  "ops": [
+   {
+    "op": "ss_incidente"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "350": {
+  "id": "350",
+  "it": "Controllo di percezione (+2): se riesce vedi 351. Se fallisce e s1 non è avvenuto, controllo di attivazione (+1): se riesce vedi 680; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 2,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "351"
+     }
+    ],
+    "ko": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "680"
+         }
+        ],
+        "ko": []
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "T358": {
+  "id": "T358",
+  "it": "Quando l’ultimo mezzo americano attivo entra in W7, vedi 464. Se un mezzo che non è ancora entrato in W7 diventa inattivo e tutti gli altri ci sono già entrati, vedi subito 464.",
+  "ops": [
+   {
+    "op": "ss_galleria_358"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "390": {
+  "id": "390",
+  "it": "[s1] Attiva i tedeschi 74 e 75 accovacciati in K10. Iniziano i Round, vantaggio tedesco.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "460": {
+  "id": "460",
+  "it": "[s2] Attiva il tedesco 50 accovacciato in D2, il 48 in piedi in J1 e il 49 in piedi in I8. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "D2"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "J1"
+     ],
+     [
+      49,
+      "I8"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "461": {
+  "id": "461",
+  "it": "[s2] Attiva il tedesco 48 in piedi in I1, il 49 accovacciato in H7 e il 50 accovacciato in D2. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "I1"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      49,
+      "H7"
+     ],
+     [
+      50,
+      "D2"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "464": {
+  "id": "464",
+  "it": "Togli dalla mappa i tedeschi 16, 17, 48, 49 e 50 ancora attivi: 1 PV per ciascuno.",
+  "ops": [
+   {
+    "op": "ss_rimuovi_bonus",
+    "g": [
+     16,
+     17,
+     48,
+     49,
+     50
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "468": {
+  "id": "468",
+  "it": "Controllo di attivazione (+1): se riesce vedi 680; altrimenti vedi 681.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "680"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "681"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "469": {
+  "id": "469",
+  "it": "Controllo di attivazione: se riesce vedi 680; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "680"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "528": {
+  "id": "528",
+  "it": "Controllo di percezione: se riesce vedi 648; altrimenti vedi 460.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "648"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "460"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "532": {
+  "id": "532",
+  "it": "Controllo di percezione: se riesce vedi 461; altrimenti vedi 649.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "461"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "649"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "534": {
+  "id": "534",
+  "it": "Controllo di percezione: se riesce vedi 681; altrimenti vedi 680.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "681"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "680"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "535": {
+  "id": "535",
+  "it": "Controllo di percezione: se riesce vedi 652; altrimenti vedi 653.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "652"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "653"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "536": {
+  "id": "536",
+  "it": "Controllo di percezione: se riesce vedi 654; altrimenti vedi 655.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "654"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "655"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "537": {
+  "id": "537",
+  "it": "Se s2 non è avvenuto, tira un dado: dispari vedi 656, pari vedi 657. Se s2 è avvenuto e s6 no, vedi 790. Se sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 2
+     }
+    },
+    "then": [
+     {
+      "op": "die",
+      "b": [
+       [
+        0,
+        0,
+        [
+         {
+          "op": "goto",
+          "p": "657"
+         }
+        ]
+       ],
+       [
+        1,
+        1,
+        [
+         {
+          "op": "goto",
+          "p": "656"
+         }
+        ]
+       ],
+       [
+        2,
+        2,
+        [
+         {
+          "op": "goto",
+          "p": "657"
+         }
+        ]
+       ],
+       [
+        3,
+        3,
+        [
+         {
+          "op": "goto",
+          "p": "656"
+         }
+        ]
+       ],
+       [
+        4,
+        4,
+        [
+         {
+          "op": "goto",
+          "p": "657"
+         }
+        ]
+       ],
+       [
+        5,
+        5,
+        [
+         {
+          "op": "goto",
+          "p": "656"
+         }
+        ]
+       ],
+       [
+        6,
+        6,
+        [
+         {
+          "op": "goto",
+          "p": "657"
+         }
+        ]
+       ],
+       [
+        7,
+        7,
+        [
+         {
+          "op": "goto",
+          "p": "656"
+         }
+        ]
+       ],
+       [
+        8,
+        8,
+        [
+         {
+          "op": "goto",
+          "p": "657"
+         }
+        ]
+       ],
+       [
+        9,
+        9,
+        [
+         {
+          "op": "goto",
+          "p": "656"
+         }
+        ]
+       ]
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 6
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "790"
+       }
+      ],
+      "else": [
+       {
+        "op": "event_marker"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "570": {
+  "id": "570",
+  "it": "Se s0 e s1 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento. Altrimenti controllo di percezione (+2): se riesce, vedi 351 se s0 non è avvenuto, altrimenti 681 se s1 non è avvenuto. Se fallisce e s1 non è avvenuto, controllo di attivazione: se riesce vedi 680.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 0
+      },
+      {
+       "s": 1
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 2,
+      "ok": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 0
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "351"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 1
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "681"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ],
+      "ko": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 1
+         }
+        },
+        "then": [
+         {
+          "op": "check",
+          "kind": "act",
+          "mod": 0,
+          "ok": [
+           {
+            "op": "goto",
+            "p": "680"
+           }
+          ],
+          "ko": []
+         }
+        ],
+        "else": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "578": {
+  "id": "578",
+  "it": "Colloca un segnalino Evento. Controllo di attivazione (−1): se riesce vedi 790; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": -1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "790"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "579": {
+  "id": "579",
+  "it": "[s7] Il soldato nota un movimento sul livello 4, verso S10 e R9.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   }
+  ],
+  "tipo": "missione"
+ },
+ "601": {
+  "id": "601",
+  "it": "Il ponte distrutto in questo esagono è impraticabile: si torna nell’esagono da cui si è entrati. Nei Round, un mezzo fa un controllo d’incidente (se lo supera torna indietro senza costo e continua, altrimenti torna indietro e il turno finisce); un soldato fa un controllo di percezione (se lo supera torna indietro senza costo, altrimenti torna indietro, cade prono e il turno finisce).",
+  "ops": [
+   {
+    "op": "ss_ponte_rotto"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "630": {
+  "id": "630",
+  "it": "Controllo di percezione: se riesce vedi 461; altrimenti vedi 460.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "461"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "460"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "648": {
+  "id": "648",
+  "it": "[s2] Attiva il tedesco 48 in piedi in I8, il 49 in piedi in J1 e il 50 accovacciato in D2. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "I8"
+     ],
+     [
+      49,
+      "J1"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "D2"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "649": {
+  "id": "649",
+  "it": "[s2] Attiva il tedesco 48 in piedi in I1, il 49 in piedi in H7 e il 50 accovacciato in D2. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "I1"
+     ],
+     [
+      49,
+      "H7"
+     ]
+    ],
+    "stance": "standing",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      50,
+      "D2"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "651": {
+  "id": "651",
+  "it": "[s6] Attiva la squadra del mortaio (tedesco 47) in S10. Iniziano i Round, vantaggio americano. Vedi 791 per il mortaio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "ss_mortaio",
+    "hex": "S10",
+    "adv": "us"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "790": {
+  "id": "790",
+  "it": "[s6] Attiva la squadra del mortaio (tedesco 47) in S10. Iniziano i Round, vantaggio tedesco. Vedi 791 per il mortaio.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "ss_mortaio",
+    "hex": "S10",
+    "adv": "de"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "791": {
+  "id": "791",
+  "it": "Il mortaio (segnalino 791) si attiva con il colpo pronto, con i tre serventi accovacciati nell’esagono. Gittata minima 7 esagoni (esclusi); in un turno si può sparare un colpo e prepararne un altro. L’abilità del servente non conta; gli americani non possono usarlo. Prima si controlla il colpo a vuoto (05), poi il bersaglio: il mezzo visibile più vicino a S10 a 7 o più esagoni; altrimenti l’esagono visibile con più americani; altrimenti un esagono a caso. Il punto d’impatto si sposta col diagramma A (B se si ripete il tiro sul segnalino o a 2 esagoni da lui). Danni: allo scoperto, su strada o in copertura riga Granata al chiuso; in un edificio riga Granata all’aperto (con ucciso crolla un lato e tutti tirano sulla riga del fucile semiautomatico); su un mezzo riga Granata all’aperto: con incapacitato o ucciso il mezzo è fuori uso e chi è a bordo tira sulla riga della carabina, altrimenti tira sulla riga della pistola.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "652": {
+  "id": "652",
+  "it": "[s4] Avete sorpreso una squadra di mitraglieri tedeschi! Attiva i tedeschi 19 e 20 accovacciati in O14. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      19,
+      "O14"
+     ],
+     [
+      20,
+      "O14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "653": {
+  "id": "653",
+  "it": "[s4] Nido di mitragliatrici! Attiva i tedeschi 19 e 20 accovacciati in O14. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      19,
+      "O14"
+     ],
+     [
+      20,
+      "O14"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "654": {
+  "id": "654",
+  "it": "[s4] Avete sorpreso una squadra di mitraglieri tedeschi! Attiva i tedeschi 19 e 20 accovacciati in P15. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      19,
+      "P15"
+     ],
+     [
+      20,
+      "P15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "655": {
+  "id": "655",
+  "it": "[s4] Nido di mitragliatrici! Attiva i tedeschi 19 e 20 accovacciati in P15. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      19,
+      "P15"
+     ],
+     [
+      20,
+      "P15"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "656": {
+  "id": "656",
+  "it": "[s2] Attiva accovacciati il tedesco 48 in F14, il 49 in J17 e il 50 in G19. Iniziano i Round; controllo di percezione: se riesce vantaggio americano, altrimenti tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "F14"
+     ],
+     [
+      49,
+      "J17"
+     ],
+     [
+      50,
+      "G19"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "pc",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "657": {
+  "id": "657",
+  "it": "[s2] Attiva accovacciati il tedesco 48 in I18, il 49 in E15 e il 50 in E19. Iniziano i Round; controllo di percezione: se riesce vantaggio americano, altrimenti tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      48,
+      "I18"
+     ],
+     [
+      49,
+      "E15"
+     ],
+     [
+      50,
+      "E19"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "pc",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "792": {
+  "id": "792",
+  "it": "[s2] Con un numero d’azione tedesco dispari attiva accovacciati il tedesco 48 in F14, il 49 in J17 e il 50 in G19; con un pari il 48 in I18, il 49 in E15 e il 50 in E19. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "if",
+    "t": {
+     "ss_dispari": true
+    },
+    "then": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        48,
+        "F14"
+       ],
+       [
+        49,
+        "J17"
+       ],
+       [
+        50,
+        "G19"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": null,
+      "two": [],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ],
+    "else": [
+     {
+      "op": "activate",
+      "g": [
+       [
+        48,
+        "I18"
+       ],
+       [
+        49,
+        "E15"
+       ],
+       [
+        50,
+        "E19"
+       ]
+      ],
+      "stance": "crouching",
+      "adv": null,
+      "two": [],
+      "us_two": false,
+      "aware": false,
+      "reaction": null,
+      "rounds": true
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "680": {
+  "id": "680",
+  "it": "[s1] Attiva i tedeschi 16 e 17 accovacciati in Q9. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      16,
+      "Q9"
+     ],
+     [
+      17,
+      "Q9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "681": {
+  "id": "681",
+  "it": "[s1] Attiva i tedeschi 16 e 17 accovacciati in Q9. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      16,
+      "Q9"
+     ],
+     [
+      17,
+      "Q9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "793": {
+  "id": "793",
+  "it": "[s1] Attiva i tedeschi 16 e 17 accovacciati in L3. Iniziano i Round, vantaggio americano. Gli americani consapevoli che non vanno in panico ricevono 2 turni; chi ha superato il controllo di percezione è consapevole.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      16,
+      "L3"
+     ],
+     [
+      17,
+      "L3"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": null,
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "796": {
+  "id": "796",
+  "it": "Colloca un segnalino Evento. Controllo di attivazione (+1): se riesce vedi 111. Se fallisce, controllo di percezione (+1): se riesce vedi 110; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "act",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "111"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "110"
+       }
+      ],
+      "ko": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "797": {
+  "id": "797",
+  "it": "Colloca un segnalino Evento. Controllo di percezione: se riesce vedi 793. Se fallisce, controllo di attivazione: se riesce vedi 110; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "793"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "110"
+       }
+      ],
+      "ko": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "798": {
+  "id": "798",
+  "it": "Colloca un segnalino Evento. Controllo di percezione: se riesce vedi 793. Se fallisce, controllo di attivazione (−1): se riesce vedi 110; altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "793"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "110"
+       }
+      ],
+      "ko": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "683": {
+  "id": "683",
+  "it": "La missione finisce quando tutti i mezzi americani attivi sono usciti da A8 e tutti i soldati attivi da A7–A9. Si evita di perdere PV per i feriti gravi e i morti portandoli fuori. Servono 6 PV per vincere. Chi esce dalla mappa, uomo o mezzo, non può tornare. Se s1 non è avvenuto, vedi subito 110.",
+  "ops": [
+   {
+    "op": "ss_fine_20",
+    "mezzi": [
+     "A8"
+    ],
+    "soldati": [
+     "A7",
+     "A8",
+     "A9"
+    ]
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 1
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "110"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "685": {
+  "id": "685",
+  "it": "Si passa alla Condizione 2. [s5] Tira un dado e rimetti in mappa, accovacciati, i tedeschi rimossi fra questi: 16 e 17 (dispari K19, pari G19), 48 (dispari I13, pari H13), 49 (dispari G14, pari F13), 50 (dispari A19, pari E19); 16, 17 e 50 nella reazione speciale D. Munizioni rifornite, granate come al 220. Iniziano i Round. Se tutti questi tedeschi sono fuori combattimento e s6 non è avvenuto, vedi subito 790; se qualcuno torna in mappa e s6 non è avvenuto, all’inizio del prossimo Round leggi 790 al posto del controllo Evento. Se s4 non è avvenuto, vedi 248. La missione finisce nella Condizione 2 quando tutti gli americani attivi sono usciti (i mezzi da B19, i soldati da A19–C19). Si evita di perdere PV per i feriti gravi e i morti portandoli fuori. Servono 6 PV per vincere. Chi esce dalla mappa, uomo o mezzo, non può tornare.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 2
+   },
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_riattiva",
+    "reazione": {
+     "16": "D",
+     "17": "D",
+     "50": "D"
+    },
+    "dispari": {
+     "16": "K19",
+     "17": "K19",
+     "48": "I13",
+     "49": "G14",
+     "50": "A19"
+    },
+    "pari": {
+     "16": "G19",
+     "17": "G19",
+     "48": "H13",
+     "49": "F13",
+     "50": "E19"
+    },
+    "round": true
+   },
+   {
+    "op": "ss_dopo_685"
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "248"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "ss_fine_20",
+    "mezzi": [
+     "B19"
+    ],
+    "soldati": [
+     "A19",
+     "B19",
+     "C19"
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "713": {
+  "id": "713",
+  "it": "Il resto della compagnia dovrebbe essere nella zona fra W6 e W10. Portate là il pranzo, il più in fretta possibile.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "T794": {
+  "id": "T794",
+  "it": "[s8] Ormai avreste dovuto vedere qualche segno della compagnia: l’avanzata deve andare meglio del previsto. Il sergente decide di proseguire lungo la strada finché non la trova. I tedeschi ancora attivi in mappa vengono tolti appena non hanno più la vista su un mezzo americano attivo. Si guadagna 1 PV per ogni servente del mortaio ancora attivo quando il tedesco 47 viene tolto per questo paragrafo.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "ss_794"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "795": {
+  "id": "795",
+  "it": "Quando l’ultimo americano attivo è a est della colonna L (compresa) e a nord della riga 14 (compresa), togli il tedesco 47 dalla mappa: 1 PV per ogni tedesco ancora attivo in quel momento.",
+  "ops": [
+   {
+    "op": "ss_nota_795"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "799": {
+  "id": "799",
+  "it": "Si passa alla Condizione 3.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 3
+   }
+  ],
+  "tipo": "missione"
+ },
+ "990": {
+  "id": "990",
+  "it": "Se un camion è fuori uso per il fuoco o per un incidente, vedi 932. Altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_camion_fuori_uso": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "932"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "932": {
+  "id": "932",
+  "it": "La benzina che esce dal serbatoio squarciato prende fuoco e il camion (a caso, se più d’uno) esplode: al suo posto resta un cratere. Chi è a bordo tira sulla riga Carica al chiuso (non prono); chi è su un altro mezzo nello stesso esagono sulla riga Carica all’aperto (prono); chi è a piedi nell’esagono sulla riga Carica all’aperto nella sua postura. Un altro mezzo nell’esagono tira sulla riga Carica all’aperto: con ucciso o incapacitato è fuori uso.",
+  "ops": [
+   {
+    "op": "ss_camion_esplode"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "991": {
+  "id": "991",
+  "it": "Se in mappa c’è una trappola esplosiva che non è esplosa quando è stata scoperta, una (a caso) non era del tutto disinnescata ed esplode ora: chi è nell’esagono tira sulla riga Granata al chiuso nella sua postura. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "ss_trappola_ritardata"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "992": {
+  "id": "992",
+  "it": "Un’arma tedesca usata nel Round precedente finisce le munizioni (a caso se più d’una); vale anche per il mortaio. Può capitare più volte.",
+  "ops": [
+   {
+    "op": "ammo_out"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "993": {
+  "id": "993",
+  "it": "Un soldato americano non prono, a caso, in un esagono che non sia strada né scoperto, cade: controllo di percezione; se riesce non si fa nulla ma cade prono, altrimenti tira i danni come colpito da una pistola. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "ss_caduta"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "995": {
+  "id": "995",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "chiave": "995",
+    "lato": "de"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "996": {
+  "id": "996",
+  "it": "Un tedesco incapacitato, scelto a caso, muore per le ferite. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "chiave": "996",
+    "lato": "de"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "997": {
+  "id": "997",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "chiave": "997",
+    "lato": "us"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "998": {
+  "id": "998",
+  "it": "Un americano incapacitato, scelto a caso, muore per le ferite. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "chiave": "998",
+    "lato": "us"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "999": {
+  "id": "999",
+  "it": "Un mezzo attivo (a caso) fora una gomma: controllo d’incidente, poi va solo piano. Con una seconda foratura nei Round resta fermo finché non si spendono 5 azioni per cambiare la ruota (nelle Operazioni nessun effetto). Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "ss_gomma_convoglio"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "198": {
+  "id": "198",
+  "it": "Se si muove un soldato, entra in P4; se si muove un mezzo, in R4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "243": {
+  "id": "243",
+  "it": "Se è al piano superiore di T12, scende al piano terra. Se è al piano terra di T12 e vede un americano, entra in S13; altrimenti in T13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_al_piano": true
+    },
+    "then": [
+     {
+      "op": "ss_scendi_piano"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "g_vede_us": true
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "S13"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "T13"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "244": {
+  "id": "244",
+  "it": "Se c’è un americano attivo entro 3 esagoni, entra in J15; altrimenti in J14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_us_entro": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "J15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "J14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "246": {
+  "id": "246",
+  "it": "Se vede un americano, entra in N15; altrimenti in M15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "247": {
+  "id": "247",
+  "it": "Se vede un americano, entra in P13; altrimenti in P14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "333": {
+  "id": "333",
+  "it": "Toglie la reazione speciale M. Se vede un bersaglio attivo, esegue il paragrafo della colonna D per il numero d’azione attuale (senza passare alla reazione D); altrimenti si accovaccia.",
+  "ops": [
+   {
+    "op": "ss_333"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "354": {
+  "id": "354",
+  "it": "Se c’è un americano attivo entro 3 esagoni, entra in I16; altrimenti in H15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_us_entro": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "I16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "355": {
+  "id": "355",
+  "it": "Con un numero d’azione dispari entra in L15, con un pari in L16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_dispari": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L15"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "L16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "356": {
+  "id": "356",
+  "it": "Se ci sono più americani attivi sulla strada e a sud di essa che a nord, entra in F16; altrimenti in F15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_us_sud_strada": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "F16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "F15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "357": {
+  "id": "357",
+  "it": "Se c’è un americano attivo entro 3 esagoni, entra in H16; altrimenti in G16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_us_entro": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "G16"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "463": {
+  "id": "463",
+  "it": "Se né il 16 né il 17 sono attivi in M13, entra in N14; altrimenti in O16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_g_attivi_in": [
+      [
+       16,
+       17
+      ],
+      "M13"
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "571": {
+  "id": "571",
+  "it": "Se si muove il 19 o il 20, entra in N13; altrimenti in N14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_num": [
+      19,
+      20
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N13"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "572": {
+  "id": "572",
+  "it": "Se vede un americano: con un numero d’azione dispari entra in O14, con un pari in P15. Altrimenti entra in O15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "ss_dispari": true
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "O14"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "P15"
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "573": {
+  "id": "573",
+  "it": "Se vede un americano, entra in Q16; altrimenti in Q15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "682": {
+  "id": "682",
+  "it": "Se c’è un americano attivo entro 3 esagoni, entra in M16; altrimenti in M15.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_us_entro": 3
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "684": {
+  "id": "684",
+  "it": "Se non vede americani, entra in R15; altrimenti in R16.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "g_vede_us": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R16"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R15"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "686": {
+  "id": "686",
+  "it": "Se è al piano superiore di V13, scende al piano terra; se è al piano terra, entra in V14.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_al_piano": true
+    },
+    "then": [
+     {
+      "op": "ss_scendi_piano"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V14"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "687": {
+  "id": "687",
+  "it": "Con un numero d’azione dispari entra in D17, con un pari in E18.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_dispari": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "D17"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "E18"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "688": {
+  "id": "688",
+  "it": "Passa alla reazione speciale D.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "D"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "689": {
+  "id": "689",
+  "it": "Con un numero d’azione dispari entra in T12, con un pari in V13.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_dispari": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T12"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "V13"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "712": {
+  "id": "712",
+  "it": "Al piano terra nessun evento; al piano superiore vedi 133.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_al_piano_us": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "133"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "431": {
+  "id": "431",
+  "it": "Se vede un bersaglio attivo, vedi 352. Se non ne vede e tutti i mezzi americani attivi sono passati per W10, esce dalla mappa. Altrimenti si sdraia prono; se a fine turno non vede nessun mezzo americano attivo, esce dalla mappa.",
+  "ops": [
+   {
+    "op": "ss_431",
+    "varco": "W10",
+    "bonus": 0
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "531": {
+  "id": "531",
+  "it": "Se vede un bersaglio attivo, vedi 352. Se non ne vede e tutti i mezzi americani attivi sono passati per W6, esce dalla mappa (1 PV). Altrimenti si sdraia prono; se a fine turno non vede nessun mezzo americano attivo, esce dalla mappa (1 PV).",
+  "ops": [
+   {
+    "op": "ss_431",
+    "varco": "W6",
+    "bonus": 1
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "352": {
+  "id": "352",
+  "it": "1. Se vede un mezzo americano attivo e ha una granata, si accovaccia (fino a 3 esagoni) o si alza (da 4 a 6) e la lancia al mezzo visibile più vicino; poi prono se può. 2. Se vede un mezzo ma non ha granate o è fuori portata, si accovaccia e fa il miglior tiro al mezzo più vicino. 3. Se vede un soldato, si accovaccia e fa il miglior tiro al più vicino. 4. Se non vede bersagli, si muove il più in fretta possibile e fa un tiro rapido al primo bersaglio che compare.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "106": {
+  "id": "106",
+  "it": "Come il 352, ma con un soldato in vista spara al bersaglio più facile e, se non vede nessuno, fa il miglior tiro al primo mezzo o soldato che compare.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "114": {
+  "id": "114",
+  "it": "Come il 352, ma con un soldato in vista spara al bersaglio più facile; se non vede nessuno si muove il più in fretta possibile.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "115": {
+  "id": "115",
+  "it": "1. In U13, con una granata e un mezzo americano nell’esagono sotto, si sporge dalla finestra e la lascia cadere sul mezzo. 2. Con una granata e un mezzo in un esagono adiacente, si accovaccia e la lancia al mezzo più vicino al bordo est. 3. Senza granate, miglior tiro al bersaglio più vicino fuori dal suo esagono. 4. Senza americani in vista né entro 3 esagoni, esce dalla mappa. 5. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "241": {
+  "id": "241",
+  "it": "Come il 115, ma la granata va al mezzo più vicino al bordo ovest e, senza americani in vista né entro 3 esagoni, passa alla reazione speciale M.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "132": {
+  "id": "132",
+  "it": "Se vede un americano attivo, con il numero d’azione: 0–3: 815, 4: 840, 5–6: 841, 7–9: 770. Altrimenti: nella Condizione 1 si accovaccia, nella 2 si muove il più in fretta possibile, nella 3 esce dalla mappa. Prima i mezzi, poi i soldati.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "139": {
+  "id": "139",
+  "it": "Se non vede americani, si muove il più in fretta possibile. Altrimenti, con il numero d’azione: 0–1: 815, 2: 840, 3–6: 770, 7–9: 841. Prima i mezzi, poi i soldati.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "462": {
+  "id": "462",
+  "it": "1. Se non vede bersagli e tutti gli americani sono a est della colonna N, esce dalla mappa (1 PV). 2. Se non vede bersagli ma ci sono americani nella colonna N o a ovest: granata al più vicino entro 3 esagoni (accovacciato) o da 4 a 6 (in piedi), −3 perché non lo vede; altrimenti si accovaccia. 3. Se vede un bersaglio, con il numero d’azione: 0–3: 802, 4–6: 808, 7–8: 824, 9: 800. Prima i mezzi, poi i soldati.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "466": {
+  "id": "466",
+  "it": "1. In Q9 senza americani in vista, si alza, entra in R8, si accovaccia e fa il miglior tiro al bersaglio più facile. 2. Senza americani in vista e con tutti i mezzi americani passati per W6, esce dalla mappa (1 PV). 3. Con il numero d’azione: 0: 843, 1–3: 841, 4–6: 815, 7–9: 770. Prima i mezzi, poi i soldati.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "467": {
+  "id": "467",
+  "it": "1. In Q9 senza americani in vista, si alza, entra in R8, si accovaccia e fa il miglior tiro al bersaglio più vicino. 2. Senza americani in vista e con tutti i mezzi americani passati per W6, esce dalla mappa (1 PV). 3. Con il numero d’azione: 0–3: 841, 4: 843, 5–8: 815, 9: 770. Prima i mezzi, poi i soldati.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "549": {
+  "id": "549",
+  "it": "Squadra del mortaio. 1. Con un americano attivo nello stesso esagono, assalto per uccidere. 2. Con un americano in un esagono adiacente, miglior tiro al bersaglio più facile. 3. Con una granata e un bersaglio a 2–3 esagoni, granata nell’esagono con più americani. 4. Con una granata e un bersaglio visibile a 4–6 esagoni, si alza e la lancia. 5. Senza granate e con un bersaglio visibile a 4–6 esagoni, miglior tiro al più vicino. 6. Altrimenti, con il numero d’azione: 0–2: L 502, Q 503, T 504; 3–5: L 503, Q 504, T 502; 6–9: L 504, Q 502, T 503.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "502": {
+  "id": "502",
+  "it": "1. Se non c’è un colpo pronto, si accovaccia e lo prepara. 2. Se il colpo è pronto e il mortaio non ha ancora sparato in questo turno, si accovaccia e spara. 3. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "503": {
+  "id": "503",
+  "it": "1. Se il mortaio ha sparato in questo turno e il colpo non è ancora stato preparato, lo prepara. 2. Se il colpo è pronto e il mortaio non ha sparato, spara. 3. Si sdraia prono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "504": {
+  "id": "504",
+  "it": "1. Se il colpo è pronto e il mortaio non ha sparato in questo turno, spara. 2. Se non c’è un colpo pronto, lo prepara. 3. Si sdraia prono.",
+  "ops": [],
+  "tipo": "azione"
+ }
+}

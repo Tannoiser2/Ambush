@@ -1161,6 +1161,16 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			_b("Fai saltare %s (%s)" % [nome_i, hi], func(): _esito(p.demolisci(a.id, hh2)), "Nelle Operazioni la carica si piazza a mano; nei Round va lanciata nell’esagono.")
 	if int(a.get("documenti", 0)) > 0:
 		_b("Porta i documenti fuori mappa", Callable(), "Valgono %d PV quando questo soldato esce dalla mappa." % int(a.documenti), false)
+	if p.ss.m20.puo_sgombrare(a):
+		_b("Sgombra il blocco stradale", func(): _esito(p.azione_ss(a.id, "sgombra")), "Nelle Operazioni costa due controlli Evento; nei Round servono 3 azioni (anche di soldati diversi). +1 PV.")
+	for c in p.ss.m20.trasferibili(a):
+		var arg_t: String = "%s>%s" % [c[0].id, c[1].id]
+		_b("Sposta il carico da %s a %s" % [str(c[0].nome), str(c[1].nome)], func(): _esito(p.azione_ss(a.id, "trasferisci", arg_t)), "Nelle Operazioni costa due controlli Evento; nei Round 4 azioni (anche divise).")
+	if p.ss.m20.attiva() and not p.arma_di(a, "bazooka").is_empty():
+		for hb in p.s.get("blocchi", []):
+			var hbs: String = hb
+			if E.distanza(a.hex, hbs) <= 6 and p.terreno.vede(a.hex, hbs, a.postura, "standing"):
+				_b("Bazooka sul blocco in %s" % hbs, func(): _esito(p.azione_ss(a.id, "bazooka_blocco", hbs)), "+2 per colpire; solo una penetrazione pesante lo sgombra.")
 	if p.ss.puo_esplosivo(a):
 		_b("Applica l’esplosivo a tempo alla chiatta", func(): _esito(p.azione_ss(a.id, "esplosivo")), "Un’azione. Salta alla fine del Round successivo (nelle Operazioni dopo due spostamenti); ratés 05. Chiatta distrutta: 3 PV.")
 	if p.ss.puo_salire_chiatta(a):

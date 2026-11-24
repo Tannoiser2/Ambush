@@ -244,3 +244,20 @@ Ordine scelto: M11, M10, M12, M9.
 - Semplificazioni: impermeabilizzazione delle armi (inceppamento 25) non gestita; bazooka sulla chiatta con
   probabilità propria (`bazooka_chiatta`); granata nella barca di guardia: dado pari = dentro.
 - Test `tests/missione19.gd`, `simula.gd -- 4 1 19`, scatti `tests/visivi/missione19_ui.gd`.
+
+## Silver Star — Missione 20 «Facile come bere un bicchier d’acqua» (mappa F, in alto è nord)
+- Carte Condizione 1–3 trascritte a vista dalle scansioni del mod TTS (`tools/carte_ss_trascritte.py`); i riferimenti
+  «T 358», «T 794» diventano `T:358`/`T:794` e valgono solo per chi è nella galleria (`missione20_ss.riferimento_t`).
+- Libretto: `tools/paragrafi_ss_testo.py` ora riconosce i paragrafi T, i rimandi «See» spezzati a capo, due numeri sbagliati
+  di fila e il 655 finito dentro il 654. Le tabelle a due colonne perse dall’OCR (139, 462, 466, 549, 791) rilette dalle pagine.
+- I paragrafi SS sono ora per missione: `data/paragrafi_ss19.json`, `data/paragrafi_ss20.json` (`tools/paragrafi_ss20.py`).
+- Motore: `scripts/motore/missione20_ss.gd` (p.ss.m20). Convoglio `vjeep` (mitragliatrice al passeggero 1, 6 caricatori) e
+  `vcamion1–3` (posti 2, 1 carico); nelle Operazioni gli altri mezzi seguono in fila quello mosso; niente discesa prima di un
+  avvistamento; aggrapparsi ai camion (`esterno_ss`, solo rapido −2, il ferito cade); carichi e trasbordo (2 eventi / 4
+  azioni), solo piano con 3 carichi; blocchi stradali (`s.blocchi`, 1 PV, a mano, carica, bazooka pesante); galleria W7–W9
+  (strada, vista al buio), ponte O4, strada sotto U13; mortaio 471–473 (549, 502–504, diagrammi A/B di `MO.dispersione`);
+  granate sui mezzi; fine 683/685 con uscita dei mezzi dall’autista (+1 camion, +2 per carico) e +1 per tedesco attivo.
+- Semplificazioni: niente sfondamento del blocco col camion; il 685 «al posto del controllo Evento» legge il 790 in più;
+  il crollo dei lati degli edifici colpiti dal mortaio non è gestito; il gruppo del 47 è tre tedeschi 471–473.
+- Test `tests/missione20.gd`, `simula.gd -- 4 1 20` (la simulazione guida il convoglio lungo la strada), scatti
+  `tests/visivi/missione20_ui.gd`.

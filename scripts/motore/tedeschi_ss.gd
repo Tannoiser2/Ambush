@@ -20,6 +20,8 @@ func turno(g: Dictionary) -> bool:
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	var p = t.p
+	if p.ss.m20.attiva():
+		return _esegui20(g, n)
 	match n:
 		233, 564:
 			_sub_cerca(g, "F4" if n == 233 else "K6", n == 564)
@@ -227,3 +229,176 @@ func _su_chiatta(g: Dictionary, n: int) -> void:
 				return
 			t._accovacciati()
 			t._tiri_rapidi()
+
+# ------------------------------------------------------------------ Missione 20
+func _per_numero20(tab: Array) -> void:
+	var num := int(t.p.s.round.get("numero_azione", 0))
+	for r in tab:
+		if num >= int(r[0]) and num <= int(r[1]):
+			t.esegui(int(r[2]))
+			return
+
+## Bersagli a bordo dei mezzi del convoglio (la priorità è sempre il mezzo, poi il soldato).
+func _su_mezzi(g: Dictionary) -> Array:
+	return t.bersagli(g).filter(func(a): return str(a.get("veicolo", "")) != "")
+
+func _piu_vicino20(g: Dictionary, lista: Array) -> Dictionary:
+	var m := {}
+	for a in lista:
+		if m.is_empty() or E.distanza(a.hex, g.hex) < E.distanza(m.hex, g.hex):
+			m = a
+	return m
+
+func _granata_mezzo(g: Dictionary, lista: Array) -> bool:
+	if int(g.munizioni.get("granata", 0)) <= 0:
+		return false
+	var b := _piu_vicino20(g, lista)
+	if b.is_empty():
+		return false
+	var d := E.distanza(b.hex, g.hex)
+	if d > 6:
+		return false
+	if d <= 3:
+		t._accovacciati()
+	else:
+		t._alzati()
+	if t.p.probabilita_lancio(g, "granata", b.hex).ok:
+		t.p.risolvi_lancio(g, "granata", b.hex)
+		t._prono_se_libero()
+		return true
+	return false
+
+func _verso_americano(g: Dictionary, spara: bool) -> void:
+	var b := _piu_vicino20(g, t.p.americani_attivi_in_mappa())
+	if b.is_empty():
+		t._accovacciati()
+		return
+	t._corri_verso(b.hex)
+	if spara and t.p.attivo(g) and not t.bersagli(g).is_empty():
+		g._snap_forzato = true
+		t._miglior_tiro("facile")
+
+## 352, 106, 114: prima i mezzi (granata o tiro), poi i soldati.
+func _contro_mezzi(g: Dictionary, n: int) -> void:
+	var mezzi := _su_mezzi(g)
+	if not mezzi.is_empty():
+		if _granata_mezzo(g, mezzi):
+			return
+		t._accovacciati()
+		t._miglior_tiro("vicino")
+		t._prono_se_libero()
+		return
+	if not t.bersagli(g).is_empty():
+		t._accovacciati()
+		t._miglior_tiro("vicino" if n == 352 else "facile")
+		t._prono_se_libero()
+		return
+	_verso_americano(g, n != 114)
+
+func _esegui20(g: Dictionary, n: int) -> bool:
+	var p = t.p
+	var m20 = p.ss.m20
+	match n:
+		352, 106, 114:
+			_contro_mezzi(g, n)
+		115, 241:
+			var mezzi: Array = m20.mezzi_attivi()
+			var sotto: Array = mezzi.filter(func(v): return v.hex == g.hex)
+			var adiac: Array = mezzi.filter(func(v): return E.distanza(v.hex, g.hex) == 1)
+			if int(g.munizioni.get("granata", 0)) > 0 and g.hex == "U13" and not sotto.is_empty():
+				g.postura = "standing"
+				p._log("tedesco", "Il %s si sporge dalla finestra e lascia cadere una granata sul mezzo sotto." % p.nome(g))
+				g.munizioni.granata = int(g.munizioni.granata) - 1
+				p.ss.m20.esplosione("granata", g.hex)
+				t._prono_se_libero()
+			elif int(g.munizioni.get("granata", 0)) > 0 and not adiac.is_empty():
+				adiac.sort_custom(func(a, b): return (E.colonna(a.hex) > E.colonna(b.hex)) if n == 115 else (E.colonna(a.hex) < E.colonna(b.hex)))
+				t._accovacciati()
+				if p.probabilita_lancio(g, "granata", adiac[0].hex).ok:
+					p.risolvi_lancio(g, "granata", adiac[0].hex)
+				t._prono_se_libero()
+			elif int(g.munizioni.get("granata", 0)) <= 0 and not t.bersagli(g).filter(func(a): return a.hex != g.hex).is_empty():
+				t._accovacciati()
+				t._miglior_tiro("vicino")
+				t._prono_se_libero()
+			elif t.bersagli(g).is_empty() and _piu_vicino20(g, p.americani_attivi_in_mappa()).is_empty() \
+					or (t.bersagli(g).is_empty() and E.distanza(_piu_vicino20(g, p.americani_attivi_in_mappa()).hex, g.hex) > 3):
+				if n == 115:
+					m20._togli(g, 0, "")
+				else:
+					g.reazione = "M"
+					p._log("tedesco", "Il %s passa alla reazione speciale M." % p.nome(g))
+			else:
+				t._accovacciati()
+		132:
+			if not t.bersagli(g).is_empty():
+				_per_numero20([[0, 3, 815], [4, 4, 840], [5, 6, 841], [7, 9, 770]])
+			elif int(p.s.condizione) == 1:
+				t._accovacciati()
+			elif int(p.s.condizione) == 2:
+				_verso_americano(g, false)
+			else:
+				m20._togli(g, 0, "")
+		139:
+			if t.bersagli(g).is_empty():
+				_verso_americano(g, false)
+			else:
+				_per_numero20([[0, 1, 815], [2, 2, 840], [3, 6, 770], [7, 9, 841]])
+		462:
+			if t.bersagli(g).is_empty():
+				var tutti_est := true
+				for a in p.americani_attivi_in_mappa():
+					if E.colonna(a.hex) <= 13:
+						tutti_est = false
+				if tutti_est:
+					m20._togli(g, 1, "tiratore scelto uscito dalla mappa")
+				elif not t._lancia_granata(6):
+					t._accovacciati()
+			else:
+				_per_numero20([[0, 3, 802], [4, 6, 808], [7, 8, 824], [9, 9, 800]])
+		466, 467:
+			if t.bersagli(g).is_empty() and g.hex == "Q9":
+				t._alzati()
+				t._passo("R8", false)
+				t._accovacciati()
+				t._miglior_tiro("facile" if n == 466 else "vicino")
+			elif t.bersagli(g).is_empty() and m20.passati_tutti("W6"):
+				m20._togli(g, 1, "mitragliere uscito dalla mappa")
+			elif n == 466:
+				_per_numero20([[0, 0, 843], [1, 3, 841], [4, 6, 815], [7, 9, 770]])
+			else:
+				_per_numero20([[0, 3, 841], [4, 4, 843], [5, 8, 815], [9, 9, 770]])
+		549:
+			var stesso: Array = p.unita_in(g.hex, "us")
+			var visti: Array = t.bersagli(g)
+			if not stesso.is_empty():
+				t._assalta(t._bersaglio_assalto())
+			elif not visti.filter(func(a): return E.distanza(a.hex, g.hex) == 1).is_empty():
+				t._accovacciati()
+				t._miglior_tiro("facile")
+				t._prono_se_libero()
+			elif int(g.munizioni.get("granata", 0)) > 0 and not p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) in [2, 3]).is_empty():
+				t._accovacciati()
+				t._lancia_granata(3)
+				t._prono_se_libero()
+			elif int(g.munizioni.get("granata", 0)) > 0 and not visti.filter(func(a): return E.distanza(a.hex, g.hex) in [4, 5, 6]).is_empty():
+				t._alzati()
+				t._lancia_granata(6)
+				t._prono_se_libero()
+			elif not visti.filter(func(a): return E.distanza(a.hex, g.hex) in [4, 5, 6]).is_empty():
+				t._accovacciati()
+				t._miglior_tiro("vicino")
+				t._prono_se_libero()
+			else:
+				var num := int(p.s.round.get("numero_azione", 0))
+				var idx: int = [471, 472, 473].find(int(g.num))
+				var tab: Array = [[502, 503, 504], [503, 504, 502], [504, 502, 503]]
+				var riga := 0 if num <= 2 else (1 if num <= 5 else 2)
+				var par: int = tab[riga][maxi(idx, 0)]
+				p._log("tedesco", "Il %s esegue il %d." % [p.nome(g), par])
+				m20.mortaio_azione(g, par)
+		502, 503, 504:
+			m20.mortaio_azione(g, n)
+		_:
+			return false
+	return true

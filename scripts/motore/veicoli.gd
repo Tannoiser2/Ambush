@@ -110,8 +110,11 @@ func sali(un: Dictionary, veic: Dictionary) -> String:
 		return "La scialuppa si vara da una spiaggia o da una banchina: portala lì (servono quattro uomini in piedi)."
 	if un.hex != veic.hex:
 		return "Si sale solo su un veicolo nello stesso esagono."
-	if occupanti(veic).size() >= int(MODELLI[veic.modello].posti):
-		return "Il veicolo è pieno."
+	if occupanti(veic).size() >= int(veic.get("posti", MODELLI[veic.modello].posti)):
+		var e_ss: String = p.ss.sali_esterno(un, veic) if p.ss != null else "-"
+		if e_ss == "":
+			return ""
+		return "Il veicolo è pieno." if e_ss == "-" else e_ss
 	un.veicolo = veic.id
 	veic.occupanti.append(un.id)
 	un.postura = "crouching"

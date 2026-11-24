@@ -74,7 +74,7 @@ func imposta_missione(n: int) -> void:
 	elif str(missione.get("libro", "")) == "ss":
 		# Silver Star: libretto proprio; i paragrafi d’azione tedeschi 800–869 restano quelli del gioco base.
 		paragrafi = _paragrafi_base.duplicate()
-		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_ss.json")), true)
+		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_ss%d.json" % int(missione.id))), true)
 	else:
 		paragrafi = _paragrafi_base
 	terreno = TerrenoScript.new("res://data/mappa_%s.json" % str(missione.get("mappa", "A")).to_lower())
@@ -277,6 +277,7 @@ func inizia_missione() -> Dictionary:
 	if bool(regola("jeep", false)) and not s.get("veicoli", {}).has("vjeep"):
 		_jeep_di_squadra(esagoni)
 	ph.dopo_ingresso(esagoni)
+	ss.m20.dopo_ingresso(esagoni)
 	if int(regola("mine_anticarro", 0)) > 0 and not s.has("mine_at"):
 		_piazza_mine_anticarro(esagoni)
 	if bool(regola("bazooka_pronti", false)):
@@ -685,6 +686,8 @@ func movimento_rosso(h: String) -> String:
 ## Risolve un riferimento delle carte (con eventuale prefisso di avvistamento).
 func _risolvi_riferimento(rif: String, ctx: Dictionary) -> void:
 	if rif == "NONE" or rif == "":
+		return
+	if ss.m20.riferimento_t(rif, ctx):
 		return
 	if rif.begins_with("s") and ":" in rif:
 		var parti := rif.split(":")
@@ -2150,6 +2153,9 @@ func azione_ph(id: String, tipo: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+func sgombra_blocco_ss(id: String) -> Dictionary:
+	return azione_ss(id, "sgombra")
+
 ## Silver Star: esplosivo a tempo sulla chiatta, salita sulla chiatta, bazooka contro la chiatta.
 func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 	_inizio_comando()
@@ -2165,6 +2171,13 @@ func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 			err = ss.sali_chiatta(a)
 		"bazooka_chiatta":
 			err = ss.bazooka_chiatta(a, arg)
+		"sgombra":
+			err = ss.m20.sgombra(a)
+		"trasferisci":
+			var parti := arg.split(">")
+			err = ss.m20.trasferisci(a, parti[0], parti[1]) if parti.size() == 2 else "Trasferimento non valido."
+		"bazooka_blocco":
+			err = ss.m20.bazooka_blocco(a, arg)
 	if err != "":
 		return _errore(err)
 	_chiudi_azione_semplice(a)
@@ -3531,6 +3544,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	for id in ids:
 		ss.dopo_ingresso_acqua(u(str(id)))
 	ss.dopo_mossa_operazioni()
+	ss.m20.dopo_movimento(ids)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))
@@ -3609,7 +3623,7 @@ func scegli_azione(id: String, azione: String) -> Dictionary:
 					return _errore("Il veicolo è fermo per un incidente in questo turno.")
 				var m: Dictionary = veicoli.MODELLI[veic.modello]
 				t.azione = "muovi"
-				t.mp = int(m.veloce) if veic.gomme else int(m.lenta)
+				t.mp = int(m.veloce) if veic.gomme and not ss.m20.solo_piano(veic) else int(m.lenta)
 				if int(veic.get("forature", 0)) > 0 and not veic.gomme:
 					return _errore("La jeep ha una gomma a terra: prima va montata la ruota di scorta.")
 				t.mp_lenta = int(m.lenta)
@@ -3673,6 +3687,9 @@ func scendi_veicolo(id: String) -> Dictionary:
 		return _errore("Si scende solo da una canoa spiaggiata: prima portala a riva.")
 	if a.get("autista_camion", false) and veicoli.attivo(veic):
 		return _errore("L’autista del camion non può scendere.")
+	var e_conv: String = ss.m20.verifica_scendi(a)
+	if e_conv != "":
+		return _errore(e_conv)
 	if s.fase == "round":
 		var t := _turno_di(a)
 		if t.azione == "":
@@ -4826,6 +4843,12 @@ func esci(id: String) -> Dictionary:
 	var e := _azione_semplice(a)
 	if e != "":
 		return _errore(e)
+	var e_ss: String = ss.m20.esci(a)
+	if e_ss != "-":
+		if e_ss != "":
+			return _errore(e_ss)
+		_fine_comando()
+		return OK
 	var camion: bool = not ph.camion_di(a).is_empty()
 	if camion and a.hex != "A3":
 		return _errore("Il camion esce soltanto da A3.")
@@ -5585,6 +5608,7 @@ func _calcola_fine(modo: String) -> void:
 			righe.append(["%s attivo alla fine" % nome(a), int(a.pv_attivo_fine)])
 	bonus += mo.righe_fine(righe)
 	bonus += ph.righe_fine(righe)
+	bonus += ss.m20.righe_fine(righe)
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

@@ -455,6 +455,8 @@ func _draw() -> void:
 			if veic.stato != "attivo":
 				col = Color("3a3a3a")
 			var extra := "" if veic.stato == "attivo" else " (FUORI USO)"
+			if int(veic.get("carichi", 0)) > 0:
+				extra += " · %d %s" % [int(veic.carichi), "CARICO" if int(veic.carichi) == 1 else "CARICHI"]
 			if veic.stato == "attivo" and int(veic.get("forature", 0)) > 0 and not veic.gomme:
 				extra = " (GOMMA A TERRA)"
 			_marcatore(str(veic.hex), str(veic.nome).to_upper() + extra, Vector2(0.0, 0.66), col)

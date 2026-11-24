@@ -39,6 +39,8 @@ func _init() -> void:
 		obiettivi = ["V12", "W14", "U15", "S14", "T11", "W16"]
 	elif missione == 4:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
+	elif missione == 20:
+		obiettivi = ["F4", "I5", "N4", "S4", "W6", "W10", "X12", "J14", "F16", "B19", "A8"]
 	elif missione == 19:
 		obiettivi = ["D1", "F4", "J7", "M7", "C6", "I7", "S1", "Q5"]
 	for i in n:
@@ -89,6 +91,12 @@ func gioca(seme: int) -> void:
 	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
 		p.schiera([p.americani()[0].id], "Y8")
+		p.inizia_missione()
+	elif bool(p.regola("convoglio", false)):
+		p.nuova(seme, true)
+		var ing_c: String = ["A8", "B19"][seme % 2]
+		for a in p.americani():
+			p.schiera([a.id], ing_c)
 		p.inizia_missione()
 	elif bool(p.regola("lancio", false)) or int(p.regola("max_edifici", 0)) > 0 or int(p.regola("canoe", 0)) > 0 or int(p.regola("schieramento_ruscello", 0)) > 0:
 		p.nuova(seme, true)
@@ -158,6 +166,12 @@ func gioca(seme: int) -> void:
 			print("ERRORE [seme %d]: %s" % [seme, v.x])
 	statistiche.attivazioni += p.s.attivati.size()
 	statistiche.passi += passi
+	if OS.get_environment("AMBUSH_CRONACA") == "1":
+		for c in p.s.cronaca:
+			if str(c.t) in ["danno", "combattimento", "dado", "tedesco", "par", "info", "attivazione"]:
+				print("  [%s] %s" % [c.t, str(c.x).left(160)])
+	if OS.get_environment("AMBUSH_FINE") == "1":
+		print("FINE [seme %d] fase=%s passi=%d %s" % [seme, p.s.fase, passi, JSON.stringify(p.s.fine).left(400)])
 	if p.s.fine.get("vinta", false):
 		statistiche.vinte += 1
 	else:
@@ -183,7 +197,93 @@ func _passo_verso(p, a: Dictionary, meta: String, rng: RandomNumberGenerator) ->
 			migliore = d
 	return migliore
 
+## Missione 20: la jeep in testa segue la strada verso la tappa successiva; davanti a un blocco qualcuno scende e lo sgombra.
+func _strada_bfs(p, v: Dictionary, da: String, meta: String) -> String:
+	var prec := {da: ""}
+	var coda: Array = [da]
+	while not coda.is_empty():
+		var h: String = coda.pop_front()
+		if h == meta:
+			break
+		for n in E.vicini(h):
+			if prec.has(n):
+				continue
+			var t: String = p.terreno.tipo(n)
+			if not (t == "road" or p.terreno.ponte(n)) and n != meta:
+				continue
+			if p.veicoli.costo(v, h, n) < 0 and not (n in p.s.get("blocchi", [])):
+				continue
+			prec[n] = h
+			coda.append(n)
+	if not prec.has(meta):
+		return ""
+	var x := meta
+	while prec[x] != da and prec[x] != "":
+		x = prec[x]
+	return x
+
+func _tappa20(p, v: Dictionary) -> String:
+	var fine: Dictionary = p.s.get("ss", {}).get("fine20", {})
+	var tappe: Array = (["W6", "W10", "F16", "B19"] if p.s.get("ss", {}).get("ingresso20", "A8") == "A8" else ["W10", "W6", "F4", "A8"])
+	if not fine.is_empty():
+		tappe = [fine.mezzi[0]]
+	var k := 0
+	while k < tappe.size() - 1 and str(tappe[k]) in v.get("passati", []):
+		k += 1
+	return str(tappe[k])
+
+func _guida_round(p, a: Dictionary) -> bool:
+	var v: Dictionary = p.veicoli.di(a)
+	if not v.get("convoglio", false) or not p.veicoli.e_autista(a) or not p.veicoli.attivo(v):
+		return false
+	var fine: Dictionary = p.s.get("ss", {}).get("fine20", {})
+	if not fine.is_empty() and v.hex in fine.mezzi:
+		return p.esci(a.id).ok
+	p.scegli_azione(a.id, "muovi")
+	if p.s.turno.is_empty() or p.s.turno.get("id", "") != a.id:
+		return false
+	for i in 5:
+		var verso := _strada_bfs(p, v, v.hex, _tappa20(p, v))
+		if verso == "" or verso in p.s.get("blocchi", []) or p.s.turno.is_empty() or p.s.turno.get("id", "") != a.id:
+			break
+		if not p.muovi([a.id], verso).ok:
+			break
+	if not p.s.turno.is_empty() and p.s.turno.get("id", "") == a.id:
+		p.fine_azione(a.id)
+	return true
+
+func _mossa_convoglio(p, rng: RandomNumberGenerator) -> bool:
+	var m20 = p.ss.m20
+	var lista: Array = m20.mezzi_attivi()
+	if lista.is_empty():
+		return false
+	var v: Dictionary = lista[0]
+	var autista: Dictionary = p.veicoli.autista(v)
+	if autista.is_empty() or not p.attivo(autista):
+		return false
+	var fine: Dictionary = p.s.get("ss", {}).get("fine20", {})
+	if not fine.is_empty() and v.hex in fine.mezzi:
+		p.esci(autista.id)
+		return true
+	var verso := _strada_bfs(p, v, v.hex, _tappa20(p, v))
+	if verso == "":
+		return false
+	if verso in p.s.get("blocchi", []):
+		for x in p.americani_attivi_in_mappa():
+			if x.hex == verso and str(x.get("veicolo", "")) == "":
+				p.sgombra_blocco_ss(x.id)
+				return true
+		for x in p.veicoli.occupanti(v):
+			if not p.veicoli.e_autista(x):
+				if p.scendi_veicolo(x.id).ok:
+					p.muovi([x.id], verso)
+					return true
+		return false
+	return p.muovi([autista.id], verso).ok
+
 func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, passi: int) -> void:
+	if p.ss.m20.attiva() and rng.randf() < 0.85 and _mossa_convoglio(p, rng):
+		return
 	if p.sherman_entrabile() and rng.randf() < 0.5:
 		p.entra_sherman()
 		return
@@ -254,6 +354,8 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 		p.muovi([a.id], verso)
 
 func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Dictionary) -> void:
+	if p.ss.m20.attiva() and rng.randf() < 0.7 and _guida_round(p, a):
+		return
 	if a.get("artiglieria", false):
 		var bers: Array = p.tedeschi_attivi()
 		if bers.is_empty():

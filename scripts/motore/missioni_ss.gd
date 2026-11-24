@@ -10,9 +10,11 @@ const ACQUA := ["water", "stream"]
 const PATTUGLIA := {60: "F5", 61: "K6"}
 
 var p  # Partita
+var m20: RefCounted
 
 func _init(partita) -> void:
 	p = partita
+	m20 = preload("res://scripts/motore/missione20_ss.gd").new(partita, self)
 
 func attiva() -> bool:
 	return str(p.missione.get("libro", "")) == "ss"
@@ -24,8 +26,11 @@ func _st() -> Dictionary:
 	return p.s.ss
 
 # ------------------------------------------------------------------ acqua
+func m19() -> bool:
+	return attiva() and int(p.missione.get("id", 0)) == 19
+
 func in_acqua(x: Dictionary) -> bool:
-	if not attiva() or x.is_empty() or str(x.get("hex", "")) == "":
+	if not m19() or x.is_empty() or str(x.get("hex", "")) == "":
 		return false
 	if p.veicoli.attivo(p.veicoli.di(x)) and not x.get("aggrappato", false):
 		return false
@@ -48,7 +53,7 @@ func dopo_nuova() -> void:
 	if not attiva():
 		return
 	_st()
-	p.terreno.acqua_ammessa = true
+	p.terreno.acqua_ammessa = int(p.missione.id) == 19
 	for a in p.americani():
 		if a.id in p.regola("sommozzatori", []):
 			a.sub = true
@@ -58,7 +63,8 @@ func dopo_nuova() -> void:
 
 func regole_terreno() -> void:
 	if attiva():
-		p.terreno.acqua_ammessa = true
+		p.terreno.acqua_ammessa = int(p.missione.id) == 19
+		m20.regole_terreno()
 
 ## Dopo l’imbarco: i sommozzatori si aggrappano ai fianchi delle canoe (due per canoa).
 func dopo_imbarco() -> void:
@@ -91,7 +97,7 @@ func dopo_imbarco() -> void:
 
 # ------------------------------------------------------------------ movimento
 func verifica_passo(a: Dictionary, verso: String) -> String:
-	if not attiva():
+	if not m19():
 		return ""
 	var veic: Dictionary = p.veicoli.di(a)
 	if a.get("aggrappato", false):
@@ -106,7 +112,7 @@ func verifica_passo(a: Dictionary, verso: String) -> String:
 
 ## In acqua si nuota: 2 PM per esagono d’acqua; dall’acqua a terra 2 PM.
 func costo_passo(a: Dictionary, da: String, verso: String, base: int) -> int:
-	if not attiva() or p.veicoli.attivo(p.veicoli.di(a)):
+	if not m19() or p.veicoli.attivo(p.veicoli.di(a)):
 		return base
 	if acqua(verso):
 		return 2
@@ -143,12 +149,16 @@ func dopo_ingresso_acqua(a: Dictionary) -> void:
 func vista(oss: Dictionary, ber: Dictionary) -> int:
 	if not attiva():
 		return -1
+	if m20.attiva():
+		return m20.vista(oss, ber)
 	if sott_acqua(oss) or sott_acqua(ber):
 		return 1 if E.distanza(oss.hex, ber.hex) <= 1 else 0
 	return -1
 
 ## In acqua: niente tiro mirato (un solo tiro rapido per turno, restando a galla) e niente bazooka.
 func blocca_tiro(tiratore: Dictionary, tipo: String, mirato: bool) -> String:
+	if m20.attiva():
+		return m20.blocca_tiro(tiratore, mirato)
 	if not attiva() or not in_acqua(tiratore) or tiratore.get("aggrappato", false):
 		return ""
 	if sott_acqua(tiratore):
@@ -162,6 +172,8 @@ func blocca_tiro(tiratore: Dictionary, tipo: String, mirato: bool) -> String:
 func mod_tiro(tiratore: Dictionary, bersaglio: Dictionary, mods: Array) -> void:
 	if not attiva():
 		return
+	if tiratore.get("esterno_ss", false) and str(tiratore.get("veicolo", "")) != "":
+		mods.append(["aggrappato al camion", -2])
 	if in_acqua(bersaglio):
 		mods.append(["bersaglio in acqua (nuotatore)", -4])
 
@@ -179,6 +191,7 @@ func colpito(tiratore: Dictionary, tipo: String, bersaglio: Dictionary, fx: Dict
 
 ## Un sommozzatore colpito o in preda al panico torna in superficie (la ferita fa perdere una casella di porto).
 func dopo_danno(x: Dictionary, l: String) -> void:
+	m20.dopo_danno(x, l)
 	if not attiva() or not sott_acqua(x) or not p.attivo(x):
 		return
 	if l in ["P", "W"] or x.panico:
@@ -221,6 +234,9 @@ func distruggi_chiatta(v: Dictionary, motivo: String) -> void:
 			p._uccidi(x, "sulla chiatta che esplode")
 
 ## Sale su una chiatta dall’acqua (un’azione) o da un esagono di terra adiacente (2 PM).
+func sali_esterno(un: Dictionary, veic: Dictionary) -> String:
+	return m20.sali_esterno(un, veic) if attiva() else "-"
+
 func sali_chiatta(a: Dictionary) -> String:
 	var v := chiatta_in(a.hex)
 	if v.is_empty():
@@ -304,6 +320,7 @@ func dopo_mossa_operazioni() -> void:
 func esplosione(tipo: String, h: String) -> void:
 	if not attiva():
 		return
+	m20.esplosione(tipo, h)
 	var v := chiatta_in(h)
 	if not v.is_empty():
 		if tipo == "satchel":
@@ -527,11 +544,15 @@ func sub_americani() -> Array:
 func inizio_round() -> void:
 	if not attiva():
 		return
+	m20.inizio_round()
 	for v in p.veicoli.tutti():
 		if v.lato == "de":
 			v.bersagliato = false
 
 func controlla() -> void:
+	if m20.attiva():
+		m20.controlla()
+		return
 	if not attiva() or p.s.fase == "fine" or not _st().fine_789:
 		return
 	var vivi: Array = p.americani_attivi_in_mappa()
@@ -557,15 +578,21 @@ func niente_pv_incapacitati() -> bool:
 	return attiva() and int(_st().get("fine_modo", 0)) == 2
 
 func blocca_fine() -> bool:
+	if m20.attiva():
+		return m20.blocca_fine()
 	return attiva() and not _st().fine_789 and not p.americani_attivi_in_mappa().is_empty()
 
 func uscita_ammessa(h: String) -> bool:
+	if m20.attiva():
+		return m20.uscita_ammessa(h)
 	return not attiva() or _st().fine_789
 
 # ------------------------------------------------------------------ operazioni dei paragrafi
 func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva() or not str(o.op).begins_with("ss_"):
 		return false
+	if m20.op(o, ctx):
+		return true
 	match str(o.op):
 		"ss_magazzino":
 			var h: String = str(ctx.get("hex", ""))
@@ -656,6 +683,9 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 func test(t: Dictionary, ctx: Dictionary):
 	if not attiva():
 		return null
+	var t20 = m20.test(t, ctx)
+	if t20 != null:
+		return t20
 	if t.has("ss_sott_acqua"):
 		var chi := _chi(ctx)
 		return (not chi.is_empty() and sott_acqua(chi)) == bool(t.ss_sott_acqua)
