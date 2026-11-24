@@ -1171,6 +1171,10 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			var hbs: String = hb
 			if E.distanza(a.hex, hbs) <= 6 and p.terreno.vede(a.hex, hbs, a.postura, "standing"):
 				_b("Bazooka sul blocco in %s" % hbs, func(): _esito(p.azione_ss(a.id, "bazooka_blocco", hbs)), "+2 per colpire; solo una penetrazione pesante lo sgombra.")
+	if p.ss.m24.puo_prendere(a):
+		_b("Prendi i muli", func(): _esito(p.azione_ss(a.id, "prendi_muli")), "Si prende la corda di uno o due muli incustoditi nello stesso esagono: poi seguono il soldato. Chi guida i muli spara solo di rapido.")
+	if p.ss.m24.puo_lasciare(a):
+		_b("Lascia i muli (%d)" % p.ss.m24.muli_di(a).size(), func(): _esito(p.azione_ss(a.id, "lascia_muli")), "I muli restano qui, incustoditi: possono imbizzarrirsi o essere presi dai tedeschi.")
 	if p.ss.m22.puo_scendere(a):
 		_b("Scendi sotto il ponte", func(): _esito(p.azione_ss(a.id, "sotto_ponte")), "Un’azione: si scende fra i sostegni (accovacciati), dove si cercano e si disinnescano gli esplosivi. Lì si è difficili da colpire.")
 	if p.ss.m22.puo_risalire(a):

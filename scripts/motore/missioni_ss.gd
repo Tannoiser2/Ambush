@@ -13,12 +13,16 @@ var p  # Partita
 var m20: RefCounted
 var m21: RefCounted
 var m22: RefCounted
+var m23: RefCounted
+var m24: RefCounted
 
 func _init(partita) -> void:
 	p = partita
 	m20 = preload("res://scripts/motore/missione20_ss.gd").new(partita, self)
 	m21 = preload("res://scripts/motore/missione21_ss.gd").new(partita, self)
 	m22 = preload("res://scripts/motore/missione22_ss.gd").new(partita, self)
+	m23 = preload("res://scripts/motore/missione23_ss.gd").new(partita, self)
+	m24 = preload("res://scripts/motore/missione24_ss.gd").new(partita, self)
 
 func attiva() -> bool:
 	return str(p.missione.get("libro", "")) == "ss"
@@ -71,6 +75,7 @@ func regole_terreno() -> void:
 		m20.regole_terreno()
 		m21.regole_terreno()
 		m22.regole_terreno()
+		m23.regole_terreno()
 
 ## Dopo l’imbarco: i sommozzatori si aggrappano ai fianchi delle canoe (due per canoa).
 func dopo_imbarco() -> void:
@@ -120,6 +125,8 @@ func verifica_passo(a: Dictionary, verso: String) -> String:
 
 ## In acqua si nuota: 2 PM per esagono d’acqua; dall’acqua a terra 2 PM.
 func costo_passo(a: Dictionary, da: String, verso: String, base: int) -> int:
+	if m23.attiva():
+		return m23.costo_passo(a, verso, base)
 	if not m19() or p.veicoli.attivo(p.veicoli.di(a)):
 		return base
 	if acqua(verso):
@@ -165,6 +172,8 @@ func vista(oss: Dictionary, ber: Dictionary) -> int:
 
 ## In acqua: niente tiro mirato (un solo tiro rapido per turno, restando a galla) e niente bazooka.
 func blocca_tiro(tiratore: Dictionary, tipo: String, mirato: bool) -> String:
+	if m24.attiva():
+		return m24.blocca_tiro(tiratore, tipo, mirato)
 	if m20.attiva():
 		return m20.blocca_tiro(tiratore, mirato)
 	if not attiva() or not in_acqua(tiratore) or tiratore.get("aggrappato", false):
@@ -180,6 +189,7 @@ func blocca_tiro(tiratore: Dictionary, tipo: String, mirato: bool) -> String:
 func mod_tiro(tiratore: Dictionary, bersaglio: Dictionary, mods: Array) -> void:
 	if not attiva():
 		return
+	m23.mod_tiro(tiratore, bersaglio, mods)
 	if tiratore.get("calcio_rotto", false):
 		mods.append(["calcio dell’arma rotto", -1])
 	if tiratore.get("esterno_ss", false) and str(tiratore.get("veicolo", "")) != "":
@@ -308,6 +318,7 @@ func _scoppia(e: Dictionary, prematuro := false) -> void:
 func fine_round() -> void:
 	if not attiva():
 		return
+	m23.fine_round()
 	var n := int(p.s.round.get("n", 0))
 	for e in _st().esplosivi.duplicate():
 		if e.has("round") and int(e.round) <= n:
@@ -557,6 +568,8 @@ func inizio_round() -> void:
 	m20.inizio_round()
 	m21.inizio_round()
 	m22.inizio_round()
+	m23.inizio_round()
+	m24.inizio_round()
 	for v in p.veicoli.tutti():
 		if v.lato == "de" and m19():
 			v.bersagliato = false
@@ -570,6 +583,12 @@ func controlla() -> void:
 		return
 	if m22.attiva():
 		m22.controlla()
+		return
+	if m23.attiva():
+		m23.controlla()
+		return
+	if m24.attiva():
+		m24.controlla()
 		return
 	if not attiva() or p.s.fase == "fine" or not _st().fine_789:
 		return
@@ -604,6 +623,10 @@ func blocca_fine() -> bool:
 		return m21.blocca_fine()
 	if m22.attiva():
 		return m22.blocca_fine()
+	if m23.attiva():
+		return m23.blocca_fine()
+	if m24.attiva():
+		return m24.blocca_fine()
 	return attiva() and not _st().fine_789 and not p.americani_attivi_in_mappa().is_empty()
 
 func uscita_ammessa(h: String) -> bool:
@@ -613,13 +636,15 @@ func uscita_ammessa(h: String) -> bool:
 		return m21.uscita_ammessa(h)
 	if m22.attiva():
 		return m22.uscita_ammessa(h)
+	if m24.attiva():
+		return m24.uscita_ammessa(h)
 	return not attiva() or _st().fine_789
 
 # ------------------------------------------------------------------ operazioni dei paragrafi
 func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva() or not (str(o.op).begins_with("ss") or str(o.op) == "event_check_ops"):
 		return false
-	if m20.op(o, ctx) or m21.op(o, ctx) or m22.op(o, ctx):
+	if m20.op(o, ctx) or m21.op(o, ctx) or m22.op(o, ctx) or m23.op(o, ctx) or m24.op(o, ctx):
 		return true
 	match str(o.op):
 		"ss_magazzino":
@@ -739,6 +764,12 @@ func test(t: Dictionary, ctx: Dictionary):
 	var t22 = m22.test(t, ctx)
 	if t22 != null:
 		return t22
+	var t23 = m23.test(t, ctx)
+	if t23 != null:
+		return t23
+	var t24 = m24.test(t, ctx)
+	if t24 != null:
+		return t24
 	if t.has("ss_sott_acqua"):
 		var chi := _chi(ctx)
 		return (not chi.is_empty() and sott_acqua(chi)) == bool(t.ss_sott_acqua)
@@ -960,7 +991,7 @@ const AZIONI := {
 }
 
 func esegui_carro(n: int, g: Dictionary, veic: Dictionary, vc) -> bool:
-	if m22.attiva() and n == 415:
+	if (m22.attiva() or m23.attiva() or m24.attiva()) and n == 415:
 		return m22.accendi_motore(g, veic)
 	if not attiva() or not (BIVI.has(n) or AZIONI.has(n) or n in [937, 874, 840, 800]):
 		return false

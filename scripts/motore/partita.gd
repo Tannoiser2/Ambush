@@ -2207,6 +2207,10 @@ func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 			err = ss.m22.risali(a)
 		"disinnesca":
 			err = ss.m22.disinnesca(a)
+		"prendi_muli":
+			err = ss.m24.prendi(a)
+		"lascia_muli":
+			err = ss.m24.lascia(a)
 	if err != "":
 		return _errore(err)
 	_chiudi_azione_semplice(a)
@@ -3577,6 +3581,8 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	ss.dopo_mossa_operazioni()
 	ss.m20.dopo_movimento(ids)
 	ss.m22.dopo_movimento(ids)
+	ss.m23.dopo_movimento(ids)
+	ss.m24.dopo_movimento(ids)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))
@@ -4915,6 +4921,7 @@ func esci(id: String) -> Dictionary:
 	a.hex = ""
 	_log("azione", "%s esce dalla mappa." % nome(a))
 	_fx("sparisce", {"ids": [a.id], "da": da_e, "motivo": "uscito"})
+	ss.m24.dopo_uscita(a)
 	_chiudi_azione_semplice(a)
 	_fine_comando()
 	return OK
@@ -5467,7 +5474,7 @@ func esagoni_edificio() -> Array:
 ## Esagono in cui un incapacitato non costa PV se la missione finisce con l’obiettivo raggiunto.
 func _salvo_a_fine(h: String) -> bool:
 	if numero == 1 or bool(regola("salvi_in_edificio", false)):
-		return terreno.edificio(h)
+		return terreno.edificio(h) or h in regola("salvi_esagoni", [])
 	return h in missione.get("obiettivi", [])
 
 ## Righe del pannello obiettivi: [fatto, etichetta, spiegazione].
@@ -5645,6 +5652,7 @@ func _calcola_fine(modo: String) -> void:
 	bonus += ph.righe_fine(righe)
 	bonus += ss.m20.righe_fine(righe)
 	bonus += ss.m21.righe_fine(righe)
+	bonus += ss.m24.righe_fine(righe)
 	if numero == 3:
 		var usciti := 0
 		for a in americani():

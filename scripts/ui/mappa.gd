@@ -389,6 +389,33 @@ func _draw() -> void:
 		if str(marcatori[k]) != "":
 			draw_arc(centro_schermo(str(marcatori[k])), RAGGIO * zoom * 0.7, 0.0, TAU, 32, Color(0.85, 0.25, 0.15, 0.9), maxf(2.0, 4.0 * zoom))
 			_marcatore(str(marcatori[k]), "MORTAIO %d" % (k + 1), Vector2(0.0, 0.55 - 0.3 * k), Color("8f2a1e"))
+	# Silver Star 24: muli
+	var m24: Dictionary = s.get("ss", {}).get("m24", {})
+	if not m24.is_empty():
+		var per_esagono := {}
+		for m in m24.get("muli", []):
+			if str(m.stato) in ["attivo", "ferito"] and str(m.hex) != "":
+				per_esagono[str(m.hex)] = per_esagono.get(str(m.hex), []) + [m]
+		for hm in per_esagono:
+			var lista: Array = per_esagono[hm]
+			var guidati: int = lista.filter(func(x): return str(x.guida) != "").size()
+			var testo_m := "%d MUL%s" % [lista.size(), "O" if lista.size() == 1 else "I"]
+			if guidati < lista.size():
+				testo_m += " (%d SOLI)" % (lista.size() - guidati)
+			_marcatore(hm, testo_m, Vector2(0.0, 0.62), Color("6b4a2a"))
+	# Silver Star 23: segnalini delle pattuglie, filo spinato, edifici fortificati, razzi illuminanti
+	var m23: Dictionary = s.get("ss", {}).get("m23", {})
+	if not m23.is_empty():
+		for nome in m23.get("pattuglie", {}):
+			var hp: String = str(m23.pattuglie[nome].hex)
+			draw_arc(centro_schermo(hp), RAGGIO * zoom * 0.55, 0.0, TAU, 32, Color(0.6, 0.15, 0.1, 0.9), maxf(2.0, 3.0 * zoom))
+			_marcatore(hp, "PATTUGLIA %s" % nome, Vector2(0.0, 0.0), Color("7a2418"))
+		for hf in m23.get("filo", []):
+			_marcatore(str(hf), "FILO SPINATO", Vector2(0.0, 0.62), Color("4a4a4a"))
+		for hb in m23.get("fortificati", []):
+			_marcatore(str(hb), "FORTIFICATO", Vector2(0.0, -0.62), Color("3a3a3a"))
+		for hr in m23.get("razzi", []):
+			_marcatore(str(hr), "RAZZO", Vector2(0.0, -0.3), Color("8a6a12"))
 	# Silver Star 22: ponti, esplosivi sotto i ponti, soldati fra i sostegni
 	var m22: Dictionary = s.get("ss", {}).get("m22", {})
 	if not m22.is_empty():

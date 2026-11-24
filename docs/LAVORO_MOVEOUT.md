@@ -301,3 +301,39 @@ Ordine scelto: M11, M10, M12, M9.
   i segnalini); il Panzer in S13 non ha le regole dell’edificio (300); il semicingolato tedesco segue il ponte in modo diretto
   invece dei riferimenti 151–157; l’ufficiale 40 non dà turni agli altri (158 semplificato).
 - Test `tests/missione22.gd`, `simula.gd -- 4 1 22`, scatti `tests/visivi/missione22_ui.gd`.
+
+## Silver Star — Missione 23 «Sconosciuti nella notte» (mappa F, in alto è sud)
+- Carte Condizione 1–3 trascritte a vista (la 3 ha i riferimenti neri per lo Sherman US 07). Tabelle perse dall’OCR (316, 318,
+  381, 385, 387, 389, 441, 512, 516, 610, 611, 615, 194, 208, 209, 218) rilette dalle pagine del libretto. Le carte delle pattuglie
+  55–58 e 62–65, del superstite US 06 e dello Sherman US 07 lette dalle scansioni (foglio s17, carte ruotate).
+- Correzione: nella Missione 21 i PV dei tedeschi sono per chi viene ucciso o ferito gravemente (+1) e per i carri fuori uso (+3),
+  non all’attivazione (`pv_eliminato`).
+- Motore `scripts/motore/missione23_ss.gd` (p.ss.m23): nebbia (vista 3 → 5 al 387 → 10 al 318, op base `vista`); +1 PV per W8,
+  O14, Q16, S13, V14; segnalini delle pattuglie NN (5 PM) e MM (4 PM) che avanzano verso l’americano più vicino (nelle
+  Operazioni un esagono per ogni esagono percorso dalla squadra, nei Round all’inizio di ogni Round), 620/492 quando si vedono,
+  380/383 per schierarle intorno al segnalino (+4/+5 PV), azioni 730/735/739/762; razzi illuminanti e fili d’inciampo (esagono e
+  sei intorno illuminati fino a fine Round, tiro del tedesco nascosto 625/629); filo spinato (+1 PM nei Round, a terra entrando,
+  0 uscendo = ferita); edifici fortificati con le mitragliatrici 59/66 (−2 a chi spara da fuori); Panzer 67 nascosto (415) e 68
+  in arrivo (consapevolezza per il rumore); superstite US 06 nella squadra; scelta 442 (Sherman US 07 con 17 PV, o da soli con
+  14); fine nella Condizione 3 dopo s7 e s8 senza tedeschi attivi (feriti gravi salvi in un edificio o nella galleria).
+- Azioni base 760 e 761 ora gestite per tutte le missioni Silver Star.
+- Semplificazioni: i diagrammi di schieramento delle pattuglie sono approssimati (esagono del segnalino e intorno); le regole
+  dell’edificio fortificato si riducono al −2; il Panzer in casa non ha le regole del 300; il superstite non si spara addosso per
+  errore (388 lo aggiunge alla squadra).
+- Test `tests/missione23.gd`, `simula.gd -- 4 1 23`, scatti `tests/visivi/missione23_ui.gd`.
+
+## Silver Star — Missione 24 «Il blues del mulattiere» (mezze mappe G e H, in alto è ovest; poi mappa F)
+- Carte Condizione 1–3 trascritte a vista (la 1 vale per le mappe G/H, la 2 e la 3 per la mappa F); carte 72–77 e pattuglia 78–81.
+- Motore `scripts/motore/missione24_ss.gd` (p.ss.m24): schieramento a sezioni (un comandante in D9, il resto in I9/J9); telefono
+  (320); scarico di 6 muli dalla chiatta in K8 (179: 9 il mulo scivola, −1 PV per mulo perso); muli come segnalini (`s.ss.m24.muli`)
+  guidati da un soldato (uno o due, bottoni «Prendi i muli» / «Lascia i muli»), che seguono chi li guida, non entrano nei dirupi,
+  al massimo 4 per esagono; chi guida spara solo di rapido e niente bazooka/BAR/mitragliatrici; danni ai muli (527, carico che
+  esplode), mulo imbizzarrito (529), calpestati (500), furto dei muli (747: il tedesco li porta verso U19/Y17 ed esce: −1 PV,
+  −2 per mulo); reazione speciale M (prima i muli); uscita a nord Y10–Y14 dopo il 175 e passaggio alla mappa F (631,
+  `cambia_mappa`), rientro fra A19 e C19; Condizione 3 (637): uscita dall’angolo nord-est W1–Y3, +1 per americano, +2 per mulo,
+  +1 per tedesco attivo rimasto, −2 per mulo rimasto, 21 PV. Pattuglia 78–81 con i segnalini della 23 (525/741/633/745).
+  Mortaio 77 con il codice del mortaio della 20 (501 → 549, 502–504).
+- Azioni base aggiunte per Silver Star: 635, 848, 849, 883, 884, 846, 847, 740, 749, 520, 322.
+- Semplificazioni: i diagrammi della pattuglia sono approssimati; il mortaio non riceve le coordinate dal cecchino 76; il rientro
+  sulla mappa F non legge i paragrafi degli esagoni d’ingresso; i muli feriti non hanno il limite di 2 PM.
+- Test `tests/missione24.gd`, `simula.gd -- 2 1 24`, scatti `tests/visivi/missione24_ui.gd`.

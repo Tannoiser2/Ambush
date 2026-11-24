@@ -151,6 +151,13 @@ TEDESCHI_21 = {
                        "immobile": False, "pv_distrutto": 0, "primo_turno": 0,
                        "testo": "Enters open; cannon prepared. Drives slow until fired upon."}),
 }
+# Silver Star 21: i PV si guadagnano eliminando i tedeschi (+1) e mettendo fuori uso i carri (+3), non all’attivazione.
+for _k, _c in TEDESCHI_21.items():
+    _c["pv"] = 0
+    if "carro" in _c:
+        _c["carro"]["pv_distrutto"] = 3
+    else:
+        _c["pv_eliminato"] = 1
 CARRI_US_21 = {
     "4": carta("AA", "Sherman", 0, [], 0, 4, 8, 1, 8, 6, [[0, 9]], ["1-6"], [[800]],
                carro={"modello": "sherman", "gruppi": [[0, 1], [2, 7], [8, 9]],
@@ -204,6 +211,71 @@ TEDESCHI_22 = {
                                  "1": {"IN": 1, "PC": 1, "WS": -1, "DS": 2, "par": [874, 814, 921, 923]}},
                        "immobile": False, "pv_distrutto": 3, "primo_turno": 415,
                        "testo": "Enters open; cannon prepared. On first turn, conduct 415."}),
+}
+
+def pattuglia(lettera, ruolo, armi, granate, IN, PC, WS, MPA, primo, altri, **extra):
+    return carta(lettera, ruolo, 0, armi, granate, IN, PC, WS, 4, MPA, [[0, 9]], ["1-3", "S"], [[altri, altri]], primo_turno=primo,
+                 **extra)
+
+
+TEDESCHI_23 = {
+    "39": carta("N", "Guardia SS", 1, ["scoped"], 2, 5, 7, 1, 6, 5, [[0, 0], [1, 4], [5, 8], [9, 9]], ["1-3", "S"],
+                [[860, 816], [869, 859], [862, 812], [866, 817]]),
+    "69": carta("T", "Guardia SS", 1, ["mp", "pistol"], 2, 3, 4, 0, 6, 4, [[0, 3], [4, 5], [6, 8], [9, 9]], ["1-3", "S"],
+                [[864, 833], [865, 817], [866, 839], [862, 215]]),
+    "59": carta("L", "Mitragliere SS", 1, ["lmg", "pistol"], 2, 3, 7, 1, 8, 4, [[0, 2], [3, 5], [6, 8], [9, 9]], ["1-3", "S"],
+                [[869, 816], [959, 770], [815, 859], [760, 857]], primo_turno=815, mg_squadra=66),
+    "66": carta("P", "Mitragliere SS", 1, ["bolt"], 0, 1, 2, -1, 4, 3, [[0, 0], [1, 5], [6, 7], [8, 9]], ["1-3", "S"],
+                [[761, 711], [824, 971], [815, 842], [829, 843]], primo_turno=869, assiste=59),
+    "55": pattuglia("M", "SS della pattuglia NN", ["mp"], 2, 4, 6, 1, 4, 739, 762),
+    "56": pattuglia("U", "SS della pattuglia NN", ["mp"], 2, 3, 5, 0, 4, 739, 762),
+    "57": pattuglia("W", "SS della pattuglia NN", ["mp"], 2, 2, 2, -1, 4, 739, 762),
+    "58": pattuglia("Y", "Sottufficiale SS (pattuglia NN)", ["mp"], 2, 5, 9, 2, 5, 735, 735, pv_cattura=2),
+    "62": pattuglia("R", "SS della pattuglia MM", ["mp"], 3, 2, 2, -1, 4, 739, 730),
+    "63": pattuglia("S", "SS della pattuglia MM", ["bolt"], 2, 3, 5, 0, 4, 739, 730),
+    "64": pattuglia("X", "SS della pattuglia MM", ["scoped"], 2, 4, 7, 1, 4, 739, 730),
+    "65": pattuglia("Z", "Capitano SS (pattuglia MM)", ["mp", "pistol"], 1, 5, 8, 0, 5, 735, 735, pv_cattura=2),
+    "67": TEDESCHI_22["67"],
+    "68": carta("PP", "Panzer IV", 2, [], 0, 4, 7, 1, 8, 6, [[0, 9]], ["1-3"], [[800]],
+                carro={"modello": "panzer4", "gruppi": [[0, 1], [2, 5], [6, 8], [9, 9]],
+                       "righe": {"5": {"IN": 4, "PC": 7, "WS": 1, "DS": 8, "par": [708, 709, 707, 924]},
+                                 "4": {"IN": 4, "PC": 6, "WS": 1, "DS": 6, "par": [906, 902, 905, 827]},
+                                 "3": {"IN": 4, "PC": 5, "WS": 0, "DS": 6, "par": [905, 826, 907, 906]},
+                                 "2": {"IN": 3, "PC": 4, "WS": -1, "DS": 4, "par": [908, 814, 910, 910]},
+                                 "1": {"IN": 2, "PC": 3, "WS": -2, "DS": 2, "par": [874, 925, 934, 933]}},
+                       "immobile": False, "pv_distrutto": 3, "primo_turno": 923, "testo": "Enters open; cannon prepared."}),
+}
+CARRI_US_23 = {
+    "7": carta("AA", "Sherman", 0, [], 0, 5, 9, 1, 8, 6, [[0, 9]], ["1-6"], [[800]],
+               carro={"modello": "sherman", "gruppi": [[0, 0], [1, 3], [4, 6], [7, 9]],
+                      "righe": {"5": {"IN": 5, "PC": 9, "WS": 1, "DS": 8, "par": [946, 939, 946, 939]},
+                                "4": {"IN": 5, "PC": 8, "WS": 1, "DS": 8, "par": [946, 946, 939, 939]},
+                                "3": {"IN": 4, "PC": 7, "WS": 0, "DS": 6, "par": [956, 956, 956, 956]},
+                                "2": {"IN": 3, "PC": 4, "WS": 0, "DS": 4, "par": [956, 956, 956, 956]},
+                                "1": {"IN": 2, "PC": 1, "WS": -1, "DS": 4, "par": [706, 706, 706, 706]}},
+                      "immobile": False, "pv_distrutto": 0, "primo_turno": 944, "testo": "Enters open; cannon unprepared."}),
+}
+
+TEDESCHI_24 = {
+    "72": carta("R", "Mitragliere", 1, ["bolt"], 1, 1, 3, -1, 4, 3, [[0, 3], [4, 4], [5, 7], [8, 9]], ["1", "2-3", "S", "A", "B", "M"],
+                [[848, 635, 817, 740, 749, 807], [884, 849, 818, 740, 749, 862], [841, 848, 833, 740, 749, 868],
+                 [815, 815, 812, 740, 749, 866]], assiste=73),
+    "73": carta("L", "Mitragliere", 1, ["lmg", "pistol"], 2, 3, 4, 1, 2, 4, [[0, 0], [1, 4], [5, 6], [7, 9]], ["1", "2-3", "S", "A", "B", "M"],
+                [[959, 849, 971, 740, 749, 843], [884, 883, 816, 740, 749, 865], [959, 847, 825, 740, 749, 815],
+                 [815, 815, 817, 740, 749, 867]], mg_squadra=72),
+    "74": carta("S", "Mitragliere", 1, ["mp"], 2, 3, 7, -1, 2, 4, [[0, 0], [1, 3], [4, 6], [7, 9]], ["1-3", "S", "M"],
+                [[841, 215, 820], [815, 818, 819], [817, 825, 809], [635, 711, 866]], assiste=75),
+    "75": carta("X", "Mitragliere", 1, ["lmg", "pistol"], 1, 3, 5, 0, 4, 4, [[0, 3], [4, 5], [6, 6], [7, 9]], ["1-3", "S", "M"],
+                [[815, 839, 807], [959, 859, 862], [884, 816, 809], [846, 833, 863]], mg_squadra=74),
+    "76": carta("M", "Cecchino", 1, ["bolt"], 2, 4, 6, 1, 6, 4, [[0, 2], [3, 4], [5, 7], [8, 9]], ["1-3", "S", "B", "M"],
+                [[808, 812, 520, 807], [801, 833, 520, 809], [802, 869, 520, 812], [824, 817, 520, 868]]),
+    "471": carta("P", "Squadra del mortaio", 1, ["bolt"], 2, 0, 1, 0, 0, 3, [[0, 9]], ["1-3", "S", "M"], [[501, 501, 501]], mortaio=77),
+    "472": carta("Q", "Squadra del mortaio", 1, ["mp"], 2, 1, 2, -2, 0, 3, [[0, 9]], ["1-3", "S", "M"], [[501, 501, 501]], mortaio=77),
+    "473": carta("V", "Squadra del mortaio", 0, ["bolt"], 2, 1, 2, 0, 0, 3, [[0, 9]], ["1-3", "S", "M"], [[501, 501, 501]], mortaio=77),
+    "78": pattuglia("Y", "Uomo della pattuglia", ["mp"], 2, 4, 6, 1, 4, 742, 742),
+    "79": pattuglia("U", "Uomo della pattuglia", ["bolt"], 2, 3, 6, 0, 4, 743, 743),
+    "80": pattuglia("Z", "Uomo della pattuglia", ["bolt"], 3, 5, 6, 0, 5, 743, 743),
+    "81": pattuglia("N", "Sottufficiale della pattuglia", ["mp", "pistol"], 1, 5, 7, 2, 5, 744, 744, pv_cattura=2),
 }
 
 ESAGONI_PV_22 = ["O4", "W8", "V14", "K14", "J14", "I15"]
@@ -304,7 +376,7 @@ MISSIONI = {
                    "sezioni": [{"nome": "la sezione A", "n": 4, "esagoni": SEZ_A}, {"nome": "la sezione B", "n": 4, "esagoni": SEZ_B}],
                    "salvi_in_edificio": True, "missione_21": True},
         "modifiche_iniziali": {},
-        "vittoria_testo": "[b]Servono 8 PV.[/b] +1 per ogni tedesco attivato, +3 per ciascun carro; −3 se lo Sherman o la "
+        "vittoria_testo": "[b]Servono 8 PV.[/b] +1 per ogni tedesco ucciso o ferito gravemente, +3 per ogni carro fuori uso; −3 se lo Sherman o la "
                           "motovedetta vanno fuori uso, −2 se il cannone navale è distrutto. Come finisce la missione si scopre "
                           "durante il gioco.",
         "testo_fine": "",
@@ -337,6 +409,56 @@ MISSIONI = {
                           "esplosivo disinnescato; il resto (e quanti PV servono) si scopre durante la missione.",
         "testo_fine": "",
     },
+    23: {
+        "titolo": "Sconosciuti nella notte", "titolo_originale": "Strangers in the Night",
+        "data": "Settembre 1944, a sud della linea Gotica", "mappa": "F", "nord": "in basso (in alto è sud)", "libro": "ss",
+        "briefing": "Settembre 1944. La divisione manda la squadra avanti a occupare un villaggio che sorveglia l’accesso a una "
+                    "galleria strategica fra le montagne: mettete in sicurezza il villaggio e controllate che i tedeschi in "
+                    "ritirata non abbiano minato la galleria. È appena l’alba e c’è una nebbia fitta.",
+        "ingresso": "Mappa F, in alto è sud. Ponte di pietra intatto in O4 (da N4 a P3), guado in K12 (da K11 a K13), bunker "
+                    "distrutto in K10, muri sfondati fra T15/S16, Q16/R16 e Q14/R13. La squadra entra da A1, A2 o B1. Livelli "
+                    "di attivazione: Condizione 1 da 0 a 3, Condizione 2 da 0 a 5, Condizione 3 da 0 a 7.",
+        "regole_testo": "[b]Nebbia.[/b] All’inizio si vede solo fino a 3 esagoni; la nebbia si dirada con gli eventi. "
+                        "[b]Torrente.[/b] Da O1 a N11 e poi fino ad A12: si attraversa coi PM del torrente. [b]Dirupi.[/b] "
+                        "Pendenze: 2 PM a piedi, vietati ai mezzi. [b]Pattuglie.[/b] I segnalini delle pattuglie tedesche si "
+                        "avvicinano alla squadra e non si possono attaccare finché non si schierano. [b]Galleria.[/b] Da W7 a "
+                        "W9, buia.",
+        "ingresso_breve": "A1, A2 o B1", "uscita_breve": "si scopre in gioco",
+        "ingresso_esagoni": ["A1", "A2", "B1"], "uscita_esagoni": [],
+        "vittoria_pv": 14, "attivazione": {"1": 3, "2": 5, "3": 7}, "obiettivi": [],
+        "regole": {"dirupi": "pendenza", "galleria_ss": True, "vista": 3, "missione_23": True, "salvi_in_edificio": True,
+                   "salvi_esagoni": ["W7", "W8", "W9"], "fiume": False,
+                   "terreno_ss": {"O4": {"t": "stream", "ponte": True}, "K12": {"t": "stream", "guado": True},
+                                  "W7": {"t": "road", "galleria": True}, "W8": {"t": "road", "galleria": True},
+                                  "W9": {"t": "road", "galleria": True}}},
+        "modifiche_iniziali": {},
+        "vittoria_testo": "[b]PV:[/b] +1 per la galleria (W8) e +1 per ognuno di O14, Q16, S13, V14 in cui entra la squadra; il "
+                          "resto (e quanti PV servono) si scopre durante la missione.",
+        "testo_fine": "",
+        "carri_us": CARRI_US_23,
+    },
+    24: {
+        "titolo": "Il blues del mulattiere", "titolo_originale": "Muleskinner Blues",
+        "data": "Ottobre 1943, vicino a Napoli", "mappa": "GH", "nord": "a destra (in alto è ovest)", "libro": "ss",
+        "briefing": "Ottobre 1943, vicino a Napoli. La squadra è mandata in un piccolo villaggio a ritirare dei rifornimenti "
+                    "appena arrivati.",
+        "ingresso": "Mezze mappe G e H, in alto è ovest. Un comandante in D9, il resto della squadra in I9 e J9. Guado in T7 (da T6 "
+                    "a T8), ponte intatto in V14 (da U15 a W14); il ponte di tre esagoni I15–K14 non c’è. Livelli di attivazione: "
+                    "Condizione 1 da 0 a 4, Condizione 2 da 0 a 6, Condizione 3 da 0 a 8.",
+        "regole_testo": "[b]Torrente.[/b] Si attraversa coi PM del torrente. [b]Dirupi.[/b] Ripidi: un’azione e un controllo "
+                        "d’appoggio per salire o scendere. [b]Baia.[/b] L’acqua profonda in basso a sinistra è invalicabile. "
+                        "[b]Muli.[/b] Si scaricano dalla chiatta in K8; ogni soldato ne guida uno o due (bottone «Prendi i muli»), "
+                        "spara solo di rapido e non usa bazooka, BAR o mitragliatrici finché li guida.",
+        "ingresso_breve": "D9, I9 e J9", "uscita_breve": "si scopre in gioco",
+        "ingresso_esagoni": ["D9", "I9", "J9"], "uscita_esagoni": ["Y10", "Y11", "Y12", "Y13", "Y14", "W1", "X1", "Y1", "Y2", "Y3"],
+        "vittoria_pv": 21, "attivazione": {"1": 4, "2": 6, "3": 8}, "obiettivi": [],
+        "regole": {"dirupi": "ripidi", "missione_24": True, "salvi_in_edificio": True,
+                   "sezioni": [{"nome": "un comandante", "n": 1, "esagoni": ["D9"]}, {"nome": "il resto della squadra", "n": 7, "esagoni": ["I9", "J9"]}],
+                   "terreno_ss": {"T7": {"t": "stream", "guado": True}, "V14": {"t": "stream", "ponte": True}}},
+        "modifiche_iniziali": {},
+        "vittoria_testo": "Quanti PV servono e come finisce la missione si scopre durante il gioco.",
+        "testo_fine": "",
+    },
 }
 
 
@@ -356,7 +478,7 @@ def main():
         elif n == 20:
             sq += json.loads(json.dumps(CONVOGLIO))
         d["squadra"] = sq
-        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20, 21: TEDESCHI_21, 22: TEDESCHI_22}[n]
+        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20, 21: TEDESCHI_21, 22: TEDESCHI_22, 23: TEDESCHI_23, 24: TEDESCHI_24}[n]
         d["condizioni"] = condizioni(n)
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         mancanti = set()

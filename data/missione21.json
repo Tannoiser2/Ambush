@@ -75,7 +75,7 @@
   "missione_21": true
  },
  "modifiche_iniziali": {},
- "vittoria_testo": "[b]Servono 8 PV.[/b] +1 per ogni tedesco attivato, +3 per ciascun carro; −3 se lo Sherman o la motovedetta vanno fuori uso, −2 se il cannone navale è distrutto. Come finisce la missione si scopre durante il gioco.",
+ "vittoria_testo": "[b]Servono 8 PV.[/b] +1 per ogni tedesco ucciso o ferito gravemente, +3 per ogni carro fuori uso; −3 se lo Sherman o la motovedetta vanno fuori uso, −2 se il cannone navale è distrutto. Come finisce la missione si scopre durante il gioco.",
  "testo_fine": "",
  "carri_us": {
   "4": {
@@ -326,7 +326,7 @@
   "22": {
    "lettera": "M",
    "ruolo": "Granatiere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp",
     "pistol"
@@ -380,12 +380,13 @@
      426,
      426
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "23": {
    "lettera": "S",
    "ruolo": "Granatiere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp"
    ],
@@ -438,12 +439,13 @@
      425,
      425
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "24": {
    "lettera": "N",
    "ruolo": "Soldato",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "bolt"
    ],
@@ -490,12 +492,13 @@
      801,
      800
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "25": {
    "lettera": "T",
    "ruolo": "Soldato",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "bolt"
    ],
@@ -542,12 +545,13 @@
      802,
      824
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "31": {
    "lettera": "V",
    "ruolo": "Granatiere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp"
    ],
@@ -600,12 +604,13 @@
      584,
      584
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "32": {
    "lettera": "Z",
    "ruolo": "Granatiere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp"
    ],
@@ -658,12 +663,13 @@
      585,
      585
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "33": {
    "lettera": "X",
    "ruolo": "Soldato nascosto",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "bolt"
    ],
@@ -716,12 +722,13 @@
      586,
      586
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "34": {
    "lettera": "Y",
    "ruolo": "Soldato nascosto",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp",
     "pistol"
@@ -775,12 +782,13 @@
      583,
      583
     ]
-   }
+   },
+   "pv_eliminato": 1
   },
   "35": {
    "lettera": "U",
    "ruolo": "Mitragliere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "lmg",
     "pistol"
@@ -830,12 +838,13 @@
     ]
    },
    "primo_turno": 815,
-   "mg_squadra": 36
+   "mg_squadra": 36,
+   "pv_eliminato": 1
   },
   "36": {
    "lettera": "L",
    "ruolo": "Mitragliere",
-   "pv": 1,
+   "pv": 0,
    "armi": [
     "mp"
    ],
@@ -884,12 +893,13 @@
     ]
    },
    "primo_turno": 841,
-   "assiste": 35
+   "assiste": 35,
+   "pv_eliminato": 1
   },
   "30": {
    "lettera": "LL",
    "ruolo": "Panzer IV",
-   "pv": 3,
+   "pv": 0,
    "armi": [],
    "granate": 0,
    "IN": 5,
@@ -991,7 +1001,7 @@
      }
     },
     "immobile": false,
-    "pv_distrutto": 0,
+    "pv_distrutto": 3,
     "primo_turno": 0,
     "testo": "Enters open; cannon prepared. Drives slow until fired upon."
    }
@@ -999,7 +1009,7 @@
   "21": {
    "lettera": "MM",
    "ruolo": "Jagdpanther",
-   "pv": 3,
+   "pv": 0,
    "armi": [],
    "granate": 0,
    "IN": 4,
@@ -1101,7 +1111,7 @@
      }
     },
     "immobile": false,
-    "pv_distrutto": 0,
+    "pv_distrutto": 3,
     "primo_turno": 0,
     "testo": "Enters open; cannon prepared. Drives slow until fired upon."
    }

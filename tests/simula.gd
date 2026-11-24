@@ -45,6 +45,10 @@ func _init() -> void:
 		obiettivi = ["S13", "T12", "G14", "H13", "U13", "I13"]
 	elif missione == 22:
 		obiettivi = ["W8", "O4", "V14", "K14", "J14", "I15", "L14", "H15"]
+	elif missione == 23:
+		obiettivi = ["W8", "O14", "Q16", "S13", "V14", "P15", "T12"]
+	elif missione == 24:
+		obiettivi = ["K8", "K8", "Y12", "Y11", "Y13"]
 	elif missione == 19:
 		obiettivi = ["D1", "F4", "J7", "M7", "C6", "I7", "S1", "Q5"]
 	for i in n:
@@ -94,13 +98,15 @@ func gioca(seme: int) -> void:
 		p.inizia_missione()
 	elif not p.regola("sezioni", []).is_empty():
 		p.nuova(seme, true)
-		var sez_i := 0
 		for a in p.americani():
-			var sez: Dictionary = p.regola("sezioni", [])[0 if sez_i < 4 else 1]
-			for h in sez.esagoni:
-				if p.schiera([a.id], h).ok:
+			var messo := false
+			for sez in p.regola("sezioni", []):
+				for h in sez.esagoni:
+					if p.schiera([a.id], h).ok:
+						messo = true
+						break
+				if messo:
 					break
-			sez_i += 1
 		p.inizia_missione()
 	elif bool(p.regola("sentinella", false)):
 		p.nuova(seme, true)
@@ -373,6 +379,9 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 
 func _mossa_round(p, rng: RandomNumberGenerator, a: Dictionary, bersaglio_di: Dictionary) -> void:
 	if p.ss.m20.attiva() and rng.randf() < 0.7 and _guida_round(p, a):
+		return
+	if p.ss.m24.attiva() and p.ss.m24.puo_prendere(a) and rng.randf() < 0.5:
+		p.azione_ss(a.id, "prendi_muli")
 		return
 	if p.ss.m21.attiva() and p.veicoli.attivo(p.veicoli.v("vpb")) and str(a.get("veicolo", "")) != "vpb":
 		bersaglio_di[a.id] = p.veicoli.v("vpb").hex

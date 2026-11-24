@@ -20,8 +20,120 @@ func turno(g: Dictionary) -> bool:
 func esegui(n: int) -> bool:
 	var g: Dictionary = t._g
 	var p = t.p
+	match n:
+		760:
+			# Granata entro 3 (accovacciato) o a 4–6 (in piedi); poi a terra.
+			var vicini: Array = p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) <= 3 and a.hex != g.hex)
+			var lontani: Array = t.bersagli(g).filter(func(a): return E.distanza(a.hex, g.hex) in [4, 5, 6])
+			if int(g.munizioni.get("granata", 0)) > 0 and not vicini.is_empty():
+				t._accovacciati()
+				t._lancia_granata(3)
+			elif int(g.munizioni.get("granata", 0)) > 0 and not lontani.is_empty():
+				t._alzati()
+				t._lancia_granata(6)
+			t._prono_se_libero()
+			return true
+		761:
+			# Se vede un altro tedesco attivo, tiri rapidi; altrimenti a terra.
+			var altri: Array = p.tedeschi_attivi().filter(func(x): return x.id != g.id and p.vede_unita(g, x))
+			if not altri.is_empty() and not t.bersagli(g).is_empty():
+				g._snap_forzato = true
+				t._miglior_tiro("vicino")
+				g.erase("_snap_forzato")
+			else:
+				g.postura = "prone"
+			return true
 	if p.ss.m20.attiva():
 		return _esegui20(g, n)
+	if p.ss.m24.attiva():
+		var m24 = p.ss.m24
+		if m24.ruba_muli(t, g) or m24.tiro_ai_muli(t, g):
+			return true
+		match n:
+			742, 743, 744:
+				p.ss.m23.turno_pattuglia(t, g, {742: 762, 743: 739, 744: 735}[n])
+				return true
+			740:
+				if t.bersagli(g).is_empty():
+					g.reazione = "B"
+					t._corri_verso("P12")
+				else:
+					t.esegui(t.paragrafo_da_carta(g, "1", int(p.s.round.get("numero_azione", 0))))
+				return true
+			749:
+				if t.bersagli(g).is_empty() and p.americani_attivi_in_mappa().filter(func(a): return E.colonna(a.hex) > E.colonna("N1")).is_empty():
+					p.ss.m20._togli(g, 0, "")
+					p._log("tedesco", "Il %s si ritira e sparisce." % p.nome(g))
+				else:
+					t.esegui(t.paragrafo_da_carta(g, "1", int(p.s.round.get("numero_azione", 0))))
+				return true
+			520:
+				var squadra: Array = [471, 472, 473].filter(func(x): return p.attivo(p.u("g%d" % x)))
+				if squadra.is_empty():
+					g.reazione = "M" if int(p.s.condizione) == 3 else ""
+					t._ritira_e_esegui()
+				else:
+					t._accovacciati()
+					t._miglior_tiro("vicino")
+					t._prono_se_libero()
+				return true
+			501, 502, 503, 504:
+				return _esegui20(g, 549 if n == 501 else n)
+			635, 848, 849:
+				var vicini: Array = p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) <= 3 and a.hex != g.hex)
+				var lontani: Array = p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) in [4, 5, 6])
+				if int(g.munizioni.get("granata", 0)) > 0 and not vicini.is_empty():
+					t._accovacciati()
+					t._lancia_granata(3)
+					t._prono_se_libero()
+				elif int(g.munizioni.get("granata", 0)) > 0 and not lontani.is_empty():
+					t._alzati()
+					t._lancia_granata(6)
+					t._prono_se_libero()
+				else:
+					t.esegui(815 if int(p.s.round.get("numero_azione", 0)) % 2 == 1 else 840)
+				return true
+			884, 883:
+				t._alzati()
+				if n == 883:
+					g._snap_forzato = true
+				t._miglior_tiro("facile" if n == 884 else "vicino")
+				g.erase("_snap_forzato")
+				t._prono_se_libero()
+				return true
+			846:
+				var nb: int = t.bersagli(g).size()
+				if nb >= 3:
+					g.postura = "prone"
+				elif nb == 2:
+					t.esegui(815)
+				elif nb == 1:
+					t._alzati()
+					t._miglior_tiro("vicino")
+					t._prono_se_libero()
+				return true
+			847:
+				var vicino: bool = not p.tedeschi_attivi().filter(func(x): return x.id != g.id and E.distanza(x.hex, g.hex) <= 8).is_empty()
+				if vicino:
+					t.esegui(869)
+				else:
+					g.postura = "prone"
+				return true
+			322:
+				if not g.get("mosso_turno", false):
+					ss_esce(g)
+				else:
+					t._accovacciati()
+				return true
+		return false
+	if p.ss.m23.attiva():
+		match n:
+			730, 735, 739, 762:
+				p.ss.m23.turno_pattuglia(t, g, n)
+				return true
+			415:
+				return true
+		return false
 	if p.ss.m22.attiva():
 		var m22 = p.ss.m22
 		match n:
@@ -347,6 +459,12 @@ func _contro_mezzi(g: Dictionary, n: int) -> void:
 		t._prono_se_libero()
 		return
 	_verso_americano(g, n != 114)
+
+func ss_esce(g: Dictionary) -> void:
+	var p = t.p
+	p.ss.m20._togli(g, 0, "")
+	p._pv(-1, "tedesco uscito")
+	p._log("tedesco", "Il %s esce dalla mappa." % p.nome(g))
 
 ## 208/209 (reazioni P e Q): panzerfaust contro un mezzo americano entro 3 esagoni, poi la tabella.
 func _panzerfaust22(g: Dictionary, n: int) -> void:
