@@ -1710,11 +1710,11 @@ func sotto_ponte_colpito(x: Dictionary, l: String) -> void:
 		return
 	var d: int = p.d10()
 	if d > int(x.IN):
-		p._log("dado", "%s, sotto il ponte, perde la presa (%d > IN %d): cade nel fiume ed è travolto." % [p.nome(x), d, int(x.IN)])
+		p._log("dado", "%s, sotto il ponte, perde la presa (%d, supera la IN %d): cade nel fiume ed è travolto." % [p.nome(x), d, int(x.IN)])
 		x.erase("sotto_ponte")
 		p._uccidi(x, "caduto nel fiume")
 	else:
-		p._log("dado", "%s, sotto il ponte, si aggrappa ai sostegni (%d ≤ IN %d): va nel panico e perde il turno." % [p.nome(x), d, int(x.IN)])
+		p._log("dado", "%s, sotto il ponte, si aggrappa ai sostegni (%d, non supera la IN %d): va nel panico e perde il turno." % [p.nome(x), d, int(x.IN)])
 		if p.fase_round():
 			x.panico = true
 			x.turni = 0
