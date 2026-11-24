@@ -2377,6 +2377,10 @@ func _scegli_missione() -> void:
 	spiega.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sotto.add_child(spiega)
 	testa.add_child(sotto)
+	var ed := Tema.bottone("Editor delle mappe", _apri_editor_mappe, "Correggi terreno, quote, lati, alberi ed edifici delle mappe")
+	ed.custom_minimum_size = Vector2(170, 40)
+	ed.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	testa.add_child(ed)
 	if p != null and p.s.has("fase"):
 		var torna := Tema.bottone("Torna alla partita", func(): _chiudi_pagina_missioni())
 		torna.custom_minimum_size = Vector2(170, 40)
@@ -2471,6 +2475,22 @@ func _mostra_missione_scelta(n: int) -> void:
 		bb.add_child(via)
 	for b in bb.get_children():
 		b.custom_minimum_size = Vector2(0, 42)
+
+const EditorMappeScript = preload("res://scripts/ui/editor_mappe.gd")
+
+## Editor delle mappe a tutto schermo; chiudendolo la partita in corso usa subito le correzioni.
+func _apri_editor_mappe() -> void:
+	var ed = EditorMappeScript.new()
+	add_child(ed)
+	ed.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ed.chiuso.connect(func(cambiate: bool):
+		if cambiate and p != null:
+			p.ricarica_terreno()
+			if mappa.vista3d != null:
+				mappa.vista3d._chiave_rilievo = ""
+				if mappa.in_3d:
+					mappa.vista3d.prepara(mappa)
+			mappa.queue_redraw())
 
 func _chiudi_pagina_missioni() -> void:
 	if pagina_missioni != null:

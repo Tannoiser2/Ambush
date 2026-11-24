@@ -7,6 +7,7 @@ extends SubViewportContainer
 ## Tocco: un dito sposta, due dita pizzicano (zoom), ruotano e, spostate in su o in giù, inclinano.
 
 const E = preload("res://scripts/motore/esagoni.gd")
+const DM = preload("res://scripts/motore/dati_mappe.gd")
 const MappaScript = preload("res://scripts/ui/mappa.gd")
 
 const K := 0.01            # unità 3D per pixel della mappa
@@ -35,10 +36,8 @@ var gh := 0
 var alt := PackedFloat32Array()
 var maschere: Image
 var alberi_per_hex: Dictionary = {}   # esagono -> indici degli alberi
-var alberi_mm: MultiMesh
-var tronchi_mm: MultiMesh
-var alberi_xf: Array = []             # trasformazioni originali delle chiome
-var tronchi_xf: Array = []
+var alberi_mm_l: Array = []
+var alberi_xf: Array = []             # per albero: [forma, indice nel multimesh, trasformazione]
 var _firma_oggetti := ""
 var _firma_pedine := ""
 var _muri_rovine: Array = []
@@ -244,7 +243,10 @@ func _costruisci_rilievo() -> void:
 			var y := (_quota_base(p) - 1.0) * LIVELLO
 			var a := _maschera(p, 0)
 			var c := _maschera(p, 1)
-			if not secco.is_empty() and secco.has(esagono_px(p)):
+			var hp := esagono_px(p)
+			if hp != "" and mappa2d.partita.terreno.tipo(hp) == "water" and p.distance_to(centro_px(hp)) < RAGGIO_PX * 0.92:
+				a = maxf(a, 1.0)  # specchi d'acqua segnati nell'editor anche dove il disegno non li ha
+			if not secco.is_empty() and secco.has(hp):
 				a = 0.0  # Purple Heart 15: letto del fiume asciutto per la diga
 			acqua[j * gw + i] = a
 			y -= 0.2 * smoothstep(0.05, 0.6, a)
@@ -403,83 +405,64 @@ func _costruisci_vegetazione() -> void:
 		c.queue_free()
 	alberi_per_hex.clear()
 	alberi_xf.clear()
-	tronchi_xf.clear()
-	var percorso := "res://data/mappa_%s_3d.json" % lettera
-	if not FileAccess.file_exists(percorso):
+	var d: Dictionary = DM.leggi("mappa_%s_3d" % lettera)
+	if d.is_empty():
 		return
-	var d: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(percorso))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 1983
-	# Alberi: chioma tondeggiante + tronco
-	var chioma := SphereMesh.new()
-	chioma.radius = 1.0
-	chioma.height = 1.7
-	chioma.radial_segments = 9
-	chioma.rings = 5
-	chioma.material = _materiale(Color.WHITE, 0.95, true)
-	var tronco := CylinderMesh.new()
-	tronco.top_radius = 0.035
-	tronco.bottom_radius = 0.055
-	tronco.height = 1.0
-	tronco.radial_segments = 5
-	tronco.material = _materiale(Color("5a4330"))
+	# Alberi: tronco e rami con corteccia, chioma di ciuffi di foglie (tre forme diverse)
+	var mat_foglie := _mat_foglie("foglie")
+	var mat_corteccia := _mat_trama("corteccia", Color(0.9, 0.88, 0.85), 0.95)
 	var lista: Array = d.get("alberi", [])
-	alberi_mm = _multimesh(chioma, lista.size(), true)
-	tronchi_mm = _multimesh(tronco, lista.size(), false)
+	var varianti := 3
+	var per_var: Array = []
+	for v in varianti:
+		per_var.append([])
 	for i in lista.size():
-		var a: Array = lista[i]
-		var p := Vector2(float(a[0]), float(a[1]))
-		var r := float(a[2]) * K * 0.95
-		var base := punto3d(p)
-		var alto := 0.32 + r * 1.1 + rng.randf_range(-0.05, 0.12)
-		var xf := Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * rng.randf_range(0.85, 1.1), r)), base + Vector3(0, alto, 0))
-		alberi_mm.set_instance_transform(i, xf)
-		alberi_xf.append(xf)
-		var verde := Color.from_hsv(rng.randf_range(0.24, 0.36), rng.randf_range(0.45, 0.7), rng.randf_range(0.32, 0.5))
-		alberi_mm.set_instance_color(i, verde)
-		var xt := Transform3D(Basis().scaled(Vector3(1, alto, 1)), base + Vector3(0, alto / 2.0, 0))
-		tronchi_mm.set_instance_transform(i, xt)
-		tronchi_xf.append(xt)
-		var h := esagono_px(p)
-		if not alberi_per_hex.has(h):
-			alberi_per_hex[h] = []
-		alberi_per_hex[h].append(i)
-	_aggiungi_mm(alberi_mm, true)
-	_aggiungi_mm(tronchi_mm, true)
-	# Cespugli
-	var cesp := SphereMesh.new()
-	cesp.radius = 1.0
-	cesp.height = 1.2
-	cesp.radial_segments = 7
-	cesp.rings = 4
-	cesp.material = _materiale(Color.WHITE, 1.0, true)
+		per_var[i % varianti].append(i)
+	alberi_xf.resize(lista.size())
+	alberi_mm_l.clear()
+	for v in varianti:
+		var mesh := _mesh_albero(v, mat_corteccia, mat_foglie)
+		var mm := _multimesh(mesh, per_var[v].size(), true)
+		alberi_mm_l.append(mm)
+		for k in per_var[v].size():
+			var i: int = per_var[v][k]
+			var a: Array = lista[i]
+			var p := Vector2(float(a[0]), float(a[1]))
+			var r := float(a[2]) * K * 0.95
+			var s := r / 0.42 * rng.randf_range(0.9, 1.08)
+			var xf := Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s * rng.randf_range(0.9, 1.12), s)), punto3d(p, -0.02))
+			mm.set_instance_transform(k, xf)
+			alberi_xf[i] = [v, k, xf]
+			mm.set_instance_color(k, Color(rng.randf_range(0.8, 1.05), rng.randf_range(0.85, 1.05), rng.randf_range(0.65, 0.9)))
+			var h := esagono_px(p)
+			if not alberi_per_hex.has(h):
+				alberi_per_hex[h] = []
+			alberi_per_hex[h].append(i)
+		_aggiungi_mm(mm, true)
+	# Cespugli: cupole basse di ciuffi di foglie
 	var lc: Array = d.get("cespugli", [])
-	var cm := _multimesh(cesp, lc.size(), true)
+	var mat_cesp := _mat_foglie("foglie")
+	var cm := _multimesh(_mesh_cespuglio(mat_cesp), lc.size(), true)
 	for i in lc.size():
 		var c: Array = lc[i]
 		var p := Vector2(float(c[0]), float(c[1]))
-		var r := float(c[2]) * K * 1.1
-		cm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * 0.8, r * rng.randf_range(0.8, 1.2))), punto3d(p, r * 0.25)))
-		cm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.14, 0.22), rng.randf_range(0.45, 0.65), rng.randf_range(0.42, 0.58)))
+		var r := float(c[2]) * K * 1.15
+		cm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * rng.randf_range(0.75, 1.0), r * rng.randf_range(0.8, 1.2))), punto3d(p, -0.01)))
+		cm.set_instance_color(i, Color(rng.randf_range(0.95, 1.2), rng.randf_range(0.95, 1.1), rng.randf_range(0.5, 0.8)))
 	_aggiungi_mm(cm, false)
-	# Erba alta (macchie di copertura)
-	var ciuffo := CylinderMesh.new()
-	ciuffo.top_radius = 0.0
-	ciuffo.bottom_radius = 0.06
-	ciuffo.height = 0.16
-	ciuffo.radial_segments = 4
-	ciuffo.rings = 1
-	ciuffo.material = _materiale(Color.WHITE, 1.0, true)
+	# Erba alta (macchie di copertura): ciuffi incrociati
 	var lt: Array = d.get("ciuffi", [])
-	var tm := _multimesh(ciuffo, lt.size(), true)
+	var tm := _multimesh(_mesh_ciuffo(), lt.size(), true)
 	for i in lt.size():
 		var c: Array = lt[i]
 		var p := Vector2(float(c[0]), float(c[1]))
-		var s := rng.randf_range(0.7, 1.3)
-		tm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s * rng.randf_range(0.8, 1.6), s)), punto3d(p, 0.06 * s)))
-		tm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.13, 0.19), rng.randf_range(0.3, 0.45), rng.randf_range(0.5, 0.65)))
+		var s := rng.randf_range(0.8, 1.3)
+		tm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(s, s * rng.randf_range(0.8, 1.4), s)), punto3d(p, -0.005)))
+		tm.set_instance_color(i, Color(rng.randf_range(0.9, 1.15), rng.randf_range(0.9, 1.1), rng.randf_range(0.75, 0.95)))
 	_aggiungi_mm(tm, false)
-	# Vigne (Purple Heart): una fila di piccole piante per ogni filare disegnato
+	# Vigne (Purple Heart): filari di piccole piante su pali
 	var lv: Array = d.get("vigne", [])
 	if not lv.is_empty():
 		var piante: Array = []
@@ -489,18 +472,12 @@ func _costruisci_vegetazione() -> void:
 			var nn := maxi(2, int(a.distance_to(b) / 11.0))
 			for k in nn + 1:
 				piante.append(a.lerp(b, float(k) / nn))
-		var vite := SphereMesh.new()
-		vite.radius = 1.0
-		vite.height = 1.6
-		vite.radial_segments = 6
-		vite.rings = 3
-		vite.material = _materiale(Color.WHITE, 1.0, true)
-		var vm := _multimesh(vite, piante.size(), true)
+		var vm := _multimesh(_mesh_cespuglio(_mat_foglie("foglie")), piante.size(), true)
 		for i in piante.size():
 			var pv: Vector2 = piante[i]
-			var r := rng.randf_range(0.026, 0.036)
-			vm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * 1.3, r)), punto3d(pv, r * 1.1)))
-			vm.set_instance_color(i, Color.from_hsv(rng.randf_range(0.2, 0.28), rng.randf_range(0.45, 0.62), rng.randf_range(0.34, 0.46)))
+			var r := rng.randf_range(0.045, 0.06)
+			vm.set_instance_transform(i, Transform3D(Basis().rotated(Vector3.UP, rng.randf() * TAU).scaled(Vector3(r, r * 1.7, r)), punto3d(pv, 0.0)))
+			vm.set_instance_color(i, Color(rng.randf_range(0.9, 1.1), rng.randf_range(1.0, 1.15), rng.randf_range(0.7, 0.9)))
 		_aggiungi_mm(vm, false)
 	# Serbatoi di carburante e monumenti (Purple Heart)
 	for c in d.get("serbatoi", []):
@@ -919,7 +896,7 @@ func _macerie(padre: Node3D, c: Vector2, n: int, mat: Material) -> void:
 ## Negli esagoni con pedine gli alberi si diradano, così le pedine restano visibili.
 func _dirada_alberi() -> void:
 	var p: Partita = mappa2d.partita
-	if p == null or p.s.is_empty() or alberi_mm == null:
+	if p == null or p.s.is_empty() or alberi_mm_l.is_empty():
 		return
 	var occupati := {}
 	for id in p.s.unita:
@@ -935,16 +912,158 @@ func _dirada_alberi() -> void:
 	for h in alberi_per_hex:
 		var c := centro_px(str(h))
 		for i in alberi_per_hex[h]:
-			var xf: Transform3D = alberi_xf[i]
-			var xt: Transform3D = tronchi_xf[i]
+			var info: Array = alberi_xf[i]
+			var mm: MultiMesh = alberi_mm_l[info[0]]
+			var xf: Transform3D = info[2]
 			var vicino := occupati.has(h) and Vector2(xf.origin.x / K, xf.origin.z / K).distance_to(c) < RAGGIO_PX * 0.85
 			if vicino:
-				# resta solo un alberello basso e trasparente alla vista
-				alberi_mm.set_instance_transform(i, Transform3D(xf.basis.scaled(Vector3(0.35, 0.25, 0.35)), Vector3(xf.origin.x, xt.origin.y - xt.basis.y.y / 2.0 + 0.05, xf.origin.z)))
-				tronchi_mm.set_instance_transform(i, Transform3D(xt.basis.scaled(Vector3(1, 0.05, 1)), xt.origin))
+				# resta solo un alberello basso, che non nasconde le pedine
+				mm.set_instance_transform(int(info[1]), Transform3D(xf.basis.scaled(Vector3(0.35, 0.22, 0.35)), xf.origin))
 			else:
-				alberi_mm.set_instance_transform(i, xf)
-				tronchi_mm.set_instance_transform(i, xt)
+				mm.set_instance_transform(int(info[1]), xf)
+
+## Materiale dei ciuffi di foglie: trama con trasparenza a soglia, due facce, un po' di luce che passa.
+func _mat_foglie(nome: String) -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.albedo_texture = _trama(nome)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	m.alpha_scissor_threshold = 0.45
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	m.vertex_color_use_as_albedo = true
+	m.roughness = 0.85
+	m.backlight_enabled = true
+	m.backlight = Color(0.25, 0.32, 0.12)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	return m
+
+## Un albero alto 1 (chioma larga circa 0.84): tronco e rami con corteccia, chioma di ciuffi.
+## Le normali dei ciuffi puntano fuori dal centro della chioma: luce morbida e volume pieno.
+func _mesh_albero(forma: int, mat_c: Material, mat_f: Material) -> ArrayMesh:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 700 + forma * 31
+	var legno := SurfaceTool.new()
+	legno.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var chioma_c := Vector3(rng.randf_range(-0.03, 0.03), [0.62, 0.66, 0.58][forma], rng.randf_range(-0.03, 0.03))
+	var raggi: Vector3 = [Vector3(0.42, 0.34, 0.42), Vector3(0.36, 0.38, 0.36), Vector3(0.46, 0.3, 0.44)][forma]
+	var cima_tronco := Vector3(chioma_c.x * 0.5, 0.5, chioma_c.z * 0.5)
+	_ramo(legno, Vector3.ZERO, cima_tronco, 0.05, 0.03, 7)
+	for k in 5:
+		var a := TAU * k / 5.0 + rng.randf_range(-0.4, 0.4)
+		var da := cima_tronco.lerp(Vector3.ZERO, rng.randf_range(0.05, 0.3))
+		var verso := chioma_c + Vector3(cos(a) * raggi.x * 0.7, rng.randf_range(-0.05, 0.15), sin(a) * raggi.z * 0.7)
+		_ramo(legno, da, verso, 0.022, 0.008, 5)
+	var foglie := SurfaceTool.new()
+	foglie.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var n := 46
+	for k in n:
+		# punti più fitti verso la superficie della chioma
+		var dir := Vector3(rng.randf_range(-1, 1), rng.randf_range(-0.7, 1), rng.randf_range(-1, 1)).normalized()
+		var r := pow(rng.randf(), 0.35)
+		var pos := chioma_c + Vector3(dir.x * raggi.x, dir.y * raggi.y, dir.z * raggi.z) * r
+		var lato := rng.randf_range(0.24, 0.34)
+		var quad := rng.randi() % 4
+		var uv0 := Vector2((quad % 2) * 0.5, (quad / 2) * 0.5)
+		for piano in 2:
+			var asse_u := Vector3(cos(rng.randf() * TAU), 0, sin(rng.randf() * TAU)).normalized()
+			var asse_v := asse_u.cross(Vector3(rng.randf_range(-0.6, 0.6), 1, rng.randf_range(-0.6, 0.6)).normalized()).normalized()
+			if piano == 1:
+				asse_v = Vector3(rng.randf_range(-0.3, 0.3), 0.0, rng.randf_range(-0.3, 0.3)) + asse_u.cross(Vector3.UP).normalized()
+				asse_v = asse_v.normalized()
+				asse_u = asse_u.rotated(asse_v, PI / 2.0)
+			var vs := [pos - asse_u * lato / 2 - asse_v * lato / 2, pos + asse_u * lato / 2 - asse_v * lato / 2,
+					pos + asse_u * lato / 2 + asse_v * lato / 2, pos - asse_u * lato / 2 + asse_v * lato / 2]
+			var uvs := [uv0, uv0 + Vector2(0.5, 0), uv0 + Vector2(0.5, 0.5), uv0 + Vector2(0, 0.5)]
+			for t in [[0, 1, 2], [0, 2, 3]]:
+				for q in t:
+					var vtx: Vector3 = vs[q]
+					var nrm := ((vtx - chioma_c) / Vector3(raggi.x, raggi.y, raggi.z) + Vector3(0, 0.35, 0)).normalized()
+					foglie.set_normal(nrm)
+					foglie.set_uv(uvs[q])
+					foglie.add_vertex(vtx)
+	legno.generate_tangents()
+	var mesh := legno.commit()
+	mesh.surface_set_material(0, mat_c)
+	foglie.commit(mesh)
+	mesh.surface_set_material(1, mat_f)
+	return mesh
+
+## Tronco o ramo: cilindro rastremato con corteccia.
+func _ramo(st: SurfaceTool, a: Vector3, b: Vector3, r0: float, r1: float, lati: int) -> void:
+	var asse := (b - a).normalized()
+	var u := asse.cross(Vector3.FORWARD if absf(asse.dot(Vector3.FORWARD)) < 0.9 else Vector3.RIGHT).normalized()
+	var v := asse.cross(u)
+	var lung := a.distance_to(b)
+	for i in lati:
+		var a0 := TAU * i / lati
+		var a1 := TAU * (i + 1) / lati
+		var d0 := u * cos(a0) + v * sin(a0)
+		var d1 := u * cos(a1) + v * sin(a1)
+		var p00 := a + d0 * r0
+		var p01 := a + d1 * r0
+		var p10 := b + d0 * r1
+		var p11 := b + d1 * r1
+		var u0 := float(i) / lati
+		var u1 := float(i + 1) / lati
+		var verts := [[p00, d0, Vector2(u0, 0)], [p10, d0, Vector2(u0, -lung * 3.0)], [p11, d1, Vector2(u1, -lung * 3.0)],
+				[p00, d0, Vector2(u0, 0)], [p11, d1, Vector2(u1, -lung * 3.0)], [p01, d1, Vector2(u1, 0)]]
+		# faccia anteriore verso fuori
+		if (p10 - p00).cross(p11 - p00).dot(d0 + d1) > 0:
+			verts = [verts[0], verts[2], verts[1], verts[3], verts[5], verts[4]]
+		for vv in verts:
+			st.set_normal(vv[1])
+			st.set_uv(vv[2])
+			st.add_vertex(vv[0])
+
+## Cespuglio di raggio 1, alto circa 0.8: ciuffi di foglie ammucchiati, normali a cupola.
+func _mesh_cespuglio(mat: Material) -> ArrayMesh:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var centro := Vector3(0, 0.25, 0)
+	for k in 16:
+		var a := rng.randf() * TAU
+		var r := sqrt(rng.randf()) * 0.75
+		var pos := Vector3(cos(a) * r, rng.randf_range(0.25, 0.55) * (1.0 - r * 0.5), sin(a) * r)
+		var lato := rng.randf_range(0.7, 1.0)
+		var quad := rng.randi() % 4
+		var uv0 := Vector2((quad % 2) * 0.5, (quad / 2) * 0.5)
+		var asse_u := Vector3(cos(rng.randf() * TAU), 0, sin(rng.randf() * TAU)).normalized()
+		var asse_v := Vector3(0, 1, 0).lerp(asse_u.cross(Vector3.UP), rng.randf_range(0.0, 0.8)).normalized()
+		var vs := [pos - asse_u * lato / 2 - asse_v * lato / 2, pos + asse_u * lato / 2 - asse_v * lato / 2,
+				pos + asse_u * lato / 2 + asse_v * lato / 2, pos - asse_u * lato / 2 + asse_v * lato / 2]
+		var uvs := [uv0, uv0 + Vector2(0.5, 0), uv0 + Vector2(0.5, 0.5), uv0 + Vector2(0, 0.5)]
+		for t in [[0, 1, 2], [0, 2, 3]]:
+			for q in t:
+				var vtx: Vector3 = vs[q]
+				st.set_normal(((vtx - centro) * Vector3(1, 1.6, 1) + Vector3(0, 0.4, 0)).normalized())
+				st.set_uv(uvs[q])
+				st.add_vertex(vtx)
+	var mesh := st.commit()
+	mesh.surface_set_material(0, mat)
+	return mesh
+
+## Ciuffo d'erba alta: tre piani incrociati con la trama dell'erba.
+func _mesh_ciuffo() -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var alto := 0.13
+	var largo := 0.14
+	for k in 3:
+		var a := PI * k / 3.0
+		var u := Vector3(cos(a), 0, sin(a)) * largo / 2.0
+		var vs := [-u, u, u + Vector3(0, alto, 0), -u + Vector3(0, alto, 0)]
+		var uvs := [Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0)]
+		for t in [[0, 1, 2], [0, 2, 3]]:
+			for q in t:
+				st.set_normal((Vector3.UP + (vs[q] as Vector3).normalized() * 0.3).normalized() if (vs[q] as Vector3).length() > 0.001 else Vector3.UP)
+				st.set_uv(uvs[q])
+				st.add_vertex(vs[q])
+	var mesh := st.commit()
+	var m := _mat_foglie("erba")
+	m.backlight = Color(0.3, 0.3, 0.15)
+	mesh.surface_set_material(0, m)
+	return mesh
 
 
 # ================================================================== edifici
@@ -953,20 +1072,46 @@ func _dirada_alberi() -> void:
 ## Quando si gioca con chi sta dentro (pedine, esagoni evidenziati, esagono sotto il dito)
 ## il tetto sparisce e i muri diventano trasparenti.
 const ALTEZZA_CASA := 0.95
-const SPESSORE_MURO := 0.12
-var _case: Array = []   # {hex: [..], muri: MeshInstance3D, tetto: MeshInstance3D, mat: StandardMaterial3D}
+const SPESSORE_MURO := 0.1
+const GRONDA := 0.075          # sporgenza del tetto oltre i muri (unità 3D)
+const DIR_TRAME := "res://assets/trame3d/"
+var _case: Array = []   # {hex, muri: [MeshInstance3D], tetto: [Node3D], dettagli: [Node3D], mat: [StandardMaterial3D], aperta}
+var _trame3d: Dictionary = {}
+
+func _trama(nome: String) -> Texture2D:
+	if not _trame3d.has(nome):
+		var p := DIR_TRAME + nome + ".png"
+		_trame3d[nome] = load(p) if ResourceLoader.exists(p) else null
+	return _trame3d[nome]
+
+## Materiale con trama e rilievo (colore × tinta), opzionalmente da duplicare per ogni casa.
+func _mat_trama(nome: String, tinta := Color.WHITE, ruvido := 0.92) -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.albedo_texture = _trama(nome + "_c")
+	m.albedo_color = tinta
+	m.roughness = ruvido
+	var n := _trama(nome + "_n")
+	if n != null:
+		m.normal_enabled = true
+		m.normal_texture = n
+		m.normal_scale = 0.8
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	return m
 
 func _costruisci_case(padre: Node3D) -> void:
 	_case.clear()
-	var percorso := "res://data/mappa_%s_3d.json" % lettera
-	if not FileAccess.file_exists(percorso):
+	var d: Dictionary = DM.leggi("mappa_%s_3d" % lettera)
+	if d.is_empty():
 		return
-	var d: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(percorso))
 	var t: Terreno = mappa2d.partita.terreno
+	var indice := 0
 	for st in d.get("case", []):
+		indice += 1
 		var angoli: Array = []
 		for q in st.angoli:
 			angoli.append(Vector2(float(q[0]), float(q[1])))
+		if angoli.size() < 3:
+			continue
 		var macerie := false
 		for h in st.hex:
 			if t.tipo(str(h)) == "rubble":
@@ -980,115 +1125,277 @@ func _costruisci_case(padre: Node3D) -> void:
 					_muro(pm, str(m.tipo), padre)
 			continue
 		var campanile: bool = lettera == "b" and "S13" in st.hex
-		_stanza(padre, st, angoli, str(st.tipo) == "pietra", campanile)
+		_stanza(padre, st, angoli, str(st.tipo) == "pietra", campanile, indice)
 
-## Una stanza come è stampata: muri, finestre e porte lungo i quattro lati, tetto a padiglione.
-func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, campanile: bool) -> void:
+## Una stanza come è stampata: la faccia esterna dei muri sta esattamente sul contorno disegnato;
+## finestre con telaio, vetri, persiane e davanzale, porte di legno, tetto a padiglione con gronda e coppi.
+func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, campanile: bool, indice: int) -> void:
+	var nang := angoli.size()
 	var base := 1e9
 	var centro := Vector2.ZERO
 	for p in angoli:
 		base = minf(base, altezza_px(p))
 		centro += p
-	centro /= 4.0
-	base = minf(base, altezza_px(centro)) - 0.04
+	centro /= float(nang)
+	base = minf(base, altezza_px(centro)) - 0.05
+	# il verso dei vertici decide da che parte è l'interno
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(str(st.angoli))
+	var intonacata := pietra and rng.randf() < 0.55
+	var h_muri := 1.75 if campanile else ALTEZZA_CASA
 	var muri := SurfaceTool.new()
 	muri.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var zoccolo := SurfaceTool.new()
+	zoccolo.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var vetri := SurfaceTool.new()
 	vetri.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var telai := SurfaceTool.new()
+	telai.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var ante := SurfaceTool.new()
+	ante.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var porte := SurfaceTool.new()
+	porte.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var tetto := SurfaceTool.new()
 	tetto.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var h_muri := 1.75 if campanile else ALTEZZA_CASA
-	for i in 4:
+	var legni := SurfaceTool.new()
+	legni.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var tile_muro := 0.75 if (intonacata or not pietra) else 0.6
+	for i in nang:
 		var p: Vector2 = angoli[i]
-		var q: Vector2 = angoli[(i + 1) % 4]
+		var q: Vector2 = angoli[(i + 1) % nang]
 		var dentro := (centro - (p + q) / 2.0).normalized()
-		for seg in st.lati[i]:
+		# perpendicolare al lato, verso l'interno
+		var perp := (q - p).normalized().orthogonal()
+		if perp.dot(dentro) < 0:
+			perp = -perp
+		var segs: Array = st.lati[i] if i < st.lati.size() else [[0.0, 1.0, "muro"]]
+		for seg in segs:
 			var a := p.lerp(q, float(seg[0]))
 			var b := p.lerp(q, float(seg[1]))
+			if a.distance_to(b) < 0.5:
+				continue
 			match str(seg[2]):
 				"muro":
-					_blocco(muri, a, b, dentro, base, base + h_muri, SPESSORE_MURO)
+					_blocco_uv(muri, a, b, perp, base, base + h_muri, SPESSORE_MURO, p, tile_muro)
 				"finestra":
-					_blocco(muri, a, b, dentro, base, base + 0.36, SPESSORE_MURO)
-					_blocco(muri, a, b, dentro, base + 0.68, base + h_muri, SPESSORE_MURO)
-					_blocco(vetri, a, b, dentro, base + 0.36, base + 0.68, 0.015)
+					_finestre(muri, vetri, telai, ante, zoccolo, a, b, perp, base, h_muri, p, tile_muro)
 				"porta":
-					_blocco(muri, a, b, dentro, base + 0.66, base + h_muri, SPESSORE_MURO)
+					_porta(muri, porte, telai, a, b, perp, base, h_muri, p, tile_muro)
+				_:
+					# varco: resta solo l'architrave
+					_blocco_uv(muri, a, b, perp, base + 0.7, base + h_muri, SPESSORE_MURO, p, tile_muro)
+		# zoccolo e cornicione lungo tutto il lato
+		_blocco_uv(zoccolo, p - perp * 1.2, q - perp * 1.2, perp, base, base + 0.1, SPESSORE_MURO + 0.012, p, 0.6)
+		_blocco_uv(zoccolo, p - perp * 1.5, q - perp * 1.5, perp, base + h_muri - 0.05, base + h_muri, SPESSORE_MURO + 0.015, p, 0.6)
 	var alto := base + h_muri
 	if campanile:
-		# cella campanaria: pilastri agli angoli con un'apertura per lato, cornicione, guglia
-		for i in 4:
+		for i in nang:
 			var p: Vector2 = angoli[i]
-			var q: Vector2 = angoli[(i + 1) % 4]
-			var dentro := (centro - (p + q) / 2.0).normalized()
-			_blocco(muri, p, p.lerp(q, 0.28), dentro, alto, alto + 0.5, SPESSORE_MURO * 1.4)
-			_blocco(muri, p.lerp(q, 0.72), q, dentro, alto, alto + 0.5, SPESSORE_MURO * 1.4)
-			_blocco(muri, p, q, dentro, alto + 0.5, alto + 0.68, SPESSORE_MURO * 1.6)
-			_blocco(muri, p, q, dentro, alto - 0.05, alto + 0.02, SPESSORE_MURO * 1.9)
+			var q: Vector2 = angoli[(i + 1) % nang]
+			var perp := (q - p).normalized().orthogonal()
+			if perp.dot(centro - (p + q) / 2.0) < 0:
+				perp = -perp
+			_blocco_uv(muri, p, p.lerp(q, 0.28), perp, alto, alto + 0.5, SPESSORE_MURO * 1.4, p, tile_muro)
+			_blocco_uv(muri, p.lerp(q, 0.72), q, perp, alto, alto + 0.5, SPESSORE_MURO * 1.4, p, tile_muro)
+			_blocco_uv(muri, p, q, perp, alto + 0.5, alto + 0.68, SPESSORE_MURO * 1.6, p, tile_muro)
+			_blocco_uv(zoccolo, p - perp * 2.0, q - perp * 2.0, perp, alto - 0.05, alto + 0.02, SPESSORE_MURO * 1.9, p, 0.6)
 		alto += 0.68
 		var cima := Vector3(centro.x * K, alto + 0.95, centro.y * K)
-		for i in 4:
+		for i in nang:
 			var p: Vector2 = centro + (angoli[i] - centro) * 1.08
-			var q: Vector2 = centro + (angoli[(i + 1) % 4] - centro) * 1.08
+			var q: Vector2 = centro + (angoli[(i + 1) % nang] - centro) * 1.08
 			var nrm := (Vector3(p.x - centro.x, 0, p.y - centro.y) + Vector3(q.x - centro.x, 0, q.y - centro.y)).normalized()
 			nrm = (nrm + Vector3.UP * 0.6).normalized()
-			_tri(tetto, _p3(p, alto), cima, _p3(q, alto), nrm)
+			_tri_uv(tetto, [_p3(p, alto), cima, _p3(q, alto)], [Vector2(0, 0), Vector2(p.distance_to(q) * K * 0.5 / 0.5, 2.4), Vector2(p.distance_to(q) * K / 0.5, 0)], nrm)
+	elif nang == 4:
+		_tetto_padiglione(tetto, legni, angoli, centro, alto, pietra, rng)
 	else:
-		_tetto_padiglione(tetto, angoli, centro, alto)
-	var colore := Color("8a8477") if pietra else Color("7a5d43")
-	var mat := _materiale(colore, 0.92)
-	var mat_tetto := _materiale(Color("6e3b2e") if pietra else Color("5a4632"), 0.95)
+		_tetto_piramide(tetto, angoli, centro, alto)
+	# materiali (i muri sono della casa: diventano trasparenti quando si guarda dentro)
+	var mat_muri: StandardMaterial3D
+	if intonacata:
+		mat_muri = _mat_trama("intonaco", Color.from_hsv(rng.randf_range(0.08, 0.13), rng.randf_range(0.05, 0.25), rng.randf_range(0.88, 1.0)))
+	elif pietra:
+		mat_muri = _mat_trama("pietra", Color(rng.randf_range(0.92, 1.0), rng.randf_range(0.9, 0.98), rng.randf_range(0.86, 0.95)))
+	else:
+		mat_muri = _mat_trama("legno", Color(rng.randf_range(0.85, 1.0), rng.randf_range(0.82, 0.95), rng.randf_range(0.78, 0.9)))
+	var mat_zoccolo := _mat_trama("pietra", Color(0.78, 0.76, 0.72))
+	var mat_tetto := _mat_trama("tegole" if pietra else "scandole", Color(rng.randf_range(0.72, 0.86), rng.randf_range(0.74, 0.86), rng.randf_range(0.74, 0.88)), 0.85)
 	mat_tetto.cull_mode = BaseMaterial3D.CULL_DISABLED
-	var mat_vetri := _materiale(Color("1e2226"), 0.4)
+	var mat_vetri := StandardMaterial3D.new()
+	mat_vetri.albedo_color = Color(0.13, 0.16, 0.18)
+	mat_vetri.roughness = 0.12
+	mat_vetri.metallic = 0.35
+	var tinte_ante := [Color("4d6b4a"), Color("6b4a32"), Color("4f6170"), Color("7a3a2e"), Color("8a8466")]
+	var mat_telai := _materiale(Color("d9d2bf") if pietra else Color("4a3a2a"), 0.7)
+	var mat_ante := _mat_trama("legno", tinte_ante[rng.randi() % tinte_ante.size()] * 1.6, 0.8)
+	var mat_porte := _mat_trama("legno", Color(0.62, 0.48, 0.36), 0.8)
+	var mat_legni := _mat_trama("legno", Color(0.5, 0.4, 0.32), 0.85)
 	var n := Node3D.new()
 	padre.add_child(n)
-	var mi := MeshInstance3D.new()
-	mi.mesh = muri.commit()
-	mi.material_override = mat
-	n.add_child(mi)
-	var mv := MeshInstance3D.new()
-	mv.mesh = vetri.commit()
-	mv.material_override = mat_vetri
-	n.add_child(mv)
-	var mt := MeshInstance3D.new()
-	mt.mesh = tetto.commit()
-	mt.material_override = mat_tetto
-	n.add_child(mt)
+	var casa := {"hex": [], "muri": [], "tetto": [], "dettagli": [], "mat": [], "aperta": false}
+	for coppia in [[muri, mat_muri, "muri"], [zoccolo, mat_zoccolo, "muri"], [tetto, mat_tetto, "tetto"], [legni, mat_legni, "tetto"],
+			[vetri, mat_vetri, "dettagli"], [telai, mat_telai, "dettagli"], [ante, mat_ante, "dettagli"], [porte, mat_porte, "dettagli"]]:
+		var stt: SurfaceTool = coppia[0]
+		stt.generate_tangents()
+		var mesh := stt.commit()
+		if mesh.get_surface_count() == 0:
+			continue
+		var mi := MeshInstance3D.new()
+		mi.mesh = mesh
+		mi.material_override = coppia[1]
+		n.add_child(mi)
+		casa[coppia[2]].append(mi)
+		if coppia[2] == "muri":
+			casa.mat.append(coppia[1])
 	var hexes: Array = st.hex.duplicate()
 	var pol := PackedVector2Array(angoli)
 	for h in E.tutti():
 		if not h in hexes and Geometry2D.is_point_in_polygon(centro_px(h), pol):
 			hexes.append(h)
-	_case.append({"hex": hexes, "muri": mi, "vetri": mv, "tetto": mt, "mat": mat, "aperta": false})
+	casa.hex = hexes
+	_case.append(casa)
 
-## Tetto a padiglione sopra un rettangolo: colmo lungo il lato lungo, piccola sporgenza.
-func _tetto_padiglione(st: SurfaceTool, angoli: Array, centro: Vector2, alto: float) -> void:
+## Una o più finestre nel tratto a–b: davanzale, telaio a croce, vetri scuri e persiane aperte.
+func _finestre(muri: SurfaceTool, vetri: SurfaceTool, telai: SurfaceTool, ante: SurfaceTool, zoccolo: SurfaceTool,
+		a: Vector2, b: Vector2, perp: Vector2, base: float, h_muri: float, origine: Vector2, tile: float) -> void:
+	var lung := a.distance_to(b) * K
+	var dir := (b - a).normalized()
+	var y0 := base + 0.36
+	var y1 := base + 0.7
+	# tratti lunghi: più finestre separate da pilastri
+	var n := maxi(1, int(round(lung / 0.42)))
+	var passo := lung / n
+	var largo := minf(passo * 0.72, 0.3)
+	var cursore := a
+	for k in n:
+		var c := a + dir * (passo * (k + 0.5)) / K
+		var w1 := c - dir * (largo / 2.0) / K
+		var w2 := c + dir * (largo / 2.0) / K
+		if w1.distance_to(cursore) > 0.5:
+			_blocco_uv(muri, cursore, w1, perp, base, base + h_muri, SPESSORE_MURO, origine, tile)
+		_blocco_uv(muri, w1, w2, perp, base, y0, SPESSORE_MURO, origine, tile)
+		_blocco_uv(muri, w1, w2, perp, y1, base + h_muri, SPESSORE_MURO, origine, tile)
+		# vetro arretrato a metà muro
+		var mezzo := perp * (SPESSORE_MURO * 0.55) / K
+		_blocco_uv(vetri, w1 + mezzo, w2 + mezzo, perp, y0, y1, 0.01, origine, 1.0)
+		# telaio: montanti, traverso e croce
+		var spt := 0.022
+		var dp := perp * (SPESSORE_MURO * 0.45) / K
+		_blocco_uv(telai, w1 + dp, w1 + dp + dir * spt / K, perp, y0, y1, 0.035, origine, 1.0)
+		_blocco_uv(telai, w2 + dp - dir * spt / K, w2 + dp, perp, y0, y1, 0.035, origine, 1.0)
+		_blocco_uv(telai, w1 + dp, w2 + dp, perp, y1 - spt, y1, 0.035, origine, 1.0)
+		_blocco_uv(telai, w1 + dp, w2 + dp, perp, y0, y0 + spt, 0.035, origine, 1.0)
+		_blocco_uv(telai, c + dp - dir * 0.008 / K, c + dp + dir * 0.008 / K, perp, y0, y1, 0.025, origine, 1.0)
+		_blocco_uv(telai, w1 + dp, w2 + dp, perp, (y0 + y1) / 2.0 + 0.04, (y0 + y1) / 2.0 + 0.055, 0.025, origine, 1.0)
+		# davanzale sporgente
+		var fuori := -perp * 0.035 / K
+		_blocco_uv(zoccolo, w1 - dir * 0.02 / K + fuori, w2 + dir * 0.02 / K + fuori, perp, y0 - 0.03, y0, 0.06, origine, 0.6)
+		# persiane aperte contro il muro, ai due lati
+		var f2 := -perp * 0.012 / K
+		_blocco_uv(ante, w1 - dir * (largo / 2.0) / K + f2, w1 + f2, perp, y0, y1, 0.012, origine, 0.5)
+		_blocco_uv(ante, w2 + f2, w2 + dir * (largo / 2.0) / K + f2, perp, y0, y1, 0.012, origine, 0.5)
+		cursore = w2
+	if b.distance_to(cursore) > 0.5:
+		_blocco_uv(muri, cursore, b, perp, base, base + h_muri, SPESSORE_MURO, origine, tile)
+
+## Porta: architrave, stipiti e battente di legno a doghe arretrato.
+func _porta(muri: SurfaceTool, porte: SurfaceTool, telai: SurfaceTool, a: Vector2, b: Vector2, perp: Vector2, base: float, h_muri: float, origine: Vector2, tile: float) -> void:
+	var lung := a.distance_to(b) * K
+	var dir := (b - a).normalized()
+	var largo := minf(lung, 0.26)
+	var c := (a + b) / 2.0
+	var p1 := c - dir * (largo / 2.0) / K
+	var p2 := c + dir * (largo / 2.0) / K
+	if p1.distance_to(a) > 0.5:
+		_blocco_uv(muri, a, p1, perp, base, base + h_muri, SPESSORE_MURO, origine, tile)
+	if b.distance_to(p2) > 0.5:
+		_blocco_uv(muri, p2, b, perp, base, base + h_muri, SPESSORE_MURO, origine, tile)
+	var y1 := base + 0.64
+	_blocco_uv(muri, p1, p2, perp, y1, base + h_muri, SPESSORE_MURO, origine, tile)
+	var dp := perp * (SPESSORE_MURO * 0.6) / K
+	_blocco_uv(porte, p1 + dp, p2 + dp, perp, base, y1, 0.025, origine, 0.5)
+	var spt := 0.02
+	_blocco_uv(telai, p1 - perp * 0.005 / K, p1 + dir * spt / K - perp * 0.005 / K, perp, base, y1, SPESSORE_MURO * 0.7, origine, 1.0)
+	_blocco_uv(telai, p2 - dir * spt / K - perp * 0.005 / K, p2 - perp * 0.005 / K, perp, base, y1, SPESSORE_MURO * 0.7, origine, 1.0)
+	_blocco_uv(telai, p1 - dir * spt / K - perp * 0.006 / K, p2 + dir * spt / K - perp * 0.006 / K, perp, y1, y1 + spt * 1.5, SPESSORE_MURO * 0.7, origine, 1.0)
+
+## Tetto a padiglione sopra un rettangolo: colmo lungo il lato lungo, gronda sporgente con
+## frontalino di legno, colmo coperto e (a volte) un comignolo.
+func _tetto_padiglione(st: SurfaceTool, legni: SurfaceTool, angoli: Array, centro: Vector2, alto: float, pietra: bool, rng: RandomNumberGenerator) -> void:
 	var c: Array = []
 	for p in angoli:
-		c.append(centro + (p - centro) * 1.06)
+		var d: Vector2 = (p - centro)
+		c.append(p + d.normalized() * GRONDA / K * 1.41)
 	var l01: float = (c[1] as Vector2).distance_to(c[0])
 	var l12: float = (c[2] as Vector2).distance_to(c[1])
-	# u: direzione del lato lungo
 	var u: Vector2 = ((c[1] - c[0]) as Vector2).normalized() if l01 >= l12 else ((c[2] - c[1]) as Vector2).normalized()
 	var lungo := maxf(l01, l12)
 	var corto := minf(l01, l12)
-	var colmo := alto + corto * K * 0.42
+	var y_gronda := alto - 0.02
+	var colmo := y_gronda + corto * K * (0.42 if pietra else 0.5)
 	var r1 := centro - u * (lungo - corto) / 2.0
 	var r2 := centro + u * (lungo - corto) / 2.0
 	var R1 := Vector3(r1.x * K, colmo, r1.y * K)
 	var R2 := Vector3(r2.x * K, colmo, r2.y * K)
+	var tile := 0.62 if pietra else 0.6
 	for i in 4:
 		var p: Vector2 = c[i]
 		var q: Vector2 = c[(i + 1) % 4]
 		var mezzo := (p + q) / 2.0
-		# il colmo più vicino a ciascun estremo del lato
 		var rp := R1 if p.distance_to(r1) < p.distance_to(r2) else R2
 		var rq := R1 if q.distance_to(r1) < q.distance_to(r2) else R2
 		var fuori := (mezzo - centro).normalized()
-		var nrm := (Vector3(fuori.x, 0, fuori.y) + Vector3.UP).normalized()
-		_tri(st, _p3(p, alto), rp, _p3(q, alto), nrm)
+		var dir := (q - p).normalized()
+		var falda := sqrt(pow(colmo - y_gronda, 2.0) + pow(_dist_linea(centro, p, q) * K, 2.0))
+		# coordinate di trama: U lungo la gronda, V su per la falda
+		var uv := func(v3: Vector3) -> Vector2:
+			var d2 := Vector2(v3.x / K, v3.z / K) - p
+			var su := d2.dot(dir) * K
+			var lungo_falda := (v3.y - y_gronda) / maxf(colmo - y_gronda, 0.001) * falda
+			return Vector2(su / tile, -lungo_falda / tile)
+		var a3 := _p3(p, y_gronda)
+		var b3 := _p3(q, y_gronda)
+		var e1: Vector3 = b3 - a3
+		var e2: Vector3 = rp - a3
+		var nrm := e1.cross(e2).normalized()
+		if nrm.y < 0:
+			nrm = -nrm
+		_tri_uv(st, [a3, rp, b3], [uv.call(a3), uv.call(rp), uv.call(b3)], nrm)
 		if rp != rq:
-			_tri(st, rp, rq, _p3(q, alto), nrm)
+			_tri_uv(st, [rp, rq, b3], [uv.call(rp), uv.call(rq), uv.call(b3)], nrm)
+		# frontalino sotto la gronda
+		_blocco_uv(legni, p, q, -fuori, y_gronda - 0.045, y_gronda, 0.02, p, 0.5)
+	# colmo: una fila di coppi più scuri
+	var dc := (r2 - r1).normalized()
+	if r1.distance_to(r2) > 1.0:
+		_blocco_uv(st, r1 - dc * 2.0, r2 + dc * 2.0, dc.orthogonal(), colmo - 0.02, colmo + 0.025, 0.035, r1, 0.5, true)
+	# comignolo sulle case in muratura
+	if pietra and rng.randf() < 0.7:
+		var lato := 1.0 if rng.randf() < 0.5 else -1.0
+		var pc := centro + u * lato * (lungo - corto) / 2.0 * 0.6 + u.orthogonal() * corto * 0.12
+		var hgt := colmo + 0.22
+		var s := 0.06 / K
+		var q1 := pc - u * s - u.orthogonal() * s * 0.8
+		var q2 := pc + u * s - u.orthogonal() * s * 0.8
+		_blocco_uv(legni, q1, q2, u.orthogonal(), y_gronda + 0.1, hgt, 0.12, q1, 0.4)
+
+func _dist_linea(c: Vector2, p: Vector2, q: Vector2) -> float:
+	return c.distance_to(Geometry2D.get_closest_point_to_segment_uncapped(c, p, q))
+
+## Pianta non rettangolare: tetto a piramide.
+func _tetto_piramide(st: SurfaceTool, angoli: Array, centro: Vector2, alto: float) -> void:
+	var cima := _p3(centro, alto + 0.4)
+	for i in angoli.size():
+		var p: Vector2 = centro + (angoli[i] - centro) * 1.06
+		var q: Vector2 = centro + (angoli[(i + 1) % angoli.size()] - centro) * 1.06
+		var a3 := _p3(p, alto)
+		var b3 := _p3(q, alto)
+		var nrm := (b3 - a3).cross(cima - a3).normalized()
+		if nrm.y < 0:
+			nrm = -nrm
+		var l := p.distance_to(q) * K
+		_tri_uv(st, [a3, cima, b3], [Vector2(0, 0), Vector2(l / 1.0, -1.0), Vector2(l / 0.5, 0)], nrm)
 
 func _p3(p: Vector2, y: float) -> Vector3:
 	return Vector3(p.x * K, y, p.y * K)
@@ -1099,48 +1406,43 @@ func _tri(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, n: Vector3) -> vo
 	st.add_vertex(b)
 	st.add_vertex(c)
 
-## Parallelepipedo tra due punti della pianta (pixel), da quota y0 a y1, spessore verso l'interno.
-func _blocco(st: SurfaceTool, a: Vector2, b: Vector2, dentro: Vector2, y0: float, y1: float, spess: float) -> void:
+## Triangolo con coordinate di trama, girato in modo che la faccia anteriore guardi verso n.
+func _tri_uv(st: SurfaceTool, v: Array, uv: Array, n: Vector3) -> void:
+	var ordine := [0, 1, 2]
+	if ((v[1] as Vector3) - (v[0] as Vector3)).cross((v[2] as Vector3) - (v[0] as Vector3)).dot(n) > 0:
+		ordine = [0, 2, 1]
+	for k in ordine:
+		st.set_normal(n)
+		st.set_uv(uv[k])
+		st.add_vertex(v[k])
+
+## Parallelepipedo tra due punti della pianta (pixel), da quota y0 a y1, spessore verso «dentro».
+## Coordinate di trama in unità 3D / tile: U lungo il muro a partire da «origine», V in altezza.
+func _blocco_uv(st: SurfaceTool, a: Vector2, b: Vector2, dentro: Vector2, y0: float, y1: float, spess: float, origine: Vector2, tile: float, _colmo := false) -> void:
 	var a2 := a + dentro * spess / K
 	var b2 := b + dentro * spess / K
-	var pts := [a, b, b2, a2]
+	var dir := (b - a).normalized()
+	var ua := (a - origine).dot(dir) * K / tile
+	var ub := (b - origine).dot(dir) * K / tile
+	var v0 := -y0 / tile
+	var v1 := -y1 / tile
 	var fuori := -dentro
-	var nrm := [Vector3(fuori.x, 0, fuori.y), Vector3((b - a).normalized().x, 0, (b - a).normalized().y), Vector3(dentro.x, 0, dentro.y), Vector3(-(b - a).normalized().x, 0, -(b - a).normalized().y)]
-	for i in 4:
-		var p: Vector2 = pts[i]
-		var q: Vector2 = pts[(i + 1) % 4]
-		var n3: Vector3 = nrm[i]
-		_tri(st, _p3(p, y0), _p3(q, y0), _p3(q, y1), n3)
-		_tri(st, _p3(p, y0), _p3(q, y1), _p3(p, y1), n3)
-	_tri(st, _p3(a, y1), _p3(b, y1), _p3(b2, y1), Vector3.UP)
-	_tri(st, _p3(a, y1), _p3(b2, y1), _p3(a2, y1), Vector3.UP)
+	var n_f := Vector3(fuori.x, 0, fuori.y)
+	var n_d := Vector3(dentro.x, 0, dentro.y)
+	var n_a := Vector3(-dir.x, 0, -dir.y)
+	var n_b := Vector3(dir.x, 0, dir.y)
+	# faccia esterna (a → b), interna (b2 → a2), testate
+	_quad(st, _p3(a, y0), _p3(b, y0), _p3(b, y1), _p3(a, y1), Vector2(ua, v0), Vector2(ub, v0), Vector2(ub, v1), Vector2(ua, v1), n_f)
+	_quad(st, _p3(b2, y0), _p3(a2, y0), _p3(a2, y1), _p3(b2, y1), Vector2(ub, v0), Vector2(ua, v0), Vector2(ua, v1), Vector2(ub, v1), n_d)
+	var s := spess / tile
+	_quad(st, _p3(a2, y0), _p3(a, y0), _p3(a, y1), _p3(a2, y1), Vector2(0, v0), Vector2(s, v0), Vector2(s, v1), Vector2(0, v1), n_a)
+	_quad(st, _p3(b, y0), _p3(b2, y0), _p3(b2, y1), _p3(b, y1), Vector2(0, v0), Vector2(s, v0), Vector2(s, v1), Vector2(0, v1), n_b)
+	_quad(st, _p3(a, y1), _p3(b, y1), _p3(b2, y1), _p3(a2, y1), Vector2(ua, 0), Vector2(ub, 0), Vector2(ub, s), Vector2(ua, s), Vector3.UP)
 
-func _lato_casa(muri: SurfaceTool, vetri: SurfaceTool, a: Vector2, b: Vector2, c: Vector2, base: float, tipo: String) -> void:
-	var mezzo := (a + b) / 2.0
-	var dentro := (c - mezzo).normalized()
-	var h := ALTEZZA_CASA
-	if tipo == "":
-		_blocco(muri, a, b, dentro, base, base + h, SPESSORE_MURO)
-		return
-	var lungo := a.distance_to(b)
-	var dir := (b - a) / lungo
-	var largo := 0.42 if tipo == "window" else 0.34
-	var p1 := mezzo - dir * lungo * largo / 2.0
-	var p2 := mezzo + dir * lungo * largo / 2.0
-	_blocco(muri, a, p1, dentro, base, base + h, SPESSORE_MURO)
-	_blocco(muri, p2, b, dentro, base, base + h, SPESSORE_MURO)
-	if tipo == "window":
-		_blocco(muri, p1, p2, dentro, base, base + 0.36, SPESSORE_MURO)
-		_blocco(muri, p1, p2, dentro, base + 0.66, base + h, SPESSORE_MURO)
-		# vetro scuro arretrato e traversa
-		_blocco(vetri, p1, p2, dentro, base + 0.36, base + 0.66, 0.012)
-		var m1 := (p1 + p2) / 2.0 - dir * 2.0
-		var m2 := (p1 + p2) / 2.0 + dir * 2.0
-		_blocco(muri, m1, m2, dentro, base + 0.36, base + 0.66, 0.02)
-	else:
-		_blocco(muri, p1, p2, dentro, base + 0.62, base + h, SPESSORE_MURO)
-		# soglia scura della porta
-		_blocco(vetri, p1, p2, dentro, base, base + 0.62, 0.01)
+## Quadrilatero a–b–c–d con le sue coordinate di trama; le facce vanno in senso orario visto dalla normale.
+func _quad(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, d: Vector3, ta: Vector2, tb: Vector2, tc: Vector2, td: Vector2, n: Vector3) -> void:
+	_tri_uv(st, [a, b, c], [ta, tb, tc], n)
+	_tri_uv(st, [a, c, d], [ta, tc, td], n)
 
 ## Tetti e muri si aprono quando si interagisce con chi sta dentro.
 func _aggiorna_case() -> void:
@@ -1165,12 +1467,14 @@ func _aggiorna_case() -> void:
 		if aperta == casa.aperta:
 			continue
 		casa.aperta = aperta
-		var mat: StandardMaterial3D = casa.mat
-		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA if aperta else BaseMaterial3D.TRANSPARENCY_DISABLED
-		mat.albedo_color.a = 0.28 if aperta else 1.0
-		casa.tetto.visible = not aperta
-		casa.vetri.visible = not aperta
-		casa.muri.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if aperta else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		for mat in casa.mat:
+			var sm: StandardMaterial3D = mat
+			sm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA if aperta else BaseMaterial3D.TRANSPARENCY_DISABLED
+			sm.albedo_color.a = 0.28 if aperta else 1.0
+		for nd in casa.tetto + casa.dettagli:
+			nd.visible = not aperta
+		for mi in casa.muri:
+			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if aperta else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 # ================================================================== miniature dei soldati
 ## Le pedine diventano miniature 3D (assets/soldati3d, da tools/costruisci_soldati3d.py),

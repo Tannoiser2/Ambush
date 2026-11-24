@@ -90,6 +90,13 @@ func cambia_mappa(l: String) -> void:
 	_applica_regole_terreno()
 	_log("info", "Si passa alla mappa %s." % l)
 
+## Rilegge il terreno della mappa in uso (dopo una correzione nell'editor delle mappe), stato invariato.
+func ricarica_terreno() -> void:
+	terreno = TerrenoScript.new("res://data/mappa_%s.json" % lettera_mappa().to_lower())
+	terreno.imposta_modifiche(s.get("modifiche", {}) if not s.is_empty() else {})
+	_alture_cache = []
+	_applica_regole_terreno()
+
 func regola(k: String, def = null):
 	return missione.get("regole", {}).get(k, def)
 

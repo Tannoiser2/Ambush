@@ -43,6 +43,7 @@ jobs:
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/schieramento.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/attivazione_round.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/salvataggio.gd
+          /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/editor_mappe.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 8 1
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/missione2.gd
           /tmp/godot-bin/Godot_v4.7-stable_linux.x86_64 --headless --path . --script tests/simula.gd -- 6 1 2

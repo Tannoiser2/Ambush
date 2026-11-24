@@ -3,6 +3,7 @@ extends RefCounted
 ## Terreno della mappa A: tipi, quote, lati speciali, costi di movimento e linea di vista (regola 8).
 
 const E = preload("res://scripts/motore/esagoni.gd")
+const DM = preload("res://scripts/motore/dati_mappe.gd")
 
 const BLOCCANTI := ["woods", "brush", "rough", "rubble"]
 const SCOPERTI := ["clear", "road", "stream", "bridge", "ford", "beach", "wharf", "subpen", "water"]
@@ -29,7 +30,8 @@ var alture: Array = []
 var torri: Dictionary = {}
 
 func _init(percorso := "res://data/mappa_a.json") -> void:
-	var dati: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(percorso))
+	# Le mappe corrette nell'editor (user://mappe) prendono il posto di quelle del gioco.
+	var dati: Dictionary = DM.leggi(percorso.get_file().get_basename())
 	esagoni = dati.esagoni
 	lati = dati.lati
 	alture = dati.get("alture_obiettivo", [])
