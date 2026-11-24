@@ -1171,6 +1171,12 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			var hbs: String = hb
 			if E.distanza(a.hex, hbs) <= 6 and p.terreno.vede(a.hex, hbs, a.postura, "standing"):
 				_b("Bazooka sul blocco in %s" % hbs, func(): _esito(p.azione_ss(a.id, "bazooka_blocco", hbs)), "+2 per colpire; solo una penetrazione pesante lo sgombra.")
+	if p.ss.m22.puo_scendere(a):
+		_b("Scendi sotto il ponte", func(): _esito(p.azione_ss(a.id, "sotto_ponte")), "Un’azione: si scende fra i sostegni (accovacciati), dove si cercano e si disinnescano gli esplosivi. Lì si è difficili da colpire.")
+	if p.ss.m22.puo_risalire(a):
+		_b("Risali sul ponte", func(): _esito(p.azione_ss(a.id, "risali_ponte")), "Un’azione, con il cambio di postura gratuito.")
+	if p.ss.m22.puo_disinnescare(a):
+		_b("Disinnesca l’esplosivo", func(): _esito(p.azione_ss(a.id, "disinnesca")), "Due azioni in tutto (anche di soldati diversi): con la prima il segnalino passa sul lato 1, con la seconda è disinnescato (+1 PV).")
 	if p.ss.m21.puo_salire_pb(a):
 		_b("Sali sulla motovedetta", func(): _esito(p.azione_ss(a.id, "motovedetta")), "Un’azione, dallo stesso esagono o da uno adiacente. Quando tutta la squadra è a bordo la motovedetta riparte.")
 	if p.ss.puo_esplosivo(a):

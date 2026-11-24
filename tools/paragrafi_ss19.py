@@ -144,8 +144,8 @@ par("419", "[s8] Attiva il tedesco 51 accovacciato in P5, nella reazione special
     sighting(8) + [activate([(51, "P5")], "crouching", adv="de", reaction="A")])
 par("715", "[s8] Attiva il tedesco 51 accovacciato in P5, nella reazione speciale A. Iniziano i Round, vantaggio americano.",
     sighting(8) + [activate([(51, "P5")], "crouching", adv="us", reaction="A")])
-par("480", "[s9] Il soldato nota che il ponte in O4 è indebolito dagli anni e dall’incuria: potrebbe non reggere.",
-    sighting(9))
+par("480", "Qui il torrente è invalicabile. Controllo di percezione: se riesce si torna nell’esagono di partenza senza perdere "
+           "PM; se fallisce si torna indietro e si perdono 2 PM.", [{"op": "ss_torna_indietro"}])
 par("530", "Se si entra in questo esagono da M9 e s0 non è avvenuto, vedi 101. Se si entra da un altro esagono e s9 non è avvenuto, "
            "vedi 716. Altrimenti nessun evento.",
     [if_(ALL({"ss_entrato_da": "M9"}, NOT(S(0))), [see("101")], [if_(ALL(NOT({"ss_entrato_da": "M9"}), NOT(S(9))), [see("716")])])])

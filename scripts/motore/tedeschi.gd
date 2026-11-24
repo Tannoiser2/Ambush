@@ -81,7 +81,7 @@ func colonna(g: Dictionary, ignora_s := false) -> String:
 		return "S"
 	if int(g.get("paracadute", 0)) > 0:
 		ignora_s = true
-	if str(g.get("reazione", "")) == "H" and p.ss.m21.attiva():
+	if (str(g.get("reazione", "")) == "H" and p.ss.m21.attiva()) or (str(g.get("reazione", "")) in ["B", "P", "Q", "E", "T"] and p.ss.m22.attiva()):
 		ignora_s = true  # Silver Star 21: nella reazione speciale H non vale l’autoconservazione
 	if bool(p.missione.tedeschi[str(int(g.num))].get("ignora_s_veicolo", false)) and str(g.get("veicolo", "")) != "" and p.veicoli.attivo(p.veicoli.di(g)):
 		ignora_s = true  # Purple Heart: «ignora l’autoconservazione a bordo di un mezzo attivo»  # Move Out! 426: col paracadute addosso si ignora l’autoconservazione

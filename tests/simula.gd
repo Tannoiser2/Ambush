@@ -43,6 +43,8 @@ func _init() -> void:
 		obiettivi = ["F4", "I5", "N4", "S4", "W6", "W10", "X12", "J14", "F16", "B19", "A8"]
 	elif missione == 21:
 		obiettivi = ["S13", "T12", "G14", "H13", "U13", "I13"]
+	elif missione == 22:
+		obiettivi = ["W8", "O4", "V14", "K14", "J14", "I15", "L14", "H15"]
 	elif missione == 19:
 		obiettivi = ["D1", "F4", "J7", "M7", "C6", "I7", "S1", "Q5"]
 	for i in n:
@@ -127,6 +129,10 @@ func gioca(seme: int) -> void:
 		p.inizia_missione()
 	else:
 		p.nuova(seme)
+	if p.ss.m22.attiva():
+		for a in p.americani():
+			if str(a.get("veicolo", "")) != "":
+				p.scendi_veicolo(a.id)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seme * 7919
 	var bersaglio_di := {}

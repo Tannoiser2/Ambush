@@ -37,6 +37,12 @@ for j in range(1, len(idx) - 1):
         nums[i] = a + 1
     elif not (a < x < b) and 2 < b - a <= 4 and str(a + 1)[-1] == str(x)[-1]:
         nums[i] = a + 1
+# «1» letto «4» (482 al posto di 182), anche più volte di fila: vale solo se diventa il successivo esatto del precedente.
+idx = [i for i, v in enumerate(nums) if isinstance(v, int)]
+for j in range(1, len(idx)):
+    a, x = nums[idx[j - 1]], nums[idx[j]]
+    if str(x)[0] == "4" and x - 300 == a + 1:
+        nums[idx[j]] = x - 300
 # Due numeri sbagliati di fila (136, 487, 438, 139).
 idx = [i for i, v in enumerate(nums) if isinstance(v, int)]
 for j in range(1, len(idx) - 2):

@@ -20,6 +20,7 @@ const MODELLI := {
 	"moto": {"art": "La", "nome": "Motocicletta", "piccolo": true, "lenta": 7, "veloce": 12, "posti": 2, "moto": true},
 	"motovedetta": {"art": "La", "nome": "Motovedetta", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 12, "nave": true},
 	"atg": {"art": "Il", "nome": "Cannone navale", "piccolo": true, "lenta": 0, "veloce": 0, "posti": 2},
+	"halftrack": {"art": "Il", "nome": "Semicingolato", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 10},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 

@@ -1862,14 +1862,14 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto", "camion", "atg"] else ("canoa" if modello in ["chiatta", "scialuppa", "motovedetta"] else modello)
+	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto", "camion", "atg", "halftrack"] else ("canoa" if modello in ["chiatta", "scialuppa", "motovedetta"] else modello)
 	corpo.mesh = _mesh_mezzo(nome_mesh)
 	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else (Color(0.78, 0.76, 0.7) if modello in ["scialuppa", "motovedetta"] else Color.WHITE)))
 	if modello == "auto_comando":
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
 	if modello == "moto":
 		corpo.scale = Vector3(0.55, 0.8, 0.6)
-	if modello == "camion":
+	if modello in ["camion", "halftrack"]:
 		corpo.scale = Vector3(1.45, 1.55, 1.8)  # camion americano: carrozzeria più grande e alta
 		corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.55, 0.6, 0.42))
 		# cassone telonato dietro la cabina

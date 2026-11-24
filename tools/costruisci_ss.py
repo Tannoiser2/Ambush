@@ -161,6 +161,52 @@ CARRI_US_21 = {
                                 "1": {"IN": 2, "PC": 4, "WS": -1, "DS": 4, "par": [706, 706, 706]}},
                       "immobile": False, "pv_distrutto": 0, "primo_turno": 0, "testo": "Enters open; cannon prepared."}),
 }
+C12 = ["1", "2", "3-4", "S"]
+TEDESCHI_22 = {
+    "26": carta("S", "Cecchino", 1, ["scoped"], 2, 3, 6, 1, 2, 4, [[0, 1], [2, 4], [5, 5], [6, 9]], C12 + ["B"],
+                [[807, 801, 807, 839, 599], [836, 802, 803, 859, 599], [804, 824, 809, 833, 599], [803, 825, 866, 971, 599]],
+                no_auto_reazioni=["B"]),
+    "27": carta("N", "Cecchino", 1, ["mp", "pzf"], 1, 5, 8, 2, 6, 5, [[0, 0], [1, 2], [3, 4], [5, 9]], ["1-2", "3-4", "S", "P", "Q"],
+                [[800, 860, 868, 208, 209], [801, 866, 215, 208, 209], [817, 807, 812, 208, 209], [824, 809, 817, 208, 209]]),
+    "28": carta("M", "Mitragliere", 1, ["lmg", "pistol"], 2, 4, 6, 1, 4, 4, [[0, 2], [3, 4], [5, 6], [7, 9]], ["1-2", "3-4", "S"],
+                [[848, 864, 817], [815, 863, 816], [959, 867, 819], [815, 868, 823]], primo_turno=815, mg_squadra=46),
+    "29": carta("L", "Cecchino", 1, ["scoped"], 2, 3, 5, 1, 4, 4, [[0, 1], [2, 5], [6, 6], [7, 9]], C12,
+                [[807, 825, 862, 825], [804, 802, 863, 812], [806, 801, 864, 802], [836, 824, 867, 817]]),
+    "38": carta("T", "Cecchino", 1, ["bolt", "pzf"], 1, 3, 7, 0, 2, 4, [[0, 0], [1, 2], [3, 5], [6, 9]], ["1-2", "3-4", "S", "P", "Q"],
+                [[840, 865, 711, 208, 209], [802, 819, 971, 208, 209], [825, 863, 813, 208, 209], [824, 868, 816, 208, 209]]),
+    "40": carta("Y", "Ufficiale", 2, ["mp", "pistol"], 1, 5, 8, 2, 8, 5, [[0, 3], [4, 6], [7, 8], [9, 9]],
+                ["1-2", "3-4", "S", "E", "G", "H", "T"],
+                [[809, 832, 859, 261, 158, 153, 217], [803, 823, 833, 261, 158, 153, 217], [807, 822, 812, 261, 158, 153, 217],
+                 [856, 969, 868, 261, 158, 153, 217]], pv_cattura=2),
+    "41": carta("Z", "Autista del semicingolato", 2, ["mp"], 2, 4, 7, -1, 6, 4, [[0, 4], [5, 6], [7, 8], [9, 9]],
+                ["1-4", "S", "E", "G", "H", "T"],
+                [[862, 817, 261, 481, 153, 216], [863, 833, 261, 481, 153, 216], [864, 812, 261, 481, 153, 216],
+                 [868, 816, 261, 481, 153, 216]]),
+    "42": carta("Q", "Geniere", 1, ["mp"], 1, 1, 4, -1, 4, 3, [[0, 1], [2, 5], [6, 6], [7, 9]], ["1-4", "S", "E", "T"],
+                [[864, 833, 261, 218], [867, 816, 261, 218], [869, 971, 261, 218], [868, 711, 261, 218]]),
+    "43": carta("U", "Geniere", 1, ["mp"], 1, 3, 5, 0, 2, 4, [[0, 3], [4, 5], [6, 6], [7, 9]], ["1-4", "S", "E", "T"],
+                [[862, 817, 261, 218], [863, 839, 261, 218], [865, 816, 261, 218], [866, 859, 261, 218]]),
+    "44": carta("W", "Geniere", 1, ["mp"], 1, 1, 2, 0, 4, 3, [[0, 1], [2, 4], [5, 5], [6, 9]], ["1-4", "S", "E", "T"],
+                [[863, 812, 261, 218], [864, 971, 261, 218], [865, 811, 261, 218], [866, 813, 261, 218]]),
+    "45": carta("X", "Geniere", 1, ["bolt"], 2, 4, 5, -1, 2, 4, [[0, 1], [2, 5], [6, 7], [8, 9]], ["1-4", "S", "E", "T"],
+                [[803, 817, 261, 218], [806, 833, 261, 218], [865, 859, 261, 218], [864, 812, 261, 218]]),
+    "46": carta("V", "Mitragliere", 1, ["bolt"], 0, 1, 2, -1, 4, 3, [[0, 0], [1, 2], [3, 4], [5, 9]], ["1-2", "3-4", "S"],
+                [[815, 815, 859], [869, 803, 823], [815, 809, 839], [770, 807, 812]], primo_turno=869, assiste=28),
+    "371": carta("P", "Servente del cannone anticarro", 1, ["mp"], 2, 1, 2, -2, 0, 3, [[0, 9]], ["1-4", "S"], [[265, 265]]),
+    "372": carta("Q", "Servente del cannone anticarro", 1, ["mp"], 2, 1, 4, -2, 0, 3, [[0, 9]], ["1-4", "S"], [[265, 265]]),
+    "471": TEDESCHI_20["471"], "472": TEDESCHI_20["472"], "473": TEDESCHI_20["473"],
+    "67": carta("LL", "Panzer IV", 2, [], 0, 5, 8, 1, 8, 6, [[0, 9]], ["1-4"], [[800]],
+                carro={"modello": "panzer4", "gruppi": [[0, 2], [3, 3], [4, 7], [8, 9]],
+                       "righe": {"5": {"IN": 5, "PC": 8, "WS": 1, "DS": 8, "par": [907, 905, 925, 925]},
+                                 "4": {"IN": 3, "PC": 7, "WS": 1, "DS": 8, "par": [925, 905, 925, 925]},
+                                 "3": {"IN": 3, "PC": 6, "WS": 1, "DS": 6, "par": [923, 923, 709, 708]},
+                                 "2": {"IN": 2, "PC": 3, "WS": 0, "DS": 4, "par": [814, 874, 923, 921]},
+                                 "1": {"IN": 1, "PC": 1, "WS": -1, "DS": 2, "par": [874, 814, 921, 923]}},
+                       "immobile": False, "pv_distrutto": 3, "primo_turno": 415,
+                       "testo": "Enters open; cannon prepared. On first turn, conduct 415."}),
+}
+
+ESAGONI_PV_22 = ["O4", "W8", "V14", "K14", "J14", "I15"]
 SEZ_A = ["E15", "F14", "G14", "H13", "I13"]
 SEZ_B = ["P15", "Q16", "R13", "S13", "T12", "T15", "U13", "U15", "V13", "V14"]
 
@@ -264,6 +310,33 @@ MISSIONI = {
         "testo_fine": "",
         "carri_us": CARRI_US_21,
     },
+    22: {
+        "titolo": "Un altro ponte di troppo?", "titolo_originale": "Another Bridge Too Far?",
+        "data": "Gennaio 1944, a nord-ovest di Montecassino", "mappa": "FG", "nord": "a sinistra (in alto è est)", "libro": "ss",
+        "briefing": "Gennaio 1944. I partigiani segnalano una strada attraverso i Monti Aurunci. Il comando manda la squadra a "
+                    "vedere se ci sono ponti intatti su cui far passare i carri della divisione per aggirare la linea Gustav. "
+                    "Avete un semicingolato con una mitragliatrice media e una jeep.",
+        "ingresso": "Mappa F con mezza mappa G sopra (in alto è est). La squadra entra sui mezzi da W1, X1 o Y1. Ponti di pietra "
+                    "intatti in O4 (da N4 a P3) e in V14 (da U15 a W14); macerie in K10. Livelli di attivazione: Condizione 1 da 0 "
+                    "a 3, Condizione 2 da 0 a 5, Condizioni 3 e 4 da 0 a 8.",
+        "regole_testo": "[b]Torrente.[/b] Da O1 a N10 e poi fino a Y15: si attraversa pagando i PM del torrente. [b]Dirupi.[/b] "
+                        "Pendenze: 2 PM a piedi, vietati ai mezzi. [b]Ponti.[/b] Da un esagono di ponte si scende fra i sostegni "
+                        "con un’azione (e si risale con un’altra): solo lì si trovano e si disinnescano gli esplosivi (2 azioni, "
+                        "+1 PV). Chi è sotto il ponte è difficile da colpire (−4, −2 dallo stesso esagono). [b]Semicingolato.[/b] "
+                        "Mitragliatrice media al passeggero 1 (senza il −2 dal mezzo), una cassetta. [b]Galleria.[/b] Da W7 a "
+                        "W9, buia; i paragrafi con la T valgono per chi la percorre.",
+        "ingresso_breve": "W1–Y1, sui mezzi", "uscita_breve": "si scopre in gioco",
+        "ingresso_esagoni": ["W1", "X1", "Y1"], "uscita_esagoni": [],
+        "vittoria_pv": 21, "attivazione": {"1": 3, "2": 5, "3": 8, "4": 8}, "obiettivi": [],
+        "regole": {"dirupi": "pendenza", "galleria_ss": True, "missione_22": True,
+                   "terreno_ss": {"O4": {"t": "stream", "ponte": True}, "V14": {"t": "stream", "ponte": True},
+                                  "K10": {"t": "rubble"}, "W7": {"t": "road", "galleria": True},
+                                  "W8": {"t": "road", "galleria": True}, "W9": {"t": "road", "galleria": True}}},
+        "modifiche_iniziali": {},
+        "vittoria_testo": "[b]PV:[/b] +1 per ogni esagono fra O4, W8, V14, K14, J14, I15 in cui entra la squadra; +1 per ogni "
+                          "esplosivo disinnescato; il resto (e quanti PV servono) si scopre durante la missione.",
+        "testo_fine": "",
+    },
 }
 
 
@@ -283,7 +356,7 @@ def main():
         elif n == 20:
             sq += json.loads(json.dumps(CONVOGLIO))
         d["squadra"] = sq
-        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20, 21: TEDESCHI_21}[n]
+        d["tedeschi"] = {19: TEDESCHI_19, 20: TEDESCHI_20, 21: TEDESCHI_21, 22: TEDESCHI_22}[n]
         d["condizioni"] = condizioni(n)
         (R / f"data/missione{n}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         mancanti = set()

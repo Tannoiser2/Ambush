@@ -290,6 +290,7 @@ func inizia_missione() -> Dictionary:
 		_jeep_di_squadra(esagoni)
 	ph.dopo_ingresso(esagoni)
 	ss.m20.dopo_ingresso(esagoni)
+	ss.m22.dopo_ingresso(esagoni)
 	if int(regola("mine_anticarro", 0)) > 0 and not s.has("mine_at"):
 		_piazza_mine_anticarro(esagoni)
 	if bool(regola("bazooka_pronti", false)):
@@ -2200,6 +2201,12 @@ func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
 			err = ss.m20.bazooka_blocco(a, arg)
 		"motovedetta":
 			err = ss.m21.sali_pb(a)
+		"sotto_ponte":
+			err = ss.m22.scendi_sotto(a)
+		"risali_ponte":
+			err = ss.m22.risali(a)
+		"disinnesca":
+			err = ss.m22.disinnesca(a)
 	if err != "":
 		return _errore(err)
 	_chiudi_azione_semplice(a)
@@ -3569,6 +3576,7 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		ss.dopo_ingresso_acqua(u(str(id)))
 	ss.dopo_mossa_operazioni()
 	ss.m20.dopo_movimento(ids)
+	ss.m22.dopo_movimento(ids)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))

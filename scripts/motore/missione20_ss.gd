@@ -7,7 +7,7 @@ const E = preload("res://scripts/motore/esagoni.gd")
 const T = preload("res://scripts/motore/tabelle.gd")
 const MO = preload("res://scripts/motore/missioni_mo.gd")
 
-const ORDINE := ["vjeep", "vcamion1", "vcamion2", "vcamion3"]
+const ORDINE := ["vjeep", "vcamion1", "vcamion2", "vcamion3", "vht"]
 const GALLERIA := ["W7", "W8", "W9"]
 const MORTAIO := [471, 472, 473]
 const MORTAIO_CASO := ["C18", "C18", "G16", "G16", "K14", "K14", "I18", "N18", "N15", "R16"]
@@ -27,8 +27,12 @@ func _st() -> Dictionary:
 
 # ------------------------------------------------------------------ terreno
 ## Ponte di pietra in O4, galleria W7–W9 (strada), relitto d’aereo in K10.
+## Galleria W7–W9 (paragrafi T, buio): Missioni 20 e 22.
+func galleria_attiva() -> bool:
+	return ss.attiva() and (attiva() or bool(p.regola("galleria_ss", false)))
+
 func regole_terreno() -> void:
-	if not attiva():
+	if not ss.attiva():
 		return
 	var mod: Dictionary = p.regola("terreno_ss", {})
 	for h in mod:
@@ -38,7 +42,7 @@ func regole_terreno() -> void:
 		p.terreno.esagoni[h] = d
 
 func in_galleria(x: Dictionary) -> bool:
-	return attiva() and str(x.get("hex", "")) in GALLERIA
+	return galleria_attiva() and str(x.get("hex", "")) in GALLERIA
 
 ## Riferimenti «T» delle carte: valgono solo per chi si muove nella galleria.
 func riferimento_t(rif: String, ctx: Dictionary) -> bool:
@@ -53,7 +57,7 @@ func riferimento_t(rif: String, ctx: Dictionary) -> bool:
 
 ## Nella galleria è buio: da W6 o W10 si vede un solo esagono dentro.
 func vista(oss: Dictionary, ber: Dictionary) -> int:
-	if not attiva():
+	if not galleria_attiva():
 		return -1
 	var hb: String = str(ber.get("hex", ""))
 	var ho: String = str(oss.get("hex", ""))
@@ -92,7 +96,7 @@ func dopo_ingresso(esagoni: Array) -> void:
 	var squadra: Array = p.americani().filter(func(a): return p.attivo(a) and a.hex == h)
 	p.s.imbarco = true
 	var j := 0
-	for vid in ORDINE:
+	for vid in ["vjeep", "vcamion1", "vcamion2", "vcamion3"]:
 		var mod := "jeep" if vid == "vjeep" else "camion"
 		var v: Dictionary = p.veicoli.crea(vid, mod, h, "us")
 		v.nome = "Jeep" if vid == "vjeep" else "Camion %s" % vid.substr(7)

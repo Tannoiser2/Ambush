@@ -510,6 +510,10 @@ func _primo_libero(lista: Array) -> String:
 func op(o: Dictionary, ctx: Dictionary) -> bool:
 	if not attiva():
 		return false
+	return op_comune(o, ctx)
+
+## Operazioni usate anche dalle altre missioni Silver Star (eventi 116, 117, 212, 221, 222, attivazioni nel primo esagono libero).
+func op_comune(o: Dictionary, ctx: Dictionary) -> bool:
 	match str(o.op):
 		"ss_jagd":
 			var h: String = _primo_libero(o.hex) if o.hex is Array else str(o.hex)
@@ -629,7 +633,7 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 		"ss_due_in_libero":
 			var h4 := _primo_libero(o.hex)
 			p._op({"op": "activate", "g": o.g.map(func(x): return [int(x), h4]), "stance": "crouching", "adv": o.get("adv", null), "two": [],
-				"us_two": false, "aware": false, "reaction": "", "rounds": true}, ctx)
+				"us_two": false, "aware": false, "reaction": str(o.get("reaction", "")), "rounds": true}, ctx)
 		"ss_vantaggio_consapevoli":
 			if p.s.has("round") and not p.s.round.is_empty():
 				var tutti: bool = p.americani_attivi_in_mappa().all(func(a): return a.get("consapevole", false))

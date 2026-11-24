@@ -1195,11 +1195,10 @@
  },
  "480": {
   "id": "480",
-  "it": "[s9] Il soldato nota che il ponte in O4 è indebolito dagli anni e dall’incuria: potrebbe non reggere.",
+  "it": "Qui il torrente è invalicabile. Controllo di percezione: se riesce si torna nell’esagono di partenza senza perdere PM; se fallisce si torna indietro e si perdono 2 PM.",
   "ops": [
    {
-    "op": "sighting",
-    "s": 9
+    "op": "ss_torna_indietro"
    }
   ],
   "tipo": "missione"

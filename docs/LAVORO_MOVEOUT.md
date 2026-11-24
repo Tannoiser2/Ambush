@@ -283,3 +283,21 @@ Ordine scelto: M11, M10, M12, M9.
 - Semplificazioni: il settore del cannone navale non si gira; il 250 (bombardamento degli edifici) ferma solo il mezzo;
   la motovedetta in 3D usa il modello della canoa.
 - Test `tests/missione21.gd`, `simula.gd -- 4 1 21`, scatti `tests/visivi/missione21_ui.gd`.
+
+## Silver Star — Missione 22 «Un altro ponte di troppo?» (mappa F con mezza G = «FG», in alto è est)
+- Carte Condizione 1–4 trascritte a vista. `tools/paragrafi_ss_testo.py` ora corregge anche i numeri con «1» letto «4» (482 al
+  posto di 182, 490–492 al posto di 190–192): il 480 della Missione 19 era sbagliato (è «torrente invalicabile», op
+  `ss_torna_indietro`), il vecchio testo era il 180.
+- Dati: TEDESCHI_22 (26–29, 38, 40–46, cannone anticarro 371/372, mortaio 471–473 come nella 20, Panzer 67 con primo turno
+  415), paragrafi `tools/paragrafi_ss22.py`. Galleria W7–W9 condivisa con la 20 (regola `galleria_ss`).
+- Motore `scripts/motore/missione22_ss.gd` (p.ss.m22): semicingolato (MMG, una cassetta) e jeep della squadra; +1 PV per gli
+  esagoni O4, W8, V14, K14, J14, I15; grande ponte I15–J14–K14 al 483 (strada; distrutto = macerie); sotto il ponte con le regole
+  già esistenti di Purple Heart 17 (`sotto_ponte`: vista, modificatori, movimento) e i bottoni «Scendi sotto il ponte»,
+  «Risali sul ponte», «Disinnesca l’esplosivo» (2 azioni, +1 PV, 210: +2); esplosioni 181 (primo scoppio un tratto, secondo
+  crollo → 260, scelta 330/994), 182/191/194/204/225; genieri tedeschi col semicingolato (216/217/218, reazioni T, E 261,
+  G 158/481, H 153: l’autista porta i genieri sul ponte e ne lascia uno per esagono senza esplosivo); cecchino 26 col
+  detonatore di V14 (599/219/598); panzerfaust (208/209); cannone anticarro (265–268, settore di tiro); fine 269/330/994.
+- Semplificazioni: i tre livelli del ponte sono due (sopra e sotto fra i sostegni); in 3D il grande ponte non si disegna (solo
+  i segnalini); il Panzer in S13 non ha le regole dell’edificio (300); il semicingolato tedesco segue il ponte in modo diretto
+  invece dei riferimenti 151–157; l’ufficiale 40 non dà turni agli altri (158 semplificato).
+- Test `tests/missione22.gd`, `simula.gd -- 4 1 22`, scatti `tests/visivi/missione22_ui.gd`.

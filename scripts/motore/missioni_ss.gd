@@ -12,11 +12,13 @@ const PATTUGLIA := {60: "F5", 61: "K6"}
 var p  # Partita
 var m20: RefCounted
 var m21: RefCounted
+var m22: RefCounted
 
 func _init(partita) -> void:
 	p = partita
 	m20 = preload("res://scripts/motore/missione20_ss.gd").new(partita, self)
 	m21 = preload("res://scripts/motore/missione21_ss.gd").new(partita, self)
+	m22 = preload("res://scripts/motore/missione22_ss.gd").new(partita, self)
 
 func attiva() -> bool:
 	return str(p.missione.get("libro", "")) == "ss"
@@ -68,6 +70,7 @@ func regole_terreno() -> void:
 		p.terreno.acqua_ammessa = int(p.missione.id) == 19
 		m20.regole_terreno()
 		m21.regole_terreno()
+		m22.regole_terreno()
 
 ## Dopo l’imbarco: i sommozzatori si aggrappano ai fianchi delle canoe (due per canoa).
 func dopo_imbarco() -> void:
@@ -100,6 +103,8 @@ func dopo_imbarco() -> void:
 
 # ------------------------------------------------------------------ movimento
 func verifica_passo(a: Dictionary, verso: String) -> String:
+	if m22.attiva():
+		return m22.verifica_passo(a, verso)
 	if not m19():
 		return ""
 	var veic: Dictionary = p.veicoli.di(a)
@@ -152,7 +157,7 @@ func dopo_ingresso_acqua(a: Dictionary) -> void:
 func vista(oss: Dictionary, ber: Dictionary) -> int:
 	if not attiva():
 		return -1
-	if m20.attiva():
+	if m20.galleria_attiva():
 		return m20.vista(oss, ber)
 	if sott_acqua(oss) or sott_acqua(ber):
 		return 1 if E.distanza(oss.hex, ber.hex) <= 1 else 0
@@ -551,6 +556,7 @@ func inizio_round() -> void:
 		return
 	m20.inizio_round()
 	m21.inizio_round()
+	m22.inizio_round()
 	for v in p.veicoli.tutti():
 		if v.lato == "de" and m19():
 			v.bersagliato = false
@@ -561,6 +567,9 @@ func controlla() -> void:
 		return
 	if m21.attiva():
 		m21.controlla()
+		return
+	if m22.attiva():
+		m22.controlla()
 		return
 	if not attiva() or p.s.fase == "fine" or not _st().fine_789:
 		return
@@ -584,6 +593,8 @@ func controlla() -> void:
 			p._calcola_fine("obiettivo")
 
 func niente_pv_incapacitati() -> bool:
+	if m22.attiva():
+		return m22.niente_pv_incapacitati()
 	return attiva() and int(_st().get("fine_modo", 0)) == 2 and m19()
 
 func blocca_fine() -> bool:
@@ -591,6 +602,8 @@ func blocca_fine() -> bool:
 		return m20.blocca_fine()
 	if m21.attiva():
 		return m21.blocca_fine()
+	if m22.attiva():
+		return m22.blocca_fine()
 	return attiva() and not _st().fine_789 and not p.americani_attivi_in_mappa().is_empty()
 
 func uscita_ammessa(h: String) -> bool:
@@ -598,13 +611,15 @@ func uscita_ammessa(h: String) -> bool:
 		return m20.uscita_ammessa(h)
 	if m21.attiva():
 		return m21.uscita_ammessa(h)
+	if m22.attiva():
+		return m22.uscita_ammessa(h)
 	return not attiva() or _st().fine_789
 
 # ------------------------------------------------------------------ operazioni dei paragrafi
 func op(o: Dictionary, ctx: Dictionary) -> bool:
-	if not attiva() or not str(o.op).begins_with("ss_"):
+	if not attiva() or not (str(o.op).begins_with("ss") or str(o.op) == "event_check_ops"):
 		return false
-	if m20.op(o, ctx) or m21.op(o, ctx):
+	if m20.op(o, ctx) or m21.op(o, ctx) or m22.op(o, ctx):
 		return true
 	match str(o.op):
 		"ss_magazzino":
@@ -644,6 +659,25 @@ func op(o: Dictionary, ctx: Dictionary) -> bool:
 			var lista: Array = o.dispari if r % 2 == 1 else o.pari
 			p._log("dado", "Dado %d: chiatte in %s." % [r, ", ".join(lista)])
 			_piazza_chiatte(lista)
+		"ss_torna_indietro":
+			# Silver Star 480: torrente invalicabile; si torna nell’esagono di partenza (−2 PM se fallisce il controllo).
+			var ids: Array = ctx.get("ids", [])
+			if ids.is_empty() and str(ctx.get("g", "")) != "":
+				ids = [str(ctx.g)]
+			for id in ids:
+				var x: Dictionary = p.u(str(id))
+				var da: String = str(x.get("hex_prec", ""))
+				if x.is_empty() or da == "" or da == x.hex:
+					continue
+				var v: Dictionary = p.veicoli.di(x)
+				if not v.is_empty() and p.veicoli.e_autista(x):
+					p.veicoli.sposta(v, da)
+				elif v.is_empty():
+					x.hex = da
+				var ok_pc: bool = p.controllo_pc(x, 0, "sul torrente invalicabile")
+				if not ok_pc and not p.s.turno.is_empty() and str(p.s.turno.get("id", "")) == x.id:
+					p.s.turno.mp = maxi(0, int(p.s.turno.mp) - 2)
+				p._log("info", "Il torrente qui è invalicabile: %s torna in %s%s." % [p.nome(x), da, "" if ok_pc else " e perde 2 PM"])
 		"ss_vantaggio":
 			if p.s.has("round") and not p.s.round.is_empty():
 				p.s.round.vantaggio_forzato = str(o.lato)
@@ -702,6 +736,9 @@ func test(t: Dictionary, ctx: Dictionary):
 	var t21 = m21.test(t, ctx)
 	if t21 != null:
 		return t21
+	var t22 = m22.test(t, ctx)
+	if t22 != null:
+		return t22
 	if t.has("ss_sott_acqua"):
 		var chi := _chi(ctx)
 		return (not chi.is_empty() and sott_acqua(chi)) == bool(t.ss_sott_acqua)
@@ -918,9 +955,13 @@ const AZIONI := {
 	814: [["g", false]],
 	826: [["g", "bersagliato"]],
 	706: [["m", "coax", true, 0]],
+	708: [["g", true], ["c"], ["s", false]],
+	709: [["g", true], ["c"], ["s", true]],
 }
 
 func esegui_carro(n: int, g: Dictionary, veic: Dictionary, vc) -> bool:
+	if m22.attiva() and n == 415:
+		return m22.accendi_motore(g, veic)
 	if not attiva() or not (BIVI.has(n) or AZIONI.has(n) or n in [937, 874, 840, 800]):
 		return false
 	var chiave := str(n)

@@ -389,6 +389,17 @@ func _draw() -> void:
 		if str(marcatori[k]) != "":
 			draw_arc(centro_schermo(str(marcatori[k])), RAGGIO * zoom * 0.7, 0.0, TAU, 32, Color(0.85, 0.25, 0.15, 0.9), maxf(2.0, 4.0 * zoom))
 			_marcatore(str(marcatori[k]), "MORTAIO %d" % (k + 1), Vector2(0.0, 0.55 - 0.3 * k), Color("8f2a1e"))
+	# Silver Star 22: ponti, esplosivi sotto i ponti, soldati fra i sostegni
+	var m22: Dictionary = s.get("ss", {}).get("m22", {})
+	if not m22.is_empty():
+		for h in ["O4", "V14"] + (["I15", "J14", "K14"] if m22.get("ponte3", false) else []):
+			var rotto: bool = m22.distrutti.has(h) or (h in ["I15", "J14", "K14"] and m22.get("crollato", false))
+			_marcatore(h, "PONTE DISTRUTTO" if rotto else "PONTE", Vector2(0.0, -0.62), Color("3a3a3a") if rotto else Color("6a5a40"))
+		for h in m22.get("esplosivi", {}):
+			_marcatore(str(h), "ESPLOSIVO (LATO %d)" % int(m22.esplosivi[h]), Vector2(0.0, 0.62), Color("8f2a1e"))
+		for x in partita.americani() + partita.tedeschi():
+			if x.get("sotto_ponte", false) and partita.ss.m22.sotto(x):
+				_marcatore(str(x.hex), "SOTTO IL PONTE", Vector2(0.0, 0.3), Color("2f3b4a"))
 	# Missione 8: blocchi stradali
 	for h in s.get("blocchi", []):
 		_marcatore(str(h), "BLOCCO STRADALE", Vector2(0.0, -0.62), Color("5b4a33"))

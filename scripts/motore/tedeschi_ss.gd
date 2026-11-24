@@ -22,6 +22,51 @@ func esegui(n: int) -> bool:
 	var p = t.p
 	if p.ss.m20.attiva():
 		return _esegui20(g, n)
+	if p.ss.m22.attiva():
+		var m22 = p.ss.m22
+		match n:
+			216:
+				m22.turno_autista(t, g)
+			217:
+				m22.turno_secondo(t, g)
+			218:
+				m22.turno_geniere(t, g)
+			261:
+				m22.turno_e(t, g)
+			153:
+				m22.turno_h(t, g)
+			158, 481:
+				m22.turno_g(t, g)
+			599:
+				m22.turno_b(t, g)
+			265, 266, 267, 268:
+				m22.turno_atg(t, g)
+			208, 209:
+				_panzerfaust22(g, n)
+			823:
+				var altri: Array = p.unita_in(g.hex, "de").filter(func(x): return x.id != g.id and p.attivo(x))
+				if not altri.is_empty():
+					g.postura = "prone"
+				else:
+					t.esegui(868)
+			848:
+				var vicini: Array = p.americani_attivi_in_mappa().filter(func(a): return E.distanza(a.hex, g.hex) <= 3)
+				var lontani: Array = t.bersagli(g).filter(func(a): return E.distanza(a.hex, g.hex) in [4, 5, 6])
+				if int(g.munizioni.get("granata", 0)) > 0 and not vicini.is_empty():
+					t._accovacciati()
+					t._lancia_granata(3)
+					t._prono_se_libero()
+				elif int(g.munizioni.get("granata", 0)) > 0 and not lontani.is_empty():
+					t._alzati()
+					t._lancia_granata(6)
+					t._prono_se_libero()
+				else:
+					t.esegui(815)
+			549, 502, 503, 504:
+				return _esegui20(g, n)
+			_:
+				return false
+		return true
 	if p.ss.m21.attiva():
 		match n:
 			425, 426, 584, 585:
@@ -302,6 +347,33 @@ func _contro_mezzi(g: Dictionary, n: int) -> void:
 		t._prono_se_libero()
 		return
 	_verso_americano(g, n != 114)
+
+## 208/209 (reazioni P e Q): panzerfaust contro un mezzo americano entro 3 esagoni, poi la tabella.
+func _panzerfaust22(g: Dictionary, n: int) -> void:
+	var p = t.p
+	var pzf: Dictionary = p.arma_di(g, "pzf")
+	if pzf.is_empty() or pzf.get("scarica", false) or pzf.get("usata", false):
+		g.reazione = ""
+		t._ritira_e_esegui()
+		return
+	var mezzi: Array = p.veicoli.tutti().filter(func(v): return v.lato == "us" and p.veicoli.attivo(v) and str(v.hex) != "" \
+		and E.distanza(v.hex, g.hex) <= 3 and p.terreno.vede(g.hex, v.hex, "crouching", "standing"))
+	if not mezzi.is_empty():
+		mezzi.sort_custom(func(a, b): return E.distanza(a.hex, g.hex) < E.distanza(b.hex, g.hex))
+		var occ: Array = p.veicoli.occupanti(mezzi[0])
+		if not occ.is_empty():
+			t._accovacciati()
+			pzf.usata = true
+			p._log("tedesco", "Il %s spara il panzerfaust contro %s." % [p.nome(g), str(mezzi[0].nome).to_lower()])
+			p.risolvi_tiro(g, pzf, occ[0], true)
+			t._prono_se_libero()
+			return
+	var num := int(p.s.round.get("numero_azione", 0))
+	var tab: Array = [[0, 0, 840], [1, 4, 802], [5, 7, 825], [8, 9, 869]] if n == 208 else [[0, 0, 869], [1, 2, 824], [3, 4, 825], [5, 9, 802]]
+	for r in tab:
+		if num >= int(r[0]) and num <= int(r[1]):
+			t.esegui(int(r[2]))
+			return
 
 func _esegui20(g: Dictionary, n: int) -> bool:
 	var p = t.p
