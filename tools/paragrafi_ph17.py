@@ -52,13 +52,13 @@ par("444", "[s3] Attiva i tedeschi 55 e 56 in O12, accovacciati. Iniziano i Roun
     sighting(3) + [activate([(55, "O12"), (56, "O12")], "crouching"), cond(2)])
 attiva_check("335", "337", "346")
 pc_check("346", "356", "367")
-par("337", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
-    sighting(5) + [activate([(50, "X14")], "crouching", adv="de", two=[50])])
-par("356", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio americano; i "
+par("337", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
+    sighting(5) + [activate([(50, "X14")], "crouching", adv="de", two=[50]), {"op": "al_piano", "g": [50]}])
+par("356", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round, vantaggio americano; i "
            "consapevoli che non vanno nel panico ricevono 2 turni.",
-    sighting(5) + [activate([(50, "X14")], "crouching", adv="us", us_two=True)])
-par("367", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round.",
-    sighting(5) + [activate([(50, "X14")], "crouching")])
+    sighting(5) + [activate([(50, "X14")], "crouching", adv="us", us_two=True), {"op": "al_piano", "g": [50]}])
+par("367", "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round.",
+    sighting(5) + [activate([(50, "X14")], "crouching"), {"op": "al_piano", "g": [50]}])
 attiva_check("514", "523", "570")
 pc_check("570", "529", "535")
 par("523", "[s0] Attiva i tedeschi 22 e 23 in I13, accovacciati. Iniziano i Round, vantaggio tedesco.",
@@ -77,14 +77,24 @@ par("471", "[s1] Il soldato sente un treno che arriva da nord. All’inizio del 
 par("486", "[s8] Un treno tedesco entra in Y5! Iniziano i Round, vantaggio tedesco. Vedi 493. Appena il treno esce dalla mappa o deraglia, "
            "passa alla Condizione 3; si resta nei Round finché il treno è in mappa.", sighting(8) + [{"op": "treno"}])
 par("493", "Il treno: locomotiva, tre vagoni merci e una cisterna (in ordine casuale dietro la locomotiva). Avanza di 6 esagoni di binario "
-           "per turno, due turni per Round (qui: 12 esagoni all’inizio di ogni Round). Non si sale sul treno. Un vagone che entra "
+           "per turno, all’inizio di ciascuno dei due turni del Round. Non si sale sul treno. Un vagone che entra "
            "nell’esagono di un soldato attivo: controllo di percezione, se riesce si sposta in un esagono vicino, altrimenti muore. Vedi 497 "
            "per farlo deragliare.", [])
-par("497", "Il treno deraglia se entra nel ponte di legno G11 distrutto (vedi 506). In questa versione i binari non si possono far "
-           "saltare e il treno non si può distruggere a colpi di bazooka.", [])
-par("506", "Deragliamento: locomotiva e vagoni si rovesciano dove si trovano (in questa versione senza la procedura di scivolamento). "
-           "Passa alla Condizione 3 e torna alle Operazioni se non ci sono tedeschi attivi. Un soldato americano attivo che entra in un "
-           "vagone merci rovesciato: vedi 595.", [])
+par("497", "Il treno si può far deragliare in tre modi: distruggendo il ponte di legno in G11 (se un pezzo del treno entra o si trova su "
+           "un ponte distrutto, vedi 506); interrompendo un esagono del binario (vedi 503); distruggendo il treno stesso (vedi 504).", [])
+par("503", "Per interrompere il binario si piazza una carica in un esagono che il treno non occupa ancora, con la spoletta regolata in "
+           "modo che salti prima che tutto il treno sia passato, oppure si lancia una carica in un esagono del binario occupato dal treno "
+           "o in cui non è ancora entrato. Se il treno comincia un turno con un pezzo su un binario interrotto, o la locomotiva ci entra, "
+           "deraglia (vedi 506).", [])
+par("504", "La locomotiva si distrugge con una penetrazione pesante del bazooka, ogni altro vagone con una media o migliore. Al tiro "
+           "locomotiva e vagoni contano come mezzi grandi allo scoperto. Se il pezzo colpito è distrutto, il treno deraglia (vedi 506).", [])
+par("506", "Deragliamento: i pezzi davanti a quello che deraglia si rovesciano dove sono; quello e i successivi, uno alla volta dal "
+           "primo all’ultimo, scivolano: dado 0–3 verso est, 4–6 sud-est, 7–9 sud-ovest; dopo ogni esagono, pari prosegue e dispari si "
+           "ferma, al terzo esagono si ferma comunque. Si fermano subito entrando in bosco, edificio (diventa macerie), terreno "
+           "accidentato, fiume o su un altro relitto; un ponte colpito crolla con un pari (altrimenti regge ma i mezzi non passano). Chi "
+           "è nell’esagono fa un controllo di percezione: se riesce si butta a terra e perde i turni, altrimenti muore (gli incapacitati "
+           "muoiono). Poi passa alla Condizione 3 e torna alle Operazioni se non ci sono tedeschi attivi. Un soldato americano attivo che "
+           "entra in un vagone merci rovesciato: vedi 595.", [])
 par("595", "[s9] I tesori del Louvre! I vagoni contengono centinaia di casse marcate Picasso, Rembrandt, Michelangelo. Guadagni 10 PV per "
            "aver salvato il patrimonio della Francia!", [{"op": "louvre"}])
 

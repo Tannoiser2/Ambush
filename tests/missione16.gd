@@ -70,5 +70,65 @@ func _init() -> void:
 	var righe: Array = []
 	var b: int = p.ph.righe_fine(righe)
 	ok(b == 8 - 2, "PV del deposito: 8 intatti − 2 = %d" % b)
+	_semplificazioni()
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)
+
+
+## Regole che nelle prime versioni erano semplificate: due jeep, allerta, soldato J, camion, battelli colpiti, deposito in fiamme.
+func _semplificazioni() -> void:
+	var p = PartitaScript.new(16)
+	p.nuova(5, true)
+	var sq: Array = p.americani()
+	for c in [["B2", 0], ["B18", 2], ["X2", 4], ["X18", 6]]:
+		p.schiera([sq[c[1]].id, sq[c[1] + 1].id], str(c[0]))
+	p.inizia_missione()
+	ok(not p.veicoli.v("vjeep").is_empty() and not p.veicoli.v("vjeep2").is_empty(), "due jeep della squadra")
+	# 501: il soldato J e i commando
+	p.leggi("501", {"hex": "V13", "ids": []})
+	var j: Dictionary = p.u("J")
+	ok(not j.is_empty() and j.hex == "V12" and j.postura == "standing" and j.consapevole, "501: la guardia del deposito J in V12")
+	p.s.round.n = 1
+	ok(p.in_comando(j), "J è in comando nel Round 1")
+	p.s.round.n = 2
+	ok(p.in_comando(sq[0]), "in allerta: nel secondo Round tutti in comando")
+	p.s.round.n = 3
+	# battello colpito: con penetrazione media o pesante affonda con gli occupanti
+	var g20: Dictionary = p.u("g20")
+	p.s.ph.barche["bx"] = {"hex": "U11", "mossa": ""}
+	g20.barca = "bx"
+	g20.hex = "U11"
+	p.ph.affonda_barca("bx", false, "prova")
+	ok(not p.s.ph.barche.has("bx") and str(g20.get("barca", "")) == "" and g20.postura == "prone", "il battello affonda: il tedesco raggiunge la riva (%s)" % g20.hex)
+	# camion del carburante
+	p.s.fase = "operazioni"
+	p.s.pausa = ""
+	p.leggi("717", {"hex": "A3"})
+	var t1: Dictionary = p.u("T1")
+	var v1: Dictionary = p.veicoli.di(t1)
+	ok(not t1.is_empty() and v1.modello == "camion" and v1.hex == "A3", "717: il primo camion entra in A3")
+	ok(p.veicoli.sali(sq[0], v1) != "" and not p.scendi_veicolo(t1.id).ok, "nessuno sale sul camion e l’autista non scende")
+	v1.hex = "U14"
+	t1.hex = "U14"
+	ok(p.carica_camion(t1.id).ok and v1.carico, "nelle Operazioni il camion si carica in U14")
+	v1.hex = "A3"
+	t1.hex = "A3"
+	var pv0: int = p.pv_totali()
+	p.s.pausa = ""
+	ok(p.esci(t1.id).ok and p.pv_totali() == pv0 + 2 and not p.u("T2").is_empty(), "esce carico da A3: +2 PV, entra il secondo camion")
+	p.veicoli.disabilita(p.veicoli.di(p.u("T2")), "prova")
+	ok(p.pv_totali() == pv0 and not p.u("T3").is_empty(), "il secondo camion messo fuori uso: −2 PV, entra il terzo")
+	# deposito in fiamme
+	p.ph.esplodi("V13")
+	var x: Dictionary = sq[2]
+	x.hex = "W12"
+	for v in E.vicini("V13"):
+		if p.terreno.costo_movimento(v, "V13") >= 0 and not (v in p.ph.deposito()):
+			x.hex = v
+			break
+	x.postura = "standing"
+	x.stato = "attivo"
+	p.s.fase = "operazioni"
+	p.s.pausa = ""
+	var r: Dictionary = p.muovi([x.id], "V13")
+	ok(r.ok and (x.stato == "morto" or (x.hex != "V13" and x.postura == "prone")), "414.2: chi entra nel deposito in fiamme muore o passa oltre, prono (%s, %s)" % [x.stato, x.hex])

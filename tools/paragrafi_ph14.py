@@ -69,9 +69,10 @@ par("368", "Ripiegate! Siete caduti in un’imboscata. " + FINE, [{"op": "ripieg
 par("390", "Passa alla Condizione 3.", [cond(3)])
 par("378", "[s7] Un colpo d’artiglieria tedesca cade in S9: il ponte è distrutto! Chi è nell’esagono muore, i mezzi sono distrutti.",
     sighting(7) + [{"op": "artiglieria_esagoni", "esagoni": ["S9"]}])
-par("555", "Metti un segnalino Evento. Un tiro d’artiglieria tedesca! Bersaglio K9, con dispersione (qui: dado 0–3 K9, 4–9 uno dei sei "
-           "esagoni vicini). Cratere, o macerie se colpisce un edificio; chi è nell’esagono muore, i mezzi sono distrutti.",
-    [EVENT, {"op": "artiglieria_esagoni", "esagoni": ["K9", "K9", "K9", "K9", "K8", "L9", "L10", "K10", "J10", "J9"]}])
+par("555", "Metti un segnalino Evento. Un tiro d’artiglieria tedesca! Tira i dadi percentuali e segui il diagramma della dispersione "
+           "dell’artiglieria (pagina 31 del libretto) con bersaglio K9: 00–09 K9, 10–39 uno dei sei esagoni vicini, 40–99 il secondo "
+           "anello. Cratere, o macerie se colpisce un edificio; chi è nell’esagono muore, i mezzi sono distrutti.",
+    [EVENT, {"op": "artiglieria_dispersione", "hex": "K9"}])
 par("383", "Un tiro d’artiglieria tedesca! Colonna: due dadi più 2; riga: due dadi (per esempio 8 e poi 18 danno J18). Cratere, o macerie "
            "se colpisce un edificio; chi è nell’esagono muore (anche i tedeschi), i mezzi sono distrutti.", [{"op": "artiglieria_383"}])
 par("544", "Un tiro d’artiglieria tedesca! Tira un dado: 0 I5, 1 S11, 2 O14, 3 F4, 4 P7, 5 U13, 6 H15, 7 P3, 8 Q12, 9 U5. Cratere, o "

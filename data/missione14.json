@@ -45,7 +45,8 @@
  "regole": {
   "fiume": true,
   "jeep_caricate": 2,
-  "radio_portata_ph": true
+  "radio_portata_ph": true,
+  "mg_jeep_opzionale": true
  },
  "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b]",
  "testo_fine": "",

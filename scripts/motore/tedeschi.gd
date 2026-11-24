@@ -28,6 +28,8 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 	_reazione_cambiata = false
 	if p.veicoli.turno_equipaggio(self, g):
 		return
+	if p.ph.attiva() and p.ph.berserk.turno_tedesco(self, g):
+		return
 	var col := colonna(g)
 	var numero: int = int(p.s.round.numero_azione)
 	var par := paragrafo_da_carta(g, col, numero)
@@ -69,6 +71,8 @@ func _nome_colonna(c: String) -> String:
 ## Colonna da usare: autoconservazione se adiacente a un americano attivo, poi reazione speciale, poi Condizione.
 func colonna(g: Dictionary, ignora_s := false) -> String:
 	var colonne: Dictionary = p.missione.tedeschi[str(int(g.num))].colonne
+	if str(g.get("reazione_fissa", "")) != "":
+		g.reazione = str(g.reazione_fissa)  # Purple Heart 648: reazione speciale fino alla fine della missione
 	if g.get("solo_S", false):
 		return "S"
 	if int(g.get("paracadute", 0)) > 0:
@@ -1140,6 +1144,12 @@ func _passo(verso: String, strisciando: bool) -> bool:
 	g.sul_ponte = p.terreno.ponte(verso) and da_hex in p.terreno.capi_ponte(verso)
 	p._log("tedesco", "Il %s %s in %s." % [p.nome(g), "striscia" if strisciando else "corre", verso])
 	p._fx("muovi", {"ids": [g.id], "da": da_hex, "a": verso, "strisciando": strisciando})
+	if p.ph.in_fiamme(verso):
+		var rif: String = _riferimento(verso)
+		p.ph.attraversa_fiamme(g, da_hex, rif if E.valido(rif) else "")
+		_mp = 0
+		_fermo = true
+		return false
 	if not p.unita_in(verso, "us").is_empty():
 		_fermo = true
 	return true

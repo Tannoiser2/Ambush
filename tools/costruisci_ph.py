@@ -145,7 +145,7 @@ MISSIONI = {
         "ingresso_breve": "bordo nord, Y7 (sulle jeep)", "uscita_breve": "bordo nord, Y1–Y19",
         "ingresso_esagoni": ["Y7"], "uscita_esagoni": ["Y%d" % r for r in range(1, 20)],
         "vittoria_pv": 20, "attivazione": {"1": 1, "2": 6, "3": 8}, "obiettivi": [],
-        "regole": {"fiume": True, "jeep_caricate": 2, "radio_portata_ph": True},
+        "regole": {"fiume": True, "jeep_caricate": 2, "radio_portata_ph": True, "mg_jeep_opzionale": True},
         "vittoria_testo": "[b]Vittoria e fine: si scoprono durante il gioco.[/b]",
         "testo_fine": "",
         "germani": [17, 35, 40, 41, 42, 43, 44, 45],
@@ -178,13 +178,15 @@ MISSIONI = {
                     "generale in persona, deve sorvegliare il deposito avanzato di carburante vicino a Digione. Non deluderlo!",
         "ingresso": "Mappa C, in alto è est. Schiera la squadra su un ampio perimetro: almeno due uomini entro 10 esagoni da ciascun "
                     "angolo della mappa (A1, A19, Y1, Y19). Nessuno può cominciare nel deposito (U15, U16, V12, V13, V14, V15, W13, W14, "
-                    "W15). Dopo lo schieramento si leggono le carte degli esagoni occupati. Ricevi gratis una jeep.",
+                    "W15). Dopo lo schieramento si leggono le carte degli esagoni occupati. Ricevi gratis due jeep.",
         "regole_testo": "[b]Notte di luna.[/b] Si vede fino a sei esagoni. [b]Fiume.[/b] Il fiume si attraversa solo sui ponti intatti. "
-                        "[b]In allerta.[/b] Tutti i soldati sono in allerta (in questa versione: regole normali di consapevolezza). "
+                        "[b]In allerta.[/b] All’inizio dei Round la consapevolezza si determina normalmente, ma nel primo Round chi è consapevole è "
+                        "in comando e nel secondo Round tutti sono consapevoli e in comando; poi il comando torna normale. "
                         "[b]Esplosivi.[/b] Un soldato nell’esagono di un esplosivo lo disinnesca in due azioni.",
         "ingresso_breve": "schieramento entro 10 esagoni dagli angoli", "uscita_breve": "nessuna",
         "vittoria_pv": 24, "attivazione": {"1": 1, "2": 3, "3": 6, "4": 8, "5": 8}, "obiettivi": [],
-        "regole": {"vista": 6, "fiume": True, "jeep": True, "deposito": DEPOSITO_16, "angoli": ANGOLI, "niente_pv_incapacitati": True},
+        "regole": {"vista": 6, "fiume": True, "jeep": True, "jeep_n": 2, "deposito": DEPOSITO_16, "angoli": ANGOLI,
+                   "niente_pv_incapacitati": True, "allerta": True},
         "vittoria_testo": "[b]Vittoria: 24 PV[/b] (si scopre durante il gioco). Valgono le attivazioni dei tedeschi, 1 PV per ogni "
                           "esagono del deposito intatto e −2 PV per ogni esagono distrutto, 2 PV per ogni esplosivo disinnescato. La "
                           "missione finisce quando non ci sono tedeschi attivi in mappa (e, se sono stati piazzati esplosivi, quando "
@@ -201,10 +203,12 @@ MISSIONI[17] = {
                 "ordini: distruggere tutti i ponti sul fiume, tagliare la ritirata ai resti tedeschi e chiudere la sacca.",
     "ingresso": "Mappe B ed E, in alto è ovest. La squadra entra da un esagono dei bordi sud e ovest tra A5 e H1. Ponte di legno in G11, "
                 "ponti di pietra in J11 e R10; gli edifici a ovest del fiume sono macerie. Ricevi 5 cariche da demolizione gratis.",
-    "regole_testo": "[b]Fiume.[/b] Il fiume da A6 a Y11 si attraversa solo sui ponti intatti. [b]Ponti.[/b] Sul ponte, carica da "
-                    "demolizione pronta: una carica basta per il ponte di legno, due per quelli di pietra. Poi si arma il timer da 1 a 4 "
-                    "Round: il ponte salta all’inizio del Round indicato (nelle Operazioni appena la squadra si è allontanata). Chi è sul "
-                    "ponte muore. (Scendere sotto il ponte non è gestito.) [b]Vittoria: 28 PV.[/b] Niente PV per le attivazioni: 10 PV "
+    "regole_testo": "[b]Fiume.[/b] Il fiume da A6 a Y11 si attraversa solo sui ponti intatti. [b]Ponti.[/b] Sul ponte si scende sui "
+                    "sostegni (2 PM per scendere o risalire) e si piazzano le cariche: una per il ponte di legno, due per quelli di "
+                    "pietra (un’azione ciascuna). La spoletta si regola da 1 a 4 turni: il ponte salta all’inizio del turno indicato, "
+                    "prima di ogni azione (nelle Operazioni appena la squadra si è allontanata); chi è sopra o sotto muore. Sotto il ponte "
+                    "si è visti come accovacciati sul ponte e al tiro si conta come in un interno; ferito o in panico, chi è sotto cade "
+                    "nel fiume se il dado supera la sua IN. [b]Vittoria: 28 PV.[/b] Niente PV per le attivazioni: 10 PV "
                     "per ogni ponte distrutto e 1 PV per ogni tedesco ucciso, catturato o incapacitato.",
     "ingresso_breve": "bordi sud e ovest, A5–H1", "uscita_breve": "bordi sud e ovest, A5–H1 (dalla Condizione 3)",
     "ingresso_esagoni": ["A1", "A2", "A3", "A4", "A5"] + ["%s1" % c for c in "BCDEFGH"],

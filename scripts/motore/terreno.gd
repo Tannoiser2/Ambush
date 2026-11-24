@@ -86,6 +86,8 @@ func capi_ponte(h: String) -> Array[String]:
 
 ## Bunker (Missione 6): {esagono: {porta: esagono davanti alla porta, sfondata: bool}}. Tutti i lati sono feritoie.
 var bunker: Dictionary = {}
+## Purple Heart 493: i vagoni intatti del treno bloccano la vista come edifici di un piano.
+var treno: Dictionary = {}
 ## Muri sfondati da un paragrafo (Purple Heart 642): coppie di esagoni il cui lato non fa più da muro.
 var muri_sfondati: Array = []
 
@@ -251,9 +253,9 @@ func _blocca_esagono(h: String, a: String, b: String, qa: int, qb: int) -> Strin
 		else:
 			if (E.adiacenti(h, a) and qh >= qa) or (E.adiacenti(h, b) and qh >= qb):
 				return "%s (%s) adiacente blocca la vista" % [NOMI.get(tipo(h), tipo(h)), h]
-	elif edificio(h) or tipo(h) in PIENI:
+	elif edificio(h) or tipo(h) in PIENI or treno.has(h):
 		if qa == qb:
-			return "l’edificio in %s blocca la vista" % h
+			return ("il treno in %s blocca la vista" % h) if treno.has(h) else ("l’edificio in %s blocca la vista" % h)
 		var basso_h := a if qa < qb else b
 		var alto_h := b if qa < qb else a
 		if E.distanza(h, basso_h) <= E.distanza(h, alto_h):

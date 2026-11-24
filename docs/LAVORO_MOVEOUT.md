@@ -112,20 +112,35 @@ Ordine scelto: M11, M10, M12, M9.
   725 per i serbatoi (incendio che illumina).
 - Mezzi: 67/68 motosiluranti (modello eboat, solo acqua), 69 Panzer IV; 662 cattura della motosilurante; auto comando
   (713) e scialuppa (718, +10 PV uscendo a ovest; parte già sulla spiaggia in I18).
-- Non gestiti: tiro ai cani (−3), cassa delle armi del lancio, treno (486), soldati «fuori di testa» (655/689), ritorno
-  della sentinella 61 in E11 (648, 3–4), colpi al faro con le armi (si distrugge solo con un esplosivo).
+- Lancio: niente fucili semiautomatici (diventano carabine) né mitragliatrici medie; ognuno si lancia con una casella d’armi;
+  bazooka, BAR, cariche e razzi vanno nella cassa (4 caselle, 8 scatole), che atterra con il suo dado (fiume = persa, 9 =
+  persa); il contenuto e le armi degli incapacitati vanno a chi ha caselle libere, prima al proprietario.
+- Cani (391): −3 a chi spara a un cane, niente panico; la sentinella 61 (403/411) fugge e sparisce nel primo esagono fuori
+  vista. 648 (3–4): la sentinella uscita con un movimento evasivo torna al piano superiore del faro E11 (torri E11 sulla
+  mappa AD) in reazione A fissa (reazione_fissa).
+- Faro: «Spara al faro» (tiro mirato +1, penetrazione leggera o più = spento; ph.spegni_faro) oltre all’esplosivo.
+- Fuori di testa (scripts/motore/berserk_ph.gd): 655 tedesco e 689 americano (2 turni, niente panico, +2 nell’assalto, tiro
+  rapido e corsa verso il nemico; l’americano agisce da solo in turni_automatici e si ferma con «Placca» o entrando nel suo
+  esagono: 0–7 placcato, poi 3–9 torna in sé).
+- Scialuppa (718, modello scialuppa): rovesciata in I14, «Porta la scialuppa» con quattro uomini in piedi (2 esagoni per
+  turno, nei Round consuma i loro turni), si vara da spiaggia o banchina, si rema di 2 esagoni in due (nei Round il secondo
+  rematore spende il turno), a bordo accovacciati in copertura e solo armi personali; un tiro tedesco mancato controlla la
+  penetrazione (leggera = un ferito, di più = affonda e annegano tutti).
 - Il bot delle simulazioni non usa gli esplosivi: perde sempre, ma serve a cercare errori (0 in 20 partite).
 
 ## Missione 17 «Sul filo del rasoio» (mappe B + E, in alto è ovest)
 - Avvio (regola fine_ponti_17): macerie negli edifici a ovest del fiume, 5 cariche gratis; ponti G11 (legno), J11 e R10
   (pietra, regola ponti_pietra). Niente PV per le attivazioni (pv 0 nel costruttore).
-- Ponti (regola ponti_timer): sul ponte si piazzano le cariche (1 legno, 2 pietra), poi «Timer: salta tra N Round» (1–4,
-  s.ph.timer_ponti, esplode all’inizio del Round) o, nelle Operazioni, «Innesca» (salta appena nessun americano è entro un
-  esagono). Il 759 fa gettare una carica al tedesco sul ponte. Non gestiti: scendere sotto il ponte e le sue regole di tiro.
-- Treno (471/486, s.ph.treno): locomotiva + 3 vagoni + cisterna su BINARIO_BE (Y5 → A13), 12 esagoni all’inizio di ogni
-  Round; travolge chi non supera il controllo di percezione; deraglia sul ponte G11 distrutto (vagoni rovesciati: 595,
-  +10 PV una volta); uscita o deragliamento → Condizione 3; i Round restano obbligati finché il treno è in mappa. Non
-  gestiti: binari fatti saltare e treno colpito dal bazooka, scivolamento dei vagoni.
+- Ponti (regola ponti_timer): si scende sotto il ponte (2 PM, sotto_ponte), si piazzano le cariche (1 legno, 2 pietra), poi
+  «Spoletta: salta tra N turni» (1–4 turni, all’inizio del turno indicato) o, nelle Operazioni, «Innesca». Sotto il ponte: si è
+  visti come accovacciati sul ponte, al tiro si conta come in un interno (scoperto se sotto lo stesso ponte), dal ponte dello
+  stesso esagono lo vede solo chi è in piedi; ferito o in panico cade nel fiume se il dado supera la IN. Il 759 fa gettare una
+  carica al tedesco sul ponte. Cecchino 50 al piano superiore di X14.
+- Treno (471/486, s.ph.treno): locomotiva + 3 vagoni + cisterna su BINARIO_BE (Y5 → A13), 6 esagoni nella casella tedesca di
+  ciascuno dei due turni (ph.casella_treno, secondo il vantaggio); blocca la vista (terreno.treno) e non ci si entra; travolge
+  chi non supera il controllo di percezione. Deraglia (506 con lo scivolamento dei vagoni: est/sud-est/sud-ovest, fino a 3
+  esagoni, ponti colpiti, soldati travolti) sul ponte distrutto, sul binario interrotto (503: carica con la spoletta o
+  lanciata) o colpito dal bazooka (504: locomotiva con penetrazione pesante, vagoni con media); vagoni rovesciati: 595.
 - Motocicletta 48/49 (559) e auto comando 52/53 (566) con colonna_ph senza reazione W; corriere SS 53: fuori combattimento
   lascia la borsa sigillata (oggetto documenti con par 652: +5 PV a chi la raccoglie).
 - Paragrafi d’azione di Purple Heart diversi dal gioco base (341–363, 624–661, 710–785, 804, 834, 846–919): in
@@ -147,7 +162,10 @@ Ordine scelto: M11, M10, M12, M9.
 - Carta C3: W18 rimandava a 449 (paragrafo della Missione 16): corretto in 499 (reazione L) nel costruttore.
 - Paragrafi dei carri di Purple Heart (900–911, 921–929) riscritti in tedeschi_ph.esegui_carro: sono diversi da quelli
   del gioco base (valgono anche per il Panzer IV della Missione 13). 909: «a est del fiume» = riga più alta del ruscello.
-- Non gestito: la mitragliatrice media montata sulla jeep (non c’è l’acquisto dell’equipaggiamento).
+- 555: diagramma della dispersione dell’artiglieria (pagina 31 del libretto, uguale a quello di Move Out!: mo.dispersione).
+- Mitragliatrice media montata (regola mg_jeep_opzionale): scelta nello schieramento, prende il posto del BAR di G (niente
+  acquisto dell’equipaggiamento); la spara solo il passeggero 1 (mg.solo_passeggero1), la assistono gli altri passeggeri.
+- Radio (regola 5 del libretto): se il sergente che la porta è ferito, incapacitato o ucciso, con 25 o meno la radio è distrutta.
 
 ## Missione 15 «Ritorno a casa» (mappa C, in alto è ovest)
 - Avvio (regola diga): letto N6–Y15 asciutto = copertura (s.modifiche "cover", S9 resta ponte), diga N5 "clear" con
@@ -155,14 +173,16 @@ Ordine scelto: M11, M10, M12, M9.
 - Condizione 1: relitti (s.punti), caduti da perquisire (leggi_entrando + bottino a terra), 491 → 498/505; 505 annota la
   collina: un americano su quota 4 → 519 → 532 (Condizione 2, chiuse 479) o 550 (Condizione 3).
 - Chiuse (azione «Apri le chiuse»): 4 azioni nei Round, un controllo eventi nelle Operazioni → 565: piena di 4 esagoni
-  all’inizio di ogni Round (approssimazione: il libro dice ogni turno), allaga (water), travolge, crolla il ponte S9;
+  all’inizio di ciascuno dei due turni del Round (partita._avvia_turni → ph.inizio_turno), allaga (water), travolge, crolla il ponte S9;
   i Round restano obbligati finché la piena è in mappa; uscita → 542 (Condizione 4, +5 PV).
-- Colonna (593/598, op colonna_ph): motociclette (modello moto, velocità ipotizzate 5/10), Kübelwagen 8–11, auto comando
+- Colonna (593/598, op colonna_ph): motociclette (modello moto: 7 lento, 12 veloce, due posti, tabella dei colpi della pagina 30), Kübelwagen 8–11, auto comando
   16, 12, 14, 15; reazione W (613 autisti, 626 passeggeri, 620 scendono); primo turno 814/840; a bordo ignorano
   l’autoconservazione (ignora_s_veicolo). 598 arriva al secondo Round al posto del controllo eventi o prima se 4 e 6 sono
   fuori combattimento. 698/709: −5/−3 PV per tedesco uscito, fine quando non ci sono tedeschi attivi in mappa, niente PV
   persi per gli incapacitati. Feldmaresciallo 12: cattura +15 PV; guardie 14/15 con 635/640/650/665/680.
-- Non gestiti: Jagdpanther utilizzabile (599), le motociclette che investono i soldati (600).
+- Investimento dei soldati (17/12, veicoli.investimento): vale per tutti i mezzi; la motocicletta (600) dopo aver investito
+  fa un controllo d’incidente da auto con −2. Il 599 (Jagdpanther da servire) non è raggiungibile in questa missione: è
+  gestito nella Missione 18.
 
 ## Missione 16 «In guardia» (mappa C)
 - Schieramento: almeno due soldati entro 10 esagoni da ogni angolo, nessuno nel deposito (U15, U16, V12–V15, W13–W15).
@@ -172,8 +192,15 @@ Ordine scelto: M11, M10, M12, M9.
   638/651/660/669/679 per le esplosioni a tempo; deposito (414): ogni esplosione nel deposito e i tiri americani mancati
   (0–3) fanno saltare il carburante; fine: +1 PV per esagono intatto, −2 per esagono distrutto.
 - «Al prossimo Round» (al_prossimo_round): l’arrivo del secondo gruppo; «secondo turno del Round 1» è approssimato col Round 2.
-- Non gestiti: camion della colonna (717, US 05), soldato J della carta US 04 (501), regola «in allerta», entrata nei
-  depositi in fiamme (414.2), seconda jeep.
+- Due jeep (regola jeep_n), regola «in allerta» (in_comando: Round 1 chi è consapevole, Round 2 tutti consapevoli e in
+  comando), soldato J (501, carta US 04: in V12, consapevole e in comando nel Round 1).
+- Camion del carburante (717, carta US 05, modello camion 4/8, tabella dei colpi della pagina 30): uno alla volta (T1–T3),
+  «Carica il carburante» in U14 (4 azioni; nelle Operazioni un controllo eventi), esce da A3 (+2 PV carico), fuori uso −2 PV,
+  +1 PV se a fine missione un camion carico è in mappa; nessuno sale, l’autista non scende.
+- Battelli (432): −2 a chi spara dal battello, chi è a bordo conta accovacciato allo scoperto; un tiro americano mancato
+  colpisce il battello con un dispari (leggera = affonda all’inizio del Round seguente, media/pesante = distrutto con gli
+  occupanti); il bazooka spara al battello (mezzo piccolo allo scoperto) e lo affonda; gli occupanti a riva nell’esagono di
+  sbarco della carta. Deposito in fiamme (414.2): chi ci entra fa un controllo di percezione (muore o passa oltre prono).
 
 ## Missione 18 «Il mattino dopo» (mappe B + E, in alto è est)
 - Avvio (regola missione_18, scripts/motore/missione18_ph.gd = ph.m18): squadra in K15, un soldato ferito a caso, radio
@@ -193,7 +220,7 @@ Ordine scelto: M11, M10, M12, M9.
   27 e 34, 861 reazione A che recupera l’arma di un caduto in tre turni, 882–892 reazione B per Condizione); 762 tre Sherman
   (carte US 01–03 in missione.carri_us) fuori mappa accanto a B19/F19/K19/N19/R19 (ingresso scelto dal giocatore con il
   pulsante «Sherman AA: entra da …»), guidati dai paragrafi 939–969 (turni_sherman in _flusso, all’inizio della casella
-  americana; numero d’azione proprio) finché il 318 (312 con la radio presidiata) non li mette ai tuoi ordini; i Round
+  americana; numero d’azione tedesco corrente e controlli di paragrafo come i soldati, regola 2/1 del libretto) finché il 318 (312 con la radio presidiata) non li mette ai tuoi ordini; i Round
   restano obbligati finché uno Sherman guidato è in gioco. 981: un’arma tedesca finisce le munizioni (reazione A se non ne
   restano, il Panzerfaust no). Panzer IV: 909/914/917/921/932/934/935/937.
 - Decisione (306/990 dopo 301/986): all’inizio del Round seguente, al posto degli eventi, la pausa di inizio Round

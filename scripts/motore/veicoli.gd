@@ -12,10 +12,12 @@ const MODELLI := {
 	"auto_comando": {"art": "L’", "nome": "Auto comando", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 5},
 	"canoa": {"art": "La", "nome": "Canoa", "piccolo": true, "lenta": 4, "veloce": 4, "posti": 3, "canoa": true},
 	"chiatta": {"art": "La", "nome": "Chiatta", "piccolo": false, "lenta": 4, "veloce": 4, "posti": 10, "canoa": true},
+	"scialuppa": {"art": "La", "nome": "Scialuppa", "piccolo": false, "lenta": 2, "veloce": 2, "posti": 10, "canoa": true},
 	"panzer4": {"art": "Il", "nome": "Panzer IV", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": true},
 	"sherman": {"art": "Lo", "nome": "Sherman", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 1, "carro": true, "torretta": true},
 	"eboat": {"art": "La", "nome": "Motosilurante", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 0, "carro": true, "torretta": false, "nave": true},
-	"moto": {"art": "La", "nome": "Motocicletta", "piccolo": true, "lenta": 5, "veloce": 10, "posti": 2, "moto": true},
+	"camion": {"art": "Il", "nome": "Camion", "piccolo": false, "lenta": 4, "veloce": 8, "posti": 1},
+	"moto": {"art": "La", "nome": "Motocicletta", "piccolo": true, "lenta": 7, "veloce": 12, "posti": 2, "moto": true},
 	"jagdpanther": {"art": "Il", "nome": "Jagdpanther", "piccolo": false, "lenta": 3, "veloce": 6, "posti": 0, "carro": true, "torretta": false},
 }
 
@@ -104,6 +106,8 @@ func sali(un: Dictionary, veic: Dictionary) -> String:
 		return "Il veicolo è fuori uso."
 	if bool(MODELLI[veic.modello].get("canoa", false)) and not spiaggiata(veic) and p.s.fase != "schieramento" and not p.s.get("imbarco", false):
 		return "Si sale solo su una canoa spiaggiata."
+	if veic.modello == "scialuppa" and not (p.terreno.tipo(str(veic.hex)) in ["beach", "wharf"]) and not p.s.get("imbarco", false):
+		return "La scialuppa si vara da una spiaggia o da una banchina: portala lì (servono quattro uomini in piedi)."
 	if un.hex != veic.hex:
 		return "Si sale solo su un veicolo nello stesso esagono."
 	if occupanti(veic).size() >= int(MODELLI[veic.modello].posti):
@@ -123,7 +127,7 @@ func scendi(un: Dictionary) -> void:
 			un.armi.erase(a)
 
 func spiaggiata(veic: Dictionary) -> bool:
-	return p.terreno.esagoni.get(str(veic.hex), {}).get("t", "") != "stream"
+	return not (p.terreno.esagoni.get(str(veic.hex), {}).get("t", "") in ["stream", "water"])
 
 func e_canoa(veic: Dictionary) -> bool:
 	return not veic.is_empty() and bool(MODELLI[veic.modello].get("canoa", false))
@@ -217,6 +221,72 @@ func controllo_incidente(veic: Dictionary, motivo: String) -> void:
 	p._log("dado", "Controllo d’incidente %s (%s, abilità di guida %d): %d → incidente possibile; tabella degli incidenti %d → %s." % [di_art(veic), motivo, ds, r, r2, _nome_incidente(esito)])
 	applica_incidente(veic, esito)
 
+## 17/12 (e Purple Heart 600): un mezzo che entra in un esagono con soldati a piedi. Con dei compagni fa un controllo d’incidente
+## per evitarli; con dei nemici lo fa per investirli. Chi sta per essere investito fa un controllo di percezione: se riesce si
+## scansa; altrimenti (e sempre gli inattivi) è colpito: dal carro ucciso, dall’auto come da un fucile a otturatore, poi l’auto
+## tira di nuovo sulla tabella degli incidenti; la motocicletta fa un controllo d’incidente da auto con −2 all’abilità di guida.
+func investimento(veic: Dictionary, h: String) -> void:
+	if not attivo(veic) or bool(MODELLI[veic.modello].get("canoa", false)) or bool(MODELLI[veic.modello].get("nave", false)):
+		return
+	var a := autista(veic)
+	if a.is_empty():
+		return
+	var a_piedi := func(lato: String) -> Array:
+		return p.unita_in(h, lato, false).filter(func(x): return str(x.get("veicolo", "")) == "" and x.stato in ["attivo", "incapacitato"] \
+			and not x.get("carro_us", false) and not x.get("in_jagd", false) and not x.get("cane", false) and int(p.piano(x)) == 0)
+	var amici: Array = a_piedi.call(veic.lato)
+	var nemici: Array = a_piedi.call("de" if veic.lato == "us" else "us")
+	if not amici.is_empty() and not _prova_guida(veic, 0, "per non investire i compagni in %s" % h):
+		_investi(veic, amici, false)
+	if attivo(veic) and not nemici.is_empty() and _prova_guida(veic, 0, "per investire i nemici in %s" % h):
+		_investi(veic, nemici, true)
+
+func _prova_guida(veic: Dictionary, mod: int, motivo: String) -> bool:
+	var a := autista(veic)
+	var ds := int(a.get("DS", 0)) + mod if not a.is_empty() else -1
+	var r := p.d10()
+	var ok := r <= ds
+	p._log("dado", "%s, abilità di guida %d (%s): %d → %s." % [nome_art(veic), ds, motivo, r, "riuscito" if ok else "fallito"])
+	return ok
+
+func _investi(veic: Dictionary, chi: Array, nemici: bool) -> void:
+	var carro: bool = bool(MODELLI[veic.modello].get("carro", false))
+	var moto: bool = veic.modello == "moto"
+	var colpiti := 0
+	for x in chi:
+		if not (p.attivo(x) or x.stato == "incapacitato"):
+			continue
+		if p.attivo(x) and p.controllo_pc(x, 0, "si scansa dal mezzo"):
+			p._log("info", "%s si scansa." % p.nome(x))
+			continue
+		colpiti += 1
+		p._fx("esplosione", {"a": x.hex})
+		if carro or (nemici and x.stato == "incapacitato"):
+			p._uccidi(x, "travolto %s" % di_art(veic))
+		else:
+			var r := p.d10()
+			var l := T.lettera_danno(T.ARMI.bolt.danni, r)
+			p._log("dado", "%s è investito %s: %d → %s" % [p.nome(x), di_art(veic), r, p._nome_danno(l)])
+			p._applica_danno(x, l, autista(veic))
+	if colpiti == 0 or carro or not attivo(veic):
+		return
+	if moto:
+		var a := autista(veic)
+		var ds := int(a.get("DS", 0)) - 2
+		var r1 := p.d10()
+		if r1 <= ds:
+			p._log("dado", "Controllo d’incidente della motocicletta dopo l’investimento (abilità %d): %d → nessun incidente." % [ds, r1])
+			return
+		var r3 := p.d10()
+		var e3: String = T.INCIDENTE_AUTO[r3]
+		p._log("dado", "Controllo d’incidente della motocicletta dopo l’investimento (abilità %d): %d; tabella %d → %s." % [ds, r1, r3, _nome_incidente(e3)])
+		applica_incidente(veic, e3)
+	else:
+		var r2 := p.d10()
+		var e2: String = T.INCIDENTE_AUTO[r2]
+		p._log("dado", "Dopo l’investimento %s tira sulla tabella degli incidenti: %d → %s." % [di_art(veic), r2, _nome_incidente(e2)])
+		applica_incidente(veic, e2)
+
 func _nome_incidente(e: String) -> String:
 	return {"nessuno": "nessun effetto", "ferma": "si ferma", "perde_turno": "perde il turno", "distrutta": "fuori uso",
 		"schianto": "schianto"}.get(e, e)
@@ -259,6 +329,8 @@ func disabilita(veic: Dictionary, motivo: String) -> void:
 		return
 	veic.stato = "distrutto"
 	p._log("danno", "%s è fuori uso (%s)." % [nome_art(veic), motivo])
+	if veic.modello == "camion":
+		p.ph.camion_fuori_uso(veic)
 	p._fx("danno", {"id": veic.id, "tipo": "distrutto"})
 	if veic.lato == "de" and int(veic.get("pv_distrutto", 0)) > 0:
 		p._pv(int(veic.pv_distrutto), "%s fuori uso" % veic.nome)
@@ -284,6 +356,104 @@ func modificatore(veic: Dictionary) -> int:
 		t = "bridge"
 	var col := 0 if bool(MODELLI[veic.modello].piccolo) else 1
 	return int(T.MOD_VEICOLO.get(t, [0, 1])[col])
+
+## Camion (Purple Heart, pagina 30): tabella dei colpi per numero di occupanti (autista, assistente, passeggeri dietro).
+func _colpito_camion(veic: Dictionary, arma: String, tiratore: Dictionary, fx: Dictionary) -> void:
+	veic.bersagliato = true
+	var occ := occupanti(veic).filter(func(x): return p.attivo(x))
+	var n: int = mini(occ.size(), 4)
+	var tab: Array = [[[0, 1, "gomme"], [2, 9, "carrozzeria"]],
+		[[0, 1, "gomme"], [2, 7, "carrozzeria"], [8, 9, "autista"]],
+		[[0, 1, "gomme"], [2, 5, "carrozzeria"], [6, 7, "autista"], [8, 9, "assistente"]],
+		[[0, 0, "gomme"], [1, 4, "carrozzeria"], [5, 6, "autista"], [7, 8, "assistente"], [9, 9, "passeggero"]],
+		[[0, 0, "gomme"], [1, 3, "carrozzeria"], [4, 5, "autista"], [6, 7, "assistente"], [8, 9, "passeggero"]]][n]
+	var r := p.d10()
+	var parte := "carrozzeria"
+	for f in tab:
+		if r >= int(f[0]) and r <= int(f[1]):
+			parte = str(f[2])
+	p._log("dado", "Tabella dei colpi del camion: %d → %s." % [r, {"gomme": "pneumatico", "carrozzeria": "cassone", "autista": "autista", "assistente": "assistente", "passeggero": "passeggero"}[parte]])
+	match parte:
+		"gomme":
+			veic.gomme = false
+			p._log("danno", "Pneumatico forato: il camion non può più andare veloce.")
+			if not occ.is_empty():
+				controllo_incidente(veic, "pneumatico colpito")
+		"carrozzeria":
+			var rd := p.d10()
+			var pen := T.penetrazione(arma, rd)
+			fx.dado_danno = rd
+			if pen in ["M", "H"]:
+				disabilita(veic, "colpito al motore")
+			elif pen == "L" and occ.size() > 2:
+				p._applica_danno(occ[occ.size() - 1], "K", tiratore)
+		"autista", "assistente", "passeggero":
+			var x: Dictionary = occ[0] if parte == "autista" else occ[mini(occ.size() - 1, 1 if parte == "assistente" else 2)]
+			var rd2 := p.d10()
+			var l := T.lettera_danno(T.ARMI[arma].danni, rd2)
+			if parte == "passeggero":
+				l = "K"
+			fx.dado_danno = rd2
+			fx.danno = p._nome_danno(l)
+			p._log("dado", "Danno a %s: %d → %s" % [p.nome(x), rd2, p._nome_danno(l)])
+			p._applica_danno(x, l, tiratore)
+			if parte == "autista" and attivo(veic):
+				if l in ["P", "W"]:
+					controllo_incidente(veic, "autista colpito")
+				elif l in ["I", "K"]:
+					var r3 := p.d10()
+					var e3: String = T.INCIDENTE_AUTO[r3]
+					p._log("dado", "Autista fuori combattimento: incidente, tabella %d → %s." % [r3, _nome_incidente(e3)])
+					applica_incidente(veic, e3)
+
+## Motocicletta con sidecar (Purple Heart, pagina 30): tabella dei colpi per numero di occupanti e danni.
+func _colpita_moto(veic: Dictionary, arma: String, tiratore: Dictionary, fx: Dictionary) -> void:
+	veic.bersagliato = true
+	var occ := occupanti(veic).filter(func(x): return p.attivo(x))
+	var n: int = mini(occ.size(), 2)
+	var r := p.d10()
+	var fasce: Array = [[[0, 4, "gomme"], [5, 9, "carrozzeria"]],
+		[[0, 2, "gomme"], [3, 5, "carrozzeria"], [6, 9, "autista"]],
+		[[0, 1, "gomme"], [2, 3, "carrozzeria"], [4, 6, "autista"], [7, 9, "passeggero"]]][n]
+	var parte := "carrozzeria"
+	for f in fasce:
+		if r >= int(f[0]) and r <= int(f[1]):
+			parte = str(f[2])
+	p._log("dado", "Tabella dei colpi della motocicletta: %d → %s." % [r, {"gomme": "pneumatico", "carrozzeria": "carrozzeria", "autista": "pilota", "passeggero": "passeggero del sidecar"}[parte]])
+	match parte:
+		"gomme":
+			veic.immobilizzato = true
+			veic.gomme = false
+			p._log("danno", "Pneumatico forato: la motocicletta non si può più guidare.")
+			if not occ.is_empty():
+				var r2 := p.d10()
+				var e2: String = T.INCIDENTE_AUTO[r2]
+				p._log("dado", "Incidente automatico: tabella %d → %s." % [r2, _nome_incidente(e2)])
+				applica_incidente(veic, e2)
+		"carrozzeria":
+			var rd := p.d10()
+			var pen := T.penetrazione(arma, rd)
+			fx.dado_danno = rd
+			if pen != "-":
+				disabilita(veic, "colpita alla carrozzeria")
+			elif not occ.is_empty():
+				controllo_incidente(veic, "carrozzeria colpita")
+		"autista", "passeggero":
+			var x: Dictionary = occ[0] if parte == "autista" else occ[mini(1, occ.size() - 1)]
+			var rd2 := p.d10()
+			var l := T.lettera_danno(T.ARMI[arma].danni, rd2)
+			fx.dado_danno = rd2
+			fx.danno = p._nome_danno(l)
+			p._log("dado", "Danno a %s: %d → %s" % [p.nome(x), rd2, p._nome_danno(l)])
+			p._applica_danno(x, l, tiratore)
+			if parte == "autista" and attivo(veic):
+				if l in ["P", "W"]:
+					controllo_incidente(veic, "pilota colpito")
+				elif l in ["I", "K"]:
+					var r3 := p.d10()
+					var e3: String = T.INCIDENTE_AUTO[r3]
+					p._log("dado", "Pilota fuori combattimento: incidente, tabella %d → %s." % [r3, _nome_incidente(e3)])
+					applica_incidente(veic, e3)
 
 ## Tabella dei colpi di jeep, Kübelwagen e auto comando: parte colpita per numero di occupanti.
 func _parte_colpita(veic: Dictionary, r: int) -> Array:
@@ -407,6 +577,12 @@ func colpito(veic: Dictionary, arma: String, tiratore: Dictionary, mirato: bool,
 		return
 	if bool(MODELLI[veic.modello].get("carro", false)):
 		colpito_carro(veic, arma, tiratore, mirato, fx)
+		return
+	if veic.modello == "moto":
+		_colpita_moto(veic, arma, tiratore, fx)
+		return
+	if veic.modello == "camion":
+		_colpito_camion(veic, arma, tiratore, fx)
 		return
 	veic.bersagliato = true
 	var r := p.d10()
@@ -537,8 +713,10 @@ func turno_carro(ia, g: Dictionary, veic: Dictionary) -> void:
 	_ia = ia
 	var d: Dictionary = carta_carro(g)
 	var numero := int(p.s.round.get("numero_azione", p.d10()))
-	if g.lato == "us":
-		numero = p.d10()  # gli Sherman guidati dai paragrafi tirano il proprio numero d’azione
+	if g.lato == "us" and int(p.s.round.get("numero_azione", -1)) < 0:
+		# Purple Heart 2/1: i mezzi americani indipendenti usano il numero d’azione tedesco corrente.
+		p.s.round.numero_azione = p.d10()
+		numero = int(p.s.round.numero_azione)
 	veic.mp_ingresso = p.ph.m18.entra_dal_bordo(veic)
 	var riga: Dictionary = d.righe.get(str(int(veic.equipaggio)), {})
 	if riga.is_empty():
@@ -811,6 +989,9 @@ func _davanti(veic: Dictionary, h: String) -> bool:
 
 ## Guida un veicolo tedesco lungo i riferimenti rossi della carta Condizione.
 func guida_tedesca(veic: Dictionary, veloce: bool) -> void:
+	if veic.get("immobilizzato", false):
+		p._log("tedesco", "%s non può muoversi." % nome_art(veic))
+		return
 	if veic.get("fermo", false):
 		veic.fermo = false
 		p._log("tedesco", "%s resta %s in questo turno." % [nome_art(veic), "ferma" if bool(MODELLI[veic.modello].piccolo) else "fermo"])
@@ -845,7 +1026,18 @@ func guida_tedesca(veic: Dictionary, veloce: bool) -> void:
 			return
 		spesi += c
 		sposta(veic, verso)
-		p._log("tedesco", "%s %s in %s." % [nome_art(veic), "corre" if veloce else "avanza", verso])
+		p._log("tedesco" if veic.lato == "de" else "info", "%s %s in %s." % [nome_art(veic), "corre" if veloce else "avanza", verso])
+		investimento(veic, verso)
+		if not attivo(veic) or veic.get("fermo", false):
+			veic.fermo = false
+			return
+		if veic.lato == "us" and not p._niente_controlli_round():
+			# Purple Heart 2/1: i mezzi americani indipendenti fanno i controlli di paragrafo come i soldati.
+			var aut: Dictionary = autista(veic)
+			if not aut.is_empty():
+				p.controllo_paragrafo(verso, [aut.id], {})
+			if not attivo(veic) or p.s.fase != "round":
+				return
 		if spesi > lenta and not controllato:
 			controllato = true
 			controllo_incidente(veic, "guida veloce")

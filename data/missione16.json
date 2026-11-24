@@ -7,8 +7,8 @@
  "nord": "a sinistra (in alto è est)",
  "libro": "ph",
  "briefing": "Le linee di rifornimento alleate si allungano mentre i tedeschi si ritirano sempre più in fretta: il generale Truscott sa che l’avanzata corazzata si fermerà quando finirà la benzina. La tua squadra di veterani, scelta dal generale in persona, deve sorvegliare il deposito avanzato di carburante vicino a Digione. Non deluderlo!",
- "ingresso": "Mappa C, in alto è est. Schiera la squadra su un ampio perimetro: almeno due uomini entro 10 esagoni da ciascun angolo della mappa (A1, A19, Y1, Y19). Nessuno può cominciare nel deposito (U15, U16, V12, V13, V14, V15, W13, W14, W15). Dopo lo schieramento si leggono le carte degli esagoni occupati. Ricevi gratis una jeep.",
- "regole_testo": "[b]Notte di luna.[/b] Si vede fino a sei esagoni. [b]Fiume.[/b] Il fiume si attraversa solo sui ponti intatti. [b]In allerta.[/b] Tutti i soldati sono in allerta (in questa versione: regole normali di consapevolezza). [b]Esplosivi.[/b] Un soldato nell’esagono di un esplosivo lo disinnesca in due azioni.",
+ "ingresso": "Mappa C, in alto è est. Schiera la squadra su un ampio perimetro: almeno due uomini entro 10 esagoni da ciascun angolo della mappa (A1, A19, Y1, Y19). Nessuno può cominciare nel deposito (U15, U16, V12, V13, V14, V15, W13, W14, W15). Dopo lo schieramento si leggono le carte degli esagoni occupati. Ricevi gratis due jeep.",
+ "regole_testo": "[b]Notte di luna.[/b] Si vede fino a sei esagoni. [b]Fiume.[/b] Il fiume si attraversa solo sui ponti intatti. [b]In allerta.[/b] All’inizio dei Round la consapevolezza si determina normalmente, ma nel primo Round chi è consapevole è in comando e nel secondo Round tutti sono consapevoli e in comando; poi il comando torna normale. [b]Esplosivi.[/b] Un soldato nell’esagono di un esplosivo lo disinnesca in due azioni.",
  "ingresso_breve": "schieramento entro 10 esagoni dagli angoli",
  "uscita_breve": "nessuna",
  "vittoria_pv": 24,
@@ -24,6 +24,7 @@
   "vista": 6,
   "fiume": true,
   "jeep": true,
+  "jeep_n": 2,
   "deposito": [
    "U15",
    "U16",
@@ -41,7 +42,8 @@
    "Y1",
    "Y19"
   ],
-  "niente_pv_incapacitati": true
+  "niente_pv_incapacitati": true,
+  "allerta": true
  },
  "vittoria_testo": "[b]Vittoria: 24 PV[/b] (si scopre durante il gioco). Valgono le attivazioni dei tedeschi, 1 PV per ogni esagono del deposito intatto e −2 PV per ogni esagono distrutto, 2 PV per ogni esplosivo disinnescato. La missione finisce quando non ci sono tedeschi attivi in mappa (e, se sono stati piazzati esplosivi, quando sono tutti disinnescati o saltati).",
  "testo_fine": "",

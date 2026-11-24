@@ -49,13 +49,13 @@ func _init() -> void:
 	ok(p.fase_round(), "565: iniziano i Round")
 	sq[3].hex = "P7"
 	sq[3].stato = "attivo"
-	p.ph.inizio_round()
+	p.ph.inizio_turno(2)
 	ok(p.terreno.tipo("N6") == "water" and p.terreno.tipo("Q8") == "water" and sq[3].stato == "morto", "la piena avanza di quattro esagoni e travolge chi è in P7")
-	p.ph.inizio_round()
+	p.ph.inizio_turno(1)
 	ok(not p.ph.ponte_s9() and p.terreno.tipo("S9") == "water", "la piena travolge il ponte in S9")
 	ok(p.ph.round_obbligati(), "i Round continuano finché la piena è in mappa")
 	for i in 3:
-		p.ph.inizio_round()
+		p.ph.inizio_turno(2)
 	ok(p.s.ph.piena.fuori and int(p.s.condizione) == 4, "542: la piena esce, Condizione 4 (+5 PV)")
 	# La colonna motorizzata.
 	p.s.condizione = 2

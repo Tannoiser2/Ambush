@@ -470,7 +470,7 @@
  },
  "548": {
   "id": "548",
-  "it": "Il faro all’inizio è rivolto a ovest. Quando richiesto ruota di 90° in senso orario (da ovest a nord, da nord a est…). Il fascio è potentissimo: illumina tutti gli esagoni in vista del faro nella direzione in cui punta, e chi è illuminato si vede da qualsiasi distanza. Il faro si distrugge con un risultato di penetrazione leggera o migliore (+1 per colpirlo; in questa versione: con un esplosivo nell’esagono).",
+  "it": "Il faro all’inizio è rivolto a ovest. Quando richiesto ruota di 90° in senso orario (da ovest a nord, da nord a est…). Il fascio è potentissimo: illumina tutti gli esagoni in vista del faro nella direzione in cui punta, e chi è illuminato si vede da qualsiasi distanza. Il faro si distrugge con un risultato di penetrazione leggera o migliore (+1 per colpirlo, tiro mirato con «Spara al faro») o con un esplosivo nell’esagono.",
   "ops": [],
   "tipo": "missione"
  },
@@ -587,7 +587,7 @@
  },
  "648": {
   "id": "648",
-  "it": "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Poi tira un dado:\n0: un esplosivo piazzato (a caso) salta.\n1–2: un edificio accanto a un edificio in fiamme prende fuoco ed esplode (ricevi i PV dell’edificio).\n3–4: vedi 443 (il ritorno del tedesco 61 in E11 non è gestito).\n5–6: vedi 649.\n7–9: se ci sono incendi entro 2 esagoni dai serbatoi, vedi 725.",
+  "it": "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Poi tira un dado:\n0: un esplosivo piazzato (a caso) salta.\n1–2: un edificio accanto a un edificio in fiamme prende fuoco ed esplode (ricevi i PV dell’edificio).\n3–4: se la sentinella 61 è uscita con un movimento evasivo e l’esagono E11 è intatto, torna in E11 accovacciata al piano superiore, iniziano i Round e resta in reazione speciale A fino alla fine; altrimenti vedi 443.\n5–6: vedi 649.\n7–9: se ci sono incendi entro 2 esagoni dai serbatoi, vedi 725.",
   "ops": [
    {
     "op": "faro_ruota"
@@ -618,8 +618,7 @@
       4,
       [
        {
-        "op": "goto",
-        "p": "443"
+        "op": "sentinella_e11"
        }
       ]
      ],
@@ -774,20 +773,20 @@
  },
  "655": {
   "id": "655",
-  "it": "Un soldato tedesco a caso va fuori di testa e carica gli americani… (in questa versione l’evento non ha effetti).",
+  "it": "Un soldato tedesco a caso (non a bordo di un mezzo) va fuori di testa! Fino alla fine della missione, o finché resta attivo: riceve 2 turni per Round (1 se ferito); a ogni turno si alza, spara un tiro rapido al bersaglio attivo più vicino e corre verso l’americano attivo più vicino usando metà dei punti movimento, senza cadere prono (da ferito non spara e si muove soltanto; senz’armi usa tutti i punti movimento; niente granate). Se comincia il turno nell’esagono di americani attivi assalta per uccidere il bersaglio più facile. È immune al panico e ha +2 all’abilità nell’assalto. Una volta sola.",
   "ops": [
    {
-    "op": "solo_testo"
+    "op": "berserk_de"
    }
   ],
   "tipo": "missione"
  },
  "689": {
   "id": "689",
-  "it": "Un soldato americano a caso (non un comandante) va fuori di testa e carica i tedeschi… (in questa versione l’evento non ha effetti).",
+  "it": "Un soldato americano a caso (non un comandante) va fuori di testa! Fino alla fine della missione, o finché lui o tutti i tedeschi restano attivi: riceve 2 turni per Round (1 se ferito); all’inizio di ogni azione si alza, spara un tiro rapido al bersaglio più vicino e corre verso il tedesco attivo più vicino usando metà dei punti movimento, senza cadere prono (da ferito si muove soltanto; senz’armi usa tutti i punti movimento; niente granate). Entrando o cominciando il turno nell’esagono di tedeschi attivi li assalta per uccidere. È immune al panico e ha +2 all’abilità nell’assalto. Un compagno che comincia il turno nel suo esagono (azione «Placca») o ci entra tira un dado: 0–7 lo placca; poi 3–9 torna in sé e tutti e due cadono proni (0–2 resta fuori di testa).",
   "ops": [
    {
-    "op": "solo_testo"
+    "op": "berserk_us"
    }
   ],
   "tipo": "missione"
@@ -1210,7 +1209,7 @@
  },
  "718": {
   "id": "718",
-  "it": "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe essere la via verso la flotta! Ci sta tutta la squadra; si vara da una spiaggia o da una banchina, si rema di 2 esagoni per turno. Chi è a bordo è accovacciato in copertura. Uscendo dal bordo ovest in scialuppa guadagni 10 PV. (In questa versione la scialuppa si trova già sulla spiaggia in I18.)",
+  "it": "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe essere la via verso la flotta! Ci sta tutta la squadra e chi è a bordo è accovacciato in copertura. Si porta di 2 esagoni per turno con quattro soldati in piedi che agiscono insieme; si vara da una spiaggia o da una banchina (salire costa 1 PM); si rema di 2 esagoni per turno con due soldati che agiscono insieme. Chi è a bordo e non rema può sparare con l’arma personale (niente bazooka, cariche, granate o mitragliatrici). La scialuppa non è un bersaglio, ma chi è a bordo sì: un tiro tedesco che lo manca controlla la penetrazione, leggera = un americano ferito, di più = la scialuppa affonda e annegano tutti. Uscendo dal bordo ovest in scialuppa guadagni 10 PV.",
   "ops": [
    {
     "op": "sighting",
@@ -1946,25 +1945,14 @@
  },
  "555": {
   "id": "555",
-  "it": "Metti un segnalino Evento. Un tiro d’artiglieria tedesca! Bersaglio K9, con dispersione (qui: dado 0–3 K9, 4–9 uno dei sei esagoni vicini). Cratere, o macerie se colpisce un edificio; chi è nell’esagono muore, i mezzi sono distrutti.",
+  "it": "Metti un segnalino Evento. Un tiro d’artiglieria tedesca! Tira i dadi percentuali e segui il diagramma della dispersione dell’artiglieria (pagina 31 del libretto) con bersaglio K9: 00–09 K9, 10–39 uno dei sei esagoni vicini, 40–99 il secondo anello. Cratere, o macerie se colpisce un edificio; chi è nell’esagono muore, i mezzi sono distrutti.",
   "ops": [
    {
     "op": "event_marker"
    },
    {
-    "op": "artiglieria_esagoni",
-    "esagoni": [
-     "K9",
-     "K9",
-     "K9",
-     "K9",
-     "K8",
-     "L9",
-     "L10",
-     "K10",
-     "J10",
-     "J9"
-    ]
+    "op": "artiglieria_dispersione",
+    "hex": "K9"
    }
   ],
   "tipo": "missione"
@@ -3593,7 +3581,7 @@
  },
  "565": {
   "id": "565",
-  "it": "L’acqua sfonda le chiuse! Il segnalino Piena parte da N5. Iniziano i Round. All’inizio di ogni Round la piena avanza di quattro esagoni del letto asciutto del fiume (in questa versione: quattro per Round) finché esce dalla mappa: allora vedi 542. Ogni esagono attraversato si allaga e resta impraticabile; soldati e mezzi che lo occupano sono travolti (uccisi o distrutti); il ponte travolto crolla. Si continua nei Round finché la piena esce, poi si torna alle Operazioni se non ci sono tedeschi attivi.",
+  "it": "L’acqua sfonda le chiuse! Il segnalino Piena parte da N5. Iniziano i Round. All’inizio di ogni Round la piena avanza di quattro esagoni del letto asciutto del fiume (all’inizio di ciascuno dei due turni del Round) finché esce dalla mappa: allora vedi 542. Ogni esagono attraversato si allaga e resta impraticabile; soldati e mezzi che lo occupano sono travolti (uccisi o distrutti); il ponte travolto crolla. Si continua nei Round finché la piena esce, poi si torna alle Operazioni se non ci sono tedeschi attivi.",
   "ops": [
    {
     "op": "piena"
@@ -5676,7 +5664,7 @@
  },
  "501": {
   "id": "501",
-  "it": "[s5 e s7] Commando tedeschi all’attacco del deposito! Attiva i tedeschi 20, 21, 28 e 29 in X15 e i tedeschi 36, 37, 38 e 39 in U12, accovacciati. Colloca un battello d’assalto vuoto in U11 e uno in X14. Iniziano i Round, vantaggio americano. Vedi 432 per il movimento dei battelli, 628 per le condizioni di vittoria e 414 per il combattimento nel deposito. (Il soldato americano J in V12 con la carta US 04 non è disponibile in questa versione.)",
+  "it": "[s5 e s7] Commando tedeschi all’attacco del deposito! Attiva i tedeschi 20, 21, 28 e 29 in X15 e i tedeschi 36, 37, 38 e 39 in U12, accovacciati. Colloca un battello d’assalto vuoto in U11 e uno in X14. Iniziano i Round, vantaggio americano. Vedi 432 per il movimento dei battelli, 628 per le condizioni di vittoria e 414 per il combattimento nel deposito. Metti in piedi in V12 il soldato americano J (carta US 04, guardia del deposito): da ora fa parte della squadra, è consapevole e in comando nel Round 1.",
   "ops": [
    {
     "op": "sighting",
@@ -5739,6 +5727,9 @@
     "op": "imbarca",
     "g": [],
     "hex": "X14"
+   },
+   {
+    "op": "soldato_j"
    }
   ],
   "tipo": "missione"
@@ -6647,7 +6638,7 @@
  },
  "717": {
   "id": "717",
-  "it": "[s6] Un camion americano entra in mappa in A3 (carta US 05): deve fermarsi in U14, caricare il carburante e uscire da A3 (+2 PV; −2 PV se messo fuori uso). In questa versione i camion non sono ancora gestiti.",
+  "it": "[s6] Un camion americano entra in mappa in A3 (carta US 05), ai tuoi ordini. Se entra in U14 e vi spende 4 azioni, carica il carburante. Se esce da A3 carico guadagni 2 PV; se è messo fuori uso perdi 2 PV; se la missione finisce con un camion carico in mappa guadagni 1 PV. Nessun soldato può salire sul camion e l’autista non può scendere; l’autista usa la pistola se in quel turno non guida. Ci sono tre camion da rifornire, uno alla volta: quando il camion esce carico o è messo fuori uso entra il successivo, finché tutti e tre hanno caricato e sono usciti, sono fuori uso o i tedeschi hanno impedito il rifornimento.",
   "ops": [
    {
     "op": "sighting",
@@ -8187,7 +8178,7 @@
  },
  "337": {
   "id": "337",
-  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round, vantaggio tedesco; riceve 2 turni.",
   "ops": [
    {
     "op": "sighting",
@@ -8210,13 +8201,19 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     50
+    ]
    }
   ],
   "tipo": "missione"
  },
  "356": {
   "id": "356",
-  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni.",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round, vantaggio americano; i consapevoli che non vanno nel panico ricevono 2 turni.",
   "ops": [
    {
     "op": "sighting",
@@ -8237,13 +8234,19 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     50
+    ]
    }
   ],
   "tipo": "missione"
  },
  "367": {
   "id": "367",
-  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato. Iniziano i Round.",
+  "it": "[s5] Attiva il tedesco 50 (cecchino) in X14, accovacciato al piano superiore. Iniziano i Round.",
   "ops": [
    {
     "op": "sighting",
@@ -8264,6 +8267,12 @@
     "aware": false,
     "reaction": null,
     "rounds": true
+   },
+   {
+    "op": "al_piano",
+    "g": [
+     50
+    ]
    }
   ],
   "tipo": "missione"
@@ -8488,19 +8497,31 @@
  },
  "493": {
   "id": "493",
-  "it": "Il treno: locomotiva, tre vagoni merci e una cisterna (in ordine casuale dietro la locomotiva). Avanza di 6 esagoni di binario per turno, due turni per Round (qui: 12 esagoni all’inizio di ogni Round). Non si sale sul treno. Un vagone che entra nell’esagono di un soldato attivo: controllo di percezione, se riesce si sposta in un esagono vicino, altrimenti muore. Vedi 497 per farlo deragliare.",
+  "it": "Il treno: locomotiva, tre vagoni merci e una cisterna (in ordine casuale dietro la locomotiva). Avanza di 6 esagoni di binario per turno, all’inizio di ciascuno dei due turni del Round. Non si sale sul treno. Un vagone che entra nell’esagono di un soldato attivo: controllo di percezione, se riesce si sposta in un esagono vicino, altrimenti muore. Vedi 497 per farlo deragliare.",
   "ops": [],
   "tipo": "missione"
  },
  "497": {
   "id": "497",
-  "it": "Il treno deraglia se entra nel ponte di legno G11 distrutto (vedi 506). In questa versione i binari non si possono far saltare e il treno non si può distruggere a colpi di bazooka.",
+  "it": "Il treno si può far deragliare in tre modi: distruggendo il ponte di legno in G11 (se un pezzo del treno entra o si trova su un ponte distrutto, vedi 506); interrompendo un esagono del binario (vedi 503); distruggendo il treno stesso (vedi 504).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "503": {
+  "id": "503",
+  "it": "Per interrompere il binario si piazza una carica in un esagono che il treno non occupa ancora, con la spoletta regolata in modo che salti prima che tutto il treno sia passato, oppure si lancia una carica in un esagono del binario occupato dal treno o in cui non è ancora entrato. Se il treno comincia un turno con un pezzo su un binario interrotto, o la locomotiva ci entra, deraglia (vedi 506).",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "504": {
+  "id": "504",
+  "it": "La locomotiva si distrugge con una penetrazione pesante del bazooka, ogni altro vagone con una media o migliore. Al tiro locomotiva e vagoni contano come mezzi grandi allo scoperto. Se il pezzo colpito è distrutto, il treno deraglia (vedi 506).",
   "ops": [],
   "tipo": "missione"
  },
  "506": {
   "id": "506",
-  "it": "Deragliamento: locomotiva e vagoni si rovesciano dove si trovano (in questa versione senza la procedura di scivolamento). Passa alla Condizione 3 e torna alle Operazioni se non ci sono tedeschi attivi. Un soldato americano attivo che entra in un vagone merci rovesciato: vedi 595.",
+  "it": "Deragliamento: i pezzi davanti a quello che deraglia si rovesciano dove sono; quello e i successivi, uno alla volta dal primo all’ultimo, scivolano: dado 0–3 verso est, 4–6 sud-est, 7–9 sud-ovest; dopo ogni esagono, pari prosegue e dispari si ferma, al terzo esagono si ferma comunque. Si fermano subito entrando in bosco, edificio (diventa macerie), terreno accidentato, fiume o su un altro relitto; un ponte colpito crolla con un pari (altrimenti regge ma i mezzi non passano). Chi è nell’esagono fa un controllo di percezione: se riesce si butta a terra e perde i turni, altrimenti muore (gli incapacitati muoiono). Poi passa alla Condizione 3 e torna alle Operazioni se non ci sono tedeschi attivi. Un soldato americano attivo che entra in un vagone merci rovesciato: vedi 595.",
   "ops": [],
   "tipo": "missione"
  },

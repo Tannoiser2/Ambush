@@ -105,7 +105,7 @@ par("479", "Tira un dado per sapere dove sono i comandi delle chiuse:\n0–2: V1
 par("606", "Nei Round servono 4 azioni per aprire le chiuse (anche divise tra più soldati); nelle Operazioni si aprono dopo un controllo "
            "degli eventi casuali. Usa l’azione «Apri le chiuse». Quando sono aperte, vedi 565.", [])
 par("565", "L’acqua sfonda le chiuse! Il segnalino Piena parte da N5. Iniziano i Round. All’inizio di ogni Round la piena avanza di "
-           "quattro esagoni del letto asciutto del fiume (in questa versione: quattro per Round) finché esce dalla mappa: allora vedi 542. "
+           "quattro esagoni del letto asciutto del fiume (all’inizio di ciascuno dei due turni del Round) finché esce dalla mappa: allora vedi 542. "
            "Ogni esagono attraversato si allaga e resta impraticabile; soldati e mezzi che lo occupano sono travolti (uccisi o distrutti); "
            "il ponte travolto crolla. Si continua nei Round finché la piena esce, poi si torna alle Operazioni se non ci sono tedeschi "
            "attivi.", [{"op": "piena"}])

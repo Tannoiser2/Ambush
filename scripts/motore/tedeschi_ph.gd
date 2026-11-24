@@ -384,11 +384,12 @@ func esegui(n: int) -> bool:
 					t._tiri_rapidi()
 			elif t.bersagli(g).is_empty():
 				t.rimuovi_evasivo(g)
-			else:
+			elif n == 428:
 				t._muovi_rapido(false)
-				if n == 411 and t.p.in_mappa(g) and t.bersagli(g).is_empty():
-					t.rimuovi_evasivo(g)
-				else:
+				t._prono()
+			else:
+				# 403/411: corre e sparisce nel primo esagono fuori dalla vista degli americani attivi.
+				if not _fuga_fuori_vista(g) and n == 411 and t.p.in_mappa(g):
 					t._prono()
 		573, 877:
 			var vis: Array = t.bersagli(g)
@@ -441,6 +442,21 @@ func esegui(n: int) -> bool:
 		_:
 			return false
 	return true
+
+## Corre seguendo i riferimenti e, nel primo esagono fuori dalla vista degli americani attivi, esce di scena. true se è uscito.
+func _fuga_fuori_vista(g: Dictionary) -> bool:
+	if not t._alzati():
+		return false
+	var passi := 0
+	while t.p.in_mappa(g) and passi < 12:
+		passi += 1
+		var rif: String = t._riferimento(g.hex)
+		if rif == "" or not t._segui_riferimento(rif, false):
+			break
+		if not t.p.in_vista_americani(g):
+			t.rimuovi_evasivo(g)
+			return true
+	return false
 
 # ------------------------------------------------------------------ cani da guardia (391)
 func _cani_attivi() -> bool:
@@ -717,8 +733,13 @@ func _panzerfaust(g: Dictionary) -> bool:
 	if base < 0:
 		return false
 	t.p._log("tedesco", "Il %s spara il Panzerfaust contro %s." % [t.p.nome(g), t.p.veicoli.nome_art(t.p.veicoli.di(b)) if not t.p.veicoli.di(b).is_empty() else t.p.nome(b)])
-	t.p.risolvi_tiro(g, armi[0], b, true, maxi(0, base))
+	var esito: Dictionary = t.p.risolvi_tiro(g, armi[0], b, true, maxi(0, base))
 	g.armi.erase(armi[0])
+	if esito.get("colpito", false):
+		# Purple Heart pagina 31: chi è nell’esagono colpito dal Panzerfaust controlla i danni come «granata fuori».
+		for x in t.p.unita_in(b.hex, "us"):
+			if t.p.attivo(x) and t.p.veicoli.di(x).is_empty() and not x.get("carro_us", false):
+				t.p._danno_esplosione(x, T.GRANATA_FUORI)
 	return true
 
 ## 861, reazione speciale A (Missione 18): il tedesco senza munizioni recupera l’arma di un caduto entro 2 esagoni.

@@ -370,12 +370,17 @@ func _caduti(o: Dictionary) -> void:
 # ------------------------------------------------------------------ 981: munizioni finite
 func _981() -> void:
 	var cand: Array = []
-	for g in p.tedeschi():
-		if not (p.attivo(g) and p.in_mappa(g)) or not (g.id in p.s.round.get("sparato_prec", [])):
+	for sp in p.s.round.get("sparato_prec", []):
+		var gid: String = str(sp[0]) if sp is Array else str(sp)
+		var tipo: String = str(sp[1]) if sp is Array and sp.size() > 1 else ""
+		var g: Dictionary = p.u(gid)
+		if g.is_empty() or not (p.attivo(g) and p.in_mappa(g)):
 			continue
 		for w in g.armi:
-			if w.tipo != "pzf" and not w.get("rotta", false) and T.ARMI.has(w.tipo) and T.ARMI[w.tipo].has("gittate"):
-				cand.append([g, w])
+			if w.tipo != "pzf" and (tipo == "" or w.tipo == tipo) and not w.get("rotta", false) and T.ARMI.get(w.tipo, {}).has("gittate"):
+				if not cand.any(func(c): return c[0].id == g.id and c[1] == w):
+					cand.append([g, w])
+				break
 	if cand.is_empty():
 		p._log("info", "Nel Round precedente nessuna arma tedesca ha sparato: nessun effetto.")
 		return

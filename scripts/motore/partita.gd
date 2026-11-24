@@ -498,6 +498,18 @@ func vede_unita(osservatore: Dictionary, bersaglio: Dictionary) -> bool:
 		return false
 	if bersaglio.get("in_jagd", false) and osservatore.get("lato", "") == "de":
 		return false
+	# Purple Heart 17: chi è sotto il ponte si vede come accovacciato sul ponte; dal ponte, nello stesso esagono, lo vede solo chi
+	# è in piedi (o chi è sotto con lui).
+	if bersaglio.get("sotto_ponte", false) or osservatore.get("sotto_ponte", false):
+		if osservatore.hex == bersaglio.hex:
+			if bersaglio.get("sotto_ponte", false) and not osservatore.get("sotto_ponte", false) and osservatore.postura != "standing":
+				return false
+			if osservatore.get("sotto_ponte", false) and not bersaglio.get("sotto_ponte", false) and bersaglio.postura != "standing":
+				return false
+			return true
+		var pb: String = "crouching" if bersaglio.get("sotto_ponte", false) else bersaglio.postura
+		var po: String = "crouching" if osservatore.get("sotto_ponte", false) else osservatore.postura
+		return terreno.vede(osservatore.hex, bersaglio.hex, po, pb, piano(osservatore), piano(bersaglio))
 	if osservatore.get("galleria", false) or bersaglio.get("galleria", false):
 		return osservatore.get("galleria", false) and bersaglio.get("galleria", false) and osservatore.hex == bersaglio.hex
 	return terreno.vede(osservatore.hex, bersaglio.hex, osservatore.postura, bersaglio.postura, piano(osservatore), piano(bersaglio))
@@ -569,6 +581,9 @@ func _mg_montata(un: Dictionary) -> Dictionary:
 	var veic: Dictionary = veicoli.di(un)
 	if not veicoli.attivo(veic) or not veic.has("mg"):
 		return {}
+	if bool(veic.mg.get("solo_passeggero1", false)):
+		# Purple Heart 14: la spara solo il passeggero 1 (il secondo a bordo), mai l’autista.
+		return veic.mg if veic.occupanti.size() > 1 and str(veic.occupanti[1]) == str(un.id) else {}
 	if veicoli.e_autista(un) and fase_round() and not s.turno.is_empty() and s.turno.get("id", "") == un.id and s.turno.get("mosso", false):
 		return {}
 	return veic.mg
@@ -601,6 +616,9 @@ func munizioni_arma(un: Dictionary, tipo: String) -> int:
 func armi_da_fuoco(un: Dictionary) -> Array:
 	var out: Array = []
 	var tutte: Array = un.armi.duplicate()
+	if veicoli.di(un).get("modello", "") == "scialuppa" and not veicoli.spiaggiata(veicoli.di(un)):
+		# 718: dalla scialuppa solo armi personali (niente bazooka, cariche o mitragliatrici).
+		tutte = tutte.filter(func(w): return not (w.tipo in ["bazooka", "satchel", "lmg", "mmg", "hmg", "cannone"]))
 	var mg := _mg_montata(un)
 	if not mg.is_empty():
 		tutte.append(mg)
@@ -1550,6 +1568,56 @@ func tiro_bunker(id: String, tipo_arma: String, h: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Purple Heart 548: tiro al faro (+1 per colpirlo, niente modificatori di terreno); con penetrazione leggera o migliore si spegne.
+func tiro_faro(id: String, tipo_arma: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	if s.fase != "round":
+		return _errore("Nelle Operazioni non si combatte.")
+	var h: String = ph.faro_hex()
+	if h == "":
+		return _errore("Il faro è già spento.")
+	var arma := arma_di(a, tipo_arma)
+	if arma.is_empty() or not (arma in armi_da_fuoco(a)):
+		return _errore("Arma non disponibile.")
+	if a.postura == "prone":
+		return _errore("Da prono non si spara.")
+	if not terreno.vede(a.hex, h, a.postura, "standing"):
+		return _errore("Il faro non è in vista.")
+	var t := _turno_di(a)
+	if t.azione != "":
+		return _errore("Il tiro al faro è un tiro mirato: un’azione a sé.")
+	var base := T.base_per_distanza(tipo_arma, E.distanza(a.hex, h))
+	if base < 0:
+		return _errore("Fuori gittata.")
+	t.azione = "mirato"
+	var prob := clampi(base + 1 + int(a.WS) - (1 if a.ferito else 0), 0, 8)
+	_log("combattimento", "%s spara al faro in %s (serve 0–%d)." % [nome(a), h, prob])
+	_fx("tiro", {"da": a.hex, "a": h, "tiratore": a.id, "bersaglio": "", "arma": tipo_arma, "mirato": true, "esito": "mancato", "prob": prob})
+	_rendi_consapevoli(a.hex)
+	var r := d10()
+	if r == 0 or (r != 9 and r <= prob):
+		var rd := d10()
+		var pen := T.penetrazione(tipo_arma, rd)
+		_log("dado", "Faro colpito (%d): penetrazione %d → %s." % [r, rd, {"-": "nessuna", "L": "leggera", "M": "media", "H": "pesante"}[pen]])
+		if pen != "-":
+			ph.spegni_faro("colpito da %s" % nome(a))
+	else:
+		_log("dado", "Mancato (%d)." % r)
+	if tipo_arma == "bazooka":
+		_consuma_bazooka(a, arma)
+	else:
+		var pm := percentuale()
+		if pm <= int(T.ARMI[tipo_arma].mun):
+			a.munizioni[tipo_arma] = maxi(0, munizioni_arma(a, tipo_arma) - 1)
+	if attivo(a) and not s.turno.is_empty():
+		_termina_azione(a)
+	_fine_comando()
+	return OK
+
 func _colpo_bunker(a: Dictionary, arma: Dictionary, h: String, b: Dictionary) -> void:
 	var dalla_porta: bool = a.hex == str(b.porta) or (E.direzione(h, a.hex) == E.direzione(h, str(b.porta)) and E.direzione(h, a.hex) >= 0)
 	var r := d10("Bunker colpito: lato %s" % ("della porta" if dalla_porta else "frontale"))
@@ -2135,6 +2203,19 @@ func radio_presidiata() -> bool:
 	return h != "" and not unita_in(h, "us").is_empty()
 
 func _jeep_di_squadra(esagoni_squadra: Array) -> void:
+	var n: int = int(regola("jeep_n", 1))
+	if n > 1 and not esagoni_squadra.is_empty():
+		# Purple Heart 16: due jeep, ciascuna accanto a un gruppo diverso della squadra (si possono poi guidare dove si vuole).
+		var gruppi: Array = []
+		for h in esagoni_squadra:
+			if gruppi.is_empty() or gruppi.all(func(x): return E.distanza(str(x), str(h)) > 6):
+				gruppi.append(str(h))
+		for i in n:
+			_una_jeep([gruppi[i % gruppi.size()]], "vjeep" if i == 0 else "vjeep%d" % (i + 1), i + 1)
+		return
+	_una_jeep(esagoni_squadra, "vjeep", 1)
+
+func _una_jeep(esagoni_squadra: Array, vid: String, k: int) -> void:
 	var migliore := ""
 	var dmin := 999
 	var area: Array = esagoni_ingresso() if int(regola("schieramento_ruscello", 0)) > 0 else []
@@ -2156,8 +2237,10 @@ func _jeep_di_squadra(esagoni_squadra: Array) -> void:
 				migliore = h
 	if migliore == "":
 		return
-	veicoli.crea("vjeep", "jeep", migliore, "us")
-	_log("info", "La jeep della squadra è parcheggiata in %s, accanto alla strada." % migliore)
+	var vj: Dictionary = veicoli.crea(vid, "jeep", migliore, "us")
+	if k > 1 or int(regola("jeep_n", 1)) > 1:
+		vj.nome = "Jeep %d" % k
+	_log("info", "La %s della squadra è parcheggiata in %s, accanto alla strada." % ["jeep" if int(regola("jeep_n", 1)) == 1 else vj.nome, migliore])
 
 func _op_offensiva() -> void:
 	if s.get("offensiva", false):
@@ -2694,6 +2777,8 @@ func _avvia_round() -> void:
 	ph.inizio_round()
 	r.sparato_prec = r.get("sparato", [])
 	r.sparato = []
+	r.turni_avviati = []
+	r.treno_mosso = []
 	r.slot_azione = ""
 	r.iniziativa_fatta = false
 	for g in tedeschi():
@@ -2728,7 +2813,8 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 		if a.consapevole:
 			righe.append({"id": a.id, "esito": "gia"})
 			continue
-		if a.get("artiglieria", false) or (s.get("mo_consapevoli", false) and (attivo(a) or a.stato == "fuori")):
+		if a.get("artiglieria", false) or (s.get("mo_consapevoli", false) and (attivo(a) or a.stato == "fuori")) \
+				or (r.n == 2 and bool(regola("allerta", false))):
 			a.consapevole = true
 			righe.append({"id": a.id, "esito": "auto"})
 			continue
@@ -2763,6 +2849,15 @@ func _fase_consapevolezza(r: Dictionary, righe: Array = []) -> void:
 		righe.append({"id": a.id, "esito": "si" if a.consapevole else "no", "dado": ultimo_dado, "pc": int(a.PC)})
 
 func in_comando(un: Dictionary) -> bool:
+	# Purple Heart 16 «In allerta»: nel primo Round è in comando chi è consapevole, nel secondo tutti.
+	if bool(regola("allerta", false)) and fase_round():
+		var nr := int(s.round.get("n", 0))
+		if nr == 1 and un.get("consapevole", false):
+			return true
+		if nr == 2:
+			return true
+	if un.get("comando_r1", false) and fase_round() and int(s.round.get("n", 0)) == 1:
+		return true
 	var tot := 0
 	for o in americani():
 		if not (attivo(o) or o.stato == "fuori") or o.get("carro_us", false):
@@ -2820,7 +2915,7 @@ func _iniziativa(r: Dictionary) -> void:
 			a.slot = "inconsapevole"
 			continue
 		var comando: bool = in_comando(a) or bool(a.get("carro_us", false))
-		var es: Dictionary = mo.turni_artiglieria(a, T.esito_turni(int(a.IN), du, true, comando, a.ferito))
+		var es: Dictionary = ph.berserk.turni(a, mo.turni_artiglieria(a, T.esito_turni(int(a.IN), du, true, comando, a.ferito)))
 		if r.n == 1 and r.get("due_turni_us", false) and not es.panico:
 			es.turni = 1 if a.ferito else 2
 		pi.righe.append({"id": a.id, "turni": es.turni, "panico": es.panico, "rosso": es.rosso, "comando": comando, "ferito": a.ferito})
@@ -2889,7 +2984,7 @@ func americani_di_turno() -> Array:
 		return []
 	var out: Array = []
 	for a in americani():
-		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori") and not a.get("ia_sherman", false):
+		if int(a.turni) == c[0] and a.slot == "turni" and (attivo(a) or a.stato == "fuori") and not ph.agisce_da_solo(a):
 			out.append(a)
 	return out
 
@@ -2901,9 +2996,20 @@ func _flusso() -> void:
 		if c.is_empty():
 			_fine_round()
 			return
+		_avvia_turni(int(c[0]))
+		if s.fase != "round" or s.pausa != "":
+			return
+		c = casella_attuale()
+		if not c.is_empty():
+			ph.casella_treno(c)
+			if s.fase != "round" or s.pausa != "":
+				return
+			c = casella_attuale()
+		if c.is_empty():
+			continue
 		if c[1] == "us":
 			# Missione 18: gli Sherman non ancora ai tuoi ordini agiscono da soli, all’inizio della casella.
-			if ph.m18.turni_sherman(c[0]):
+			if ph.turni_automatici(c[0]):
 				if s.fase == "round" and s.pausa == "":
 					s.pausa = "azioni_sherman"
 				return
@@ -2938,12 +3044,26 @@ func _flusso() -> void:
 			s.pausa = "azioni_tedesche"
 			return
 
+## Inizio dei turni del Round (la pista ha il turno «2» e poi il turno «1»): effetti che avvengono prima di ogni azione.
+func _avvia_turni(fino_a: int) -> void:
+	if not s.has("round") or s.round.is_empty():
+		return
+	if not s.round.has("turni_avviati"):
+		s.round.turni_avviati = []
+	for tn in [2, 1]:
+		if tn < fino_a or tn in s.round.turni_avviati:
+			continue
+		s.round.turni_avviati.append(tn)
+		ph.inizio_turno(tn)
+
 func _consuma_turno(x: Dictionary) -> void:
 	x.turni = maxi(0, int(x.turni) - 1)
 	if x.turni == 0 and x.slot == "turni":
 		x.slot = "completo"
 
 func _fine_round() -> void:
+	_avvia_turni(0)
+	ph.casella_treno([])
 	_canoe_forate()
 	_passo("fine_round", {"n": int(s.round.n)})
 	s.ultimo_round = int(s.round.n)
@@ -3014,6 +3134,8 @@ func puo_agire(a: Dictionary, consenti_paracadute := false) -> String:
 		return "%s non può agire." % nome(a)
 	if ph.m18.sherman_ia(a):
 		return "Lo Sherman %s non è ai tuoi ordini: muove e spara secondo i suoi paragrafi." % a.id
+	if a.get("berserk", false) and attivo(a):
+		return "%s è fuori di testa: agisce da solo finché un compagno non lo placca." % nome(a)
 	if a.get("legato", false):
 		return "%s è legato: un compagno nello stesso esagono deve slegarlo." % nome(a)
 	if s.fase == "round":
@@ -3119,6 +3241,10 @@ func _costo_ingresso(h: String) -> int:
 func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> String:
 	if piano(a) > 0 and verso != a.hex:
 		return "%s è al piano superiore: prima deve scendere le scale." % nome(a)
+	if a.get("sotto_ponte", false):
+		return "%s è sotto il ponte: prima deve risalire (2 PM)." % nome(a)
+	if ph != null and ph.pezzo_treno_in(verso) >= 0:
+		return "Non si entra in un esagono occupato dal treno."
 	var e_mo: String = mo.verifica_passo(a, verso)
 	if e_mo != "":
 		return e_mo
@@ -3130,6 +3256,8 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 			return "Per muoversi a piedi bisogna prima scendere dal veicolo."
 		if not E.adiacenti(a.hex, verso):
 			return "Si può entrare solo in un esagono adiacente."
+		if veic.get("immobilizzato", false):
+			return "Il veicolo è immobilizzato."
 		var cv: int = veicoli.costo(veic, a.hex, verso)
 		if cv < 0:
 			return "Il veicolo non può entrare in quell’esagono."
@@ -3233,6 +3361,19 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 		return OK
 	var costo := _costo_passo(primo, da_hex, verso)
 	var controllo_veicolo := false
+	if s.fase == "round" and veic_m.get("modello", "") == "scialuppa" and not _turno_di(primo).has("rematore"):
+		# 718: la scialuppa si rema in due che agiscono insieme.
+		var c_r: Array = casella_attuale()
+		var secondo := {}
+		for x in veicoli.occupanti(veic_m):
+			if x.id != primo.id and attivo(x) and not c_r.is_empty() and int(x.turni) == int(c_r[0]) and x.slot == "turni":
+				secondo = x
+				break
+		if secondo.is_empty():
+			return _errore("Per remare serve un secondo soldato a bordo che possa agire ora.")
+		_consuma_turno(secondo)
+		_turno_di(primo).rematore = secondo.id
+		_log("azione", "%s e %s remano insieme." % [nome(primo), nome(secondo)])
 	if s.fase == "round":
 		var t := _turno_di(primo)
 		if veicoli.attivo(veic_m):
@@ -3281,7 +3422,13 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	else:
 		_log("azione", "%s %s in %s (%s)." % [", ".join(nomi), "entra" if nomi.size() == 1 else "entrano", verso, terreno.nome_tipo(verso)])
 	_fx("muovi", {"ids": mossi, "da": da_hex, "a": verso})
-	if controllo_veicolo:
+	if veicoli.attivo(veic_m) and not veicoli.e_canoa(veic_m):
+		veicoli.investimento(veic_m, verso)
+		if not veicoli.attivo(veic_m) or veic_m.get("fermo", false):
+			veic_m.fermo = false
+			if not s.turno.is_empty():
+				s.turno.mp = 0
+	if controllo_veicolo and veicoli.attivo(veic_m):
 		veicoli.controllo_incidente(veic_m, "guida veloce")
 		if not veicoli.attivo(veic_m) or veic_m.get("fermo", false):
 			veic_m.fermo = false
@@ -3299,7 +3446,20 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 	if s.fase == "round" and not s.turno.is_empty() and not unita_in(verso, "de").is_empty():
 		s.turno.fermo = true
 	mo.dopo_ingresso(ids, verso)
-	_ingresso(verso, ids, sul_ponte)
+	if ph.in_fiamme(verso):
+		# 414.2: il deposito in fiamme si attraversa con un controllo di percezione e si finisce proni oltre.
+		for id in ids:
+			var af := u(str(id))
+			if attivo(af) and veicoli.di(af).is_empty():
+				ph.attraversa_fiamme(af, da_hex, "")
+		if not s.turno.is_empty():
+			s.turno.mp = 0
+			s.turno.cambio_libero = false
+		var oltre: Array = ids.filter(func(i): return attivo(u(str(i))))
+		if not oltre.is_empty():
+			_ingresso(u(str(oltre[0])).hex, oltre, false)
+	else:
+		_ingresso(verso, ids, sul_ponte)
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))
@@ -3329,6 +3489,11 @@ func _ingresso(h: String, ids: Array, sul_ponte: bool) -> void:
 	if vivi.is_empty():
 		return
 	_edificio_raggiunto(h)
+	for bx in unita_in(h, "us"):
+		if bx.get("berserk", false):
+			for id in vivi:
+				if ph.berserk.placca(u(str(id)), bx):
+					break
 	_controlla_da_leggere()
 	if _niente_controlli_round():
 		_log("info", "Nei Round di questa missione non si fanno controlli di paragrafo entrando negli esagoni.")
@@ -3435,6 +3600,8 @@ func scendi_veicolo(id: String) -> Dictionary:
 		return _errore("Il soldato non è su un veicolo.")
 	if veicoli.e_canoa(veic) and not veicoli.spiaggiata(veic):
 		return _errore("Si scende solo da una canoa spiaggiata: prima portala a riva.")
+	if a.get("autista_camion", false) and veicoli.attivo(veic):
+		return _errore("L’autista del camion non può scendere.")
 	if s.fase == "round":
 		var t := _turno_di(a)
 		if t.azione == "":
@@ -3501,6 +3668,9 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 			return {"ok": false, "motivo": "servono due serventi a bordo"}
 	if mirato and tiratore.get("lato", "") == "us" and bool(T.ARMI[tipo].get("squadra", false)) and not tiratore.get("carro_us", false):
 		var compagni := unita_in(tiratore.hex, "us").filter(func(x): return x.id != tiratore.id and not x.panico)
+		if arma.get("solo_passeggero1", false):
+			var vj: Dictionary = veicoli.di(tiratore)
+			compagni = veicoli.occupanti(vj).filter(func(x): return x.id != tiratore.id and not x.panico and attivo(x) and str(vj.occupanti[0]) != x.id)
 		if compagni.is_empty():
 			return {"ok": false, "motivo": "da solo la mitragliatrice spara solo di rapido"}
 	var mods: Array = []
@@ -3522,7 +3692,38 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 	var ip := T.indice_postura(bersaglio.postura)
 	var th := terreno.tipo(bersaglio.hex)
 	var veic_b: Dictionary = veicoli.di(bersaglio)
-	if veicoli.e_canoa(veic_b):
+	if str(tiratore.get("barca", "")) != "":
+		mods.append(["dal battello d’assalto", -2])
+	if bersaglio.get("sotto_ponte", false):
+		# Purple Heart 17: sotto il ponte si conta accovacciato all’interno (apertura non adiacente; adiacente se si spara dal ponte
+		# dello stesso esagono; allo scoperto se si è sotto lo stesso ponte).
+		var ipc := T.indice_postura("crouching")
+		if tiratore.get("sotto_ponte", false) and tiratore.hex == bersaglio.hex:
+			var mcs: int = int(T.MOD_TERRENO.get("clear", [0, 0, 0])[ipc])
+			if mcs != 0:
+				mods.append(["sotto lo stesso ponte (accovacciato allo scoperto)", mcs])
+		else:
+			var mi: int = (T.MOD_INTERNO_VICINO if tiratore.hex == bersaglio.hex else T.MOD_INTERNO_LONTANO)[ipc]
+			mods.append(["sotto il ponte (come in un interno)", mi])
+	elif bersaglio.get("cane", false):
+		# Purple Heart 391: −3 a chi spara a un cane, qualunque sia il terreno.
+		mods.append(["cane da guardia", -3])
+	elif str(bersaglio.get("barca", "")) != "" and tipo == "bazooka":
+		# 432.6: il bazooka spara al battello, mezzo piccolo allo scoperto.
+		mods.append(["battello d’assalto, mezzo piccolo allo scoperto", int(T.MOD_VEICOLO.get("clear", [2, 3])[0])])
+	elif str(bersaglio.get("barca", "")) != "":
+		# 432.5: chi è nel battello conta accovacciato allo scoperto.
+		ip = T.indice_postura("crouching")
+		var mb: int = int(T.MOD_TERRENO.get("clear", [0, 0, 0])[ip])
+		if mb != 0:
+			mods.append(["nel battello (accovacciato allo scoperto)", mb])
+	elif veic_b.get("modello", "") == "scialuppa" and veicoli.attivo(veic_b):
+		# Purple Heart 718: nella scialuppa si è accovacciati in copertura.
+		ip = T.indice_postura("crouching")
+		var msc: int = int(T.MOD_TERRENO.get("cover", [0, 0, 0])[ip])
+		if msc != 0:
+			mods.append(["nella scialuppa (accovacciato in copertura)", msc])
+	elif veicoli.e_canoa(veic_b):
 		# In canoa si conta accovacciati in terreno scoperto.
 		ip = T.indice_postura("crouching")
 		var mc: int = int(T.MOD_TERRENO.get("clear", [0, 0, 0])[ip])
@@ -3599,18 +3800,41 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 	var r := d10()
 	var colpito: bool = r == 0 or (r != 9 and r <= int(p.prob))
 	fx.esito = "colpito" if colpito else "mancato"
-	if not colpito and str(tiratore.get("lato", "")) == "us":
+	if not colpito:
 		ph.tiro_mancato(bersaglio)
+	if not colpito and str(tiratore.get("lato", "")) == "us" and str(bersaglio.get("barca", "")) != "" and tipo != "bazooka":
+		ph.tiro_mancato_barca(bersaglio, tipo)
 	fx.dado = r
 	_log("dado", "Per colpire: serve 0–%d, esce %d → %s." % [int(p.prob), r, "COLPITO" if colpito else "mancato"])
-	if not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)) and veicoli.di(bersaglio).modello != "chiatta":
+	if not colpito and tiratore.get("lato", "") == "de" and veicoli.di(bersaglio).get("modello", "") == "scialuppa" and not veicoli.spiaggiata(veicoli.di(bersaglio)):
+		# Purple Heart 718: un colpo che manca chi è nella scialuppa può forarla.
+		var rp := d10()
+		var pen := T.penetrazione(tipo, rp)
+		var vsc: Dictionary = veicoli.di(bersaglio)
+		_log("dado", "Il colpo finisce nella scialuppa: penetrazione %d → %s." % [rp, {"-": "nessuna", "L": "leggera", "M": "media", "H": "pesante"}[pen]])
+		if pen == "L":
+			var abordo: Array = veicoli.occupanti(vsc).filter(func(x): return attivo(x))
+			if not abordo.is_empty():
+				var ferito: Dictionary = abordo[rng.randi_range(0, abordo.size() - 1)]
+				_applica_danno(ferito, "W", tiratore)
+		elif pen != "-":
+			_log("danno", "La scialuppa colpita affonda: chi è a bordo annega.")
+			for x in veicoli.occupanti(vsc):
+				veicoli.scendi(x)
+				if attivo(x):
+					_uccidi(x, "annegato con la scialuppa")
+			vsc.stato = "distrutto"
+			vsc.hex = ""
+	elif not colpito and tiratore.get("lato", "") == "de" and veicoli.e_canoa(veicoli.di(bersaglio)) and not (veicoli.di(bersaglio).modello in ["chiatta", "scialuppa"]):
 		var rc := d10()
 		if rc % 2 == 0:
 			var vc: Dictionary = veicoli.di(bersaglio)
 			if not vc.get("forata", false):
 				vc.forata = true
 				_log("danno", "Il colpo buca la %s (%d): deve spiaggiare entro il Round o affonda." % [vc.nome.to_lower(), rc])
-	if colpito and veicoli.attivo(veicoli.di(bersaglio)) and not veicoli.e_canoa(veicoli.di(bersaglio)):
+	if colpito and tipo == "bazooka" and str(bersaglio.get("barca", "")) != "":
+		ph.bazooka_su_barca(str(bersaglio.barca))
+	elif colpito and veicoli.attivo(veicoli.di(bersaglio)) and not veicoli.e_canoa(veicoli.di(bersaglio)):
 		veicoli.colpito(veicoli.di(bersaglio), tipo, tiratore, mirato, fx)
 	elif colpito:
 		var rd := d10()
@@ -3686,6 +3910,15 @@ func _danno_esplosione(x: Dictionary, tabella: String) -> void:
 
 func _applica_danno(x: Dictionary, l: String, fonte: Dictionary) -> void:
 	if not attivo(x) and x.stato != "catturato":
+		return
+	if ph != null:
+		ph.radio_colpita(x, l)
+	if ph != null and x.get("sotto_ponte", false):
+		ph.sotto_ponte_colpito(x, l)
+		if not attivo(x):
+			return
+	if l == "P" and (x.get("cane", false) or x.get("berserk", false)):
+		_log("danno", "%s non va nel panico." % nome(x))
 		return
 	match l:
 		"P":
@@ -3858,6 +4091,8 @@ func tiro(id: String, tipo_arma: String, bersaglio_id: String, mirato: bool) -> 
 
 ## Granata o carica da demolizione (regola 10).
 func probabilita_lancio(lanciatore: Dictionary, tipo: String, h: String) -> Dictionary:
+	if veicoli.di(lanciatore).get("modello", "") == "scialuppa":
+		return {"ok": false, "motivo": "dalla scialuppa non si lanciano granate o cariche"}
 	if lanciatore.postura == "prone":
 		return {"ok": false, "motivo": "da prono non si lancia"}
 	if tipo == "satchel" and lanciatore.postura != "standing":
@@ -4037,14 +4272,16 @@ func probabilita_assalto(att: Dictionary, dif: Dictionary, carica: bool) -> Dict
 			solo_catturate = false
 	if att.armi.size() > 0 and solo_catturate:
 		ws -= 1
+	if att.get("berserk", false):
+		ws += 2
 	if ws != 0:
 		mods.append(["abilità", ws])
 	if carica:
 		mods.append(["carica", -3])
 	if att.ferito:
 		mods.append(["attaccante ferito", -2])
-	var ws_d := int(dif.WS)
-	var difesa_valida: bool = ws_d >= 1 and not dif.panico and not dif.ferito
+	var ws_d := int(dif.WS) + (2 if dif.get("berserk", false) else 0)
+	var difesa_valida: bool = ws_d >= 1 and not dif.panico and (not dif.ferito or dif.get("berserk", false))
 	if dif.lato == "de" and str(dif.get("senza_ws_per", "")) == str(att.id):
 		difesa_valida = false
 	if dif.lato == "us" and fase_round() and not dif.consapevole:
@@ -4162,6 +4399,35 @@ func prepara(id: String, tipo: String) -> Dictionary:
 		return _errore("Nessun razzo per il bazooka.")
 	arma.preparata = true
 	_log("azione", "%s prepara: %s." % [nome(a), T.ARMI[tipo].nome])
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
+## 717: un’azione di carico del camion in U14.
+func carica_camion(id: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	var err: String = ph.carica_camion(a)
+	if err != "":
+		return _errore(err)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
+## 689: un compagno nello stesso esagono placca il soldato fuori di testa (un’azione).
+func placca(id: String, bid: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	var b := u(bid)
+	if b.is_empty() or not b.get("berserk", false) or b.hex != a.hex:
+		return _errore("Qui non c’è nessuno da placcare.")
+	ph.berserk.placca(a, b)
 	_chiudi_azione_semplice(a)
 	_fine_comando()
 	return OK
@@ -4385,6 +4651,61 @@ func trascina(id: String, ferito_id: String, verso: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Purple Heart 718: la scialuppa a terra si porta con quattro uomini in piedi che agiscono insieme (2 esagoni per turno).
+func portatori_scialuppa(a: Dictionary) -> Array:
+	var v: Dictionary = veicoli.v("vscialuppa")
+	if v.is_empty() or not veicoli.attivo(v) or a.hex != str(v.hex) or not veicoli.spiaggiata(v) or not veicoli.occupanti(v).is_empty():
+		return []
+	var c: Array = casella_attuale() if fase_round() else []
+	var l: Array = [a]
+	for x in unita_in(a.hex, "us"):
+		if x.id == a.id or x.postura != "standing" or not veicoli.di(x).is_empty() or x.get("carro_us", false):
+			continue
+		if fase_round() and not (int(x.turni) == int(c[0]) and x.slot == "turni") and not (str(s.turno.get("id", "")) == a.id and x.id in s.turno.get("portatori", [])):
+			continue
+		l.append(x)
+	return l.slice(0, 4) if l.size() >= 4 else []
+
+func porta_scialuppa(id: String, verso: String) -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := puo_agire(a)
+	if e != "":
+		return _errore(e)
+	if a.postura != "standing":
+		return _errore("Per portare la scialuppa bisogna essere in piedi.")
+	var v: Dictionary = veicoli.v("vscialuppa")
+	var port: Array = portatori_scialuppa(a)
+	if port.is_empty():
+		return _errore("Servono quattro uomini in piedi nell’esagono della scialuppa a terra%s." % (" che possano agire ora" if fase_round() else ""))
+	if not E.adiacenti(str(v.hex), verso) or terreno.tipo(verso) in ["water", "stream"] or terreno.edificio(verso) or terreno.costo_movimento(str(v.hex), verso) < 0:
+		return _errore("La scialuppa si porta solo in un esagono di terra adiacente (non in un edificio).")
+	if s.fase == "round":
+		var t := _turno_di(a)
+		if t.azione == "":
+			t.azione = "scialuppa"
+			t.mp = 2
+			t.portatori = port.map(func(x): return x.id)
+			for x in port:
+				if x.id != a.id:
+					_consuma_turno(x)
+			_log("azione", "%s porta la scialuppa insieme a %s." % [nome(a), ", ".join(port.filter(func(x): return x.id != a.id).map(func(x): return x.lettera))])
+		elif t.azione != "scialuppa" or int(t.mp) <= 0:
+			return _errore("In questo turno non si può più portare la scialuppa.")
+		t.mp = int(t.mp) - 1
+	var da: String = str(v.hex)
+	v.hex = verso
+	var ids: Array = port.map(func(x): return x.id)
+	for x in port:
+		x.hex = verso
+	_log("azione", "La scialuppa è portata in %s." % verso)
+	_fx("muovi", {"ids": ids, "da": da, "a": verso, "veicolo": v.id})
+	_ingresso(verso, ids, false)
+	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == a.id and int(s.turno.mp) <= 0:
+		_termina_azione(a)
+	_fine_comando()
+	return OK
+
 ## Esce dalla mappa dal margine nord (fine della missione n. 2).
 func esci(id: String) -> Dictionary:
 	_inizio_comando()
@@ -4392,10 +4713,15 @@ func esci(id: String) -> Dictionary:
 	var e := _azione_semplice(a)
 	if e != "":
 		return _errore(e)
-	if not e_uscita(a.hex):
+	var camion: bool = not ph.camion_di(a).is_empty()
+	if camion and a.hex != "A3":
+		return _errore("Il camion esce soltanto da A3.")
+	if not camion and not e_uscita(a.hex):
 		return _errore("Si esce solo da %s." % str(missione.get("uscita_breve", "margine nord, tra A1 e J1")))
 	if a.postura == "prone":
 		return _errore("Un soldato prono non si muove.")
+	if camion:
+		ph.camion_uscito(a)
 	for pid in a.prigionieri:
 		var p := u(pid)
 		if not p.is_empty() and p.stato == "catturato":
@@ -4476,21 +4802,46 @@ func azioni_ponte(a: Dictionary) -> Array:
 				and a.postura != "prone" and terreno.vede(a.hex, h, a.postura, "standing") and fase_round():
 			out.append({"azione": "bazooka", "hex": h, "testo": "Bazooka sul ponte %s (%s)" % [nome_p, h]})
 		var carica := arma_di(a, "satchel")
-		if a.hex == h and not carica.is_empty() and carica.preparata:
-			out.append({"azione": "carica", "hex": h, "testo": "Piazza una carica sul ponte (%s)" % h})
+		var sotto: bool = a.get("sotto_ponte", false)
+		var timer: bool = bool(regola("ponti_timer", false))
+		if timer and a.hex == h:
+			# Purple Heart 17: le cariche si piazzano sui sostegni, sotto il ponte (2 PM per scendere o risalire).
+			if sotto:
+				out.append({"azione": "sopra", "hex": h, "testo": "Risali sul ponte (%s)" % h})
+			elif a.postura != "prone":
+				out.append({"azione": "sotto", "hex": h, "testo": "Scendi sotto il ponte (%s)" % h})
+		if a.hex == h and not carica.is_empty() and carica.preparata and (sotto or not timer):
+			out.append({"azione": "carica", "hex": h, "testo": "Piazza una carica sotto il ponte (%s)" % h if timer else "Piazza una carica sul ponte (%s)" % h})
 		var servono := 2 if ponte_di_pietra(h) else 1
-		if bool(regola("ponti_timer", false)):
-			# Purple Heart 17: sul ponte, con le cariche piazzate, si arma il timer (1–4 Round; nelle Operazioni si innesca).
-			if a.hex == h and int(st.cariche) >= servono and not ph.ponte_armato(h):
+		if timer:
+			# Purple Heart 17: con le cariche piazzate si regola la spoletta (1–4 turni; nelle Operazioni si innesca).
+			if a.hex == h and sotto and int(st.cariche) >= servono and not ph.ponte_armato(h):
 				if fase_round():
 					for k in [1, 2, 3, 4]:
-						out.append({"azione": "timer%d" % k, "hex": h, "testo": "Timer: salta tra %d Round (%s)" % [k, h]})
+						out.append({"azione": "timer%d" % k, "hex": h, "testo": "Spoletta: salta tra %d turn%s (%s)" % [k, "o" if k == 1 else "i", h]})
 				else:
 					out.append({"azione": "timer0", "hex": h, "testo": "Innesca le cariche del ponte (%s)" % h})
 		elif int(st.cariche) >= servono and (E.distanza(a.hex, h) <= 1 or terreno.vede(a.hex, h, a.postura, "standing")):
 			out.append({"azione": "brilla", "hex": h, "testo": "Fai saltare il ponte %s (%s)" % [nome_p, h]})
 		if not ponte_di_pietra(h) and st.carburante and E.distanza(a.hex, h) == 1:
 			out.append({"azione": "fuoco", "hex": h, "testo": "Dai fuoco al ponte di legno (%s)" % h})
+	# Purple Heart 17 (503/504): carica sul binario con la spoletta, bazooka contro il treno.
+	var binario: Array = regola("binario", [])
+	if not binario.is_empty():
+		var carica_b := arma_di(a, "satchel")
+		if a.hex in binario and not carica_b.is_empty() and carica_b.preparata and ph.pezzo_treno_in(a.hex) < 0 \
+				and not ph._st().get("cariche_binario", {}).has(a.hex):
+			if fase_round():
+				for k in [1, 2, 3, 4]:
+					out.append({"azione": "binario%d" % k, "hex": a.hex, "testo": "Carica sul binario: salta tra %d turn%s" % [k, "o" if k == 1 else "i"]})
+			else:
+				out.append({"azione": "binario0", "hex": a.hex, "testo": "Innesca una carica sul binario (%s)" % a.hex})
+		var bz := arma_di(a, "bazooka")
+		if not bz.is_empty() and bz.preparata and munizioni_arma(a, "bazooka") > 0 and fase_round() and a.postura != "prone":
+			for ht in ph._posizioni_treno() if str(ph._st().get("treno", {}).get("stato", "")) == "attivo" else []:
+				if str(ht) != "" and E.distanza(a.hex, str(ht)) <= 14 and terreno.vede(a.hex, str(ht), a.postura, "standing"):
+					var ip: int = ph.pezzo_treno_in(str(ht))
+					out.append({"azione": "treno", "hex": str(ht), "testo": "Bazooka sul%s in %s" % [" la locomotiva" if ip == 0 else " vagone", ht]})
 	var dep := str(regola("deposito", ""))
 	if dep != "" and a.hex == dep and porte_usate(a) < porte_massime(a):
 		out.append({"azione": "tanica", "hex": dep, "testo": "Prendi una tanica di carburante"})
@@ -4520,6 +4871,36 @@ func azione_ponte(id: String, azione: String, h: String) -> Dictionary:
 			_log("azione", "%s piazza una carica da demolizione sul ponte in %s (%d)." % [nome(a), h, int(st.cariche)])
 		"timer0", "timer1", "timer2", "timer3", "timer4":
 			ph.arma_ponte(h, int(azione.substr(5)))
+		"binario0", "binario1", "binario2", "binario3", "binario4":
+			var cb := arma_di(a, "satchel")
+			a.armi.erase(cb)
+			ph.arma_binario(h, int(azione.substr(7)))
+		"treno":
+			var bzt := arma_di(a, "bazooka")
+			var it: int = ph.pezzo_treno_in(h)
+			var baset := T.base_per_distanza("bazooka", E.distanza(a.hex, h))
+			var probt := clampi(baset + int(T.MOD_VEICOLO.get("clear", [2, 3])[1]) + int(a.WS) - (1 if a.ferito else 0), 0, 8)
+			_log("combattimento", "%s spara col bazooka contro il treno in %s (serve 0–%d)." % [nome(a), h, probt])
+			_fx("tiro", {"da": a.hex, "a": h, "tiratore": a.id, "bersaglio": "", "arma": "bazooka", "mirato": true, "esito": "mancato", "prob": probt})
+			var rt := d10()
+			if it >= 0 and (rt == 0 or (rt != 9 and rt <= probt)):
+				var dpt := d10()
+				var pent := T.penetrazione("bazooka", dpt)
+				_log("dado", "Colpito (%d). Penetrazione: %d → %s." % [rt, dpt, {"L": "leggera", "M": "media", "H": "pesante"}.get(pent, "nessuna")])
+				ph.colpo_treno(it, pent)
+			else:
+				_log("dado", "Mancato (%d)." % rt)
+			_consuma_bazooka(a, bzt)
+		"sotto", "sopra":
+			if s.fase == "round" and int(_turno_di(a).mp) < 2:
+				return _errore("Servono 2 punti movimento per scendere o risalire.")
+			if azione == "sotto":
+				a.sotto_ponte = true
+				a.postura = "crouching"
+				_log("azione", "%s scende sui sostegni sotto il ponte in %s." % [nome(a), h])
+			else:
+				a.erase("sotto_ponte")
+				_log("azione", "%s risale sul ponte in %s." % [nome(a), h])
 		"brilla":
 			_log("azione", "%s fa brillare le cariche." % nome(a))
 			distruggi_ponte(h, "cariche da demolizione")
@@ -5058,7 +5439,7 @@ func _calcola_fine(modo: String) -> void:
 		righe.append(["Obiettivo raggiunto: strada di Saint-Michaux sotto controllo", 4])
 	var perdite := 0
 	for a in americani():
-		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J") or a.get("carro_us", false):
+		if (numero == 1 and a.id in ["J", "K"]) or (numero == 2 and a.id == "J") or a.get("carro_us", false) or a.has("autista_camion"):
 			continue
 		if a.id == "K" and s.get("staffetta_spia", false):
 			continue

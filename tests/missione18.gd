@@ -118,7 +118,7 @@ func _init() -> void:
 	p = _nuova()
 	var g19: Dictionary = p._crea_tedesco(19, "G2", "standing")
 	p.leggi("512", {})
-	p.s.round.sparato_prec = ["g19"]
+	p.s.round.sparato_prec = [["g19", "bolt"]]
 	p.leggi("981", {})
 	ok(g19.armi.all(func(w): return w.tipo == "pzf") and g19.reazione == "A", "981: finito il fucile, resta il Panzerfaust e passa alla reazione A")
 

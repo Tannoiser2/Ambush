@@ -73,8 +73,8 @@ par("508", "Ti servono 21 PV per vincere. Oltre ai PV delle attivazioni ci saran
         [])
 par("548", "Il faro all’inizio è rivolto a ovest. Quando richiesto ruota di 90° in senso orario (da ovest a nord, da nord a est…). Il "
            "fascio è potentissimo: illumina tutti gli esagoni in vista del faro nella direzione in cui punta, e chi è illuminato si vede "
-           "da qualsiasi distanza. Il faro si distrugge con un risultato di penetrazione leggera o migliore (+1 per colpirlo; in questa "
-           "versione: con un esplosivo nell’esagono).", [])
+           "da qualsiasi distanza. Il faro si distrugge con un risultato di penetrazione leggera o migliore (+1 per colpirlo, tiro mirato con "
+           "«Spara al faro») o con un esplosivo nell’esagono.", [])
 par("571", "Se un soldato americano attivo è o è stato a nord-ovest del fiume, vedi 589. Altrimenti vedi 604.",
     [if_({"nw_fiume": True}, [see("589")], [see("604")])])
 par("589", "[s2] Attiva il tedesco 69 (Panzer IV) in Y15. Iniziano i Round; il tedesco 69 riceve 2 turni in questo Round. Passa "
@@ -85,10 +85,12 @@ par("632", "Il faro ruota di una posizione in senso orario, se non sta illuminan
            "vedi 643; altrimenti vedi 648.", [{"op": "faro_ruota"}, if_(NOT(S(6)), [see("643")], [see("648")])])
 par("648", "Il faro ruota di una posizione in senso orario, se non sta illuminando un americano attivo. Poi tira un dado:\n0: un "
            "esplosivo piazzato (a caso) salta.\n1–2: un edificio accanto a un edificio in fiamme prende fuoco ed esplode (ricevi i PV "
-           "dell’edificio).\n3–4: vedi 443 (il ritorno del tedesco 61 in E11 non è gestito).\n5–6: vedi 649.\n7–9: se ci sono incendi "
+           "dell’edificio).\n3–4: se la sentinella 61 è uscita con un movimento evasivo e "
+           "l’esagono E11 è intatto, torna in E11 accovacciata al piano superiore, iniziano i Round e resta in reazione speciale A fino "
+           "alla fine; altrimenti vedi 443.\n5–6: vedi 649.\n7–9: se ci sono incendi "
            "entro 2 esagoni dai serbatoi, vedi 725.",
     [{"op": "faro_ruota"}, die((0, 0, [{"op": "esplosivo_us_casuale"}]), (1, 2, [{"op": "incendio_adiacente"}]),
-                               (3, 4, [see("443")]), (5, 6, [see("649")]), (7, 9, [{"op": "solo_testo", "testo": "Nessun incendio vicino ai serbatoi."}]))])
+                               (3, 4, [{"op": "sentinella_e11"}]), (5, 6, [see("649")]), (7, 9, [{"op": "solo_testo", "testo": "Nessun incendio vicino ai serbatoi."}]))])
 par("629", "Se è stato piazzato un esplosivo, tira i dadi percentuali: con 75 o più uno salta in anticipo (a caso se più d’uno).",
     [{"op": "esplosione_prematura"}])
 par("634", "Tira un dado:\n0–5: vedi 648.\n6: vedi 461.\n7: vedi 623.\n8: vedi 641.\n9: vedi 646.",
@@ -97,10 +99,19 @@ par("646", "Tira un dado: 0–4 vedi 655; 5–9 vedi 689.", [die((0, 4, [see("65
 par("641", "Un soldato tedesco a caso, non in un mezzo, si arrende. Può accadere più volte.", [{"op": "arresa_casuale"}])
 par("649", "Se un cane da guardia era stato incapacitato, uno si riprende (ferito) e riparte verso l’americano attivo più vicino. Una "
            "volta sola per missione. Se nessun cane può riprendersi, vedi 485.", [{"op": "cane_recupera"}])
-par("655", "Un soldato tedesco a caso va fuori di testa e carica gli americani… (in questa versione l’evento non ha effetti).",
-    [{"op": "solo_testo"}])
-par("689", "Un soldato americano a caso (non un comandante) va fuori di testa e carica i tedeschi… (in questa versione l’evento non ha "
-           "effetti).", [{"op": "solo_testo"}])
+par("655", "Un soldato tedesco a caso (non a bordo di un mezzo) va fuori di testa! Fino alla fine della missione, o finché resta "
+           "attivo: riceve 2 turni per Round (1 se ferito); a ogni turno si alza, spara un tiro rapido al bersaglio attivo più vicino e "
+           "corre verso l’americano attivo più vicino usando metà dei punti movimento, senza cadere prono (da ferito non spara e si "
+           "muove soltanto; senz’armi usa tutti i punti movimento; niente granate). Se comincia il turno nell’esagono di americani "
+           "attivi assalta per uccidere il bersaglio più facile. È immune al panico e ha +2 all’abilità nell’assalto. Una volta sola.",
+    [{"op": "berserk_de"}])
+par("689", "Un soldato americano a caso (non un comandante) va fuori di testa! Fino alla fine della missione, o finché lui o tutti i "
+           "tedeschi restano attivi: riceve 2 turni per Round (1 se ferito); all’inizio di ogni azione si alza, spara un tiro rapido al "
+           "bersaglio più vicino e corre verso il tedesco attivo più vicino usando metà dei punti movimento, senza cadere prono (da "
+           "ferito si muove soltanto; senz’armi usa tutti i punti movimento; niente granate). Entrando o cominciando il turno "
+           "nell’esagono di tedeschi attivi li assalta per uccidere. È immune al panico e ha +2 all’abilità nell’assalto. Un compagno "
+           "che comincia il turno nel suo esagono (azione «Placca») o ci entra tira un dado: 0–7 lo placca; poi 3–9 torna in sé e "
+           "tutti e due cadono proni (0–2 resta fuori di testa).", [{"op": "berserk_us"}])
 
 # ------------------------------------------------------------------ attivazioni della guarnigione
 def guarnigione(pid, s, coppie, testo_h):
@@ -158,9 +169,13 @@ par("702", "Tira un dado: 0–4 vedi 713; 5–9 vedi 718.", [die((0, 4, [see("71
 par("713", "[s1] Il soldato vede un’auto comando abbandonata in I14. Se un soldato entra nell’esagono, vedi 897.",
     sighting(1) + [{"op": "auto_comando"}])
 par("897", "Le chiavi sono nel cruscotto e c’è benzina in abbondanza.", [])
-par("718", "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe essere la via verso la flotta! Ci sta tutta la squadra; si "
-           "vara da una spiaggia o da una banchina, si rema di 2 esagoni per turno. Chi è a bordo è accovacciato in copertura. Uscendo "
-           "dal bordo ovest in scialuppa guadagni 10 PV. (In questa versione la scialuppa si trova già sulla spiaggia in I18.)",
+par("718", "[s1] Il soldato vede una scialuppa rovesciata in I14: potrebbe essere la via verso la flotta! Ci sta tutta la squadra e chi è a "
+           "bordo è accovacciato in copertura. Si porta "
+           "di 2 esagoni per turno con quattro soldati in piedi che agiscono insieme; si vara da una spiaggia o da una banchina (salire "
+           "costa 1 PM); si rema di 2 esagoni per turno con due soldati che agiscono insieme. Chi è a bordo e non rema può sparare con "
+           "l’arma personale (niente bazooka, cariche, granate o mitragliatrici). La scialuppa non è un bersaglio, ma chi è a bordo sì: un "
+           "tiro tedesco che lo manca controlla la penetrazione, leggera = un americano ferito, di più = la scialuppa affonda e annegano "
+           "tutti. Uscendo dal bordo ovest in scialuppa guadagni 10 PV.",
     sighting(1) + [{"op": "scialuppa"}])
 
 # ------------------------------------------------------------------ eventi generici

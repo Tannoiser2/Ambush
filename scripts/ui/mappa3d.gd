@@ -1374,9 +1374,9 @@ func _aggiorna_pedine() -> void:
 		if not vm.is_empty() and _mezzi.has(str(vm.id)):
 			var nm: Node3D = _mezzi[str(vm.id)]
 			var posto: int = vm.occupanti.find(str(id))
-			var lung := 0.5 if str(vm.modello) == "canoa" else (0.8 if str(vm.modello) == "chiatta" else 0.35)
+			var lung := 0.5 if str(vm.modello) == "canoa" else (0.8 if str(vm.modello) in ["chiatta", "scialuppa"] else 0.35)
 			var loc := Vector3(0, 0.1, (float(posto) - (vm.occupanti.size() - 1) / 2.0) * lung / maxf(1.0, vm.occupanti.size() - 1.0) * -1.0)
-			if str(vm.modello) == "chiatta":
+			if str(vm.modello) in ["chiatta", "scialuppa"]:
 				loc.x = -0.08 if posto % 2 == 0 else 0.08
 			elif str(vm.modello) != "canoa":
 				loc = Vector3(-0.1 if posto % 2 == 0 else 0.1, 0.12, 0.1 - 0.25 * (posto / 2))
@@ -1502,13 +1502,18 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto"] else ("canoa" if modello == "chiatta" else modello)
+	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto", "camion"] else ("canoa" if modello in ["chiatta", "scialuppa"] else modello)
 	corpo.mesh = _mesh_mezzo(nome_mesh)
-	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else Color.WHITE))
+	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else (Color(0.78, 0.76, 0.7) if modello == "scialuppa" else Color.WHITE)))
 	if modello == "auto_comando":
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
 	if modello == "moto":
 		corpo.scale = Vector3(0.55, 0.8, 0.6)
+	if modello == "camion":
+		corpo.scale = Vector3(1.45, 1.55, 1.8)  # camion americano: carrozzeria più grande e alta
+		corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.55, 0.6, 0.42))
+		# cassone telonato dietro la cabina
+		_scatola(n, Vector3(0, 0.3, 0.22), Vector3(0.34, 0.26, 0.5), 0.0, _materiale(Color("6b6a4a"), 0.85))
 	if modello == "eboat":
 		# Motosilurante (Purple Heart 13): scafo affusolato, plancia e due tubi lanciasiluri, costruiti qui.
 		corpo.mesh = null
@@ -1535,8 +1540,8 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 			mt.rotation = Vector3(PI / 2.0, 0, 0)
 			mt.position = Vector3(0.11 * k, 0.22, -0.35)
 			corpo.add_child(mt)
-	if modello == "chiatta":
-		corpo.scale = Vector3(1.9, 1.2, 1.6)  # la chiatta: una grossa barca da dieci posti
+	if modello in ["chiatta", "scialuppa"]:
+		corpo.scale = Vector3(1.9, 1.2, 1.6)  # chiatta e scialuppa: grosse barche da dieci posti
 	n.add_child(corpo)
 	var et := Label3D.new()
 	et.name = "etichetta"
@@ -1598,7 +1603,7 @@ func _aggiorna_mezzi() -> void:
 				k = k * k * (3.0 - 2.0 * k)
 				c = centro_px(str(m.da)).lerp(centro_px(str(m.a)), k)
 				break
-		var acqua := str(veic.modello) in ["canoa", "chiatta"] and p.terreno.tipo(str(veic.hex)) == "stream"
+		var acqua := str(veic.modello) in ["canoa", "chiatta", "scialuppa"] and p.terreno.tipo(str(veic.hex)) in ["stream", "water"]
 		n.position = punto3d(c)
 		if acqua:
 			n.position.y = (_quota_base(c) - 1.0) * LIVELLO - 0.1

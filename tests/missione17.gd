@@ -35,18 +35,22 @@ func _init() -> void:
 	a0.hex = "G11"
 	a0.postura = "standing"
 	a0.armi.append({"tipo": "satchel", "inceppata": false, "rotta": false, "preparata": true, "catturata": false})
+	var r0: Dictionary = p.azione_ponte(a0.id, "sotto", "G11")
+	ok(r0.ok and a0.get("sotto_ponte", false), "si scende sotto il ponte G11 %s" % str(r0.get("errore", "")))
 	var r1: Dictionary = p.azione_ponte(a0.id, "carica", "G11")
 	var r2: Dictionary = p.azione_ponte(a0.id, "timer0", "G11")
 	ok(r1.ok and r2.ok and p.ph.ponte_armato("G11"), "carica e innesco sul ponte G11 %s %s" % [str(r1.get("errore", "")), str(r2.get("errore", ""))])
 	for a in sq:
 		if a.hex != "" and E.distanza(a.hex, "G11") <= 1:
 			a.hex = "A3"
+			a.erase("sotto_ponte")
 	p._controlla_fine_automatica()
 	ok(not p.ponte_intatto("G11"), "allontanata la squadra, il ponte G11 salta")
-	# Ponte di pietra J11: due cariche e timer di 2 Round.
+	# Ponte di pietra J11: due cariche e spoletta di 2 turni.
 	p.leggi("387", {"hex": "A3"})
 	ok(p.fase_round(), "387: tedeschi 22 e 23, iniziano i Round")
 	a0.hex = "J11"
+	a0.sotto_ponte = true
 	p.s.pausa = ""
 	var rr: Dictionary = p.s.round
 	p.s.fase = "operazioni"
@@ -58,18 +62,30 @@ func _init() -> void:
 	p.s.round.n = 1
 	var azioni: Array = p.azioni_ponte(a0).map(func(x): return x.azione)
 	p.ph.arma_ponte("J11", 2)
-	ok(int(p.ponte_stato("J11").cariche) == 2 and "timer2" in azioni and p.ph.ponte_armato("J11"), "due cariche e timer di 2 Round sul ponte J11")
+	ok(int(p.ponte_stato("J11").cariche) == 2 and "timer2" in azioni and p.ph.ponte_armato("J11"), "due cariche e spoletta di 2 turni sul ponte J11")
 	a0.hex = "A3"
-	p.s.round.n = 3
-	p.ph.inizio_round()
-	ok(not p.ponte_intatto("J11"), "all’inizio del Round 3 il ponte J11 salta")
+	a0.erase("sotto_ponte")
+	p.ph.inizio_turno(2)
+	ok(p.ponte_intatto("J11"), "dopo un turno il ponte J11 regge ancora")
+	p.ph.inizio_turno(1)
+	ok(not p.ponte_intatto("J11"), "all’inizio del secondo turno il ponte J11 salta")
+	# Sotto il ponte: chi è ferito o in panico può cadere nel fiume.
+	var sb: Dictionary = sq[3]
+	sb.hex = "R10"
+	sb.sotto_ponte = true
+	sb.stato = "attivo"
+	var gtir: Dictionary = p._crea_tedesco(22, "R13", "crouching")
+	ok(p.probabilita_tiro(gtir, gtir.armi[0], sb, true).get("mods", []).any(func(m): return "sotto il ponte" in str(m[0])), "chi è sotto il ponte si colpisce come in un interno")
+	gtir.stato = "rimosso"
+	gtir.hex = ""
 	# Il treno.
 	p.leggi("486", {})
 	ok(str(p.s.ph.treno.stato) == "attivo" and p.s.punti.get("Y5", "") == "locomotiva", "486: il treno entra in Y5")
 	ok(p.ph.round_obbligati(), "i Round continuano finché il treno è in mappa")
-	for i in 3:
-		p.ph.inizio_round()
+	for i in 6:
+		p.ph._muovi_treno(6)
 	ok(str(p.s.ph.treno.stato) == "deragliato" and int(p.s.condizione) == 3, "il treno arriva al ponte G11 distrutto e deraglia: Condizione 3")
+	ok(p.s.ph.treno.has("relitti"), "506: i vagoni scivolano fuori dal binario (%s)" % str(p.s.ph.treno.get("relitti", [])))
 	var vagoni: Array = p.s.get("da_leggere", {}).keys().filter(func(h): return p.s.da_leggere[h] == "595")
 	ok(not vagoni.is_empty(), "i vagoni merci rovesciati nascondono qualcosa (%s)" % str(vagoni))
 	var pv0: int = p.pv_totali()
@@ -129,5 +145,42 @@ func _init() -> void:
 	ok(p.s.fase == "fine" and int(p.s.ph.get("fine_modo", 0)) == 1, "fine 1: niente tedeschi attivi e tutti i ponti saltati o minati")
 	var righe: Array = p.s.fine.get("righe", [])
 	ok(righe.any(func(r): return "Ponti distrutti (3)" in str(r[0])), "a fine missione i tre ponti contano 30 PV (%s)" % str(righe))
+	_treno_binario()
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)
+
+
+## 503/504/493: binario interrotto da una carica, bazooka contro la locomotiva, treno che si muove nelle caselle tedesche.
+func _treno_binario() -> void:
+	var p = PartitaScript.new(17)
+	p.nuova(9, true)
+	var sq: Array = p.americani()
+	p.schiera(sq.map(func(a): return a.id), "A3")
+	p.inizia_missione()
+	p.s.pausa = ""
+	p.leggi("486", {})
+	p.s.pausa = ""
+	p.s.round.vantaggio = "us"
+	p.s.round.treno_mosso = []
+	p.ph.casella_treno([2, "us"])
+	ok(int(p.s.ph.treno.idx) == 0, "con il vantaggio americano il treno aspetta la casella tedesca")
+	p.ph.casella_treno([2, "de"])
+	ok(int(p.s.ph.treno.idx) == 6, "nella casella tedesca il treno avanza di 6 esagoni")
+	p.ph.casella_treno([])
+	ok(int(p.s.ph.treno.idx) == 12, "a fine Round il treno ha fatto anche il secondo turno")
+	# carica lanciata sul binario davanti alla locomotiva
+	var b: Array = p.regola("binario", [])
+	p.ph.distruggi_binario(str(b[14]))
+	p.ph._muovi_treno(6)
+	ok(str(p.s.ph.treno.stato) == "deragliato", "503: la locomotiva entra nel binario interrotto e deraglia")
+	# bazooka contro la locomotiva
+	var q = PartitaScript.new(17)
+	q.nuova(10, true)
+	q.schiera(q.americani().map(func(a): return a.id), "A3")
+	q.inizia_missione()
+	q.leggi("486", {})
+	q.ph._muovi_treno(6)
+	q.ph.colpo_treno(0, "M")
+	ok(str(q.s.ph.treno.stato) == "attivo", "504: la locomotiva regge a una penetrazione media")
+	q.ph.colpo_treno(2, "M")
+	ok(str(q.s.ph.treno.stato) == "deragliato" and q.s.ph.treno.relitti.size() == 5, "504: un vagone distrutto fa deragliare il treno")

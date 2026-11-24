@@ -560,6 +560,10 @@ func _aggiorna_mappa() -> void:
 			for v in E.vicini(a.hex):
 				if p.terreno.costo_movimento(a.hex, v) >= 0:
 					ev[v] = Color("8fd16a")
+		elif modo == "scialuppa" and a.hex != "":
+			for v in E.vicini(a.hex):
+				if p.terreno.costo_movimento(a.hex, v) >= 0 and not (p.terreno.tipo(v) in ["water", "stream"]) and not p.terreno.edificio(v):
+					ev[v] = Color("8fd16a")
 		elif modo in ["cedi", "sveglia"]:
 			for x in p.americani_attivi_in_mappa():
 				if x.id != a.id and E.distanza(x.hex, a.hex) <= 2:
@@ -683,9 +687,13 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 		stati.add_child(_chip(T.NOMI_POSTURA[a.postura], Color("6b6248")))
 	if a.get("in_jagd", false):
 		stati.add_child(_chip("nel Jagdpanther", Color("50604a")))
+	if a.get("sotto_ponte", false):
+		stati.add_child(_chip("sotto il ponte", Color("50604a")))
+	if a.get("berserk", false) and a.stato == "attivo":
+		stati.add_child(_chip("FUORI DI TESTA", Tema.ROSSO))
 	if a.ferito and a.stato == "attivo":
 		stati.add_child(_chip("FERITO", Tema.ROSSO))
-	if a.stato == "attivo" and a.hex != "" and not riproducendo and not a.get("panico", false) and not a.get("senza_carta", false) and not a.get("carro_us", false):
+	if a.stato == "attivo" and a.hex != "" and not riproducendo and not a.get("panico", false) and not a.get("senza_carta", false) and not a.get("carro_us", false) and not a.has("autista_camion"):
 		var vivo := p.u(str(a.id))
 		if not vivo.is_empty() and vivo.stato == "attivo":
 			if p.in_comando(vivo):
@@ -929,6 +937,13 @@ func _azioni_schieramento() -> void:
 	_b("Tutti", func(): selezione = tutti.map(func(x): return x.id); _aggiorna_tutto(), "Sceglie tutta la squadra: un tocco su un esagono li mette insieme")
 	_b("Quelli ancora fuori (%d)" % fuori.size(), func(): selezione = fuori.map(func(x): return x.id); _aggiorna_tutto(), "", not fuori.is_empty())
 	_b("Aggiungi il prossimo", _aggiungi_prossimo, "Aggiunge alla scelta il prossimo soldato ancora fuori", not fuori.filter(func(x): return not (x.id in selezione)).is_empty())
+	if p.ph.mg_jeep_possibile():
+		_gruppo("EQUIPAGGIAMENTO")
+		var mg_si: bool = p.ph.mg_jeep_scelta()
+		var bm := _b(("MG media sulla jeep 1: sì" if mg_si else "MG media sulla jeep 1: no"), func(): p.ph.scegli_mg_jeep(not mg_si); _aggiorna_tutto(),
+			"Una mitragliatrice media montata sulla jeep 1 (al posto del BAR di G): la usa il passeggero 1, gli altri passeggeri la assistono, l’autista no. Se la jeep è distrutta, lo è anche la mitragliatrice.")
+		if mg_si:
+			bm.add_theme_color_override("font_color", Tema.OTTONE)
 	_gruppo("SPOSTA")
 	var sulla_mappa: Array = selezione.filter(func(id): return p.u(id).hex != "")
 	_b("Rimetti fuori mappa", func(): p.schiera(sulla_mappa, ""); _salva(); _aggiorna_tutto(), "", not sulla_mappa.is_empty())
@@ -1169,6 +1184,12 @@ func _bottoni_veicolo(a: Dictionary) -> void:
 		return
 	if a.get("carro_us", false):
 		return
+	if a.get("autista_camion", false) and not veic.is_empty():
+		if p.ph.puo_caricare(a):
+			_b("Carica il carburante (%d/4)" % int(veic.get("azioni_carico", 0)), func(): _esito(p.carica_camion(a.id)), "Quattro azioni in U14 (nelle Operazioni basta un controllo degli eventi casuali).")
+		if a.hex == "A3":
+			_b("Esci da A3 con il camion", func(): _esito(p.esci(a.id)), "Carico di carburante vale 2 PV; poi arriva il camion successivo.")
+		return
 	if not veic.is_empty():
 		_b("Scendi dalla %s" % veic.nome, func(): _esito(p.scendi_veicolo(a.id)), "Nei Round costa 1 punto movimento di un’azione di movimento.")
 		return
@@ -1197,6 +1218,9 @@ func _bottoni_fuoco(a: Dictionary, mirato: bool) -> void:
 		for hb in p.bunker_in_vista(a):
 			var hbb: String = hb
 			_b("Spara al bunker in %s" % hb, func(): _esito(p.tiro_bunker(a.id, arma_scelta[a.id], hbb)), "Tiro mirato con +2: poi la tabella dei colpi (muro, feritoia, porta, equipaggio).", a.postura != "prone")
+		var hf: String = p.ph.faro_hex()
+		if hf != "" and a.hex != "" and p.terreno.vede(a.hex, hf, a.postura, "standing"):
+			_b("Spara al faro in %s" % hf, func(): _esito(p.tiro_faro(a.id, arma_scelta[a.id])), "Tiro mirato con +1: con penetrazione leggera o migliore il faro si spegne.", a.postura != "prone")
 		var b := _b("Tiro mirato", func(): _imposta_modo(a, "mirato"), "Un tiro senza malus; il bazooka spara solo mirato.", a.postura != "prone")
 		if modo == "mirato":
 			b.add_theme_color_override("font_color", Tema.OTTONE)
@@ -1244,10 +1268,29 @@ func _azioni_missione() -> void:
 			if galleria_no:
 				_b("Sali dalla botola" if a.hex != "G13" else "Esci dalla galleria", func(): _esito(p.mo.galleria(a.id, false)))
 	_azioni_missione_18()
+	_azioni_berserk()
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:
 		_gruppo("MISSIONE")
 		var b := _b("Missione compiuta: termina", func(): _conferma("Terminare la missione?", str(p.missione.get("testo_fine", "Tutti gli obiettivi sono raggiunti: ottieni 4 PV supplementari. I soldati incapacitati negli edifici non fanno perdere punti.")), func(): _esito(p.termina_missione("obiettivo"))))
 		b.add_theme_color_override("font_color", Tema.OTTONE)
+
+## 689: placcare il compagno fuori di testa nello stesso esagono. 718: portare la scialuppa in quattro.
+func _azioni_berserk() -> void:
+	if selezione.is_empty() or not (p.s.fase in ["operazioni", "round"]):
+		return
+	var a: Dictionary = p.u(selezione[0])
+	if a.is_empty() or p.puo_agire(a) != "" or a.hex == "":
+		return
+	var port: Array = p.portatori_scialuppa(a)
+	if not port.is_empty() and a.postura == "standing":
+		_gruppo("SCIALUPPA")
+		_b("Porta la scialuppa (con %s)" % ", ".join(port.filter(func(x): return x.id != a.id).map(func(x): return x.lettera)),
+			func(): modo = "scialuppa"; _aggiorna_tutto(), "Quattro uomini in piedi la portano insieme fino a una spiaggia o una banchina, dove si vara.")
+	for b in p.unita_in(a.hex, "us"):
+		if b.get("berserk", false) and b.id != a.id:
+			var bid: String = b.id
+			_gruppo("FUORI DI TESTA")
+			_b("Placca %s" % b.lettera, func(): _esito(p.placca(a.id, bid)), "Dado 0–7: placcato; poi 3–9 torna in sé e tutti e due cadono proni.")
 
 ## Missione 18: ingresso degli Sherman di rinforzo, Jagdpanther da servire.
 func _azioni_missione_18() -> void:
@@ -1293,7 +1336,8 @@ func _imposta_modo(a: Dictionary, m: String) -> void:
 			"rapido": "TIRO RAPIDO: tocca un tedesco evidenziato in rosso. Accanto a ogni bersaglio c’è la probabilità di colpirlo.",
 			"granata": "GRANATA: tocca l’esagono bersaglio (arancione).", "satchel": "CARICA: tocca l’esagono bersaglio (arancione).",
 			"cedi": "CEDI IL TURNO: tocca un compagno entro 2 esagoni (azzurro).", "sveglia": "ALLERTA: tocca un compagno inconsapevole entro 2 esagoni (azzurro).",
-			"trascina": "TRASCINA: tocca l’esagono adiacente in cui trascinare (verde)."}
+			"trascina": "TRASCINA: tocca l’esagono adiacente in cui trascinare (verde).",
+			"scialuppa": "SCIALUPPA: tocca l’esagono di terra adiacente in cui portarla (verde); nei Round fino a 2 esagoni."}
 		aiuto_azioni.text = testi.get(modo, "")
 		aiuto_azioni.add_theme_color_override("font_color", Color("f2d98c"))
 		if modo in ["mirato", "rapido"] and mappa.etichette.is_empty():
@@ -1357,6 +1401,9 @@ func _clic_mappa(h: String, _tasto: int) -> void:
 				var k := 0 if modo == "mortaio0" else 1
 				modo = ""
 				_esito(p.mo.colpo(a.id, k, h))
+				return
+			"scialuppa":
+				_esito(p.porta_scialuppa(a.id, h))
 				return
 			"trascina":
 				var f: Array = p.unita_in(a.hex, "us", false).filter(func(x): return x.stato in ["incapacitato", "morto"])

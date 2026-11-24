@@ -87,14 +87,16 @@ secondo_battello("460", "N5")
 dal_fiume("475", "Q8", "481")
 secondo_battello("481", "Q8")
 
-for pid, extra in (("490", ""), ("501", " (Il soldato americano J in V12 con la carta US 04 non è disponibile in questa versione.)")):
+for pid, extra in (("490", ""), ("501", " Metti in piedi in V12 il soldato americano J (carta US 04, guardia del deposito): da ora fa "
+                                        "parte della squadra, è consapevole e in comando nel Round 1.")):
     adv = "de" if pid == "490" else "us"
     par(pid, "[s5 e s7] Commando tedeschi all’attacco del deposito! Attiva i tedeschi 20, 21, 28 e 29 in X15 e i tedeschi 36, 37, 38 e 39 "
              "in U12, accovacciati. Colloca un battello d’assalto vuoto in U11 e uno in X14. Iniziano i Round, vantaggio "
              + ("tedesco." if adv == "de" else "americano.") + INFO + extra,
         sighting(5, 7) + [activate([(20, "X15"), (21, "X15"), (28, "X15"), (29, "X15"), (36, "U12"), (37, "U12"), (38, "U12"), (39, "U12")],
                                    "crouching", adv=adv),
-                          {"op": "imbarca", "g": [], "hex": "U11"}, {"op": "imbarca", "g": [], "hex": "X14"}])
+                          {"op": "imbarca", "g": [], "hex": "U11"}, {"op": "imbarca", "g": [], "hex": "X14"}]
+        + ([{"op": "soldato_j"}] if pid == "501" else []))
 
 
 # ------------------------------------------------------------------ attivazioni dai bordi
@@ -178,8 +180,12 @@ par("623", "Un soldato americano ferito a caso diventa incapacitato per la perdi
 par("370", "Squilla un telefono in J8. Se entri in J8 durante questa Condizione e rispondi, vedi 381.", [{"op": "telefono"}])
 par("381", "[s8] Il comando di divisione avverte che una colonna di camion sta arrivando a prendere il carburante per l’offensiva di domani: "
            "proteggila. «Li sento arrivare, signore. Passo e chiudo.» Vedi subito 717.", sighting(8) + [see("717")])
-par("717", "[s6] Un camion americano entra in mappa in A3 (carta US 05): deve fermarsi in U14, caricare il carburante e uscire da A3 (+2 PV; "
-           "−2 PV se messo fuori uso). In questa versione i camion non sono ancora gestiti.", sighting(6) + [{"op": "camion"}])
+par("717", "[s6] Un camion americano entra in mappa in A3 (carta US 05), ai tuoi ordini. Se entra in U14 e vi spende 4 azioni, carica il "
+           "carburante. Se esce da A3 carico guadagni 2 PV; se è messo fuori uso perdi 2 PV; se la missione finisce con un camion carico "
+           "in mappa guadagni 1 PV. Nessun soldato può salire sul camion e l’autista non può scendere; l’autista usa la pistola se in quel "
+           "turno non guida. Ci sono tre camion da rifornire, uno alla volta: quando il camion esce carico o è messo fuori uso entra il "
+           "successivo, finché tutti e tre hanno caricato e sono usciti, sono fuori uso o i tedeschi hanno impedito il rifornimento.",
+    sighting(6) + [{"op": "camion"}])
 
 # ------------------------------------------------------------------ movimenti: battelli
 def fiume(pid, sbarco, barca, solo=None, nota=""):

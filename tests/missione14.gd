@@ -73,5 +73,23 @@ func _init() -> void:
 	ok(true, "paragrafi 590, 712, 750 eseguiti")
 	p.leggi("462", {})
 	ok(true, "462: catena di eventi della Condizione 3")
+	_mg_jeep()
 	print("Errori: %d" % errori)
 	quit(1 if errori > 0 else 0)
+
+
+## Mitragliatrice media montata sulla jeep 1 (scelta nello schieramento) e dispersione dell’artiglieria del 555.
+func _mg_jeep() -> void:
+	var p = PartitaScript.new(14)
+	p.nuova(3, true)
+	ok(p.ph.mg_jeep_possibile(), "nello schieramento si può montare la MG sulla jeep")
+	p.ph.scegli_mg_jeep(true)
+	p.schiera(p.americani().map(func(a): return a.id), "Y7")
+	p.inizia_missione()
+	var j1: Dictionary = p.veicoli.v("vjeep1")
+	ok(j1.has("mg") and not p.u("G").armi.any(func(w): return w.tipo == "ar"), "MG media sulla jeep 1 al posto del BAR di G")
+	var occ: Array = p.veicoli.occupanti(j1)
+	ok(p._mg_montata(occ[1]).tipo == "mmg" and p._mg_montata(occ[0]).is_empty() and p._mg_montata(occ[2]).is_empty(), "la spara solo il passeggero 1")
+	var prima: int = p.s.modifiche.size()
+	p.leggi("555", {"hex": "K9"})
+	ok(p.s.cronaca.any(func(r): return "Artiglieria su K9: percentuale" in str(r.x)), "555: dispersione dell’artiglieria con i percentuali")
