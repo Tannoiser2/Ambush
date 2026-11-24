@@ -13,11 +13,13 @@ var _reazione_cambiata := false
 
 var mo: RefCounted
 var ph: RefCounted
+var ss: RefCounted
 
 func _init(partita: Partita) -> void:
 	p = partita
 	mo = preload("res://scripts/motore/tedeschi_mo.gd").new(self)
 	ph = preload("res://scripts/motore/tedeschi_ph.gd").new(self)
+	ss = preload("res://scripts/motore/tedeschi_ss.gd").new(self)
 
 # ------------------------------------------------------------------ turno
 func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
@@ -26,6 +28,8 @@ func turno(g: Dictionary, numero_tirato := false, casella := "") -> void:
 	_mp = p.effettivo_mpa(g)
 	_fermo = false
 	_reazione_cambiata = false
+	if p.ss.attiva() and ss.turno(g):
+		return
 	if p.veicoli.turno_equipaggio(self, g):
 		return
 	if p.ph.attiva() and p.ph.berserk.turno_tedesco(self, g):
@@ -130,6 +134,8 @@ func esegui(n: int) -> void:
 	if p.mo.attiva() and mo.esegui(n):
 		return
 	if p.ph.attiva() and ph.esegui(n):
+		return
+	if p.ss.attiva() and ss.esegui(n):
 		return
 	match n:
 		800:

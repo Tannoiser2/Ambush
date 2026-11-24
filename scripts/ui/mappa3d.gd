@@ -1762,6 +1762,13 @@ func _aggiorna_pedine() -> void:
 			tre2.scale = Vector3.ONE * 0.7
 			tre2.position = Vector3(sin(yaw), 0, cos(yaw)) * 0.2
 		corpo.position.y = 0.05 if morto else 0.0
+		# Silver Star: chi nuota affiora fino alle spalle; chi è sott’acqua si intravede sotto la superficie.
+		var ssx = mappa2d.partita.ss if mappa2d.partita != null else null
+		var in_acqua_ss: bool = ssx != null and ssx.attiva() and str(x.stato) == "attivo" and ssx.in_acqua(x)
+		var sotto_ss: bool = in_acqua_ss and ssx.sott_acqua(x)
+		if in_acqua_ss:
+			corpo.position.y = -0.12 if sotto_ss else -0.27
+		corpo.transparency = 0.55 if sotto_ss else 0.0
 		var base: MeshInstance3D = fig.get_node("base")
 		var sel: bool = mappa2d.vista == null and id in mappa2d.selezionati
 		var turno: bool = id in di_turno
@@ -1777,6 +1784,10 @@ func _aggiorna_pedine() -> void:
 			extra.append("FERITO")
 		if str(x.stato) in ["incapacitato", "morto", "catturato", "arreso"]:
 			extra.append({"incapacitato": "INCAPACITATO", "morto": "UCCISO", "catturato": "PRIGIONIERO", "arreso": "ARRESO"}[str(x.stato)])
+		if sotto_ss:
+			extra.append("SOTT’ACQUA")
+		if x.get("barca_ss", false) and str(x.stato) == "attivo":
+			extra.append("BARCA DI GUARDIA")
 		if not extra.is_empty():
 			testo += "\n" + " · ".join(extra)
 		et.text = testo

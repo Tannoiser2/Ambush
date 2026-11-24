@@ -904,6 +904,14 @@ func _azioni_posture(a: Dictionary, costo := "") -> void:
 	if a.get("carro_us", false):
 		return
 	_gruppo("POSTURA")
+	if p.ss.in_acqua(a) and not a.get("aggrappato", false):
+		var su := _b("In superficie", func(): _esito(p.cambia_postura(a.id, "standing")), "In superficie si vede e si spara (solo di rapido); il cambio è gratuito.", a.postura != "standing")
+		var giu := _b("Sott’acqua", func(): _esito(p.cambia_postura(a.id, "prone")), "Sott’acqua si vede e si è visti solo nell’esagono e in quelli adiacenti; non si spara.", a.postura != "prone" and p.ss.sommozzatore(a))
+		for bx in [su, giu]:
+			if bx.disabled and ((bx == su and a.postura == "standing") or (bx == giu and a.postura == "prone")):
+				bx.add_theme_stylebox_override("disabled", Tema.scatola(Color("55603f"), Tema.OTTONE, 1, 3, 10))
+				bx.add_theme_color_override("font_disabled_color", Color(C_CHIARO))
+		return
 	for k in ["standing", "crouching", "prone"]:
 		var b := _b(_maiuscola(T.NOMI_POSTURA[k]) + costo, func(): _esito(p.cambia_postura(a.id, k)), "", a.postura != k and a.hex != "")
 		if a.postura == k:
@@ -1103,7 +1111,7 @@ func _azioni_round(a: Dictionary) -> void:
 		var mm: Dictionary = p.veicoli.MODELLI[veic.modello]
 		_b("Guida la %s (%d–%d PM)" % [veic.nome, int(mm.lenta), int(mm.veloce)], func(): _esito(p.scegli_azione(a.id, "muovi")), "Fino a %d PM senza rischi; oltre si fa un controllo d’incidente. Tutti a bordo si muovono insieme." % int(mm.lenta))
 	else:
-		_b("Muovi (%d PM)" % p.effettivo_mpa(a), func(): _esito(p.scegli_azione(a.id, "muovi")), "Spendi i punti movimento secondo il terreno.", a.postura != "prone")
+		_b("Nuota (%d PM)" % p.effettivo_mpa(a) if p.ss.in_acqua(a) else "Muovi (%d PM)" % p.effettivo_mpa(a), func(): _esito(p.scegli_azione(a.id, "muovi")), "In acqua ogni esagono costa 2 PM." if p.ss.in_acqua(a) else "Spendi i punti movimento secondo il terreno.", a.postura != "prone" or p.ss.nuota(a))
 	_bottoni_veicolo(a)
 	if p.veicoli.di(a).is_empty():
 		_b("Muovi e spara", func(): _esito(p.scegli_azione(a.id, "muovi_spara")), "Metà dei PM e un tiro rapido, prima o dopo.", a.postura != "prone")
@@ -1153,6 +1161,13 @@ func _bottoni_ponte(a: Dictionary) -> void:
 			_b("Fai saltare %s (%s)" % [nome_i, hi], func(): _esito(p.demolisci(a.id, hh2)), "Nelle Operazioni la carica si piazza a mano; nei Round va lanciata nell’esagono.")
 	if int(a.get("documenti", 0)) > 0:
 		_b("Porta i documenti fuori mappa", Callable(), "Valgono %d PV quando questo soldato esce dalla mappa." % int(a.documenti), false)
+	if p.ss.puo_esplosivo(a):
+		_b("Applica l’esplosivo a tempo alla chiatta", func(): _esito(p.azione_ss(a.id, "esplosivo")), "Un’azione. Salta alla fine del Round successivo (nelle Operazioni dopo due spostamenti); ratés 05. Chiatta distrutta: 3 PV.")
+	if p.ss.puo_salire_chiatta(a):
+		_b("Sali sulla chiatta", func(): _esito(p.azione_ss(a.id, "chiatta")), "Dall’acqua costa un’azione; a bordo si è in copertura.")
+	for vb in p.ss.chiatte_per_bazooka(a):
+		var vid: String = vb.id
+		_b("Bazooka sulla %s (%s)" % [str(vb.nome).to_lower(), vb.hex], func(): _esito(p.azione_ss(a.id, "bazooka_chiatta", vid)), "Bersaglio grande allo scoperto: con una penetrazione media o pesante la chiatta salta (3 PV).")
 	if p.ph.attiva() and p.ph.nel_deposito_navale(a):
 		_b("Prendi esplosivi al plastico", func(): _esito(p.azione_ph(a.id, "prendi")), "Due cariche a testa; ogni carica occupa una casella di porto.")
 	if p.ph.attiva() and int(a.get("esplosivi_ph", 0)) > 0:

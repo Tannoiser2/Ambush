@@ -39,6 +39,8 @@ func _init() -> void:
 		obiettivi = ["V12", "W14", "U15", "S14", "T11", "W16"]
 	elif missione == 4:
 		obiettivi = ["G13", "G14", "M6", "S13", "J13", "G5", "L10"]
+	elif missione == 19:
+		obiettivi = ["D1", "F4", "J7", "M7", "C6", "I7", "S1", "Q5"]
 	for i in n:
 		gioca(seme + i)
 	print("RISULTATI ", JSON.stringify(statistiche))
@@ -96,7 +98,7 @@ func gioca(seme: int) -> void:
 			if bool(p.regola("lancio", false)):
 				p.schiera([a.id], ingressi[i])
 			elif int(p.regola("canoe", 0)) > 0:
-				p.schiera([a.id], "H1")
+				p.schiera([a.id], str(p.esagoni_ingresso()[0]) if p.ss.attiva() else "H1")
 			elif int(p.regola("schieramento_ruscello", 0)) > 0:
 				p.schiera([a.id], ingressi[(i * 37) % ingressi.size()])
 			else:
@@ -190,6 +192,9 @@ func _mossa_operazioni(p, rng: RandomNumberGenerator, bersaglio_di: Dictionary, 
 		p.termina_missione("ritirata")
 		return
 	var a: Dictionary = candidati[rng.randi_range(0, candidati.size() - 1)]
+	if p.ss.puo_esplosivo(a):
+		p.ss.piazza_esplosivo(a)
+		return
 	var vc: Dictionary = p.veicoli.di(a)
 	if p.veicoli.e_canoa(vc) and not p.veicoli.e_autista(a):
 		if p.veicoli.spiaggiata(vc):

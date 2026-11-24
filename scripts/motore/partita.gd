@@ -10,6 +10,7 @@ const TedeschiScript = preload("res://scripts/motore/tedeschi.gd")
 const VeicoliScript = preload("res://scripts/motore/veicoli.gd")
 const MissioniMOScript = preload("res://scripts/motore/missioni_mo.gd")
 const MissioniPHScript = preload("res://scripts/motore/missioni_ph.gd")
+const MissioniSSScript = preload("res://scripts/motore/missioni_ss.gd")
 
 signal aggiornata
 
@@ -22,6 +23,7 @@ var veicoli: RefCounted
 ## Regole delle missioni di Move Out! (9–12).
 var mo: RefCounted
 var ph: RefCounted
+var ss: RefCounted
 var _paragrafi_base: Dictionary
 var rng := RandomNumberGenerator.new()
 ## Voci di cronaca prodotte dall’ultimo comando (per la scheda dei paragrafi).
@@ -42,6 +44,7 @@ func _init(n := 1) -> void:
 	paragrafi = _paragrafi_base
 	mo = MissioniMOScript.new(self)
 	ph = MissioniPHScript.new(self)
+	ss = MissioniSSScript.new(self)
 	ia = TedeschiScript.new(self)
 	veicoli = VeicoliScript.new(self)
 	imposta_missione(n)
@@ -68,6 +71,10 @@ func imposta_missione(n: int) -> void:
 		# Move Out! ha un libretto suo (400–1000): i suoi paragrafi prendono il posto di quelli base con lo stesso numero.
 		paragrafi = _paragrafi_base.duplicate()
 		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_mo.json")), true)
+	elif str(missione.get("libro", "")) == "ss":
+		# Silver Star: libretto proprio; i paragrafi d’azione tedeschi 800–869 restano quelli del gioco base.
+		paragrafi = _paragrafi_base.duplicate()
+		paragrafi.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/paragrafi_ss.json")), true)
 	else:
 		paragrafi = _paragrafi_base
 	terreno = TerrenoScript.new("res://data/mappa_%s.json" % str(missione.get("mappa", "A")).to_lower())
@@ -124,6 +131,8 @@ func _applica_regole_terreno() -> void:
 	terreno.muri_sfondati = s.get("muri_sfondati", []) if not s.is_empty() else []
 	if ph != null and not s.is_empty():
 		ph.regole_terreno()
+	if ss != null and not s.is_empty():
+		ss.regole_terreno()
 	terreno._cache_los.clear()
 
 func titolo_missione() -> String:
@@ -149,6 +158,7 @@ func nuova(seme := 0, con_schieramento := false) -> void:
 		s.unita[u.id] = u
 	mo.dopo_nuova()
 	ph.dopo_nuova()
+	ss.dopo_nuova()
 	for hm in missione.get("modifiche_iniziali", {}):
 		s.modifiche[hm] = missione.modifiche_iniziali[hm]
 	terreno.imposta_modifiche(s.modifiche)
@@ -184,6 +194,8 @@ func e_ingresso(h: String) -> bool:
 ## Esagoni da cui si esce dalla mappa (di solito gli stessi dell’ingresso).
 func e_uscita(h: String) -> bool:
 	if ph != null and ph.m18.uscita_vietata(h):
+		return false
+	if ss != null and not ss.uscita_ammessa(h):
 		return false
 	if str(regola("uscita_mappa", "")) != "" and lettera_mappa() != str(regola("uscita_mappa", "")):
 		return false
@@ -274,6 +286,7 @@ func inizia_missione() -> Dictionary:
 				bz.preparata = true
 	if int(regola("canoe", 0)) > 0 and not s.get("veicoli", {}).has("canoa1"):
 		_imbarca_canoe()
+		ss.dopo_imbarco()
 	if bool(regola("radio", false)) and s.get("radio_hex", "") == "":
 		s.radio_hex = esagoni[0]
 		for a in americani():
@@ -503,6 +516,10 @@ func vede_unita(osservatore: Dictionary, bersaglio: Dictionary) -> bool:
 	# Purple Heart 18: i mezzi fuori mappa non vedono e non si vedono; il Jagdpanther non è mai un bersaglio.
 	if osservatore.get("fuori_mappa_ph", false) or bersaglio.get("fuori_mappa_ph", false):
 		return false
+	# Silver Star: chi è sott’acqua vede ed è visto solo nello stesso esagono o in uno adiacente.
+	var vss: int = ss.vista(osservatore, bersaglio)
+	if vss >= 0:
+		return vss == 1
 	if bersaglio.get("in_jagd", false) and osservatore.get("lato", "") == "de":
 		return false
 	# Purple Heart 17: chi è sotto il ponte si vede come accovacciato sul ponte; dal ponte, nello stesso esagono, lo vede solo chi
@@ -1053,7 +1070,7 @@ func _op(o: Dictionary, ctx: Dictionary) -> void:
 			if not gn.is_empty():
 				gn.no_auto = true
 		_:
-			if not mo.op(o, ctx) and not ph.op(o, ctx):
+			if not mo.op(o, ctx) and not ph.op(o, ctx) and not ss.op(o, ctx):
 				_log("errore", "Istruzione sconosciuta: %s" % o.op)
 
 func _test(t: Dictionary, ctx: Dictionary) -> bool:
@@ -1215,6 +1232,9 @@ func _test(t: Dictionary, ctx: Dictionary) -> bool:
 			if terreno.vede(str(t.us_visible_from), a.hex, "standing", a.postura):
 				return true
 		return false
+	var tsx = ss.test(t, ctx)
+	if tsx != null:
+		return tsx
 	var tp = ph.test(t, ctx)
 	if tp != null:
 		return bool(tp)
@@ -2130,6 +2150,27 @@ func azione_ph(id: String, tipo: String) -> Dictionary:
 	_fine_comando()
 	return OK
 
+## Silver Star: esplosivo a tempo sulla chiatta, salita sulla chiatta, bazooka contro la chiatta.
+func azione_ss(id: String, tipo: String, arg := "") -> Dictionary:
+	_inizio_comando()
+	var a := u(id)
+	var e := _azione_semplice(a)
+	if e != "":
+		return _errore(e)
+	var err := ""
+	match tipo:
+		"esplosivo":
+			err = ss.piazza_esplosivo(a)
+		"chiatta":
+			err = ss.sali_chiatta(a)
+		"bazooka_chiatta":
+			err = ss.bazooka_chiatta(a, arg)
+	if err != "":
+		return _errore(err)
+	_chiudi_azione_semplice(a)
+	_fine_comando()
+	return OK
+
 ## Purple Heart: disinnesco di un esplosivo dei commando (due azioni; nelle Operazioni in un colpo solo, con un controllo Evento).
 func disinnesca_esplosivo(id: String) -> Dictionary:
 	_inizio_comando()
@@ -2782,6 +2823,7 @@ func _avvia_round() -> void:
 	s.round_tot = int(s.get("round_tot", 0)) + 1
 	mo.inizio_round()
 	ph.inizio_round()
+	ss.inizio_round()
 	r.sparato_prec = r.get("sparato", [])
 	r.sparato = []
 	r.turni_avviati = []
@@ -3072,6 +3114,7 @@ func _fine_round() -> void:
 	_avvia_turni(0)
 	ph.casella_treno([])
 	_canoe_forate()
+	ss.fine_round()
 	_passo("fine_round", {"n": int(s.round.n)})
 	s.ultimo_round = int(s.round.n)
 	_log("round", "Fine del Round %d." % int(s.round.n))
@@ -3193,6 +3236,12 @@ func cambia_postura(id: String, postura: String) -> Dictionary:
 		return _errore("Lo Sherman non cambia postura.")
 	if a.postura == postura:
 		return _errore("È già %s." % T.NOMI_POSTURA[postura])
+	var e_acqua: String = ss.cambia_postura(a, postura)
+	if e_acqua != "-":
+		if e_acqua != "":
+			return _errore(e_acqua)
+		_fine_comando()
+		return OK
 	if postura == "prone" and terreno.tipo(a.hex) == "stream" and not a.sul_ponte:
 		return _errore("Nel ruscello non ci si può sdraiare.")
 	if postura == "crouching" and terreno.tipo(a.hex) == "stream" and not a.sul_ponte:
@@ -3239,6 +3288,7 @@ func _costo_passo(a: Dictionary, da_hex: String, verso: String) -> int:
 	if da_hex == "":
 		return _costo_ingresso(verso) + mo.costo_extra(a, verso)
 	var c := terreno.costo_movimento(da_hex, verso)
+	c = ss.costo_passo(a, da_hex, verso, c)
 	return c + mo.costo_extra(a, verso) if c >= 0 else c
 
 func _costo_ingresso(h: String) -> int:
@@ -3257,6 +3307,9 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 	var e_mo: String = mo.verifica_passo(a, verso)
 	if e_mo != "":
 		return e_mo
+	var e_ss: String = ss.verifica_passo(a, verso)
+	if e_ss != "":
+		return e_ss
 	if bool(regola("xxx", false)) and riferimento(verso) == "XXX":
 		return "Esagono vietato (XXX sulla carta)."
 	var veic: Dictionary = veicoli.di(a)
@@ -3281,7 +3334,7 @@ func _verifica_passo(a: Dictionary, verso: String, silenzioso := false) -> Strin
 			if cv > int(tv.mp):
 				return "Punti movimento del veicolo insufficienti (servono %d, restano %d)." % [cv, int(tv.mp)]
 		return ""
-	if a.postura == "prone":
+	if a.postura == "prone" and not ss.nuota(a):
 		return "Un soldato prono non può muoversi."
 	var da_hex: String = a.hex
 	if da_hex != "" and not E.adiacenti(da_hex, verso):
@@ -3475,6 +3528,9 @@ func muovi(ids: Array, verso: String) -> Dictionary:
 			_ingresso(u(str(oltre[0])).hex, oltre, false)
 	else:
 		_ingresso(verso, ids, sul_ponte)
+	for id in ids:
+		ss.dopo_ingresso_acqua(u(str(id)))
+	ss.dopo_mossa_operazioni()
 	if s.fase == "round" and not s.turno.is_empty() and s.turno.id == str(ids[0]):
 		var t: Dictionary = s.turno
 		var a := u(str(ids[0]))
@@ -3658,7 +3714,7 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 	if bersaglio.is_empty() or not in_mappa(bersaglio):
 		return {"ok": false, "motivo": "bersaglio non valido"}
 	if tiratore.postura == "prone":
-		return {"ok": false, "motivo": "da prono non si spara"}
+		return {"ok": false, "motivo": "sott’acqua non si spara" if ss.sott_acqua(tiratore) else "da prono non si spara"}
 	var dist := E.distanza(tiratore.hex, bersaglio.hex)
 	if dist > 0 and not vede_unita(tiratore, bersaglio):
 		return {"ok": false, "motivo": terreno.vista(tiratore.hex, bersaglio.hex, tiratore.postura, bersaglio.postura, piano(tiratore), piano(bersaglio)).motivo}
@@ -3675,6 +3731,9 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		return {"ok": false, "motivo": "fuori gittata"}
 	if tipo == "bazooka" and not mirato:
 		return {"ok": false, "motivo": "il bazooka non spara di rapido"}
+	var e_ss: String = ss.blocca_tiro(tiratore, tipo, mirato)
+	if e_ss != "":
+		return {"ok": false, "motivo": e_ss}
 	if arma.get("jagd", false):
 		# Purple Heart 599: cannone e mitragliatrice del Jagdpanther, armi di squadra verso il fronte (est).
 		if not ph.m18.fronte_jagd(tiratore, bersaglio.hex):
@@ -3698,6 +3757,7 @@ func probabilita_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Diction
 		mods.append(["tiro rapido", -2])
 	if tiratore.ferito:
 		mods.append(["tiratore ferito", -1])
+	ss.mod_tiro(tiratore, bersaglio, mods)
 	if veicoli.attivo(veicoli.di(tiratore)) and not tiratore.get("carro_us", false) and not veicoli.e_canoa(veicoli.di(tiratore)):
 		mods.append(["tiratore in auto", -2])
 	if mirato and T.ARMI[tipo].get("auto", false):
@@ -3847,7 +3907,9 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 			if not vc.get("forata", false):
 				vc.forata = true
 				_log("danno", "Il colpo buca la %s (%d): deve spiaggiare entro il Round o affonda." % [vc.nome.to_lower(), rc])
-	if colpito and tipo == "bazooka" and str(bersaglio.get("barca", "")) != "":
+	if colpito and ss.colpito(tiratore, tipo, bersaglio, fx):
+		pass
+	elif colpito and tipo == "bazooka" and str(bersaglio.get("barca", "")) != "":
 		ph.bazooka_su_barca(str(bersaglio.barca))
 	elif colpito and veicoli.attivo(veicoli.di(bersaglio)) and not veicoli.e_canoa(veicoli.di(bersaglio)):
 		veicoli.colpito(veicoli.di(bersaglio), tipo, tiratore, mirato, fx)
@@ -3858,6 +3920,7 @@ func risolvi_tiro(tiratore: Dictionary, arma: Dictionary, bersaglio: Dictionary,
 		fx.danno = _nome_danno(lettera)
 		_log("dado", "Danno: %d → %s" % [rd, _nome_danno(lettera)])
 		_applica_danno(bersaglio, lettera, tiratore)
+		ss.dopo_danno(bersaglio, lettera)
 		if tipo == "bazooka":
 			for altro in unita_in(bersaglio.hex, bersaglio.lato):
 				if altro.id != bersaglio.id:
@@ -3922,6 +3985,7 @@ func _danno_esplosione(x: Dictionary, tabella: String) -> void:
 		l = "P" if x.postura == "prone" else "W"
 	_log("dado", "Esplosione su %s: %d → %s" % [nome(x), r, _nome_danno(l)])
 	_applica_danno(x, l, {})
+	ss.dopo_danno(x, l)
 
 func _applica_danno(x: Dictionary, l: String, fonte: Dictionary) -> void:
 	if not attivo(x) and x.stato != "catturato":
@@ -4202,6 +4266,7 @@ func risolvi_lancio(lanciatore: Dictionary, tipo: String, h: String) -> void:
 		return
 	mo.esplosione(tipo, arrivo)
 	ph.esplosione(tipo, arrivo)
+	ss.esplosione(tipo, arrivo)
 	if tipo == "satchel":
 		_colpisci_installazione(arrivo)
 		if s.get("bunker", {}).has(arrivo):
@@ -4321,6 +4386,7 @@ func probabilita_assalto(att: Dictionary, dif: Dictionary, carica: bool) -> Dict
 		ws -= 1
 	if att.get("berserk", false):
 		ws += 2
+	ws = ss.mod_assalto(att, ws)
 	if ws != 0:
 		mods.append(["abilità", ws])
 	if carica:
@@ -5455,7 +5521,8 @@ func _controlla_fine_automatica() -> void:
 		return
 	mo.controlla()
 	ph.controlla()
-	if s.fase == "fine" or mo.blocca_fine() or ph.blocca_fine():
+	ss.controlla()
+	if s.fase == "fine" or mo.blocca_fine() or ph.blocca_fine() or ss.blocca_fine():
 		return
 	if bool(regola("fine_ponti", false)) and int(s.condizione) >= 4 and tedeschi_attivi().filter(func(g): return attivo(g)).is_empty() \
 			and not americani_attivi_in_mappa().is_empty():
@@ -5495,7 +5562,7 @@ func _calcola_fine(modo: String) -> void:
 		if a.stato == "morto":
 			perdite -= 2
 			righe.append(["%s ucciso" % nome(a), -2])
-		elif a.stato == "incapacitato" and (bool(regola("niente_pv_incapacitati", false)) or ph.niente_pv_incapacitati()):
+		elif a.stato == "incapacitato" and (bool(regola("niente_pv_incapacitati", false)) or ph.niente_pv_incapacitati() or ss.niente_pv_incapacitati()):
 			continue
 		elif a.stato == "incapacitato":
 			var salvo: bool = a.get("uscito", false) or a.get("salvo_mo", false) or (modo == "obiettivo" and _salvo_a_fine(a.hex))

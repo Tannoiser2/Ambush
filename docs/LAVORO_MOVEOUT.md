@@ -229,3 +229,18 @@ Ordine scelto: M11, M10, M12, M9.
   incapacitati. 994: Condizione 6, 30 PV, uscita dal bordo ovest A19–Y19 (+2 PV, −2 per tedesco), fine senza americani.
 - Test: tests/missione18.gd, simula 18, tests/visivi/missione18_ui.gd.
 
+
+## Silver Star — Missione 19 «Fradici» (mappa F con mezza H = «FH», in alto è ovest)
+- Dati: `tools/costruisci_ss.py` → `data/missione19.json` (libro «ss», carte tedesche GE10–15, 51–54, 60–61, 70–71
+  rilette a mano) e `data/paragrafi_ss.json` (paragrafi da `tools/paragrafi_ss19.py`; le azioni 800–869 restano
+  quelle base). Carte Condizione: `tools/carte_ss_trascritte.py` → `data/carte/missione19.json`.
+- Motore: `scripts/motore/missioni_ss.gd` (p.ss) e `tedeschi_ss.gd`. Agganci in partita.gd: op/test, vista
+  (sott’acqua solo esagono e adiacenti), tiro (−4 ai nuotatori, in acqua solo rapido, niente bazooka), costo
+  (2 PM per esagono d’acqua), postura (in piedi = superficie, prono = sott’acqua, gratis), assalto (coltello +1,
+  max +2), esplosioni (carica/granata sulle chiatte e sulle barche), fine Round (esplosivi a tempo), fine (789).
+- Canoe: 2 (regola «canoe»), sommozzatori E–H aggrappati come occupanti in più (`aggrappato`) fino al 787.
+  Chiatte = veicoli «chiatta» `chiatta_ss` (3 PV). Barche di guardia 60/61 = tedeschi `barca_ss` con punti
+  equipaggio (`turno_barca`, paragrafi 911–918 semplificati). Camion `camion_ss` con i tedeschi 10–15 (reazione T).
+- Semplificazioni: impermeabilizzazione delle armi (inceppamento 25) non gestita; bazooka sulla chiatta con
+  probabilità propria (`bazooka_chiatta`); granata nella barca di guardia: dado pari = dentro.
+- Test `tests/missione19.gd`, `simula.gd -- 4 1 19`, scatti `tests/visivi/missione19_ui.gd`.

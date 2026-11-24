@@ -1,0 +1,3652 @@
+{
+ "100": {
+  "id": "100",
+  "it": "Campo minato! Esegui la procedura del campo minato. Se sei nella Condizione 1 e la mina esplode, vedi 235.",
+  "ops": [
+   {
+    "op": "minefield"
+   },
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "no_mine_blast": true
+       }
+      },
+      {
+       "cond_in": [
+        1
+       ]
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "235"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "750": {
+  "id": "750",
+  "it": "Campo minato! Esegui la procedura del campo minato. Se la mina esplode e s3 non è ancora avvenuto, vedi 235.",
+  "ops": [
+   {
+    "op": "minefield"
+   },
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "no_mine_blast": true
+       }
+      },
+      {
+       "not": {
+        "s": 3
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "235"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "751": {
+  "id": "751",
+  "it": "Campo minato! Esegui la procedura del campo minato. Se la mina esplode e s9 non è ancora avvenuto, vedi 430.",
+  "ops": [
+   {
+    "op": "minefield"
+   },
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "no_mine_blast": true
+       }
+      },
+      {
+       "not": {
+        "s": 9
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "430"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "101": {
+  "id": "101",
+  "it": "Colloca un segnalino Evento. Effettua un controllo di percezione: se riesce vedi 109; se fallisce, nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "109"
+     }
+    ],
+    "ko": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "109": {
+  "id": "109",
+  "it": "[s0] È un magazzino tedesco. In questo esagono ci sono una pistola mitragliatrice con 3 caricatori, un fucile a otturatore con 3 caricatori, 3 granate e una carica da demolizione non innescata. La carica si può lanciare in una chiatta per distruggerla (−1 se lanciata da fuori dell’esagono della chiatta).",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 0
+   },
+   {
+    "op": "ss_magazzino"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "120": {
+  "id": "120",
+  "it": "Se si muove un soldato, vedi 100. Se è in una canoa spiaggiata, nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_in_canoa": true
+    },
+    "then": [],
+    "else": [
+     {
+      "op": "goto",
+      "p": "100"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "230": {
+  "id": "230",
+  "it": "Se è in canoa, nessun evento. Se c’è un soldato in acqua, quello con la percezione più alta effettua un controllo di percezione: se riesce vedi 340, se fallisce vedi 450.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_in_canoa": true
+    },
+    "then": [],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "340"
+       }
+      ],
+      "ko": [
+       {
+        "op": "goto",
+        "p": "450"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "231": {
+  "id": "231",
+  "it": "Colloca un segnalino Evento.\n1. In superficie: controllo di percezione (−2). Se riesce vedi 561; se fallisce, controllo di attivazione (−2): se riesce vedi 562, altrimenti nessun evento.\n2. Sott’acqua: controllo di attivazione (−2). Se riesce vedi 562; se fallisce, controllo di percezione (−2): se riesce vedi 561, altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": -2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "562"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": -2,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "561"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": -2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "561"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -2,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "562"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "232": {
+  "id": "232",
+  "it": "Se è avvenuto un avvistamento diverso da s9:\n1. se s6 non è avvenuto, vedi 323;\n2. se s7 non è avvenuto, vedi 338;\n3. se s6 e s7 sono avvenuti entrambi, vedi 342.\nAltrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_avvistamento_tranne_9": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 6
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "323"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 7
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "338"
+         }
+        ],
+        "else": [
+         {
+          "op": "goto",
+          "p": "342"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "238": {
+  "id": "238",
+  "it": "Se è avvenuto un avvistamento diverso da s9:\n1. se s7 non è avvenuto, vedi 338;\n2. se s6 non è avvenuto, vedi 323;\n3. se s6 e s7 sono avvenuti entrambi, vedi 349.\nAltrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_avvistamento_tranne_9": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 7
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "338"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 6
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "323"
+         }
+        ],
+        "else": [
+         {
+          "op": "goto",
+          "p": "349"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "234": {
+  "id": "234",
+  "it": "1. In superficie: controllo di percezione. Se riesce vedi 561; se fallisce, controllo di attivazione: se riesce vedi 562, altrimenti nessun evento.\n2. Sott’acqua: controllo di percezione (−1). Se riesce vedi 561; se fallisce, controllo di attivazione (−1): se riesce vedi 563, altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "561"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "563"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "561"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "562"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "236": {
+  "id": "236",
+  "it": "Colloca un segnalino Evento.\n1. In superficie: controllo di percezione (−1). Se riesce vedi 561; se fallisce, controllo di attivazione (−1): se riesce vedi 562, altrimenti nessun evento.\n2. Sott’acqua: controllo di attivazione (−1). Se riesce vedi 562, altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "562"
+       }
+      ],
+      "ko": []
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "561"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "562"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "235": {
+  "id": "235",
+  "it": "[s3] Arrivano rinforzi tedeschi: i tedeschi 10–15 su un camion. Tira un dado: con un dispari il camion entra in Y4, con un pari in Y10. I tedeschi 10–15 si attivano nella reazione speciale T. Iniziano i Round, vantaggio tedesco. Il tedesco 10 riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "die",
+    "b": [
+     [
+      1,
+      1,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y4"
+       }
+      ]
+     ],
+     [
+      3,
+      3,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y4"
+       }
+      ]
+     ],
+     [
+      5,
+      5,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y4"
+       }
+      ]
+     ],
+     [
+      7,
+      7,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y4"
+       }
+      ]
+     ],
+     [
+      9,
+      9,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y4"
+       }
+      ]
+     ],
+     [
+      0,
+      0,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y10"
+       }
+      ]
+     ],
+     [
+      2,
+      2,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y10"
+       }
+      ]
+     ],
+     [
+      4,
+      4,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y10"
+       }
+      ]
+     ],
+     [
+      6,
+      6,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y10"
+       }
+      ]
+     ],
+     [
+      8,
+      8,
+      [
+       {
+        "op": "ss_camion",
+        "hex": "Y10"
+       }
+      ]
+     ]
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "429": {
+  "id": "429",
+  "it": "[s3] Un camion di tedeschi entra in mappa diretto al villaggio: i tedeschi 10–15 su un camion in Y4, tutti nella reazione speciale T. Iniziano i Round, vantaggio tedesco. Il tedesco 10 riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "ss_camion",
+    "hex": "Y4"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "600": {
+  "id": "600",
+  "it": "[s3] Un camion di tedeschi entra in mappa diretto al villaggio: i tedeschi 10–15 su un camion in Y10, tutti nella reazione speciale T. Iniziano i Round, vantaggio tedesco. Il tedesco 10 riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 3
+   },
+   {
+    "op": "ss_camion",
+    "hex": "Y10"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "237": {
+  "id": "237",
+  "it": "Le chiatte (segnalino 237). Sono mezzi grandi allo scoperto per il fuoco; chi è su una chiatta è in copertura; non bloccano la vista. Si sale su una chiatta con 2 PM da un esagono di terra adiacente o con un’azione dall’acqua. Ogni chiatta distrutta vale 3 PV. Si distrugge con: 1) penetrazione M o H di un bazooka (muore chi è a bordo); 2) l’esplosione di un esplosivo a tempo applicato alla chiatta (un’azione nell’esagono della chiatta, in superficie o sott’acqua; salta alla fine del Round successivo, ratés 05 come la carica): chi è a bordo muore, chi è in acqua nell’esagono subisce danni sulla riga Carica all’aperto (in superficie non prono, sott’acqua prono); 3) una carica da demolizione esplosa sulla chiatta (−1 da fuori dell’esagono); 4) una granata, se il primo tiro sulla riga Granata al chiuso dà incapacitato o ucciso. Da adesso i sommozzatori possono salire sulle chiatte, ma non ancora entrare in un esagono di terra.",
+  "ops": [
+   {
+    "op": "ss_nota_237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "239": {
+  "id": "239",
+  "it": "Se è su un veicolo, togli la reazione speciale T, scende in piedi (1 PM) ed entra in C3. Altrimenti entra in C3.",
+  "ops": [
+   {
+    "op": "ss_scende_camion"
+   },
+   {
+    "op": "g_enter",
+    "hex": "C3"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "242": {
+  "id": "242",
+  "it": "Trappola esplosiva! Esegui la procedura della trappola esplosiva.",
+  "ops": [
+   {
+    "op": "boobytrap"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "323": {
+  "id": "323",
+  "it": "[s6] Attiva il tedesco 70 (sommozzatore) in superficie in F7. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 6
+   },
+   {
+    "op": "ss_sub_tedesco",
+    "g": 70,
+    "hex": "F7"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "338": {
+  "id": "338",
+  "it": "[s7] Attiva il tedesco 71 (sommozzatore) in superficie in L4. Iniziano i Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 7
+   },
+   {
+    "op": "ss_sub_tedesco",
+    "g": 71,
+    "hex": "L4"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "332": {
+  "id": "332",
+  "it": "Attiva il tedesco 52 accovacciato in M9 e il tedesco 53 accovacciato in I9, entrambi nella reazione speciale A. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "M9"
+     ],
+     [
+      53,
+      "I9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "430": {
+  "id": "430",
+  "it": "Attiva il tedesco 52 accovacciato in M9 e il tedesco 53 accovacciato in I9, entrambi nella reazione speciale A. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "activate",
+    "g": [
+     [
+      52,
+      "M9"
+     ],
+     [
+      53,
+      "I9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "340": {
+  "id": "340",
+  "it": "C’è una trappola subacquea in questo esagono. Chi ha superato il controllo torna nell’esagono da cui è venuto; chi è entrato con lui fa ora il suo controllo di percezione: se lo supera torna indietro anche lui, se lo fallisce esegue la procedura della trappola, non prono. Se la trappola esplode, vedi 560.",
+  "ops": [
+   {
+    "op": "ss_trappola_sub",
+    "superato": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "450": {
+  "id": "450",
+  "it": "C’è una trappola subacquea in questo esagono. Chi ha fallito il controllo conta non prono; gli altri entrati con lui fanno il controllo di percezione: chi lo supera conta prono, chi lo fallisce no. Esegui la procedura della trappola; se esplode, vedi subito 560.",
+  "ops": [
+   {
+    "op": "ss_trappola_sub",
+    "superato": false
+   }
+  ],
+  "tipo": "missione"
+ },
+ "341": {
+  "id": "341",
+  "it": "[s1] Attiva la barca di guardia 60 in C7 e il tedesco 54 accovacciato in C9, nella reazione speciale A. Iniziano i Round, vantaggio tedesco. Se s4 non è avvenuto, vedi 541.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 60,
+    "hex": "C7"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "C9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "541"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "542": {
+  "id": "542",
+  "it": "[s1] Attiva la barca di guardia 60 in C7 e il tedesco 54 accovacciato in C9, nella reazione speciale A. Iniziano i Round. Se s4 non è avvenuto, vedi 541.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 60,
+    "hex": "C7"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "C9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "541"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "783": {
+  "id": "783",
+  "it": "[s1] Attiva la barca di guardia 60 in C7 e il tedesco 54 accovacciato in C9, nella reazione speciale A. Se s4 non è avvenuto, vedi 541. Iniziano i Round, vantaggio americano; il soldato che ha superato il controllo è consapevole e riceve 2 turni in questo Round.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 60,
+    "hex": "C7"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "C9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": true,
+    "aware": true,
+    "reaction": "A",
+    "rounds": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "541"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "342": {
+  "id": "342",
+  "it": "Se s1, s2 o entrambi sono avvenuti:\n1. se s8 non è avvenuto, vedi 419;\n2. se s9 non è avvenuto, vedi 430;\n3. se s3 non è avvenuto, vedi 235;\n4. se la vista è di 3 esagoni, vedi 640;\n5. se s4 e s5 sono avvenuti e restano 2 chiatte attive o meno, vedi 789;\n6. altrimenti nessun evento.\nSe né s1 né s2 sono avvenuti, nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_s1_o_s2": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 8
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "419"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 9
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "430"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 3
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "235"
+           }
+          ],
+          "else": [
+           {
+            "op": "if",
+            "t": {
+             "ss_vista": 3
+            },
+            "then": [
+             {
+              "op": "goto",
+              "p": "640"
+             }
+            ],
+            "else": [
+             {
+              "op": "if",
+              "t": {
+               "all": [
+                {
+                 "s": 4
+                },
+                {
+                 "s": 5
+                },
+                {
+                 "ss_chiatte_max": 2
+                }
+               ]
+              },
+              "then": [
+               {
+                "op": "goto",
+                "p": "789"
+               }
+              ],
+              "else": []
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "349": {
+  "id": "349",
+  "it": "Se s1, s2 o entrambi sono avvenuti:\n1. se s9 non è avvenuto, vedi 430;\n2. se s8 non è avvenuto, vedi 419;\n3. se s3 non è avvenuto, vedi 235;\n4. se la vista è di 3 esagoni, vedi 640;\n5. se s4 e s5 sono avvenuti e restano 2 chiatte attive o meno, vedi 789;\n6. altrimenti nessun evento.\nSe né s1 né s2 sono avvenuti, nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_s1_o_s2": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 9
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "430"
+       }
+      ],
+      "else": [
+       {
+        "op": "if",
+        "t": {
+         "not": {
+          "s": 8
+         }
+        },
+        "then": [
+         {
+          "op": "goto",
+          "p": "419"
+         }
+        ],
+        "else": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 3
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "235"
+           }
+          ],
+          "else": [
+           {
+            "op": "if",
+            "t": {
+             "ss_vista": 3
+            },
+            "then": [
+             {
+              "op": "goto",
+              "p": "640"
+             }
+            ],
+            "else": [
+             {
+              "op": "if",
+              "t": {
+               "all": [
+                {
+                 "s": 4
+                },
+                {
+                 "s": 5
+                },
+                {
+                 "ss_chiatte_max": 2
+                }
+               ]
+              },
+              "then": [
+               {
+                "op": "goto",
+                "p": "789"
+               }
+              ],
+              "else": []
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "346": {
+  "id": "346",
+  "it": "Un sommozzatore (anche tedesco, se ce ne sono di attivi) resta senz’aria: può ancora nuotare sott’acqua, ma deve finire ogni Round in superficie (diventa un nuotatore). Solo una volta per missione; se ricapita, si tira un nuovo evento.",
+  "ops": [
+   {
+    "op": "ss_senz_aria"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "400": {
+  "id": "400",
+  "it": "Un’arma tedesca usata nel Round precedente finisce le munizioni (a caso se più d’una). Può capitare più volte.",
+  "ops": [
+   {
+    "op": "ammo_out"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "419": {
+  "id": "419",
+  "it": "[s8] Attiva il tedesco 51 accovacciato in P5, nella reazione speciale A. Iniziano i Round, vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      51,
+      "P5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "de",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "715": {
+  "id": "715",
+  "it": "[s8] Attiva il tedesco 51 accovacciato in P5, nella reazione speciale A. Iniziano i Round, vantaggio americano.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 8
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      51,
+      "P5"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": "us",
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   }
+  ],
+  "tipo": "missione"
+ },
+ "480": {
+  "id": "480",
+  "it": "[s9] Il soldato nota che il ponte in O4 è indebolito dagli anni e dall’incuria: potrebbe non reggere.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   }
+  ],
+  "tipo": "missione"
+ },
+ "530": {
+  "id": "530",
+  "it": "Se si entra in questo esagono da M9 e s0 non è avvenuto, vedi 101. Se si entra da un altro esagono e s9 non è avvenuto, vedi 716. Altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "ss_entrato_da": "M9"
+      },
+      {
+       "not": {
+        "s": 0
+       }
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "101"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "all": [
+        {
+         "not": {
+          "ss_entrato_da": "M9"
+         }
+        },
+        {
+         "not": {
+          "s": 9
+         }
+        }
+       ]
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "716"
+       }
+      ],
+      "else": []
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "540": {
+  "id": "540",
+  "it": "[s5] Ci sono chiatte tedesche di rifornimento qui vicino. Tira un dado: con un dispari le chiatte sono in J7, L7, N6; con un pari in I7, M7, N5. Vedi 237 per le chiatte.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_chiatte",
+    "dispari": [
+     "J7",
+     "L7",
+     "N6"
+    ],
+    "pari": [
+     "I7",
+     "M7",
+     "N5"
+    ]
+   },
+   {
+    "op": "goto",
+    "p": "237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "541": {
+  "id": "541",
+  "it": "[s4] C’è una chiatta tedesca di rifornimento qui vicino. Tira un dado: con un dispari è in C6, con un pari in D7. Vedi 237 per le chiatte.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "ss_chiatte",
+    "dispari": [
+     "C6"
+    ],
+    "pari": [
+     "D7"
+    ]
+   },
+   {
+    "op": "goto",
+    "p": "237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "543": {
+  "id": "543",
+  "it": "1. In superficie: controllo di percezione. Se riesce vedi 783; se fallisce, controllo di attivazione: se riesce vedi 341, altrimenti, se s4 non è avvenuto, vedi 541.\n2. Sott’acqua: controllo di percezione. Se riesce vedi 783; se fallisce, controllo di attivazione (−1): se riesce vedi 341, altrimenti, se s4 non è avvenuto, vedi 541.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "783"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 4
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "541"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "783"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 4
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "541"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "544": {
+  "id": "544",
+  "it": "[s2] Attiva la barca di guardia 61 in M5. Iniziano i Round. Se s5 non è avvenuto, vedi 540.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 61,
+    "hex": "M5"
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "540"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "545": {
+  "id": "545",
+  "it": "Se s6 non è avvenuto, vedi 323. Se s1 non è avvenuto, vedi 670; se s1 è avvenuto, controllo di percezione (+1): se riesce vantaggio americano, se fallisce vantaggio tedesco. Se s1 e s6 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 1
+      },
+      {
+       "s": 6
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 6
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "323"
+       }
+      ],
+      "else": []
+     },
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "670"
+       }
+      ],
+      "else": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 1,
+        "ok": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "us"
+         }
+        ],
+        "ko": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "de"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "546": {
+  "id": "546",
+  "it": "Se s6 non è avvenuto, vedi 323. Se s1 non è avvenuto, vedi 670; se s1 è avvenuto, controllo di percezione: se riesce vantaggio americano, se fallisce vantaggio tedesco. Se s1 e s6 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 1
+      },
+      {
+       "s": 6
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 6
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "323"
+       }
+      ],
+      "else": []
+     },
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "670"
+       }
+      ],
+      "else": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "us"
+         }
+        ],
+        "ko": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "de"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "547": {
+  "id": "547",
+  "it": "Se s6 non è avvenuto, vedi 323. Se s1 non è avvenuto, vedi 670; se s1 è avvenuto, controllo di percezione: se riesce vantaggio americano, se fallisce vantaggio tedesco. Se s1 e s6 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 1
+      },
+      {
+       "s": 6
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 6
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "323"
+       }
+      ],
+      "else": []
+     },
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 1
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "670"
+       }
+      ],
+      "else": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "us"
+         }
+        ],
+        "ko": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "de"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "548": {
+  "id": "548",
+  "it": "Controllo di percezione: se riesce vedi 323 con vantaggio americano; se fallisce, controllo di attivazione: se riesce vedi 323 con vantaggio tedesco, altrimenti vedi 323.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "323"
+     },
+     {
+      "op": "ss_vantaggio",
+      "lato": "us"
+     }
+    ],
+    "ko": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": 0,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "323"
+       },
+       {
+        "op": "ss_vantaggio",
+        "lato": "de"
+       }
+      ],
+      "ko": [
+       {
+        "op": "goto",
+        "p": "323"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "550": {
+  "id": "550",
+  "it": "Se s7 non è avvenuto, vedi 338. Se s2 non è avvenuto, vedi 236; se s2 è avvenuto, controllo di percezione: se riesce vantaggio americano, se fallisce vantaggio tedesco. Se s2 e s7 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 2
+      },
+      {
+       "s": 7
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 7
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "338"
+       }
+      ],
+      "else": []
+     },
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 2
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "236"
+       }
+      ],
+      "else": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "us"
+         }
+        ],
+        "ko": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "de"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "551": {
+  "id": "551",
+  "it": "Se s7 non è avvenuto, vedi 338. Se s2 non è avvenuto, vedi 234; se s2 è avvenuto, controllo di percezione: se riesce vantaggio americano, se fallisce vantaggio tedesco. Se s2 e s7 sono avvenuti entrambi, colloca un segnalino Evento: nessun evento.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "s": 2
+      },
+      {
+       "s": 7
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "event_marker"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 7
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "338"
+       }
+      ],
+      "else": []
+     },
+     {
+      "op": "if",
+      "t": {
+       "not": {
+        "s": 2
+       }
+      },
+      "then": [
+       {
+        "op": "goto",
+        "p": "234"
+       }
+      ],
+      "else": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "us"
+         }
+        ],
+        "ko": [
+         {
+          "op": "ss_vantaggio",
+          "lato": "de"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "552": {
+  "id": "552",
+  "it": "Controllo di percezione (+1): se riesce vedi 338 con vantaggio americano; se fallisce vedi 338 con vantaggio tedesco.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 1,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "338"
+     },
+     {
+      "op": "ss_vantaggio",
+      "lato": "us"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "338"
+     },
+     {
+      "op": "ss_vantaggio",
+      "lato": "de"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "553": {
+  "id": "553",
+  "it": "Controllo di percezione: se riesce vedi 715; se fallisce vedi 419.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "715"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "419"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "533": {
+  "id": "533",
+  "it": "Controllo di percezione: se riesce vedi 715; se fallisce vedi 419.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "715"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "419"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "554": {
+  "id": "554",
+  "it": "Un esplosivo a tempo (a caso se più d’uno) esplode prima del previsto: la chiatta a cui è applicato è distrutta e chi è a bordo muore. Chi è in acqua nell’esagono subisce danni sulla riga Carica all’aperto (in superficie non prono, sott’acqua prono), senza controllo di percezione. Può capitare più volte.",
+  "ops": [
+   {
+    "op": "ss_esplosivo_prematuro"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "679": {
+  "id": "679",
+  "it": "Se non ci sono esplosivi a tempo innescati, nessun evento. Altrimenti vedi 554.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_esplosivi_innescati": true
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "554"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "560": {
+  "id": "560",
+  "it": "[s1, s2, s4 e s5] Attiva la barca di guardia 60 in C7 e la 61 in M5. Iniziano i Round, vantaggio tedesco. Tira un dado: con un dispari le chiatte sono in C5, I7, M7, N5; con un pari in D7, J7, L7, N6. Vedi 237.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 60,
+    "hex": "C7"
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 61,
+    "hex": "M5",
+    "adv": "de"
+   },
+   {
+    "op": "ss_chiatte",
+    "dispari": [
+     "C5",
+     "I7",
+     "M7",
+     "N5"
+    ],
+    "pari": [
+     "D7",
+     "J7",
+     "L7",
+     "N6"
+    ]
+   },
+   {
+    "op": "goto",
+    "p": "237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "561": {
+  "id": "561",
+  "it": "[s2] Attiva la barca di guardia 61 in M5. Iniziano i Round, vantaggio americano. L’americano che ha superato il controllo è consapevole e riceve 2 turni in questo Round. Se s5 non è avvenuto, vedi 540.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 61,
+    "hex": "M5",
+    "adv": "us",
+    "us_two": true
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "540"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "562": {
+  "id": "562",
+  "it": "[s2] Attiva la barca di guardia 61 in M5. Iniziano i Round, vantaggio tedesco. Se s5 non è avvenuto, vedi 540.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 61,
+    "hex": "M5",
+    "adv": "de"
+   },
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "540"
+     }
+    ],
+    "else": []
+   }
+  ],
+  "tipo": "missione"
+ },
+ "563": {
+  "id": "563",
+  "it": "[s2 e s5] Attiva la barca di guardia 61 in M5. Iniziano i Round; la barca riceve 2 turni in questo Round. Tira un dado: con un dispari le chiatte sono in J7, L7, N6; con un pari in I7, M7, N5. Vedi 237.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 2
+   },
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 61,
+    "hex": "M5",
+    "two": true
+   },
+   {
+    "op": "ss_chiatte",
+    "dispari": [
+     "J7",
+     "L7",
+     "N6"
+    ],
+    "pari": [
+     "I7",
+     "M7",
+     "N5"
+    ]
+   },
+   {
+    "op": "goto",
+    "p": "237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "640": {
+  "id": "640",
+  "it": "Spunta l’alba: la vista arriva a 5 esagoni.",
+  "ops": [
+   {
+    "op": "vista",
+    "n": 5
+   }
+  ],
+  "tipo": "missione"
+ },
+ "670": {
+  "id": "670",
+  "it": "Colloca un segnalino Evento.\n1. In superficie: controllo di percezione (−2). Se riesce vedi 780; se fallisce, controllo di attivazione (−2): se riesce vedi 341, altrimenti nessun evento.\n2. Sott’acqua: controllo di attivazione (−2): se riesce vedi 341, altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": -2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "341"
+       }
+      ],
+      "ko": []
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": -2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "780"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -2,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "671": {
+  "id": "671",
+  "it": "Colloca un segnalino Evento.\n1. In superficie: controllo di percezione (−1). Se riesce vedi 780; se fallisce, controllo di attivazione (−1): se riesce vedi 341, altrimenti nessun evento.\n2. Sott’acqua: controllo di attivazione (−1): se riesce vedi 341, altrimenti nessun evento.",
+  "ops": [
+   {
+    "op": "event_marker"
+   },
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "341"
+       }
+      ],
+      "ko": []
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": -1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "780"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": []
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "673": {
+  "id": "673",
+  "it": "1. In superficie: controllo di percezione (+2). Se riesce vedi 783; se fallisce, controllo di attivazione: se riesce vedi 341, altrimenti, se s4 non è avvenuto, vedi 541.\n2. Sott’acqua: controllo di percezione (+1). Se riesce vedi 783; se fallisce, controllo di attivazione (−1): se riesce vedi 341, altrimenti, se s4 non è avvenuto, vedi 541.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "783"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": -1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 4
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "541"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 2,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "783"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 0,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": [
+         {
+          "op": "if",
+          "t": {
+           "not": {
+            "s": 4
+           }
+          },
+          "then": [
+           {
+            "op": "goto",
+            "p": "541"
+           }
+          ],
+          "else": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "676": {
+  "id": "676",
+  "it": "Se il camion tedesco è attivo fora una gomma: controllo d’incidente, poi può andare solo piano (con una seconda gomma forata è immobilizzato e conta come distrutto). Solo una volta per missione. Altrimenti si tira un nuovo evento casuale.",
+  "ops": [
+   {
+    "op": "ss_gomma_camion"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "677": {
+  "id": "677",
+  "it": "1. In superficie: controllo di attivazione (+1). Se riesce vedi 341; se fallisce, controllo di percezione (+1): se riesce vedi 780, altrimenti vedi 542.\n2. Sott’acqua: controllo di percezione (+1). Se riesce vedi 780; se fallisce, controllo di attivazione (+1): se riesce vedi 341, altrimenti vedi 542.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_sott_acqua": true
+    },
+    "then": [
+     {
+      "op": "check",
+      "kind": "pc",
+      "mod": 1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "780"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "act",
+        "mod": 1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "341"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "542"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "check",
+      "kind": "act",
+      "mod": 1,
+      "ok": [
+       {
+        "op": "goto",
+        "p": "341"
+       }
+      ],
+      "ko": [
+       {
+        "op": "check",
+        "kind": "pc",
+        "mod": 1,
+        "ok": [
+         {
+          "op": "goto",
+          "p": "780"
+         }
+        ],
+        "ko": [
+         {
+          "op": "goto",
+          "p": "542"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "678": {
+  "id": "678",
+  "it": "Controllo di percezione: se riesce vedi 783; se fallisce vedi 341.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "783"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "341"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "696": {
+  "id": "696",
+  "it": "Se è sulla strada, nessun evento. Se è al piano superiore di U13, vedi 242.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "716": {
+  "id": "716",
+  "it": "Controllo di percezione: se riesce vedi 332; se fallisce vedi 430.",
+  "ops": [
+   {
+    "op": "check",
+    "kind": "pc",
+    "mod": 0,
+    "ok": [
+     {
+      "op": "goto",
+      "p": "332"
+     }
+    ],
+    "ko": [
+     {
+      "op": "goto",
+      "p": "430"
+     }
+    ]
+   }
+  ],
+  "tipo": "missione"
+ },
+ "719": {
+  "id": "719",
+  "it": "Niente sbarco: si prosegue verso nord lungo la riga 1.",
+  "ops": [],
+  "tipo": "missione"
+ },
+ "780": {
+  "id": "780",
+  "it": "[s1, s4 e s5] Attiva la barca di guardia 60 in C7 e il tedesco 54 accovacciato in C9, nella reazione speciale A. Tira un dado: con un dispari le chiatte sono in D7, J7, M7, N5; con un pari in C6, I7, L7, N6. Vedi 237.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 1
+   },
+   {
+    "op": "sighting",
+    "s": 4
+   },
+   {
+    "op": "sighting",
+    "s": 5
+   },
+   {
+    "op": "ss_barca_guardia",
+    "g": 60,
+    "hex": "C7"
+   },
+   {
+    "op": "activate",
+    "g": [
+     [
+      54,
+      "C9"
+     ]
+    ],
+    "stance": "crouching",
+    "adv": null,
+    "two": [],
+    "us_two": false,
+    "aware": false,
+    "reaction": "A",
+    "rounds": true
+   },
+   {
+    "op": "ss_chiatte",
+    "dispari": [
+     "D7",
+     "J7",
+     "M7",
+     "N5"
+    ],
+    "pari": [
+     "C6",
+     "I7",
+     "L7",
+     "N6"
+    ]
+   },
+   {
+    "op": "goto",
+    "p": "237"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "787": {
+  "id": "787",
+  "it": "[s9] Il comandante sgancia i quattro sommozzatori, che entrano nella cala da E2, F2 e G2, mentre le due canoe proseguono verso nord per tagliare la strada ai rinforzi e attaccare il villaggio alle spalle. Le canoe non possono sbarcare nelle colonne A–N, poi si muovono liberamente. I sommozzatori restano negli esagoni d’acqua salvo diversa indicazione. Nelle Operazioni sommozzatori e canoe possono muoversi insieme, ma i sommozzatori non sono più aggrappati; nei Round ognuno muove per conto suo. I sommozzatori possono stare in superficie o sott’acqua.",
+  "ops": [
+   {
+    "op": "sighting",
+    "s": 9
+   },
+   {
+    "op": "ss_sgancia_sub"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "789": {
+  "id": "789",
+  "it": "Si passa alla Condizione 2 e si tolgono tutte le reazioni speciali A. La missione finisce quando (1) tutti gli americani sono usciti da A1 con tedeschi ancora attivi in mappa, oppure (2) tutti gli americani sono in acqua nelle righe 1 o 2, colonne A–G, e non ci sono tedeschi attivi. Nel caso 2 non si perdono PV per gli incapacitati; nel caso 1 si evitano facendoli uscire. I sommozzatori ora possono entrare in qualunque esagono: dall’acqua alla terra costa 2 PM (un’azione oltre una massicciata), con un cambio di postura gratuito. Un sommozzatore sale su una canoa con posto libero nello stesso esagono con un’azione. Un incapacitato può uscire nelle due caselle di porto di una canoa. Servono 20 PV per vincere.",
+  "ops": [
+   {
+    "op": "condition",
+    "n": 2
+   },
+   {
+    "op": "togli_reazioni",
+    "r": [
+     "A"
+    ]
+   },
+   {
+    "op": "ss_fine_789"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "995": {
+  "id": "995",
+  "it": "Un tedesco ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "chiave": "995",
+    "lato": "de"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "996": {
+  "id": "996",
+  "it": "Un tedesco incapacitato, scelto a caso, muore per le ferite. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "chiave": "996",
+    "lato": "de"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "997": {
+  "id": "997",
+  "it": "Un americano ferito, scelto a caso, diventa incapacitato per la perdita di sangue. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "dissanguamento",
+    "chiave": "997",
+    "lato": "us"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "998": {
+  "id": "998",
+  "it": "Un americano incapacitato, scelto a caso, muore per le ferite. Solo una volta per missione.",
+  "ops": [
+   {
+    "op": "morte_incapacitato",
+    "chiave": "998",
+    "lato": "us"
+   }
+  ],
+  "tipo": "missione"
+ },
+ "121": {
+  "id": "121",
+  "it": "Se si muove un veicolo, entra in U2. Se si muove un soldato, entra in U3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "U2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "122": {
+  "id": "122",
+  "it": "Se si muove un veicolo, entra in T2. Se si muove un soldato, entra in U3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "T2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "U3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "123": {
+  "id": "123",
+  "it": "Se si muove un veicolo, entra in P3. Se si muove un soldato, entra in P4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "124": {
+  "id": "124",
+  "it": "Se si muove un veicolo, entra in S3. Se si muove un soldato, entra in T3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "S3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "T3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "125": {
+  "id": "125",
+  "it": "Se si muove un veicolo, entra in O4. Se si muove un soldato, entra in P4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "126": {
+  "id": "126",
+  "it": "Se si muove un veicolo, entra in R3. Se si muove un soldato, entra in S4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "R3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "S4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "127": {
+  "id": "127",
+  "it": "Se si muove un veicolo, entra in N3. Se si muove un soldato, entra in O5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "128": {
+  "id": "128",
+  "it": "Se si muove un veicolo, entra in Q4. Se si muove un soldato, entra in R4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "129": {
+  "id": "129",
+  "it": "Se si muove un veicolo, entra in M3. Se si muove un soldato, entra in N4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "M3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "N4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "424": {
+  "id": "424",
+  "it": "Se si muove un veicolo, entra in N7. Se si muove un soldato, entra in P7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N7"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "717": {
+  "id": "717",
+  "it": "Se si muove un veicolo, entra in P4. Se si muove un soldato, entra in R4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "P4"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "R4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "718": {
+  "id": "718",
+  "it": "Se si muove un veicolo, entra in O6. Se si muove un soldato, entra in P5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "O6"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "P5"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "714": {
+  "id": "714",
+  "it": "Se si muove un veicolo: nella Condizione 1 entra in R5, nella Condizione 2 in Q7. Se si muove un soldato, entra in Q6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "vehicle_moving": true
+    },
+    "then": [
+     {
+      "op": "if",
+      "t": {
+       "cond_in": [
+        1
+       ]
+      },
+      "then": [
+       {
+        "op": "g_enter",
+        "hex": "R5"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "Q7"
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "Q6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "451": {
+  "id": "451",
+  "it": "Se si muove un veicolo, entra in M4. Se si muove un soldato e s2 è avvenuto, entra in L3; altrimenti in M4.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "s": 2
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "L3"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "M4"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "459": {
+  "id": "459",
+  "it": "Se in H3 ci sono più tedeschi attivi che in H2, entra in H2; altrimenti in H3.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_piu_tedeschi": [
+      "H3",
+      "H2"
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "H2"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "H3"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "458": {
+  "id": "458",
+  "it": "Se si muove un soldato nella Condizione 1, entra in C9 e passa alla reazione speciale A. Altrimenti entra in B7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "all": [
+      {
+       "not": {
+        "vehicle_moving": true
+       }
+      },
+      {
+       "cond_in": [
+        1
+       ]
+      }
+     ]
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "C9"
+     },
+     {
+      "op": "g_reaction",
+      "r": "A"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "B7"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "781": {
+  "id": "781",
+  "it": "Passa alla reazione speciale D.",
+  "ops": [
+   {
+    "op": "g_reaction",
+    "r": "D"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "788": {
+  "id": "788",
+  "it": "Entra in N2, scendendo in piedi dal camion se serve (1 PM).",
+  "ops": [
+   {
+    "op": "ss_scende_camion"
+   },
+   {
+    "op": "g_enter",
+    "hex": "N2"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "675": {
+  "id": "675",
+  "it": "1. Se ci sono meno americani a sud della colonna M (compresa) che a nord, entra in N3.\n2. Altrimenti, se si muove un soldato, entra in M2; se si muove il camion, ogni occupante (al suo turno) scende in piedi in M3 spendendo 1 PM e toglie la reazione speciale T.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_meno_a_sud": "M"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "N3"
+     }
+    ],
+    "else": [
+     {
+      "op": "if",
+      "t": {
+       "vehicle_moving": true
+      },
+      "then": [
+       {
+        "op": "ss_scendono_tutti",
+        "hex": "M3"
+       }
+      ],
+      "else": [
+       {
+        "op": "g_enter",
+        "hex": "M2"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "931": {
+  "id": "931",
+  "it": "Se ci sono meno americani attivi a sud della colonna P (compresa) che a nord, entra in Q5; altrimenti in O6.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "ss_meno_a_sud": "P"
+    },
+    "then": [
+     {
+      "op": "g_enter",
+      "hex": "Q5"
+     }
+    ],
+    "else": [
+     {
+      "op": "g_enter",
+      "hex": "O6"
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "452": {
+  "id": "452",
+  "it": "Se s5 non è avvenuto, vedi subito 540. Se si muove il camion e in N5 c’è una chiatta attiva senza tedeschi a bordo, fa scendere in piedi un passeggero in O5 (a caso, o l’assistente) ed entra in O6; senza chiatta entra in O6. Se si muove un soldato e in N5 c’è una chiatta attiva senza tedeschi, sale sulla chiatta (2 PM) e passa alla reazione speciale B; altrimenti entra in P5 e passa alla reazione speciale A.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "540"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "N5"
+    ],
+    "max": 0,
+    "scende": "O5",
+    "v_entra": "O6",
+    "v_altrimenti": "O6",
+    "s_altrimenti": "P5",
+    "s_reazione": "A"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "453": {
+  "id": "453",
+  "it": "Se si muove il camion e in N6 c’è una chiatta attiva senza tedeschi, fa scendere in piedi un passeggero in O7 ed entra in N7; altrimenti entra in N7. Se si muove un soldato e in N6 c’è una chiatta attiva senza tedeschi, ci sale (2 PM) e passa alla reazione B; altrimenti entra in P7 e passa alla reazione A.",
+  "ops": [
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "N6"
+    ],
+    "max": 0,
+    "scende": "O7",
+    "v_entra": "N7",
+    "v_altrimenti": "N7",
+    "s_altrimenti": "P7",
+    "s_reazione": "A"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "454": {
+  "id": "454",
+  "it": "Condizione 1: se si muove il camion ed è attiva una chiatta in L7 o M7 senza tedeschi, fa scendere in piedi un passeggero in M8 ed entra in L8; un soldato sale sulla chiatta in L7 o M7 (2 PM, reazione B), altrimenti entra in M9 (reazione A). Condizione 2: il camion fa scendere un passeggero in M8 se c’è una chiatta libera ed entra in N7; un soldato sale sulla chiatta in L7 o M7 (reazione B), altrimenti entra in N7.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      1
+     ]
+    },
+    "then": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "M7",
+       "L7"
+      ],
+      "max": 0,
+      "scende": "M8",
+      "v_entra": "L8",
+      "v_altrimenti": "L8",
+      "s_altrimenti": "M9",
+      "s_reazione": "A"
+     }
+    ],
+    "else": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "M7",
+       "L7"
+      ],
+      "max": 0,
+      "scende": "M8",
+      "v_entra": "N7",
+      "v_altrimenti": "N7",
+      "s_altrimenti": "N7",
+      "s_reazione": ""
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "455": {
+  "id": "455",
+  "it": "Condizione 1: se si muove il camion ed è attiva una chiatta in J7 senza tedeschi, fa scendere in piedi un passeggero in J8 ed entra in I8; un soldato sale sulla chiatta in J7 (2 PM, reazione B), altrimenti entra in I9 (reazione A). Condizione 2: il camion entra in K8; un soldato sale sulla chiatta libera in J7 (reazione B), altrimenti entra in K8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      1
+     ]
+    },
+    "then": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "J7"
+      ],
+      "max": 0,
+      "scende": "J8",
+      "v_entra": "I8",
+      "v_altrimenti": "I8",
+      "s_altrimenti": "I9",
+      "s_reazione": "A"
+     }
+    ],
+    "else": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "J7"
+      ],
+      "max": 0,
+      "scende": "",
+      "v_entra": "K8",
+      "v_altrimenti": "K8",
+      "s_altrimenti": "K8",
+      "s_reazione": ""
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "456": {
+  "id": "456",
+  "it": "Condizione 1: se si muove il camion ed è attiva una chiatta in I7 o J7 con al massimo un tedesco a bordo, fa scendere in piedi un passeggero in I8 ed entra in H8; un soldato ci sale (2 PM, reazione B), altrimenti entra in I9 (reazione A). Condizione 2: il camion fa scendere un passeggero in I8 se c’è una chiatta libera ed entra in J8; un soldato sale sulla chiatta libera (reazione B), altrimenti entra in J8.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "cond_in": [
+      1
+     ]
+    },
+    "then": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "I7",
+       "J7"
+      ],
+      "max": 1,
+      "scende": "I8",
+      "v_entra": "H8",
+      "v_altrimenti": "H8",
+      "s_altrimenti": "I9",
+      "s_reazione": "A"
+     }
+    ],
+    "else": [
+     {
+      "op": "ss_chiatta_mov",
+      "chiatte": [
+       "I7",
+       "J7"
+      ],
+      "max": 0,
+      "scende": "I8",
+      "v_entra": "J8",
+      "v_altrimenti": "J8",
+      "s_altrimenti": "J8",
+      "s_reazione": ""
+     }
+    ]
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "457": {
+  "id": "457",
+  "it": "Se s4 non è avvenuto, vedi subito 541. Se si muove il camion e in D7 c’è una chiatta attiva senza tedeschi, fa scendere in piedi un passeggero in D8 ed entra in C8. Se si muove un soldato e in D7 c’è una chiatta attiva, ci sale (2 PM, reazione B); altrimenti entra in D9 (reazione A).",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 4
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "541"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "D7"
+    ],
+    "max": 9,
+    "scende": "D8",
+    "v_entra": "C8",
+    "v_altrimenti": "C8",
+    "s_altrimenti": "D9",
+    "s_reazione": "A"
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "919": {
+  "id": "919",
+  "it": "Se si muove un soldato e in N5 c’è una chiatta attiva senza tedeschi, ci sale (2 PM, reazione B). Altrimenti entra in O5.",
+  "ops": [
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "N5"
+    ],
+    "max": 0,
+    "scende": "",
+    "v_entra": "O5",
+    "v_altrimenti": "O5",
+    "s_altrimenti": "O5",
+    "s_reazione": ""
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "920": {
+  "id": "920",
+  "it": "Se s5 non è avvenuto, vedi 540. Condizione 1: se si muove il camion e in N6 c’è una chiatta attiva senza tedeschi, fa scendere in piedi un passeggero in O6 ed entra in O7. Se si muove un soldato e in N6 c’è una chiatta libera, ci sale (2 PM, reazione B). Altrimenti entra in O5.",
+  "ops": [
+   {
+    "op": "if",
+    "t": {
+     "not": {
+      "s": 5
+     }
+    },
+    "then": [
+     {
+      "op": "goto",
+      "p": "540"
+     }
+    ],
+    "else": []
+   },
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "N6"
+    ],
+    "max": 0,
+    "scende": "O6",
+    "v_entra": "O7",
+    "v_altrimenti": "O5",
+    "s_altrimenti": "O5",
+    "s_reazione": ""
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "926": {
+  "id": "926",
+  "it": "Se si muove il camion e in M7 c’è una chiatta attiva senza tedeschi, fa scendere in piedi un passeggero in N7 ed entra in M8. Se si muove un soldato e in M7 c’è una chiatta attiva, ci sale (2 PM, reazione B). Altrimenti entra in M8.",
+  "ops": [
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "M7"
+    ],
+    "max": 9,
+    "scende": "N7",
+    "v_entra": "M8",
+    "v_altrimenti": "M8",
+    "s_altrimenti": "M8",
+    "s_reazione": ""
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "930": {
+  "id": "930",
+  "it": "Se si muove il camion, entra in B5 facendo scendere in piedi un passeggero in B6 se in C6 c’è una chiatta attiva senza tedeschi. Se si muove un soldato e in C6 c’è una chiatta libera, ci sale (2 PM, reazione B). Altrimenti entra in B5.",
+  "ops": [
+   {
+    "op": "ss_chiatta_mov",
+    "chiatte": [
+     "C6"
+    ],
+    "max": 0,
+    "scende": "B6",
+    "v_entra": "B5",
+    "v_altrimenti": "B5",
+    "s_altrimenti": "B5",
+    "s_reazione": ""
+   }
+  ],
+  "tipo": "movimento"
+ },
+ "233": {
+  "id": "233",
+  "it": "Il sommozzatore fa un controllo di percezione. Se riesce: riemerge se è sott’acqua e nuota verso il sommozzatore americano più vicino in vista; se non ne vede, nuota verso F4; in F4 non fa nulla. Se fallisce: resta come sta e nuota verso F4; in F4 non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "564": {
+  "id": "564",
+  "it": "Il sommozzatore fa un controllo di percezione. Se riesce: riemerge se serve e nuota verso il sommozzatore americano attivo più vicino in vista; se non ne vede, nuota verso K6; in K6, se vede un americano, gli spara con la pistola impermeabilizzata (inceppamento 25); altrimenti non fa nulla. Se fallisce: resta come sta e nuota verso K6; in K6 non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "672": {
+  "id": "672",
+  "it": "1. Con un sommozzatore americano attivo entro 2 esagoni, nuota verso il più vicino.\n2. Se è a 3 esagoni e ha una granata, riemerge e la lancia al sommozzatore più vicino a F2.\n3. Spara con la pistola all’americano attivo più vicino (inceppamento 25), riemergendo prima se serve.\n4. Nuota verso F2.\n5. Non fa nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "348": {
+  "id": "348",
+  "it": "1. Con un americano attivo nello stesso esagono, assalto per uccidere.\n2. Con un sommozzatore americano incapacitato nello stesso esagono e un americano attivo in un esagono adiacente, spende un’azione per strappargli l’equipaggiamento e lasciarlo cadere sul fondo.\n3. Con un americano attivo in un esagono adiacente, carica d’assalto per uccidere.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "343": {
+  "id": "343",
+  "it": "Sulla chiatta. 1. Con una granata e un sommozzatore americano attivo entro 3 esagoni, si accovaccia e la lancia al più vicino (−3 se non lo vede); poi prono se può. 2. Altrimenti si accovaccia e fa il miglior tiro al bersaglio visibile più vicino (prima i sommozzatori); poi prono se può. 3. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "344": {
+  "id": "344",
+  "it": "Sulla chiatta. 1. Se vede un sommozzatore americano, si accovaccia e spara al più vicino; poi prono se può. 2. Con una granata e un sommozzatore entro 3 esagoni non visibile, gliela lancia. 3. Si accovaccia e spara al bersaglio più facile. 4. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "345": {
+  "id": "345",
+  "it": "Sulla chiatta. 1. Con una granata e un bersaglio visibile, la lancia al più vicino (accovacciato fino a 3 esagoni, in piedi da 4 a 6). 2. Si accovaccia e fa più tiri rapidi possibili. 3. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "347": {
+  "id": "347",
+  "it": "Sulla chiatta. 1. Con una granata e un bersaglio entro 3 esagoni, si accovaccia e la lancia al più vicino (−3 se non lo vede). 2. Si accovaccia e fa il miglior tiro al bersaglio più facile. 3. Si accovaccia.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "565": {
+  "id": "565",
+  "it": "Autista del camion. Se il camion è stato colpito in questo Round, corre veloce e fa un tiro rapido con la pistola al bersaglio più facile; altrimenti avanza piano.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "566": {
+  "id": "566",
+  "it": "Sul camion. Se il camion è stato colpito in questo Round, fa il miglior tiro al bersaglio più vicino; altrimenti nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "567": {
+  "id": "567",
+  "it": "Sul camion. Se il camion è stato colpito in questo Round, fa il miglior tiro al bersaglio più facile; altrimenti nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "568": {
+  "id": "568",
+  "it": "Sul camion. Se il camion è stato colpito in questo Round, tira un dado: dispari, dà un turno al tedesco sul camion con l’abilità più alta; pari, fa più tiri rapidi possibili con la pistola mitragliatrice. Altrimenti nulla.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "569": {
+  "id": "569",
+  "it": "Toglie la reazione speciale T, scende in piedi dal camion (1 PM) e segue i paragrafi d’azione normali.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "782": {
+  "id": "782",
+  "it": "1. Se in N5 c’è una chiatta attiva senza tedeschi, toglie la reazione A, si alza ed entra in O5. 2. Se ce n’è una in N6, entra in O6. 3. Altrimenti, con il numero d’azione: 0–1: 801, 2–5: 800, 6–9: 808.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "784": {
+  "id": "784",
+  "it": "Se in M7 o L7 c’è una chiatta attiva senza tedeschi, toglie la reazione A, si alza ed entra in M8. Altrimenti, con il numero d’azione: 0–3: 801, 4–6: 808, 7–9: 856.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "785": {
+  "id": "785",
+  "it": "Se in J7 c’è una chiatta attiva senza tedeschi, toglie la reazione A, si alza ed entra in J8; se ce n’è una in I7, entra in I8. Altrimenti, con il numero d’azione: 0–3: 801, 4–6: 808, 7–9: 856.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "786": {
+  "id": "786",
+  "it": "Se in D7 c’è una chiatta attiva senza tedeschi, toglie la reazione A, si alza ed entra in D8; se ce n’è una in C6, entra in B8. Altrimenti, con il numero d’azione: 0–1: 856, 2: 840, 3–6: 810, 7–9: 802.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "823": {
+  "id": "823",
+  "it": "Se nell’esagono c’è un altro tedesco attivo, si sdraia prono. Altrimenti corre in un esagono scoperto o striscia in qualunque altro esagono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "861": {
+  "id": "861",
+  "it": "Se c’è un tedesco attivo nello stesso esagono o in uno adiacente, si accovaccia e cede un turno al tedesco con meno turni (a parità, a quello con l’abilità più alta). Se tutti hanno due turni, o non ce ne sono, vedi 856.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "674": {
+  "id": "674",
+  "it": "Barca di guardia: mezzo piccolo allo scoperto, non ci si sale. Va piano (1 esagono per 1 punto equipaggio) o veloce (2 esagoni per 2 punti); sparare con il fucile o lanciare una granata costa 1 punto. Colpita: dispari, colpito l’equipaggio (tranne il panico, un uomo in meno; col mitra si continua a tirare; col bazooka il resto dell’equipaggio tira sulla riga Granata al chiuso); pari, colpita la barca (L: va solo piano; M o H: eliminata). Una granata dentro la barca la distrugge (−3 da fuori dell’esagono). Senza equipaggio la barca è eliminata.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "911": {
+  "id": "911",
+  "it": "Barca 60. Fuori da F5: miglior tiro a un americano nello stesso esagono o adiacente, granata al più vicino a 2–3 esagoni, va piano verso l’americano visibile più vicino; senza americani in vista va veloce verso F5. In F5: miglior tiro al più vicino, tiri rapidi al più facile, granata al più vicino (prima i sommozzatori).",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "912": {
+  "id": "912",
+  "it": "Barca 60. Va veloce verso l’americano attivo visibile più vicino (prima i sommozzatori) e fa più tiri rapidi possibili; senza americani in vista va veloce verso F5 e spara al primo che vede. In F5 o con un americano nell’esagono: miglior tiro al più vicino, granata al secondo più vicino, tiri rapidi.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "913": {
+  "id": "913",
+  "it": "Barca 60. Fuori da F5: granata al più vicino fuori dall’esagono, va piano verso il più vicino in vista (o verso F5). In F5 o con un americano nell’esagono: più tiri rapidi possibili al più vicino.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "914": {
+  "id": "914",
+  "it": "Barca 60. Miglior tiro al più vicino, va veloce verso l’americano in vista più vicino (o piano verso F5), granata al più vicino fuori dall’esagono.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "915": {
+  "id": "915",
+  "it": "Barca 61, come 911 ma verso K6.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "916": {
+  "id": "916",
+  "it": "Barca 61, come 912 ma verso K6.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "917": {
+  "id": "917",
+  "it": "Barca 61, come 913 ma verso K6.",
+  "ops": [],
+  "tipo": "azione"
+ },
+ "918": {
+  "id": "918",
+  "it": "Barca 61, come 914 ma verso K6.",
+  "ops": [],
+  "tipo": "azione"
+ }
+}

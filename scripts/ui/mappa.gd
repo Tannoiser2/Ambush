@@ -458,6 +458,9 @@ func _draw() -> void:
 			if veic.stato == "attivo" and int(veic.get("forature", 0)) > 0 and not veic.gomme:
 				extra = " (GOMMA A TERRA)"
 			_marcatore(str(veic.hex), str(veic.nome).to_upper() + extra, Vector2(0.0, 0.66), col)
+	if partita != null and partita.ss.attiva() and not senza_pedine:
+		for e in s.get("ss", {}).get("esplosivi", []):
+			_marcatore(str(e.hex), "TIC TAC", Vector2(0.0, -0.62), Color("8a2b1c"))
 	for h in s.oggetti:
 		var armi_a_terra: Array = s.oggetti[h].filter(func(o): return not (str(o.get("tipo", "")) in ["barca", "esplosivo", "incendio", "carica_us", "faro", "antenna", "cannone_costiero"]))
 		if not armi_a_terra.is_empty():
@@ -646,6 +649,15 @@ func _pedina(x: Dictionary, r: Rect2, selezionato: bool, di_turno: bool) -> void
 		draw_rect(Rect2(r.position + Vector2(0, r.size.y * 0.38), Vector2(r.size.x, fs * 1.25)), Color(0.65, 0.12, 0.08, 0.9))
 		draw_string(f, r.position + Vector2(0, r.size.y * 0.38 + fs), "PANICO", HORIZONTAL_ALIGNMENT_CENTER, r.size.x, fs, Color.WHITE)
 	_icone_stato(x, r)
+	if partita != null and partita.ss.attiva() and x.stato == "attivo" and (partita.ss.in_acqua(x) or x.get("barca_ss", false)):
+		# Silver Star: nuotatori, sommozzatori sott’acqua e barche di guardia.
+		var fs2 := int(maxf(8.0, r.size.x * 0.17))
+		var sotto: bool = partita.ss.sott_acqua(x)
+		var etich: String = "BARCA %d" % int(x.get("equip_ss", 0)) if x.get("barca_ss", false) else ("SOTT’ACQUA" if sotto else "IN ACQUA")
+		if sotto:
+			draw_rect(r, Color(0.1, 0.3, 0.55, 0.45))
+		draw_rect(Rect2(r.position + Vector2(0, r.size.y - fs2 * 1.3), Vector2(r.size.x, fs2 * 1.3)), Color(0.08, 0.25, 0.45, 0.9))
+		draw_string(Tema.testo_bold, r.position + Vector2(0, r.size.y - fs2 * 0.3), etich, HORIZONTAL_ALIGNMENT_CENTER, r.size.x, fs2, Color.WHITE)
 	if selezionato:
 		draw_rect(r.grow(2.0), Tema.OTTONE, false, maxf(2.0, 4.0 * zoom))
 	elif di_turno:
