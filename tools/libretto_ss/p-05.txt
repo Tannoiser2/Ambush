@@ -1,0 +1,150 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 5
+
+Round, flip the tick, tick marker over to the end-this-Round side.
+At the end of the next Round, the timed explosive detonates. Timed
+explosives cannot be thrown at a target; they can only be affixed to
+a target. Before a timed explosive detonates, check to see if it is a
+dud by using the Satchel Charge dud number (05). Timed explosives
+can be carried only by the four squad members assigned as divers.
+
+Canoes. Canoes are treated as on page 36 of Ambush! with the
+exception that, if a canoe is sunk by fire in a hex not adjacent to
+land, the occupants of the canoe have until the end of the current
+Round to get the canoe to land. Otherwise, the canoe sinks in its cur-
+rent hex (taking with it all the equipment in the canoe Port Boxes)
+_and the occupants instantly become swimmers. If a canoe with divers
+hanging onto its sides is fired on, the men in the water will let go
+of the canoe and conduct their Actions individually as divers and
+swimmers rather than simply be carried along with the canoe.
+Divers and Swimmers. Divers and swimmers are restricted to using
+1 Port Box. Divers are designated by using a marker that indicate
+whether they are surfaced or underwater. Any soldier other than a
+diver is in an all-water hex is considered a swimmer (as opposed
+to a designated diver); place an inverted prone marker on a swimmer
+who is currently underwater. Non-wounded swimmers and divers
+receive one free stance change per Turn. It costs 2 MP to enter a
+new all-water hex when swimming or diving. Swimmers must end
+each Round on the surface (to breathe), but they can swim under-
+water during the Round. The LOS of a man underwater is restricted
+to the same and adjacent hexes.
+
+When firing at a swimmer or a diver, there is a —4 Fire Combat
+Modifier applied. A soldier underwater can be seen (and fired upon)
+only from the same or an adjacent hex. An American diver or
+swimmer in the same hex with a German diver or swimmer must
+be in the same stance (underwater or on the surface) to prevent another
+German from firing at the American (similarly for a German diver
+or swimmer in the same hex with an American); grenade attacks can-
+not be conducted against hexes containing both German and American
+soldiers. A swimmer or diver can conduct one snap fire per Turn
+when on the surface, but he cannot move during a Turn in which
+he snap fires (he spends the remainder of his MPA staying afloat
+to conduct the snap fire). He can surface prior to firing, or dive
+underwater after firing if he has a free stance change available. No
+fire combat can be conducted by a man underwater; he can only move,
+assault, or stay where he is. Weapons (other than grenades, clips,
+knives, and timed explosives, none of which requires protection) can
+be waterproofed before the man carrying them dives underwater. It
+costs 1 Action to apply or remove waterproofing. If a weapon is taken
+underwater without waterproofing, or if a waterproofed weapon is
+fired before the protection is removed, the Jam Number becomes
+25 (and the Jam Number remains 25 until the soldier spends 1 Action
+to clear his weapon, at which time the Jam 25 marker is removed).
+Several Jam 25 waterproofing markers are included to help you keep
+track; the markers can be placed either on the appropriate soldier
+
+or on the Squad Record Sheet. Note that a bazooka cannot be fired
+from an all-water hex.
+
+A swimmer or diver attacked by a grenade makes the normal
+grenade strike PC Check (see Ambush!). If he passes, he is considered
+prone; if he fails, he is considered non-prone. Grenade attacks against
+swimmers and divers are resolved on the Grenade Outside row. If
+the grenade strike PC Check is successful and the man who passed
+it has at least one Turn remaining in the Round, he can use a Turn
+to move to any adjacent hex, making the normal Paragraph Check.
+German divers and swimmers who pass the grenade strike PC Check
+and have at least one Turn remaining will immediately use a Turn
+to move to an adjacent hex, according to the current German move-
+ment references. A swimmer or diver on the surface can throw a
+grenade up to 3 hexes, applying a —1 modifier due to the unsteady
+nature of his condition. A man on the surface can drop a grenade
+to attack another man who is underwater; both the man dropping the
+grenade and the target make grenade strike PC Checks in this case,
+but the man who dropped the grenade adds 2 to his PC for this Check.
+A man on the surface cannot use a grenade to attack another man
+on the surface in the same hex. A diver or swimmer can only assault
+a man who is in the same stance (surface vs. surface, or underwater
+vs. underwater).
+
+Combat effects against divers and swimmers are resolved as
+follows. Panic: Surface immediately and lose any remaining Turns.
+Wounded: Surface immediately, lose any remaining Turns, and drop
+1 Port Box of equipment or diving gear. Incapacitated: Surface im-
+mediately and move IN marker to Inactive. Killed: Remove counter
+from the map (the man sinks to the bottom and all his equipment
+is lost).
+
+Diving Equipment. Diving equipment is considered to fill 1 Port
+Box, leaving the diver’s other Port Box available to carry a timed
+explosive or a weapon. Once the diving equipment is assigned to the
+four squad members, it cannot be exchanged with or given to another
+squad member, even ifthe man originally assigned the diving equip-
+ment is killed or incapacitated.
+
+Night Visibility. To aid in the success of your Mission, it has been
+timed for a night with heavy cloud cover. A soldier can see only 3
+hexes beyond the hex he occupies.
+
+Cliffs. Cliffs are extremely steep and cannot be entered. Cliff hexes
+are marked XXX on the Condition Cards to remind you that they
+cannot be entered.
+
+Stream. The water barrier running from A-12 to Y-6 is a stream
+and can be entered or crossed by spending Movement Points as
+summarized on the MP Cost Chart. Paragraph Checks must be con-
+ducted in stream hexes.
+
+VICTORY
+
+Victory Points needed, and how the Mission ends, will be revealed
+during play.
+
+Mission 20: Easy as Apple Pie
+
+Christmas Day, 1943, somewhere south of Cassino. Your squad is
+just coming off Christmas leave. The first task you are assigned is
+to escort a small convoy bringing hot Christmas dinners to the rest
+of your company, which has been guarding a strategic tunnel through
+the mountains.
+
+YOUR SQUAD
+
+You can use the pregenerated squad or your own continuing squad,
+or you can generate a new squad. If campaigning your own squad,
+re-roll the Weapon Points number and re-arm your squad. In addi-
+tion and at no cost, you receive 3 trucks and a jeep with a mounted
+medium machinegun. You must buy ammo for the MMG with your
+Weapon Points. Soldiers US 01 and US 02 are members of your squad
+for this Mission.
+
+SET-UP
+
+Use Map F. The top of the map is the north edge. All your squad
+enters in the vehicles in either A-8 or B-19 (one or the other; not
+both). All squad members must stay in the vehicles until a sighting
+occurs. Place intact stone bridge marker in O-4 (connecting P-3 and
+N-4) and wrecked stone bridge marker in K-12 (connecting K-11 and
+K-13). Place wrecked airplane marker (from Ambush/) in K-10. The
+Activation Levels are as follow: ¢1: 0-4; €2: 0-6; ¢3: 0-4.
+
+CONVOY PROCEDURES
+
+The jeep and trucks are in convoy and can enter in any order you
+choose, using the following procedure:
+
+1. Place the first vehicle in the entry hex and conduct a Paragraph
+Check.
+
+2. Advance the first vehicle one hex and conduct a Paragraph Check.
+

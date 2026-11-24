@@ -1,0 +1,271 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 27
+
+counter to round unprepared side; when crew
+member prepares round, flip counter to round
+prepared side. Place three mortar team
+members crouching in activation hex.
+
+Firing Mortar. The mortar has a minimum
+range of 7 hexes. It can be fired at hexes no
+closer than 7 hexes (exclusive) from its
+location. The mortar fire can scatter into a
+hex less than 7 hexes away during hit
+resolution. When a mortar team member is
+directed to fire the mortar, first check for dud
+using a dud number of 05. If the round is not
+a dud, use the first of the following to apply:
+1.,If given coordinates, fire mortar at hex
+where coordinates given marker is located.
+Roll on Mortar Strike Diagram B to determine
+the hex actually hit (move coordinates given
+marker to hex hit if not target hex). Flip
+marker to mortar strike marker side up and
+assess damage as in Damage section.
+
+2. If not given coordinates and mortar strike
+marker is on the map, use Procedure A
+below.
+
+3. If not given coordinates and mortar strike
+marker is not on the map and soldier firing
+mortar can see an active target, use Procedure
+B below.
+
+4. If none of the above apply, use Procedure
+C below.
+
+Mortar can be fired and round prepared in
+same Turn, but each can occur only once per
+Turn. Firing soldier's WS does not apply
+when firing mortar. US soldiers cannot use
+German mortar for any purpose.
+
+A. 1. If mortar team can see mortar strike
+marker and there is an active American in the
+same hex as the marker (but the marker is not
+within the mortar’s minimum range), fire
+mortar at the same hex again. Roll on Mortar
+Strike Diagram B to determine the hex
+actually hit (move mortar strike marker to hex
+hit if not target hex). Assess damage as in the
+Damage section.
+
+2. If mortar team can see mortar strike marker
+and can also see an active American within
+two hexes of the marker (but not within the
+mortar’s minimum range), move the mortar
+strike marker to the hex closest to Y-1. Roll
+on Mortar Strike Diagram B to determine the
+hex actually hit (move mortar strike marker to
+hex hit if not target hex). Assess damage as in
+the Damage section.
+
+3. If mortar team can see mortar strike marker
+and there is no active American in that hex or
+within two hexes of the marker, place the
+mortar strike marker in the hex closest to Y-1
+that is visible to the mortar team and that
+contains at least one active American. If the
+hex closest to Y-1 is within the mortar's
+minimum range, fire at hex closest to Y-1 not
+within minimum range. Roll on Mortar Strike
+Diagram A to determine the hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section.
+
+4. If the only active Americans visible to the
+mortar team are within the mortar’s minimum
+range, use Procedure C.
+
+B. Place mortar strike marker in hex closest
+to Y-1 that is visible to mortar team and that
+contains at least one active American (if hex
+is within mortar’s minimum range, target hex
+closest to Y-1 that is not within minimum
+range). Roll on Mortar Strike Diagram A to
+determine hex actually hit (move mortar strike
+marker to hex hit if not target hex). Assess
+damage as in Damage section. If all visible
+Americans are within mortar’s minimum
+range, use Procedure C.
+
+C. Fire mortar at hex determined by rolling 1
+
+Place mortar strike marker in hex determined
+above. Roll on Mortar Strike Diagram A to
+get hex actually hit (move mortar strike
+marker to hex hit if not target hex). Assess
+damage as in Damage section.
+
+Damage. If mortar strike lands off map, no
+effect. If mortar strike lands in hex with an
+active soldier, damage is assessed as follows.
+Each soldier occupying a clear, road, cover,
+or stream hex rolls on the Grenade Inside
+row. Each soldier in any other type of hex
+rolls on the Grenade Outside row. Soldiers in
+cliff hexes are considered prone for resolving
+this attack. If mortar strike lands in a hex
+occupied by a mule, the mule takes damage as
+in 527. If mortar strike lands in a hex
+occupied by both mules and soldiers, after the
+damage is assessed, see 500.
+
+525. Conduct Activation Check:
+
+® Success: See 633.
+
+© Failure: Each American who can see patrol
+marker conducts PC Check. Success (any):
+See 745 and each man who passed his PC
+Check is automatically aware. Failure: See
+510.
+
+526. No Event. Continue with American
+Turn. If new American moves into a hex with
+LOS to patrol marker, or same American who
+caused 741 to come into play moves to a new
+hex where he can again see patrol marker,
+conduct 741 again.
+
+527. The mules are loaded with ammo and
+supplies for the front lines (these supplies
+cannot be used by your squad).
+
+Control. Mule counters have two sides,
+marked under control and unattended, to help
+you keep track of their status. A mule is
+under control when an active soldier in the
+same hex picks up the lead rope (no cost in
+Operations; 1 MP in Rounds); flip the mule
+counter to its under control side when this
+happens. One soldier can hold up to 4 mules
+in place (keep them under control without
+moving them). One soldier can move only 1
+or 2 mules at a time. Once a mule is under
+control, it stays under control until the soldier
+controling the mule drops the lead rope,
+which he can do at any time at no cost; if this
+occurs, flip the mule counter to the unattended
+side. If the soldier controlling the mule is
+wounded, incapacitated, or killed, he drops
+the lead rope automatically; flip the mule
+counter to its unattended side. A soldier
+controlling a mule must drop the lead rope
+(flip counter) to fire a bazooka, LMG, or
+BAR, or to make or defend against an assault.
+A soldier controlling a mule can only snap
+fire weapons other than those named above
+unless he drops the lead rope (flip counter)
+before firing.
+
+Movement. Mules will not move unless being
+led by an active soldier or unless directed by
+paragraph. One soldier can lead up to 2 mules
+under his control. The soldier moves normally
+and the mules move with him. Mules cannot
+enter cliff hexes and can enter and exit
+buildings only through doors or destroyed
+wall hexsides. No more than 4 mules can be
+in any hex at one time after they have been
+unloaded from the barge.
+
+Damage to Mules. When mules are hit by
+fire or subject to grenade attack, roll 1 die:
+On a result of 0-3, there is no effect; on a
+
+result of 4-7, the mule panics and will not
+move for the rest of the Round; on a result of
+8, the mule is wounded (place marker) and
+will not enter more than 2 MP worth of hexes
+per Turn, regardless of how many MPs the
+soldier controlling the mule has to spend; on a
+result of 9, the mule is incapacitated (place
+marker). If a mule is incapacitated as a résult
+of rolling a 9 (but not as the result of being
+wounded twice), roll 1 die: On a result of
+0-8, there is no effect; on a result of 9, the
+supplies on the mule explode, the mule is
+killed (remove it from the map), and all
+soldiers in the hex suffer damage on the
+Satchel Charge Outside row. Any other mules
+in the hex suffer damage as in the beginning
+of this section (more than one mule may have
+its supplies explode as the result of a single
+attack).
+
+Combat Against Soldiers in a Hex With
+Mules. Unless otherwise directed, when a
+German fires at a hex with both soldiers and
+mules in it, the target is a soldier. A mule is
+considered a soldier for the purposes of
+resolving Aimed Automatic Weapon Fire (see
+Ambush!), but soldiers in the hex suffer
+damage first. If a German is directed
+specifically to fire at a mule, the mule is
+considered a standing soldier in the terrain it
+‘occupies. A prone soldier in a hex with an
+incapacitated mule is —2 to hit, unless the
+terrain offers a better modifier. If a prone
+soldier in a hex with an incapacitated mule is
+fired on and missed, roll 1 die: On a result of
+0-8, no effect; on a result of 9, the supplies
+on the incapacitated mule explode and damage
+is resolved as above. If a hex with soldiers
+and mules in it is subjected to a grenade
+attack, all soldiers and mules in the hex could
+incur damage. Soldiers resolve the grenade
+attack normally, and the mules take damage as
+above. Mule counters are marked with 527 on
+both sides to remind you of this paragraph for
+easy reference.
+
+528. Conduct PC Check:
+* Success: See 648.
+Failure: See 460.
+
+529. If any mules are unattended, one
+unattended mule determined at random panics.
+Roll one die:
+
+}; Mule moves 1 hex north.
+
+: Mule moves 1 hex northeast.
+
+: Mule moves 1 hex southeast.
+
+: Mule moves 1 hex south.
+
+: Mule moves 1 hex southwest.
+
+: Mule moves 1 hex northwest.
+
+: Mule moves 2 hexes back along the route it
+travelled (or as near as you can remember).
+7-9: Mule will not move this Round, even if a
+soldier picks up its lead rope and tries to
+move it.
+
+If a die roll of 0-5 causes a mule to enter a
+cliff hex from higher ground, the mule falls
+through the cliff hex(es) to land in the lower
+level. (For example, a mule in R-8 forced to
+move 1 hex north would fall through R-7 and
+end up in R-6.) For each cliff hex the mule
+falls through, it rolls once on the Carbine
+row. If the result is panic, the mule will not
+move in that Round. If the result is KIA, roll
+one die: On a result of 0-4, no further effect;
+on a result of 5-9, the supplies explode (as in
+527). If the die roll causes a mule to enter or
+leave a building other than through a door, the
+mule remains where it is and will not move in
+that Round. If a die roll causes a mule to
+enter a hex containing an active soldier, the
+soldier conducts a PC Check:
+
+* Success: The soldier suffers no damage.
+
+Quawn-o
+

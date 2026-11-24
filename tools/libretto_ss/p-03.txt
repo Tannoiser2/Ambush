@@ -1,0 +1,136 @@
+Mie rest
+
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 3
+
+4. Paragraphs
+
+The paragraphs in the rear of this booklet form the heart of the game,
+and they should not be read until called for by a Paragraph Check
+or other game instruction. The paragraphs are numbered from 100
+to 1000, with intentional gaps.
+
+5. Radios
+
+A radio may be given to your squad at the start of a Mission. If so,
+it takes one Port Box to carry it. A radio is considered manned as
+long as it is in a hex with an active US soldier. When a radio is
+manned, a paragraph may allow you to send or receive instructions
+by radio. A radio is unmanned if not in a hex with an active US
+soldier, or if it has been destroyed. When a soldier who is carrying
+a radio is wounded, incapacitated, or killed, by whatever means, there
+is a chance that the radio is also destroyed. Roll percentile dice: On
+a result of 25 or less, the radio is destroyed and is useless for the
+remainder of the Mission; on any other result, there is no effect.
+
+6. New Maps and Terrain
+
+Silver Star includes one new full-map (Map F) and two half-maps
+(Maps G and H). The Mission Set-Up instructions will tell you which
+map(s) are used in each Mission and any other special instructions
+that you may need.
+
+6.1 New Terrain
+
+Level 4. The Level 4 hexes introduced in Silver Star in no way affect
+or alter the Ambush! LOS rules, except that the view from a Level
+4 hill will permit you to see quite a lot of terrain.
+
+All-Water Hexes. These hexes cannot be entered (unless specifically
+allowed in a Mission briefing), and they never block LOS.
+Cliffs. Only crouching soldiers can enter cliff hexes. When in a cliff
+hex, a soldier cannot stand or lie prone, and he is considered to be
+crouching in cover. Cliff hexes never block LOS and can be Level
+2 or Level 3, as indicated on the Map Terrain Key (the only difference
+between the two Level cliff hexes is in their height).
+
+Depending on the Mission briefing, cliff hexes will be
+impassable, steep, or sloping. A sloping cliff hex costs 2 MP to enter;
+a steep cliff hex requires 1 Action for a soldier to climb up or down,
+followed by an immediate Footing Check:
+
+Each time a soldier (German or US) ascends or descends to a
+new steep cliff hex, there is a possibility that he will lose his footing
+and fall. Roll one die: On a result of 0-8, the soldier is safe; on a
+result of 9, there is a possibility that the soldier failed to catch him-
+self in time. Conduct an immediate PC Check; if the soldier passes
+the Check, he is safe; if the soldier fails the Check, he falls to an
+adjacent lower hex (determined at random), panics, and checks for
+damage on the Pistol row. If the hex he falls into is another cliff hex,
+conduct another PC Check to see whether or not he stops his fall
+(if not, he falls into another lower hex chosen at random and suffers
+damage on the Pistol row again).
+
+Note that a panicked soldier in a cliff hex cannot fall prone and
+must remain crouching. This is an exception to the standard panic
+tules.
+
+Ifa soldier is wounded, on a Footing Check die roll of 0 through
+The is safe, and on a roll of 8 or 9 he loses his footing. If a soldier
+is killed or incapacitated in a cliff hex, that soldier’s body falls from
+cliff hex to cliff hex until it lands on a Level 1 hex closest to the
+hex from which the fall began. In each cliff hex fallen through, roll
+for damage on the Semi-Automatic Rifle row of the CRT for an in-
+capacitated soldier; on an additional incapacitation result, the soldier
+is instantly killed.
+
+Boulders. A boulder hex is filled with large rocks. It costs a soldier
+1 MP to enter a boulder hex, and a vehicle cannot enter a boulder
+
+hex at all. A soldier in a boulder hex is considered to be in a crater
+hex for purposes of determining fire combat modifiers. You might
+want to pencil in Boulder next to Crater on your Fire Combat
+Modifiers Chart and the MP Cost Chart. Boulders do block LOS.
+
+Second Story Over Road. On Map F, the second story of the wooden
+building in U-13 extends over the roadway. Soldiers on the road are
+at Level | and in a road hex. A soldier in the second level of U-13
+can see into the hex below only if he is standing, and soldiers in the
+road can see only standing targets in the building above. LOS from
+the second level of U-13 to adjacent and other hexes follows normal
+Ambush! rules for LOS.
+
+7. New Counters
+
+In addition to providing more counters of types that you are familiar
+with (from playing Ambush!), Silver Star offers new counter types
+that are necessary for play.
+
+Destroyed Wall Hexside. When a wall hexside is destroyed by a
+bazooka or tank main gun, place one of these markers in a hex with
+the arrow on the marker facing the destroyed hexside. This will help
+you to remember which hexside is now open. Remember that, if a
+second hexside of the same building hex is destroyed, the building
+hex turns into rubble (see 13.5 in Ambush!).
+
+JAM
+
+Jam. These markers are used as generic jam markers when certain
+weapon type counters are unavailable.
+
+Vehicle AR Markers. Some new vehicles are provided with double-
+letter codes on their counters, and they have matching double-letter
+coded AR markers with IN ratings from 5 to 0 to reflect crew losses.
+When a vehicle suffers a crew loss, invert or replace the AR marker
+so that the new lower IN is exposed, and place the marker in the
+new correct IN column of the AR Track. The German vehicles receive
+Turns in alphabetical order, with double-letter AR markers follow-
+ing single-letter markers. (For example, GE L would go, then GE
+LL, followed by GE M.) You decide the order in which US vehicles
+and soldiers receive Turns.
+
+OTHER COUNTERS
+
+Note that many of the counter types summarized below are printed
+with paragraph numbers. These numbers are put on the counters to
+remind you of the paragraph explaining special details about that
+
+counter.
+LOADED ‘UNLOADED a) 5
+253 253 527 527
+'ANTETANK GUN MULE
+LOADED/UNLO /ATTENDED/UNATTENDED
+524 524 Mortar Strike | Mortar Strike
+ez 5
+‘MORTAR MORTAR STRIKE7
+ROUND PREPARED/UNPREPARED COORDINATES GIVEN
+

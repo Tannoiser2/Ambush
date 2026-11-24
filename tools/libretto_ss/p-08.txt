@@ -1,0 +1,152 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 8
+
+stone bridge marker in O-4 connecting N-4 and P-3; a ford marker
+in K-12 connecting K-11 and K-13; a destroyed bunker marker in
+K-10; and destroyed wall hexside markers in T-15/S-16, Q-16/R-16,
+and Q-14/R-13. Your squad enters in A-1, A-2, and B-1. Activation
+Levels are as follow: ¢1: 0-3; 2: 0-5; ¢3: 0-7.
+
+SPECIAL RULES
+Stream. The water barrier running from O-1 to N-11 and then east
+to A-12 is a stream and can be crossed by spending Movement Points
+as summarized on the MP Cost Chart.
+
+_ Cliffs. The cliffs are sloping and can be entered by a soldier at a
+cost of 2 MP; vehicles cannot enter cliff hexes.
+Visibility. The Mission starts just after sunrise in a heavy mist. LOS
+is only 3 hexes beyond a soldier’s own hex.
+
+VICTORY
+
+You receive 1 VP for entering the tunnel hex W-8. You also receive
+1 VP for entering each of the following hexes in the village: O-14,
+Q-16, S-13, and V-14. Additional VP awards will be revealed dur-
+ing play, as well as the number of Victory Points needed to win and
+how the Mission ends.
+
+Mission 24: Muleskinner
+Blues
+
+October 1943. Near Naples. Your. squad has been sent to a small
+village to pick up recently arrived supplies.
+
+YOUR SQUAD
+
+You can use the pre-generated squad or your own continuing squad,
+or you can generate a new squad. If campaigning your own squad,
+re-roll the Weapon Points number and re-arm your squad.
+
+SET-UP
+
+Use half-maps G and H. The top of the map is the west edge. Place
+a ford marker in T-7 connecting T-6 and T-8, and an intact bridge
+marker in V-14 connecting U-15 and W-14. There is no 3-hex bridge
+in I-15, J-14, K-14 (connecting H-15 and L-13); it has been destroyed
+and the wreckage cleared away, and it has not yet been rebuilt. Your
+squad sets up with one commander in D-9 and the rest of the squad
+in I-9 and J-9. Activation Levels are as follow: ¢1: 0-4; ¢2: 0-6;
+3: 0-8.
+
+SPECIAL RULES
+
+Stream. The water barrier running south from Y-6 to the N-column
+and then north to Y-15 is a stream and may be crossed by spending
+Movement Points as summarized on the MP Cost Chart.
+
+Cliffs. Cliffs are steep and require 1 Action and a Footing Check
+to climb up or down a cliff hex.
+
+Bay. The all-water hexes in the southwest corner are a deep bay and
+cannot be entered.
+
+VICTORY
+
+Victory Points needed and how the Mission ends will be revealed
+during play.
+
+APPENDIX A:
+ADDITIONAL WEAPONS
+
+‘The following weapons are used in addition to those found in the
+Ambush! Weapon Type Chart
+
+PANZERFAUST
+PENETRATION
+SAME ADJ 2-HEX 3-HEX LIGHT MED HEAVY
+
+8 6 5 4 0-2 3-5 6-9
+
+‘A panzerfaust can be fired only once. The firing soldier's WS rating
+is nor applied to this weapon. All US soldiers in a hex in which a
+panzerfaust has impacted must check for damage on the Grenade Out-
+side row of the Weapon Type Chart.
+
+ANTI-TANK GUN
+PERSONNEL = PENETRATION
+SHORT MED LONG INCAP_ KILL LIGHT MED HEAVY
+
+2+ e 4 oO 1-9 04 5-7 8-9
+
+CLIP-FED LIGHT MACHINEGUN
+
+‘This weapon is like the German LMG described in Ambush! section
+9.7, with the following exceptions.
+
+4. This weapon takes up only 2 Port Boxes and can be carried by
+a single soldier without having to be broken down.
+
+2. The weapon can be fired by a standing or crouching soldier.
+3. It uses clips of ammo, which are limited in number (as shown by
+the number of available clips listed on the Assistant Machinegun-
+ner’s soldier card). Each time the clip-fed LMG is fired, ammo deple-
+tion must be rolled for using the out of ammo number of 50. Clip-fed
+LMG and clips must be in the same hex to fire the weapon.
+
+Firing the Clip-Fed LMG
+
+4. If the machinegunner is directed to fire the weapon, he will do
+so only if clips are available in the hex. If directed to fire and no
+clips are available in the hex, but the assistant is active, the
+machinegunner will fire his personal weapon instead. If directed to
+fire the weapon and no clips are available in the hex and the assistant
+with clips is inactive within 4 MPs of the machinegunner’s hex, the
+machinegunner will ignore his Action paragraphs and move as quickly
+as possible to the hex where the inactive assistant with clips is, crouch,
+and pick up all available clips (1 Action). He will then return to where
+the clip-fed LMG is. Once the machinegunner has returned with the
+clips to the hex with the weapon, he will again conduct normal Ac-
+tion paragraphs. If the machinegunner is directed to fire the weapon
+and there are no clips in the hex and no clips available within 4 MPs,
+he will use his personal weapon when directed to conduct fire combat.
+
+2. If the assistant is directed to fire or assist and is not in the hex
+with the clip-fed LMG or is in the hex but no clips are available,
+the assistant will fire his personal weapon instead. If the assistant
+is directed to fire or assist and is in the hex with the weapon and
+clips are available, he will do as directed.
+
+3. If the assistant is active and the machinegunner is wounded or in-
+active, on Turns where the assistant starts in a hex without the weapon,
+he will stop moving if the hex with the weapon is entered and will
+fall prone if free stance change is available or he has sufficient MPs
+remaining. On the next Turn, the assistant will crouch and pick up
+the weapon (1 Action).
+
+Americans can use the clip-fed LMG with —1 applied to the firing
+soldier's WS. There must be clips available in the same hex for the
+weapon to be fired. Clips take up 1 Ammo Box per clip. Clip-fed
+LMG uses the LMG row of the Weapon Type Chart.
+Abandoning the Clip-Fed LMG
+
+‘The German carrying the weapon will immediately abandon it if no
+clips are available (all have been used), or clips are available but are
+more than 4 MPs from the soldier carrying the weapon and the sold-
+ier with the clips is inactive, or the soldier carrying the weapon be-
+comes wounded.
+
+Note: Paragraphs stating that one German weapon fired in the previ-
+‘ous Round is out of ammo do not apply to clip-fed LMGs, because
+these weapons roll for ammo depletion each time they fire. If the
+cout of ammo paragraph states it also applies to machineguns, this
+means only those machineguns other than the clip-fed variety.
+

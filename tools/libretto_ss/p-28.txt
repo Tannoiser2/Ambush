@@ -1,0 +1,298 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 28
+
+* Failure: The soldier suffers damage on the
+Pistol row (due to galloping mule hooves).
+
+530. © If this hex is entered from M-9 and sO
+has not occurred, see 101.
+
+* If this hex is entered from other than M-9
+and s9 has not occurred, see 716.
+
+* Otherwise, no Event.
+
+531. © If active target in sight, see 352.
+© If no active target in sight and all US
+vehicles have passed through W-6, remove
+this German and gain 1 bonus VP.
+
+© Otherwise, fall prone. If no LOS to active
+US vehicle at end of Turn, remove this
+German and gain 1 bonus VP.
+
+532. Conduct PC Check:
+© Success: See 461.
+* Failure: See 649.
+
+534. Conduct PC Check:
+* Success: See 681.
+° Failure: See 680.
+
+535. Conduct PC Check:
+© Success: See 652.
+© Failure: See 653.
+
+536. Conduct PC Check:
+
+* Success: See 654.
+
+° Failure: See 655.
+
+537. © If s2 has not occurred, roll 1 die: On
+an odd result, see 656; on an even result, see
+657.
+
+* If s2 has occurred and s6 has not occurred,
+see 790.
+
+© If both s2 and s6 have occurred, place
+Event marker. No Event.
+
+538. Conduct PC Check (+1):
+* Success: See 220 and US advantage.
+© Failure: See 220 and German advantage.
+
+540. [s5] There are German supply barges
+nearby. Place barges in hexes determined by
+rolling 1 die: On an odd result, place barges
+in J-7, L-7, N-6; on an even result, place
+barges in I-7, M-7, N-5. See 237 for
+additional information about barges.
+
+541. [s4] There is a German supply barge
+nearby. Place barge in hex determined by
+rolling 1 die: On an odd result, C-6; on an
+even result, D-7. See 237 for additional
+information about barges.
+
+542. [s1] Activate GE 60 in C-7. Activate GE
+54 crouching in C-9 in Special Reaction A.
+Commence Rounds. If s4 has not occurred,
+see 541.
+
+543. 1. If on surface, conduct PC Check:
+
+© Success: See 783.
+
+* Failure: Conduct Activation Check. Success:
+See 341, Failure: If s4 has not occurred, see
+541; otherwise, no Event.
+
+2. If underwater, conduct PC Check:
+
+* Success: See 783.
+
+© Failure: Conduct Activation Check (—1).
+Success: See 341. Failure: If s4 has not
+occurred, see 541; otherwise, no Event.
+
+544. [82] Activate GE 61 in M-5. Commence
+Rounds. If s5 has not occurred, see 540.
+
+545. © If s6 has not occurred, see 323. If sl
+has not occurred, see 670; if s1 has occurred,
+conduct PC Check (+1). Success: US
+advantage. Failure: German advantage.
+
+© If s1 and s6 have both occurred, place
+Event marker. No Event.
+
+546. © If s6 has not occurred, see 323. If sI
+
+has not occurred, see 670; if s6 has occurred,
+conduct PC Check. Success: US advantage.
+
+Failure: German advantage.
+© If both sand s6 have occurred, place
+Event marker. No Event.
+
+547. © If s6 has not occurred, see 323. If s1
+has not occurred, see 670; if s1 has occurred,
+conduct PC Check. Success: US advantage.
+Failure: German advantage.
+
+© If both sand s6 have occurred, place
+Event marker. No Event.
+
+548. Conduct PC Check:
+* Success: See 323, US advantage.
+
+© Failure: Conduct Activation Check. Success:
+See 323, German advantage. Failure: See 323.
+
+549. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If there is an active American in an
+adjacent hex, crouch and conduct best fire at
+easiest target. Fall prone if free stance change
+is available.
+
+3. If grenade is available and target is at 2-3
+hex range, crouch and toss grenade at hex
+with most Americans in it (easiest, if more
+than one hex has same number), using —3
+modifier if target not in sight. Fall prone if
+free stance change is available.
+
+4. If grenade is available and target is visible
+at 4-6 hex range, stand and throw grenade at
+hex with most Americans in it (closest hex, if
+more than one hex has same number). Fall
+prone if free stance change is available,
+
+5. If target is visible at 4-6 hex range and no
+grenade is available, crouch and conduct best
+fire at closest target. Fall prone if free stance
+change is available.
+
+6. If none of the above apply, use the current
+German Action Number to conduct the
+indicated paragraph (if directed to fire mortar,
+see 791):
+
+0-2: L conducts 502; Q conducts 503; T
+conducts 504.
+
+3-5: L conducts 503; Q conducts 504; T
+conducts 502.
+
+6-9: L conducts 504; Q conducts 502; T
+conducts 503.
+
+550. © If s7 has not occurred, see 338. If s2
+has not occurred, see 236; if s2 has occurred,
+conduct PC Check. Success: US advantage.
+Failure: German advantage.
+
+* If both s2 and s7 have occurred, place
+Event marker. No Event.
+
+551. © If s7 has not occurred, see 338. If s2
+has not occurred, see 234; if s2 has occurred,
+conduct PC Check. Success: US advantage.
+Failure: German advantage.
+
+© If both s2 and s7 have occurred, no Event.
+Place Event marker.
+
+552. Conduct PC Check (+1):
+* Success: See 338 and US advantage.
+* Failure: See 338 and German advantage.
+
+553. Conduct PC Check:
+* Success: See 715.
+© Failure: See 419.
+
+554. One timed explosive (chosen at random
+if necessary) detonates prematurely. The barge
+to which it is affixed is destroyed and all
+soldiers on the barge are Killed. Soldiers in
+the water in the hex suffer damage on the
+Satchel Charge Outside row; soldiers in the
+hex on the surface are considered non-prone
+and soldiers underwater are considered prone.
+There is no Grenade Strike PC Check for the
+affected soldiers. Remove the tick, tick
+marker for this explosive charge from the
+Action Round Track. This can occur more
+than once per Mission.
+
+560. [s1, $2, 84, and s5] Activate German
+
+60 in C-7 and German 61 in M-5. Commence
+Rounds. German advantage. Roll 1 die: On an
+odd result, place German supply barges in
+C-5, I-7, M-7, and N-5; on an even result,
+place German supply barges in D-7, J-7, L-7,
+and N-6. See 237 for information on barges.
+561. [82] Activate German 61 in M-5.
+Commence Rounds. US advantage. American
+who passed his PC Check is automatically
+aware and receives 2 Turns this Round. If s5
+has not occurred, see 540. .
+
+562. [s2] Activate GE 61 in M-5. Commence
+Rounds. German advantage. If s5 has not
+occurred, see 540.
+
+563. [s2 and s5] Activate German 61 in
+M-S. Commence Rounds. German 61 receives
+2 Turns this Round. Roll 1 die: On an odd
+result, place German supply barges in J-7,
+L-7, and N-6; on an even result, place
+German supply barges in I-7, M-7, and N-5,
+See 237 for information on barges.
+
+564. This Germans conducts PC Check:
+
+* Success: Surface if necessary and:
+
+1. Swim toward nearest visible active
+American diver.
+
+2. If no active American diver is visible, swim
+toward K-6.
+
+3. If in K-6 and an any American is visible,
+conduct best fire with pistol at easiest target
+(do not remove waterproofing from pistol
+first, and use jam number 25),
+
+4. Otherwise, do nothing.
+
+© Failure: 1. Stay in current stance and swim
+toward K-6.
+5. If in K-6, do nothing.
+
+565. © If truck has been fired on in this
+Round, drive fast and conduct 1 snap fire with
+pistol at easiest target.
+
+* Otherwise, drive slow.
+
+566. © If truck has been fired on in this
+Round, conduct best fire at closest target.
+® Otherwise, do nothing.
+
+567. © If truck has been fired on in this
+Round, conduct best fire at easiest target.
+© Otherwise, do nothing.
+
+‘568. ¢ If truck has been fired on in this
+Round, roll 1 die: On an odd result, give
+Turn to German in truck with highest WS; on
+an even result, conduct as many snap fires as
+possible with machine pistol, beginning with
+closest, then easiest.
+
+* Otherwise, do nothing.
+
+569. Remove Special Reaction T, spend 1 MP
+to exit truck standing, and follow normal
+Action Paragraphs.
+
+570. © If both sO and s1 have occurred, place
+Event marker. No Event.
+
+© Otherwise, conduct PC Check (+2).
+Success: If sO has not occurred, see 351; if s1
+has not occurred, see 681. Failure: If s1 has
+occurred, no Event; if s1 has not occurred,
+conduct Activation Check (Success: See 680.
+Failure: No Event).
+
+571. © If GE 19 or 20 is moving, enter N-13.
+* Otherwise, enter N-14.
+
+572. ¢ If an American is in sight, and the
+current German Action Number is odd, enter
+O-14.
+
+° If an American is in sight, and the current
+German Action Number is even, enter P-15.
+* Otherwise, enter O-15.
+
+573. © If an American is in sight, enter Q-16.
+* Otherwise, enter Q-15.
+

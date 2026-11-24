@@ -1,0 +1,150 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 4
+
+a U Guard
+oe
+
+ee BY
+731 674 588
+
+AA Patrol
+
+BARBED WIRE FORTIFIED BUILDING GUARD BOAT PATROL BOAT
+
+End Next | End This BERSERK
+Turn Turn
+
+Tick Tick 116
+
+TICK TICK
+NEXT TURN/THIS TURN
+
+&?| &||@? ie
+
+BLOWN TIRE CLIP-FED LMG
+LOADED/UNLOADED
+
+GERSERK
+
+TIMED EXPLOSIVE
+2 TURNS/1 TURN,
+
+8. Random Destruction
+
+Bridges, buildings, walls, sightings, and so forth, which players
+encounter during play, should under no circumstances be destroyed
+or fired at unless they contain active targets, or their destruction is
+specifically allowed in a Mission briefing or in a paragraph instruc-
+tion. Players should understand that, if they destroy a bridge without
+reason, the game system will not know that the bridge is down, which
+will result in illogical movement situations that can ruin a Mission’s
+programming.
+
+9. Optional Rules
+
+The following rules can be used entirely at your own option to add
+flavor to your Missions. The rules can be used individually or in con-
+junction with one another.
+
+9.1 Firing at Targets in Buildings
+
+German soldiers currently have no provision for firing at targets lying
+prone in building hexes, because these potential targets are not in
+
+sight and are therefore invalid targets, even though German weapons
+are quite capable of penetrating buildings. The following optional
+German Action is highly recommended, because it allows the German
+soldiers to fire at these hidden targets. Letting them do so is much
+more realistic, and it evens things up a bit.
+
+If a German soldier has fired at a visible target in a wooden build-
+ing hex, receives a subsequent order to fire again, but has no target
+because the US soldier has since fallen prone, the German can now
+fire at the wall in an attempt to achieve a penetration result. Conduct
+the following procedure for the German:
+
+1. If the paragraph gives no other options for the German (such as
+move, surrender, throw a grenade), the German conducts a PC Check.
+If the German passes the Check, he will fire at the wall; if he fails,
+he will do nothing.
+
+2. If the German is allowed to fire at the wall, he will crouch and
+conduct the procedure outlined in 13.5 of the Ambush! rules.
+Note that a German tank will conduct the same procedure, but it will
+fire its main gun at a stone wall, or its coaxial or bow MG at a wooden
+wall.
+
+9.2 Moving an Inactive Soldier
+
+In addition to the procedure for moving an inactive man one hex,
+as provided for in the Ambush! rules booklet, the following method
+can be used. Two non-wounded soldiers can make a litter using their
+rifles by spending 1 Action each, simultaneously. Once the litter is
+constructed, the two soldiers can carry the litter a maximum of 3
+hexes per Turn, paying normal terrain costs. It costs 1 MP to pick
+up or put down the litter, and the rifles used to make the litter cannot
+be used in combat while the litter is occupied.
+
+The soldiers carrying the litter cannot engage in any form of fire
+combat nor carry any other weapons other than pistols. They can
+assault normally after putting the litter down. If assaulted while
+carrying the litter, or if one or both litter-bearers panic for any reason,
+the litter is dropped and the man on the litter suffers damage on the
+Pistol row. When an inactive man is being carried on a litter, it is
+not necessary to check for death caused by moving an inactive man.
+
+The two soldiers carrying the litter must be on the same row
+of the Action Round Track to spend simultaneous Actions to move
+the litter or pick it up or put it down. If one litter bearer has 2 Turns
+and the other has only one Turn, they cannot pick up, put down,
+or carry the litter until both are on the 1-Turn row (unless, of course,
+someone gives the 1-Turn bearer a Turn, raising him to the 2-Turn
+row).
+
+Mission 19: All Wet
+
+August 1943. Intelligence reports that the Germans are massing sup-
+plies for a counteroffensive at a small cove near Messina. Your squad
+is to verify the accuracy of this information and, if confirmed, destroy
+as much of the German stockpiles as possible.
+
+YOUR SQUAD
+
+You can use the pre-generated squad or your own continuing squad,
+or you can generate a new squad. If you are campaigning your own
+squad, re-roll the Weapon Points number and re-arm your squad.
+Since you will be travelling light and fast, you can buy weapons from
+only the following categories: carbines, submachineguns, pistols,
+bazookas, grenades, and clips. In addition and at no cost, you receive
+diving equipment (masks, fins, rubber suits, air tanks for 4 squad
+members), 4 knives, 4 timed explosives, and 2 canoes (see below
+for rules concerning these articles).
+
+SET-UP
+
+Use half-map H and full-map F. Place H on top of F so that hexes
+‘A-1 and Y-1 on Map H are over the same hexes on Map F. The top
+
+of the map is the west edge. Your squad enters in hex A-1 with 2
+squad members in each canoe and 2 divers hanging on the sides of
+each canoe. Divers are considered to be on the surface and must
+continue to hang onto the canoes until directed to do otherwise. At
+least one commander must be in a canoe. Place intact stone bridge
+in T-7 connecting T-6 and T-8; place a ford marker in K-12 connect-
+ing K-11 and K-13. The Activation Levels are as follow: ¢1: 0-5;
+c2: 0-8.
+
+SPECIAL RULES
+
+Knives. Knives have no cost to carry; just mark on your Squad Record
+Sheet which squad members have knives. A man with a knife receives
+a +1 to his WS (for a maximum WS of +2) when making or defend-
+ing against an assault. Knives cannot be thrown, nor can any soldier
+have more than one knife.
+
+Timed Explosives. It costs 1 Action to affix a timed explosive to
+a target and set the fuse. The timed explosive will detonate at the
+end of the next Round. Use a tick, tick marker to remind you that
+a timed explosive is set. When an Action is spent to set the timed
+explosive, place a tick, tick marker (end-next-Round side up) in the
+Panic space of the Action Round Track. At the end of the current
+

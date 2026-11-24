@@ -1,0 +1,305 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 18
+
+7-8: 825
+
+9: 800
+
+263. German exits tunnel. Remove inverted
+prone marker and enter W-6.
+
+264. © If on top of tunnel, enter X-7.
+© If in tunnel and soldier is moving, enter
+W-9.
+© If in tunnel and vehicle is moving, enter
+W-7.
+
+265. 1. If an active American is in the same
+hex, assault to kill.
+
+2. If an active American is in an adjacent hex
+and a grenade is available, crouch and toss
+grenade at hex with most Americans in it
+(choose 1 at random if all have the same
+number of Americans). Fall prone if free
+stance change is available.
+
+3. If active American is in adjacent hex and
+no grenade is available, crouch and conduct
+best fire at easiest target. Fall prone if free
+stance change is available.
+
+4. If in Condition 3 or 4 and no active target
+is in sight, crew member P will conduct 863,
+and crew member R will conduct 865.
+
+5. If none of the above apply, use the current
+German Action Number and refer to the
+Action paragraph indicated:
+
+0-3: Crew member P, 266; member R, 268.
+4-6: Crew member P, 267; member R, 266.
+7-9: Crew member P, 268; member R, 267.
+
+266. 1. If vehicle is in sight and ATG is
+loaded (but loading did not occur this Turn),
+crouch and fire ATG at nearest vehicle.
+
+2. If ATG is not loaded and was not fired in
+this Turn, crouch and load ATG.
+
+3. Crouch.
+
+267. 1. If ATG is not loaded and was not
+fired this Turn, crouch and load ATG.
+
+2. If vehicle is in sight and ATG is loaded
+(but loading did not occur this Turn), crouch
+and fire ATG at easiest vehicle.
+
+3. Do nothing.
+
+268. 1. If ATG is not loaded and was not
+fired this Turn, crouch and load ATG.
+
+2. If vehicle is in sight and ATG is loaded
+(but loading did not occur this Turn), crouch
+and fire ATG at vehicle closest to 3-hex
+bridge.
+
+3, Fall prone.
+
+269. Mission ends in Condition 2 when no
+active Germans and no planted explosives are
+‘on the map; if there are still planted
+explosives on the map when all the Germans
+have become inactive, stay in Rounds until the
+planted explosives have been defused or have
+detonated. There is no VP loss for
+incapacitated men. You need 21 VPs to win.
+
+270. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in hex O-14.
+Place fortified building counter in O-14 with
+door facing hexside P-13/P-14. See 517 for
+details on fortified buildings. Commence
+Rounds. German advantage. GE 59 receives 2
+Turns this Round. If s5 has not occurred, see
+162. Go to Condition 3.
+
+271. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in hex T-12.
+Place fortified building in T-12, door facing
+S-13. See 517 for details. Commence Rounds.
+German advantage. GE 59 receives 2 Turns
+this Round. If s5 has not occurred, see 160.
+Go to Condition 3.
+
+272. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in hex V-13.
+Place fortified building counter in V-13 with
+door facing V-14. See 517 for details about
+
+fortified buildings. Commence Rounds.
+German advantage. GE 59 receives 2 Turns
+this Round. If s5 has not occurred, see 161.
+Go to Condition 3.
+
+273. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in hex P-15.
+Place fortified building in P-15, door facing
+
+Q-16. See 517 for details. Commence Rounds.
+
+German advantage. GE 59 receives 2 Turns
+this Round. If s5 has not occurred, see 162.
+Go to Condition 3.
+
+274. Roll one die: On an odd result, see 160;
+on an even result, see 162.
+
+275. Soldier steps on tripwire and sets off a
+flare in the hex. Place starshell marker in the
+hex. The flare illuminates the hex and the six
+hexes surrounding it. Any soldier illuminated
+can be seen by any other soldier who can
+trace a LOS to his hex regardless of how far
+away. If any soldier is illuminated, each
+illuminated soldier must make a PC Check:
+* Success: Soldier falls prone.
+
+¢ Failure: Soldier must remain in his current
+stance.
+
+If s8 has not occurred, see 272. Remove
+starshell marker (flare burns out) at end of
+current Round (at end of first Round, if
+currently in Operations).
+
+276. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in hex T-12.
+Place fortified building counter in T-12 with
+door facing S-13. See 517 for details about
+fortified buildings. Commence Rounds. US
+advantage. All aware Americans who do not
+panic receive 2 Turns this Round. If s5 has
+not occurred, see 160. Go to Condition 3.
+
+277. Soldier steps on tripwire and sets off a
+flare in the hex. Place starshell marker in the
+hex. The flare illuminates the hex and the six
+hexes surrounding it. Any man illuminated
+can be seen by any other soldier who can
+trace a LOS to his hex regardless of how far
+away. If any man is illuminated, each
+illuminated soldier must make a PC Check:
+
+© Success: Soldier falls prone.
+
+© Failure: Soldier must remain in his current
+stance.
+
+If s8 has not occurred, see 273. Remove
+starshell marker (flare burns out) at end of
+current Round (at end of first Round if
+currently in Operations).
+
+278. Go to Condition 2.
+
+279. Soldier steps on tripwire and sets off a
+flare in the hex. Place starshell marker in the
+hex. The flare illuminates the hex and the six
+hexes surrounding it. Any man illuminated
+can be seen by any other soldier who can
+trace a LOS to his hex regardless of how far
+away. If any man is illuminated, each
+illuminated soldier must make a PC Check:
+
+* Success: Soldier falls prone.
+
+© Failure: Soldier must remain in his current
+stance.
+
+If s8 has not occurred, see 270. Remove
+starshell marker (flare burns out) at end of
+current Round (at end of first Round if
+currently in Operations).
+
+280. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 401.
+
+© Failure: No Event.
+
+281. Place Event marker. Conduct PC Check:
+* Success: See 402.
+
+© Failure: Conduct Activation Check. Success:
+
+See 401. Failure: No Event.
+282. Place Event marker. Conduct Activation
+
+Check:
+* Success: See 403.
+Failure: No Event.
+
+283. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 403.
+
+Failure: Conduct PC Check. Success: See
+404. Failure: No Event. .
+
+284. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 409.
+
+© Failure: No Event.
+
+285. Place Event marker. Conduct PC Check:
+* Success: See 408.
+
+© Failure: Conduct Activation Check. Success:
+See 409. Failure: No Event.
+
+286. Place Event marker. Conduct Activation
+Check:
+* Success: See 405.
+* Failure: No Event.
+
+287. Place Event marker. Conduct PC Check:
+* Success: See 406.
+
+* Failure: Conduct Activation Check. Success:
+See 405. Failure: No Event.
+
+288. Place Event marker. Conduct Activation
+Check (+1):
+
+* Success: See 405.
+
+* Failure: Conduct PC Check. Success: See
+406. Failure: No Event.
+
+289. © If there is an active American in sight,
+roll one die: On an odd result, see 824; on an
+even result, see 825.
+
+* If there is no active American in sight, see
+397.
+
+290. This hex is impassable for vehicles and
+costs 2 MP for soldiers to enter.
+
+291. Place Event marker.
+
+* If s5 has not occurred, see 617.
+
+If s5 has occurred and you are in
+Operations, conduct Event Check.
+
+© If s5 has occurred and you are in Rounds,
+no Event.
+
+292. Place Event marker.
+* If s5 has not occurred, see 723.
+
+* If s5 has occurred and you are in
+Operations, conduct Event Check.
+
+© If s5 has occurred and you are in Rounds,
+no Event.
+
+293. Conduct PC Check:
+© Success: See 164.
+© Failure: No Event.
+
+294. « If there is a fortified building in P-15,
+see 242.
+
+* If there is not a fortified building in P-15,
+and s4 has not occurred, conduct PC Check
+(41). Success: See 732. Failure: Conduct
+Activation Check. Success: See 733. Failure:
+No Event.
+
+© If there is no fortified building in P-15 and
+s4 has occurred, place Event marker. No
+Event.
+
+295. Conduct PC Check (+2):
+* Success: See 297.
+© Failure: No Event.
+
+296. Conduct PC Check (+1):
+* Success: See 411.
+© Failure: See 410.
+
+297. Soldier notices tank tracks in Q-14
+leading away from the building. Or do they
+lead to the building? Ignore further references
+to 295, 297, and 734 (note this on your Squad
+Record Sheet).
+

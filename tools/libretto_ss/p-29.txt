@@ -1,0 +1,281 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 29
+
+578. Place Event marker. Conduct Activation
+Check (=1):
+
+® Success: See 790.
+
+¢ Failure: No Event.
+
+579. [S7] Man notices movement on Level 4,
+near S-10 and R-9.
+
+580. [s1] Activate GE 31 and GE 32 in
+Special Reaction T in same hex as GE 21. GE
+31 and GE 32 each get 2 Turns this Round.
+
+581. Conduct PC Check:
+* Success: See 700.
+* Failure: No Event.
+
+582. [s8] Help arrives! Activate US 04 in hex
+determined by rolling 1 die: On an odd result,
+activate in A-11 facing B-11; on an even
+result, activate in Y-4 facing X-3. US 04 is
+not under your control. Use the current
+German Action Number to determine which
+Action paragraph applies. When directed to
+move, use the movement references on the
+Condition cards. Remove Special Reaction D
+from all Germans to whom it currently
+applies. If s7 has not occurred, see 473. The
+Mission ends when there are no active
+Germans on the map. You need 8 VP to win.
+VP loss for incapacitated men can be avoided
+by moving them into a building hex. Make
+note of this paragraph on your Squad Record
+Sheet.
+
+583. 1. If in the same hex with an active US
+soldier, assault to kill. Fall prone if free
+stance change is available.
+
+2. If in a hex adjacent to an active US target
+and a grenade is available, crouch and throw
+grenade (target priority is open vehicle, then
+soldier). Fall prone if free stance change is
+available.
+
+3. If in a hex adjacent to an active US target
+and no grenade is available, crouch and
+conduct best fire at easiest target (open vehicle
+first, then soldier). Fall prone if free stance
+change is available.
+
+4. If an active US target is in sight but not in
+the same or an adjacent hex, move as quickly
+as possible toward nearest target. If the most
+direct route is through a prohibited hex, take
+the shortest path without entering the
+prohibited hex. Fall prone if free stance
+change is available.
+
+5. If there is no active American in sight and
+this soldier is in I-13, remove Special
+Reaction H from this German, re-roll the
+German Action Number, and follow normal
+condition paragraph.
+
+6. If there is no active American in sight,
+stand and move 1 hex toward the top of the
+map. Keep moving in that direction until a
+German reference for movement appears on
+the Condition Card. At such time as there is a
+movement reference on the Condition Card,
+remove Special Reaction H from this German.
+
+584. 1. If jagdpanther is immobilized or hit by
+any type of fire, regardless of result, remove
+Special Reaction T from this German.
+
+2. If in hex with jagdpanther at the start of
+this Turn, this German will conduct 840, if
+current German Action Number is odd, or
+868, if current German Action Number is
+even.
+
+3. If not in hex with jagdpanther at the start
+of this Turn, use the current German Action
+Number and refer to the indicated paragraph:
+0-3: 803
+
+9: 800
+If directed to move and he enters the hex with
+the jagdpanther, this German will stop
+
+moving. If target is in sight and free stance
+change is available or sufficient MPs remain,
+he will fall prone. If no target is in sight, he
+will crouch.
+
+585. 1. If jagdpanther is immobilized or hit by
+any type of fire, regardless of result, remove
+Special Reaction T from this German.
+
+2. If in hex with jagdpanther at the start of his
+Turn, this German will conduct 868, if current
+German Action Number is odd, or 800, if
+current German Action Number is even.
+
+3. If not in hex with jagdpanther at the start
+of the Turn, use the current German Action
+Number and refer to the indicated paragraph:
+0-2: 862
+
+3-4: 863
+
+5-6: 864
+
+7-9: 858
+
+If directed to move and he enters the hex with
+the jagdpanther, this German will stop
+moving. If target is in sight, he will fall prone
+if free stance change is available or sufficient
+MPs remain. If no target is in sight, he will
+crouch.
+
+586. 1. If in same hex with active US soldier,
+assault to kill. Fall prone if free stance change
+is available.
+
+2. If there is an active US soldier in an
+adjacent hex and a grenade is available,
+crouch and throw a grenade at the hex with
+the most Americans in it. Fall prone if free
+stance change is available.
+
+3. If there is an active US soldier in an
+adjacent hex and no grenade is available,
+charge assault to kill. Fall prone if free stance
+change is available.
+
+4. If there is an active US soldier in sight, but
+not in the same or an adjacent hex, move as
+quickly as possible toward the nearest target.
+If the most direct route is through a prohibited
+hex, take the shortest path possible jout
+entering prohibited hexes. Fall prone if free
+stance change is available.
+
+5. If there is no active American in sight,
+stand and move toward the-top of the map
+until there is German movement reference on
+the Condition Card. When that happens,
+remove Special Reaction H from this German
+and follow the normal condition paragraph.
+
+587. [s8] Activate US 05 in A-1 facing B-1.
+If s6 has not occurred, see 472. If s7 has not
+occurred, see 473. Go to Condition 3.
+Commence Rounds. Remove Special Reaction
+D from all Germans to whom it currently
+applies. Mission ends when (1) there are no
+active Germans on the map, or (2) all active
+US soldiers (excluding naval gun crew, which
+stays were it is) have exited the map in the
+boat. If Mission ends in option 1, VP loss for
+incapacitated men can be avoided by moving
+them into a building hex. If Mission ends in
+option 2, Incapacitated men must be exited to
+avoid VP loss. You need 8 VP to win. Make
+note of this paragraph on your Squad Record
+Sheet.
+
+588. Patrol boat has 6 Crew Points (not
+Tepresented by separate counters). Boat will
+spend all available Crew Points to pull squad
+members on board unless instructed to fire
+first. In such a case, Crew Points remaining
+after fire is conducted will be used to pull
+squad members on board. Boat will not move
+when within 2 hexes of active US soldier.*
+When the patrol boat has an IN of 4 or 5, it
+exerts a Command Radius of 2 hexes. The
+patrol boat’s IN is added to that of all active
+US soldiers occupying those hexes for
+purposes of determining whether the soldiers
+are in command. If the patrol boat's IN is
+
+reduced to 2, it will no longer have a
+Command Radius, and the soldiers will
+determine command status normally. The
+patrol boat itself (and its inherent crew) will
+never panic. If patrol boat fails an Accident
+Check caused by driving fast, it will stop in
+that hex. It can still fire or pull squad
+members on board if so directed, but it will
+not move further in that Turn. Patrol boat
+pays 1 MP per hex entered and follows
+movement references on Condition 3 card.
+Action costs are as follows: drive slow, 1
+Crew Point; drive fast, 2 Crew Points, snap
+fire with HMG, 1 Crew Point; aimed fire
+with HMG, 2 Crew Points; pull active squad
+member on board from adjacent hex, 2 Crew
+Points; pull inactive squad member on board
+from adjacent hex, 4 Crew Points, and roll
+one die with a result of 0 causing an
+incapacitated man to be killed and a 1-9
+having no effect. Squad members can conduct
+fire from boat, using —2 modifier for fire
+from vehicle. Grenades thrown from boat
+have distance to target doubled for To Hit
+determination (grenade thrown at target 2
+hexes away is considered to be thrown at
+target at 4 hex distance). Grenade cannot be
+thrown at target more than 3 hexes from boat.
+If boat crew is reduced to 2 or 1, other
+passengers can spend Actions to help pull men
+on board, with 1 Action being considered 1
+Crew Point. Squad members cannot fire the
+HMG. If crew is reduced to zero, a squad
+member can drive the boat with his DS
+reduced by 2. German grenade attacks against
+the patrol boat are resolved on the Grenade
+Inside row. Boat crew makes 1 PC Check:
+
+* Success: The crew is considered prone.
+
+© Failure: The crew is considered non-prone.
+Any result other than panic reduces the crew
+by 1. Passengers, if any, get to make the
+normal Grenade Strike PC Check. If the
+initial result on the damage roll against crew
+members is kill, the boat is destroyed an the
+entire crew is killed. Any passengers who
+survive their damage rolls are placed prone in
+an adjacent land hex of your choice. Once all
+active US soldiers are on board, the boat crew
+will conduct one PC Check per Turn:
+
+© Success: The boat is under your control and
+will exit the south edge of the map as fast as
+possible.
+
+* Failure: Follow the movement references on
+the Condition Card.
+
+Any commander on board can spend an
+Action to give the boat crew another PC
+Check to attempt to exit, but the crew cannot
+be given a Turn for any other purpose. If the
+boat is sunk, see 703. Patrol boat counter has
+588 on it, referring to this paragraph.
+“Excludes naval gun crew.
+
+589. Sarge decides to fight a delaying defense
+while withdrawing toward the village around
+the bay in the southeast corner of the map.
+
+590. © If bridge is intact and sO has occurred,
+no Event.
+
+© If bridge is intact and sO has not occurred,
+see 226.
+
+* If bridge is destroyed, see 290.
+
+591. © If vehicle is moving, no Event.
+© If soldier is moving, see 372.
+
+592. © If vehicle is moving, no Event.
+© If soldier is moving, see 373.
+
+593. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 615.
+
+© Failure: No Event.
+

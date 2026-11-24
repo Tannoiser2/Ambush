@@ -1,0 +1,303 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 33
+
+718. If vehicle is moving, enter O-6.
+* If soldier is moving, enter P-5.
+
+719. Do not attempt to land. Enter the next
+hex to the north in the | row.
+
+720. Conduct Activation Check (+1):
+© Success: See 616.
+
+© Failure: Conduct PC Check. Success: See
+618, Failure: No Event.
+
+721, Roll one die: On an odd result, see 616;
+on an event result, see 618.
+
+722. 1. If 86 has not occurred, see 487.
+
+2. If s5 has not occurred, see 723.
+
+3. If's8 has not occurred, see 727.
+
+4. If s7 has not occurred, see 724.
+
+5. If GE 26 has exited or been removed from
+the map, see 489. If GE 29 has exited or been
+removed from the map, see 728.
+
+6. If you have not yet read 269, do so now.
+7. If you have read 269, see 182.
+
+723. [85] German engineers are attempting to
+destroy the bridge. Place half track in L-13
+facing K-14. Activate GE 40 through GE 45
+as follows: GE 40 is assistant driver; GE 41
+is driver; GE 42 through GE 45 are in rear of
+half track with GE 42 manning the LMG (if
+he is directed to fire LMG, the next lowest
+numbered passenger will assist). Commence
+Rounds. GE 41 gets 2 Turns this Round.
+
+724, [s7] Activate GE 37 in hex determined
+by rolling one die:
+
+0-2: Q-9 with covered arc P-9, Q-10, R-9.
+-19 with covered arc N-19, N-18,
+
+-9 with covered arc J-9, K-10, L-9.
+9: Roll again.
+
+See 253 for attributes of ATG. Commence
+Rounds. If any other Germans are active, US
+advantage. If no other Germans are active,
+German advantage.
+
+728, Place Event marker. Conduct PC Check:
+* Success: See 483.
+
+* Failure: No Event.
+
+726. 1. If s7 has not occurred, see 724.
+2. If s8 has not occurred, see 727.
+
+3. If s5 has not occurred, roll one die: On an
+odd result, see 723; on an even result, see
+617.
+
+4. If s6 has not occurred, see 487.
+
+5. If GE 29 has exited or been removed from
+the map, see 728. If GE 26 has exited or been
+removed from the map, see 489.
+
+6. If you have not yet read 269, do so now.
+
+7. If you have read 269, see 182.
+
+727. [s8] Activate GE 38 crouching, in
+Special Reaction P, in hex determined by
+rolling one die:
+
+0-3: L-14
+
+4-6: F-8
+
+7-9: H-13
+
+Commence Rounds.
+
+728. Reactivate GE 29 crouching in hex
+determined by rolling 1 die: On an odd result,
+reactivate in N-1; on an even result, reactivate
+in Y-8, Commence Rounds.
+
+729. 1. If s5 has not occurred, see 617.
+
+2. If s6 has not occurred, see 487.
+
+3. If s7 has not occurred, see 724.
+
+4. If s8 has not occurred, see 727.
+
+5. If GE 26 has exited or been removed from
+the map, see 489. If GE 29 has exited or been
+removed from the map, see 728.
+
+6. If you have not yet read 269, do so now.
+
+7. If you have read 269, see 182.
+
+730. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If there is an active American in an
+adjacent hex and German's WS is +1 or +2,
+charge assault to kill.
+
+3. If there is an active American in an
+adjacent hex and German’s WS is 0, —1, or
+—2, crouch and throw grenade at hex with
+most Americans in it and no active German in
+same hex. If no grenade is available, conduct
+801. If all adjacent hexes that have active
+Americans in them also have an active
+German in the same hex, charge assault hex
+with most Americans in it.
+
+4. If there are 2 or more Germans from this
+patrol inactive, move as quickly as possible
+away from the nearest active American by
+most direct route, going around prohibited
+hexes. Fall prone if free stance change is
+available and a target is in sight. If out of
+sight at the end of the Round and no active
+American is within 6 hexes, remove this
+German from the map.
+
+5. If an active American is visible, conduct
+one snap fire at closest target and then move
+as quickly as possible toward nearest active
+target by the most direct route, going around
+prohibited hexes.
+
+6. If there is no active American in sight,
+move as quickly as possible toward nearest
+active American by the most direct route,
+going around prohibited hexes. Conduct one
+snap fire at closest target to come into view if
+there are sufficient Movement Points
+remaining to do so. Fall prone at end of Turn
+if free stance change is available and target is
+in sight.
+
+731. In Operations, move through barbed wire
+normally. In Rounds, barbed wire costs +1
+MP to enter, and each US soldier
+
+must fall prone upon entering the barbed wire
+hex. Soldiers can continue to move in the
+same Turn if they have sufficient Movement
+Points remaining to do so. When a soldier
+attempts to leave a barbed wire hex, roll one
+die: On a result of 0, the soldier is wounded,
+remains prone in the hex, and loses any
+remaining Turns in the Round; on each
+successive Turn, the soldier must again roll
+one die prior to moving to see if he suffers
+further damage; on a result of 1-9, there is no
+effect. Barbed wire has no effect on German
+soldier movement. A hex can be cleared of
+barbed wire by successfully setting off a
+satchel charge in the hex. If a tracked vehicle
+attempts to move through a barbed wire hex,
+it costs 2 MP to enter the hex plus an
+Accident Check:
+
+* Success: The barbed wire marker is
+removed.
+
+* Failure: The vehicle is immobilized in the
+hex and the barbed wire remains.
+
+Other vehicles (non-tracked) are prohibited
+from barbed wire hexes. Barbed wire counters
+have 731 on them to remind you of this
+paragraph.
+
+732. [s4] Activate GE 67 in P-15 facing
+Q-16. See 300 for details about panzer in
+building. Commence Rounds. American who
+passed his PC Check is automatically aware.
+
+733. [s4] Activate GE 67 in P-15 facing
+Q16. See 300 for details about panzer in
+building. Commence Rounds. Roll one die:
+On an odd result, German advantage; on an
+even result, GE 67 receives 2 Turns this
+Round.
+
+734, Conduct PC Check:
+© Success: See 297.
+© Failure: No Event.
+
+736. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If there is an active German within 2 hexes
+in the same hex as an active American,
+crouch and give Turn to German with highest
+ws.
+
+3. If there is an active German within 2 hexes
+in a hex adjacent to an active American,
+crouch and give Turn to German with highest
+ws.
+
+4. If none of the above apply, or there are no
+Germans eligible to receive a Turn, conduct
+730 if GE 65, or conduct 762 if GE 58.
+
+736. [s4] Activate GE 67 in U-15 facing
+
+T-15. See 300 for details about panzer in
+building. Commence Rounds. Roll one die:
+On an odd result, US advantage; on an even
+result, all aware Americans who do not panic
+receive 2 Turns this Round.
+
+787. [4] Activate GE 67 in U-15 facing
+T-15. See 300 for details about panzer in
+building. Commence Rounds. German
+advantage.
+
+738. Conduct PC Check (+1):
+© Success: See 736.
+© Failure: See 731.
+
+739. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If there is a grenade available and an active
+American is visible within 3 hexes, crouch
+and throw grenade at hex with most
+Americans in it. If all hexes have the same
+number of Americans, throw grenade at
+closest hex (determined at random, if
+necessary). Fall prone if free stance change is
+available.
+
+3. If grenade available and active American
+visible at 4-6 hexes, stand and throw grenade
+at hex with most Americans. If all hexes have
+the same number of ‘Americans, throw
+grenade at closest hex (determined at random,
+if necessary). Fall prone if free stance change
+is available.
+
+4, If none of the above apply, conduct 730 if
+GE 62, GE 63, or GE 64, or conduct 762 if
+GE 55, GE 56, or GE 57.
+
+740. 1. If there are no active Americans in
+sight, remove Special Reaction A, crawl to
+P-12, and put Special Reaction B into effect
+for this German.
+
+2. If there is an active American in sight, do
+not remove Special Reaction A, but use
+current German Action Number and conduct
+paragraph for that number under Condition 1.
+3. Crouch.
+
+741, All Americans who can see the patrol
+marker conduct a PC Check:
+
+* Success (any): See 745, and those who pass
+are automatically aware and receive 2 Turns
+this Round.
+
+Failure (all): Conduct Activation Check.
+Success: See 633. Failure: See 526.
+
+742. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If any visible hex has more than one
+American in it, conduct best fire with machine
+pistol at hex with most Americans (if more
+than one hex has same number of Americans,
+fire at easiest target). Fall prone, if free
+stance change is available.
+
+3. If in the same hex as an active mule, and
+there is no US soldier in the hex, see 747.
+
+4. If there is an active American in an
+adjacent hex, charge assault to kill.
+
+5. If an active American is visible, crouch and
+conduct best fire at closest target. Fall prone,
+if free stance change is available.
+

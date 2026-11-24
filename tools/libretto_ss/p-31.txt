@@ -1,0 +1,289 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 31
+
+633. Roll one die to determine the Patrol
+Activation Diagram used to place patrol
+markers on the map:
+
+O-: 1
+
+23:2
+
+8-9: Roll again.
+Activate GE 78 through GE 81 using the
+diagram determined above (patrol members
+can activate in cliff hexes). Remove the patrol
+marker and its IN marker. The lowest
+numbered German activates in position A,
+second lowest in B, and so forth. Once all 4
+patrol members are on the map, see 748.
+Commence Rounds. German advantage.
+Combat of any type can be conducted against
+the individual patrol members once they are
+placed on the map.
+
+634. One German weapon fired last Round
+(other than mortar) runs out of ammo
+(determined at random, if necessary). If
+German has no second weapon, put 810 into
+effect for him, if applicable. This can occur
+more than once per Mission.
+
+635. 1. If a grenade is available and a target
+is within 3 hexes, crouch and throw grenade
+at closest target. Fall prone, if free stance
+change is available.
+
+2. If grenade is available and a target is within
+4-6 hex range, stand and throw grenade at
+closest target. Fall prone, if free stance
+change is available.
+
+3. If no grenade is available, or no target is in
+range, conduct 815 if current German Action
+Number is odd, or conduct 840 if current
+German Action Number is even.
+
+636, Place Event marker. Roll one die:
+
+0-6: One soldier determined at random in the
+hex is fired on by a hidden German (do not
+begin Rounds). Resolve this fire with the
+following attributes: snap fire; long range;
+machine pistol; WS 0.
+
+7-9: As above, but fire is aimed (may damage
+more than one soldier).
+
+637. Go to Condition 3. You need 21 VP to
+win. You receive 1 VP for each American
+exited through the northeast corner between
+W-1 and Y-1 and Y-3 (inclusive) and 2 VP
+for each mule exited through the same hexes.
+You also receive 1 VP for each active German
+left on the map when your squad has exited
+(each mortar crew member active is worth 1
+VP). You lose 2 VP for each active mule left
+on the map. VP loss for an incapacitated man
+can be avoided by moving him into a building
+hex or exiting him. The Mission ends in
+Condition 3 when there are no active
+Americans left on the map. Put Special
+Reaction M into effect for GE 72 through GE
+76. For these Germans, target priority is mule
+(when closest or easiest) and then soldiers at
+the same distance. A mule takes damage as in
+527. Make note of this target priority on your
+Squad Record Sheet.
+
+638. Boobytrap! Conduct boobytrap
+procedure.
+
+639. [s2] Soldier hears sound of a pitched
+battle in the northeast corner. Squad decides
+to investigate and attempt to deliver the
+supplies to the men in the area.
+
+640. Dawn breaks. LOS increases to 5 hexes,
+exclusive.
+
+641. Cutting corners costs! Make an
+immediate Accident Check.
+
+642. [s9] If either GE 72 or GE 73 or both is
+still active at the end of Condition 1 or they
+were removed from the map, reactivate them
+crouching in the first hex not occupied by an
+active American chosen from the following
+hexes: Y-16, R-19, O-19. If in Condition 3,
+these Germans reactivate in Special Reaction
+M. Commence Rounds.
+
+643. [s6] Activate GE 68 in R-19 facing
+R-18. Commence Rounds. Due to the noise of
+the approaching panzer, all unaware
+Americans within 6 hexes (inclusive) of R-19
+make a PC Check (+2) for Awareness.
+
+644, « If soldier is moving, see 293.
+© If vehicle is moving, enter S-18.
+
+645. © If soldier is moving, see 168.
+© If vehicle is moving, enter Y-14.
+
+646. ¢ If soldier is moving, no Event.
+If vehicle is moving, see 609.
+
+647. 1. If s8 has not occurred, see 608. If s4
+has not occurred, see 483.
+
+2. If both s4 and s8 have occurred, place
+Event marker. No Event.
+
+648. [s2] Activate GE 48 standing in I-8, GE
+49 standing in J-1, and GE 50 crouching in
+D-2. Commence Rounds. US advantage.
+
+649. [s2] Activate GE 48 standing in I-1, GE
+49 standing in H-7, and GE 50 crouching in
+D-2. Commence Rounds. German advantage.
+
+650. GE 26 re-enters the map standing in this
+hex. All Americans in the hex conduct a PC
+Check (+2):
+
+© Success (any): US advantage and Americans
+who passed the Check are automatically
+ware.
+
+© Failure (all): German advantage and
+Americans who failed the Check are
+automatically unaware.
+
+651. [s6] Activate GE 47 in S-10. Commence
+Rounds. US advantage.
+
+652. [4] You have surprised a German MG
+team. Activate GE 19 and GE 20 crouching in
+0-14. Commence Rounds. US advantage.
+653. [4] Machinegun nest! Activate GE 19
+and GE 20 crouching in O-14. Commence
+Rounds. German advantage.
+
+654. [84] You have surprised a German MG
+team. Activate GE 19 GE 20 crouching in
+P-15. Commence Rounds. US advantage.
+
+6565. [4] Machinegun nest! Activate GE 19
+and GE 20 crouching in P-15. Commence
+Rounds. German advantage.
+
+656. [82] Activate GE 48 in F-14, GE 49 in
+J-17, and GE 50 in G-19. All activate
+crouching. Commence Rounds. Conduct PC
+Check:
+
+© Success: US advantage.
+
+© Failure: German advantage.
+
+657. [s2] Activate GE 48 in I-18, GE 49 in
+E-15, and GE 50 in E-19. All activate
+crouching. Commence Rounds. Conduct PC
+Check:
+
+© Success: US advantage.
+
+© Failure: German advantage.
+
+658. Minefield! Conduct minefield procedure.
+
+659. GE 29 re-enters the map standing in this
+hex. All Americans in the hex conduct PC
+Check (+2):
+
+© Success (any): US advantage and those who
+passed the Check are automatically aware.
+
+© Failure (all): German advantage and those
+who failed the Check are automatically
+unaware.
+
+670. Place Event marker.
+4. If on surface, conduct PC Check (—2):
+* Success: See 780.
+
+* Failure: Conduct Activation Check (—2).
+Success: See 341. Failure: No Event.
+
+2. If underwater, conduct Activation Check
+(-2):
+
+© Success: See 341.
+© Failure: No Event.
+
+671. Place Event marker.
+
+1. If on surface, conduct PC Check (—1):
+* Success: See 780.
+
+° Failure: Conduct Activation Check (—1).
+Success: See 341. Failure: No Event.
+
+2. If underwater, conduct Activation Check
+(-1)):
+
+* Success: See 341.
+
+* Failure: No Event.
+
+672. 1. If an active American diver is within
+2 hexes, swim toward nearest American diver.
+2. If an active American diver is at a range of
+3 hexes and a grenade is available, surface if
+necessary and throw grenade at diver closest
+to F-2.
+
+3. Conduct best fire with pistol at nearest
+active American, using jam number 25 for not
+first removing waterproofing. Surface before
+firing if necessary.
+
+4, Swim toward F-2.
+
+5. Do nothing.
+673. 1. If on surface, conduct PC Check
+(42):
+
+® Success: See 783.
+
+* Failure: Conduct Activation Check. Success:
+See 341. Failure:If s4 has not occurred, see
+541; if s4 has occurred, no Event.
+
+2. If underwater, conduct PC Check (+1):
+Success: See 783.
+
+© Failure: Conduct Activation Check (~1).
+Success: See 341. Failure: If s4 has occurred,
+no Event; if s4 has not occurred, see 541.
+
+674. A guard boat is considered a small
+vehicle in the open for fire combat purposes.
+Guard boat cannot be entered by Americans
+for any purpose. A guard boat has 2 speeds:
+slow (1 hex per Turn, for 1 Crew Point); and
+fast (2 hexes per Turn, for 2 Crew Points). If
+a guard boat is fired on, roll 1 die:
+
+© On an odd result, the crew is hit. If the
+result is other than panic, reduce the crew by
+1. If the firing weapon is a submachinegun,
+keep rolling. If the firing weapon is a
+bazooka, the rest of the crew rolls on the
+Grenade Inside row, with any result other
+than panic reducing the crew by 1 (see
+Bazooka rules in Ambush!). If the crew is
+reduced to zero, remove the guard boat from
+the map; it is considered eliminated for
+victory purposes.
+
+* On an even result, the boat is hit. If
+penetration is L, the boat can move only
+slowly. If penetration is M or H, the boat is
+eliminated and removed from the map.
+Grenades can be thrown into a guard boat.
+There is a —3 modifier applied if the grenade
+is thrown from outside the boat’s hex. If the
+initial roll causes the grenade to miss, and the
+scatter roll causes the grenade to hit, roll 1
+die: On an odd result, the grenade lands in
+the boat; on an even result, the grenade lands
+in the water in the boat’s hex. If a grenade
+lands in the guard boat, the guard boat is
+destroyed and all crew members are killed;
+remove the guard boat from the map. It costs
+1 Crew Point to fire bolt rifle and 1 Crew
+Point to throw grenade. Guard boat counter
+has 674 marked on it to remind you of this
+Paragraph.
+

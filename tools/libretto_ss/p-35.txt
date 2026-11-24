@@ -1,0 +1,262 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 35
+
+7-9: 856
+
+785. © If there is an active German barge in
+J-7 with no active German on board, remove
+Special Reaction A, stand, and enter J-8.
+
+© If there is an active German barge in I-7
+with no active German on board, remove
+Special Reaction A, stand, and enter I-8.
+
+© Otherwise, using the current German Action
+Number, refer to the indicated paragraph:
+
+786. © If there is an active German barge in
+D-7 with no active German on board, remove
+Special Reaction A, stand, and enter D-8.
+
+© If there is an active German barge in C-6
+with no active German on board, remove
+Special Reaction A, stand, and enter B-8.
+
+© Otherwise, using the current German Action
+Number, refer to the indicated paragraph:
+0-1: 856
+
+2: 840
+
+3-6: 810
+
+7-9: 802
+
+787. [s9] Commander decides to drop off all
+4 divers and have them enter the cove via
+hexes E-2, F-2, and G-2, while the men in the
+2 canoes continue north to cut off any
+possible reinforcements and to attack the
+village from the rear. Men in the canoes
+cannot land south of the N column (inclusive),
+but can move freely after they land. Divers
+must stay in all-water hexes unless otherwise
+directed by a paragraph. While in Operations,
+divers and canoes can move together, but
+divers are no longer considered to be hanging
+‘onto the sides of the canoes. When in Rounds,
+each man must move independently. Divers
+can now be either on the surface or
+underwater (use the appropriate side of the
+surface-underwater marker to record their
+status).
+
+788. Enter N-2, spending 1 MP, if necessary,
+to exit the truck standing.
+
+789. Go to Condition 2, Remove Special
+Reaction A for all Germans to whom it
+currently applies. The Mission ends when (1)
+all Americans have exited the map through
+A-1 and there are still active Germans on the
+map, or (2) when all Americans occupy all-
+water hexes in the 1 or 2 row south of the G
+column (inclusive) and there are no active
+Germans on the map. There is no VP loss for
+incapacitated squad members in 2, and VP
+loss can be avoided in 1 by exiting
+incapacitated men. American divers can now
+enter any hex, including land hexes. It costs 2
+MP to enter any land hex from an all-water
+hex, except if crossing an embankment
+hexside, which takes 1 Action. There is a free
+stance change when the land hex is entered. If
+there is a vacant space in a canoe, a diver can
+climb into a canoe in the same hex by
+spending 1 Action. An incapacitated man can
+be exited by using the 2 Port Boxes in a
+canoe. In such a case, no other equipment can
+be carried in the canoe’s Port Boxes. Once the
+incapacitated man has been put into the canoe,
+there is no further need to check if movement
+causes him to become KIA. You need 20 VP
+to win.
+
+790. [s6] Activate GE 47 in S-10. Commence
+Rounds. German advantage. See 791 for
+details about mortar.
+
+791. Place mortar counter marked 791 (to
+remind you of this paragraph) with round
+prepared side up in activation hex. Mortar
+counter has two sides marked round prepared
+and round unprepared to help you keep track
+of its status. When the mortar is fired, flip the
+counter to its round unprepared side; when a
+crew member prepares a round, flip the
+mortar counter to its round prepared side.
+Place 3 mortar team members crouching in
+the activation hex.
+
+Firing Mortar. The mortar has a minimum
+range of 7 hexes. It can be fired at hexes no
+closer than 7 hexes (exclusive) from its
+location. The mortar fire can scatter to within
+minimum range during hit resolution. Mortar
+can be fired and round prepared in the same
+Turn, but each can occur only once per Turn.
+The firing soldier's WS does not apply when
+firing the mortar. US soldiers cannot use
+German mortar for any purpose. When a
+mortar team member is directed to fire the
+mortar, first check for dud using dud number
+of 05. If the round is not a dud, conduct the
+first of the following that applies:
+
+1. If the mortar strike marker is not on the
+map and there is a vehicle visible to the
+German firing the mortar at 7 hexes or more
+in range, fire mortar at the hex with vehicle
+closest to S-10. Place mortar strike marker in
+the target hex. Roll on Mortar Strike Diagram
+A to determine the hex actually hit (move the
+mortar strike marker to the hex hit if not the
+target hex). Assess damage as in the Damage
+section.
+
+2. If the mortar strike marker is not on the
+map and there is at least one active American
+visible to the German firing the mortar, place
+the mortar strike marker in the hex with the
+most Americans in it (if all visible hexes with
+Americans in them have the same number of
+Americans, place the mortar strike marker in
+the hex closest to S-10 not within the 7-hex
+minimum range). Roll on Mortar Strike
+Diagram A to determine the hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section.
+
+3. If mortar strike marker is not on the map
+and no vehicles or soldiers are visible to the
+firing German or any targets that are visible
+are within the 7-hex minimum range, fire
+mortar at hex determined by rolling 1 die:
+
+9: R-16
+
+Place mortar strike marker in hex and roll on
+mortar strike Diagram A to determine hex
+actually hit (move mortar strike marker to hex
+hit if mot target hex). Assess damage as in the
+Damage section.
+
+4. If mortar strike marker is on the map and
+visible to the German firing the mortar:
+
+* If active vehicle is in same hex as mortar
+strike marker, German will fire at that hex
+again. Roll on Mortar Strike Diagram B to
+determine the hex actually hit (move the
+mortar strike marker to hex hit if not target
+hex). Assess damage as in Damage section.
+
+© If active vehicle is not in same hex as
+mortar strike marker but within 2 hexes of it,
+move mortar strike marker to hex with vehicle
+closest to S-10. Roll on Mortar Strike
+Diagram B to determine hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section.
+
+* If active vehicle is not in same hex as
+mortar strike marker or within 2 hexes of it,
+fire at vehicle closest to S-10 not within 7-hex
+minimum range. Move mortar strike marker
+to target hex and roll on Mortar Strike
+Diagram A to determine hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section.
+
+5. If mortar strike marker is on map and
+visible to German firing the mortar:
+
+* If active American is in the same hex as the
+mortar strike marker, fire at that hex again.
+Roll on Mortar Strike Diagram B to determine
+hex actually hit (move mortar strike marker to
+hex hit if not target hex). Assess damage as in
+the Damage section.
+
+If active American is not in same hex as
+mortar strike marker but within 2 hexes of it,
+fire at hex with most Americans in it (closest
+to S-10 if all possible target hexes have same
+number of Americans), Move mortar strike
+marker to target hex and roll on Mortar Strike
+Diagram B to determine hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section.
+
+* If visible active American is not in same
+hex as mortar strike marker nor within 2
+hexes of it, fire mortar at hex closest to S-10
+containing visible Americans and not within
+7-hex minimum range. Place mortar strike
+marker in target hex and roll on Mortar Strike
+Diagram A to determine hex actually hit
+(move mortar strike marker to hex hit if not
+target hex). Assess damage as in Damage
+section,
+
+6. If mortar strike marker is on the map but is
+not visible to the firing German, proceed as if
+it were not on the map.
+
+Damage. If the mortar strikes lands off the
+map, no effect. If the mortar strike lands in a
+hex with an active target, damage is assessed
+as follows. Each soldier occupying a clear,
+road, or cover hex rolls on the Grenade Inside
+row. If mortar strike hits a building hex, roll
+on the Grenade Outside row; if the initial
+result is kill, one wall hexside (chosen at
+random, place destroyed wall hexside marker)
+is destroyed and all soldiers in the hex take
+damage on the Semi-Automatic Rifle row; if
+the initial result is other than kill, there is no
+damage to the building, but all soldiers in the
+hex lose 1 Turn (if any remain). If the mortar
+strike hits a hex with a vehicle, roll on the
+Grenade Outside row. If the initial result is
+incapacitated or kill, vehicle is disabled and
+vehicle occupants roll on Carbine row; if
+initial result is other than incapacitated or kill,
+there is no damage to the vehicle, but all
+occupants take damage on the Pistol row due
+to flying shrapnel. Remember that soldiers in
+a hex with a vehicle but not in the vehicle are
+considered to be in cover. If any other type of
+hex is hit by the mortar strike, each soldier in
+the hex takes damage on the Grenade Outside
+row.
+
+792. {s2] © If the current German Action
+Number is odd, activate GE 48 in F-14, GE
+49 in J-17, and GE 50 in G-19. Alll are
+crouching. Commence Rounds.
+
+© If the current German Action Number is
+even, activate GE 48 in I-18, GE 49 in E-15,
+and GE 50 in E-19. All are crouching.
+Commence Rounds.
+
+793. [s1] Activate GE 16 and GE 17 in L-3,
+crouching. Commence Rounds. US advantage.
+
+All aware Americans who do not panic
+receive 2 Turns this Round. The American
+

@@ -1,0 +1,299 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 13
+
+or under the bridge with explosives. Put
+Special Reaction E into effect. After the
+explosives are set and Special Reaction E is
+removed, put Special Reaction H back into
+effect.
+
+3. If neither of the above apply and the half
+track is still active, return to half track and
+enter driver's seat if empty or assistant
+driver's seat. Remove Special Reaction H and
+put Special Reaction T into effect.
+
+4. If neither 1 nor 2 apply and half track is
+knocked out, remove Special Reaction H and
+follow normal condition paragraphs.
+
+154. © If there are no explosives set under
+bridge or no active Germans with explosives
+on or under bridge, enter K-14.
+
+© Otherwise, driver moves vehicle to L-14;
+assistant driver sees 217; passengers with
+explosives see 224; passengers without
+explosives see 223; other man in hex but not
+in vehicle see 834 and enter L-14 if directed
+to move. If directed to fire, target priority is
+man under bridge (if visible), man on bridge,
+vehicle, easiest target.
+
+155. © If vehicle is moving and has active
+passenger(s) with explosives:
+
+1. If any active passenger with explosives has
+a Turn remaining in this Round, drop off
+highest numbered passenger with remaining
+Turn, Passenger dropped off spends 1 Action
+(move his AR marker down 1 Turn on the
+Action Round Track) and is placed crouching
+in the hex on top of the bridge. Remove
+Special Reaction T from the passenger
+dropped off. After 1 passenger is dropped off,
+enter K-14 if this hex is entered from I-15, or
+enter I-15 if this hex is entered from K-14.
+
+2. If there is no active passenger with a
+remaining Turn, driver stops half track and
+conducts 1 snap fire at closest target.
+
+* If vehicle is moving and no active
+passengers have explosives, remove Special
+Reaction T from driver and put Special
+Reaction H into effect for driver.
+
+© If soldier with explosives is moving and
+there are no explosives set or active German
+with explosives on or under bridge in this
+hex, put Special Reaction E into effect for this
+soldier.
+
+© If soldier with explosives is moving and
+there are explosives set or an active German
+with explosives is on or under bridge in this
+hex, enter K-14 if this hex is entered from
+I-15, or enter I-15 if this hex is entered from
+K-14.
+
+© If soldier is moving and has no explosives:
+4. If there is an inactive German with
+explosives on the bridge, move to nearest
+inactive German with explosives and pick up
+the explosives.
+
+2. Follow normal condition Action paragraphs
+and movement references on Condition Card.
+
+156. © If vehicle is moving and has active
+passenger(s) with explosives:
+
+1. If any active passenger with explosives has
+a remaining Turn in this Round, drop off
+highest numbered passenger with Turns
+remaining. Passenger dropped off spends 1
+Action (move his AR marker down 1 Turn on
+the Action Round Track) and is placed
+crouching in the hex on top of the bridge.
+Remove Special Reaction T from the
+passenger dropped off. After 1 passenger is
+dropped off, enter L-13 if this hex is entered
+from J-14, or enter J-14 if this hex is entered
+from L-13.
+
+2. If there is no active passenger with
+explosives with a remaining Turn, driver stops
+
+half track and conducts 1 snap fire at closest
+target.
+
+© If vehicle is moving and no there are no
+active passengers with explosives, remove
+Special Reaction T from driver and put
+Special Reaction H into effect for driver.
+
+If soldier with explosives is moving and
+there are no explosives set or active German
+with explosives is on or under bridge in this
+hex, put Special Reaction E into effect for this
+soldier.
+
+© If soldier with explosives is moving and
+there are explosives set or an active German
+with explosives is on or under bridge in this
+hex, enter L-13 if this hex is entered from
+J-14, or enter J-14 if this hex is entered from
+L-13.
+
+* If soldier is moving and has no explosives:
+1. If there is an inactive German with
+explosives on bridge, move to nearest inactive
+German with explosives and pick up the
+explosives.
+
+2. Follow normal condition Action
+
+paragraphs and movement references on
+Condition Card.
+
+157. © If active passenger in back, driver
+conducts 802.
+
+* If no active passenger in back, driver
+conducts 223.
+
+If active passengers have explosives, see
+224.
+
+* If active passengers have no explosives, see
+223
+
+© If man in hex with explosives, but not in
+vehicle, see 224.
+
+© If man in hex without explosives, but not in
+vehicle, see 223.
+
+158. 1. If active German with explosives is
+within 2 hexes, give Turn to one farthest
+away who is eligible to receive Turn.
+
+2. If active German without explosives is
+within 2 hexes, give Turn to one farthest
+away who is eligible to receive Turn.
+
+3. Give Turn to driver if he is eligible.
+
+4. See 824.
+
+159. © If vehicle is moving, enter W-8.
+
+© If soldier is moving, this German exits
+tunnel. Remove inverted prone marker and
+enter W-10.
+
+160. [5] There is a row of barbed wire in
+hexes R-12, S-12, T-11, U-12. Place barbed
+wire markers in those hexes. See 731 for
+details about barbed wire. If s8 has not
+occurred, roll one die: On a result of 0-6, see
+276; on a result of 7-9, see 271.
+
+161. [s5] There is a row of barbed wire in
+hexes U-16, V-15, W-15, W-14, W-13. Place
+barbed wire markers in those hexes. See 731
+for details about barbed wire. If s8 has not
+occurred, roll one die: On a result of 0-6, see
+167; on a result of 7-9, see 272.
+
+162. [s5] There is a row of barbed wire in
+hexes N-14, N-13, 0-13, P-13. Place barbed
+wire markers in those hexes. See 731 for
+details about barbed wire. If s8 has not
+occurred, roll one die: On a result of 0-6, see
+169; on a result of 7-9, see 270.
+
+163. Conduct PC Check:
+© Success: See 167.
+© Failure: See 272.
+
+164. Soldier notices tank tracks in hexes R-16
+and S-16 leading away from the buildings. Or
+are the tracks leading to the buildings? Ignore
+further references to 164, 166, or 293 (note
+this on your Squad Record Sheet).
+
+165. [s5] There is a row of barbed wire in
+hexes N-15, 0-16, P-16, Q-17. Place barbed
+
+wire markers in those hexes. See 731 for
+details about barbed wire. If s8 has not
+occurred, roll one die: On a result of 0-6, see
+626; on a result of 7-9, see 273.
+
+166. Conduct PC Check (+1):
+* Success: See 164.
+« Failure: No Event.
+
+167. [s8] Activate GE 59 and GE 66
+crouching in a fortified building hex in V-13.
+Place fortified building counter in V-13 with
+door facing V-14. See 517 for details on
+fortified buildings. Commence Rounds. All
+aware Americans who do not panic receive 2
+Turns this Round. If s5 has not occurred, see
+161. Go to Condition 3.
+
+168. 1. If s7 has not occurred, conduct
+Activation Check:
+
+* Success: See 384.
+
+« Failure: See 386.
+
+2. If s5 has not occurred, see 161.
+
+3. If s5 and s7 have both occurred, place
+Event marker. No Event.
+
+169. [s8] Activate GE 59 and GE 66
+crouching in a fortified building in O-14.
+Place fortified building counter in O-14 with
+door facing hexside P-13/P-14. See 517 for
+details on fortified building. Commence
+Rounds. US advantage. All aware Americans
+who do not panic receive 2 Turns this Round.
+If s5 has not occurred, see 162, Go to
+Condition 3.
+
+170. Conduct PC Check:
+* Success: See 178.
+* Failure: No Event.
+
+171. © If on road, see 173.
+* If on second level, see 638.
+
+172. 1. If s4 has not occurred, see 396.
+
+2. If there is any active American east of the
+K column (exclusive), see 176.
+
+3. If s5 and s6 have both occurred, see 637.
+4. If there is at least one unattended mule,
+see 529.
+
+5. If in Operations, no Event.
+
+6. Roll one die and refer to the indicated
+paragraph:
+
+0: 212
+
+1: 222
+
+2-3: 400
+
+6-7: 117
+8-9: 500
+
+173. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 392.
+
+* Failure: Conduct PC Check. Success: See
+393. Failure: No Event.
+
+174. The tunnel has been destroyed by the
+Germans. Tunnel entrances in hexsides
+W-6/W-7 and W-9/W-10 are blocked by
+rubble. The only route is overland. If in
+Condition 2, put Special Reaction M into
+effect for GE 72 through GE 77. For
+Germans in Special Reaction M, priority is
+mule (when mule is closest and easiest target)
+and then soldier at same distance. Make note
+of this on your Squad Record Sheet.
+
+175. The front lines have expanded faster than
+HQ realized. When all active squad members
+and mules have exited the north edge between
+Y-10 and Y-14 (inclusive), see 631. Make
+note of this on your Squad Record Sheet.
+
+Lose 5 VP for any active mule left on the
+map when all of your squad has exited. Once
+a man has exited the map, he cannot return.
+VP loss for an incapacitated man can be
+avoided by moving him into any non-open hex
+

@@ -1,0 +1,282 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 17
+
+2. If grenade is available and an active
+American vehicle is in an adjacent hex,
+crouch and throw grenade at vehicle nearest
+west edge of map. Fall prone if free stance
+change is available.
+
+3. If no grenade is available, crouch and
+conduct best fire at closest (not in same hex)
+target (vehicle first, then soldier). Fall prone
+if free stance change is available.
+
+4. If no target is in sight and no active
+American is within 3 hexes, put Special
+Reaction M into effect for this soldier.
+
+5. Crouch.
+
+242. Boobytrap! Conduct Boobytrap
+Procedure.
+
+243. © If on second floor of T-12, descend to
+first floor of T-12.
+
+© If on first floor of T-12 and an American is
+in sight, enter S-13.
+
+© Otherwise, enter T-13.
+
+244. « If an active American is within 3
+hexes, enter J-15.
+© Otherwise, enter J-14.
+
+245. There is an entrance to a road tunnel
+through the mountains in this hex. The tunnel
+extends from W-7 to W-9. Pay normal road
+movement costs when moving in the tunnel.
+Place an inverted prone marker on the man or
+vehicles moving in the tunnel. For LOS
+purposes, consider tunnel entrance hexsides
+W-6/W-7 and W-9/W-10 to be doors. Due to
+darkness in the tunnel, a soldier in W-6 or
+W-10 can see only one hex into the tunnel.
+There is no restriction looking out of the
+tunnel from W-7 or W-9. If a vehicle is
+moving fast in the tunnel and has to make an
+Accident Check as a result, or has to make an
+Accident Check as a result of combat, see
+465. Make note of these paragraphs on your
+Squad Record Sheet. Conduct normal
+paragraph checks when moving in the tunnel.
+Paragraphs preceded by a T (for example, T
+358) are for movement in the tunnel.
+Paragraphs without the T are for movement
+‘on top of the tunnel.
+
+246. © If an American is in sight, enter N-15.
+© Otherwise, enter M-15.
+
+247. © If an American is in sight, enter P-13.
+* Otherwise, enter P-14.
+
+248. [s4] Machinegun nest! Activate Germans
+19 and 20, crouching. Roll 1 die: On an odd
+result, activate in P-15; on an even result,
+activate in O-14, Commence Rounds.
+
+249. [s3] Activate German 18 in U-13,
+second story, standing. Commence Rounds.
+German advantage. The floor of the second
+story is considered a wooden wall for combat
+purposes. If the floor is hit by bazooka fire
+from below, all soldiers in the hex below roll
+for damage as if behind a wall hit by bazooka
+fire (roll on the Semi-Automatic Rifle row, as
+indicated in the Ambush! rules).
+
+250. Until otherwise directed, this German
+vehicle will ignore those parts of its Action
+paragraphs directing it to move. When
+instructed to fire its cannon, the target priority
+will be as follows:
+
+1. Active US vehicle.
+
+2. Active US anti-tank gun.
+
+3. Active US soldier in building, if visible.
+4. If none of the 3 preceding targets is
+available, German vehicle will fire its cannon
+at the nearest building, using a +4 modifier
+for fire at a wall. Place a destroyed wall
+hexside marker when the first wall hexside is
+destroyed. When the second wall hexside is
+
+destroyed, remove the destroyed wall hexside
+marker and replace it with a rubble marker, as
+in the Ambush! rules. Lose 1 VP for each
+building hex so destroyed. For this Mission
+only, 2 hits on a building hex will destroy that
+building hex, even if the German vehicle can
+see only one hexside. If s7 has not occurred,
+see 473. Make note of this paragraph on your
+Squad Record Sheet. If Conditions change, the
+German vehicle must conduct Paragraph
+Checks for movement.
+
+251. © If German vehicle is moving, enter
+K-10.
+
+© If German soldier is moving and current
+German Action Number is odd, enter L-10.
+* If German soldier is moving and current
+German Action Number is even, enter J-10.
+
+252. © If German vehicle is moving, see 250.
+© If German soldier is moving, enter P-7.
+
+253. An ATG counter has two sides printed
+loaded and unloaded to help you keep track of
+its status. When an ATG is fired, turn the
+counter to its unloaded side; when a crew
+member spends an Action to load the ATG,
+flip the counter to its loaded side. An ATG
+cannot be loaded and fired in the same Turn;
+no soldiers other than the original crew can
+load or fire the ATG. Americans cannot use a
+German ATG for any purpose. This paragraph
+number appears on both sides of the ATG
+counter in case you want to refer back to this
+paragraph during play.
+
+Firing the ATG. The firing soldier's WS does
+apply. An ATG can fire only through its
+covered arc. If the crew is directed to fire the
+ATG and the only target is outside the
+covered arc, the crew will spend 2 Actions (1
+Action per crew member and both crew
+members must have Turns remaining in the
+Round to spend the Actions; if one crew
+member has 2 Turns and the other crew
+member has 1, move each of their IN markers
+down one Turn) to change the covered arc to
+that the new covered arc is centered on the
+target. If only one crew member is active, the
+covered arc cannot be changed. If any crew
+members have Turns remaining, the ATG can
+be fired in the same Turn that the covered arc
+is changed, using a —2 modifier for snap fire.
+It costs 1 Action to fire an ATG and 1 Action
+to load it. An ATG cannot fire and load, or
+load and fire, in the same Turn. It costs 1
+Action to load an ATG and 1 Action to fire
+it.
+
+Fire Combat versus ATG
+
+4. Explosive Weapon (tank main gun,
+bazooka, etc.). If an ATG is hit, roll for
+penetration on the row of the attacking
+weapon. If light penetration, each crew
+member takes damage on the Pistol row. If
+medium penetration, each crew member takes
+damage on the Semi-Automatic Rifle row. If
+heavy penetration, the ATG is destroyed and
+each crew member takes damage on the
+Medium Machinegun row.
+
+2. Non-Automatic Weapon. If fire is through
+covered arc and ATG is hit, roll for
+penetration and apply results as in 1, above. If
+fire is from outside covered arc, crew
+members are considered crouching in cover,
+unless terrain gives better protection. US fire
+at an ATG and crew from outside the covered
+are can be directed at the ATG (in an attempt
+to destroy it) or at the crew, at your choice.
+German fire will always be against the crew
+when fire originates outside the covered arc.
+3. Automatic Weapon. If aimed automatic fire
+is through the covered arc and there is
+penetration, roll for damage to the first crew
+
+member as in 1, above. Then roll for damage
+against the second crew member; if the result
+of the second damage roll is less than the
+result of the first damage roll, apply the
+indicated damage to the second crew member,
+Similarly for the third crew member (if thete
+is one). If aimed automatic weapon fire is
+targeted against an ATG from outside its
+covered arc, treat it as automatic weapon fire.
+against a multiple target hex (see Ambush!). If
+automatic fire is not aimed, treat it as in 2,
+above.
+
+4, Grenades and Satchel Charges. Crew
+members make Grenade Strike PC Checks as
+in the Ambush! rules. An initial damage roll
+‘on the Outside row of incapacitated or killed
+destroys the ATG.
+
+254. © If German vehicle is moving, enter
+0-7.
+
+© If German soldier is moving, enter O-8.
+255. ¢ If there is an active US soldier
+(excluding ATG crew) on the map and not in
+a boat, stay in P-1. Pull soldiers on board. If
+Crew Points remain after all adjacent soldiers
+are pulled on board (or if none are currently
+adjacent), conduct as many aimed fires with
+HMG as possible.
+
+© If all active US soldiers are on board, exit.
+
+256. © If there is an active US soldier or
+vehicle to the east of this hex, enter F-8
+* Otherwise, enter H-8.
+
+257. © If there is an active US boat in sight,
+do not move.
+© Otherwise, enter H-8.
+
+258. * If German vehicle is moving and there
+is an active US boat in sight, do not move.
+* Otherwise, enter K-9.
+
+259. © If soldier is moving, enter P-5S.
+* If vehicle is moving, enter N-4.
+
+260. [s3] Now that the bridge is destroyed,
+you must decide whether it is wiser to go
+after the Germans responsible or withdraw
+and report the destruction to headquarters as
+soon as possible. If you decide to go after the
+Germans, see 330. If you decide to withdraw,
+see 994,
+
+261. © If there are no explosives set in this
+hex:
+
+1. And this German is on bridge, climb under
+bridge (1 Action).
+
+2. And this German is under bridge, set
+explosives (1 Action) if an entire Action
+remains this Turn; otherwise, conduct best fire
+at closest target, if sufficient Movement Points
+remain.
+© If there are explosives set in this hex:
+
+1. And this German is under bridge and active
+target is in the same hex, assault to kill.
+
+2. And this German is under bridge and active
+target is visible under bridge but not in same
+hex, conduct best fire at closest target.
+
+3. And this German is under bridge with no
+active target under bridge visible, climb onto
+bridge (1 Action).
+
+4. And this German is on top of bridge,
+remove Special Reaction E (if in effect) from
+this German. Put Special Reaction H into
+effect if GE 40 or GE 41; otherwise, conduct
+normal Condition Action paragraphs.
+
+‘When explosives are set, see 202 for
+information about explosives.
+
+262. ° If there are no active Americans west
+of diagonal P-1 to Y-5 (exclusive), exit.
+
+© Otherwise, using current German Action
+Number, refer to the indicated paragraph:
+0-3: 869
+
+4-6: 824
+

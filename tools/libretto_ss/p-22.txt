@@ -1,0 +1,258 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 22
+
+(exclusive). If this causes there to be LOS
+between German Patrol marker MM and an
+active American, roll 1 die: On an odd result,
+see 620; on an even result, see 492. If
+German Patrol marker NN and an active
+American now have LOS to each other, roll 1
+die: On an odd result, see 492; on an even
+result, see 620.
+
+3. Roll 1 die and refer to the indicated
+paragraph:
+
+O-1: 212
+
+2-3: 993
+
+4: 370
+
+5-6: 400
+
+TAT
+
+8-9: 116
+
+388. [s8] Your squad members have made a
+terrible mistake. It was not a German patrol,
+but the survivor of an American patrol who
+was spotted. Activate US 06 crouching in the
+hex with the Patrol marker (the Patrol marker
+remains on the map). All Americans who
+failed the PC Check caused by 492 conduct
+one snap fire at US 06 (no cost). If US 06 is
+KIA by the snap fire(s), lose 4 VP (2 for
+KIA, 2 for mistake). If US 06 is incapacitated
+by these fires, normal VP loss is incurred. If
+US 06 survives the mistaken attacks, he is a
+member of your squad for the rest of the
+Mission. If US 06 survives the attacks,
+reconduct 492, but Activation Check is now
+=1.
+
+389, [s1] Place German Patrol marker MM in
+hex determined by rolling one die:
+
+If in Operations, stay in Operations. The
+Patrol marker and Americans will alternate
+moving. For each squad member who moves
+‘one hex, the Patrol marker will move one hex
+toward the nearest active American. If you
+decide not to move any of your squad
+members, the Patrol marker will continue to
+move one hex at a time toward the nearest
+active American. You can still move your
+squad members one at a time in alternation
+with the Patrol marker if you wish. Roll 1
+die: On an odd result, American moves first;
+on an even result, German moves first. If the
+Patrol marker moves into a hex where it can
+see an active American, see 620; if an
+American moves into a hex where he can see
+the Patrol marker, see 492. If in Rounds or
+Rounds commence due to the activation of
+another German, use the AR marker for IN of
+4 to keep track of Patrol marker MM’s place
+‘on the Action Round Track. Each time it gets
+a Turn, the Patrol marker will move 4 MPs
+toward the nearest active American (playing
+normal terrain costs); if more than one route
+is possible, choose one at random. If the
+Patrol marker moves into a hex where it can
+see an active American, see 620; if an
+American moves into a hex where he can see
+the Patrol marker, see 492. The German
+Patrol marker has a side with 389 printed on
+it to remind you of this paragraph. No combat
+of any type can be conducted against the
+German Patrol marker.
+
+390. [s1] Activate GE 74 and GE 75
+
+crouching in K-10. Commence Rounds.
+German advantage.
+
+391. [s1] Activate GE 74 and GE 75
+crouching in K-10. Commence Rounds. US
+advantage.
+
+392. [s1] Activate GE 74 and GE 75
+crouching in W-8. Commence Rounds.
+German advantage.
+
+393. [s1] Activate GE 74 and GE 75
+crouching in W-8. Commence Rounds. US
+advantage.
+
+394. [s1] Activate GE 74 and GE 75
+crouching in Q-9. Commence Rounds.
+German advantage.
+
+395. [s1] Activate GE 74 and GE 75
+crouching in Q-9. Commence Rounds. US
+advantage.
+
+396. [s4] Place patrol marker MM in hex
+determined by rolling one die:
+
+If in Operations, stay in Operations. The
+Patrol marker and Americans will alternate
+moving. For each squad member who moves
+one hex, the Patrol marker will move one hex
+toward the nearest active American. If you
+decide not to move any of your squad
+members, the Patrol marker will continue to
+move one hex at a time toward the nearest
+active American. You can still move your
+squad members one soldier at a time in
+alternation with the Patrol marker if you wish.
+Roll 1 die: On an odd result, American moves
+first; on an even result, German moves first.
+If the Patrol marker moves into a hex whefe it
+can see an active American, see 525; if an
+American moves into a hex where he can see
+the Patrol marker, see 741. If in Rounds or
+Rounds commence due to the activation of
+another German, use the AR marker for IN of
+4 to keep track of Patrol marker MM’s place
+on the Action Round Track. Each time it gets
+a Turn, the Patrol marker will move 4 MPs
+toward the nearest active American (paying
+normal terrain costs); if more than one route
+is possible, choose one at random. If the
+Patrol marker moves into a hex where it can
+‘see an active American, see 525; if an
+American moves into a hex where it can see
+the Patrol marker, see 741. If German Patrol
+marker MM activates in a hex with LOS to an
+active American, roll 1 die: On an odd result,
+see 525; on an even result, see 741. German
+Patrol marker has a side with 396 printed on
+it to remind you of this paragraph. No combat
+of any type can be conducted against the
+German Patrol marker.
+
+397. German exits. You lose 1 VP.
+
+398. [s1] Activate GE 74 and GE 75
+crouching in G-7. Commence Rounds.
+German advantage.
+
+399. [s1] Activate GE 74 and GE 75
+crouching in G-7. Commence Rounds. US
+advantage.
+
+400. One German weapon fired in the last
+Round runs out of ammo. If more than one
+German weapon was fired last Round, choose
+one at random. This can occur more than
+once per Mission.
+
+401. [s0] Activate GE 72 and GE 73
+crouching in V-7. Commence Rounds.
+
+German advantage.
+
+402. [sO] Activate GE 72 and GE 73
+crouching in V-7. Commence Rounds. US
+advantage.
+
+403. [sO] Activate GE 72 and GE 73
+crouching in R-8. Commence Rounds.
+German advantage. '
+
+404. [s0] Activate GE 72 and GE 73
+crouching in R-8. Commence Rounds. US
+advantage.
+
+405. [s0] Activate GE 72 and GE 73
+crouching in X-13. Commence Rounds.
+German advantage.
+
+406. [s0] Activate GE 72 and GE 73
+crouching in X-13. Commence Rounds. US
+advantage.
+
+407. Place Event marker. Conduct Activation
+Check:
+
+* Success: See 390.
+
+© Failure: Conduct PC Check. Success: See
+391, and all aware Americans who do not
+panic get 2 Turns this Round. Failure: No
+Event.
+
+408. [s0] Activate GE 72 and GE 73
+crouching in O-12 in Special Reaction A.
+Commence Rounds. US advantage.
+
+409. [s0] Activate GE 72 and GE 73
+crouching in O-12 in Special Reaction A.
+Commence Rounds. German advantage.
+
+410. [s4] Activate GE 67 in S-13 facing
+R-13. See 300 for details about panzer in
+buildings. Commence Rounds. German
+advantage.
+
+411. [s4] Activate GE 67 in S-13 facing
+R-13. See 300 for details about panzer in
+buildings. Commence Rounds. All aware
+Americans who do not panic receive 2 Turns
+this Round.
+
+412. Conduct PC Check:
+* Success: See 319,
+Failure: See 440.
+
+413. © If any commander is still active, see
+442.
+© Otherwise, see 329.
+
+414, [s2] Activate US 06 prone in this hex. If
+in Rounds, US 06 receives 2 Turns this
+
+Round and cannot panic except as the result of
+combat.
+
+415. German 67 has been quietly hiding in the
+building. On its first Turn, German 67 will
+use all available crew points to start the tank’s
+engine. All Americans within 3 hexes are
+automatically aware due to the roar of the
+engine firing up in such a confined space.
+
+416. [s1] Activate GE 27 crouching in Special
+Reaction P in hex P-12. Commence Rounds.
+German advantage.
+
+417. [s1] Activate GE 27 crouching in Special
+Reaction P in hex O-12. Commence Rounds.
+German advantage.
+
+418. [sO] There is a hidden German in this
+hex. Activate GE 26 crouching in Special
+Reaction B in the hex. Commence Rounds.
+All Americans in the hex conduct PC Check:
+© Success (any): US advantage and those who
+pass are automatically aware.
+
+© Failure (all): German advantage and those
+who fail are automatically unaware.
+
+419. [88] Activate GE 51 crouching in P-5, in
+Special Reaction A. Commence Rounds.
+German advantage.
+

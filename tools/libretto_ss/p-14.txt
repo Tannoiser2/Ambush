@@ -1,0 +1,267 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 14
+
+not in sight of any active German. If GE 72
+or GE 73 is active when all Americans have
+exited the map, gain 1 VP for each German
+still active and remove the Germans from
+the map.
+
+176. [s5 and s6] Activate GE 77 in hex
+determined by rolling one die: On an odd
+result, activate in Y-1; on an even result,
+activate in R-19. Activate GE 76 in Y-8. All
+Germans activate crouching, and GE 76
+activates in Special Reaction B. Commence
+Rounds. Each mortar team member and GE
+76 receive 2 Turns this Round. See 524 for
+details about mortar.
+
+177. © If on first floor and s3 has occurred,
+no Event.
+
+© If on first floor and s3 has not occurred, see
+170.
+
+© If on second floor, roll one die: On an odd
+result, no Event; on an even result, see 242.
+
+478. [s3] Your soldier discovers a case of
+wine and stops to refresh himself. All men in
+the hex and any who enter this Round lose the
+rest of their Turns. Man with highest PC
+currently in hex conducts PC Check:
+
+® Success: All men in hex go prone.
+
+© Failure: All men in hex must remain in
+current stance.
+
+If in Operations, no effect on squad members.
+
+179. [s8] The barge contains many mules.
+There is a crew (not represented in any way)
+which will help unload the mules from the
+barge into K-8; once the mules are unloaded,
+the crew will attend to its other duties, and
+neither the crew nor the barge will have any
+further part in the Mission. No squad
+members can board the barge. At least one
+active squad member must be present in K-8
+during each attempt to unload a mule. To
+unload a mule from the barge into K-8, roll 1
+die: On a result of 0-8, the mule is
+successfully unloaded (place Mule counter,
+Controlled side up, in K-8); on a result of 9,
+the mule slips off the gangplank and damage
+is determined by rolling 1 die: On a result of
+0-2, the mule falls into the bay and drowns,
+taking the supplies it carried to the bottom; on
+a result of 3-5, the mule falls back into the
+barge and is incapacitated; on a result of 6-9,
+the mule falls into K-8 and is incapacitated
+and unable to carry supplies. If a mule falls
+into K-8, each active soldier in the hex
+conducts a PC Check. Those that pass jump
+clear and are unharmed; those that fail are
+struck by the falling mule and roll for damage
+on the Pistol row. You lose 1 VP for each
+mule that drowns or is incapacitated during
+unloading. Once you have successfully
+unloaded 6 mules (you cannot take more than
+6 with your squad), head for the front lines,
+which are reported to be in the vicinity of
+Y-10 through Y-14. See 527 for information
+about mules. Remember that no more than 4
+mules can occupy a hex at one time.
+
+480. [s9] Soldier notices bridge in O-4 has
+been weakened by age and neglect. It may not
+be safe for use.
+
+481. When the first bridge hex has explosives
+go off, flip the bridge marker in that hex to
+its destroyed side (marked with 181 to remind
+you of this paragraph). The hex is then
+impassable for vehicles and costs 2 MP and a
+Footing Check for a soldier to enter. To
+conduct a Footing Check, roll 1 die: On a
+result of 0-7, there is no effect; on a result of
+8-9, the soldier slips and falls off the bridge
+to the ground beneath, suffering damage on
+the Medium Machinegun row.
+
+4. When the first explosives go off, soldiers
+and vehicles in that hex take damage as
+follows. Soldiers on top of the bridge roll on
+the Satchel Charge Outside row and make an
+immediate Footing Check; soldiers under the
+bridge in the supports roll on the Satchel
+Charge Inside row as if non-prone (because
+they must crouch under the bridge); soldiers
+beneath the bridge on the ground roll on the
+Grenade Outside row; vehicles on top of the
+bridge roll on the Satchel Charge Outside row
+(if the result is incapaciated or killed, the
+vehicle is disabled in that hex and all
+occupants roll on the Grenade Outside row as
+if prone; if the vehicle is not disabled, an
+American vehicle is placed in an adjacent hex
+of your choice, and a German vehicle is
+placed in an adjacent hex closest to a non-
+bridge hex — in either case, all vehicle
+occupants lose one Turn); vehicles under the
+bridge are undamaged, but all occupants roll
+ne Grenade Outside row as if non-prone.
+2. When the second explosive charge goes off
+in a bridge hex, the bridge collapses. Remove
+the 3 bridge markers and place rubble markers
+in the three hexes (I-15, J-14, K-14). All
+soldiers in the three hexes roll on the Medium
+Machinegun row; those that are not killed are
+placed on the rubble marker in the hex they
+were in, but they lose all their equipment
+from their Port Boxes; those that are killed
+‘are removed from the map, and all their
+equipment and ammo is lost (buried in the
+rubble). All vehicles in the three hexes are
+disabled and removed from the map (also
+considered buried in the rubble). All vehicle
+occupants take damage on the Medium
+Machinegun row and are treated as above. See
+260 immediately.
+
+482. 1. If there is a 1-side up explosives
+marker under a bridge with an active
+‘American under the bridge in the same hex,
+see 191.
+
+2. If there is a 2-side up explosives marker
+under the bridge with an active American
+under the bridge in the same hex, see 204.
+3. Otherwise, see 194.
+
+183. © If soldier is moving and current
+German Action Number is odd, enter S-14.
+© Otherwise, enter T-14.
+
+484, © If any American is north of the O
+column (inclusive) and east of the 10 row
+(inclusive), enter O-11.
+
+© Otherwise, enter P-11.
+
+185. © If vehicle is moving, enter M-14.
+© If soldier is moving, enter L-12.
+
+186. © If vehicle is moving, enter V-12.
+© If soldier is moving, enter W-13.
+
+187. © If vehicle is moving, enter W-10.
+© If soldier is moving, enter X-10.
+
+488. Vehicle enters tunnel. Place inverted
+prone marker on it and enter W-9.
+
+189. © If soldier is moving, enter X-6.
+© If vehicle is moving, enter W-S.
+
+490. © If vehicle is moving (alone or with
+soldiers) beneath the bridge, no Event.
+
+If soldier is moving under or beneath the
+bridge, no Event.
+
+If half track is moving (alone or with
+soldiers) on top of the bridge, roll 1 die: On
+an odd result, see 200; on an even result, no
+Event.
+
+© If jeep is moving (alone or with soldiers) on
+top of the bridge, roll 1 die: On a result of
+0-7, no Event; on a result of 8-9, see 200.
+
+© If one or more soldiers (but no vehicle) is
+
+moving on top of the bridge, roll 1 die and
+add 1 to the result for each soldier in the hex
+after the first soldier: On a result of 0-8, no
+Event; on a result of 9, see 200.
+
+491. The soldier with the highest PC currently
+under the bridge in a hex containing an
+explosives marker with the 1-side up conducts
+an immediate PC Check:
+
+* Success: See 210.
+
+© Failure: See 201.
+
+492. Vehicle will remain in this hex until
+otherwise directed. Driver and assistant will
+move to back and man LMG if there are no
+other active passengers (1 Action). When
+directed to drive fast, driver will conduct best
+fire at closest target. When directed to drive
+slow, driver will conduct best fire at easiest
+target. If there are any passengers in back,
+passenger with highest WS will conduct 815
+and passenger with lowest WS will assist.
+Other passenges will roll 1 die:
+
+Do nothing,
+
+493. © If current German Action Number is
+odd, enter U-8.
+© Otherwise, enter S-7.
+
+194. Roll one die and refer to indicated
+paragraph:
+O-1: 117
+
+195. © If soldier is moving, enter L-9.
+If vehicle is moving, enter M-10.
+
+196. © If soldier is moving, enter 0-8.
+© If vehicle is moving, enter O-7.
+
+197. © If soldier is moving, enter P-4.
+© If vehicle is moving, enter Q-5.
+
+198. © If soldier is moving, enter P-4.
+© If vehicle is moving, enter R-4.
+
+199. © If soldier is moving, enter T-6.
+© If vehicle is moving, enter U-6.
+
+200. Bridge collapses. Flip stone bridge
+marker to destroyed side. All vehicles are
+disabled in this hex. Vehicle occupants roll on
+Pistol row. Soldiers in hex but not in vehicle
+roll on Satchel Charge Outside row. Survivors
+are placed prone in adjacent hex of your
+choice and lose any remaining Turns this
+Round.
+
+201. The explosives in this hex go off. See
+181 for effects of the explosion.
+
+202. It takes 2 Actions (which may be shared)
+to defuse explosives which have been set.
+Soldier must first climb under the bridge into
+the supports (1 Action). When the first Action
+is spent, invert explosives marker to the l-side
+up. When the second Action is spent, remove
+the explosives counter from the map and gain
+1 bonus VP. If explosives under bridge V-14
+are defused, remove Special Reaction B from
+GE 26 (if active). Explosives cannot be used
+by Americans for any purpose. If all Germans
+are inactive and explosives remain planted
+under any bridge, stay in Rounds until all
+explosives that are set are defused or
+detonated. Make note of this paragraph on
+your Squad Record Sheet.
+
+203. © If soldier is moving, enter K-13.
+© If vehicle is moving, enter L-12.
+

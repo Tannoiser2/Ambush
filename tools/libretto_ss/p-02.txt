@@ -1,0 +1,152 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 2
+
+1. Introduction
+
+Silver Star is an even tougher test for your battle-weary campaign
+veterans than the original Ambush! and its later modules, Purple Heart
+and Move Out! Each Mission is specifically designed to attempt to
+eliminate a certain number of your squad members; in fact, you should
+be advised that it is possible to lose your entire squad in a matter
+of minutes should your playmanship falter, or should your nerve
+crack! Players are encouraged to brush up on a few of your favorite
+Missions from Ambush! or any of the modules before taking on the
+challenge of Silver Star.
+
+. The best advice we can give is to suggest that you read the Hints
+and Reminders section very carefully, as these clues represent the
+best we and our playtesters can offer you on how to get back home
+alive.
+
+In Silver Star, new rules, clever German tricks, and special effects
+have been buried in the paragraphs in an attempt to maximize sur-
+prise; in fact, players begin most Missions with no hint of purpose
+other than to enter the map — making uncertainty the rule of the game
+and key to the fun. Players are once again encouraged not to break
+the system by looking over the paragraphs and other supports for
+hints or clues as to what lies ahead. Remember that part of the fun
+is not knowing — until it is almost too late!
+
+Your squad is invited to campaign its way through Silver Star,
+and should anyone from the original squad survive, they will be
+assured of their well-deserved rewards as defenders of America,
+freedom, and democracy. We hope you enjoy Silver Star and that
+it provides the additional challenges your squad deserves.
+
+A WORD ON REPLAYABILITY
+
+The Missions in Silver Star are almost infinitely replayable. It is quite
+possible that your intrepid soldiers will not win a Mission the first
+time around, but don’t despair. Give it another shot, because the folks
+at home are counting on you. Even if you do win, each Mission con-
+tains many surprises, and it is unlikely that you will uncover them
+all the first time around. Also, in many cases, German movement
+and Activation is somewhat randomly controlled, so they will not
+do the same things every time you play. (This means that even if
+you remember where the Germans appeared last time, and set up
+an ambush for them, they can still surprise you. Beware!)
+
+It is suggested that you try something different each time you
+replay a Mission. You can radically alter the way a Mission goes
+simply by changing where you enter and move, or even by changing
+the way you outfit your squad.
+
+GAME QUESTIONS
+
+If you have any questions about the rules, feel free to write to us.
+Please do not call in your questions! When you write, to ensure a
+quick and precise answer, please word your questions so that we can
+respond with a one-word reply when possible, and include a self-
+addressed stamped envelope. Mail your questions to:
+
+Silver Star Questions
+
+Victory Games, Inc.
+
+43 West 33rd Street
+
+New York, NY 10001
+
+Also included in this box is a Feedback Card that you are encouraged
+to fill out and send in to us. Your comments and suggestions are
+greatly appreciated.
+
+2. US Vehicles
+
+2.1 Independent US Vehicles
+
+Many of the US vehicles you encounter in Silver Star are not under
+your command. Instead, they move and fight just as German vehicles
+do, following all movement and combat rules just as if they were
+German (with the exception that the US vehicles will not attack your
+
+squad). US Vehicle Cards contain Condition, Action Die Roll, and
+Paragraph references which direct the vehicles’ Actions. Movement
+is conducted from hex to hex, using the current Condition Card move-
+ment references, moving the vehicle to the hex indicated as if the
+vehicle were German. However, these vehicles do make Paragraph
+Checks, just as US soldiers. In all cases, the current German Action
+Number is used to determine the US vehicle Actions. ‘
+
+Remain in Rounds as long as active US vehicles not under your
+control are on the map, even if there are no active Germans on the
+map. New paragraphs have been included to assure that the US
+vehicles will not kill your squad members (but careless soldiers can
+be run over). Should you wish to use these vehicles for your own
+purposes, resist the temptation. Do not, for instance, put incapacitated
+soldiers in a US jeep that is not under your control. If your squad
+begins a Mission with control over a vehicle, you can use that vehicle
+as described in Section 17 of the Ambush! rules.
+
+2.2 New Tank Actions
+
+There are two new tank Actions (see 17.13 of the Ambush! rules)
+available to the tanks in Silver Star: pushing and crunching. These
+Actions are not specifically called for by paragraph. The tanks will
+automatically perform one or the other when circumstances dictate
+(just as a tank is not instructed by paragraph to try to run over a slow
+soldier in its path, but it does so if given the opportunity).
+
+Pushing Vehicles. If a US or German tank begins its Turn adjacent
+to a hex containing 2 immobile large vehicles and is instructed to
+enter their hex, it will attempt to push one out of its way. (If a tank
+encounters the two vehicles during movement, it will stop moving
+in an adjacent hex and, the next time it is instructed to move, it will
+push.) The pushing tank makes an Accident Check. If the tank fails
+the Check, its push attempt fails and the tank remains in the hex it
+attempted to push from; roll on the Accident Table and apply any
+results immediately. If the tank passes the Check, the vehicle being
+pushed is moved to the adjacent hex that would cost a tank the least
+Movement Points to enter (clear before cover; cover before rough;
+and so forth) and the pushing tank is moved into the hex vacated by
+the vehicle that is pushed aside. A vehicle cannot be pushed into a
+hex that a tank is prohibited from entering, nor can it be pushed into
+the hex from which the tank is pushing. A tank that is attempting
+to push a vehicle aside can perform no other Action in that Turn.
+
+Crunching Vehicles. A tank that is entering a hex that contains a
+small vehicle occupied by active enemy targets will attempt to run
+over the vehicle, making 2 Accident Checks: one just prior to the
+crunch, and the other immediately following. If the tank passes the
+first Check, the small vehicle is immediately disabled. Each passenger
+then conducts an immediate PC Check. A passenger who passes his
+PC Check is placed prone and unharmed in the same hex; a passenger
+who fails his PC Check rolls for damage on the Satchel Charge Out-
+side row. If the tank fails the first Check, it fails to crunch the vehicle
+and loses the rest of its Turn (although it does not suffer an accident).
+If the tank has successfully crunched a vehicle, then it makes a second
+Accident Check; if it fails this Check, it has an Accident.
+
+If a tank is instructed to enter a hex containing two vehicles,
+at least one of which is small and is not occupied by friendly active
+soldiers, the tank can enter that hex by crunching one vehicle.
+
+3. Game Parts
+
+Silver Star provides new counters, three new maps (one full-map and
+two half-maps), new Mission Cards, new German and US cards, and
+this Rules/Paragraph booklet. It is necessary to own the original
+Ambush! counters, view sleeve, and dice to play Silver Star. You
+will not need the original Ambush! Paragraph Booklet, German Cards,
+or Mission Cards, nor is it necessary to own a copy of any of the
+other modules (although, if you enjoy playing Ambush! we suggest
+that you run right out and buy Move Out! and Purple Heart).

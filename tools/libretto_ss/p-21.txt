@@ -1,0 +1,277 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 21
+
+359. [s3] Activate German 18 in U-13,
+second story, standing. Commence Rounds.
+‘American who passed his PC Check receives
+2 Turns this Round. German advantage. Floor
+of second story over roadway is considered
+wooden wall for combat purposes. If floor is
+hit by bazooka fire from below, all soldiers in
+the hex below roll for damage as if behind
+wall hit by bazooka fire (roll on the Semi-
+Automatic Rifle row as indicated in the
+Ambush! rules).
+
+360. [s0] Counterattack! Activate GE 21 in
+B-19. See 580 immediately. Commence
+Rounds. Due to the noise of the approaching
+jagdpanther, all unaware Americans within 6
+exes (exclusive) of the jagdpanther’s entry
+hex make a PC Check (+2) for Awareness.
+Roll on die: On an odd result, German
+advantage; on an even result, US advantage.
+
+361. [s3] Your squad did not search the
+buildings carefully enough before settling in.
+There was a German hidden in your midst and
+he now emerges from his hiding spot.
+
+Activate GE 33 standing in the first of the
+following hexes not occupied by an active
+American: T-15, Q-16, R-13, U-15, T-12. GE
+33 activates in Special Reaction H. Commence
+Rounds. All Americans who can see GE 33
+conduct PC Check. If any pass, US
+advantage, and those soldiers who pass the
+Check and do not panic get 2 Turns; if all
+fail, German advantage.
+
+362. [s5] Activate GE 35 and GE 36 in H-19,
+crouching. Commence Rounds.
+
+363. [4] Your squad members were not
+paying attention when they settled in. There is
+a German in your midst and he now emerges
+from his hiding spot. Activate GE 34 standing
+in the first hex on the following list not
+currently occupied by an active American:
+F-14, G-14, H-13, I-13, E-15, F-13. GE 34
+activates in Special Reaction H. Commence
+Rounds. All Americans who can see GE 34
+‘conduct PC Check. If any pass, US advantage
+and those soldiers who pass their Checks and
+do not panic get 2 Turns this Round; if all
+fail, German advantage and those Americans
+who failed their Checks are automatically
+unaware in the ensuing Round.
+
+364. [s5] Counterattack! Activate GE 35 and
+GE 36 in K-19, crouching. Commence
+Rounds.
+
+365. [s0] Counterattack! Activate GE 21 in
+P-19, See 580 immediately. Commence
+Rounds. Due to the noise of the approaching
+jagdpanther, all unaware Americans within 6
+hexes (exclusive) of the jagdpanther’s entry
+hex make a PC Check (+2) for Awareness.
+Roll one die: On an odd result, US advantage;
+on an even result, German advantage.
+
+366, Headquarters wants to know if you can
+hold out.
+
+© If you think you can, see 582.
+
+© If you think you cannot, see 587.
+
+367. © If German vehicle is moving, and an
+active US boat is in sight, do not move.
+* Otherwise, enter P-6,
+
+368. [s5] Counterattack! Activate GE 35 and
+GE 36 in S-19, crouching. Commence
+Rounds.
+
+369. [sO] Counterattack! Activate GE 21 in
+Y-16. See 580 immediately. Commence
+Rounds. Due to the noise of the approaching
+jagdpanther, all unaware Americans within 6
+hexes (exclusive) of the jagdpanther’s entry
+hex make a PC Check (+2) for Awareness.
+
+370. © If no soldier (US or German) is in a
+stream hex, no Event.
+
+© Otherwise, one soldier chosen at random
+from all soldiers currently in stream hexes
+slips on the rocks in the stream bed. The
+affected soldier conducts a PC Check.
+Success: He recovers from his slip with no
+loss. Failure: He loses 1 grenade (if he has
+any). Ignore further references to this
+paragraph after the first soldier slips (note this
+‘on your Squad Record Sheet).
+
+371. Conduct PC Check:
+© Success: See 485.
+© Failure: No Event.
+
+372. Conduct PC Check:
+
+* Success: See 611.
+
+© Failure: Conduct Activation Check. Success:
+See 610. Failure: No Event.
+
+373. Conduct PC Check:
+
+* Success: See 485.
+
+© Failure: If sO has occurred, no Event. If sO
+has not occurred, conduct Activation Check.
+Success: See 610. Failure: No Event.
+
+374. Conduct Activation Check (—1):
+
+© Success: See 613.
+
+© Failure: Conduct PC Check. Success: See
+612. Failure: No Event.
+
+T 375. Boobytrap! Conduct boobytrap
+procedure.
+
+376. Conduct PC Check (—1):
+
+* Success: See 612.
+
+* Eailure: Conduct Activation Check (—1).
+Sutcess: See 613. Failure: No Event.
+
+377. Conduct PC Check:
+
+© Success: See 612.
+
+Failure: Conduct Activation Check. Success:
+See 613. Failure: No Event.
+
+378. Conduct PC Check (~1):
+
+* Success: See 614.
+
+© Failure: Conduct Activation Check. Success:
+See 619. Failure: No Event.
+
+379. © If in Operations, all vehicle occupants
+conduct PC Check (driver is normal; others
+are —2). Success (any): See 485. Failure: If
+all fail and sO has not occurred, conduct
+Activation Check (+1). Success: 610. Failure:
+611.
+
+© If in Rounds, conduct PC Checks as above,
+but only aware men make PC Checks.
+
+380. Roll one die to determine Patrol
+Activation Diagram (1-4) used to position
+patrol members (remove Patrol marker when
+individual Germans are placed on the map):
+O-1: 1
+
+2-3: 2
+
+8-9: Roll again.
+
+If referring to this paragraph for Patrol
+marker MM, activate GE 62 through GE 65
+using diagram determined above. If referring
+to this paragraph for Patrol marker NN,
+activate GE 55 through 58 using diagram
+determined above. Once the patrol members
+are placed on the map (may activate in cliff
+hexes), see 499. Commence Rounds. German
+advantage. Combat of any type can be
+conducted against the individual patrol
+members once they have been placed on the
+map.
+
+381. 1. If sO has not occurred, see 385.
+
+2. If in Operations and sO has occurred, no
+Event.
+
+3. Roll 1 die and refer to the indicated
+
+paragraph:
+0-1: 212
+
+8:
+9: No Event.
+
+382. [s7] Activate GE 39 crouching in V-6
+and GE 69 crouching in V-9, Commence
+Rounds. .
+
+383, Roll one die to determine the Patrol
+Activation Diagram (1-4) used to position
+patrol members (remove Patrol marker when
+individual Germans are placed on the map):
+
+‘oll again.
+
+If this paragraph is referred to for Patrol
+marker MM, activate GE 62 through 65 using
+the diagram determined above. If this
+paragraph is referred to for Patrol marker
+NN, activate GE 55 through 58 using the
+diagram determined above. Once the patrol
+members are placed on the map (may activate
+in cliff hexes), see 499. Commence Rounds.
+US advantage. Combat of any type can be
+conducted against the individual patrol
+members once they have been placed on the
+map.
+
+384. [s7] Activate GE 39 crouching in X-9
+and GE 69 crouching in V-9. Commence
+Rounds. German advantage.
+
+385. [s0] Place German Patrol marker NN in
+hex determined by rolling one die:
+
+0: A-19
+
+12: S-10
+
+If in Operations, stay in Operations. The
+Patrol marker and American will alternate
+moving. For each squad member who moves
+one hex, the Patrol marker will move one hex
+toward the nearest active American. If you
+decide not to move any of your squad
+members, the Patrol marker will continue to
+move one hex at a time toward the nearest
+active American. You can still move your
+squad members one soldier at a time in
+alternation with the Patrol marker if you wish.
+Roll one die: On an odd result, the American
+moves first; on an even result, the German
+moves first. If the Patrol marker moves into a
+hex where it can see an active American, see
+620; if an American moves into a hex where
+he can see the Patrol marker, see 492. If in
+Rounds, or if Rounds commence due to the
+activation of another German, use the AR
+marker for IN of 5 to keep track of Patrol
+marker NN's place on the Action Round
+Track. Each time it gets a Turn, the Patrol
+marker will move 5 MPs toward the nearest
+active American (paying normal terrain costs);
+if more than one route is possible, choose one
+at random. If the Patrol marker moves into a
+hex where it can see an active American, see
+620; if an American moves into a hex where
+he can see the Patrol marker, see 492.
+German Patrol marker NN has 385 printed on
+it to remind you of this paragraph. No combat
+of any type can be conducted against the
+German Patrol marker.
+
+386. [s7] Activate GE 39 crouching in X-9
+and GE 69 crouching in V-9. Commence
+Rounds. US advantage.
+
+387. 1. If s1 has not occurred, see 389.
+2. Mist starts to burn off. LOS is now 5 hexes
+

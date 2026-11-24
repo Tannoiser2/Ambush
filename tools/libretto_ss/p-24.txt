@@ -1,0 +1,291 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 24
+
+Reaction B into effect for this German after
+he climbs onto the barge. If soldier is moving
+in Condition 1 with no active barge in L-7 or
+M-7, soldier enters M-9. Put Special Reaction
+A into effect for this German after he enters
+M9.
+
+3. If in Condition 2 and vehicle is moving,
+enter N-7 after dropping off 1 passenger,
+standing (chosen at random, or assistant
+driver, if passenger is not available) in M-8 if
+active barge is in M-7 or L-7 with no active
+German on board.
+
+4, If in Condition 2 and soldier is moving,
+and there is an active barge in L-7 or M-7,
+climb onto barge (2 MP) and put Special
+Reaction B into effect for this soldier.
+
+5. If in Condition 2 and soldier is moving,
+and there is no active barge in L-7 or M-7,
+enter N-7.
+
+455. 1. If in Condition 1 and vehicle is
+moving, enter I-8 after dropping off 1
+passenger, standing (chosen at random, or
+assistant driver, if no passenger is available)
+in J-8 if there is an active barge in J-7 with
+no active German on board. Remove Special
+Reaction T from German who is dropped off.
+2. If in Condition 1 and soldier is moving,
+and there is an active barge in J-7 with no
+active German on board, climb onto barge (2
+MP) and put Special Reaction B into effect for
+this soldier.
+
+3. If in Condition 1 and soldier is moving,
+and there is no active barge in J-7 or there is
+an active barge with an active German on
+board, enter I-9 and put Special Reaction A
+into effect for this soldier.
+
+4. If in Condition 2 and vehicle is moving,
+enter K-8.
+
+5. If in Condition 2 and soldier is moving,
+and there is an active barge in J-7 with no
+active German on board, climb onto barge (2
+MP) and put Special Reaction B into effect for
+this soldier.
+
+6. If in Condition 2 and soldier is moving,
+and there is no active barge in J-7 or there is
+an active barge with an active German on
+board, enter K-8.
+
+456. 1. If in Condition 1 and vehicle is
+moving, enter H-8 after dropping off 1
+passenger, standing (chosen at random, or
+assistant driver, if no passenger is available)
+in [-8 if there is an active barge in I-7 or J-7
+with no more than 1 active German on board.
+Remove Special Reaction T from German who
+is dropped off.
+
+2. If in Condition 1 and soldier is moving,
+and there is an active barge in I-7 or J-7 with
+no more than’ 1 active German on board,
+climb onto barge (2 MP) and put Special
+Reaction B into effect for this soldier.
+Otherwise, soldier enters I-9 and put Special
+Reaction A into effect for this soldier.
+
+3. If in Condition 2 and vehicle is moving,
+enter J-8, after dropping off 1 passenger,
+standing (chosen at random, or assistant
+driver, if no passenger is available) in 1-8 if
+there is an active barge in I-7 or J-7 with no
+active German on board.
+
+4. If in Condition 2 and soldier is moving,
+and there is an active barge in I-7 or J-7 with
+no active German on board, climb onto barge
+(2 MP) and put Special Reaction B into effect
+for this soldier.
+
+5. Otherwise, enter J-8.
+
+457. If s4 has not occurred, see 541
+immediately.
+
+4. If vehicle is moving, enter C-8 after
+dropping off 1 passenger, standing (chosen at
+random, or assistant driver, if no passenger is
+
+available) in D-8 if there is an active barge in
+D-7 with no active German on board.
+
+2. If soldier is moving and there is an active
+barge in D-7, climb onto barge (2 MP) and
+put Special Reaction B into effect for this
+soldier.
+
+3. Otherwise, soldier enters D-9 and put
+Special Reaction A into effect for this soldier.
+
+458. 1. If soldier is moving and in Condition
+1, enter C-9 and put Special Reaction A into
+effect for this soldier.
+
+2. Otherwise, enter B-7.
+
+459. © If there are more active Germans in
+H-3 than in H-2, enter H-2.
+* Otherwise, enter H-3.
+
+460. [s2] Activate German 50 crouching in
+D-2, German 48 standing in J-1, and German
+49 standing in I-8. Commence Rounds.
+German advantage.
+
+461. [s2] Activate German 48 standing in I-1,
+German 49 crouching in H-7, and German 50
+crouching in D-2. Commence Rounds. US
+advantage.
+
+462. 1. If no target is in sight and all
+Americans are east of the N column, remove
+this German from the map. Gain 1 VP.
+
+2. If no target is in sight, but there are
+Americans in the N column or west of it:
+
+* Crouch and throw grenade at nearest target
+within 3 hexes (paying —3 for not in sight).
+* Stand and throw grenade at nearest target
+within 4-6 hexes (paying —3 for not in sight).
+* Crouch.
+
+3. If a target is in sight, using current German
+Action Number, refer to the indicated
+
+Target priority is vehicle first, then soldier.
+
+463. © If neither GE 17 nor 16 is active in
+M-13, enter N-14.
+* Otherwise, enter O-16.
+
+464. Remove and gain 1 bonus VP for each
+of the following active Germans still on map:
+16, 17, 48, 49, 50.
+
+465. Due to the confined area of the tunnel,
+any accident that occurs in it will cause more
+damage than usual. Conduct Accident Check
+in normal manner. If an accident results,
+subtract 2 from the damage die roll. If 2
+vehicles crash or are disabled in the same hex
+in the tunnel, it takes 6 Actions in Rounds or
+2 Random Event Checks in Operations to
+clear a path. After 6 Actions are spent or 2
+Random Event Checks are made, move one of
+the crashed or disabled vehicles (your choice)
+one hex away from the end of the tunnel
+entered.
+
+466. 1. If in Q-9 and there is no American in
+sight, stand and enter R-8. Crouch and
+conduct best fire at easiest target.
+
+2. If no American in sight, and all active US
+vehicles have passed through W-6, remove
+this German.and gain 1 bonus VP.
+
+3. Using the current German Action Number,
+refer to the indicated paragraph:
+
+Target priority is vehicle first, then soldier.
+467. 1. If in Q-9, and there is no American in
+sight, stand and enter R-8. Crouch and
+conduct best fire at closest target.
+
+2. If no American in sight, and all active US
+vehicles have passed through W-6, remove
+this German and gain 1 bonus VP.
+
+3. Using the current German Action Number,
+refer to the indicated paragraph:
+0-3: 841
+
+4: 843
+
+5-8: 815
+
+9: 770
+
+Target priority is vehicle first, then soldier.
+468. Conduct Activation Check (+1):
+
+* Success: See 680.
+
+¢ Failure: See 681.
+
+469. Conduct Activation Check:
+* Success: See 680.
+Failure: No Event.
+
+470. 1. If sO has not occurred, see 360.
+
+2. If s4 has not occurred, see 363.
+
+3. If s5 has not occurred, see 362.
+
+4. If s3 has not occurred, see 361.
+
+5. If you have not yet read 701, so do now.
+6. If any German is south of the river and s8
+has not occurred, see 690.
+
+7. No Event.
+
+471, Headquarters says you can withdraw to
+the village around the bay in the southeast
+corner of the map. Do your best to repel the
+German counterattack on your own while HQ
+tries to get you some help.
+
+472. [s6] Activate GE 22 through GE 25 and
+GE 30 as follows:
+
+1. Activate GE 30 in hex determined by
+rolling one die. 0-2: B-19. 3-5: P-19. 6-8:
+Y-16. 9: Y-10.
+
+2. Activate GE 22 and GE 23 in hex with GE
+30 in Special Reaction T.
+
+3. Activate GE 24, standing, in one of the
+following three hexes, determined at random:
+H-19, Y-17, S-19.
+
+4. Activate GE 25, standing, in one of the
+following three hexes, determined at random:
+H-19, Y-17, S-19 (but not in a hex with GE
+24.
+
+5. Commence Rounds. Due to the noise of the
+approaching panzer, all unaware Americans
+within 6 hexes (exclusive) of the panzer’s
+entry hex make a PC Check (+2) for
+Awareness. If any pass or all Americans are
+already aware, US advantage; if all fail,
+German advantage.
+
+473. [s7] There is a naval gun team guarding
+the seaward approaches to the bay. Activate
+US 03 in D-2 with covered arc D-3, E-3, E-2.
+Commence Rounds. If activation caused by
+German movement, German advantage;
+otherwise, US advantage. See 253 for
+attributes of ATG. If s8 has not yet occurred,
+see 690 at the start of the next Round in place
+of the Random Event Check.
+
+474. 1. If active German is in same hex,
+assault to kill. Fall prone if free stance change
+is available.
+
+2. If active German is at less than 4 hex range
+and grenade is available, throw grenade at hex
+with most Germans in it. Fall prone if free
+stance change is available.
+
+3. If ATG is loaded and loading did not occur
+this Turn, and there is an active German
+vehicle in sight, crouch and fire ATG at
+nearest target.
+
+4. If ATG not loaded and was not fired this
+Turn, crouch and load ATG.
+
+5. Crouch and conduct best fire with carbine
+at easiest target within 6 hexes. Fall prone if
+free stance change is available.
+
+6. Crouch.
+
+475. 1. If s3 has not occurred, see 361.
+

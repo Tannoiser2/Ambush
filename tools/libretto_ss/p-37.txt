@@ -1,0 +1,300 @@
+—_——
+
+e
+
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 37
+
+835. « If there is an active German within 2
+hexes, give a Turn to the German with the
+fewest Turns. If 2 or more eligible Germans
+have the same number of Turns, give one to
+the soldier closer to an active US soldier (then
+to the one with the higher WS, if still tied). If
+all eligible Germans have 2 Turns, see 801.
+
+© If no other active Germans are within 2
+hexes, conduct 801.
+
+836. © If out of US sight, remove the German
+from the map.
+
+© If in US sight and in open terrain, move as
+quickly as possible. Fall prone after move if
+free stance change is available.
+
+¢ If in US sight and not in open terrain,
+crouch and conduct best fire. Fall prone after
+fire if free stance change is available.
+
+839. © If there is an active US soldier in the
+hex, assault to kill.
+
+° If there is no active target in the hex,
+crouch and conduct best fire at closest target.
+
+840. Do nothing.
+
+841. If there are three or more active targets
+visible, conduct 800. Otherwise, conduct 815.
+
+842. Crouch, then conduct snap fire with
+rifle. Fall prone after fire.
+
+843. If there is no active German in the same
+hex and there is more than one US soldier in
+sight, surrender. Otherwise, conduct 815.
+
+844. Crouch.
+
+846. « If there are at least 3 active targets in
+sight, fall prone.
+
+¢ If there are 2 active targets in sight, see
+815.
+
+© If there is 1 active target in sight, stand and
+conduct best fire with personal weapon at
+closest target. Fall prone, if free stance
+change is available.
+
+847. © If this German is within 8 hexes of
+another active German, conduct 869.
+© Otherwise, fall prone.
+
+848. 1. If a grenade is available and a target
+is within 3 hexes, crouch and toss grenade at
+closest target. Fall prone, if free stance
+change is available.
+
+2. If a grenade is available and a target is in
+the 4-6 hex range, stand and throw grenade at
+closest target. Fall prone, if free stance
+change is available.
+
+3. If no grenade is available, or no target is
+within range, roll one die and refer to the
+indicated paragraph:
+
+815
+
+40
+
+849. © If there is an active target in sight
+within 6 hexes, stand and throw grenade at
+nearest. Fall prone, if free stance change is
+available.
+
+© If there is no active target in sight, but there
+is an active target within 6 hexes, stand and
+throw grenade at nearest, paying —3 modifier
+for target not in sight. Fall prone, if free
+stance change is available.
+
+© If there is an active target in sight and no
+grenade is available, conduct 801.
+
+* Crouch.
+
+856. ° If inside building, stand and conduct
+best fire at easiest target. Fall prone after fire
+if free stance change is available.
+
+® If not inside building, crouch and conduct
+best fire at easiest target. Fall prone after fire
+if free stance change is available.
+
+857. © If inside building, stand and conduct
+best fire at closest target. Fall prone after fire
+
+if free stance change is available.
+If not inside building, crouch and conduct
+best fire at closest target. Fall prone after fire
+if free stance change is available.
+
+858. © If no target is in sight, crouch.
+
+© If inside a building and 1 or 2 targets are in
+sight or occupy adjacent hexes, stand and
+conduct best fire at easiest target. Fall prone
+if free stance change is available.
+
+* If not inside a building and 1 or 2 targets
+are in sight, crouch and conduct best fire at
+easiest target. Fall prone if free stance change
+is available.
+
+© If there are 3 or more active targets in
+sight, fall prone.
+
+859. « If there is an active US soldier in the
+hex, assault to kill.
+
+° If there is no active target in the hex and
+German occupies a building, stand and
+conduct best fire at closest target. Fall prone
+if free stance change is available.
+
+If there is no active target in the hex and
+German does not occupy a building, crouch
+and conduct best fire at closest target.
+
+860. © If German occupies a building, stand
+and conduct snap fire at as many targets as
+possible, beginning with the closest and then
+the easiest. Fall prone if free stance change is
+available.
+
+© If German does not occupy a building,
+crouch and conduct snap fire at as many
+targets as possible, beginning with the closest
+and then the easiest.
+
+861. © If there is an active German in the
+same or adjacent hex, crouch and give a Turn
+to the German with the fewest Turns. If there
+are 2 or more eligible Germans with the same
+number of Turns, give to the soldier with the
+higher WS. If all eligible Germans have 2
+Turns, see 856.
+
+* If there are no other active Germans in the
+same or adjacent hexes, see 856.
+
+862. « If there is no active target in sight,
+move as quickly as possible. Fall prone if an
+active target is in sight and free stance change
+is available.
+
+© If there is an active target in sight and
+soldier occupies an open hex, move as quickly
+as possible. Fall prone after movement
+(spending a Movement Point to do so, if
+necessary).
+
+© If there is an active target in sight and
+soldier occupies a non-open hex, crouch and
+conduct best fire at easiest target.
+
+863. « If there is no active target in sight,
+move as quickly as possible. Fall prone if
+there is an active target in sight and free
+stance change is available.
+
+© If there is an active target in sight and
+soldier occupies an open hex, move as quickly
+as possible. Fall prone in first non-open hex
+entered (spending a Movement Point to do so,
+if necessary). If no non-open hex is entered,
+fall prone in last hex entered (again, spending
+an MP, if necessary).
+
+© If there is an active target in sight and
+soldier occupies a non-open hex, conduct 869.
+
+864. © If there is no active target in sight,
+move as quickly as possible. Fall prone if
+there is an active target in sight and free
+stance change is available.
+
+© If there is an active target in sight, stand
+and conduct one snap fire. Then move as
+quickly as possible, spending up to half the
+soldier's MPA (rounded down). Fall prone if
+free stance change is available.
+
+865. « If there is no active target in sight,
+move as quickly as possible. Fall prone if
+there is an active target in sight and free
+stance change is available.
+
+© If there are 1 or 2 active targets in sight,
+crouch and conduct best fire at closest target.
+© If there are 3 or more active targets in
+sight, fall prone.
+
+866. © If there is no active target in sight,
+move as quickly as possible. Fall prone if an
+active target is in sight and free stance change
+is available.
+
+© If there are 1 or 2 active targets in sight,
+move as quickly as possible. Fall prone in the
+first non-open hex entered (spending a
+Movement Point to do so, if necessary). If no
+non-open hex is entered, fall prone in the last
+hex entered (again, spending an MP, if
+necessary).
+
+© If there are 3 or more active targets in
+sight, crouch and conduct snap fire at as many
+targets as possible, beginning with the closest
+and then the easiest.
+
+867. © If there is no active target in sight,
+move as quickly as possible. Fall prone if
+there is an active target in sight and free
+stance change is available.
+
+If there is an active target in sight, move as
+quickly as possible. Fall prone in the first
+non-open hex entered (spending a Movement
+Point to do so, if necessary). If no non-open
+hex is entered, fall prone in last hex entered
+(again, spending an MP, if necessary).
+
+868. Move as fast as possible. Fall prone at
+the end of the move if free stance change is
+available and active US soldier is in sight.
+
+869. © If an active US soldier is in the same
+hex, assault to kill.
+
+© If grenade is available and an active US
+soldier is within 3 hexes, stand and throw
+grenade at hex with most Americans in it, or
+nearest if all have same number of Americans.
+Fall prone if free stance change is available.
+
+© If grenade unavailable or target at greater
+than 4-hex range, conduct 801.
+
+© Fall prone.
+
+874. Surrender.
+
+883. ¢ If there is an active target in sight,
+stand and snap fire personal weapon at as
+many targets as possible, first the closest, then
+the second closest.
+
+* Otherwise, fall prone.
+
+884. Stand and conduct best fire with personal
+weapon at easiest target. Fall prone, if free
+stance change is available.
+
+900. © If there are 3 or more active targets in
+sight, or if this vehicle has been fired on,
+button up. If already buttoned up, see 901.
+
+© If there are 1 or 2 targets in sight, see 903.
+If there are no active targets in sight, open.
+If already opened, see 906.
+
+901. Conduct aimed fire with bow MG at
+closest target. Fire cannon at an active US
+vehicle or an active target in a building hex,
+if in sight. Prepare cannon if unable to fire. If
+cannon prepared and no cannon target is in
+sight, conduct aimed fire with coaxial MG at
+second closest target.
+
+902. © If 1 or more active targets are in sight,
+button up. If already buttoned up, see 901.
+© If no active targets in sight, see 906.
+
+903. Drive slow. Fire cannon at active US
+vehicle or active target in a building hex, if in
+sight. Prepare cannon if unable to fire. If
+cannon prepared and no cannon target is in
+

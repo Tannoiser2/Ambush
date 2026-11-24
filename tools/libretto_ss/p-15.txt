@@ -1,0 +1,292 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 15
+
+204. One explosive (chosen at random, if
+more than one with 2-side up is in a hex with
+an active American under a bridge) goes off.
+See 181 for effects of this explosion. This
+Event can occur more than once per Mi
+
+205. ¢ If soldier is moving, enter G-16.
+© If vehicle is moving, enter G-15.
+
+206. © If GE 28 or GE 46 is moving, enter
+K-9.
+
+* Otherwise, enter J-9.
+
+207. © If current German Action Number is
+odd, enter N-19.
+© Otherwise, enter O-18.
+
+208. 1. If panzerfaust is available and active
+American vehicle is within 3 hexes, crouch
+and fire panzerfaust at nearest American
+vehicle. Fall prone if free stance change is
+available.
+
+2. If there is no panzerfaust available, remove
+Special Reaction P from this German and re-
+roll German Action Number.
+
+3, Using current German Action Number,
+refer to the indicated paragraph:
+
+0: 840
+
+802
+
+825
+
+869
+
+209. 1. If panzerfaust is available and active
+American vehicle is within 3 hexes, crouch
+and fire panzerfaust at nearest American
+vehicle. Fall prone if free stance change is
+available.
+
+2. If there is no panzerfaust available, remove
+Special Reaction Q from this German and re-
+roll German Action Number.
+
+3. Using current German Action Number,
+refer to indicated paragraph:
+
+0: 869
+
+824
+
+825
+
+5-9: 802
+
+210. The soldier successfully defuses the
+explosives just before they go off. Remove the
+explosives marker from the map and gain 2
+Bonus VP (instead of the usual 1 VP provided
+in 202). This can occur any number of times
+during the Mission.
+
+211. © If the German half track is active, it
+blows a tire and can now move only slowly.
+This can occur only once per Mission.
+
+© If the German half track is not active or has
+already blown a tire, no Event.
+
+212. One soldier is carrying a defective
+grenade. If in Operations, an American is
+automatically carrying the defective grenade.
+If in Rounds, roll 1 die: On an odd result, a
+US soldier has the defective grenade; on an
+even result, a German soldier has it.
+Determine which soldier’s grenade detonates
+at random, The soldier carrying the defective
+grenade conducts a PC Check:
+
+© Success: He can toss the grenade into any
+adjacent unoccupied hex, where it explodes
+harmlessly.
+
+© Failure: He and everyone else in the hex are
+hit by the grenade explosion. The soldier
+carrying the defective grenade is considered
+indoors, regardless of his location. No other
+soldier in the hex can conduct a PC Check for
+the purposes of throwing the grenade clear or
+changing stance.
+
+This can occur only once per Mission. Ignore
+farther references to this paragraph after the
+first occurrence (note this on your Squad
+Record Sheet).
+
+213. © If man is visible under bridge, conduct
+
+best fire at closest target under bridge. |
+© Otherwise, see 815.
+
+214. One German weapon fired in the
+previous Round (does not apply to ATG) runs
+out of ammo. If more than one has fired,
+determine which ran out of ammo at random.
+If German who ran out of ammo has no other
+weapon, he will conduct 810, if applicable.
+This can occur more than once per Mission.
+
+215. ¢ If active American is in same hex,
+assault to kill.
+
+© If no active target is in same hex and
+German occupies a building, see 816.
+
+© If no active target is in same hex and
+German does not occupy a building, see 868.
+
+216. 1. If half track is immobilized or
+knocked out, remove Special Reaction T from
+this German.
+
+2. If there are active passengers with
+explosives in back of half track, drive slowly.
+3. If there are no active passengers in back of
+half track and there is at least one bridge hex
+without explosives set or an active German
+with explosives on or under bridge in same
+hex, remove Special Reaction T and put
+Special Reaction H into effect for this
+German.
+
+4. If there are no active passengers in back of
+half track and all three bridge hexes have
+explosives set or active German with
+explosives on or under bridge in same hex,
+remove Special Reaction T and put Special
+Reaction G into effect for this German.
+
+5. If in Condition 3 or 4, driver see 436.
+
+6. Do nothing.
+
+217. 1. If half track is immobilized or
+knocked out, remove Special Reaction T from
+this German.
+
+2. If driver is inactive or not in truck, move
+to driver’s seat (1 Action) and use driver's
+Special Reaction T paragraphs.
+
+3. If in activation hex, give Turn to driver if
+eligible. Give Turn to man at LMG if eligible
+to receive Turn. If neither driver nor man at
+LMG is eligible to receive Turn, see 802.
+
+4. If on bridge (I-15, J-14, K-14), give Turn
+to highest numbered passenger eligible to
+receive Turn. If no passenger eligible to
+receive Turn, see 840.
+
+5. If there are no active passengers in the
+back of the half track and all 3 bridge hexes
+have explosives set, or an active German with
+explosives is on or under the bridge, remove
+Special Reaction T from this German and put
+Special Reaction G into effect.
+
+6. If in Condition 2 and no other active
+German is in the vehicle, put Special Reaction
+H into effect for this German. If in Condition
+2 and there are other active Germans in the
+back of the half track or within 2 hexes, give
+Turn to the highest numbered German who is
+eligible to receive a Turn; if no German is
+eligible to receive a Turn, do nothing.
+
+7. If in Condition 3 or 4, give a Turn to the
+driver, if he is eligible. If driver is ineligible,
+give Turn to soldier at LMG. If soldier at
+LMG is ineligible or there is no soldier at
+LMG, conduct 801.
+
+218.1. If half track is immobilized or knocked
+out, remove Special Reaction T from this
+German.
+
+2. If this German has explosives available, no
+explosives are set under bridge in this hex,
+and no other active German with explosives
+on or under bridge in this hex, remove
+Special Reaction T, exit truck standing (1
+MP), and put Special Reaction E into effect
+for this German.
+
+3. If this German has explosives available, no
+explosives are set in adjacent hex to the rear
+of half track, and no active German with
+explosives is on or under bridge in that hex,
+remove Special Reaction T, exit truck standing
+(1 MP), and move to the hex to the rear.
+When in that hex, put Special Reaction E into
+effect for this German. ‘
+
+4, Using the current German Action Number,
+refer to the indicated paragraph:
+
+219. Crouch and spend 1 Action to use
+detonator in this hex to destroy bridge in
+V-14. Remove Special Reaction B from this
+soldier. Fall prone if free stance change is
+available. See 598 for effects.
+
+220. [s5] Roll 1 die and reactivate any of the
+following Germans who were removed from
+the map in the hexes determined by the die
+roll:
+
+GE 18: Odd result, E-3; even result, H-7.
+GE 19 and GE 20: Odd result, H-7; even
+result, E-3.
+
+GE 48: Odd result, K-3; even result, H-1.
+GE 49: Odd result, K-9; even result, 1-8.
+GE 50: Odd result, D-2; even result, D-2.
+Alll activate crouching. If any had run out of
+ammo, they are now resupplied. For each of
+
+| the above Germans who is reactivated and
+
+who has used some or all of his initial supply
+of grenades, roll 1 die: On a result of 0-4, no
+further grenades are supplied; on a result of
+5-7, one grenade is supplied; on a result of
+8-9, two grenades are supplied. Regardless of
+the result of the resupply roll, no German can
+reactivate with more grenades than he
+originally had.
+
+221. One US soldier (chosen at random, but
+not a commander) goes berserk! For the
+remainder of the Mission, or until this soldier
+or all Germans become inactive, conduct the
+following procedure:
+
+1. The soldier receives 2 Turns per Round
+(unless wounded).
+
+2. At the start of each Action, the soldier
+stands, conducts one snap fire at the closest
+target, and then moves toward the closest
+active German soldier, using up to half his
+MPA (rounded down). The soldier does not
+fall prone after movement. If the soldier is
+wounded, he will stop firing and move only.
+3. If the soldier’s main weapon jams or runs
+out of ammo, he will use his secondary
+weapon. If no weapons are available, the
+soldier will use his full MPA each Turn. The
+berserk US soldier will not use grenades.
+
+4. The soldier must move directly toward the
+closest active German soldier, paying normal
+terrain costs, and rolling one die to resolve
+movement choices. The soldier will not enter
+prohibited terrain, but will move as quickly as
+possible around the obstacles.
+
+5. If the soldier enters a hex or begins a Turn
+in a hex containing active German soldiers, he
+will assault to kill. If all Germans exit the hex
+or become inactive, the berserk soldier will
+again move toward the nearest active German
+soldier.
+
+6. The soldier is immune to panic, and is
+considered to have a +2 WS when attacking
+or defending in assault combat.
+
+7. A US soldier can stop the berserk soldier
+by successfully tackling him. If any US
+soldier begins a Turn in the berserk soldier's
+hex, or enters the hex during movement, roll
+‘one die: 0-7, the tackle is successful; 8-9, the
+

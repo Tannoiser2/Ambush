@@ -1,0 +1,305 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 25
+
+2. If sO has not occurred, see 365.
+3. If s4 has not occurred, see 363.
+
+4. If s5 has not occurred, see 368.
+
+5. If you have not yet read 701, do so now.
+6. If there is any German south of the river
+and s8 has not occurred, see 690.
+
+7. No Event.
+
+476. 1. If an active German is in the same
+hex, assault to kill.
+
+2. If an active German is in an adjacent hex
+and a grenade is available, crouch and toss
+grenade at hex with most Germans in it. Fall
+prone if free stance change is available.
+
+3..Jt ATG is not loaded and was not fired in
+this Turn, crouch and load ATG.
+
+4. If ATG is loaded and loading did not occur
+in this Turn, and there is an active German
+vehicle in sight, crouch and fire ATG at
+easiest target. Fall prone if free stance change
+is available.
+
+5. Crouch and conduct best fire with carbine
+at closest target. Fall prone if free stance
+change is available.
+
+6. Do nothing.
+
+477. 1. If an active German is in the same
+hex, assault to kill.
+2. If an active German is in an adjacent hex,
+crouch and conduct best fire at easiest target.
+Fall prone if free stance change is available.
+3. If ATG is not loaded and was not fired this
+Turn, crouch and load ATG.
+4. If ATG is loaded and loading did not occur
+in this Turn, and there is an active German
+vehicle in sight, crouch and fire ATG at
+closest target.
+5. If an active German is in 2-3 hex range and
+grenade is available, crouch and toss grenade
+at hex with most Germans in it (closest, if all
+have same number of Germans). Fall prone if
+free stance change is available.
+6. Crouch and conduct best fire at easiest
+target. Fall prone if free stance change is
+available.
+7. Crouch.
+478. 1. If s6 has not occurred, see 472.
+2. If s6 has occurred, roll one die and refer to
+indicated paragraph:
+
+212
+
+116
+221
+117
+: 222
+
+479. 1. If s4 has not occurred, see 363.
+2. If s5 has not occurred, see 364.
+
+3. If sO has not occurred, see 369.
+
+4. If s3 has not occurred, see 361.
+
+5. If you have not yet read 701, do so now.
+6. If s8 has not occurred and any German is
+south of the river, see 690.
+
+7. No Event.
+
+480. Stream is impassable in this hex.
+Conduct PC Check:
+
+* Success: Return to original hex with no loss
+of MP.
+
+© Failure: Return to original hex and lose 2
+MP.
+
+481. Ignore movement references and return
+by most direct path to J-14. If GE 40 is
+active, put Special Reaction G into effect for
+GE 40. Once half track is in J-14, driver
+conducts 824 until all active engineers (GE
+42, GE 43, GE 44, GE 45) are back in the
+half track, at which time remove Special
+Reaction G from GE 40 and GE 41, put
+Special Reaction T into effect for both, and
+roll one die: On an odd result, enter K-14; on
+an even result, enter I-15. Follow movement
+references from there. Make note of this on
+
+your Squad Record Sheet.
+
+482. Conduct Activation Check:
+
+* Success: See 619.
+
+¢ Failure: Conduct PC Check (—1). Success:
+See 614. Failure: No Event.
+
+483. [s4] Soldier sees that the big bridge in
+J-15 to K-14 is still there. Place intact stone
+bridge markers in each of the hexes (I-15,
+J-14, K-14) so as to make a 3-hex bridge
+connecting H-15 to L-14. This is the bridge
+that HQ was concerned about. Your primary
+mission now is to check the bridge hexes for
+possible explosives, secure the area, and
+protect the bridge from German attack. Go to
+Condition 2. If a soldier panics or is wounded
+while in the supports of the 3-hex bridge and
+fails his PC Check causing him to fall, he
+falls to the cliffs or boulders below and
+suffers damage on the MMG row. Make note
+of this on your Squad Record Sheet. Roll 1
+die: On an odd result, see 617; on an even
+result, see 723.
+
+484, Conduct PC Check (—1):
+
+* Success: Conduct Activation Check.
+Success: See 616. Failure: See 618.
+© Failure: No Event.
+
+485. Soldier notices that the bridge is wired
+with explosives. Place Explosives marker with
+2-side up under the bridge. See 202 for
+instructions about explosives under a bridge.
+Soldier who passed his PC Check is
+automatically aware. If sO has not occurred,
+conduct Activation Check:
+
+* Success: See 610.
+
+© Failure: See 611.
+
+486. Conduct PC Check:
+
+* Success: Conduct Activation Check.
+Success: See 616 and soldier who passed PC
+Check is automatically aware. Failure: See
+618.
+
+© Failure: Conduct Activation Check (+1).
+Success: See 616 and soldier who failed PC
+Check is automatically unaware. Failure: No
+Event.
+
+487. [s6] Activate GE 28 and GE 46
+crouching in hex determined by rolling one
+die:
+
+0-2: E-10
+
+3-5: F-8
+
+6-9: N-19
+
+Commence Rounds. GE 28 receives 2 Turns
+this Round.
+
+488. © If soldier is moving, no Event.
+© If vehicle is moving, see 720.
+
+489. Reactivate GE 26 crouching in hex
+
+determined by rolling 1 die: On an odd result,
+activate in Y-8; on an even result, activate in
+Y-12. Commence Rounds. German advantage.
+
+490. Place Event marker. All soldiers in this
+hex conduct PC Check:
+
+® Success (all): See 511.
+
+© Failure (any): See 279.
+
+491. Place Event marker. All soldiers in the
+hex conduct PC Check:
+
+* Success (all): See 623. Soldiers who passed
+the PC Check are automatically aware.
+
+* Failure (any): See 514.
+
+492. All Americans who can see Patrol
+marker conduct PC Check:
+
+* Success (any): See 383 and soldiers who
+passed the PC Check automatically aware.
+
+® Fail (all): Conduct Activation Check.
+Success: See 380, and soldiers who pass their
+PC Check are automatically aware. Failure:
+See 519.
+
+493. Place Event marker. Conduct PC Check:
+© Success: See 386.
+
+* Failure: Conduct Activation Check. Success:
+See 384. Failure: No Event.
+
+494. Place Event marker. All soldiers in lex
+conduct PC Check:
+
+* Success (all): See 511.
+¢ Failure (any): See 277.
+495. Place Event marker. Conduct PC Check:
+© Success: See 276.
+
+© Failure: See 271.
+
+496. Place Event marker. Conduct PC Check:
+* Success: See 167.
+Failure: See 275.
+
+497. Conduct Activation Check:
+* Success: See 622.
+Failure: See 623.
+
+498. Place Event marker.
+© If in Operations, conduct PC Check.
+Success: If s7 has not occurred, see 628; if s7
+has occurred, no Event. Failure: See 514.
+
+* If in Rounds, conduct PC Check. Success:
+If s7 has occurred, no Event; if s7 has not
+occurred, conduct Activation Check (Success
+See 623. Failure: See 628.). Failure: If s7 has
+occurred, see 514; if s7 has not occurred,
+conduct Activation Check (Success: See 514
+Failure: No Event.). Ignore further references
+to this paragraph (note this on your Squad
+Record Sheet).
+
+499. Germans in patrol are not automatically
+aware when activated. Each German in the
+patrol must conduct a PC Check as follows:
+© If in the same hex as an active American,
+conduct PC (+2).
+
+* If in a hex adjacent to an active American,
+conduct PC (+1).
+
+© If in neither the same nor an adjacent hex,
+conduct normal PC.
+
+Any German who fails his PC Check is not
+aware in the first Round. All Germans in
+patrol are automatically aware in the second
+and all subsequent Rounds.
+
+500. ¢ If there is no active soldier prone in a
+hex with an active mule, no Event.
+
+© If there is at least one soldier prone in the
+same hex as an active mule, one mule chosen
+at random becomes skittish and may step on
+the prone soldier(s). All soldiers in the hex
+with the skittish mule conduct a PC Check.
+Any who pass the check roll clear, uninjured;
+those who fail are stepped on and suffer
+damage on the Pistol row.
+
+This may affect any mule in a hex with an
+active soldier, including those currently under
+control. This may occur more than once per
+Mission.
+
+501. 1. If an active American is in the same
+hex, assault to kill.
+
+2. If an active American is in an adjacent hex,
+crouch and conduct best fire at easiest target.
+Fall prone if free stance change is available.
+3. If a grenade is available and a target is at
+2-3 hex range, crouch and toss grenade at hex
+with most Americans in it (at closest if more
+than one hex has the same number). Fall
+prone if free stance change is available.
+
+4. If a grenade is available and target is at 4-6
+hex range, stand and throw grenade at hex
+with most Americans in it (closest if more
+than one hex has the same number). Fall
+prone if free stance change is available.
+
+5. If no grenade is available and a target is
+visible at 2-6 hex range, crouch and conduct
+best fire at easiest target. Fall prone if free
+stance change is available.
+
+6. If none of the above apply, use the current
+

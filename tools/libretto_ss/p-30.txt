@@ -1,0 +1,290 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 30
+
+594. © If vehicle is moving, see 374.
+© If soldier is moving, see 376.
+
+595. © If soldier is moving, see 376.
+© If vehicle is moving, see 377.
+
+596. © If soldier is moving, see 378.
+© If vehicle is moving, see 482.
+
+597. © If soldier is moving, see 484.
+* If vehicle is moving, see 486.
+
+598. Remove explosives marker, if there is
+one in the hex. Flip bridge counter over to
+destroyed side; any vehicles that were on top
+of the bridge are disabled (flip their markers
+to their destroyed side). Occupants of vehicles
+that were on top of the bridge take damage on
+Satchel Charge Outside row as if prone;
+soldiers who were on top of the bridge but
+not in vehicles roll on the Satchel Charge
+Outside row in current stance. Soldiers under
+the bridge in the supports take damage on
+Satchel Charge Outside row as if non-prone;
+soldiers beneath the bridge on the ground roll
+on the Satchel Charge Outside row in current
+stance. The hex is now impassable to vehicles
+and costs soldiers 2 MP to enter. Lose 1 VP
+when bridge in V-14 is destroyed.
+
+599. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If explosives under the bridge in V-14 are
+defused, remove Special Reaction B from this
+German.
+
+3. If there is an active American on the bridge
+in V-14 or adjacent to it, see 219.
+
+4. If there is an active American on or under
+or beneath the bridge in V-14, crouch and
+conduct best fire (target priority is on bridge,
+under bridge, beneath bridge). Fall prone if
+free stance change is available.
+
+5. Crouch and conduct best fire at target
+closest to bridge.
+
+6. If all Americans are north and west of the
+stream, remove Special Reaction B from this
+German.
+
+7. Crouch.
+
+600. [s3] A truckload of Germans enters the
+map on its way to the village. Activate GE 10
+through GE 15 in a truck in Y-10; all these
+Germans activate in Special Reaction T.
+Commence Rounds. German advantage. GE
+10 receives 2 Turns this Round.
+
+601. The destroyed bridge in this hex is
+impassable. If in Operations, return to the hex
+entered from. If in Rounds and vehicle is
+moving, driver conducts Accident Check: If
+he passes, return to the hex entered from at
+no cost and continue with driver's Turn; if he
+fails, return to hex entered from and driver’s
+Turn ends. If in Rounds and soldier is
+moving, conduct PC Check:
+
+* Success: Return to hex entered from at no
+cost and continue with soldier's Turn.
+
+© Failure: Return to hex entered from, fall
+prone, and this soldier's Turn ends.
+
+602. [s6] Activate GE 68 in F-19 facing
+F-18. Commence Rounds. Due to the noise of
+the approaching panzer, all unaware
+Americans within 6 hexes (inclusive) of F-19
+make a PC Check (+2) for Awareness.
+
+603. © If soldier is moving, see 168.
+© If vehicle is moving, see 435.
+
+604. [s6] Activate GE 28 and GE 46
+crouching in first hex on following list not
+occupied by an active American: F-8, N-19,
+E-10. Commence Rounds. All Americans who
+can see GE 28 and GE 46 conduct PC Check:
+* Success (any): US advantage.
+
+Failure (all): German advantage.
+
+If no Americans can see GE 28 and GE 46,
+German advantage.
+
+605. © If GE 26 exited or was removed from
+the map, see 650.
+© Otherwise, no Event.
+
+607. © If GE 29 exited or was removed from
+the map, see 659.
+
+© Otherwise, no Event.
+
+608. [s8] Activate GE 38 crouching in Special
+Reaction P in first hex on following list not
+occupied by an active American: L-14, N-14,
+H-13. Commence Rounds. All Americans who
+can see GE 38 conduct PC Check:
+
+© Success (any): US advantage.
+
+© Failure (all): German advantage.
+
+If no American can see GE 38, German
+advantage.
+
+609. US 07 turns to enter P-12. Brush
+becomes entangled in the treads, immobilizing
+the Sherman in this hex facing P-12/Q-12. US
+07 cannot move for the rest of the Mission,
+but will perform other actions as directed by
+Action paragraphs.
+
+610. [s0] Activate GE 26 crouching, in
+Special Reaction B, in hex determined by
+rolling one die:
+
+Commence Rounds. German advantage.
+611. [s0] Activate GE 26 crouching, in
+Special Reaction B, in hex determined by
+rolling one die:
+
+Commence Rounds. US advantage.
+
+612. [s1] Activate GE 27 crouching, in
+Special Reaction P, in P-12. Commence
+Rounds. US advantage.
+
+613. [s1] Activate GE 27 crouching, in
+Special Reaction P, in P-12. Commence
+Rounds. German advantage.
+
+614. [s1] Activate GE 27 crouching, in
+Special Reaction P, in 0-12. Commence
+Rounds. US advantage.
+
+615. [82] Activate GE 29 crouching in hex
+determined by rolling one die:
+M4
+
+: Nel
+
+Commence Rounds. If no other sightings have
+occurred, German advantage. Otherwise, US
+advantage.
+
+616. [s1] Activate GE 27 crouching, in
+Special Reaction P, in Q-17. Commence
+Rounds. German advantage.
+
+617. [s5] German engineers are attempting to
+destroy the bridge. Place half track in H-15,
+facing I-15. Activate GE 40 through 45 as
+follows: GE 40 is assistant driver; GE 41 is
+driver; GE 42 through GE 45 are in rear of
+half track with GE 42 manning the LMG (if
+he is directed to fire the LMG, the next
+lowest numbered passenger will assist).
+Commence Rounds. German advantage.
+
+618. [s1] Activate GE 27 crouching, in
+Special Reaction P, in hex Q-17. Commence
+Rounds. US advantage.
+
+619. [s1] Activate GE 27 crouching, in
+Special Reaction P, in hex O-12. Commence
+Rounds. German advantage.
+
+620. Conduct Activation Check:
+
+* Success: See 380.
+
+* Failure: Each American who can see the
+Patrol marker conduct a PC Check. Success
+(any): See 383. Failure (all): See 510.
+
+621. Boobytrap! Conduct Boobytrap
+Procedure. If boobytrap explodes, replace
+destroyed bunker counter with rubble counter.
+
+622. [s7] Activate GE 39 crouching in V-6
+and GE 69 crouching in X-6. Commence
+Rounds. German advantage.
+
+623. [s7] Activate GE 39 crouching in V-6
+and GE 69 crouching in X-6. Commence
+Rounds. US advantage.
+
+624. Conduct Activation Check:
+* Success: See 384.
+© Failure: See 386,
+
+625. Roll one die:
+
+0-6: One illuminated soldier (determined at
+random, if necessary) is fired on by a hidden
+German (if in Operations, do not begin
+Rounds). Resolve one fire with the following
+attributes: snap fire; long range; machine
+pistol; WS +1.
+
+7-9: As above, but aimed fire and more than
+one soldier in the hex can be hit per Ambush!
+rules (Aimed Automatic Weapon Damage).
+After fire is resolved, remove starshell marker
+and go to Condition 2.
+
+626. [s8] Activate GE 59 and GE 66
+crouching in fortified building in hex P-15.
+Place fortified building marker in P-15 with
+doorway facing Q-16. See 517 for details
+about fortified building. Commence Rounds.
+US advantage. All aware Americans who do
+not panic receive 2 Turns this Round. If s5
+has not occurred, see 162. Go to Condition 3.
+
+627. Roll one die: On an odd result, see 162;
+on an even result, see 165.
+
+628. Soldier hears noises coming from near
+the tunnel entrance in W-6/W-7.
+
+629. Roll one die:
+
+0-6: One illuminated soldier (determined at
+random, if necessary) is fired on by a hidden
+German (if in Operations, do not begin
+Rounds). Resolve one fire with the following
+attributes: snap fire; medium range; bolt rifle;
+WS 0.
+
+7-9: As above, but aimed fire.
+
+Do not roll for jam, but only to see if soldier
+is hit. Once fire is resolved, remove starshell
+marker.
+
+630. Conduct PC Check:
+* Success: See 461.
+* Failure: See 460.
+
+631. [87] Remove maps G and H and replace
+them with full-map F. Squad enters between
+A-19 and C-19, inclusive. The top of the map
+is the north edge. Place ford markers in K-12
+(connecting K-11 and K-13) and O-4
+(connecting N-4 and P-3). Place rubble
+marker in K-10. Water barrier is still a
+stream. Go to Condition 2 and conduct normal
+Paragraph Checks as squad enters the map.
+
+632. 1. If s9 has not occurred, see 746.
+2. If s9 has occurred, roll one die and refer to
+the indicated paragraph:
+
+116
+
+221
+
+117
+
+995
+
+996
+
+997
+
+6-7: 634
+
+8-9: 529
+
+ew R te:
+

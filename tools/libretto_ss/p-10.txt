@@ -1,0 +1,180 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 10
+
+APPENDIX C:
+CURRENT ERRATA
+
+The following errata apply to Ambush!, Move Out!, and Purple Heart.
+They do not include the errata applicable to the earliest editions of
+Ambush! You can procure a copy of the entire Ambush! errata by sending
+a stamped self-addressed envelope to Victory Games, Inc.
+
+6. Actions Rounds (Clarification). Paragraph Checks that call for Event
+Checks during Rounds are ignored, but an Event marker is still placed in
+the hex. This Clarification also applies to 6/11 (Condition Changes During
+Rounds) and 7/3 (Movement During Rounds).
+
+6/7. Performing Actions During Rounds (Clarification). A soldier can
+never move and throw a grenade in the same Turn.
+
+8/2. Building Hexes (Clarification). A soldier outside a building looking
+in through a non-adjacent doorway cannot see a target lying prone inside the
+building. He can, however, see that target's hex. A soldier outside a build-
+ing who is adjacent to the doorway can see a prone target in the building.
+A soldier inside a building, regardless of stance, can see all hexes in the field
+of view of a doorway.
+
+9/1. Fire Combat Procedure (Clarification). When snap firing a personal
+weapon twice, remember to roll for jam and ammo use once for each fire.
+
+10/1. Grenade/Satchel Charge Combat Procedure (Clarification). The
+—3 modifier for target not in sight is applied only when the target hex itself
+is not in sight (unless specified otherwise). It is possible for a soldier to see
+the target hex, but not the target itself. In these cases, the —3 modifier is
+not applied. For example, two crouching adjacent soldiers are separated by
+a window hexside. Per Ambush! LOS rules, they cannot see each other, but
+they can see each other’s hex. Thus, any grenade or satchel charge combat
+between the two would not use the —3 modifier for target hex not in sight.
+
+10/3. Grenade/Satchel Charge Scatter (Addition). When throwing a
+grenade or satchel charge through an adjacent aperture into a building, it is
+always assumed that the grenade or satchel charge goes into the building
+(although not necessarily into the target hex). If a grenade or satchel charge
+roll fails, it is very possible that a scatter die roll on Diagram A or B will
+scatter the weapon through a wall hexside without an aperture. In such cases,
+the scatter procedure should be slightly modified so that the grenade or satchel
+charge will bounce off the wall, back into the closest hex in the direction
+of the throwing soldier. Grenades can never scatter through a window or back
+into the thrower’s hex, but they can scatter through a doorway. Should any
+
+problems arise in the interpretation of these clarifications, apply common sense
+to resolve the situation.
+
+41/2. Capture (Clarification). A US soldier guarding a captured German
+can perform all Actions normally during Rounds, with the exception of firing
+a crew weapon. As before, his MPA is reduced to 2. In order to provide more
+realism, the rule in Section 9 (Fire Combat) regarding soldiers firing into
+a hex with active or captured friendly soldiers should be modified as follows.
+If the friendly soldier is still active, the rule still applies. If the friendly soldier
+is captured, then you cannot fire at the enemy soldier who is guarding the
+prisoner, but you can fire at all other soldiers in the hex. A prisoner's guard
+can be changed only when the guarding soldier has a Turn and wishes to
+relinquish control of that prisoner. This change costs nothing. Should automatic
+weapons fire or a grenade or satchel charge be fired into the hex; both the
+prisoner and his guard take damage normally.
+
+4717. Cars (Clarification). Soldiers in cars cannot engage in bazooka, satchel
+charge, grenade, or crew weapon (except mounted machineguns) combat unless
+specifically noted.
+
+17/11. Grenades and Satchel Charges (Addition). When an attempt to
+throw a grenade or satchel charge into a tank or car fails, the scatter procedure
+is modified as follows. If the throwing soldier is in the same hex as the vehicle,
+use Diagram C or D below. (It is assumed that a soldier will never attack
+a vehicle from the front, so no scatter chance is provided to the rear of the
+vehicle.) If the throwing soldier is in a hex adjacent to the vehicle, use Diagram
+A or B (as appropriate). However, a roll of 6-9 will scatter the grenade into
+the vehicle’s hex, not into the vehicle itself. In cases where the throwing soldier
+is in neither the same nor an adjacent hex, use Diagram A or B, as usual.
+Should the above procedure scatter a grenade or satchel charge into a build-
+ing through a wall with no aperture, follow the guideline provided in the
+additions to rule 10/3 (i.e., the grenade or satchel charge will bounce off
+the wall into a different hex). Note that a grenade can never scatter back into
+the inside of a vehicle or into the thrower’s hex.
+
+47/43. Tanks (Clarification). A panzer or Sherman can fire its cannon and
+coaxial machinegun at a target in the same hex. They cannot fire their bow
+machineguns, however. A jagdpanther cannot fire either of its weapons (cannon
+or bow machinegun) at a target in the same hex. (Per 17/2, Vehicle Facing,
+if both attacker and target occupy the same hex, the attacker has his choice
+of which side to attack.)
+
+Player Aid Screen: Fire Combat Modifiers Chart (Clarification).
+“Interior: through aperture adjacent to firer or no aperture.’ The phrase ‘‘or
+no aperture” is superfluous; combat through a wall with no aperture is handled
+by the procedure in 13/5, Penetration,
+
+APPENDIX D:
+HINTS AND REMINDERS
+
+© If you need to remember a specific paragraph, write down the para-
+graph number together with a few descriptive words, such as: Victory
+Conditions, 666. When you are instructed to look at a paragraph at a
+certain time, make a note of the paragraph number and situation that
+must exist before you can look it up. This could save you from an
+enormous amount of wasted time and frustration later in the Mission,
+especially in Silver Star, which has some very complex paragraphs.
+
+© When you purchase weapons for your squad, remember that each
+weapon comes with one round of free ammo. This ammo still takes up
+one Ammo Box, however. A soldier cannot carry 6 rounds of ammo
+and one in the weapon. Note also that a pistol and a round of ammo
+for it each take up an Ammo Box.
+
+© Don’t forget to conduct grenade and satchel charge strike PC Checks!
+Both German and US soldiers (not in a vehicle) have the chance to fall
+prone, or throw the thing away (see 10.2 in Ambush!)
+
+© Bazookas are a squad’s best friend. Not only are they vital for such
+difficult tasks as blowing up tanks, but they are often extremely helpful
+when attempting to take out the old machinegun nest hidden in a build-
+ing. Remember that any stone or wood wall hit by a non-dud bazooka
+round is automatically destroyed, and any soldiers behind the wall are
+hit, and take damage as if by semi-automatic rifle fire. Due to the back-
+blast when it is fired, a bazooka cannot be fired by a soldier occupying
+a vehicle.
+
+‘© Move soldiers in a crouched position during Operations. This can mean
+the difference between life and death for your men.
+
+® Use your commander to give Turns to soldiers with good Weapon Skills.
+We have seen Private C move into a German’s hex, assault to kill, fail,
+assault again, fail again, and finally succeed before the German has a
+chance to respond.
+
+* Although there is no right way to attack a bunker or occupied build-
+ing, crouching next to one of its windows may be the safest (unless the
+
+crafty German stands up).
+
+* Once a crew weapon has been set up in a hex, any soldiers in that
+hex can fire it, without spending an Action to set it up again.
+
+© If a wounded German is instructed to enter a hex that he will never
+be able to enter (due to his halved MPA), move him into the hex any-
+way. Otherwise, he will spend the rest of the Mission trying vainly to
+get out of that hex.
+
+© Place Event markers every time the word Event appears on a Mission
+Card as a result of a Paragraph Check, even if a subsequent die roll
+indicates that no Event occurs.
+
+© Since a wounded soldier has no free stance change, a prone wounded
+soldier would have to make a charge assault to get up and attack an enemy
+in his own hex.
+
+© When firing a mounted MG from a vehicle, there is no —2 modifier
+for firing from inside a car. Any other unmounted weapons in the vehicle
+do suffer the —2 modifier.
+
+Panic for a wounded US soldier is determined by the initiative die roll
+result, regardless of the fact that he can receive only one Turn, For
+example, an out of command wounded soldier with an IN of 2 still panics
+ona roll of 3 or 8, even though his marker would be placed in the 1-Turn
+space.
+
+© If two walls on a second story are destroyed, the first floor collapses
+as well.
+
+© Opposing soldiers on different floors in the same building hex are con-
+sidered adjacent, and they use interior through aperture adjacent to firer
+modifiers for all fire, grenade, and satchel charge combat they perform
+against one another.
+
+© All equipment in a bunker or building hex is destroyed if the hex is
+reduced to rubble.
+
+* Artillery landing in a hex will eliminate a minefield.
+
+* A Campaign veteran does not become a commander simply because
+that soldier reaches an IN or 4 or 5.
+

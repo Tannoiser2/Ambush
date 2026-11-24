@@ -1,0 +1,294 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 20
+
+335. © If vehicle is moving and this nex has
+been entered directly from F-4, see 641. If s2
+has not occurred, see 130.
+
+© If s2 has not occurred, see 130.
+
+© Otherwise, no Event.
+
+336. © If vehicle is moving and this hex has
+been entered directly from G-4, see 641.
+© Otherwise, no Event.
+
+337. Conduct best fire with HMG at easiest
+target. Load squad members. Drive boat fast,
+stopping when within 2 hexes of active squad
+member (excluding naval gun team).
+
+338. [s7] Activate German 71 on surface in
+L-4, Commence Rounds.
+
+339. When wounded, this German will drop
+his personal weapon and keep the explosives.
+After he sets his explosives, he will conduct
+810. Make note of this paragraph on your
+Squad Record Sheet.
+
+340. There is an underwater boobytrap in this
+hex. You can either return to the hex from
+which you entered, or remain in this hex and
+conduct the Boobytrap Procedure. If you
+choose to stay in this hex and conduct the
+Boobytrap Procedure, the man who conducted
+the initial PC Check is considered prone if the
+boobytrap explodes. If more than 1 man
+entered this hex at the same time, men who
+did not conduct PC Checks do so now.
+
+© If man who passed initial PC Check moved
+back to hex entered from and other man (or
+men) have Success in their Checks, they can
+return to the entry hex or conduct the
+Boobytrap Procedure and be considered prone
+if it explodes. If they fail, they must conduct
+the Boobytrap Procedure and are considered
+non-prone if it explodes.
+
+© If man who passed the initial PC Check is
+conducting the Boobytrap Procedure, others
+who pass their PC Check are considered
+prone, and those who fail are considered
+non-prone.
+
+If the boobytrap explodes, see 560.
+
+341. [81] Activate GE 60 in C-7. Activate GE
+54 crouching in C-9 in Special Reaction A.
+Commence Rounds. German advantage. If s4
+has not occurred, see 541.
+
+342. © If sl or s2 or both have occurred:
+
+1. If s8 has not occurred, see 419.
+
+2. If s9 has not occurred, see 430.
+
+3. If s3 has not occurred, see 235.
+
+4. If LOS is 3 hexes, see 640.
+
+5. If both s4 and s5 have occurred and there
+are 2 or fewer barges still active, see 789.
+
+6. If none of the above apply, no Event.
+
+© If neither s1 nor s2 has occurred, no Event.
+
+343. 1. If grenade is available and an active
+American diver is within 3 hexes, crouch and
+throw grenade at nearest diver, using —3
+modifier if diver is not visible. Fall prone if
+free stance change is available.
+
+2. If no grenade is available or no diver is
+within 3 hexes, crouch and conduct best fire
+at nearest visible target (diver first, then any
+other active American). Fall prone if free
+stance change is available.
+
+3. Crouch.
+
+344, 1. If an American diver is visible, crouch
+and conduct best fire at nearest diver. Fall
+prone if free stance change is available.
+
+2. If grenade is available and an active
+American diver is within 3 hexes but not
+visible, crouch and throw grenade at nearest
+diver, using modifier for target not in sight.
+Fall prone if free stance change is available.
+3. Crouch and conduct best fire at easiest
+
+target. Fall prone if free stance change is
+available.
+4. Crouch.
+
+345. 1. If grenade is available and target is
+visible, crouch (if target at range of 3 hexes
+or less) or stand (if target at range of 4 to 6
+hexes) and throw grenade at nearest target.
+Fall prone if free stance change is available.
+2. Crouch and conduct as many snap fires as
+possible, beginning with the closest and then
+the easiest target. Fall prone if free stance
+change is available.
+
+3. Crouch.
+
+346. One diver (including German divers, if
+any are active) runs out of air. He can still
+swim underwater, but must end each Round
+on the surface. Remove underwater-surface
+marker from diver so affected and treat him
+as a swimmer. This may occur only once per
+Mission. If this paragraph comes up again, re-
+roll the dice for a new Random Event.
+
+347. 1. If grenade is available and target is
+within 3 hexes, crouch and throw grenade at
+nearest target, paying —3 modifier if target is
+not in sight. Fall prone if free stance change
+is available.
+
+2. Crouch and conduct best fire at easiest
+target. Fall prone if free stance change is
+available.
+
+3. Crouch.
+
+348. 1. If an active American is in the same
+hex, assault to kill.
+
+2. If an incapacitated American diver is in the
+same hex and an active American is in an
+adjacent hex, spend 1 Action to strip
+incapacitated American of his equipment
+(diving gear and weapons, including timed
+explosives and grenades) and drop the
+equipment to the bottom. Mark off this
+equipment on your Squad Record Sheet,
+because it is no longer available to you.
+
+3. If an active American is in an adjacent hex,
+charge assault to kill.
+
+349. © If either s1 or s2 or both has occurred:
+1. If s9 has not occurred, see 430.
+
+2. If s8 has not occurred, see 419.
+
+3. If s3 has not occurred, see 235.
+
+4. If LOS is 3 hexes, see 640.
+
+5. If both s4 and s5 have occurred, and there
+are 2 or fewer barges still active, see 789.
+
+6. If none of the above applies, no Event.
+
+© If neither s1 nor s2 has occurred, no Event.
+
+350. Conduct PC Check (+2):
+
+* Success: See 351.
+
+* Failure: If s1 has occurred, no Event. If 31
+has not occurred, conduct Activation Check
+(+1). Success: See 680. Failure: No Event.
+
+351. [s0] There is a roadblock in K-6. Place
+roadblock marker. Gain 1 Bonus VP when
+roadblock cleared. If in Operations, at least 1
+soldier must be in the roadblock hex and 2
+RE Checks must be made. If in Rounds,
+roadblock can be cleared by:
+
+1. Throwing satchel charge into the hex.
+
+2. Heavy penetration by bazooka (roadblock is
++2 to hit).
+
+3. At least one crouching or standing soldier
+must be in the roadblock hex and 3 Actions
+(which can be shared) must be spent by
+soldier(s) in the roadblock hex. Soldiers in the
+roadblock hex are considered to be in cover
+for purposes of resolving fire combat.
+
+4. Ramming through the roadblock with a
+truck. The truck attempting to ram through
+the roadblock must be going fast when it
+enters the roadblock hex and must have
+
+sufficient MPs left to exit the roadblock. The
+driver of the truck must conduct two Accident
+Checks — the first when entering the hex with
+the roadblock and the second to exit the hex.
+If either Accident Check is failed, the truck is
+automatically disabled in the roadblock hex
+and all occupants take damage on the Semi-
+Automatic Rifle row (due to being slammed
+into the dashboard and windshield by the
+sudden stop). If two trucks become disabled in
+the roadblock hex, the third truck can enter
+the adjacent hex and, after a standing or
+crouching soldier in either hex spends 1
+Action to hook up a towline, the driver of the
+truck can spend 1 Action to pull a disabled
+truck into the adjacent hex (this is to allow the
+third truck to try to ram through the
+roadblock hex without violating the
+prohibition against more than two vehicles in
+a hex). The truck attempting to clear the
+roadblock by ramming through it must enter
+and exit the roadblock hex in the same Turn
+for the roadblock to be successfully cleared.
+The jeep cannot attempt to clear the roadblock
+by ramming through because the small vehicle
+lacks sufficient weight to break through the
+roadblock.
+
+352. 1. If active US vehicle in sight and
+grenade available, crouch (if at 3-hex range or
+less) or stand (if at 4-6 hexes) and throw
+grenade at nearest active visible vehicle. Fall
+prone if free stance change available.
+
+2. If an active American vehicle is in sight
+and no grenade is available or vehicle is not
+in range, crouch and conduct best fire at
+closest vehicle. Fall prone if free stance
+change is available.
+
+3. If active US soldier is in sight, crouch and
+conduct best fire at closest target. Fall prone
+if free stance change available.
+
+4. If no target is in sight, move as quickly as
+possible. Conduct one snap fire at first target
+to come into view (easiest target if more than
+‘one comes into view simultaneously) if
+sufficient MPs remain to do so. Fall prone at
+end of move, if free stance change is available
+and target is in sight.
+
+353. [s3] Activate German 18 in U-13,
+second story, standing. Commence Rounds.
+US advantage. Floor of second story over
+roadway is considered wooden wall for
+combat purposes. If floor is hit by bazooka
+fire from below, all soldiers in the hex below
+roll for damage as if behind a wall hit by
+bazooka fire (roll on the Semi-Automatic Rifle
+row as indicated in the Ambush! rules).
+
+354. © If an active American is within 3
+hexes, enter I-16.
+* Otherwise, enter H-15.
+
+355. ¢ If current German Action Number is
+odd, enter L-15.
+
+© If current German Action Number is even,
+enter L-16.
+
+356. © If there are more active Americans on
+the road and south of the road than there are
+north of it, enter F-16.
+
+* Otherwise, enter F-15.
+
+357. © If there is an active American within 3
+hexes, enter H-16.
+© Otherwise, enter G-16.
+
+T 358. When the last active American vehicle
+enters W-7, see 464. If an active American
+vehicle which has not yet entered W-7
+becomes inactive and all other active
+‘American vehicles have entered W-7, see 464
+immediately. Make note of this on your Squad
+Record Sheet.
+

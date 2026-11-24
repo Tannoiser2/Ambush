@@ -1,0 +1,293 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 23
+
+420. ¢ If s7 has not occurred, see 433.
+
+If s4 has not occurred, see 725.
+
+¢ If s4, s6, and s7 have all occurred, place
+Event marker. No Event.
+
+421. Conduct PC Check:
+Success: See 447.
+© Failure: See 448.
+
+422. [sO] Counterattack! Activate GE 21 in
+the first hex not occupied by an American
+chosen from these three possibilities: P-19;
+B-19; Y-16. See 580 immediately. Commence
+Rounds. Due to the noise of the approaching
+jagdpanther, all unaware Americans within 6
+hexes (exclusive) of the jagdpanther’s entry
+hex make a PC Check (+2) for Awareness.
+GE 21 gets 2 Turns this Round.
+
+423. ¢ If the current German Action Number
+is 0-1, enter J-14.
+
+If the current German Action Number is
+2-9, enter L-14.
+
+424, ¢ If vehicle is moving, enter N-7.
+* If soldier is moving, enter P-7.
+
+425. 1. If tank is immobilized or hit by any
+type of fire, regardless of the result, remove
+Special Reaction T from this German,
+
+2. If in hex with tank at the start of his Turn,
+this German will conduct 840, if current
+German Action Number is odd, or 868, if
+current German Action Number is even.
+
+3. If not in hex with tank at the start of his
+Turn, use the current German Action Number
+and refer to the indicated paragraph:
+
+0-3: 803
+
+4-5: 809
+
+6-8: 868
+
+9: 800
+
+If directed to move and he enters the hex with
+the tank, this German will stop moving. If
+there is a target in sight and a free stance
+change available or sufficient MPs remaining,
+he will fall prone. If no active target is in
+sight, he will crouch.
+
+426. 1. If tank is immobilized or hit by any
+type of fire, regardless of the result, remove
+Special Reaction T from this German.
+
+2. If in hex with tank at the start of his Turn,
+this German will conduct 800, if current
+German Action Number is even, or 868, if
+current German Action Number is odd.
+
+3. If not in hex with tank at the start of his
+Turn, this German will use the current
+German Action Number and refer to the
+indicated paragraph:
+
+0-2: 862
+
+If directed to move and he enters the hex with
+the tank, this German will stop moving. If
+active target is in sight, he will fall prone if
+free stance change is available or sufficient
+MPs remain. If no target is in sight, he will
+crouch.
+
+427. [s1] Activate GE 74 and GE 75
+crouching in S-9. Commence Rounds. German
+advantage.
+
+428. Roll 1 die: On an odd result, see 165;
+on an even result, see 169.
+
+429. [s3] A truckload of Germans enters the
+map on its way to the village. Activate GE 10
+through GE 15 in a truck in Y-4. All these
+Germans activate in Special Reaction T.
+Commence Rounds. German advantage. GE
+10 receives 2 Turns this Round.
+
+430. Activate GE 52 crouching in M-9 and
+
+GE 53 crouching in I-9. Both activate in
+Special Reaction A. Commence Rounds.
+German advantage.
+
+431. © If an active target is in sight, see 352.
+© If no active target is in sight and all active
+American vehicles have passed through W-10,
+remove this German from the map.
+
+* Otherwise, fall prone. If no LOS to an
+active American vehicle at the end of the
+Turn, remove this German from the map.
+
+432. Conduct PC Check:
+* Success: See 508.
+* Failure: See 509.
+
+433. Conduct Activation Check:
+* Success: See 505.
+* Failure: See 506.
+
+434, See 472. No German can activate in a
+hex with an American.
+
+435. US 07 turns to enter X-12. Brush
+becomes entangled in the treads, immobilizing
+the Sherman in this hex, facing X-11/X-12.
+US 07 cannot move for the rest of the
+Mission, but will perform other actions as
+directed by Action paragraphs.
+
+436. ¢ If half track has been fired on this
+Turn, drive fast.
+
+* Otherwise, drive slow. Conduct best fire at
+closest target.
+
+437. © If s6 has not occurred, see 604.
+° If s4 has not occurred, see 725.
+
+* If both s4 and s6 have occurred, place
+Event marker. No Event.
+
+438. 1. If s6 has not occurred, see 604. If s7
+has not occurred, see 421.
+
+2. If s6 and s7 have both occurred, place
+Event marker. No Event.
+
+439. [s6] Activate GE 68 in O-1, facing O-2.
+Commence Rounds. Due to the noise of the
+approaching panzer, all unaware Americans
+within 6 hexes (inclusive) of O-1 conduct PC
+Check (+2) for Awareness.
+
+440. 1. If GE 69 has been removed from the
+map, reactivate crouching in W-8. If GE 39
+has been removed from the map, reactivate
+crouching in W-8. Commence Rounds.
+German advantage.
+
+2. If GE 39 and GE 69 are both inactive,
+place Event marker. No Event.
+
+3. No Event.
+
+441. [2] Activate US 06 prone in hex
+determined by rolling one die:
+0-1: X-19
+
+N-1
+If in Rounds, US 06 receives 2 Turns the first
+Round and cannot panic the first Round
+except as a result of combat.
+
+442. Do you need help?
+
+* If you do, see 328.
+
+* If not, see 329.
+
+443. © If GE 39 has been removed from the
+map, reactivate him crouching in this hex. If
+GE 69 has been removed from the map,
+reactivate him crouching in this hex.
+Commence Rounds. US advantage.
+
+* Otherwise, no Event.
+
+444. If GE 39 or GE 69 has been removed
+from the map, reactivate either or both
+crouching in this hex. Commence Rounds.
+German advantage.
+
+445. © If vehicle is moving, enter Q-8.
+
+* If soldier is moving, enter P-7.
+
+446. ¢ If s6 has occurred, enter X-4.
+© Otherwise, enter X-3.
+
+447. [s7] You have surprised a hidden
+German ATG team. Activate GE 37 in 0-19,
+with covered arc N-19, N-18, 0-18. ‘
+Commence Rounds. US advantage. See 253
+for attributes of ATG.
+
+448. [s7] There is a hidden German ATG
+team in O-19. Activate GE 37 in O-19, with
+covered arc N-19, N-18, O-18. Commence
+Rounds. German advantage. See 253 for
+attributes of ATG.
+
+449, © If sO has not occurred, see 418. If s1
+has not occurred, see 721.
+
+© If sO and s1 have both occurred, place
+Event marker. No Event.
+
+450. There is an underwater boobytrap in this
+hex. The soldier who failed his PC Check is
+considered non-prone. If more than one
+soldier entered the hex at the same time, any
+soldier who did not conduct a PC Check does
+so now. Those who pass are considered
+prone, and those who fail are considered non-
+prone. Conduct Boobytrap Procedure. If
+boobytrap explodes, see 560 immediately.
+
+451. © If vehicle is moving, enter M-4.
+
+* If soldier is moving, and s2 has occurred,
+enter L-3.
+
+* Otherwise, enter M-4,
+
+452. If s5 has not occurred, see 540
+immediately.
+
+© If vehicle is moving and an active barge is
+in N-5 with no active German on board, drop
+off 1 passenger, standing (chosen at random,
+or assistant driver if no passenger is available)
+in O-5 and vehicle enters O-6. Remove
+Special Reaction T from the German who is
+dropped off.
+
+* If vehicle is moving and there is no active
+barge in N-5, vehicle enters 0-6.
+
+© If soldier is moving and there is an active
+barge in N-5 with no active German on board,
+climb onto barge (2 MP) and put Special
+Reaction B into effect for this soldier.
+
+© If soldier is moving and there is no active
+barge in N-5, or there is an active barge with
+an active German on board, enter P-5 and put
+Special Reaction A into effect for this soldier.
+
+453. © If vehicle is moving and there is an
+active barge in N-6 with no active German on
+board, drop off 1 passenger, standing (chosen
+at random, or assistant driver, if no passenger
+is available) in O-7 and vehicle enters N-7.
+Remove Special Reaction T from German who
+is dropped off.
+
+© If vehicle is moving and there is no active
+barge in N-6, or there is an active barge with
+an active German on board, vehicle enters
+N-7.
+
+© If soldier is moving and there is an active
+barge in N-6 with no active German on board,
+climb onto barge (2 MP) and put Special
+Reaction B into effect for this soldier.
+
+* Otherwise, enter P-7 and put Special
+Reaction A into effect for this soldier.
+
+454. 1. If in Condition 1 and vehicle is
+moving, enter L-8 after dropping off 1
+passenger, standing (chosen at random, or
+assistant driver, if no passenger is available)
+in M-8, if there is an active barge in L-7 or
+M-7 with no active German on board.
+Remove Special Reaction T from German who
+is dropped off.
+
+2. If in Condition 1 and soldier is moving,
+and there is an active barge in M-7 or L-7,
+soldier climbs onto barge (2 MP). Put Special
+

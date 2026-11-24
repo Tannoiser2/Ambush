@@ -1,0 +1,300 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 36
+
+who passed his PC Check is automatically
+aware.
+
+T 794, [s8] You should have seen signs of
+your company by now. The advance must be
+going better than expected. Sarge decides to
+continue down the road until you find the rest
+‘of your company. If there are any active
+Germans still on the map, remove them as
+soon as they have no LOS to an active
+American vehicle. Gain 1 bonus VP for each
+mortar crew member still active when GE 47
+is removed from the map by this paragraph.
+
+795. When the last active American is east of
+the L column (inclusive) and north of the 14
+row (inclusive), remove GE 47 from the map.
+Gain 1 bonus VP for each German still active
+when GE 47 removed from the map. Make
+note of this paragraph on your Squad Record
+Sheet.
+
+796. Place Event marker. Conduct Acti
+Check (+1):
+
+® Success: See 111.
+
+© Failure: Conduct PC Check (+1). Success:
+See 110, Failure: No Event.
+
+797. Place Event marker. Conduct PC Check:
+* Success: See 793.
+
+© Failure: Conduct Activation Check. Success:
+See 110. Failure: No Event.
+
+798. Place Event marker. Conduct PC Check:
+* Success: See 793.
+
+* Failure: Conduct Activation Check (—1).
+Success: See 110. Failure: No Event.
+
+799. Go to Condition 3.
+
+800. Lie prone.
+
+801. Crouch, then conduct best fire at easiest
+target. Fall prone after fire if free stance
+change is available.
+
+802. Crouch, then conduct best fire at closest
+target. Fall prone after fire if free stance
+change is available.
+
+tion
+
+803. © If active target is visible and German
+is not in an open hex, crouch and conduct
+best fire at easiest target. Fall prone after fire
+if free stance change is available.
+
+© If active target is visible and German is in
+open hex, move as quickly as possible.
+
+© If no active target is visible, run into open,
+crawl into any other type of hex.
+
+804. © If out of US sight, remove the German
+from the map.
+
+© If in US sight and a target is within 3
+hexes, crouch and conduct best fire. Fall
+prone after fire if free stance change is
+available.
+
+© If in US sight and no target is within 3
+hexes, fall prone.
+
+805. © If out of US sight, remove the German
+from the map.
+
+If in US sight and a target is within 4
+hexes, surrender.
+
+© If in US sight and no target is within 4
+hexes, fall prone.
+
+806. Run into open hex, crawl into any other
+type of hex. Stop moving and fall prone if
+free stance change is available and out of sight
+of active US soldier. If out of US sight at end
+of Round, remove the German from the map.
+
+807. © If an active target is in sight, crouch
+and conduct best fire at easiest target. Fall
+prone after Action if free stance change is
+available.
+
+© If no active target is in sight, run into open
+hex or crawl into any other type of hex. Fall
+
+prone after Action if free stance change is
+available.
+
+808. ¢ If no active target is in sight, crouch.
+© If 1 or 2 active targets are in sight, crouch
+and conduct best fire at easiest target. Fall
+prone after fire if free stance change is
+available.
+
+If 3 or more active targets are in sight, fall
+prone.
+
+809. Move as quickly as possible; fall prone
+after movement, spending a Movement Point
+to do so, if necessary.
+
+810. 1. If within 2 hexes of a killed or
+incapacitated enemy or friendly soldier, and
+not in sight of an active target, run to victim
+and take weapon. Then return to the hex the
+soldier occupied before moving to take the
+weapon.
+
+2. If in sight of active target, crouch and
+conduct best fire.
+
+3. Crouch.
+
+811. © If in sight of an active target,
+surrender.
+© Otherwise, fall prone.
+
+812. 1. If there is an active US soldier in the
+hex, assault to kill.
+2. If adjacent to an active US soldier through
+a traverseable hexside and a grenade is
+available, crouch and throw grenade.
+Exception: If another active German is in the
+hex, charge assault to kill instead.
+
+3. If there is an active target in sight and no
+German is in the target hex, crouch and
+conduct best fire.
+
+4. Move and snap fire if any active targets
+become visible during movement.
+
+813. © If more than 2 active targets are
+visible, surrender.
+
+© Otherwise, see 802.
+
+814. Drive slowly.
+
+815. Crouch, then fire machinegun or assist
+firing machinegun. Conduct best fire at any
+active target within 3 hexes. Otherwise,
+conduct aimed fire at easiest target. Fall prone
+after fire if free stance change is available. If
+machinegun is out of ammo, fire second
+weapon.
+
+816. Ignore the Self-Preservation Reaction.
+Roll for a new German Action Number and
+refer to this soldier's Action Column that
+would otherwise apply.
+
+817. 1. If there is an American in an adjacent
+hex and a grenade is available, see 818.
+
+2. If there is no active target visible, crouch.
+3. If there is a target visible, crouch and
+conduct best fire at nearest target.
+
+4. If out of ammo, but a grenade is available,
+see 818.
+
+5. If out of ammo and grenades, and an active
+target is visible, surrender.
+
+818. Crouch, then throw grenade at nearest
+target. Fall prone after throw if free stance
+change is available. If there is no target
+visible, or nearest target is in the same hex,
+crouch.
+
+819. © If there is a grenade available and a
+target is in range, throw grenade at closest
+target. Fall prone after throw if free stance
+change is available.
+
+If there is no grenade available, or no target
+is in range, run into an open hex, crawl into
+any other type of hex.
+
+820. 1. If there is no active target in sight,
+run into an open hex or crawl into any other
+
+type of hex.
+2. If there is an active target in sight and
+German is in a hex with or adjacent to
+another active German, fall prone.
+
+3. Surrender.
+
+821. If in sight of an active target, fall
+prone. .
+
+© If there is no active target in sight, run into
+an open or interior hex, crawl into any other
+type of hex.
+
+822. « If there is an active German in the
+same or an adjacent hex, crouch and give a
+Turn to the German with the fewest Turns in
+the same or adjacent hex. If there are 2 or
+more eligible Germans with the same number
+of Turns, give one to the soldier with the
+highest WS. If all available Germans have 2
+Turns, see 801.
+
+© If there is no active German in the same or
+adjacent hexes, run into an open or crawl into
+any other type of hex.
+
+823. If there is another active German in
+the hex, fall prone.
+
+* If there is no other active German in the
+hex, run into an open hex or crawl into any
+other type of hex.
+
+824. Crouch, then conduct best fire at easiest
+target. Fall prone after fire if free stance
+change is available. Exception: If this target
+has already been fired at in this Round and
+another target is visible, fire at the second
+target instead.
+
+825. Crouch and conduct snap fire at as many
+targets as possible, beginning with the closest
+and then the easiest.
+
+826. © If vehicle has been fired upon, drive
+vehicle fast.
+
+* If vehicle has never been fired upon, drive
+vehicle slowly.
+
+827. Drive vehicle fast.
+
+829. © If one active target (only) is visible,
+crouch and conduct best fire. Fall prone after
+fire, if free stance change is available.
+
+* Otherwise, fall prone.
+
+830. « If in an open hex, move as quickly as
+possible.
+
+© If in any other type of hex, or any other
+type of hex is entered during movement, fall
+prone.
+
+832. © If there is an active German in the
+same or adjacent hex, crouch and give a Turn
+to the German with the fewest Turns. If 2 or
+more eligible Germans have the same number
+of Turns, give one to the soldier with the
+higher WS. If all eligible Germans have 2
+Turns, see 801.
+
+© If there are no other active Germans in the
+same or adjacent hex, see 801.
+
+833. 1. If there is an active US soldier in the
+hex, assault to kill.
+
+2. If adjacent to a US soldier through a
+traverseable hexside, and there is a grenade
+available, crouch and throw grenade.
+Exception: If there is an active German in the
+US soldier's hex, charge assault to kill.
+
+3. If there is an active target in sight, crouch
+and conduct best fire.
+
+4. Lie prone.
+
+834. ¢ If in a hex with an active German
+vehicle, crouch and conduct best fire at easiest
+target. Fall prone after fire if free stance
+change is available.
+
+* If not in a hex with an active German
+vehicle, see 803.
+

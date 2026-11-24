@@ -1,0 +1,145 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 9
+
+APPENDIX B:
+ADDITIONAL VEHICLES
+Note that schematic diagrams of a half track, truck, and jeep have been
+
+printed on the mapsheet as an aid showing where the occupants of these
+vehicles are located at any given time.
+
+PATROL BOAT
+
+Large Vehicle Armored; Open Only
+CREW: 6
+
+MAXIMUM PASSENGERS: 8
+
+SLOW MOVEMENT POINT ALLOWANCE: 4
+FAST MOVEMENT POINT ALLOWANCE: 8
+Hit Chart
+
+Body
+
+Crew
+
+Passengers
+
+Damage Effects
+
+Body: Use Damage Table for attacking weapon type. If penetration
+is light, roll on Pistol row for damage; any result other than panic
+reduces crew by 1; if penetration is medium, roll on Semi-Automatic
+Rifle row (any result other than panic reduces crew by 1); if penetra-
+tion is heavy, boat sinks and crew is killed; passengers roll on the
+SAR row and on a KIA result they sink with the boat (on any other
+result, they are placed in the closest land hex prone with indicated
+result), Crew: Use damage Table for firing weapon; any result other
+than panic reduces crew by 1. Passengers: Use damage table for
+firing weapon; suffer indicated damage. If no passengers, no effect.
+
+TRUCK
+Large Vehicle; Non-Armored; Open Only
+MAXIMUM OCCUPANTS: 2 in front (driver and assistant); 8 in rear
+SLOW MOVEMENT POINT ALLOWANCE: 4
+FAST MOVEMENT POINT ALLOWANCE: 8
+Hit Chart
+NUMBER OF OCCUPANTS
+ITEM HIT o 1 2. 3 A+
+
+Tire 0-1 0. 0 o 0
+Body 2-9 2-7 1-5 1-4 1-3
+Driver 2 89 6-7 56 45
+
+8-9 7-8 6-7
+Passenger * © 9 9 89
+
+Damage Effects
+
+© No result. Tire: Vehicle cannot be driven fast. If occupied, make
+an immediate Accident Check. Body: If body is hit, resolve combat
+using Damage Table row for the attacking weapon. If the result is
+light penetration, one passenger (chosen at random) suffers damage
+as determined by rolling on the row for the attacking weapon. If
+penetration result is medium or heavy, the truck is disabled. Driver:
+Roll for damage using the Damage Table row for the attacking
+weapon. If driver panics or is wounded, make an immediate Acci-
+dent Check. If the driver is incapacitated or killed, an Accident oc-
+curs; roll on the Accident Table. Assistant or Passenger: Roll for
+damage on the Damage Table row for the attacking weapon. The truck
+is considered a car for resolving grenade/satchel charge attacks, for
+conducting minefield/boobytrap procedures, on the Accident Table,
+and when running over soldiers.
+
+Assistant bd °
+
+HALF TRACK
+Large Vehicle; Armored; Open Only
+MAXIMUM OCCUPANTS: 8 (driver, assistant driver, 6 passengers)
+‘SLOW MOVEMENT POINT ALLOWANCE: 4
+FAST MOVEMENT POINT ALLOWANCE: 7
+Hit Chart
+FACING
+
+FRONT SIDE REAR
+
+0-1
+
+Assistant Driver 2.
+454 .
+6 56 Ol
+
+79 19 2-9
+
+Damage Effects
+
+© No result. Driver: Roll for damage using the Damage Table row
+of the attacking weapon. If the driver panics or is wounded, make
+an immediate Accident Check. If the driver is incapacitated or killed,
+an accident occurs; roll on the Accident Table. Assistant Driver:
+Roll for damage using the Damage Table row of the attacking weapon.
+Tire: Vehicle cannot be driven fast. If occupied, make an immediate
+Accident Check. Tread: If there is light penetration and the vehicle
+is occupied, make an immediate Accident Check. If the penetration
+is medium or heavy, the half track throws a tread, is immobilized
+in its current hex, and cannot move again, Body: If the body is hit
+and there is light penetration, one passenger (chosen at random) suffers
+damage as determined by rolling on the Semi-Automatic row. If the
+penetration is medium, the half track is disabled; passengers must
+spend 2 MP to exit the wreck. If the penetration is heavy, the half
+track is disabled and all occupants roll on the Semi-Automatic row.
+Survivors spend 2 MP to exit the wreck. The half track is considered
+a tank for resolving grenade/satchel charge attacks, for conducting
+minefield/boobytrap procedures, on the Accident Table, and when
+running over soldiers.
+
+FORTIFIED BUILDING
+
+Hit Chart
+
+FRONT FACING DOOR FACING
+DIE ITEMHIT ARMOR DIE ITEMHIT ARMOR
+0-7 Wall H_ 0-4 Door H
+8 Aperture = M 5-7 Door Li
+9 Crew * 89 Crew *
+
+“If bazooka fire, treat as aperture hit if front facing is fired upon,
+as a door if door facing is fired upon.
+
+Damage Effects
+
+‘Wall: If wall is hit and penetration result is H, the fortified building
+is destroyed and all soldiers inside are killed. Replace fortified building
+marker with rubble marker; all equipment in the hex is lost to play
+due to being buried in the rubble. If the penetration result is less than
+H, no effect. Aperture: Like a wall, except that an H or M result
+causes destruction. Door: Any H or M penetration result causes for-
+tified building to be destroyed. An L penetration result causes the
+door to be breached. If the door is breached, treat that side of the
+building like a doorway instead of a window (the door has been blasted
+open). A breached door can be crossed by US soldiers to enter the
+fortified building. Crew: If the crew is prone, the fire misses. (Ex-
+ception: If firing through a breached door, the crew can be hit if
+prone.) If the crew is not prone, determine the target hit at random.
+Resolve damage against that soldier alone, unless using aimed auto-
+matic weapon fire, in which case more than one soldier can be hit.
+

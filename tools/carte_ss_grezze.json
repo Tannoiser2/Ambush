@@ -1,0 +1,3077 @@
+{
+ "GE74": {
+  "lato": "GE",
+  "num": 74,
+  "lettera": "S",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 0,
+  "testo": "GE 74/S Machinegunner\n+1VP\n\nIN: 3 PC:7 .WS: -1 DS:2 MPA: 4\nMachine Pistol _\n[ ime [ime [ima[ ala] |\n\nCOND SPEC\n\nDIE 23S ™M\n0 841. 215 820\n1-3 815 818 819 ;\n4-6 817 825 809\n7-9 635 711 866\nAssists GE 75 unless GE 75 is wounded and GE 74 is not\nwounded, in which case GE 74 fires LMG and GE 75 assists.\nTarget priority is soldier, then mule is no soldier is visible,\nexcept in Special Reaction M, when the target priority is\nmule (when closest or easiest) and then soldier.\n",
+  "IN": 3,
+  "PC": 7,
+  "WS": -1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol _",
+  "armi": [
+   "mp"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    4,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "23S": [
+    841,
+    815,
+    817,
+    635
+   ],
+   "M": [
+    215,
+    818,
+    825,
+    711
+   ],
+   "?2": [
+    820,
+    819,
+    809,
+    866
+   ]
+  },
+  "note": "Assists GE 75 unless GE 75 is wounded and GE 74 is not wounded, in which case GE 74 fires LMG and GE 75 assists. Target priority is soldier, then mule is no soldier is visible, except in Special Reaction M, when the target priority is mule (when closest or easiest) and then soldier."
+ },
+ "GE72": {
+  "lato": "GE",
+  "num": 72,
+  "lettera": "R",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 1,
+  "testo": "GE 72/R Machinegunner\n+1VP\n\nIN: 1 PC:3 WS: -—1 DS:4 MPA: 3\nBolt Rifle\n[ ime [ime [ima|[imel{a] |\n\nCOND SPEC\n\nDIE 1 23 S A BM\n0-3 848 635 817 740 749 807\n4 884 849 818 740 749 862\n5-7 841 848 833 740 749 868\n8-9 815 815 812 740 749 866\nAssists GE 73 in firing LMG unless GE 73 is wounded and\nGE 72 is not wounded, in which case GE 72 fires LMG and\nGE 73 assists. Target priority is soldier, then mule if no\nsoldier is visible, except in Special Reaction M, when the\ntarget priority is mule (when closest or easiest) and then\nsoldier.\n",
+  "IN": 1,
+  "PC": 3,
+  "WS": -1,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    848,
+    884,
+    841,
+    815
+   ],
+   "2-3": [
+    635,
+    849,
+    848,
+    815
+   ],
+   "S": [
+    817,
+    818,
+    833,
+    812
+   ],
+   "A": [
+    740,
+    740,
+    740,
+    740
+   ],
+   "BM": [
+    749,
+    749,
+    749,
+    749
+   ],
+   "?5": [
+    807,
+    862,
+    868,
+    866
+   ]
+  },
+  "note": "Assists GE 73 in firing LMG unless GE 73 is wounded and GE 72 is not wounded, in which case GE 72 fires LMG and GE 73 assists. Target priority is soldier, then mule if no soldier is visible, except in Special Reaction M, when the target priority is mule (when closest or easiest) and then soldier."
+ },
+ "GE75": {
+  "lato": "GE",
+  "num": 75,
+  "lettera": "X",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 2,
+  "testo": "GE 75/X Machinegunner\n+1 VP\n\nIN; 3. PC:5 WS:0 ODS:4 MPA: 4\nClip-fed LMG; Pistol; Grenade\n\nCOND SPEC\n\nDIE 23 S$ M\n0-3. 815 839 807\n45 959 859 862\n6 884 816 809\n7-9 846 833 863\nFires LMG unless GE 75 is wounded and GE 74 is not\nwounded, in which case GE 74 fires LMG and GE 75 assists.\nTarget priority is soldier, then mule if no soldier is visible,\nexcept in Special Reaction M, when the target priority is\nmule (when closest or easiest) and then soldier.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Clip-fed LMG; Pistol; Grenade",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-3": [
+    815,
+    959,
+    884,
+    846
+   ],
+   "SS": [
+    839,
+    859,
+    816,
+    833
+   ],
+   "M": [
+    807,
+    862,
+    809,
+    863
+   ]
+  },
+  "note": "Fires LMG unless GE 75 is wounded and GE 74 is not wounded, in which case GE 74 fires LMG and GE 75 assists. Target priority is soldier, then mule if no soldier is visible, except in Special Reaction M, when the target priority is mule (when closest or easiest) and then soldier."
+ },
+ "GE70": {
+  "lato": "GE",
+  "num": 70,
+  "lettera": "Y",
+  "ruolo": "Diver",
+  "foglio": "s17",
+  "indice": 3,
+  "testo": "GE 70/Y Diver\n+1 VP (+2 if captured and exited)\n\nIN: 4 PC:6 WS:0 DS:8 MPA: 4\nPistol; Knife; Grenade; Diving Equipment\n\nCOND SPEC\n\nDIE 1 2. S$\n0-9 233 672 348\nPistol is waterproofed. German diving equipment cannot be\nused by Americans.\n",
+  "IN": 4,
+  "PC": 6,
+  "WS": 0,
+  "DS": 8,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Pistol; Knife; Grenade; Diving Equipment",
+  "armi": [
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    233
+   ],
+   "2.": [
+    672
+   ],
+   "SS": [
+    348
+   ]
+  },
+  "note": "Pistol is waterproofed. German diving equipment cannot be used by Americans."
+ },
+ "GE71": {
+  "lato": "GE",
+  "num": 71,
+  "lettera": "T",
+  "ruolo": "Diver",
+  "foglio": "s17",
+  "indice": 4,
+  "testo": "GE 71/T Diver\n+1 VP (+2 if captured and exited)\n\nIN: 3 PC:5 WS: +1 DS: 2 MPA: 4\nPistol; Knife; Grenade; Diving Equipment\n\nCOND SPEC\n\nDIE 1 2 Ss\n0-9 564 672 348\nPistol is waterproofed. German diving equipment cannot be\nused by Americans.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Pistol; Knife; Grenade; Diving Equipment",
+  "armi": [
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    564
+   ],
+   "2": [
+    672
+   ],
+   "Ss": [
+    348
+   ]
+  },
+  "note": "Pistol is waterproofed. German diving equipment cannot be used by Americans."
+ },
+ "GE51": {
+  "lato": "GE",
+  "num": 51,
+  "lettera": "P",
+  "ruolo": "Garrison",
+  "foglio": "s17",
+  "indice": 5,
+  "testo": "GE 51/P Garrison\n+1 VP\n\nIN: 1 PC:3 WS:0 DS:4 MPA: 3\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 12 S A B OD\n0-2 866 812 782 345 801\n3-4 863 817 782 344 869\n5 840 839 800 347 817\n6-9 868 821 782 343 802\nActivates in Special Reaction A.\n",
+  "IN": 1,
+  "PC": 3,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    866,
+    863,
+    840,
+    868
+   ],
+   "S": [
+    812,
+    817,
+    839,
+    821
+   ],
+   "A": [
+    782,
+    782,
+    800,
+    782
+   ],
+   "B": [
+    345,
+    344,
+    347,
+    343
+   ],
+   "OD": [
+    801,
+    869,
+    817,
+    802
+   ]
+  },
+  "note": "Activates in Special Reaction A."
+ },
+ "GE59": {
+  "lato": "GE",
+  "num": 59,
+  "lettera": "L",
+  "ruolo": "SS Machingunner",
+  "foglio": "s17",
+  "indice": 6,
+  "testo": "GE 59/L SS Machingunner\n+1 VP\nIN: 3 PC:7 WS: +1 DS:8 MPA: 4\nClip-fed LMG; Pistol; 2 Grenades\nCOND SPEC\n\nDIE 2:3 S\n\n0-2. 869 816\n\n3-5 959 770\n\n6-8 815 859\n\n9 760 857\n| Fires LMG unless GE 59 is wounded and GE 66 is not\nwounded, in which case GE 66 fires LMG and GE 59 assists.\nOn first Turn, use 815.\n",
+  "IN": 3,
+  "PC": 7,
+  "WS": 1,
+  "DS": 8,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Clip-fed LMG; Pistol; 2 Grenades",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "2:3": [
+    869,
+    959,
+    815,
+    760
+   ],
+   "S": [
+    816,
+    770,
+    859,
+    857
+   ]
+  },
+  "note": "| Fires LMG unless GE 59 is wounded and GE 66 is not wounded, in which case GE 66 fires LMG and GE 59 assists. On first Turn, use 815."
+ },
+ "GE66": {
+  "lato": "GE",
+  "num": 66,
+  "lettera": "P",
+  "ruolo": "SS Machinegunner",
+  "foglio": "s17",
+  "indice": 7,
+  "testo": "GE 66/P SS Machinegunner\n+1VP\nIN: 1 PC:2 WS: -1 DS: 4 MPA: 3\n\nBolt Rifle\n\n[ ime ime ]imat ala] |\nCOND SPEC\n\nDIE 23° S\n\n0 761 (711\n\n15 824 971\n\n6-7 815 842\n\n8-9 829 843\n\nAssists GE 59 unless GE 59 is wounded and GE 66 is not\n\nwounded, in which case GE 66 fires LMG and GE 59 assists.\n\nOn first turn, use 869.\n",
+  "IN": 1,
+  "PC": 2,
+  "WS": -1,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "23°": [
+    761,
+    824,
+    815,
+    829
+   ],
+   "S": [
+    711,
+    971,
+    842,
+    843
+   ]
+  },
+  "note": "Assists GE 59 unless GE 59 is wounded and GE 66 is not wounded, in which case GE 66 fires LMG and GE 59 assists. On first turn, use 869."
+ },
+ "GE44": {
+  "lato": "GE",
+  "num": 44,
+  "lettera": "w",
+  "ruolo": "Engineer",
+  "foglio": "s17",
+  "indice": 8,
+  "testo": "GE 44/w Engineer\n+1 VP\n\nIN: 1 PC:2 WS:0 DS:4 MPA:3\nMachine Pistol; Grenade; Explosives\n\nCOND SPEC\n\nDIE 24 S ET\n0-1 863 812 261 218\n2-4 864 971 261 218\n5 865 811 261 218\n6-9 866 813 261 218\nActivates in Special Reaction T. Self-preservation does not\napply while in Special Reaction E or T. If wounded while\ncarrying explosives, see 339.\n",
+  "IN": 1,
+  "PC": 2,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Grenade; Explosives",
+  "armi": [
+   "mp"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-4": [
+    863,
+    864,
+    865,
+    866
+   ],
+   "S": [
+    812,
+    971,
+    811,
+    813
+   ],
+   "ET": [
+    261,
+    261,
+    261,
+    261
+   ],
+   "?3": [
+    218,
+    218,
+    218,
+    218
+   ]
+  },
+  "note": "Activates in Special Reaction T. Self-preservation does not apply while in Special Reaction E or T. If wounded while carrying explosives, see 339."
+ },
+ "GE49": {
+  "lato": "GE",
+  "num": 49,
+  "lettera": "X",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 9,
+  "testo": "GE 49/X Soldier\nIN: 3 PC: 4 WS: -1 DS: 6.MPA: 4\nMachine Pistol; 2 Grenades\nCOND SPEC\nDIE 1-2. 3 Ss D\n0-1 352 106 812 770\n2 840 844 817 802\n3-6 352 106 833 825\n7-9 352 106 859 824\n|\n|\n",
+  "IN": 3,
+  "PC": 4,
+  "WS": -1,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 0,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2.": [
+    352,
+    840,
+    352,
+    352
+   ],
+   "3": [
+    106,
+    844,
+    106,
+    106
+   ],
+   "Ss": [
+    812,
+    817,
+    833,
+    859
+   ],
+   "D": [
+    770,
+    802,
+    825,
+    824
+   ]
+  },
+  "note": "| |"
+ },
+ "GE50": {
+  "lato": "GE",
+  "num": 50,
+  "lettera": "N",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 10,
+  "testo": "GE 50/N Sniper\nIN: 5 PC:8 WS:0 DS:6 MPA: 5\nBolt Rifle with Scope; Grenade\nCOND SPEC\nDIE 1 23 S OD\n0-2 462 114 817 824\n\"3-6 462 114 859 825\n7 804 844 869 802\n8-9 462 114 971 801\n",
+  "IN": 5,
+  "PC": 8,
+  "WS": 0,
+  "DS": 6,
+  "MPA": 5,
+  "pv": 0,
+  "armi_testo": "Bolt Rifle with Scope; Grenade",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    7,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    462,
+    804,
+    462
+   ],
+   "2-3": [
+    114,
+    844,
+    114
+   ],
+   "S": [
+    817,
+    869,
+    971
+   ],
+   "OD": [
+    824,
+    802,
+    801
+   ]
+  },
+  "note": "8-9 462 114 971 801"
+ },
+ "GE39": {
+  "lato": "GE",
+  "num": 39,
+  "lettera": "N",
+  "ruolo": "SS Guard",
+  "foglio": "s17",
+  "indice": 11,
+  "testo": "GE 39/N SS Guard\n+1 VP\n\nIN: 5 PC:7 WS: +1 DS:6 MPA: 5\nBolt Rifle with Scope; 2 Grenades\n\nCOND SPEC\n\nDIE 13 = S\n0 860 816\n\n1-4 869 859\n\n5-8 862 812\n\n9 866 817\n",
+  "IN": 5,
+  "PC": 7,
+  "WS": 1,
+  "DS": 6,
+  "MPA": 5,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle with Scope; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    860,
+    869,
+    862,
+    866
+   ],
+   "=": [
+    816,
+    859,
+    812,
+    817
+   ]
+  },
+  "note": ""
+ },
+ "GE33": {
+  "lato": "GE",
+  "num": 33,
+  "lettera": "X",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 13,
+  "testo": "GE 33/X Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN:3 PC:7 WS:0 DS:6 MPA: 4\nBolt Rifle; 3 Grenades\n\nCOND SPEC\n\nDIE 13° S D H\n0-5 868 812 842 586\n6-7 867 817 869 586\n8 807 824 801 586\n9 865 816 802 586\nActivates in Special Reaction H. Self-preservation does not\napply while in Special Reaction H.\n",
+  "IN": 3,
+  "PC": 7,
+  "WS": 0,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 3 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 3,
+  "gruppi": [
+   [
+    0,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "13°": [
+    868,
+    867,
+    807,
+    865
+   ],
+   "S": [
+    812,
+    817,
+    824,
+    816
+   ],
+   "D": [
+    842,
+    869,
+    801,
+    802
+   ],
+   "H": [
+    586,
+    586,
+    586,
+    586
+   ]
+  },
+  "note": "Activates in Special Reaction H. Self-preservation does not apply while in Special Reaction H."
+ },
+ "GE34": {
+  "lato": "GE",
+  "num": 34,
+  "lettera": "Y",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 14,
+  "testo": "GE 34/Y Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN; 5 PC:7 WS: +1 DS: 4 MPA:5\nMachine Pistol; Pistol; Grenade\n\nCOND SPEC\n\nDIE 13° S D 4H\n0-3 866 770 869 583\n4 868 711 817 583\n5-8 862 839 824 583\n9 803 816 801 583\nActivates in Special Reaction H. Self-preservation does not\napply while in Special Reaction H.\n",
+  "IN": 5,
+  "PC": 7,
+  "WS": 1,
+  "DS": 4,
+  "MPA": 5,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Pistol; Grenade",
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    4
+   ],
+   [
+    5,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "13°": [
+    866,
+    868,
+    862,
+    803
+   ],
+   "S": [
+    770,
+    711,
+    839,
+    816
+   ],
+   "D": [
+    869,
+    817,
+    824,
+    801
+   ],
+   "4H": [
+    583,
+    583,
+    583,
+    583
+   ]
+  },
+  "note": "Activates in Special Reaction H. Self-preservation does not apply while in Special Reaction H."
+ },
+ "GE27": {
+  "lato": "GE",
+  "num": 27,
+  "lettera": "N",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 15,
+  "testo": "GE 27/N Sniper\n+1VP\n\nIN: 5 PC:8 WS: +2 DS:6 MPA:5\nMachine Pistol; Panzerfaust; Grenade\n\nCOND SPEC\n\nDIE 12 34 S PQ\n0 800 860 868 208 209\n1-2. 801 866 215 208 209\n3-4 817 807 812 208 209\n59 824 809 817 208 209\nActivates in Special Reaction P. Self-preservation does not\napply while in Special Reaction P or Q.\n",
+  "IN": 5,
+  "PC": 8,
+  "WS": 2,
+  "DS": 6,
+  "MPA": 5,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Panzerfaust; Grenade",
+  "armi": [
+   "mp",
+   "panzerfaust"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    800,
+    801,
+    817,
+    824
+   ],
+   "3-4": [
+    860,
+    866,
+    807,
+    809
+   ],
+   "S": [
+    868,
+    215,
+    812,
+    817
+   ],
+   "PQ": [
+    208,
+    208,
+    208,
+    208
+   ],
+   "?4": [
+    209,
+    209,
+    209,
+    209
+   ]
+  },
+  "note": "Activates in Special Reaction P. Self-preservation does not apply while in Special Reaction P or Q."
+ },
+ "GE28": {
+  "lato": "GE",
+  "num": 28,
+  "lettera": "M",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 16,
+  "testo": "GE 28/M Machinegunner\n+1 VP\nIN: 4 PC:6 WS: +1 DS:4 MPA: 4\nClip-fed LMG; Pistol; 2 Grenades\nCOND SPEC\nDIE 2 3-4 = S\n0-2 848 864 817\n3-4 815 863 816\n5-6 959 867 819\n7-9 815 868 823\nFires LMG unless GE 28 is wounded and GE 46 is not\nwounded, in which case GE 46 fires LMG and GE 28 assists.\nFor first Turn, use 815.\n",
+  "IN": 4,
+  "PC": 6,
+  "WS": 1,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Clip-fed LMG; Pistol; 2 Grenades",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "2": [
+    848,
+    815,
+    959,
+    815
+   ],
+   "3-4": [
+    864,
+    863,
+    867,
+    868
+   ],
+   "=": [
+    817,
+    816,
+    819,
+    823
+   ]
+  },
+  "note": "Fires LMG unless GE 28 is wounded and GE 46 is not wounded, in which case GE 46 fires LMG and GE 28 assists. For first Turn, use 815."
+ },
+ "GE29": {
+  "lato": "GE",
+  "num": 29,
+  "lettera": "L",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 17,
+  "testo": "GE 29/L Sniper\n+1 VP\nIN: 3 PC:5 WS: +1 DS:4 MPA: 4\nBolt Rifle with Scope; 2 Grenades\nCOND SPEC\nDIE 1 2 3-4 =S\n0-1 807 825 862 825\n2-5 804 802 863 812\n6 806 801 864 802\n7-9 836 824 867 817\nIf in Condition 1, use 866 on first Turn.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle with Scope; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    5
+   ],
+   [
+    6,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    807,
+    804,
+    806,
+    836
+   ],
+   "2": [
+    825,
+    802,
+    801,
+    824
+   ],
+   "3-4": [
+    862,
+    863,
+    864,
+    867
+   ],
+   "=S": [
+    825,
+    812,
+    802,
+    817
+   ]
+  },
+  "note": "If in Condition 1, use 866 on first Turn."
+ },
+ "GE76": {
+  "lato": "GE",
+  "num": 76,
+  "lettera": "M",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 18,
+  "testo": "GE 76/M Sniper\n+1VP\nIN: 4 -PC:6 WS: +1 DS:6 MPA: 4\nBolt Rifle; 2 Grenades\nCOND SPEC\nDIE 23 S$ B M\n0-2. 808 812 520 807\n3-4 801 833 520 809\n5-7 802 869 520 812\n8-9 824 817 520 868\nActivates in Special Reaction B. Target priority is soldier,\nthen mule if no soldier is visible, except in Special Reaction\nM, when the target priority is mule (when closest or easiest)\nand then soldier.\n|\n|\n",
+  "IN": 4,
+  "PC": 6,
+  "WS": 1,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-3": [
+    808,
+    801,
+    802,
+    824
+   ],
+   "SS": [
+    812,
+    833,
+    869,
+    817
+   ],
+   "B": [
+    520,
+    520,
+    520,
+    520
+   ],
+   "M": [
+    807,
+    809,
+    812,
+    868
+   ]
+  },
+  "note": "Activates in Special Reaction B. Target priority is soldier, then mule if no soldier is visible, except in Special Reaction M, when the target priority is mule (when closest or easiest) and then soldier. | |"
+ },
+ "GE73": {
+  "lato": "GE",
+  "num": 73,
+  "lettera": "L",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 19,
+  "testo": "GE 73/L Machinegunner\n+1 VP\nIN: 3 PC: 4 WS: +1 DS: 2 MPA: 4\n\nClip-fed LMG; Pistol; 2 Grenades\n\n° COND SPEC\nDIE 1 23 =S A B M\n0 959 849 971 740 749 843\n1-4 884 883 816 740 749 865 -\n5-6 959 847 825 740 749 815\n7-9 815 815 817 740 749 867\nFires LMG unless GE 73 is wounded and GE 72 is not\nwounded, in which case GE 72 fires LMG and GE 73 assists.\nTarget priority is soldier, then mule if no soldier is visible,\nexcept in Special Reaction M, when the target priority is\nmule (when closest or easiest) and then soldier.\n",
+  "IN": 3,
+  "PC": 4,
+  "WS": 1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Clip-fed LMG; Pistol; 2 Grenades",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    959,
+    884,
+    959,
+    815
+   ],
+   "2-3": [
+    849,
+    883,
+    847,
+    815
+   ],
+   "=S": [
+    971,
+    816,
+    825,
+    817
+   ],
+   "A": [
+    740,
+    740,
+    740,
+    740
+   ],
+   "B": [
+    749,
+    749,
+    749,
+    749
+   ],
+   "M": [
+    843,
+    865,
+    815,
+    867
+   ]
+  },
+  "note": "Fires LMG unless GE 73 is wounded and GE 72 is not wounded, in which case GE 72 fires LMG and GE 73 assists. Target priority is soldier, then mule if no soldier is visible, except in Special Reaction M, when the target priority is mule (when closest or easiest) and then soldier."
+ },
+ "GE69": {
+  "lato": "GE",
+  "num": 69,
+  "lettera": "T",
+  "ruolo": "SS Guard",
+  "foglio": "s17",
+  "indice": 20,
+  "testo": "GE 69/T SS Guard\n+1 VP\nIN: 3 PC:4 WS:0 DS:6 MPA: 4\nMachine Pistol; Pistol; 2 Grenades\nCOND SPEC\nDIE 13° S$\n0-3 864 833\n4-5 865 817\n6-8 866 839\n9 862 215\n",
+  "IN": 3,
+  "PC": 4,
+  "WS": 0,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Pistol; 2 Grenades",
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "13°": [
+    864,
+    865,
+    866,
+    862
+   ],
+   "SS": [
+    833,
+    817,
+    839,
+    215
+   ]
+  },
+  "note": ""
+ },
+ "GE52": {
+  "lato": "GE",
+  "num": 52,
+  "lettera": "Z",
+  "ruolo": "Garrison",
+  "foglio": "s17",
+  "indice": 21,
+  "testo": ") GE 52/Z Garrison\n+1 VP\n| IN: 5 PC:9 WS:0 DS:4 MPA:5\nBolt Rifle; 2 Grenades\n| COND SPEC\n| DIE 12 S A BOD\n| 0-1 862 833 784 343 869\n2:3 866 812 784 347 801\n| 4-5 863 817 784 345 802 __\n| 6-9 803 840 784 344 842\n| Activates in Special Reaction A.\n",
+  "IN": 5,
+  "PC": 9,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 5,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2
+ },
+ "GE53": {
+  "lato": "GE",
+  "num": 53,
+  "lettera": "Q",
+  "ruolo": "Garrison",
+  "foglio": "s17",
+  "indice": 22,
+  "testo": "GE 53/Q Garrison\n+1 VP\n\nIN: 0 PC:0 WS: -2 DS:0 MPA: 3\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 12 S$ A B D\n0-4 803 817 785 345 801\n5 809 833 844 343 808\n6-7 807 839 785 344 802\n8-9 868 821 785 347 817\nActivates in Speciai Reaction A.\n",
+  "IN": 0,
+  "PC": 0,
+  "WS": -2,
+  "DS": 0,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    803,
+    809,
+    807,
+    868
+   ],
+   "SS": [
+    817,
+    833,
+    839,
+    821
+   ],
+   "A": [
+    785,
+    844,
+    785,
+    785
+   ],
+   "B": [
+    345,
+    343,
+    344,
+    347
+   ],
+   "D": [
+    801,
+    808,
+    802,
+    817
+   ]
+  },
+  "note": "Activates in Speciai Reaction A."
+ },
+ "GE54": {
+  "lato": "GE",
+  "num": 54,
+  "lettera": "S",
+  "ruolo": "Garrison",
+  "foglio": "s17",
+  "indice": 23,
+  "testo": "GE 54/S Garrison\n+1 VP\n\nIN: 2 PC:3 WS: -2 DS:2 MPA: 4\nBolt Rifle; 2 Grenades\n\nCOND SPEC\n\nDIE 72 S AB D\n0-2 803 859 786 347 802\n3-4 867 825 786 345 869\n\n5 868 817 786 343 860\n6-9 865 833 786 344 801\n\nActivates in Special Reaction A.\n",
+  "IN": 2,
+  "PC": 3,
+  "WS": -2,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "7-2": [
+    803,
+    867,
+    868,
+    865
+   ],
+   "S": [
+    859,
+    825,
+    817,
+    833
+   ],
+   "AB": [
+    786,
+    786,
+    786,
+    786
+   ],
+   "D": [
+    347,
+    345,
+    343,
+    344
+   ],
+   "?4": [
+    802,
+    869,
+    860,
+    801
+   ]
+  },
+  "note": "Activates in Special Reaction A."
+ },
+ "GE45": {
+  "lato": "GE",
+  "num": 45,
+  "lettera": "X",
+  "ruolo": "Engineer",
+  "foglio": "s17",
+  "indice": 24,
+  "testo": "GE 45/X Engineer\n+1 VP\n\nIN: 4 PC:5 WS: -1 DS:2 MPA: 4\nBolt Rifle; 2 Grenades; Explosives\n\nCOND SPEC\n\nDIE 2-4 S$ E T\n0-1 803 817 261 218\n2:5 806 833 261 218\n6-7 865 859 261 218\n8-9 864 812 261 218\nActivates in Special Reaction T. Self-preservation does not\napply while in Special Reaction E or T. If wounded while\ncarrying explosives, see 339.\n",
+  "IN": 4,
+  "PC": 5,
+  "WS": -1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades; Explosives",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-4": [
+    803,
+    865,
+    864
+   ],
+   "SS": [
+    817,
+    859,
+    812
+   ],
+   "E": [
+    261,
+    261,
+    261
+   ],
+   "T": [
+    218,
+    218,
+    218
+   ]
+  },
+  "note": "8-9 864 812 261 218 Activates in Special Reaction T. Self-preservation does not apply while in Special Reaction E or T. If wounded while carrying explosives, see 339."
+ },
+ "GE46": {
+  "lato": "GE",
+  "num": 46,
+  "lettera": "V",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 25,
+  "testo": "GE 46/V Machinegunner\n+1 VP\nIN: 1 PC:2 WS: -1 DS:4 MPA: 3\n\nBolt Rifle\n\n[ ima|[ ima] ime] ime] a] |\nCOND SPEC\n\nDIE 2 3-4 =S\n\n0 815 815 859\n\n1-2 869 803 823\n\n3-4 815 809 839\n\n5-9 770 807 812\n\nAssists GE 28 unless GE 28 is wounded and GE 46 is not\n\n‘wounded, in which case GE 46 fires LMG and GE 28 assists.\n\nFor first Turn, see 869.\n",
+  "IN": 1,
+  "PC": 2,
+  "WS": -1,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    9
+   ]
+  ],
+  "colonne": {
+   "2": [
+    815,
+    869,
+    815,
+    770
+   ],
+   "3-4": [
+    815,
+    803,
+    809,
+    807
+   ],
+   "=S": [
+    859,
+    823,
+    839,
+    812
+   ]
+  },
+  "note": "Assists GE 28 unless GE 28 is wounded and GE 46 is not ‘wounded, in which case GE 46 fires LMG and GE 28 assists. For first Turn, see 869."
+ },
+ "GE48": {
+  "lato": "GE",
+  "num": 48,
+  "lettera": "M",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 26,
+  "testo": "GE 48/M Soldier\nIN: 3 PC:5 WS:0 DS:2 MPA: 4\nMachine Pistol; 3 Grenades\nCOND SPEC\n\nDIE 1-2. 3 sD _\n0 800 800 825 770\n\n1:3. 352 106 812 825\n\n4-5 352 106 817 824\n\n6-9 352 106 824 801\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 0,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 0,
+  "armi_testo": "Machine Pistol; 3 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 3,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2.": [
+    800,
+    352,
+    352
+   ],
+   "3": [
+    800,
+    106,
+    106
+   ],
+   "sD": [
+    825,
+    817,
+    824
+   ],
+   "_": [
+    770,
+    824,
+    801
+   ]
+  },
+  "note": "6-9 352 106 824 801"
+ },
+ "GE40": {
+  "lato": "GE",
+  "num": 40,
+  "lettera": "Y",
+  "ruolo": "Officer",
+  "foglio": "s17",
+  "indice": 27,
+  "testo": "| GE 40/Y Officer\n+2 VP (+2 if captured)\n| IN: 5 PC:8 WS: +2 DS:8 MPA:5\nMachine Pistol; Pistol; Grenade\nCOND SPEC\nDIE 2 34 =S E G HT\n0-3. 809 832 859 261 158 153 217\n| 46 803 823 833 261 158 153 217\n7-8 807 822 812 261 158 153 217\n| 9 856 969 868 261 158 153 217\nActivates in Special Reaction T. Self-preservation does not\napply while in Special Reaction E or T. If wounded while\n| carrying explosives, see 339.\n",
+  "IN": 5,
+  "PC": 8,
+  "WS": 2,
+  "DS": 8,
+  "MPA": 5,
+  "pv": 2,
+  "armi_testo": "Machine Pistol; Pistol; Grenade",
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    7,
+    8
+   ]
+  ],
+  "colonne": {
+   "2": [
+    809,
+    807
+   ],
+   "3-4": [
+    832,
+    822
+   ],
+   "=S": [
+    859,
+    812
+   ],
+   "E": [
+    261,
+    261
+   ],
+   "G": [
+    158,
+    158
+   ],
+   "HT": [
+    153,
+    153
+   ],
+   "?6": [
+    217,
+    217
+   ]
+  },
+  "note": "7-8 807 822 812 261 158 153 217 | 9 856 969 868 261 158 153 217 Activates in Special Reaction T. Self-preservation does not apply while in Special Reaction E or T. If wounded while | carrying explosives, see 339."
+ },
+ "GE41": {
+  "lato": "GE",
+  "num": 41,
+  "lettera": "Z",
+  "ruolo": "Driver and Half Track",
+  "foglio": "s17",
+  "indice": 28,
+  "testo": "GE 41/Z Driver and Half Track\n+2 VP (+3 if half track knocked out)\n\nIN: 4 PC:7 WS: -1 DS:6 MPA: 4\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 24 S E G H-:T\n0-4 862 817 261 481 153 216\n5-6 863 833 261 481 153 216\n7-8 864 812 261 481 153 216\n9 868 816 261 481 153 216\nActivates in Special Reaction T. Self-preservation does not\napply while in Special Reaction E or T. If wounded while\ncarrying explosives, see 339. Half track has amounted LMG\nin rear passenger compartment; when firing LMG, -2\nmodifier for fire from vehicle is not applied.\n",
+  "IN": 4,
+  "PC": 7,
+  "WS": -1,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 2,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-4": [
+    862,
+    863,
+    864,
+    868
+   ],
+   "S": [
+    817,
+    833,
+    812,
+    816
+   ],
+   "E": [
+    261,
+    261,
+    261,
+    261
+   ],
+   "G": [
+    481,
+    481,
+    481,
+    481
+   ],
+   "H-:T": [
+    153,
+    153,
+    153,
+    153
+   ],
+   "?5": [
+    216,
+    216,
+    216,
+    216
+   ]
+  },
+  "note": "Activates in Special Reaction T. Self-preservation does not apply while in Special Reaction E or T. If wounded while carrying explosives, see 339. Half track has amounted LMG in rear passenger compartment; when firing LMG, -2 modifier for fire from vehicle is not applied."
+ },
+ "GE42": {
+  "lato": "GE",
+  "num": 42,
+  "lettera": "Q",
+  "ruolo": "Engineer",
+  "foglio": "s17",
+  "indice": 29,
+  "testo": "GE 42/Q Engineer\n+1 VP\n\nIN: 1 PC: 4 WS: -1 DS: 4 MPA:3\nMachine Pistol; Grenade; Explosives\n\nCOND SPEC\n\nDIE 24 S ET\n0-1 864 833 261 218\n2:5 867 816 261 218\n6 869 971 261 218\n7-9 868 711 261 218\nActivates in Special Reaction T. Self-preservation does not\napply while in Special Reaction E or T. If wounded while\ncarrying explosives, see 339.\n",
+  "IN": 1,
+  "PC": 4,
+  "WS": -1,
+  "DS": 4,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Grenade; Explosives",
+  "armi": [
+   "mp"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    6,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "2-4": [
+    864,
+    869,
+    868
+   ],
+   "S": [
+    833,
+    971,
+    711
+   ],
+   "ET": [
+    261,
+    261,
+    261
+   ],
+   "?3": [
+    218,
+    218,
+    218
+   ]
+  },
+  "note": "7-9 868 711 261 218 Activates in Special Reaction T. Self-preservation does not apply while in Special Reaction E or T. If wounded while carrying explosives, see 339."
+ },
+ "GE35": {
+  "lato": "GE",
+  "num": 35,
+  "lettera": "U",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 30,
+  "testo": "| GE 35/U Machinegunner\n+1 VP if killed or incapacitated\n\n| IN: 3 PC:5 WS: +1 DS:2 MPA: 4\nClip-fed LMG; Pistol; Grenade\n\n| COND SPEC\n\nDIE 13 = S$ D\n\n0-3 865 817 869\n\n4-6 862 812 824\n\n7-8 815 821 815\n\n| 9 868 839 825\n\n| Fires LMG unless GE 35 is wounded and GE 36 is not\nwounded, in which case GE 36 fires LMG and GE 36 assists.\n\n| On first Turn, use 815.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Clip-fed LMG; Pistol; Grenade",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    6
+   ],
+   [
+    7,
+    8
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    865,
+    862,
+    815
+   ],
+   "=": [
+    817,
+    812,
+    821
+   ],
+   "SS": [
+    869,
+    824,
+    815
+   ]
+  },
+  "note": "| 9 868 839 825 | Fires LMG unless GE 35 is wounded and GE 36 is not wounded, in which case GE 36 fires LMG and GE 36 assists. | On first Turn, use 815."
+ },
+ "GE36": {
+  "lato": "GE",
+  "num": 36,
+  "lettera": "L",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 31,
+  "testo": "GE 36/L Machinegunner\n+1 VP if killed or incapacitated\n\nIN: 3 PC:6 WS:0 DS: 4 MPA: 4\nMachine Pistol\n[| ume [ime [ime | ima|[a | |\n\nCOND SPEC\n\nDIE 13 S$ D\n0-1 862 817 770\n2 865 833 840\n3-6 865 839 841\n7-9 815 812 815\nAssists GE 35 in firing LMG unless GE 35 is wounded and\nGE 36 is not wounded, in which case GE 36 fires LMG and\nGE 35 assists. On first Turn, use 841.\n",
+  "IN": 3,
+  "PC": 6,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol",
+  "armi": [
+   "mp"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    862,
+    865,
+    865,
+    815
+   ],
+   "SS": [
+    817,
+    833,
+    839,
+    812
+   ],
+   "D": [
+    770,
+    840,
+    841,
+    815
+   ]
+  },
+  "note": "Assists GE 35 in firing LMG unless GE 35 is wounded and GE 36 is not wounded, in which case GE 36 fires LMG and GE 35 assists. On first Turn, use 841."
+ },
+ "GE38": {
+  "lato": "GE",
+  "num": 38,
+  "lettera": "T",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 32,
+  "testo": "GE 38/T Sniper\n+1VP\n\nIN: 3 PC:7 WS:0 DS:2 MPA:4\nBolt Rifle; Panzerfaust; Grenade\n\nCOND SPEC\n\nDIE 2 34 =S PQ\n0 840 865 711 208 209\n1:2. 802 819 971 208 209\n3-5 825 863 813 208 209\n6-9 824 868 816 208 209\nActivates in Special Reaction P. Self-preservation does not\napply while in Special Reaction P or Q.\n",
+  "IN": 3,
+  "PC": 7,
+  "WS": 0,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; Panzerfaust; Grenade",
+  "armi": [
+   "bolt",
+   "panzerfaust"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "2": [
+    840,
+    825,
+    824
+   ],
+   "3-4": [
+    865,
+    863,
+    868
+   ],
+   "=S": [
+    711,
+    813,
+    816
+   ],
+   "PQ": [
+    208,
+    208,
+    208
+   ],
+   "?4": [
+    209,
+    209,
+    209
+   ]
+  },
+  "note": "6-9 824 868 816 208 209 Activates in Special Reaction P. Self-preservation does not apply while in Special Reaction P or Q."
+ },
+ "GE32": {
+  "lato": "GE",
+  "num": 32,
+  "lettera": "Z",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 34,
+  "testo": "GE 32/Z Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN: 4 PC:7 WS: -1 DS: 4 MPA: 4\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 13 = S DT\n0 830 839 802 585\n1-2 866 817 808 585\n3-4 867 833 801 585\n5:9 865 821 817 585\nActivates in Special Reaction T.\n",
+  "IN": 4,
+  "PC": 7,
+  "WS": -1,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    4
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    830,
+    866,
+    867
+   ],
+   "=": [
+    839,
+    817,
+    833
+   ],
+   "S": [
+    802,
+    808,
+    801
+   ],
+   "DT": [
+    585,
+    585,
+    585
+   ]
+  },
+  "note": "5:9 865 821 817 585 Activates in Special Reaction T."
+ },
+ "GE22": {
+  "lato": "GE",
+  "num": 22,
+  "lettera": "M",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 37,
+  "testo": "GE 22/M Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN: 3 PC:7 WS: -1 DS: 2 MPA: 4\nMachine Pistol; Pistol; Grenade\n\nCOND SPEC\n\nDIE 13° S DT\n\n0-4 868 770 801 426\n\n§ 864 817 802 426\n\n6-8 866 839 808 426\n\n9 867 829 817 426\n\nActivates in Special Reaction T.\n",
+  "IN": 3,
+  "PC": 7,
+  "WS": -1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Pistol; Grenade",
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    4
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "13°": [
+    868,
+    866,
+    867
+   ],
+   "S": [
+    770,
+    839,
+    829
+   ],
+   "DT": [
+    801,
+    808,
+    817
+   ],
+   "?3": [
+    426,
+    426,
+    426
+   ]
+  },
+  "note": "9 867 829 817 426 Activates in Special Reaction T."
+ },
+ "GE23": {
+  "lato": "GE",
+  "num": 23,
+  "lettera": "S",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 38,
+  "testo": "GE 23/S Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN: 3 PC:5 WS: +1 DS: 4 MPA:4\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 13 = S D sT\n\n0 865 816 840 425\n\n41-2. 863 817 825 425\n\n3-5 868 812 824 425\n6-9 807 833 802 425\n\nActivates in Special Reaction T.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3": [
+    865,
+    868,
+    807
+   ],
+   "=": [
+    816,
+    812,
+    833
+   ],
+   "S": [
+    840,
+    824,
+    802
+   ],
+   "D": [
+    425,
+    425,
+    425
+   ]
+  },
+  "note": "6-9 807 833 802 425 Activates in Special Reaction T."
+ },
+ "GE19": {
+  "lato": "GE",
+  "num": 19,
+  "lettera": "W",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 39,
+  "testo": "GE 19/W Machinegunner\nIN: 1 PC:4 WS: -1 DS:6 MPA:3\nClip-fed LMG; Pistol; 2 Grenades\nCOND SPEC\nDIE 1 23S D\n0-3 815 132 859 815\n4-5 843 132 817 841\n6-8 802 132 812 843\n9 840 132 833 802\nOn first Turn, use 869. Fires LMG unless GE 19 is wounded\nand GE 20 is not wounded, in which case GE 20 fires LMG\n| and GE 19 assists.\n",
+  "IN": 1,
+  "PC": 4,
+  "WS": -1,
+  "DS": 6,
+  "MPA": 3,
+  "pv": 0,
+  "armi_testo": "Clip-fed LMG; Pistol; 2 Grenades",
+  "armi": [
+   "lmg",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    815,
+    843,
+    802,
+    840
+   ],
+   "23S": [
+    132,
+    132,
+    132,
+    132
+   ],
+   "D": [
+    859,
+    817,
+    812,
+    833
+   ],
+   "?3": [
+    815,
+    841,
+    843,
+    802
+   ]
+  },
+  "note": "On first Turn, use 869. Fires LMG unless GE 19 is wounded and GE 20 is not wounded, in which case GE 20 fires LMG | and GE 19 assists."
+ },
+ "GE18": {
+  "lato": "GE",
+  "num": 18,
+  "lettera": "U",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 40,
+  "testo": "GE 18/U Soldier\nIN: 3 PC:5 WS: +1 DS:4 MPA: 4\nMachine Pistol; 2 Grenades\nCOND SPEC\nDIE 1-2. 3 Ss D M\n0 241115 817 802 862\n1-2. 241 115 833 801 864\n3-5 241 115 829 808 863\n6-9 241 115 839 817 866\nSelf-preservation does not apply, unless on same Level.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 1,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 0,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2.": [
+    817,
+    241,
+    241,
+    241
+   ],
+   "3": [
+    802,
+    115,
+    115,
+    115
+   ],
+   "Ss": [
+    862,
+    833,
+    829,
+    839
+   ],
+   "D": [
+    null,
+    801,
+    808,
+    817
+   ],
+   "M": [
+    null,
+    864,
+    863,
+    866
+   ]
+  },
+  "note": "Self-preservation does not apply, unless on same Level."
+ },
+ "GE17": {
+  "lato": "GE",
+  "num": 17,
+  "lettera": "S",
+  "ruolo": "Machinegunner",
+  "foglio": "s17",
+  "indice": 41,
+  "testo": "GE 17/S Machinegunner\nIN; 3 PC:5 WS:0 DS:4 MPA: 4\nBolt Rifle\nLMG LMG LMG LMG G\nCOND SPEC\nDIE 1-2 3 Ss D\n0-1 467 139 803 843\n2 467 139 803 841\n3-6 467 139 817 815\n7-9 467 139 833 770\nOn first Turn, use 815. Assists GE 16 in firing LMG unless\nGE 16 is wounded and GE 17 is not wounded, in which case\nGE 17 fires LMG and GE 16 assists.\n",
+  "IN": 3,
+  "PC": 5,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 4,
+  "pv": 0,
+  "armi_testo": "Bolt Rifle",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 0,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    467,
+    467,
+    467,
+    467
+   ],
+   "3": [
+    139,
+    139,
+    139,
+    139
+   ],
+   "Ss": [
+    803,
+    803,
+    817,
+    833
+   ],
+   "D": [
+    843,
+    841,
+    815,
+    770
+   ]
+  },
+  "note": "On first Turn, use 815. Assists GE 16 in firing LMG unless GE 16 is wounded and GE 17 is not wounded, in which case GE 17 fires LMG and GE 16 assists."
+ },
+ "GE13": {
+  "lato": "GE",
+  "num": 13,
+  "lettera": "W",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 42,
+  "testo": "GE 13/W Soldier\n+1 VP\nIN: 2 PC:5 WS: -1 DS:6 MPA: 4\nMachine Pistol; Grenade\nCOND SPEC\nDIE 12° S A B DT\n0-2 868 816 857 344 842 566\n3-4 863 839 856 347 858 566\n5 866 868 801 343 860 566\n6-9 864 817 856 345 861 566\nActivates in Special Reaction T. If truck is disabled, see 569.\n",
+  "IN": 2,
+  "PC": 5,
+  "WS": -1,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; Grenade",
+  "armi": [
+   "mp"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    2
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "12°": [
+    868,
+    863,
+    866,
+    864
+   ],
+   "S": [
+    816,
+    839,
+    868,
+    817
+   ],
+   "A": [
+    857,
+    856,
+    801,
+    856
+   ],
+   "B": [
+    344,
+    347,
+    343,
+    345
+   ],
+   "DT": [
+    842,
+    858,
+    860,
+    861
+   ],
+   "?5": [
+    566,
+    566,
+    566,
+    566
+   ]
+  },
+  "note": "Activates in Special Reaction T. If truck is disabled, see 569."
+ },
+ "GE12": {
+  "lato": "GE",
+  "num": 12,
+  "lettera": "xX",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 43,
+  "testo": "GE 12/xX Soldier\n+1 VP\n\nIN: 3 PC:6 WS: -1 DS:8 MPA: 4\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 12 = S A B DOT\n0-1 866 859 860 344 869 567\n2 868 800 869 345 808 567\n3-5 867 817 770 347 824 567\n6-9 819 839 801 343 825 567\nActivates in Special Reaction T. If truck is disabled, see 569.\n",
+  "IN": 3,
+  "PC": 6,
+  "WS": -1,
+  "DS": 8,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    866,
+    868,
+    867,
+    819
+   ],
+   "=": [
+    859,
+    800,
+    817,
+    839
+   ],
+   "S": [
+    860,
+    869,
+    770,
+    801
+   ],
+   "A": [
+    344,
+    345,
+    347,
+    343
+   ],
+   "B": [
+    869,
+    808,
+    824,
+    825
+   ],
+   "DOT": [
+    567,
+    567,
+    567,
+    567
+   ]
+  },
+  "note": "Activates in Special Reaction T. If truck is disabled, see 569."
+ },
+ "GE11": {
+  "lato": "GE",
+  "num": 11,
+  "lettera": "R",
+  "ruolo": "Assistant Driver",
+  "foglio": "s17",
+  "indice": 44,
+  "testo": "GE 11/R Assistant Driver\n+1 VP\n\nIN: 2 PC:4 WS:0 DS:6 MPA: 4\nBolt Rifle; Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 1-2, S A B DT\n0-1 862 817 857 343 842 566\n2 863 816 858 344 856 566\n3-5 864 833 856 345 858 566\n6-9 865 839 802 347 857 566\nActivates in Special Reaction T. If driver is incapacitated or\nkilled, spend 1 Action to become driver and use 565 as long\nas in truck. If truck is disabled, see 569.\n",
+  "IN": 2,
+  "PC": 4,
+  "WS": 0,
+  "DS": 6,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; Pistol; 2 Grenades",
+  "armi": [
+   "bolt",
+   "pistol"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2,": [
+    862,
+    863,
+    864,
+    865
+   ],
+   "S": [
+    817,
+    816,
+    833,
+    839
+   ],
+   "A": [
+    857,
+    858,
+    856,
+    802
+   ],
+   "B": [
+    343,
+    344,
+    345,
+    347
+   ],
+   "DT": [
+    842,
+    856,
+    858,
+    857
+   ],
+   "?5": [
+    566,
+    566,
+    566,
+    566
+   ]
+  },
+  "note": "Activates in Special Reaction T. If driver is incapacitated or killed, spend 1 Action to become driver and use 565 as long as in truck. If truck is disabled, see 569."
+ },
+ "GE60": {
+  "lato": "GE",
+  "num": 60,
+  "lettera": "U",
+  "ruolo": "Guard Boat",
+  "foglio": "s17",
+  "indice": 46,
+  "testo": "GE 60/U Guard Boat\n+1 VP (+2 if eliminated)\n\nBolt Rifles; Unlimited Grenades\n\nAct ACTION NR.\n\nCrew IN PC WS DS 0-2 3 4-7 8-9\n3.2 ~«5 0 na_ 911 912 913 914\n2.2 3 O na_914 911 912 913\n\n1 1 3 ~-1 na_ 912 913 911 914\nSee 674 for information about guard boat.\n",
+  "pv": 1,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "GE61": {
+  "lato": "GE",
+  "num": 61,
+  "lettera": "L",
+  "ruolo": "Guard Boat",
+  "foglio": "s17",
+  "indice": 47,
+  "testo": "GE 61/L Guard Boat\n+1 VP (+2 if eliminated)\n\nBolt Rifles; Unlimited Grenades\n\nAct ACTION NR.\n\nCrew IN PC WS DS 0 1-2 3-7 89\n\n3. 3 «6 +1 na_918 916 915 917\n\n2 3 4 +1 na _ 916 917 918 915\n\n41 #1 #2 -1 na_ 915 918 917 916\nSee 674 for information about guard boat.\n",
+  "pv": 1,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "US4": {
+  "lato": "US",
+  "num": 4,
+  "lettera": "AA",
+  "ruolo": "Sherman",
+  "foglio": "s17",
+  "indice": 49,
+  "testo": "US 04/AA Sherman\n—3 VP if knocked out\n\nAct ACTION NR.\n\nCrw IN PC WS DS 0-1 2-7 8-9\n\n5 4 8 +18 939 946 939\n\n4 4 7 +18 946 939 946\n\n3 4 6 06 956 956 956\n\n2.3 +5 06 956 956 956\n\n1 2 4 ~-14 706 706 706\n\nEnters open with cannon prepared.\n",
+  "pv": 0,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "US3": {
+  "lato": "US",
+  "num": 3,
+  "lettera": "BB",
+  "ruolo": "Anti-Tank Gun Team",
+  "foglio": "s17",
+  "indice": 50,
+  "testo": "US 03/BB Anti-Tank Gun Team\n\n—2 VP if ATG destroyed\n\nCrew ACTION NRA.\n\nMan IN PC WS MPA0-2 3-7 8-9\n\nJ 3 6 +14 477 476 474\n\nK 2 4 04 474 477 476\n\nATG activates loaded; J and K activate crouching. ATG is\n\nconsidered a small vehicle for fire combat purposes. J and\n\nK are not under your control, but conduct Action Paragraphs\n\nas indicated. J and K are subject to panic in normal manner.\n\nport [J] Carbine [|\n[K[ Carb [Carb[carb] ¢@ [ | |\n\nwon fil eaten oo ETI\n",
+  "pv": 0,
+  "armi_testo": "J 3 6 +14 477 476 474",
+  "armi": [],
+  "granate": 0
+ },
+ "GE24": {
+  "lato": "GE",
+  "num": 24,
+  "lettera": "N",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 54,
+  "testo": "GE 24/N Panzergrenadier\n+1 VP if killed or incapacitated\nIN;5 PC:6 WS:0 DS:4 MPA:5\nBolt Rifle; 2 Grenades\nCOND SPEC\nDIE 1-3, S D\n0-4 862 839 825\n5 863 812 802\n6:8 868 859 801\n9 865 971 800\n|\n",
+  "IN": 5,
+  "PC": 6,
+  "WS": 0,
+  "DS": 4,
+  "MPA": 5,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-3,": [
+    862,
+    863,
+    865
+   ],
+   "S": [
+    839,
+    812,
+    971
+   ],
+   "D": [
+    825,
+    802,
+    800
+   ]
+  },
+  "note": "9 865 971 800 |"
+ },
+ "GE25": {
+  "lato": "GE",
+  "num": 25,
+  "lettera": "T",
+  "ruolo": "Panzergrenadier",
+  "foglio": "s17",
+  "indice": 55,
+  "testo": "GE 25/T Panzergrenadier\n+1 VP if killed or incapacitated\n\nIN: 2 PC:4 WS:0 DS:2 MPA: 4\nBolt Rifle; 2 Grenades\n\nCOND SPEC\n\nDIE 13° S OD\n0-3 866 817 770\n4-5 867 812 825\n6-7 865 833 802\n8-9 864 859 824\n",
+  "IN": 2,
+  "PC": 4,
+  "WS": 0,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    3
+   ],
+   [
+    4,
+    5
+   ],
+   [
+    6,
+    7
+   ],
+   [
+    8,
+    9
+   ]
+  ],
+  "colonne": {
+   "13°": [
+    866,
+    867,
+    865,
+    864
+   ],
+   "S": [
+    817,
+    812,
+    833,
+    859
+   ],
+   "OD": [
+    770,
+    825,
+    802,
+    824
+   ]
+  },
+  "note": ""
+ },
+ "GE26": {
+  "lato": "GE",
+  "num": 26,
+  "lettera": "S",
+  "ruolo": "Sniper",
+  "foglio": "s17",
+  "indice": 56,
+  "testo": "GE 26/S Sniper\n+1 VP\n\nIN: 3 PC:6 WS: +1 DS:2 MPA: 4\nBolt Rifle with Scope; 2 Grenades\n\nCOND SPEC\n\nDIE 1 2 3-4 S B\n0-1 807 801 807 839 599\n2-4 836 802 803 859 599\n5 804 824 809 833 599\n6-9 803 825 866 971 599\nActivates in Special Reaction B. Self-preservation does not\napply while in Special Reaction B.\n",
+  "IN": 3,
+  "PC": 6,
+  "WS": 1,
+  "DS": 2,
+  "MPA": 4,
+  "pv": 1,
+  "armi_testo": "Bolt Rifle with Scope; 2 Grenades",
+  "armi": [
+   "bolt"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    5,
+    5
+   ],
+   [
+    6,
+    9
+   ]
+  ],
+  "colonne": {
+   "1": [
+    807,
+    836,
+    804,
+    803
+   ],
+   "2": [
+    801,
+    802,
+    824,
+    825
+   ],
+   "3-4": [
+    807,
+    803,
+    809,
+    866
+   ],
+   "S": [
+    839,
+    859,
+    833,
+    971
+   ],
+   "B": [
+    599,
+    599,
+    599,
+    599
+   ]
+  },
+  "note": "Activates in Special Reaction B. Self-preservation does not apply while in Special Reaction B."
+ },
+ "GE15": {
+  "lato": "GE",
+  "num": 15,
+  "lettera": "N",
+  "ruolo": "Captain",
+  "foglio": "s17",
+  "indice": 58,
+  "testo": "GE 15/N Captain\n+2 VP (+2 if captured)\n\nIN; 5 PC:7 WS:0 DS:8 MPA:5\nMachine Pistol; Pistol; Grenade\n\nCOND SPEC\n\nDIE 12 S A B DT\n0-1 823 817 856 344 832 568\n2-4 863 823 860 343 861 568\n5-6 822 859 861 347 835 568\n7-9 866 825 857 345 860 568\nActivates in Special Reaction T. If truck is disabled, see 569.\n",
+  "IN": 5,
+  "PC": 7,
+  "WS": 0,
+  "DS": 8,
+  "MPA": 5,
+  "pv": 2,
+  "armi_testo": "Machine Pistol; Pistol; Grenade",
+  "armi": [
+   "mp",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    4
+   ],
+   [
+    5,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    823,
+    863,
+    822,
+    866
+   ],
+   "S": [
+    817,
+    823,
+    859,
+    825
+   ],
+   "A": [
+    856,
+    860,
+    861,
+    857
+   ],
+   "B": [
+    344,
+    343,
+    347,
+    345
+   ],
+   "DT": [
+    832,
+    861,
+    835,
+    860
+   ],
+   "?5": [
+    568,
+    568,
+    568,
+    568
+   ]
+  },
+  "note": "Activates in Special Reaction T. If truck is disabled, see 569."
+ },
+ "GE14": {
+  "lato": "GE",
+  "num": 14,
+  "lettera": "V",
+  "ruolo": "Soldier",
+  "foglio": "s17",
+  "indice": 59,
+  "testo": "GE 14/V Soldier\n+1 VP\n\nIN: 0 PC: 2 WS: -1 DS:0 MPA: 3\nMachine Pistol; 2 Grenades\n\nCOND SPEC\n\nDIE 1-2 S$ A B D T\n0-1 803 839 859 347 856 567\n2 800 821 857 345 857 567\n3-6 807 817 860 344 801 567\n7-9 808 833 858 343 802 567\nActivates in Special Reaction T. If truck is disabled, see 569.\n",
+  "IN": 0,
+  "PC": 2,
+  "WS": -1,
+  "DS": 0,
+  "MPA": 3,
+  "pv": 1,
+  "armi_testo": "Machine Pistol; 2 Grenades",
+  "armi": [
+   "mp"
+  ],
+  "granate": 2,
+  "gruppi": [
+   [
+    0,
+    1
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    3,
+    6
+   ],
+   [
+    7,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    803,
+    800,
+    807,
+    808
+   ],
+   "SS": [
+    839,
+    821,
+    817,
+    833
+   ],
+   "A": [
+    859,
+    857,
+    860,
+    858
+   ],
+   "B": [
+    347,
+    345,
+    344,
+    343
+   ],
+   "D": [
+    856,
+    857,
+    801,
+    802
+   ],
+   "T": [
+    567,
+    567,
+    567,
+    567
+   ]
+  },
+  "note": "Activates in Special Reaction T. If truck is disabled, see 569."
+ },
+ "GE10": {
+  "lato": "GE",
+  "num": 10,
+  "lettera": "M",
+  "ruolo": "Driver and Truck",
+  "foglio": "s17",
+  "indice": 60,
+  "testo": "| GE 10/M Driver and Truck\n| +2 VP (+2 if truck knocked out)\n\nIN: 4 PC:6 WS: +1 DS:8 MPA: 4\n| Bolt Rifle; Pistol; Grenade\n\nCOND SPEC\n\nDIE 12 S A B OD _ T\n| 0-1 803 812 859 347 869 565\n\n2-5 807 833 860 344 825 565\n\n6-8 819 817 857 343 824 565\n\n9 809 816 858 345 808 565\n| Activates in Special Reaction T. If truck is disabled, see 569.\na\n",
+  "IN": 4,
+  "PC": 6,
+  "WS": 1,
+  "DS": 8,
+  "MPA": 4,
+  "pv": 2,
+  "armi_testo": "| Bolt Rifle; Pistol; Grenade",
+  "armi": [
+   "bolt",
+   "pistol"
+  ],
+  "granate": 1,
+  "gruppi": [
+   [
+    2,
+    5
+   ],
+   [
+    6,
+    8
+   ],
+   [
+    9,
+    9
+   ]
+  ],
+  "colonne": {
+   "1-2": [
+    807,
+    819,
+    809
+   ],
+   "S": [
+    833,
+    817,
+    816
+   ],
+   "A": [
+    860,
+    857,
+    858
+   ],
+   "B": [
+    344,
+    343,
+    345
+   ],
+   "OD": [
+    825,
+    824,
+    808
+   ],
+   "_": [
+    565,
+    565,
+    565
+   ]
+  },
+  "note": "9 809 816 858 345 808 565 | Activates in Special Reaction T. If truck is disabled, see 569. a"
+ },
+ "GE30": {
+  "lato": "GE",
+  "num": 30,
+  "lettera": "LL",
+  "ruolo": "Panzer",
+  "foglio": "s17",
+  "indice": 61,
+  "testo": "GE 30/LL Panzer\n+3 VP if knocked out\n\nAct ACTION NR.\n\nCrew IN PC WS DS 0-3 4-5 68 9\n\n5 5 8 +28 902 905 925 814\n\n4 3 6 +18 925 902 905 827\n3.3 ~CS5 06 906 907 707 826\n\n2 2 3 -14 908 910 921 814\n\n1 1 = 1 = -22 9837 921 874 923\nEnters open with cannon prepared. Will only drive slowly\nuntil hit by fire of any type, regardless of result. Once hit\nby fire, will drive fast if so directed.\n",
+  "pv": 3,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "GE37": {
+  "lato": "GE",
+  "num": 37,
+  "lettera": "",
+  "ruolo": "Anti-Tank Team",
+  "foglio": "s17",
+  "indice": 62,
+  "testo": "GE 37 Anti-Tank Team\n+2 VP (+2 if ATG destroyed)\n\nAnti-Tank Gun; Unlimited ATG Rounds\n\nP has Machine Pistol; 2 Grenades\n\nQ has Machine Pistol; 2 Grenades\n\nMan IN PC WS MPA\n\nPoi 2. -23\n\nQi 4 -23\n\nOn all Turns, ATG crew members will conduct 265. ATG\nactivates loaded. Crew members activate crouching. ATG\nis considered small vehicle for fire combat purposes.\n",
+  "pv": 2,
+  "armi_testo": "Poi 2. -23",
+  "armi": [],
+  "granate": 0
+ },
+ "GE67": {
+  "lato": "GE",
+  "num": 67,
+  "lettera": "LL",
+  "ruolo": "Panzer IV",
+  "foglio": "s17",
+  "indice": 63,
+  "testo": "GE 67/LL Panzer IV\n+2 VP (+3 if knocked out) °\n\nAct ACTION NR.\n\nCrew IN PC WS DS 0-2 3 47 89 _\n5 5 8 +18 907 905 925 925 _\n4 3 7 +18 925 905 925 925 _\n3. 3 6 +16 923 923 709 708\n\n2 2 3 04 814 874 923 921\n\noo -12 874 814 921 923\nActivates open with cannon prepared. On first Turn, conduct\n415.\n",
+  "pv": 2,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "GE21": {
+  "lato": "GE",
+  "num": 21,
+  "lettera": "MM",
+  "ruolo": "Jagdpanther",
+  "foglio": "s17",
+  "indice": 64,
+  "testo": "GE 21/MM Jagdpanther\n+3 VP if knocked out\n\nAct ACTION NR.\n\nCrew IN PC WS DS 0-1 26 7 8-9\n45 4 7 +18 928 936 928 936\n3.4 ~25 06 928 933 936 933\n\n2 3 4 -14 933 924 840 924\n\n1 2 3 -22 840 874 908 874\nEnters open with cannon prepared. Will only drive slowly\nuntil hit by fire of any type, regardless of result. Once hit\nby fire, will drive fast if so directed.\n",
+  "pv": 3,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "US7": {
+  "lato": "US",
+  "num": 7,
+  "lettera": "AA",
+  "ruolo": "Sherman",
+  "foglio": "s17",
+  "indice": 65,
+  "testo": "US 07/AA Sherman\n—3 VP if knocked out\n\nAct ACTION NR.\n\nCrew IN PC WS DS O 1-3 46 7-9\n\n5 5 9 +18 946 939 946 939\n\n4 5 8 +18 946 946 939 939\n3.4 ~=7 06 956 956 956 956\n2.3 4 04 956 956 956 956\n12 -14 706 706 706 706\nActivates open with cannon unprepared. On first Turn,\nconduct 944.\n",
+  "pv": 0,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "GE68": {
+  "lato": "GE",
+  "num": 68,
+  "lettera": "PP",
+  "ruolo": "Panzer IV",
+  "foglio": "s17",
+  "indice": 66,
+  "testo": "GE 68/PP Panzer IV\n+2 VP (+3 if knocked out)\nAct ACTION NR.\nCrew IN PC -WS DS 0-1 2-5 6-8 9\n5 4 7 +18 708 709 707 924\n4 4 6 +16 906 902 905 827\n3.4 =~ 5 06 905 826 907 906\n2 3 4 -14 908 814 910 910\n1 2 3 j-22 874 925 934 933\n| pelvelss open with cannon prepared. On first Turn, conduct\n923.\n",
+  "pv": 2,
+  "armi_testo": "",
+  "armi": [],
+  "granate": 0
+ },
+ "GE77": {
+  "lato": "GE",
+  "num": 77,
+  "lettera": "",
+  "ruolo": "Mortar Team",
+  "foglio": "s17",
+  "indice": 67,
+  "testo": "GE 77 Mortar Team\n+2 VP\n\nMortar; Unlimited Mortar Rounds\n\nP has Bolt Rifle; 2 Grenades\n\nQ has Machine Pistol; 2 Grenades\n\nV has Bolt Rifle; 2 Grenades\n\nfig IN PC WS MPA\n\nPo 1 03\n\nQi 2 -23\n\nvoi 2 0.3\n\nOn all Turns, mortar team members will conduct 501. Mortar\nactivates with round prepared.\n",
+  "pv": 2,
+  "armi_testo": "Po 1 03",
+  "armi": [],
+  "granate": 0
+ }
+}

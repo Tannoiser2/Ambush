@@ -1,0 +1,307 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 12
+
+© Failure: If s5 has occurred, no Event; if s5
+has not occurred, Activation Check (—1).
+Success: See 220. Failure: No Event.
+
+120. © If soldier is moving, see 100.
+© If in beached canoe, no Event.
+
+121. © If vehicle is moving, enter U-2.
+© If soldier is moving, enter U-3.
+
+122. © If vehicle is moving, enter T-2.
+If soldier is moving, enter U-3.
+
+423. © If vehicle is moving, enter P-3.
+® If soldier is moving, enter P-4.
+
+‘424, © If vehicle is moving, enter S-3.
+® If soldier is moving, enter T-3.
+
+1285. © If vehicle is moving, enter O-4.
+© If soldier is moving, enter P-4.
+
+126. © If vehicle is moving, enter R-3.
+© If soldier is moving, enter S-4.
+
+127. © If vehicle is moving, enter N-3.
+© If soldier is moving, enter O-5.
+
+128. © If vehicle is moving, enter Q-4.
+© If soldier is moving, enter R-4.
+
+129. © If vehicle is moving, enter M-3.
+© If soldier is moving, enter N-4.
+
+130. 1. If s1 has not occurred, see 469.
+2. If sO has not occurred, see 240.
+
+3. If s2 has not occurred, see 108.
+
+4. No Event.
+
+131. 1. If sO has not occurred, see 351.
+2. If s1 has not occurred, see 468.
+
+3. If s2 has not occurred, see 107.
+
+4, No Event.
+
+132. © If an active American vehicle or
+soldier is in sight, using the current German
+‘Action Number, refer to the indicated
+paragraph:
+
+0-3: 815
+
+4: 840
+
+5-6: 841
+
+7-9: 770
+
+© If no active American is in sight and you
+are in Condition 1, crouch.
+
+© If no active American is in sight and you
+are in Condition 2, move as quickly as
+possible.
+
+* If no active American is in sight and you
+are in Condition 3, remove this German from
+the map.
+
+Target priority is vehicle first, then soldier.
+
+133. Man with the highest PC conducts PC
+Check:
+
+# Success: See 353, unless die roll is exactly
+equal to PC, in which case see 359.
+
+© Failure: See 136.
+
+134. Place Event marker. Conduct PC Check
+(-):
+
+* Success: See 248.
+
+° Failure: No Event.
+
+135. 1. If s2 has not occurred, roll 1 die: On
+an odd result, see 461; on an even result, see
+460.
+
+2. If s1 has not occurred, roll 1 die: On an
+odd result, see 680; on an even result, see
+681.
+
+3. Place Event marker. No Event.
+
+136. Conduct Activation Check:
+* Success: See 249.
+© Failure: See 353.
+
+487. Place Event marker. Conduct PC Check:
+# Success: See 248, US advantage.
+
+© Failure: Conduct Activation Check. Success:
+
+See 248; German advantage. Failure: No
+Event.
+
+438. Conduct PC Check (+1):
+
+© Success: See 248, US advantage.
+
+Failure: Conduct Activation Check (+1).
+Success: See 248; German advantage. Failure:
+See 248.
+
+139. © If no active American is in sight, move
+as quickly as possible. Fall prone if free
+stance change is available and target is in
+sight at end of Turn.
+
+If there is an active American in sight,
+using the current German Action Number,
+refer to the indicated paragraph:
+
+0-1: 815
+
+Target priority is vehicle first, then soldier.
+
+140. © If the current German Action Number
+is odd, enter E-16.
+
+© If the current German Action Number is
+even, enter F-16.
+
+141. © If vehicle is moving and the current
+German Action Number is odd, enter K-13.
+
+© If vehicle is moving and the current German
+Action Number is even, enter L-14.
+
+If soldier is moving, enter K-13.
+
+142, © If current German Action Number is
+odd, enter P-13.
+
+© If current German Action Number is even,
+enter Q-15.
+
+143. © If vehicle is moving, enter I-12.
+
+* If soldier is moving and no active German
+is south of the river, see 692.
+
+* If soldier is moving and there is an active
+German south of the river, enter I-12.
+
+144, © If soldier is moving, enter U-12.
+
+© If vehicle is moving and current German
+Action Number is odd, enter U-12.
+
+© If vehicle is moving and current German
+Action Number is even, enter W-12.
+
+145. © If current German Action Number is
+odd, enter Q-17.
+
+* If current German Action Number is even,
+enter O-17.
+
+146. © If soldier is moving, enter V-14.
+
+© If vehicle is moving and current German
+Action Number is odd, enter W-14.
+
+* If vehicle is moving and current German
+Action Number is even, enter V-15.
+
+147. © If current German Action Number is
+odd, enter I-19.
+
+© Otherwise, enter G-19.
+
+148. © If current German Action Number is
+odd, enter S-18.
+
+* If current German Action Number is even,
+enter R-18.
+
+449. © If there is an active American in
+building D-9 or C-9, enter D-9.
+
+© Otherwise, enter D-10.
+
+150. German enters tunnel. Place inverted
+prone marker on him and enter W-7.
+
+151. © If vehicle is moving and has active
+passenger(s) with explosives:
+
+1. If any active passenger with explosives has
+a Turn remaining in this Round, drop off
+highest numbered passenger with remaining
+Turns. Passenger dropped off spends 1 Action
+(move his AR marker down 1 Turn on the
+Action Round Track) and is placed crouching
+in the hex on top of the bridge. Remove
+Special Reaction T from the passenger
+dropped off. After passenger is dropped off,
+enter J-14 if this hex is entered from H-15, or
+enter H-15 if hex entered from J-14.
+
+2. If there is no active passenger with
+explosives with a remaining Turn, driver stops
+the half track and conducts 1 snap fire at
+closest target.
+
+© If vehicle is moving and no active passenger
+has explosives, remove Special Reaction T
+from driver and put Special Reaction H_ into
+effect for driver. :
+
+¢ If soldier with explosives is moving and
+there are no explosives set, or active German
+with explosives is on or under the bridge in
+this hex, put Special Reaction E into effect for
+this soldier.
+
+© If soldier with explosives is moving and
+there are explosives set, or an active German
+with explosives is on or under the bridge in
+this hex, enter J-14 if this hex is entered from
+H-15, or enter H-15 if this hex is entered
+from J-14.
+
+© If soldier without explosives is moving and
+there is an inactive German with explosives
+on bridge, ignore Action paragraphs and
+movement references (make note of this on
+your Squad Record Sheet) and move to
+nearest inactive German with explosives.
+When in that hex, crouch and pick up
+explosives (1 Action). After explosives are
+picked up, use normal Condition Action
+paragraphs and movement references.
+
+* If soldier without explosives is moving and
+there is an inactive German with explosives
+within 4 hexes, ignore Action paragraphs and
+movement references (make note of this on
+your Squad Record Sheet) and move to
+nearest inactive German with explosives.
+When in that hex, crouch and pick up
+explosives (1 Action). After explosives are
+picked up, use normal Condition Action
+paragraphs and movement references.
+
+© If soldier without explosives is moving and
+no inactive German with explosives is within
+4 hexes, conduct 868.
+
+152. © If there are no explosives set, or there
+is no German with explosives on or under the
+bridge, enter I-15.
+
+© Otherwise, driver moves vehicle to H-14;
+assistant driver conducts 217; passengers with
+explosives see 224; passengers without
+explosives see 223; other men in hex but not
+in vehicle see 834 and enter H-14 if directed
+to move. Target priority for any man directed
+to fire is man under bridge (if visible), man
+on bridge, vehicle, closest target.
+
+153. 1. If any bridge hex (I-15, J-14, K-14)
+has no explosives set in it, and there is an
+inactive German with explosives on the bridge
+(any hex), remove Special Reaction T from
+this German and exit half track standing (1
+MP). Ignore movement references and move
+as quickly as possible to the nearest inactive
+German with explosives. Crouch and pick up
+explosives (1 Action). Move to the nearest
+bridge hex with no explosives in it and put
+Special Reaction E into effect for this
+German. After explosives are set and Special
+Reaction E has been removed from this
+German, put Special Reaction H back into
+effect.
+
+2. If any bridge hex (as above) does not have
+explosives set in it and there is an inactive
+German in the back of the half track with
+explosives, move to the back of the half track
+(1 Action), pick up explosives (1 Action),
+remove Special Reaction T from this German,
+and exit truck standing (1 MP). Ignore
+movement references and move as quickly as
+possible to nearest bridge hex with no
+explosives set in it and no active German on
+

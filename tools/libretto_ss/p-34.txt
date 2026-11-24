@@ -1,0 +1,285 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 34
+
+6. If no active American is visible, but an
+active unattended mule is in sight, move as
+quickly as possible by the most direct route,
+going around prohibited hexes, toward the
+nearest unattended mule.
+
+7. If there is no active American or mule in
+sight, move as quickly as possible toward the
+nearest American by the most direct route,
+going around prohibited hexes; do not look
+for movement references on the Condition
+cards, Conduct 1 snap fire at the first target
+to come into view if sufficient Movement
+Points remain to do so. Fall prone at end of
+Turn, if free stance change is available and
+target is in sight.
+
+743. 1. If there is an active American in the
+same hex, assault to kill,
+
+2. If there is an active American in an
+adjacent hex and a grenade is available,
+crouch and throw grenade at adjacent hex with
+most Americans in it. If no grenade is
+available or there is an active German in the
+hex with the American, charge assault a target
+determined at random.
+
+3. If grenade available and active American
+visible within 3 hexes, crouch and throw
+grenade at hex with most Americans (nearest,
+if all have same number). Fall prone after
+throw, if free stance change is available.
+
+4. If no grenade is available, or the closest
+American is 4 or more hexes away, stand,
+conduct 1 snap fire at closest target, and move
+as quickly as possible toward the nearest
+active American. Fall prone, if free stance
+change is available.
+
+5. If in a hex with an unattended active mule,
+see 747.
+
+6. If in a hex adjacent to an unattended active
+mule, enter that hex and see 747 once there.
+7. If there is no active American in sight,
+move as quickly as possible toward the
+nearest American by the most direct route,
+going around prohibited hexes; do not look
+for movement references on the Condition
+cards. Conduct | snap fire at first target to
+come into view, if sufficient Movement Points
+remain to do so. Fall prone at end of Turn, if
+free stance change is available and target
+sight.
+
+744, 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If there is an active German within 2 hex
+in the same hex with an active American,
+crouch and give Turn to German with highest
+WS who is eligible to receive a Turn.
+
+3. If there is an active German within 2 hexes
+in the same hex with an unattended active
+mule, crouch and give Turn to lowest
+numbered German who is eligible to receive a
+Turn.
+
+4. If there is an active German within 2 hexes
+who is adjacent to an active American, crouch
+and give Turn to German with highest WS
+who is eligible to receive a Turn.
+
+5. See 742.
+
+745. Roll one die to determine Patrol
+Activation Diagram used to place patrol
+members on map:
+
+Activate GE 78 through GE 81 using the
+diagram determined above (patrol members
+can activate in cliff hexes). Remove patrol
+marker and its IN marker. Lowest numbered
+German activates in position A, second lowest
+in position B, and so forth. Once all 4 patrol
+
+members are on the map, see 748. Commence
+Rounds. US advantage. Combat of any type
+can be conducted against the individual patrol
+members once they are placed on the map.
+746. [s9] If GE 72 or GE 73 was active at
+the end of Condition 1 and was removed from
+the map, reactivate in hex determined by
+rolling 1 die (Commence Rounds):
+
+0-3: T-19
+
+4-6: Y-16
+
+7-9: O-19
+
+747. 1. Crouch and pick up lead rope for 2
+mules, if available (1 MP).
+
+2. Move as quickly as possible toward U-19
+or Y-17 (whichever is closer). Conduct
+Paragraph Check once there. If more than one
+route is possible, choose one at random.
+Crouch at the end of the Turn, if free stance
+change is available or if sufficient Movement
+Points remain to crouch but not to enter a
+new hex (wounded man will not crouch at end
+of Turn), An American cannot intentionally
+fire at mules in a hex with an active German.
+Make note of this paragraph and the Germans
+to which it applies on your Squad Record
+Sheet.
+
+748. Germans in patrol are not automatically
+aware when placed on the map. Each German
+must conduct a PC Check as follows:
+
+* In same hex with active American or mule:
+PC (+2).
+
+* Within 3 hexes of visible active American
+or mule: PC (+1).
+
+* Otherwise: normal PC.
+
+Any Germans who fail this PC Check are
+unaware for the first Round. All Germans in
+patrol are automatically aware in the second
+and subsequent Rounds.
+
+749. 1. If there is no active American in sight
+and none east or south of the stream, remove
+
+this German from the map.
+
+2. Otherwise, do not remove Special Reaction
+
+B, but use the current German Action Number
+and action paragraph for Condition 1 for that
+
+number.
+
+750. Minefield! Conduct minefield procedure.
+If mine explodes and s3 has not occurred, see
+235.
+
+751. Minefield! Conduct minefield procedure.
+If mine explodes and s9 has not occurred, see
+430.
+
+760. 1. If a grenade is available and there is a
+target within 3 hexes, crouch and throw
+grenade at nearest target. Fall prone after
+throw if free stance change is available.
+
+2. If grenade is available and target is at 4-6
+hex range, stand and throw grenade at nearest
+target. Fall prone after throw if free stance
+change is available.
+
+3. If out of grenades, but there are grenades
+available in the same hex, crouch and take as
+many grenades as possible from any active
+German or any inactive soldier in the hex.
+
+4. Fall prone.
+
+761. © If this German can see another active
+German, conduct as many snap fires as
+possible, first at the second closest target,
+then at the easiest.
+
+© Otherwise, fall prone.
+
+762. 1. If there is an active American in the
+same hex, assault to kill.
+
+2. If any visible hex has more than one active
+American in it, conduct best fire with machine
+pistol at hex with most Americans in it. If
+more than one hex has the same number of
+Americans, fire at easiest target. Fall prone if
+
+free stance change is available and there is an
+active target in sight.
+
+3. If there is an active American in an
+adjacent hex, charge assault to kill.
+
+4. If more than 2 Germans from this patrol
+are inactive, move as quickly as possible away
+from the nearest active American by the most
+direct route, going around prohibited hexes.
+Fall prone if free stance change is available.
+If out of sight at end of Round and no active
+American is within 6 hexes, remove this
+German from the map.
+
+5. If there is an active American in sight,
+conduct 802.
+
+6. If there is no active American in sight,
+move as quickly as possible toward nearest
+active target by the most direct route, going
+around prohibited hexes. Conduct one snap
+fire at first target to come into view if there
+are sufficient Movement Points remaining to
+do so. Fall prone at end of Turn if free stance
+change is available and active target is in
+sight.
+
+763. © If soldier is moving, enter K-15.
+
+© If vehicle is moving, roll one die: On a roll
+of 0-2, enter L-13; on a roll of 3-9, enter
+M-15.
+
+764, © If soldier is moving, enter M-16.
+If vehicle is moving, enter 0-16.
+
+765. © If soldier is moving, enter N-17.
+* If vehicle is moving, enter O-18.
+
+770. ¢ If grenade is available and target is
+within 3 hexes, stand and throw grenade into
+closest hex containing the most Americans (if
+2 or more hexes have the same number of
+active US soldiers, determine the target at
+random).
+
+* If no grenade is available or there is no
+target within 3 hexes, stand and conduct best
+fire with personal weapon at closest target.
+Fall prone if free stance change is available,
+
+780. [s1, $4, and s5] Activate GE 60 in
+C-7. Activate GE 54 crouching in C-9, in
+Special Reaction A. Place German supply
+barges in hexes determined by rolling 1 d
+On an odd result, barges are in D-7, J-7, M-7,
+N-5; on an even result, barges are in C-6, I-7,
+L-7, N-6. See 237 for information about
+barges.
+
+781. Put Special Reaction D into effect for
+this soldier.
+
+782. 1. If there is an active barge in N-5 with
+no active German on it, remove Special
+Reaction A, stand, and enter O-5
+2. If there is an active barge in N-6 with no
+active German on it, remove Special Reaction
+A, stand, and enter 0-6.
+3. Otherwise, using the current German
+Action Number, refer to the indicated
+paragraph:
+0-1: 801
+
+800
+
+808
+
+783. [81] Activate GE 60 in C-7. Activate GE
+54 crouching in C-9, in Special Reaction A. If
+s4 has not occurred, see 541. Commence
+Rounds. US advantage and soldier who passes
+his PC Check is automatically aware and
+receives 2 Turns this Round. If s4 has not
+occurred, see 541.
+
+784. © If there is an active barge in M-7 or
+L-7 with no active German on board, remove
+Special Reaction A, stand, and enter M-8.
+© Otherwise, using the current German Action
+Number, refer to the indicated paragraph:

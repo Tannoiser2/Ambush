@@ -1,0 +1,297 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 26
+
+German Action Number and conduct the
+Action paragraph as indicated:
+
+0-3: P conducts 502; Q conducts 503; V
+conducts 504.
+
+4-6: P conducts-503; Q conducts 504; V
+conducts 502.
+
+7-9: P conducts 504; Q conducts 502; V
+conducts 503.
+
+502. 1. If no round is prepared, crouch and
+prepare round.
+
+2. If round is prepared and mortar has not yet
+fired this Turn, crouch and fire mortar.
+
+3. Crouch.
+
+503. 1. If mortar has fired this Turn and
+round is not yet prepared this Turn, crouch
+and prepare round.
+
+2. If round is prepared and mortar has not yet
+fired this Turn, crouch and fire mortar.
+
+3. Fall prone.
+
+504, 1. If round is prepared and mortar has
+not fired this Turn, crouch and fire mortar.
+
+2. If no round is prepared, crouch and prepare
+round.
+
+3, Fall prone.
+
+505. [7] There is a hidden German ATG
+team in K-9. Activate GE 37 in K-9, with
+covered are J-9, K-10, L-9. Commence
+Rounds. German advantage. See 253 for
+attributes of ATG.
+
+506. [s7] You have surprised a hidden
+German ATG team. Activate GE 37 in K-9
+with covered arc J-9, K-10, L-9. Commence
+Rounds. US advantage and all aware
+Americans who do not panic receive 2 Turns
+this Round. See 253 for attributes of ATG.
+
+507. [s5] Counterattack! Activate GE 35 and
+GE 36 in first hex not occupied by an
+American: H-19, K-19, S-19. Commence
+Rounds. US advantage.
+
+508. [7] You have surprised a hidden
+German ATG team. Activate GE 37 in Q-9,
+with covered arc P-9, Q-10, R-9. Commence
+Rounds. US advantage. See 253 for attributes
+of ATG.
+
+509. [s7] There is a hidden German ATG
+team in Q-9. Activate GE 37 in Q-9 with
+covered arc P-9, Q-10, R-9. Commence
+Rounds. German advantage. See 253 for
+attributes of ATG.
+
+510. No German activation. Continue moving
+the Patrol marker toward the nearest active
+American if it has Movement Points
+remaining. If not, it is American Turn.
+
+511. There is a tripwire in this hex which
+soldier avoids successfully and deactivates.
+Gain 1 Bonus VP.
+
+512. Place Event marker. A German flare
+
+lights up the area! Roll one die to determine
+
+the hex which is temporarily illuminated:
+B-5
+
+H-l
+
+‘The flare lights up the hex it lands in and the
+six adjacent hexes. Place a starshell marker in
+the hex determined above to remind you
+which hexes are illuminated.
+
+¢ If no soldiers are illuminated, no Event.
+Remove starshell marker.
+
+© If any soldiers are illuminated, each
+illuminated soldier must make a PC Check.
+Success: Soldier falls prone. Failure: Soldier
+remains in current stance.
+
+Once all PC Checks have been made, see 629.
+
+513. ¢ If this hex contains a destroyed bunker,
+see 621.
+© Otherwise, place Event marker. No Event.
+
+514. Soldier steps on tripwire in this hex and
+sets off flare. Place starshell marker in the
+hex. Flare lights up the hex and the six
+surrounding hexes. Any soldier illuminated by
+the flare can be fired on by any enemy who
+can trace a LOS to him regardless of the
+range. Remove starshell marker at end of
+current Round (at end of first Round if in
+Operations). If s7 has not occurred, see 622.
+
+515. No Event. Continue with US Turn. If
+new American moves into a hex where he has
+LOS to Patrol marker or same American who
+brought 492 into play moves to another hex
+where he can see Patrol marker, conduct 492
+again.
+
+516. Place Event marker. A German flare
+lights up the area. Roll one die to determine
+where the flare lands:
+
+B-9
+
+E-8
+
+H-9
+
+K6
+
+N-9
+
+NO
+
+N-3
+
+Qs
+
+P-1
+
+: Roll again.
+
+The flare illuminates the hex where it lands
+and the six adjacent hexes. Place starshell
+marker to remind you which hexes are
+temporarily illuminated.
+
+* If no soldier is illuminated, see 278.
+Remove starshell marker.
+
+© If any soldiers are illuminated, each
+illuminated soldier must make a PC Check.
+Success: Soldier falls prone. Failure: Soldier
+must remain in current stance.
+
+Once all PC Checks have been made, see 625.
+
+517. A fortified building hex is a building hex
+that the Germans have strengthened with
+concrete, steel, and other materials. (If a
+fortified building marker is placed in a multi-
+hex building, only the hex occupied by the
+marker is considered fortified; the rest of the
+building is normal. If a fortified building
+marker is in a two-story building, only the
+first floor is fortified. A collapsing second
+story will not damage the fortified first floor.)
+A fortified building faces the four sides as
+indicated by the fortified building marker and
+has a door on one side (doors and windows as
+originally indicated on the map have been
+blocked up and sealed off). The activation
+paragraph will indicate the facing of the door.
+All four sides of the fortified building are
+considered window apertures for combat and
+LOS. Firing at a fortified building, you can
+aim at a target visible through an aperture, or
+you can fire at the
+
+fortified building itself. To fire at a soldier,
+the soldier must be crouching or standing.
+However, a soldier crouching in a fortified
+building cannot be fired at if your soldier is
+adjacent to the fortified building and is also
+crouching (see LOS rules in Ambush!) and
+vice versa. When firing at the fortified
+building, there is a +4 modifier for fire at a
+wall. When firing at the fortified building
+itself, use the following procedure. First
+resolve the fire to determine whether or not
+you have hit the fortified building. If you
+miss, there is no effect. If you hit, you must
+determine which facing you hit; there are only
+
+VRID ESP SR
+
+two possible facings: front and door. When
+the facing has been determined, roll 1 die and
+refer to the Fortified Building Hit Tables to
+determine the part of the building hit. Then
+resolve combat using the Damage Table-row
+for the weapon fired. A fortified building can
+also be attacked by grenade or satchel chaige
+as if it were a normal building hex. If the
+fortified building is destroyed by bazooka,
+tank main gun, or satchel charge, replace the
+fortified building marker with a rubble
+marker. Gain 2 VP if the fortified building is
+reduced to rubble. The fortified building
+marker has 517 printed on it to remind you of
+this paragraph. See Vehicle Summary.
+
+518. 1. If s8 has not occurred, conduct PC
+Check:
+
+* Success: See 276.
+
+* Failure: See 271.
+
+2. If s7 has not occurred, conduct PC Check:
+® Success: See 386.
+
+* Failure: See 384.
+
+3. If s7 and s8 have both occurred, place
+Event marker. No Event.
+
+4. If any Japanese are activated in this Turn,
+Corporal Vernon’s hair inexplicably catches
+fire in the frozen foods department of the
+local Post Exchange.
+
+519. © If s2 has not occurred, roll one die:
+On a result of 0-8, see 515; on a result of 9,
+see 388.
+
+© If s2 has occurred, see 515.
+
+520. 1. If at least one mortar team member is
+active and all targets visible to GE 76 are
+within minimum range of the mortar, crouch
+and conduct best fire at target closest to
+mortar team. Fall prone if free stance change
+is available.
+
+2. If at least one mortar team member is
+active and there is an active target visible to
+GE 76 not within mortar's minimum range,
+crouch and spend 1 Action to give coordinates
+to mortar team (place coordinates given
+marker in hex closest to Y-1 not within
+mortar’s minimum range that contains at least
+one active American). Fall prone if free stance
+change is available.
+
+3. If no mortar team members are active and
+you are in Condition 2, remove Special
+Reaction B from this German, re-roll the
+German Action Number, and conduct normal
+Condition Action paragraphs for this German.
+4. If no mortar team members are active and
+you are in Condition 3, remove Special
+Reaction B from this German and put Special
+Reaction M into effect for him. Use current
+German Action Number.
+
+5. Fall prone.
+
+521. Place Event marker. Conduct PC Check:
+* Success: See 639.
+* Failure: No Event.
+
+522. Place Event marker. Conduct PC Check:
+* Success: See 395.
+
+* Failure: Conduct Activation Check. Success:
+See 394. Failure: No Event.
+
+523. Place Event marker. Conduct Activation
+Check:
+
+© Success: See 398.
+
+© Failure: Conduct PC Check. Success: See
+399. Failure: No Event.
+
+524. Place mortar counter marked 524 (to
+remind you of this paragraph) with round
+prepared side up in activation hex. Mortar
+counter has two sides, marked round prepared
+and round unprepared, to help you keep track
+of its status. When mortar is fired, turn

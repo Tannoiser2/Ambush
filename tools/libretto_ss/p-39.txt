@@ -1,0 +1,172 @@
+2
+
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 39
+
+cannon prepared and no cannon target is in
+sight, conduct aimed fire with coaxial MG at
+second closest target.
+
+944. Drive slow. Fire cannon at an active
+vehicle or at an active target in a building
+hex, if in sight. Prepare cannon if unable to
+fire. If cannon prepared and no cannon target
+is in sight, conduct snap fire with coaxial MG
+at second closest target. Conduct snap fire
+with bow MG at closest target.
+
+946. © If there are 2 or more targets in sight,
+button up. If already buttoned up, see 949.
+
+© If there is only one target in sight, button
+up. If already buttoned up, see 951.
+
+© If no active targets are in sight, open. If
+already opened up, see 953.
+
+949. Conduct aimed fire with bow MG at
+closest target. Fire cannon at an active vehicle
+or at an active target in a building hex, if in
+sight. Prepare cannon if unable to fire. If
+cannon is prepared and no cannon target is in
+sight, conduct aimed fire with coaxial MG at
+second closest target.
+
+951. Conduct snap fire with bow MG at
+closest target. Fire cannon at an active vehicle
+or at an active target in a building hex, if in
+sight. Prepare cannon if unable to fire.
+
+953. Drive vehicle fast. Fire cannon at an
+active vehicle or at an active target in a
+building hex, if in sight. Prepare cannon if
+unable to fire. Conduct snap fire with coaxial
+MG at second closest, then closest target.
+
+956, ¢ If there are 2 or more targets in sight,
+button up. If already buttoned up, see 958.
+
+® If there is only 1 target in sight, button up.
+If already buttoned up, see 965.
+
+© If there are no active targets in sight, open.
+If already opened up, see 967.
+
+958. Conduct aimed fire with bow MG at
+closest target. Fire cannon at an active vehicle
+or at an active target in a building hex, if in
+sight. Prepare cannon if unable to fire.
+
+959. © If there is an active target wit
+hexes, crouch and conduct best fire with
+
+3
+
+pistol. Fall prone after fire, if free stance
+change is available.
+
+* Otherwise, see 815.
+
+965. Conduct snap fire with bow MG at
+closest target. Fire cannon at an active vehicle
+or an active target in a building hex, if in
+sight. Prepare cannon if unable to fire.
+967. Drive vehicle fast.
+
+969. © If there is an active target within 7
+hexes, crouch and conduct best fire. Fall
+prone after fire, if free stance change is
+available.
+
+© Otherwise, see 822.
+
+971. © If there are no active targets in hex, lie
+prone.
+
+If there are one or two active targets in hex,
+assault to kill.
+
+* If there are three or more active targets in
+hex, surrender.
+
+990. If any truck is currently disabled by
+combat or accident, see 932.
+* Otherwise, no Event.
+
+991. © If there are any boobytraps on the map
+that did not explode when discovered, one
+(chosen at random, if necessary) was not fully
+defused and now explodes. Any soldiers in the
+hex roll on the Grenade Inside row in their
+current stance. (If you cannot remember
+whether or not a boobytrap exploded, assume
+that it did not.) This can occur only once per
+Mission; ignore any further reference to this
+paragraph once a boobytrap explodes in this
+manner.
+
+* Otherwise, no Event.
+
+992. One German weapon fired in the
+previous Round is out of ammo. If more than
+one German weapon was fired in the last
+Round, determine which is out of ammo at
+random. Does apply to GE 47, if active. Can
+occur more than once per Mission.
+
+993. One non-prone US soldier, determined at
+random, occupying a non-road, non-clear hex,
+falls. First he must make a PC Check. If
+
+successful, he is uninjured, but falls prone. If
+
+he fails, roll for damage as if he were hit by
+Pistol fire. This can occur only once per
+Mission. Ignore any further reference to this
+paragraph once the first soldier has fallen in
+this manner.
+
+994. Go to Condition 3. Mission ends in
+Condition 3 when all Americans have exited
+the map via the entry hexes (W-1 through
+Y-1). You need 20 VPs to win (ignore
+Victory Conditions in 269). VP loss for
+incapacitated squad members can be avoided
+by exiting them.
+
+995. One wounded German soldier,
+determined at random, becomes incapacitated
+due to blood loss. The Event can occur only
+once per Mission. Ignore this paragraph after
+the first German soldier is incapacitated in this
+manner.
+
+996. One incapacitated German soldier,
+determined at random, dies due to his injuries.
+This Event can occur only once per Mission.
+Ignore this paragraph after the first German
+soldier dies in this manner.
+
+997. One wounded US soldier, determined at
+random, becomes incapacitated due to blood
+loss. This Event can occur only once per
+Mission. Ignore this paragraph after the first
+US soldier is incapacitated in this manner.
+
+998. One incapacitated US soldier, determined
+at random, dies due to his injuries. This Event
+can occur only once per Mission. Ignore this
+paragraph after the first US soldier dies in this
+manner.
+
+999. One active vehicle (chosen at random, if
+necessary) blows a tire. Conduct Accident
+Check. Vehicle can now be driven only
+slowly. If the vehicle has already blown a tire
+and you are in Rounds, the vehicle is
+immobilized until 5 Actions are spent to put
+on the spare tire; Actions can be shared. If in
+Operations, there is no effect. This can occur
+only once per Mission. Ignore any further
+reference to this paragraph after the first tire
+blows.
+

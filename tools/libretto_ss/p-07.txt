@@ -1,0 +1,142 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 7
+
+German Entry. Since you are on the defense, the Germans enter
+by Random Event. There are no Activation Checks. Once you have
+set up your soldiers, roll for Random Events until a German is
+activated and Rounds commence. If you ever re-enter Operations
+(which is very unlikely) and do not wish to move any of your soldiers,
+roll for Random Events again until another German enters and Rounds
+
+commence again.
+
+VICTORY
+
+Victory Points needed and how the Mission ends will be revealed
+during play.
+
+Mission 22: Another Bridge
+Too Far?
+
+January 1944, Northwest of Monte Cassino. Partisans report that there
+is a route through the Aurunci Mountains. Headquarters has sent your
+squad to see if there are intact bridges over which divisional armor
+can move to flank the Gustav Line.
+
+YOUR SQUAD
+
+You can use the pre-generated squad or your own continuing squad,
+or you can generate a new squad. If you are campaigning your own
+squad, re-roll the Weapon Points number and re-arm your squad.
+In addition, at no cost, you receive a half track with a mounted
+medium machinegun (the MMG comes with 1 clip; you must buy
+any additional ammo for it with your Weapons Points) and a jeep
+at no cost. Both vehicles are under your control.
+
+SET-UP
+
+Use full-map F and half-map G. Place Map G on top of Map F so
+that hexes A-11 and Y-11 on Map G are over the same hexes on Map
+F. The top of the map is the east edge. Your squad enters in the
+vehicles through hexes W-1 to Y-1. Place an intact stone bridge
+marker in O-4 connecting N-4 and P-3, and in V-14 connecting U-15
+and W-14. Place a rubble marker in K-10. No other markers begin
+on the map. Activation Levels are as follow: ¢1: 0-3; ¢2: 0-5; ¢3:
+0-8; e4: 0-8.
+
+SPECIAL RULES
+
+Stream. The water barrier running from O-1 through N-10 and then
+southwest to Y-15 is a stream and can be crossed by spending Move-
+ment Points as summarized on the MP Cost Chart.
+
+Cliffs. Cliffs are sloping and can be entered by a soldier at a cost
+of 2 MP to enter. Vehicles cannot enter cliff hexes.
+
+Bridges. There are 3 levels to a bridge hex: (1) on top of the bridge;
+(2) under the bridge, in the bridge supports (place soldier under the
+bridge counter with an inverted prone marker on him); and (3) beneath
+the bridge, on the ground (place soldier under the bridge counter
+without the inverted prone marker). A soldier under or beneath the
+bridge cannot see or be seen by a vehicle or a crouching or prone
+soldier on the bridge; LOS exists only between standing soldiers on
+the bridge and soldiers under or beneath the bridge. There is LOS
+between soldiers under the bridge and those beneath the bridge.
+To check a bridge hex, a soldier must be in the hex on top of
+the bridge and climb down into the supports (1 Action to climb down
+into supports or back up). Due to the nature of the bridge construc-
+tion, a soldier cannot climb from the ground beneath a bridge up
+
+into the supports. A soldier in the supports in considered crouching;
+a soldier climbing back onto the bridge from the supports has a free
+stance change. Since a soldier under a bridge is considered crouch-
+ing, it costs 1 Action to move from a hex in the supports to an adjacent
+hex in the supports.
+
+A soldier in the supports or beneath a bridge can be seen from
+non-bridge hexes as if he were crouching on top of the bridge. Base
+Hit modifiers against a target in the supports under a bridge are
+determined as follows: when firing at a target from a different hex
+at a soldier under a bridge, the target is considered to be crouching
+in a hex Interior Through Non-Adjacent Aperture (—4 modifier);
+when firing from the top of the bridge at a target in the same hex
+under the bridge, the target is considered to be crouching in a hex
+Interior Through Adjacent Aperture (—2 modifier). Attacks against
+soldiers beneath a bridge on the ground use the modifier for the terrain
+and current stance. If a soldier under a bridge is firing at another
+soldier under the bridge, the target is considered to be crouching in
+the clear (no modifier).
+
+If a soldier panics or is wounded while under a bridge in the
+supports, conduct PC Check: If successful, the soldier loses any
+remaining Turns this Round, but he does not fall; if he fails, the soldier
+falls from his position in the supports under the bridge. If he falls
+from under the bridge in O-4 or V-14, he falls into the stream and
+is swept away (he is considered KIA and all his equipment and ammo
+is lost).
+
+Soldiers under or beneath a bridge can engage in all types of
+combat except grenade and satchel charge attacks. Grenades and
+satchel charges cannot be thrown from the top of the bridge at targets
+under or beneath the bridge, nor can they be thrown from under the
+bridge at targets on or beneath the bridge, nor from beneath the bridge
+at targets on top of or under the bridge.
+
+Half Track. The half track has ammo capacity totalling 6 clips. This
+capacity can be used only to carry MMG ammo. Passenger | fires
+the MMG and does not pay the —2 modifier penalty for fire from
+a vehicle. Any other passenger (not driver or assistant) can assist
+in firing the MMG. If the half track is disabled, the MMG is con-
+sidered destroyed as well. If the half track is immobilized, the MMG
+can still be fired, but it cannot be removed from the half track.
+
+Embankments. In this Mission, embankment hexsides present no
+special hazard to soldiers, but they are too steep for wheeled and
+tracked vehicles. Vehicles are prohibited from crossing embankment
+hexsides. .
+
+VICTORY
+
+You receive 1 VP for each of the following hexes entered: O-4, W-8,
+V-14, K-14, J-14, I-15. Additional Victory Points will be revealed
+during play as will the number of Victory Points needed to win and
+how the Mission ends.
+
+Mission 23: Strangers in the
+Night
+
+September 1944. South of the Gothic Line. Division has sent your
+squad ahead to occupy a village guarding the approaches to a key
+tunnel through the mountains. Your mission is to secure the village
+and check the tunnel for demolitions that the retreating Germans may
+have set.
+
+YOUR SQUAD
+
+You can use the pre-generated squad or your own continuing squad,
+or you can generate a new squad. If you are campaigning your own
+squad, re-roll the Weapon Points number and re-arm your squad.
+In addition, and at no cost, you receive 2 satchel charges.
+
+SET-UP
+Use full-map F. The top of the map is the south edge. Place an intact
+

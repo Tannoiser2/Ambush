@@ -1,0 +1,153 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 6
+
+3. Place the second vehicle in the entry hex and, if necessary, con-
+duct a Paragraph Check.
+
+4, Advance the first vehicle one hex and conduct a Paragraph Check.
+
+5. Advance the second vehicle one hex and, if necessary, conduct
+a Paragraph Check.
+
+6. Place the third vehicle in the entry hex and, if necessary, conduct
+a Paragraph Check.
+
+7. Advance the first vehicle one hex and conduct a Paragraph Check.
+
+8. Advance the second and third vehicles one hex and, if necessary,
+conduct a Paragraph Check.
+
+9. Place the fourth (last) vehicle in the entry hex and, if necessary,
+conduct a Paragraph Check.
+
+In Operations, the convoy must stay closed up, with one vehicle per
+hex and no gaps, except that there can be a one-hex gap between
+the first and second vehicles. Once Rounds are entered, you can move
+vehicles as you choose. If you return to Operations, the lead vehicle
+must wait where it is until the rest of the active vehicles have once
+again closed up the convoy.
+
+Since the backs of the trucks are filled with hot meals for your
+company, no one can ride back there. As long as all vehicles are
+active, all soldiers must either occupy a seat in the jeep, ride in the
+front of the truck, or walk. If a vehicle is inactive, men can hang
+on the outside of the trucks (but not the jeep); it costs 1 MP to climb
+onto the side of a truck. No more than two men can hang onto one
+truck. A non-wounded man can hang on the side of a truck and con-
+duct one snap fire per Turn (paying —2 for fire from a vehicle); a
+wounded man can only hang on and cannot conduct any fire while
+doing so. A man hanging onto the side of a truck is considered a
+passenger for purposes of resolving fire combat. If a man hanging
+onto the side of a truck is wounded, he falls off and lands prone in
+the hex where he was wounded. If a man hanging onto the side of
+a truck panics as the result of an IN die roll or combat, he conducts
+a PC Check. If he passes, he continues to hang onto the truck and
+will not go prone at the end of the Round; if he fails, he falls off
+the truck, lands crouching, and falls prone at the end of the Round.
+
+SPECIAL RULES
+
+Jeep. The jeep has an ammo capacity totalling 6 clips. This storage
+can be used only to carry MMG ammo (squad members can also
+carry ammo for the MMG in their Ammo Boxes). Passenger | fires
+the MMG and does not pay the —2 penalty for fire from a vehicle;
+any other passenger (not the driver) can assist. If the jeep is disabled,
+the MMG is considered destroyed as well. If the jeep is immobi-
+lized, the MMG can still be fired, but it cannot be removed from
+the jeep.
+
+Trucks. Each truck starts the Mission carrying a load of food for
+the rest of your company. If a truck becomes disabled, its load can
+be transferred to another active vehicle. The disabled truck and the
+vehicle to which the load will be transferred must be in the same
+hex. In Operations, it costs 2 Random Event Checks to transfer a
+load; in Rounds, it costs 4 Actions (which can be shared) and the
+soldier(s) making the transfer must be standing or crouching in:the
+hex with the 2 vehicles. After the load has been transferred, make
+note on your Squad Record Sheet of which vehicle has the load from
+the disabled truck. As long as a truck is still active, its load cannot
+be transferred to another vehicle. Any truck can carry up to 3 loads,
+but a truck carrying 3 loads can be driven only slowly. The jeep can
+carry one load if the only occupant is the driver. The jeep can be
+driven only slowly if it is carrying a load of food.
+
+River. The water running from O-1 south is a river and can only
+be crossed at the bridge or ford. River hexes are marked XXX on
+the Condition Cards to remind you that these hexes cannot be entered.
+
+Cliffs. The cliff hexes are extremely steep and impassable, They can-
+not be entered by soldiers or by vehicles. These hexes are also marked
+XXX on the Condition Cards to remind you that they cannot be
+entered.
+
+German Actions. For this Mission only, if a German is instructed
+to throw a grenade at an active American vehicle, he will do so in
+the following manner:
+
+1. If in the same hex as the vehicle, the German will attempt to throw
+the grenade directly into the vehicle.
+
+2. If in an adjacent hex, the German will attempt to throw the grenade
+directly into the vehicle, subject to a —3 modifier for throwing through
+a non-adjacent aperture.
+
+3. If at a range of 2 or more hexes, the German will attempt to disable
+the vehicle by throwing the grenade into the vehicle’s hex and roll-
+ing on the Grenade Outside row. If the result is incapacitated or killed,
+the vehicle is disabled and each occupant must roll on the Grenade
+Outside row (see page 32 of the Ambush! rules).
+
+VICTORY
+
+There are no VP awards for German activation in this Mission.
+Victory Points are awarded as follows: +1 VP for each truck exited;
++2 VP for each load of food exited; +1 VP for each active German
+left on the map at the end of the Mission. Bonus VP awards may
+also be revealed during play. Victory Points needed, and how the
+Mission ends (including exit location) will be revealed during play.
+If all 3 trucks are disabled, it will be extremely difficult to win the
+Mission. If you have already read the Victory Conditions when the
+last truck becomes disabled and feel victory is possible, please try;
+if you have not read the Victory Conditions when the last truck
+becomes inactive, it is suggested that you start the Mission over.
+
+Mission 21: Surprise,
+Surprise!
+
+19 July 1943, Near Gela, Sicily. Following a long and tiring over-
+night march, your squad is dozing in the sun while guarding the
+approaches to a small bay where supplies are to be delivered later
+in the day. This should be easy duty, despite rumors of roving German
+units that have not yet been neutralized.
+
+YOUR SQUAD
+
+You can use the pre-generated squad or your own continuing squad,
+or you can generate a new squad. If you are campaigning your own
+squad, re-roll the Weapon Points and re-arm your squad. In addi-
+tion, you receive a radio at no cost.
+
+SET-UP
+Use half-map H and full-map F. Place Map H on top of Map F so
+
+that hexes A-1 and Y-1 on Map H are over the same hexes on Map
+F. The top of the map is the south edge.
+
+Divide your squad into two 4-man sections. One section is to
+set up in the row of Level 3 hexes running from E-15 through I-13
+(inclusive); the other section is to set up in any first floor building
+hex within 3 hexes of S-14. No more than two men can start in any
+one hex.
+
+Place intact stone bridge markers in K-12 (connecting K-13 and
+K-11) and T-7 (connecting T-6 and T-8).
+
+SPECIAL RULES
+
+River. The water barrier running from Y-6 to A-12 is a river and
+can be crossed only at a bridge or ford. River hexes are marked XXX
+on the Condition Cards to remind you that these hexes cannot be
+entered.
+
+Cliffs. The cliff hexes are so steep as to be impassable and cannot
+be entered by men or vehicles. Cliff hexes are also marked XXX on
+the Condition Cards to remind you that these hexes cannot be entered.

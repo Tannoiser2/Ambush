@@ -1,0 +1,295 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 16
+
+tackle fails. If the tackle is successful, roll one
+ie again: 0-2, no effect and the soldier is still
+the soldier is restrained and
+comes to his senses. Place both soldiers prone
+in the hex. A berserk US soldier will not
+attack other US soldiers, even if they try to
+restrain him.
+Place berserk marker with 221 on it (to
+remind you of this paragraph) on the berserk
+American. This Event can occur only once per
+Mission. Ignore further references to this
+paragraph once the first American has gone
+berserk.
+
+222. One soldier (determined at random) is
+carrying a defective weapon. Due to age and
+abuse, the wooden stock on the weapon has
+deteriorated and broken off (this will affect
+only a soldier carrying a bolt rifle, bolt rifle
+with scope, carbine, semi-automatic rifle,
+BAR, SMG, or LMG). If no Germans are
+active, an American is automatically affected;
+if there is at least one German carrying a
+weapon in the group named above who is
+currently active, roll 1 die: On an odd result,
+an American is carrying the defective weapon;
+‘on an even result, a German has it. Place a
+broken stock marker on the affected soldier.
+The broken stock marker has 222 on it to
+remind you of this paragraph. The soldier
+with the defective weapon must now pay an
+additional —1 modifier on the To Hit
+determination of any fire combat conducted
+with the defective weapon. This Event can
+occur only once per Mission. Ignore further
+references to this paragraph after the first
+soldier suffers a broken stock.
+
+223. © If there is at least one bridge hex with
+no explosives set and no active German with
+explosives in the hex and there is an inactive
+German with explosives on the bridge or in
+rear of half track:
+
+4. Ignore normal Action paragraphs and
+movement references (make note of this on
+your Squad Record Sheet).
+
+2. Remove Special Reaction T, exit half track
+standing (1 MP), move to nearest inactive
+German on bridge with explosives; crouch and
+pick up explosives (1 Action); move to nearest
+bridge hex with no explosives set and no
+active German on or under the bridge with
+explosives, and put Special Reaction E into
+effect.
+
+3. If there is no inactive German with
+explosives on the bridge and there is an
+inactive German with explosives in the rear of
+the half track, remove Special Reaction T,
+climb into rear (1 Action), pick up explosives
+(1 Action), exit half track standing (1 MP),
+and move to nearest bridge hex with no
+explosives set and no active German with
+explosives in the hex. When there, put Special
+Reaction E into effect for this German.
+
+4. When Special Reaction E is removed from
+this German, return to this hex. If half track
+ig still active, climb into half track (1 MP)
+and put Special Reaction T back into effect.
+
+© Otherwise, roll one die: On an odd result,
+see 802; on an even result, see 824.
+
+224. 1. If any bridge hex (I-15, J-14, K-14)
+does not have explosives set or active German
+with explosives on or under bridge in hex,
+remove Special Reaction T from this German.
+Ignore Action paragraphs and movement
+references, exit half track standing (1 MP),
+and move as quickly as possible to nearest
+hex without explosives set or active German
+with explosives on or under bridge in same
+hex. When there, put Special Reaction E into
+
+effect for this German.
+2. See 802.
+
+225. © If any bridge hex has explosives set in
+it, one (chosen at random, if necessary)
+explodes. See 181 for effects of explosion.
+This can occur only once per Mission. Ignore
+any further references to this paragraph after
+the first explosion occurs in this manner.
+
+© Otherwise, no Event.
+
+226. © If soldier is moving, see 371.
+© If vehicle is moving, see 379.
+
+227. © If bridge is destroyed, see 290.
+* Otherwise, no Event.
+
+228. ¢ If bridge is intact, see 190.
+° If bridge is destroyed, see 290.
+
+229. © If any American vehicle is active, one
+(chosen at random, if necessary) blows a tire
+and can only be driven slowly. This can occur
+only once per Mission. Ignore any further
+reference to this paragraph after the first US
+vehicle blows a tire in this manner.
+
+* Otherwise, no Event.
+
+230. ¢ If in canoe, no Event.
+
+© If soldier in water, soldier with highest PC
+conduct a PC Check. Success: See 340.
+Failure: See 450.
+
+231. Place Event marker.
+
+1. If on surface, conduct PC Check (—2):
+
+* Success: See 561.
+
+* Failure: Conduct Activation Check (—2).
+Success: See 562. Failure: No Event.
+
+2. If underwater, conduct Activation Check
+(-2):
+
+* Success: See 562.
+
+* Failures Conduct PC Check (—2). Success:
+See 561. Failure: No Event.
+
+232. © If any sighting other than s9 has
+occurred:
+
+1. If s6 has not occurred, see 323.
+
+2. If s7 has not occurred, see 338.
+
+3. If both s6 and s7 have occurred, see 342.
+© Otherwise, no Event.
+
+233. This German conducts a PC Check:
+* Success: Surface if underwater and:
+
+4. Swim toward nearest American diver in
+Los.
+
+2. If no American diver is in LOS, swim
+toward F-4.
+
+3. If in F-4, do nothing.
+
+© Failure: 1. Stay in current stance and swim
+toward F-4.
+
+2. If in F-4, do nothing.
+
+234. 1. If on surface, conduct PC Check:
+
+* Success: See 561.
+
+Failure: Conduct Activation Check. Success:
+See 562. Failure: No Event.
+
+2. If underwater, conduct PC Check (~—1):
+
+* Success: See 561.
+
+Failure: Conduct Activation Check (—1).
+Success: See 563. Failure: No Event.
+
+235. [s3] German reinforcements arrive.
+Active GE 10 through GE 15 in a truck in
+hex determined by rolling 1 die: On an odd
+result, truck enters in Y-4; on an even result,
+truck enters in Y-10. GE 10 through GE 15
+activate in Special Reaction T. Commence
+Rounds. German advantage. GE 10 receives 2
+Turns this Round.
+
+236. Place Event marker.
+
+1. If on surface, conduct PC Check (—1):
+Success: See 561.
+
+¢ Failure: Conduct Activation Check (—1).
+Success: See 562. Failure: No Event.
+
+2. If underwater, conduct Activation Check
+(-)):
+
+* Success: See 562.
+© Failure: No Event.
+
+237. Barge counters are marked with 237 to
+remind you of this paragraph. Barges are
+considered large vehicles in the open for fire
+combat purposes. A soldier on a barge is
+considered to be in cover. Barges do not block
+LOS. It costs 2 MP to climb onto a barge
+from an adjacent land hex, and it costs 1
+Action to climb onto a barge from an all-
+water hex. Each barge is worth 3 VP if
+destroyed. A barge can be destroyed by:
+
+4. M or H penetration from a bazooka, killing
+any soldiers on the barge.
+
+2. Exploding a timed explosive affixed to the
+barge (barges are the only target timed
+explosives can be used to destroy). Soldier
+must be in same hex as the barge to affix a
+timed explosive to the barge, but soldier can
+be underwater or on the surface to do so. It
+costs 1 Action to affix the timed explosive to
+the barge and set the fuse. Use a tick, tick
+marker as explained in the Mission briefing to
+remind you that the timed explosive is set.
+Check for dud as for satchel charge. When
+the timed explosive goes off, all soldiers on
+the barge are killed; all soldiers in the water
+in the barge’s hex take damage on the Satchel
+Charge Outside row, without first making a
+Grenade Strike PC Check; soldiers on the
+surface are considered non-prone and soldiers
+underwater are considered prone; and the
+barge is destroyed (remove barge from the
+map).
+
+3. Exploding a satchel charge on the barge
+will destroy the barge. There is a —1 modifier
+if the satchel charge is thrown from other than
+the barge’s hex. Damage is assessed as in Part
+2, above.
+
+4. Exploding a grenade on a barge will
+destroy the barge if the initial roll on the
+Grenade Inside row is incapacitated or killed
+(in which case damage is assumed as in Part
+2, above). If the initial roll is panic or
+wounded, the barge is unharmed, but all
+soldiers on the barge take damage on the
+Grenade Inside row. Soldiers on a barge do
+make a Grenade Strike PC Check prior to any
+damage occurring. There is a —1 modifier if
+the grenade is thrown from other than the
+barge’s hex. If the initial hit roll causes the
+grenade to miss the barge, but the roll on the
+Grenade Scatter Diagram causes the grenade
+to hit the barge, roll 1 die: On an odd result,
+the grenade hits the barge; on an even result,
+the grenade lands in the water in the barge’s
+hex.
+
+Divers can now climb onto the barge, but still
+cannot enter a land hex. Make a note of this
+paragraph on your Squad Record Sheet.
+
+238. © If any sighting other than s9 has
+occurred:
+
+1. If s7 has not occurred, see 338.
+
+2. If s6 has not occurred, see 323.
+
+3. If s6 and s7 have both occurred, see 349.
+© Otherwise, no Event.
+
+239. © If in vehicle, remove Special Reaction
+T, exit vehicle (1 MP) standing end enter C-3.
+© Otherwise, enter C-3.
+
+240. Conduct PC Check:
+* Success: See 351.
+* Failure: No Event.
+
+241. 1. If in U-13 and grenade is available,
+
+and an active American vehicle is in the hex
+below, stand and lean out window and drop
+
+grenade on vehicle. Fall prone if free stance
+change is available.
+

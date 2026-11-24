@@ -1,0 +1,290 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 32
+
+675. 1. If there are fewer Americans to the
+south of row M (inclusive) than north of it,
+enter N-3.
+
+2. Otherwise, if soldier is moving, enter M-2.
+If vehicle is moving, each occupant (on his
+Turn) will spend 1 MP to exit the truck
+standing in M-3. Remove Special Reaction T
+from each German after he exits the truck.
+
+676. © If German truck is active, it blows a
+tire. Conduct Accident Check. Truck can be
+driven only slowly. If 1 tire is already blown
+due to combat result, or truck later blows
+second tire due to combat result, truck is
+immobilized (considered knocked out for VP
+purposes). If this happens, remove Special
+Reaction T for all Germans in the truck. This
+can occur only once per Mission. Ignore
+further references to this paragraph after it
+causes the truck to blow a tire.
+
+* Otherwise, roll for a new Random Event.
+
+677. 1. If on surface, conduct Activation
+Check (+1):
+
+* Success: See 341,
+
+* Failure: Conduct PC Check (+1). Success:
+See 780. Failure: See 542.
+
+2. If underwater, conduct PC Check (+1):
+
+© Success: See 780.
+
+© Failure: Conduct Activation Check (+1).
+Success: See 341. Failure: See 542.
+
+678. Conduct PC Check:
+* Success: See 783.
+* Failure: See 341.
+
+679. © If no timed explosives are set, no
+Event.
+
+* If one or more timed explosives are set, see
+554.
+
+680. [s1] Activate GE 16 and GE 17 in Q-9,
+crouching. Commence Rounds. German
+advantage.
+
+681. [s1] Activate GE 16 and GE 17 in Q-9,
+crouching. Commence Rounds. US advantage.
+
+682. © If there is an active American within 3
+hexes, enter M-16,
+* Otherwise, enter M-15.
+
+683. Mission ends when all active American
+vehicles exit the map via A-8, and all active
+American soldiers exit via A-7 to A-9,
+inclusive. VP loss for incapacitated and killed
+men can be avoided by exiting them (if
+campaigning your own continuing squad, men
+who are KIA in this Mission and exited are
+not reincarnated in the next Mission). You
+need 6 VP to win. If s1 has not occurred, see
+110 immediately. Once an American soldier
+or vehicle exits the map, he or it cannot
+return,
+
+684. « If there are no Americans in sight,
+enter R-15.
+© Otherwise, enter R-16.
+
+685. Go to Condition 2. [s5] Roll 1 die and
+reactivate any of the following Germans who
+were removed from the map:
+
+GE 16 and GE 17: On an odd roll, in K-19;
+even, G-19.
+
+GE 48: On an odd roll, in I-13; even, H-13.
+GE 49: On an odd roll, in G-14; even, F-13.
+GE 50: On an odd roll, in A-19; even, E-19.
+All activate crouching. GE 16, 17, and 50
+activate in Special Reaction D. If any of these
+Germans had run out of ammo, they have
+been resupplied. For each of the above
+Germans who is reactivated and who has used
+some or all of his initial supply of grenades,
+roll 1 die: On a result of 0-4, no
+
+resupplied; on a result of 5-7, one grenade
+resupplied; on a result of 8-9, two grenades
+
+resupplied. Regardless of the result of the
+resupply roll, no German can reactivate with
+more grenades than he originally had.
+Commence Rounds. If all of the above
+Germans are incapacitated or killed and s6 has
+not occurred, see 790 immediately. If any of
+the above Germans are placed back on the
+map as the result of this paragraph and s6 has
+not occurred, see 790 at the start of the next
+Round in place of the Random Event Check
+(note this on your Squad Record Sheet if it
+applies). If s4 has not occurred, see 248. The
+Mission ends in Condition 2 when all active
+Americans have exited the map (vehicles via
+B-19 and soldiers via A-19 through C-19,
+inclusive). VP loss for incapacitated and killed
+squad members can be avoided by exiting
+them (if campaigning you own continuing
+squad, soldiers who are killed in this Mission
+are not reincarnated after the Mission). You
+need 6 VP to win. Once an American soldier
+or vehicle exits the map, he or it cannot
+return.
+
+686. © If on second floor in V-13, descend to
+first floor.
+* If on first floor in V-13, enter V-14.
+
+687. If current German Action Number is
+odd, enter D-17.
+
+* If current German Action Number is even.
+enter E-18.
+
+688. Put Special Reaction D into effect for
+this soldier.
+
+689. © If current German Action Number is
+odd, enter T-12.
+
+° If current German Action Number is even,
+enter V-13.
+
+690. If radio is manned, see 366.
+
+* If radio is unmanned, or has been
+destroyed, roll one die: On an odd result, see
+582; on an even result, see 587.
+
+691. Place Event marker. Conduct PC Check:
+* Success: See 699.
+* Failure: No Event.
+
+692. [s2] There is a ford in H-11, connecting
+H-12 and H-10. Place ford marker. German
+enters H-11. If s2 has not already occurred, it
+does so now; make the appropriate notation
+on your Squad Record Sheet.
+
+693. © If there is an American vehicle in
+sight, put Special Reaction D into effect for
+this German.
+
+* Otherwise, enter P-6 (after removing Special
+Reaction D, if in effect).
+
+694. 1. If there is an American vehicle in
+sight, put Special Reaction D into effect for
+this German.
+
+2. If there are more Germans in P-4 than
+there are in R-4, remove Special Reaction D
+and enter Q-5.
+
+3. Remove Special Reaction D, if in effect,
+and enter P-4.
+
+695. © If vehicle is moving, enter 0-6.
+© If soldier is moving, enter P-5.
+
+696. ¢ If on road, no Event.
+© If in second story of U-13, see 242.
+
+697. « If either GE 21 or GE 30 moved 4 or
+more hexes in the previous Round, one of
+them (chosen at random) has thrown a tread
+and is immobilized. Place thrown tread
+marker on appropriate vehicle. It cannot move
+for the rest of the Mission, but it can perform
+any non-movement Actions called for. This
+Event can occur only once per Mission.
+Ignore any further references to this paragraph
+once one vehicle is affected in this manner.
+
+* Otherwise, no Event.
+
+698. One German weapon fired in the
+previous Round (including tank main guns and
+machineguns) runs out of ammo. If more than
+one fired in the previous Round, determine
+one at random.
+
+699. [s9] There is a bazooka with two rounds
+and an unprepared satchel charge in this hex.
+
+700. [s2] There is a ford in H-11, connecting
+H-10 and H-12, Place ford marker.
+
+701. © If radio is manned, see 471.
+
+© If radio is unmanned, see 471 when it is
+manned.
+
+* f radio is destroyed, either now or before it
+is manned, see 589.
+
+702. Go to Condition 2, If s7 has not
+occurred, see 473. If s8 has not occurred, see
+690.
+
+703. Squad members can exit the map via
+W-I through Y-1 inclusive. Once a man
+leaves the map, he cannot re-enter. Victory
+conditions of 587 still apply.
+
+704. Drive boat fast, stopping when within 2
+hexes of an active US soldier (excluding naval
+gun crew). Conduct best fire with HMG at
+easiest target. Load squad members.
+
+705. Load squad members. Drive boat slowly,
+stopping when within 2 hexes of an active US
+soldier (excluding naval gun crew). Conduct
+best fire with HMG at closest target.
+
+706. Conduct aimed fire with coaxial MG at
+closest target.
+
+707. © If there are 1 or more targets in sight,
+button up. If already buttoned up, see 934.
+
+© If there is no active target in sight, open. If
+already opened, see 935.
+
+708. Drive vehicle fast. Fire cannon at an
+active US vehicle or an active target in a
+building hex, if in sight. Prepare cannon if
+unable to fire. If cannon prepared and no
+cannon target in sight, conduct snap fire with
+coaxial MG at closest target.
+
+709. Drive vehicle fast. Fire cannon at an
+active US vehicle or an active target in a
+building hex, if in sight. Prepare cannon if
+unable to fire. If cannon prepared and no
+cannon target in sight, conduct aimed fire
+with bow MG at easiest target.
+
+711. © If there are 2 or more active US
+soldiers in the hex, surrender.
+
+* Otherwise, stand and conduct best fire at
+closest target. Fall prone if free stance change
+is available.
+
+712. © If on first floor, no Event.
+© If on second floor, see 133.
+
+718. The rest of your company should be in
+the area of W-6 through W-10. Get the food
+there as fast as you can.
+
+714. © If vehicle is moving and you are in
+Condition 1, enter R-5.
+
+* If vehicle is moving and you are in
+Condition 2, enter Q-7.
+
+© If soldier is moving, enter Q-6.
+
+716. [88] Activate GE 51 crouching in P-5, in
+Special Reaction A. Commence Rounds. US
+advantage.
+
+716. Conduct PC Check:
+® Success: See 332.
+© Failure: See 430.
+
+717. © If vehicle is moving, enter P-4.
+* If soldier is moving, enter R-4.

@@ -1,0 +1,282 @@
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE Il
+
+100. Minefield! Conduct Minefield Procedure.
+If in Condition 1 and mine explodes,
+see 235.
+
+101. Place Event marker. Conduct PC Check:
+* Success: See 109.
+© Failure: No Event.
+
+102, There is a boobytrapped road block in
+this hex. Conduct Boobytrap Procedure. If
+boobytrap explodes, it reduces to 1 the
+number of Actions needed to clear the
+roadblock. If sO has not occurred, see 351. If
+sl has not occurred, see 681. If s2 has not
+occurred, see 461.
+
+103. Place Event marker. Conduct PC Check
+(=D:
+
+® Success: See 579.
+
+* Failure: No Event.
+
+104. Place Event marker. Conduct PC Check:
+* Success: See 579.
+© Failure: No Event.
+
+4105. © If no sighting has occurred, see 118.
+© If any sighting has occurred, no Event.
+Ignore further references to this paragraph if
+any sighting has occurred (note this paragraph
+‘on your Squad Record Sheet).
+
+106. 1. If US vehicle in sight and grenade
+available, crouch (if within 3 hexes) or stand
+(within 4-6 hexes) and throw grenade at
+nearest visible active vehicle. Fall prone if
+free stance change available.
+
+2. If an active American vehicle is in sight
+and no grenade is available, or target is not in
+range, crouch and conduct best fire at closest
+vehicle. Fall prone if free stance change is
+available.
+
+3. If an active American is in sight, crouch
+and conduct best fire at easiest target. Fall
+prone if free stance change is available.
+
+4. If no active American is in sight, move as
+quickly as possible. Conduct best fire at first
+active vehicle or soldier to come into sight.
+Fall prone if target is in sight and free stance
+change is available at end of Turn.
+
+107. Conduct Activation Check (+1):
+* Success: See 461.
+° Failure: No Event.
+
+108. Conduct Activation Check:
+* Success: See 460.
+° Failure: No Event.
+
+109. [s0] This is a German supply room.
+There is 1 machine pistol with 3 clips, 1 bolt
+rifle with 3 clips, 3 grenades, and 1
+unprepared satchel charge in this hex. The
+satchel charge can be thrown into barge to
+destroy it (there is a —1 modification if the
+satchel charge is thrown from other than the
+barge’s hex).
+
+410. [1] Activate Germans 16 and 17 in L-3,
+crouching. Commence Rounds. German
+advantage. All aware Americans who do not
+panic receive 2 Turns this Round.
+
+111, [s1] Activate Germans 16 and 17 in L-3,
+crouching. Commence Rounds. German
+advantage. Germans 16 and 17 get 2 Turns
+this Round.
+
+112. Conduct PC Check:
+
+* Success: See 113.
+
+© Failure: If s5 has not occurred, conduct
+Activation Check. Success: See 220. Failure:
+No Event. If s5 has occurred, no Event.
+
+413. [s0] There is a roadblock in I-5. Place
+roadblock marker (from Ambush). Gain 1
+bonus VP when roadblock is cleared. If in
+Operations, at least 1 soldier must be in the
+roadblock hex to clear it and two Random
+
+Event Checks must be made. If in Rounds,
+roadblock can be cleared by:
+
+1. Throwing satchel charge in the hex.
+
+2. Heavy bazooka penetration (roadblock is
++2 to hit).
+
+3. At least 1 crouching or standing soldier
+must be in the roadblock hex and 3 Actions
+(which can be shared) must be spent by
+soldier(s) in the roadblock hex. Soldiers in the
+roadblock hex are considered to be in cover
+for purposes of resolving fire combat.
+
+4. Ramming through the roadblock with a
+truck. The truck attempting to ram through
+the roadblock must be going fast when it
+enters the roadblock hex and must have
+sufficient MPs to exit the roadblock. The
+driver of the truck must conduct 2 Accident
+Checks — the first when entering the hex with
+the roadblock, and the second to exit the hex.
+If either Accident Check is failed, the truck is
+automatically disabled in the roadblock hex
+and all occupants take damage on the Semi-
+Automatic Rifle row (due to being slammed
+into the dashboard and windshield by the
+sudden stop). If 2 trucks become disabled in
+the roadblock hex, the third truck can enter
+the adjacent hex and, after a standing or
+crouching soldier in either hex spends one
+Action to hook up a towline, the driver of the
+truck can spend one Action to pull a disabled
+truck into the adjacent hex (this is to allow the
+third truck to try to ram through the
+roadblock without violating the prohibition.
+against more than two vehicles in a hex). The
+truck attempting to clear the roadblock by
+ramming through it must enter and exit the
+roadblock hex in the same Turn for the
+roadblock to be successfully cleared. The jeep
+cannot attempt to clear the roadblock by
+ramming through because the small vehicle
+lacks sufficient weight to break through the
+roadblock.
+
+114. 1. If an active American vehicle is in
+sight and a grenade is available, crouch (if
+range is 3 hexes or less) or stand (if range is
+4-6 hexes) and throw grenade at nearest
+visible active vehicle. Fall prone if free stance
+change is available.
+
+2. If an active American vehicle is in sight
+and no grenade is available or is not in range,
+crouch and conduct best fire at nearest
+vehicle. Fall prone if free stance change is
+available.
+
+3. If active American soldier is in sight,
+crouch and conduct best fire at easiest target.
+Fall prone if free stance change is available.
+4. If no active American is in sight, move as
+quickly as possible.
+
+115. 1. If in U-13 and a grenade is available,
+and an active American vehicle is in the hex
+below, stand and lean out window and drop
+grenade on vehicle below. Fall prone if free
+stance change is available.
+
+2. If a grenade is available and an active
+American vehicle is in an adjacent hex,
+crouch and throw grenade at vehicle closest to
+east edge of map. Fall prone if free stance
+change is available.
+
+3. If no grenade is available, crouch and
+conduct best fire at closest target not in same
+hex. Fall prone if free stance change is
+available.
+
+4. If no active American is in sight and none
+is within 3 hexes, remove this German from
+the map.
+
+5. Crouch.
+
+116. One German soldier chosen at random
+goes berserk! For the remainder of the
+Mission, or until this German becomes
+
+inactive, conduct the following procedures:
+1. The soldier receives 2 Turns per Round
+(unless wounded).
+
+2. Each Turn, the soldier stands, conducts one
+snap fire at the closest active target, and then
+moves toward the closest active target, using
+up to half his MPA (rounding down). If there
+is no active target in sight, the berserk
+German will move toward the nearest active
+American and conduct 1 snap fire against the
+first target to come into sight if sufficient MPs
+remain to do so. The soldier does not fall
+prone, even if a free stance change is
+available. If the soldier is wounded, he will
+stop firing and move only.
+
+3. If the soldier's main weapon jams or he
+runs out of ammo, he will use his secondary
+weapon, if available. If no weapons are
+available, the soldier will use his full MPA
+each Turn toward the nearest active US
+soldier. The berserk German will not use
+grenades.
+
+4, The berserk German’s movement is not
+controlled by standard paragraph references.
+Instead, move the soldier directly toward the
+closest active American, paying normal terrain
+costs. Roll one die to resolve movement
+choices. The soldier will not enter prohibited
+terrain or run through burning buildings,
+across destroyed bridges, and so forth (he’s
+berserk, not crazy).
+
+5. If the berserk German begins a Turn in a
+hex with one or more active Americans, he
+will assault to kill the easiest target. If all
+Americans in the hex become inactive or exit
+the hex, the berserk German will repeat Step
+2, above.
+
+6. The berserk German will not panic and is
+considered to have a +2 WS when attacking
+or defending in assault combat. Berserk
+German cannot be given a Turn and does not
+make a Grenade Strike PC Check.
+
+Place Berserk marker with 116 on it on the
+berserk German as a reminder. The 116 on
+the counter is to remind you of this paragraph
+for reference. This Event can occur only once
+per Mission. Ignore further references to it
+after the first German goes berserk.
+
+117. © If in Operations, no Event.
+
+© If in Rounds, one US soldier (chosen at
+random, but not a commander) panics and
+falls prone immediately. Place the soldier’s
+AR marker in the Panic space of the Action
+Round Track. This soldier will rally only
+when another US soldier enters his hex and
+spends one Action. The soldier rallies
+immediately when the other soldier’s Action is
+spent and can perform Actions that Round if
+given a Turn by a commander; otherwise,
+place his AR marker in the Complete space.
+This Event can occur only once per Mission.
+Ignore further references to this paragraph
+after the first US soldier panics in this
+manner.
+
+118. 1. If reading this paragraph for the first
+time, what are you doing wandering around?
+You may only be delivering hot meals to the
+rest of the company, but they want the meals
+to still be hot when they eat them.
+
+2. If reading this paragraph for the second
+time, get moving before your Sarge becomes
+your Corporal.
+
+3. If reading this paragraph for the third time
+or more, lose 1 VP for each time you read
+this paragraph after the second.
+
+119. Place Event marker. Conduct PC Check
+(-)):
+© Success: See 113.
+

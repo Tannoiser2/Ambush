@@ -1,0 +1,294 @@
+=
+
+SILVER STAR RULES AND PARAGRAPH BOOKLET, PAGE 19
+
+298. Conduct PC Check:
+
+* Success: See 736.
+
+* Failure: Conduct Activation Check. Success:
+See 737. Failure: No Event.
+
+299. If in fortified building, no Event.
+© If s4 has not occurred, see 732.
+
+If not in fortified building and s4 has
+occurred, see 242.
+
+300. As long as the tank is in a building, the
+tank can only fire along the row of hexes it is
+facing. When the tank is in the hex with the
+destroyed wall hexside, the destroyed wall
+hexside is considered open for LOS and fire
+combat purposes. If a tank is in a building
+and the building collapses while the tank is
+open, each exposed crew member rolls on the
+Pistol row and any result other than panic
+reduces the crew by 1. If the tank is closed
+and the building collapses on it, make an
+Accident Check; if an accident results, a —2
+modifier is applied to the roll on the Accident
+Table. If a tank is directed to enter a barbed
+wire hex, it costs 2 MP to enter the hex plus
+an Accident Check. If the Accident Check is
+passed, remove the barbed wire counter from
+the hex; if the Accident Check fails, the tank
+is immobilized in the hex and the barbed wire
+remains. Make note of this paragraph on your
+Squad Record Sheet.
+
+301. © If there is a fortified building in P-15,
+place Event marker. No Event.
+
+© If there is no fortified building in P-15 and
+s4 has not occurred, conduct PC Check.
+Success: See 732. Failure: See 733.
+
+© If there is no fortified building in P-15 and
+s4 has occurred, place Event marker. No
+Event.
+
+302. © If there is a fortified building in P-15
+or O-14, enter Q-15.
+
+© If there is a fortified building in T-12 or
+V-13, enter S-15.
+
+303. © If there is a fortified building in P-15,
+enter N-16.
+Otherwise, enter M-15.
+
+304. © If there is a fortified building in P-15
+or O-14, enter Q-15.
+© Otherwise, enter R-14.
+
+305. © If there is a fortified building in V-13,
+enter X-12.
+© Otherwise, enter V-11.
+
+306. If there are more Americans south of the
+6 row (inclusive) than there are west of the U
+column (inclusive), enter W-6.
+
+© Otherwise, enter V-7.
+
+307. © If vehicle is moving, enter W-9.
+
+© If soldier is moving and there is no active
+‘American in sight, remove this German from
+the map.
+
+© If soldier is moving and there is an active
+American in sight, conduct 802.
+
+Note that this paragraph applies to German
+soldier in tunnel or on top of tunnel.
+
+308. © If soldier is moving, soldier enters
+tunnel. Put inverted prone marker on him. If
+there is a German in W-6, enter W-7; if in
+‘W-10, enter W-9.
+
+© If vehicle in W-10 is moving, vehicle enters
+W-1l.
+
+© If vehicle in W-6 is moving, vehicle enters
+tunnel. Place inverted prone marker on it and
+vehicle enters W-7.
+
+309. ¢ If there are more active Americans
+north of the 10 row (inclusive) than there are
+west of the U column (inclusive), enter W-10.
+* Otherwise, enter U-9.
+
+310. Conduct Activation Check:
+* Success: See 410.
+© Failure: See 411.
+
+311. Conduct PC Check (+1):
+© Success: See 411.
+© Failure: See 410.
+
+312. © If there are more Americans south of
+the 6 row (inclusive) than there are west of
+the V column (inclusive), enter Y-7.
+
+© Otherwise, enter W-6.
+
+313. © If there is an active American within 2
+hexes, enter Y-9.
+* Otherwise, enter W-10.
+
+314. 1. If GE 39 or GE 69 has been removed
+from the map, conduct PC Check:
+
+© Success: See 443.
+
+* Failure: See 444.
+
+2. If GE 39 and GE 69 are both inactive,
+place Event marker. No Event.
+
+3. If neither GE 39 nor GE 69 has been
+removed from the map, no Event.
+
+315. © If there are 2 or more active
+Americans within 3 hexes of W-8, enter Q-3.
+© Otherwise, enter P-3.
+
+316. [s6] Activate GE 68 in hex determined
+by rolling one die:
+
+F-19, facing F-18.
+
+R-19, facing R-18.
+
+6-9: O-1, facing O-2.
+
+Commence Rounds. GE 68 receives 2 Turns
+this Round.
+
+317. © If soldier is moving, enter W-8.
+
+© If vehicle is moving, vehicle exits tunnel.
+Remove inverted prone marker and enter
+W-10.
+
+318. 1. Mist continues to burn off. LOS is
+now 10 hexes (exclusive). If this Event causes
+LOS between German patrol marker and
+active American, roll I die: On an odd result,
+see 492; on an even result, see 620.
+
+2. If s2 has not occurred, see 441.
+
+3. If s9 has not occurred, see 413.
+
+4. Roll 1 die and refer to the indicated
+
+9: 370
+
+319. There is a trap door in this hex with a
+ladder leading down into the tunnel. It takes 2
+MP to climb down the ladder. Make note of
+this paragraph on your Squad Record Sheet.
+
+320. There is a telephone in this room.
+RRRRinnnggg. RRRinnnggg. It rings and the
+Sarge answers. Headquarters tells Sarge to get
+the rest of the squad and go to K-8 and
+unload supply mules from the barge in K-7.
+‘Once the mules are unloaded, the squad is to
+escort the mules to the front lines. Sarge is to
+return directly to the rest of the squad via the
+road. Mules can be unloaded from the barge
+only into K-8.
+
+321. © If s8 has occurred, no Event.
+* If s8 has not occurred, see 636.
+
+322. © If this German has moved this Turn
+and has at least half his MPA left (rounded
+down), crouch and roll one die: On an odd
+result, conduct 1 snap fire at closest target; on
+an even result, conduct 1 snap fire at easiest
+
+target.
+© If this German has moved this Turn and
+
+does not have at least half his MPA left
+(rounded down), crouch if free stance change
+is available or sufficient Movement Points
+available.
+
+© If this German has not moved this Turn,
+exit. You lose 1 VP for each German who
+exits, and 2 VP for each mule he takes out.
+
+328. [s6] Activate German 70 on surface in
+F-7. Commence Rounds.
+
+324. [s1] Activate GE 74 and GE 75
+
+| crouching in L-8. Commence Rounds. German
+
+advantage.
+
+328. [s9] Activate US 07 in hex determined
+by rolling one die: On an odd result, US 07
+activates in B-19; on an even result, US 07
+activates in A-8. Facing is your choice. US 07
+is not under your control. Actions are
+determined by current German Action Number
+and Action Paragraphs on the card; when
+directed to move, use movement references on
+Condition cards. Commence Rounds. US 07
+receives 2 Turns this Round. Next Round,
+instead of RE Check, see 316. Make note of
+this. You need 17 VP to win. The Mission
+ends in Condition 3 after s7 and s8 have
+occurred and there are no active Germans on
+the map. VP loss for incapacitated men can be
+avoided by moving them into a building or
+tunnel hex.
+
+329. You need 14 VP to win. The Mission
+ends in Condition 3 after s7 and s8 have
+occurred and there are no active Germans on
+the map. VP loss for incapacitated men can be
+avoided by moving them into a building or
+tunnel hex.
+
+330. Go to Condition 4. Mission ends in
+Condition 4 when there are no active Germans
+on the map. You need 21 VP to win (ignore
+victory conditions in 269). There is no VP
+loss for incapacitated men if all Germans are
+inactive or have exited the map when the
+Mission ends.
+
+331. 1. If soldier is moving, conduct PC
+Check:
+
+© Success: See 180.
+
+© Failure: No Event.
+
+2. If vehicle is moving, driver conduct PC
+Check:
+
+* Success: See 180.
+
+© Failure: If there is an assistant driver,
+assistant driver conducts PC Check (—1).
+Success: See 180. Failure: No Event. If there
+is no assistant driver, no Event.
+
+382. Activate GE 52, crouching in M-9, and
+GE 53, crouching in I-9, Both activate in
+Special Reaction A. Commence Rounds. US
+advantage.
+
+333. Remove Special Reaction M from this
+German. If an active target is visible, conduct
+paragraph for current German Action Number
+as listed in Special Reaction D column (but do
+not put Special Reaction D into effect for this
+German). If no target is visible, crouch.
+
+334, Minefield! Conduct Minefield Procedure.
+1. If you pass the minefield PC Check and no
+mines detonate: If s1 has not occurred, see
+681; if s6 has not occurred, see 651; if both
+sl and s6 have occurred, no Event.
+
+2. If you fail the minefield PC Check and
+soldier suffers mine attack but is still active:
+If sl has not occurred, see 680; if s6 has not
+occurred, see 790; if both s1 and s6 have
+occurred, no Event.
+
+3. If you fail the minefield PC Check and
+soldier is inactive as a result of the mine
+attack, no further Event.
+
