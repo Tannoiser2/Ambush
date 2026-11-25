@@ -598,6 +598,16 @@ func _aggiorna_squadra() -> void:
 			continue
 		lista_squadra.add_child(_riga_soldato(a, a.id in selezione and not riproducendo, a.id in di_turno, in_round))
 
+var _volti: Dictionary = {}
+
+## Ritratto del soldato (assets/volti/us_<id>.jpg), se c’è.
+func _volto(a: Dictionary) -> Texture2D:
+	var k := str(a.get("id", a.get("lettera", "")))
+	if not _volti.has(k):
+		var perc := "res://assets/volti/us_%s.jpg" % k
+		_volti[k] = load(perc) if k != "" and ResourceLoader.exists(perc) else null
+	return _volti[k]
+
 func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Control:
 	var pc := PanelContainer.new()
 	var colore := Color("efe6cb") if not sel else Color("f4dfa0")
@@ -624,7 +634,31 @@ func _riga_soldato(a: Dictionary, sel: bool, turno: bool, in_round: bool) -> Con
 	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if a.stato == "morto":
 		tr.modulate = Color(0.5, 0.5, 0.5)
-	hb.add_child(tr)
+	# A sinistra il volto del soldato e sotto la sua pedina.
+	var col_sx := VBoxContainer.new()
+	col_sx.add_theme_constant_override("separation", 3)
+	col_sx.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col_sx.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	var volto := _volto(a)
+	if volto != null:
+		var cornice := PanelContainer.new()
+		cornice.add_theme_stylebox_override("panel", Tema.scatola(Color("2b2a22"), bordo, 1, 1, 3))
+		cornice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var vt := TextureRect.new()
+		vt.texture = volto
+		vt.custom_minimum_size = Vector2(52, 52)
+		vt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		vt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		vt.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if a.stato == "morto":
+			vt.modulate = Color(0.45, 0.45, 0.45)
+		elif a.get("ferito", false):
+			vt.modulate = Color(1.0, 0.78, 0.74)
+		cornice.add_child(vt)
+		col_sx.add_child(cornice)
+		tr.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col_sx.add_child(tr)
+	hb.add_child(col_sx)
 	var vb := VBoxContainer.new()
 	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vb.add_theme_constant_override("separation", -1)
@@ -2318,11 +2352,31 @@ func _mostra_regole() -> void:
 	vb.add_child(bb)
 	_apri_finestra(vb, 860)
 
+## Immagine della carta: per i tedeschi la carta della missione (ridisegnata con la foto, oppure l’originale stampata
+## per Move Out!, Purple Heart e Silver Star); per gli americani la carta base.
+func _percorso_carta(x: Dictionary) -> String:
+	if x.lato == "us":
+		return "res://assets/carte/us05.jpg"
+	var num := int(x.get("num", 0))
+	var n := int(p.numero)
+	var modulo := "base" if n <= 8 else ("mo" if n <= 12 else ("ph" if n <= 18 else "ss"))
+	var candidati: Array = []
+	if not bool(_pref_grafica.get("carte", true)) and modulo != "base":
+		candidati.append("res://assets/carte/orig/%s/ge%02d.jpg" % [modulo, num])
+	if modulo == "base":
+		candidati.append("res://assets/carte/base/ge%02d.jpg" % num)
+	candidati.append("res://assets/carte/nuove/m%d/ge%02d.jpg" % [n, num])
+	candidati.append("res://assets/carte/orig/%s/ge%02d.jpg" % [modulo, num])
+	for c in candidati:
+		if ResourceLoader.exists(c):
+			return c
+	return "res://assets/carte/us05.jpg"
+
 func _mostra_carta(x: Dictionary) -> void:
 	var vb := VBoxContainer.new()
 	var tr := TextureRect.new()
-	tr.texture = load("res://assets/carte/us05.jpg" if x.lato == "us" else "res://assets/carte/ge%02d.jpg" % int(x.num))
-	tr.custom_minimum_size = Vector2(380, 540)
+	tr.texture = load(_percorso_carta(x))
+	tr.custom_minimum_size = Vector2(380, 548)
 	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	vb.add_child(tr)
@@ -2705,7 +2759,7 @@ func _leggi_preferenze() -> void:
 	if d is Dictionary:
 		automatico = bool(d.get("automatico", false))
 		linee_vista = bool(d.get("linee_vista", true))
-		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true)), "3d": bool(d.get("vista_3d", false))}
+		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true)), "3d": bool(d.get("vista_3d", false)), "carte": bool(d.get("carte_ridisegnate", true))}
 		_velocita_iniziale = float(d.get("velocita", 1.0))
 
 var _velocita_iniziale := 1.0
@@ -2721,7 +2775,7 @@ func _applica_3d() -> void:
 	mappa.imposta_3d(on)
 	if bottone_3d != null:
 		bottone_3d.text = "2D" if on else "3D"
-var _pref_grafica := {"mappa": false, "pedine": false, "comando": true}
+var _pref_grafica := {"mappa": false, "pedine": false, "comando": true, "carte": true}
 
 ## Finestra della grafica: mappa, pedine e raggio di comando a scelta del giocatore.
 func _mostra_grafica() -> void:
@@ -2731,6 +2785,7 @@ func _mostra_grafica() -> void:
 	var voci := [
 		["MAPPA", "mappa", "Originale", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa, per tutte le missioni (anche Purple Heart, Move Out e Silver Star): stessi esagoni, stesso terreno."],
 		["PEDINE", "pedine", "Originali", "Ridisegnate", "Le pedine ridisegnate mostrano il soldato in piedi oppure accovacciato secondo la postura."],
+		["CARTE", "carte", "Originali", "Ridisegnate", "Le carte dei tedeschi ridisegnate hanno la foto del soldato. Per le missioni 1–8 esistono solo così; per le altre si può scegliere la carta originale stampata."],
 		["COMANDO", "comando", "Nascosto", "Mostrato", "Mostra sulla mappa chi è in comando e gli esagoni entro due dal comandante."],
 	]
 	for v in voci:
@@ -2773,7 +2828,7 @@ func _salva_preferenze() -> void:
 	var f := FileAccess.open(PREFERENZE, FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista,
-			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando, "vista_3d": bool(_pref_grafica.get("3d", false))}))
+			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando, "vista_3d": bool(_pref_grafica.get("3d", false)), "carte_ridisegnate": bool(_pref_grafica.get("carte", true))}))
 
 func _mostra_legenda() -> void:
 	var vb := VBoxContainer.new()

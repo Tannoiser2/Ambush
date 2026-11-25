@@ -1535,7 +1535,11 @@ func _aggiorna_case() -> void:
 ## Le pedine diventano miniature 3D (assets/soldati3d, da tools/costruisci_soldati3d.py),
 ## scelte secondo parte, postura, stato e arma principale.
 const DIR_SOLDATI := "res://assets/soldati3d/"
-const VERSO_MODELLI := PI   # rotazione che porta il «davanti» delle miniature verso +Z
+const VERSO_MODELLI := PI   # miniature distese: la testa è verso −Z, va girata verso +Z
+
+## Le miniature in piedi e accovacciate hanno già l’arma verso +Z; quelle distese hanno la testa verso −Z.
+func _verso_modello(nome: String) -> float:
+	return VERSO_MODELLI if nome.ends_with("_prono") or nome.ends_with("_morto") or nome.ends_with("_ferito") else 0.0
 var _mesh_soldati: Dictionary = {}
 var _figure: Dictionary = {}     # id unità -> Node3D
 var _figure_nodo: Node3D
@@ -1771,7 +1775,7 @@ func _aggiorna_pedine() -> void:
 		corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto else str(x.lato)))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
 		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
-		corpo.rotation = Vector3(0, yaw + VERSO_MODELLI, deg_to_rad(80.0) if morto else 0.0)
+		corpo.rotation = Vector3(0, yaw + _verso_modello(nome), deg_to_rad(80.0) if morto else 0.0)
 		var tre2: MeshInstance3D = fig.get_node_or_null("treppiede")
 		if tre2 != null and tre2.visible:
 			tre2.rotation.y = yaw + VERSO_MEZZI

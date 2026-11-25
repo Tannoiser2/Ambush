@@ -108,6 +108,9 @@ static func indice_postura(p: String) -> int:
 	return maxi(0, POSTURE.find(p))
 
 static func base_per_distanza(arma: String, dist: int) -> int:
+	# cariche da demolizione e taniche non si sparano: nessuna gittata
+	if not ARMI.has(arma) or not ARMI[arma].has("gittate"):
+		return -1
 	if dist == 0:
 		return 8
 	if dist == 1:
@@ -126,6 +129,8 @@ static func nome_gittata(arma: String, dist: int) -> String:
 		return "stesso esagono"
 	if dist == 1:
 		return "adiacente"
+	if not ARMI.has(arma) or not ARMI[arma].has("gittate"):
+		return "fuori gittata"
 	var g: Array = ARMI[arma].gittate
 	if dist <= g[0]:
 		return "corta"

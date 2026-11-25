@@ -380,3 +380,27 @@ Ordine scelto: M11, M10, M12, M9.
   Ora tutte le mappe del gioco (A, B, C, A+D, B+E, F, F+H, F+G, G+H) hanno la versione realistica (menu «Grafica»).
 - Scatti: `tests/visivi/realistiche.gd`.
 
+
+## Carte dei tedeschi
+- `tools/costruisci_carte_tedesche.py <Mods TTS> <Cards_ready_to_print_v1.5.pdf>`:
+  - `assets/carte/base/` = carte base con la nuova grafica (67 dal mod TTS, 9 dal PDF);
+  - `assets/carte/orig/{mo,ph,ss}/` = carte originali stampate dei moduli;
+  - `assets/carte/nuove/m<N>/` = 192 carte ridisegnate (foto di una carta base della stessa categoria, testi in italiano,
+    tabella Condizione/Speciale della missione).
+  - Le foto che non sono soldati (`FOTO_ESCLUSE`: razzi V1, fucili isolati, civili) non si riusano.
+- Ogni carta tedesca di ogni missione ha un’immagine (`_percorso_carta` in `principale.gd`). Il menu «Grafica → Carte»
+  sceglie fra originali e ridisegnate (dalla missione 9; per le missioni 1–8 esiste solo la nuova grafica).
+- Scatti: `tests/visivi/carte_volti.gd`.
+
+## Volti della squadra
+- `assets/volti/us_<id>.jpg` (136×136, ritratti generati per A Alex … K Kenny), nella scheda della squadra sopra la pedina,
+  con la cornice grigia se il soldato è morto e rosata se è ferito.
+
+## Verso delle miniature 3D
+- I modelli in piedi e accovacciati hanno l’arma verso +Z; quelli distesi (prono, morto, ferito) la testa verso −Z.
+  `_verso_modello` aggiunge mezzo giro solo a questi ultimi. Il verso segue l’ultimo movimento, tiro o lancio
+  (`mappa.direzioni`), altrimenti il nemico più vicino, e si ricalcola a ogni fotogramma.
+
+## Armi senza gittata
+- `T.base_per_distanza` e `T.nome_gittata` danno «fuori gittata» per carica da demolizione e tanica (prima la simulazione
+  poteva fermarsi con un errore se una routine di tiro le considerava).
