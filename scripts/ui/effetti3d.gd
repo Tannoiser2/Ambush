@@ -8,6 +8,11 @@ const E = preload("res://scripts/motore/esagoni.gd")
 ## Missioni notturne (vista limitata dal buio) e missioni con la nebbia.
 const NOTTE := [4, 6, 9, 12, 13, 16, 19, 23]
 const NEBBIA := [3, 23]
+## Missioni invernali (Belgio e Ardenne a dicembre): nevica. Nelle altre può piovere, a caso, solo come effetto.
+const NEVE := [3, 11, 18]
+const PROBABILITA_PIOGGIA := 35  # su cento partite
+## Preferenza del giocatore (Grafica → Meteo).
+static var meteo_attivo := true
 const CELLA := 16  # pixel della mappa per ogni pixel della maschera di luce
 
 var m3  # la vista 3D (mappa3d.gd)
@@ -33,6 +38,10 @@ var _visti: Dictionary = {}     # animazioni 2D già trasformate in effetti 3D
 var _attivi: Array = []         # effetti a tempo: {nodo, t0, dur, tipo, ...}
 var _t := 0.0
 var _tex_morbida: Texture2D
+var _precipitazione: CPUParticles3D
+var _tipo_meteo := ""
+var meteo := ""          # "neve", "pioggia" o "" (sereno)
+var pioggia := 0.0       # intensità attuale della pioggia, 0–1 (va e viene)
 
 func prepara(vista3d, env: Environment, luce: DirectionalLight3D, riempimento: DirectionalLight3D) -> void:
 	m3 = vista3d
@@ -80,6 +89,7 @@ func aggiorna(delta: float) -> void:
 	if p == null or p.s.is_empty() or _img == null:
 		return
 	var t0 := Time.get_ticks_usec()
+	_meteo(p)
 	_atmosfera(p)
 	var t1 := Time.get_ticks_usec()
 	_maschera_luce(p)
@@ -92,6 +102,87 @@ func aggiorna(delta: float) -> void:
 	if OS.has_environment("FX_PROFILO") and _conta % 20 == 0:
 		print("fx ", _conta, " atm ", t1 - t0, " masch ", t2 - t1, " resto ", t3 - t2, " fps ", Engine.get_frames_per_second())
 
+# ------------------------------------------------------------------ neve e pioggia
+## Che tempo fa in questa partita: neve nelle missioni invernali; altrove pioggia per alcune partite, scelte col seme
+## della partita (così una partita salvata ritrova lo stesso tempo). Solo effetto: le regole non cambiano.
+func tempo_di(p) -> String:
+	if not meteo_attivo:
+		return ""
+	if int(p.numero) in NEVE:
+		return "neve"
+	var h := absi(hash("meteo%d_%s" % [int(p.numero), str(p.s.get("seme", ""))])) % 100
+	return "pioggia" if h < PROBABILITA_PIOGGIA else ""
+
+func _meteo(p) -> void:
+	meteo = tempo_di(p)
+	# la pioggia va e viene: rovesci e pause lente
+	var vuole := 0.0
+	if meteo == "pioggia":
+		vuole = clampf(0.55 + 0.45 * sin(_t * 0.05) + 0.25 * sin(_t * 0.17 + 1.3), 0.0, 1.0)
+	pioggia = move_toward(pioggia, vuole, 0.004)
+	if meteo != _tipo_meteo:
+		_tipo_meteo = meteo
+		if _precipitazione != null:
+			_precipitazione.queue_free()
+			_precipitazione = null
+		if meteo == "neve":
+			_precipitazione = _particelle_neve()
+		elif meteo == "pioggia":
+			_precipitazione = _particelle_pioggia()
+		if _precipitazione != null:
+			add_child(_precipitazione)
+	if _precipitazione == null:
+		return
+	# il riquadro da cui cade segue l’inquadratura e si allarga quando la camera si allontana
+	var lato := clampf(m3.distanza * 0.9, 4.0, 22.0)
+	_precipitazione.global_position = m3.bersaglio + Vector3(0, minf(m3.distanza * 0.55, 9.0) + 2.5, 0)
+	_precipitazione.emission_box_extents = Vector3(lato, 0.2, lato)
+	if meteo == "pioggia":
+		_precipitazione.emitting = pioggia > 0.05
+		# CPUParticles3D non ha amount_ratio: l’intensità passa per la trasparenza delle gocce
+		var mg := (_precipitazione.mesh as QuadMesh).material as StandardMaterial3D
+		mg.albedo_color.a = 0.45 * clampf(pioggia, 0.15, 1.0)
+
+func _particelle_pioggia() -> CPUParticles3D:
+	var c := _base(1400, 1.1, false)
+	var q := QuadMesh.new()
+	q.size = Vector2(0.008, 0.28)
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.billboard_mode = BaseMaterial3D.BILLBOARD_FIXED_Y  # gocce verticali, girate verso la camera
+	m.albedo_color = Color(0.62, 0.68, 0.76, 0.45)
+	m.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_DISABLED
+	q.material = m
+	c.mesh = q
+	c.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	c.direction = Vector3(0.12, -1, 0.05)
+	c.spread = 3.0
+	c.initial_velocity_min = 10.0
+	c.initial_velocity_max = 12.5
+	c.gravity = Vector3(0, -4, 0)
+	c.preprocess = 1.0
+	return c
+
+func _particelle_neve() -> CPUParticles3D:
+	var c := _base(1100, 9.0, false)
+	var q := _quad(0.045, false)
+	(q.material as StandardMaterial3D).albedo_color = Color(0.86, 0.88, 0.9, 0.85)
+	c.mesh = q
+	c.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+	c.direction = Vector3(0.15, -1, 0.1)
+	c.spread = 25.0
+	c.initial_velocity_min = 0.5
+	c.initial_velocity_max = 0.9
+	c.gravity = Vector3(0.05, -0.25, 0)
+	# fiocchi che ondeggiano: piccola accelerazione tangenziale e dimensioni diverse
+	c.tangential_accel_min = -0.15
+	c.tangential_accel_max = 0.15
+	c.scale_amount_min = 0.5
+	c.scale_amount_max = 1.3
+	c.preprocess = 8.0
+	return c
+
 # ------------------------------------------------------------------ notte e nebbia
 func _atmosfera(p) -> void:
 	var lim: int = int(p.terreno.limite_vista)
@@ -102,7 +193,7 @@ func _atmosfera(p) -> void:
 	notte = move_toward(notte, vuole_notte, 0.02)
 	nebbia = move_toward(nebbia, vuole_nebbia, 0.01)
 	# Luna fredda e debole di notte, sole caldo di giorno; mai bianchi sovraesposti.
-	_luce.light_energy = lerpf(0.72, 0.30, notte)
+	_luce.light_energy = lerpf(0.72, 0.30, notte) * (1.0 - 0.25 * pioggia)
 	_luce.light_color = Color(1.0, 0.96, 0.88).lerp(Color(0.62, 0.70, 0.92), notte)
 	_riemp.light_energy = lerpf(0.28, 0.10, notte)
 	_env.ambient_light_color = Color(0.72, 0.74, 0.78).lerp(Color(0.30, 0.36, 0.52), notte)
@@ -110,7 +201,7 @@ func _atmosfera(p) -> void:
 	_env.background_color = Color("2b2f24").lerp(Color("0b0e16"), notte)
 	var col_nebbia := Color(0.56, 0.58, 0.58).lerp(Color(0.16, 0.19, 0.26), notte)
 	_env.fog_light_color = Color("3a3f31").lerp(col_nebbia, maxf(nebbia, notte * 0.6))
-	_env.fog_density = 0.006 + nebbia * 0.055 + notte * 0.01
+	_env.fog_density = 0.006 + nebbia * 0.055 + notte * 0.01 + pioggia * 0.012 + (0.006 if meteo == "neve" else 0.0)
 	_env.tonemap_exposure = lerpf(0.95, 1.05, notte)
 	for mat in [m3.mat_terreno, m3.acqua_mi.material_override if m3.acqua_mi != null else null]:
 		if mat != null:

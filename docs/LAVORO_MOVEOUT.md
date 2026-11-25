@@ -442,3 +442,10 @@ Ordine scelto: M11, M10, M12, M9.
   - caduta: chi muore cade all’indietro in 0,5 s con l’ultima posa da vivo (meta `posa_viva`), poi resta il
     modello a terra; chi è già morto all’apertura della partita non cade.
 - Test: `tests/visivi/animazioni3d.gd` (verifica rinculo, dissolvenza e caduta, salva i fotogrammi).
+
+## Meteo nella vista 3D (solo effetto)
+- Neve nelle missioni invernali 3, 11 e 18 (`Effetti3D.NEVE`): fiocchi lenti che ondeggiano, un filo di foschia in più.
+- Pioggia: nelle altre missioni piove nel 35% delle partite (`PROBABILITA_PIOGGIA`). La scelta viene dal seme della partita, quindi una partita salvata ritrova lo stesso tempo. La pioggia va e viene, a rovesci e pause, e scurisce un poco la luce.
+- Le regole non cambiano. Il giocatore può spegnere tutto in Grafica, voce «METEO» (preferenza `meteo`).
+- Le particelle seguono l'inquadratura e il riquadro da cui cadono si allarga con la distanza della camera. In CPUParticles3D non c'è `amount_ratio`, quindi l'intensità passa per la trasparenza delle gocce.
+- Test visivo: `tests/visivi/meteo3d.gd`.

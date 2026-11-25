@@ -2608,6 +2608,7 @@ func _mostra_missione_scelta(n: int) -> void:
 		b.custom_minimum_size = Vector2(0, 42)
 	_apri_finestra(vb, clampf(size.x * 0.8, 340.0, 900.0))
 
+const Effetti3DMeteo = preload("res://scripts/ui/effetti3d.gd")
 const EditorMappeScript = preload("res://scripts/ui/editor_mappe.gd")
 
 ## Editor delle mappe a tutto schermo; chiudendolo la partita in corso usa subito le correzioni.
@@ -2791,7 +2792,7 @@ func _leggi_preferenze() -> void:
 	if d is Dictionary:
 		automatico = bool(d.get("automatico", false))
 		linee_vista = bool(d.get("linee_vista", true))
-		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true)), "3d": bool(d.get("vista_3d", false)), "carte": bool(d.get("carte_ridisegnate", true))}
+		_pref_grafica = {"mappa": bool(d.get("mappa_realistica", false)), "pedine": bool(d.get("pedine_nuove", false)), "comando": bool(d.get("mostra_comando", true)), "3d": bool(d.get("vista_3d", false)), "carte": bool(d.get("carte_ridisegnate", true)), "meteo": bool(d.get("meteo", true))}
 		_velocita_iniziale = float(d.get("velocita", 1.0))
 
 var _velocita_iniziale := 1.0
@@ -2807,7 +2808,7 @@ func _applica_3d() -> void:
 	mappa.imposta_3d(on)
 	if bottone_3d != null:
 		bottone_3d.text = "2D" if on else "3D"
-var _pref_grafica := {"mappa": false, "pedine": false, "comando": true, "carte": true}
+var _pref_grafica := {"mappa": false, "pedine": false, "comando": true, "carte": true, "meteo": true}
 
 ## Finestra della grafica: mappa, pedine e raggio di comando a scelta del giocatore.
 func _mostra_grafica() -> void:
@@ -2818,6 +2819,7 @@ func _mostra_grafica() -> void:
 		["MAPPA", "mappa", "Originale", "Realistica", "La mappa realistica è un ridisegno moderno della stessa mappa, per tutte le missioni (anche Purple Heart, Move Out e Silver Star): stessi esagoni, stesso terreno."],
 		["PEDINE", "pedine", "Originali", "Ridisegnate", "Le pedine ridisegnate mostrano il soldato in piedi oppure accovacciato secondo la postura."],
 		["CARTE", "carte", "Originali", "Ridisegnate", "Le carte dei tedeschi ridisegnate hanno la foto del soldato. Per le missioni 1–8 esistono solo così; per le altre si può scegliere la carta originale stampata."],
+		["METEO", "meteo", "Spento", "Acceso", "Nella vista 3D nevica nelle missioni invernali (3, 11 e 18); nelle altre, in alcune partite, piove. È solo un effetto: le regole non cambiano."],
 		["COMANDO", "comando", "Nascosto", "Mostrato", "Mostra sulla mappa chi è in comando e gli esagoni entro due dal comandante."],
 	]
 	for v in voci:
@@ -2854,13 +2856,14 @@ func _applica_grafica() -> void:
 			or (p != null and mappa.lettera_mappa != p.lettera_mappa().to_lower()):
 		mappa.imposta_grafica(bool(_pref_grafica.mappa), bool(_pref_grafica.pedine))
 	mappa.mostra_comando = bool(_pref_grafica.comando)
+	Effetti3DMeteo.meteo_attivo = bool(_pref_grafica.get("meteo", true))
 	mappa.queue_redraw()
 
 func _salva_preferenze() -> void:
 	var f := FileAccess.open(PREFERENZE, FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify({"automatico": automatico, "velocita": mappa.velocita, "linee_vista": linee_vista,
-			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando, "vista_3d": bool(_pref_grafica.get("3d", false)), "carte_ridisegnate": bool(_pref_grafica.get("carte", true))}))
+			"mappa_realistica": _pref_grafica.mappa, "pedine_nuove": _pref_grafica.pedine, "mostra_comando": _pref_grafica.comando, "vista_3d": bool(_pref_grafica.get("3d", false)), "carte_ridisegnate": bool(_pref_grafica.get("carte", true)), "meteo": bool(_pref_grafica.get("meteo", true))}))
 
 func _mostra_legenda() -> void:
 	var vb := VBoxContainer.new()
