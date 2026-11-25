@@ -102,6 +102,9 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: build/web
+      # a volte l'API non vede ancora l'artefatto appena caricato ("Found 0 artifact(s)"): si aspetta un poco
+      - name: Wait for artifact
+        run: sleep 30
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
