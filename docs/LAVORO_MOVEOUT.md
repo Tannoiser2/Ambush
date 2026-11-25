@@ -425,3 +425,10 @@ Ordine scelto: M11, M10, M12, M9.
 ## Volti di riserva per la campagna
 - `assets/volti/rimpiazzi/r01…r48.jpg`: 48 ritratti nello stesso stile (generati a gruppi di quattro).
   Un soldato americano senza `us_<id>.jpg` riceve sempre lo stesso volto di riserva (hash dell’id).
+
+## Pagina delle missioni a schede
+- `_scegli_missione`: le 24 missioni in un’unica schermata, senza elenco da scorrere: griglia 6×4 sugli schermi larghi,
+  4×6 in verticale. Ogni scheda: illustrazione a tutta scheda, fascia colorata del modulo con il numero, cartiglio con
+  nome e data (o «partita salvata»), cornice d’ottone sull’ultima missione.
+- Tocco su una scheda → `_mostra_missione_scelta(n)`: ordine di missione in una finestra con i pulsanti per partire,
+  riprendere o ricominciare.

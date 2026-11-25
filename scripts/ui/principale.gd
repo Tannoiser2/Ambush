@@ -2481,17 +2481,18 @@ const DATE_MISSIONI := ["Normandia, giugno 1944", "Francia, agosto 1944", "Belgi
 	"Valle del Rodano, 3 settembre 1944", "Germania occidentale, 15 marzo 1945", "Ardenne, 20 dicembre 1944",
 	"Messina, agosto 1943", "Cassino, Natale 1943", "Gela, 19 luglio 1943", "Monte Cassino, gennaio 1944",
 	"Linea Gotica, settembre 1944", "Napoli, ottobre 1943"]
-## Intestazioni delle espansioni nell’elenco delle missioni (indice della prima missione → titolo).
-const ESPANSIONI := {8: "ESPANSIONE MOVE OUT!", 12: "ESPANSIONE PURPLE HEART", 18: "ESPANSIONE SILVER STAR"}
 var pagina_missioni: Control
 
-## Pagina delle missioni: a tutto schermo, una scheda illustrata per ciascuna delle 8 missioni.
+## Pagina delle missioni: tutte le 24 schede illustrate in un’unica schermata, senza elenco da scorrere.
+## Toccando una scheda si apre il suo ordine di missione, da cui si parte direttamente con la mappa.
 var _missione_scelta := 1
-var _elenco_missioni: VBoxContainer
-var _pannello_ordine: VBoxContainer
+var _griglia_missioni: GridContainer
 
-## Pagina delle missioni: a sinistra l’elenco, a destra l’ordine di missione di quella scelta.
-## Da qui si parte direttamente con la mappa.
+const COLORI_MODULI := {"AMBUSH!": Color("7a2a20"), "MOVE OUT!": Color("4d5a2a"), "PURPLE HEART": Color("5a3a6a"), "SILVER STAR": Color("3a4f63")}
+
+static func _modulo_di(n: int) -> String:
+	return "AMBUSH!" if n <= 8 else ("MOVE OUT!" if n <= 12 else ("PURPLE HEART" if n <= 18 else "SILVER STAR"))
+
 func _scegli_missione() -> void:
 	_chiudi_finestra()
 	if pagina_missioni != null:
@@ -2504,7 +2505,7 @@ func _scegli_missione() -> void:
 	pagina.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var margine := MarginContainer.new()
 	for lato in ["left", "right", "top", "bottom"]:
-		margine.add_theme_constant_override("margin_" + lato, 14)
+		margine.add_theme_constant_override("margin_" + lato, 12)
 	pagina.add_child(margine)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 8)
@@ -2512,75 +2513,71 @@ func _scegli_missione() -> void:
 	var testa := HBoxContainer.new()
 	testa.add_theme_constant_override("separation", 14)
 	vb.add_child(testa)
-	testa.add_child(Tema.titolo("AMBUSH!", 36, Tema.CARTA))
+	testa.add_child(Tema.titolo("AMBUSH!", 32, Tema.CARTA))
 	var sotto := VBoxContainer.new()
 	sotto.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sotto.add_child(Tema.titolo("LE MISSIONI", 20, Tema.OTTONE))
-	var spiega := Tema.etichetta("Scegli una missione a sinistra e leggi l’ordine di missione. Ognuna ha il suo salvataggio.", Tema.testo, 14, Tema.KAKI_SPENTO)
+	sotto.add_child(Tema.titolo("LE MISSIONI", 18, Tema.OTTONE))
+	var spiega := Tema.etichetta("Tocca una missione per leggere l’ordine e partire. Ognuna ha il suo salvataggio.", Tema.testo, 14, Tema.KAKI_SPENTO)
 	spiega.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	spiega.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	spiega.custom_minimum_size = Vector2(160, 0)
 	sotto.add_child(spiega)
 	testa.add_child(sotto)
+	# legenda dei moduli
+	var leg := HBoxContainer.new()
+	leg.add_theme_constant_override("separation", 6)
+	leg.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if size.x >= 900:
+		for nome in COLORI_MODULI:
+			var t := PanelContainer.new()
+			t.add_theme_stylebox_override("panel", Tema.scatola(COLORI_MODULI[nome], Color.TRANSPARENT, 0, 3, 4))
+			t.add_child(Tema.etichetta(nome, Tema.testo_bold, 12, Tema.CARTA))
+			leg.add_child(t)
+	testa.add_child(leg)
 	var ed := Tema.bottone("Editor delle mappe", _apri_editor_mappe, "Correggi terreno, quote, lati, alberi ed edifici delle mappe")
-	ed.custom_minimum_size = Vector2(170, 40)
+	ed.custom_minimum_size = Vector2(150, 40)
 	ed.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	testa.add_child(ed)
 	if p != null and p.s.has("fase"):
 		var torna := Tema.bottone("Torna alla partita", func(): _chiudi_pagina_missioni())
-		torna.custom_minimum_size = Vector2(170, 40)
+		torna.custom_minimum_size = Vector2(150, 40)
 		torna.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		testa.add_child(torna)
 	var linea := ColorRect.new()
 	linea.color = Tema.BORDO
 	linea.custom_minimum_size = Vector2(0, 2)
 	vb.add_child(linea)
-	var corpo := HBoxContainer.new()
-	corpo.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	corpo.add_theme_constant_override("separation", 14)
-	vb.add_child(corpo)
-	# Elenco delle missioni
-	var scorri := ScrollContainer.new()
-	scorri.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scorri.custom_minimum_size = Vector2(clampf(size.x * 0.3, 250.0, 380.0), 0)
-	corpo.add_child(scorri)
-	_elenco_missioni = VBoxContainer.new()
-	_elenco_missioni.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_elenco_missioni.add_theme_constant_override("separation", 8)
-	scorri.add_child(_elenco_missioni)
-	# Ordine di missione
-	var foglio := PanelContainer.new()
-	foglio.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	foglio.add_theme_stylebox_override("panel", Tema.carta(16))
-	corpo.add_child(foglio)
-	_pannello_ordine = VBoxContainer.new()
-	_pannello_ordine.add_theme_constant_override("separation", 8)
-	foglio.add_child(_pannello_ordine)
+	# griglia: 6 colonne × 4 righe sugli schermi larghi, 4 × 6 su quelli stretti o in verticale
+	_griglia_missioni = GridContainer.new()
+	_griglia_missioni.columns = 6 if size.x >= size.y * 1.05 else 4
+	_griglia_missioni.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_griglia_missioni.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_griglia_missioni.add_theme_constant_override("h_separation", 10)
+	_griglia_missioni.add_theme_constant_override("v_separation", 10)
+	vb.add_child(_griglia_missioni)
 	if p != null and p.numero in Partita.disponibili() and p.s.has("fase"):
 		_missione_scelta = p.numero
 	else:
 		_missione_scelta = _ultima_missione()
-	_mostra_missione_scelta(_missione_scelta)
+	var pronte := Partita.disponibili()
+	for i in NOMI_MISSIONI.size():
+		_griglia_missioni.add_child(_scheda_missione(i + 1, i + 1 in pronte, i + 1 == _missione_scelta))
 
+## Ordine di missione in una finestra, con i pulsanti per partire o riprendere.
 func _mostra_missione_scelta(n: int) -> void:
 	_missione_scelta = n
-	if not is_instance_valid(_elenco_missioni):
-		return
+	if is_instance_valid(_griglia_missioni):
+		for i in _griglia_missioni.get_child_count():
+			var c: Control = _griglia_missioni.get_child(i)
+			if c.has_meta("cornice"):
+				(c.get_meta("cornice") as Panel).visible = (i + 1 == n)
 	var pronte := Partita.disponibili()
-	for c in _elenco_missioni.get_children():
-		c.queue_free()
-	for i in NOMI_MISSIONI.size():
-		if ESPANSIONI.has(i):
-			var esp := Tema.etichetta(ESPANSIONI[i], Tema.testo_bold, 12, Tema.ROSSO)
-			esp.custom_minimum_size = Vector2(160, 0)
-			esp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			_elenco_missioni.add_child(esp)
-		_elenco_missioni.add_child(_voce_missione(i + 1, i + 1 in pronte, i + 1 == n))
-	for c in _pannello_ordine.get_children():
-		c.queue_free()
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 8)
 	var sc := ScrollContainer.new()
-	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_pannello_ordine.add_child(sc)
+	sc.custom_minimum_size = Vector2(0, clampf(size.y * 0.72, 300.0, 900.0))
+	vb.add_child(sc)
 	var testo := VBoxContainer.new()
 	testo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	testo.add_theme_constant_override("separation", 10)
@@ -2588,37 +2585,28 @@ func _mostra_missione_scelta(n: int) -> void:
 	var bb := HBoxContainer.new()
 	bb.alignment = BoxContainer.ALIGNMENT_END
 	bb.add_theme_constant_override("separation", 8)
-	_pannello_ordine.add_child(bb)
+	vb.add_child(bb)
 	if not n in pronte:
 		_intestazione(testo, "MISSIONE %d" % n, "%s · %s" % [NOMI_MISSIONI[n - 1].to_upper(), DATE_MISSIONI[n - 1].to_upper()])
-		var percorso_img := "res://assets/missioni/missione%d.jpg" % n
-		if ResourceLoader.exists(percorso_img):
-			var img := TextureRect.new()
-			img.texture = load(percorso_img)
-			img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-			img.custom_minimum_size = Vector2(0, clampf(size.y * 0.42, 160.0, 420.0))
-			img.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			img.clip_contents = true
-			testo.add_child(img)
-		var esp := "Move Out!" if n <= 12 else ("Purple Heart" if n <= 18 else "Silver Star")
-		_paragrafo(testo, "Missione dell’espansione %s, ancora in preparazione." % esp if n > 8 else "Questa missione è ancora in preparazione.", 16)
-		return
-	var m: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
-	_ordine_missione(testo, m, n, clampf(size.y * 0.26, 120.0, 260.0))
-	var salvata := FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
-	bb.add_child(Tema.bottone("Regole in breve", _mostra_regole))
-	if salvata:
-		bb.add_child(Tema.bottone("Ricomincia da capo", func(): _conferma("Ricominciare la missione?", "La partita salvata della missione %d andrà persa." % n, func(): _chiudi_finestra(); _avvia_missione(n, false, false))))
-		var rip := Tema.bottone("Riprendi la partita", func(): _avvia_missione(n, true, false))
-		rip.add_theme_color_override("font_color", Tema.OTTONE)
-		bb.add_child(rip)
+		_paragrafo(testo, "Questa missione è ancora in preparazione.", 16)
 	else:
-		var via := Tema.bottone("Agli ordini: inizia", func(): _avvia_missione(n, false, false))
-		via.add_theme_color_override("font_color", Tema.OTTONE)
-		bb.add_child(via)
+		var m: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
+		_ordine_missione(testo, m, n, clampf(size.y * 0.24, 110.0, 240.0))
+		var salvata := FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
+		bb.add_child(Tema.bottone("Regole in breve", _mostra_regole))
+		if salvata:
+			bb.add_child(Tema.bottone("Ricomincia da capo", func(): _conferma("Ricominciare la missione?", "La partita salvata della missione %d andrà persa." % n, func(): _chiudi_finestra(); _avvia_missione(n, false, false))))
+			var rip := Tema.bottone("Riprendi la partita", func(): _chiudi_finestra(); _avvia_missione(n, true, false))
+			rip.add_theme_color_override("font_color", Tema.OTTONE)
+			bb.add_child(rip)
+		else:
+			var via := Tema.bottone("Agli ordini: inizia", func(): _chiudi_finestra(); _avvia_missione(n, false, false))
+			via.add_theme_color_override("font_color", Tema.OTTONE)
+			bb.add_child(via)
+	bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
 	for b in bb.get_children():
 		b.custom_minimum_size = Vector2(0, 42)
+	_apri_finestra(vb, clampf(size.x * 0.8, 340.0, 900.0))
 
 const EditorMappeScript = preload("res://scripts/ui/editor_mappe.gd")
 
@@ -2641,54 +2629,94 @@ func _chiudi_pagina_missioni() -> void:
 		pagina_missioni.queue_free()
 		pagina_missioni = null
 
-## Voce dell’elenco: immagine piccola, numero, data, nome; tocco = mostra il suo ordine di missione.
-func _voce_missione(n: int, pronta: bool, scelta: bool) -> Control:
+## Scheda di una missione: illustrazione a tutta scheda, fascia del modulo, numero, nome e data;
+## tocco = apre il suo ordine di missione.
+func _scheda_missione(n: int, pronta: bool, scelta: bool) -> Control:
 	var salvata := pronta and FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
-	var voce := PanelContainer.new()
-	voce.add_theme_stylebox_override("panel", Tema.scatola(Tema.CARTA if scelta else Color("cfc4a4"), Tema.OTTONE if scelta else Color("8a7c58"), 3 if scelta else 1, 3, 5))
-	voce.mouse_filter = Control.MOUSE_FILTER_STOP
-	voce.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	voce.gui_input.connect(func(ev):
+	var modulo := _modulo_di(n)
+	var scheda := PanelContainer.new()
+	scheda.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scheda.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scheda.custom_minimum_size = Vector2(120, 110)
+	scheda.clip_contents = true
+	scheda.add_theme_stylebox_override("panel", Tema.scatola(Color("2b2d22"), Color("8a7c58"), 1, 4, 0))
+	scheda.mouse_filter = Control.MOUSE_FILTER_STOP
+	scheda.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	scheda.tooltip_text = "Missione %d · %s" % [n, NOMI_MISSIONI[n - 1]]
+	scheda.gui_input.connect(func(ev):
 		if (ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT) or (ev is InputEventScreenTouch and ev.pressed):
 			_mostra_missione_scelta(n))
-	var hb := HBoxContainer.new()
-	hb.add_theme_constant_override("separation", 8)
-	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	voce.add_child(hb)
+	# illustrazione a tutta scheda
 	var img := TextureRect.new()
 	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	img.custom_minimum_size = Vector2(96, 72)
-	img.clip_contents = true
 	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var percorso := "res://assets/missioni/missione%d.jpg" % n
 	if ResourceLoader.exists(percorso):
 		img.texture = load(percorso)
 	if not pronta:
 		img.modulate = Color(0.45, 0.45, 0.45)
-	hb.add_child(img)
-	var testi := VBoxContainer.new()
-	testi.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	testi.add_theme_constant_override("separation", 0)
-	testi.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.add_child(testi)
-	var num := Tema.etichetta("MISSIONE %d · %s" % [n, DATE_MISSIONI[n - 1].to_upper()], Tema.testo_bold, 11, Tema.ROSSO)
-	num.clip_text = true
-	num.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scheda.add_child(img)
+	var strati := VBoxContainer.new()
+	strati.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	strati.add_theme_constant_override("separation", 0)
+	scheda.add_child(strati)
+	# fascia del modulo in alto, con il numero
+	var fascia := PanelContainer.new()
+	fascia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fascia.add_theme_stylebox_override("panel", Tema.scatola(Color(COLORI_MODULI[modulo], 0.92), Color.TRANSPARENT, 0, 0, 3))
+	var fh := HBoxContainer.new()
+	fh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fascia.add_child(fh)
+	var num := Tema.titolo("%d" % n, 18, Tema.CARTA)
 	num.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	testi.add_child(num)
-	var nome_l := Tema.titolo(NOMI_MISSIONI[n - 1], 16, Tema.INCHIOSTRO)
+	fh.add_child(num)
+	var mod_l := Tema.etichetta(modulo, Tema.testo_bold, 10, Color(Tema.CARTA, 0.85))
+	mod_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mod_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	mod_l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	mod_l.clip_text = true
+	mod_l.custom_minimum_size = Vector2(40, 0)
+	mod_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fh.add_child(mod_l)
+	var aria := Control.new()
+	aria.custom_minimum_size = Vector2(6, 0)
+	aria.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fh.add_child(aria)
+	strati.add_child(fascia)
+	var vuoto := Control.new()
+	vuoto.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vuoto.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	strati.add_child(vuoto)
+	# cartiglio in basso: nome, data, stato
+	var cart := PanelContainer.new()
+	cart.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cart.add_theme_stylebox_override("panel", Tema.scatola(Color(Tema.CARTA, 0.93), Color.TRANSPARENT, 0, 0, 4))
+	var cv := VBoxContainer.new()
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.add_theme_constant_override("separation", 0)
+	cart.add_child(cv)
+	var nome_l := Tema.titolo(NOMI_MISSIONI[n - 1], 15, Tema.INCHIOSTRO)
 	nome_l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	nome_l.custom_minimum_size = Vector2(100, 0)
 	nome_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	nome_l.custom_minimum_size = Vector2(120, 0)
 	nome_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	testi.add_child(nome_l)
-	var stato := "in preparazione" if not pronta else ("partita salvata" if salvata else "")
-	if stato != "":
-		var st := Tema.etichetta(stato, Tema.testo_bold if salvata else Tema.testo, 12, Color("6b5a22") if salvata else Tema.INCHIOSTRO_TENUE)
-		st.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		testi.add_child(st)
-	return voce
+	cv.add_child(nome_l)
+	var stato: String = "in preparazione" if not pronta else ("partita salvata" if salvata else str(DATE_MISSIONI[n - 1]))
+	var st := Tema.etichetta(stato, Tema.testo_bold if salvata else Tema.testo, 11, Color("8a2a1e") if salvata else Tema.INCHIOSTRO_TENUE)
+	st.clip_text = true
+	st.custom_minimum_size = Vector2(60, 0)
+	st.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.add_child(st)
+	strati.add_child(cart)
+	# cornice d’ottone sull’ultima missione giocata o scelta
+	var cornice := Panel.new()
+	cornice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cornice.add_theme_stylebox_override("panel", Tema.scatola(Color.TRANSPARENT, Tema.OTTONE, 3, 4, 0))
+	cornice.visible = scelta
+	scheda.add_child(cornice)
+	scheda.set_meta("cornice", cornice)
+	return scheda
 
 ## Passa alla missione n: riprende il suo salvataggio o ne comincia una nuova.
 func _avvia_missione(n: int, riprendi: bool, con_briefing := true) -> void:
