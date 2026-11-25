@@ -432,3 +432,13 @@ Ordine scelto: M11, M10, M12, M9.
   nome e data (o «partita salvata»), cornice d’ottone sull’ultima missione.
 - Tocco su una scheda → `_mostra_missione_scelta(n)`: ordine di missione in una finestra con i pulsanti per partire,
   riprendere o ricominciare.
+
+## Animazioni delle miniature (stile da tavolo, senza scheletro)
+- In `_aggiorna_pedine` (mappa3d.gd), tutto a tempo su `mappa._t`:
+  - verso morbido (`lerp_angle` verso il bersaglio o la direzione, meta `yaw`);
+  - passo: mentre scorre fra due esagoni (`mappa.mobili`) la figura saltella e ondeggia, tre passi per esagono;
+  - rinculo: `mappa.spari[id]` (istante del tiro o del lancio) → arretra e si inclina per 0,4 s;
+  - cambio di posa: la posa vecchia sfuma in 0,3 s (`_fantasma_posa`) mentre compare la nuova;
+  - caduta: chi muore cade all’indietro in 0,5 s con l’ultima posa da vivo (meta `posa_viva`), poi resta il
+    modello a terra; chi è già morto all’apertura della partita non cade.
+- Test: `tests/visivi/animazioni3d.gd` (verifica rinculo, dissolvenza e caduta, salva i fotogrammi).

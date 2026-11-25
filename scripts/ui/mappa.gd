@@ -70,6 +70,8 @@ var solo_velo := false
 var senza_pedine := false
 ## Verso dell'ultimo movimento o tiro di ogni unità: id -> [da, a] (per girare le miniature 3D).
 var direzioni: Dictionary = {}
+## Istante (in _t) dell’ultimo tiro o lancio di ciascun soldato: la vista 3D ci aggancia il rinculo.
+var spari: Dictionary = {}
 ## Missione 4: soldati in discesa col paracadute: id -> {"passo": n, "atterra": t0 o -1}
 var paracadutisti: Dictionary = {}
 ## Vista 3D (scripts/ui/mappa3d.gd), creata la prima volta che si passa al 3D.
@@ -739,6 +741,7 @@ func anima(ev: Dictionary) -> float:
 			dur = 0.8 if ev.esito == "inceppata" else (1.25 if ev.get("auto", false) else 0.95)
 			if str(ev.get("da", "")) != "" and str(ev.get("a", "")) != "" and ev.da != ev.a:
 				direzioni[str(ev.tiratore)] = [ev.da, ev.a]
+			spari[str(ev.tiratore)] = _t
 			assicura_visibili([ev.da, ev.a] if ev.da != "" else [ev.a])
 			var nemico: bool = partita.u(str(ev.tiratore)).get("lato", "de") != "us"
 			segni.append({"da": ev.da, "a": ev.a, "nemico": nemico, "esito": ev.esito, "bersaglio": ev.get("bersaglio", ""),
@@ -749,6 +752,8 @@ func anima(ev: Dictionary) -> float:
 			assicura_visibili([ev.da, ev.a])
 			if ev.has("id") and ev.da != ev.a:
 				direzioni[str(ev.id)] = [ev.da, ev.a]
+			if ev.has("id"):
+				spari[str(ev.id)] = _t
 		"atterra":
 			dur = 1.1
 			if paracadutisti.has(str(ev.id)):

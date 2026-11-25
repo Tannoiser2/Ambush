@@ -1853,6 +1853,17 @@ func _crea_figura(id: String) -> Node3D:
 	_figure_nodo.add_child(n)
 	return n
 
+## Copia della posa vecchia che sfuma e sparisce (cambio di posa morbido).
+func _fantasma_posa(fig: Node3D, corpo: MeshInstance3D) -> void:
+	var g := MeshInstance3D.new()
+	g.mesh = corpo.mesh
+	g.material_override = corpo.material_override
+	g.transform = corpo.transform
+	fig.add_child(g)
+	var tw := g.create_tween()
+	tw.tween_property(g, "transparency", 1.0, 0.3)
+	tw.tween_callback(g.queue_free)
+
 func _aggiorna_pedine() -> void:
 	if _figure_nodo == null:
 		_figure_nodo = Node3D.new()
@@ -1935,7 +1946,28 @@ func _aggiorna_pedine() -> void:
 					nome = "de_fucile_acc"
 		_paracadute(fig, str(id), x)
 		var corpo: MeshInstance3D = fig.get_node("corpo")
+		var morto := str(x.stato) == "morto"
+		# caduta: chi muore si accascia all’indietro con la sua ultima posa da vivo, poi resta il modello a terra
+		var caduta := 1.0
+		if morto:
+			if not fig.has_meta("morto_t"):
+				fig.set_meta("morto_t", t_ora if fig.get_meta("visto_vivo", false) else t_ora - 10.0)
+			caduta = clampf((t_ora - float(fig.get_meta("morto_t"))) / 0.5, 0.0, 1.0)
+			caduta = caduta * caduta
+		else:
+			if fig.has_meta("morto_t"):
+				fig.remove_meta("morto_t")
+			fig.set_meta("visto_vivo", true)
+			fig.set_meta("posa_viva", nome)
+		var cade := morto and caduta < 1.0 and fig.has_meta("posa_viva")
+		if cade:
+			nome = str(fig.get_meta("posa_viva"))
 		if corpo.get_meta("modello", "") != nome:
+			var prima: String = corpo.get_meta("modello", "")
+			# cambio di posa: la posa vecchia sfuma mentre compare quella nuova (non per chi muore: quello cade)
+			if prima != "" and not morto and corpo.mesh != null:
+				_fantasma_posa(fig, corpo)
+				fig.set_meta("cambio_t", t_ora)
 			corpo.mesh = _mesh_mezzo(nome.substr(3)) if nome.begins_with("mz:") else _mesh_soldato(nome)
 			corpo.set_meta("modello", nome)
 		# mitragliatrice su treppiede davanti a chi la serve da accovacciato o prono
@@ -1949,27 +1981,57 @@ func _aggiorna_pedine() -> void:
 			fig.add_child(tre)
 		if tre != null:
 			tre.visible = serve_mg
-		var morto := str(x.stato) == "morto"
 		if nome == "mz:cane":
 			corpo.material_override = _materiale_dipinto("cane", Color("4a3b2c") if morto else Color("6e5638"))
 		else:
-			corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto else str(x.lato)))
+			corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto and not cade else str(x.lato)))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
-		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
-		corpo.rotation = Vector3(0, yaw + _verso_modello(nome), deg_to_rad(80.0) if morto else 0.0)
+		var yaw_meta := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
+		# il verso non scatta: la figura si gira verso il nuovo bersaglio o la nuova direzione in pochi decimi
+		var t_prima: float = fig.get_meta("t", t_ora)
+		var dt := clampf(t_ora - t_prima, 0.0, 0.2)
+		fig.set_meta("t", t_ora)
+		var yaw: float = yaw_meta
+		if fig.has_meta("yaw") and ang_mezzo == INF:
+			yaw = lerp_angle(float(fig.get_meta("yaw")), yaw_meta, 1.0 - exp(-9.0 * dt))
+		fig.set_meta("yaw", yaw)
+		var avanti := Vector3(sin(yaw), 0, cos(yaw))
+		# passo: mentre scorre fra due esagoni la figura saltella e ondeggia appena, tre passi per esagono
+		var passo_y := 0.0
+		var ondeggia := 0.0
+		if mappa2d.mobili.has(id) and not morto:
+			var mv: Dictionary = mappa2d.mobili[id]
+			var kk := clampf((t_ora - float(mv.t0)) / float(mv.dur), 0.0, 1.0)
+			if kk < 1.0 and not nome.ends_with("_prono"):
+				passo_y = absf(sin(kk * PI * 3.0)) * 0.035
+				ondeggia = sin(kk * PI * 3.0) * 0.07
+		# rinculo: allo sparo (o al lancio) la figura arretra e si inclina un attimo
+		var rinculo := 0.0
+		if mappa2d.spari.has(id) and not morto:
+			var fs := (t_ora - float(mappa2d.spari[id])) / 0.4
+			if fs >= 0.0 and fs < 1.0:
+				rinculo = sin(fs * PI) * (1.0 - fs)
+		if cade:
+			corpo.rotation = Vector3(-1.45 * caduta, yaw + _verso_modello(nome), 0.0)
+		else:
+			corpo.rotation = Vector3(-0.12 * rinculo, yaw + _verso_modello(nome), deg_to_rad(80.0) if morto else ondeggia)
 		var tre2: MeshInstance3D = fig.get_node_or_null("treppiede")
 		if tre2 != null and tre2.visible:
 			tre2.rotation.y = yaw + VERSO_MEZZI
 			tre2.scale = Vector3.ONE * 0.7
 			tre2.position = Vector3(sin(yaw), 0, cos(yaw)) * 0.2
-		corpo.position.y = 0.05 if morto else 0.0
+		corpo.position = -avanti * 0.035 * rinculo
+		corpo.position.y = 0.0 if cade else (0.05 if morto else passo_y)
 		# Silver Star: chi nuota affiora fino alle spalle; chi è sott’acqua si intravede sotto la superficie.
 		var ssx = mappa2d.partita.ss if mappa2d.partita != null else null
 		var in_acqua_ss: bool = ssx != null and ssx.attiva() and str(x.stato) == "attivo" and ssx.in_acqua(x)
 		var sotto_ss: bool = in_acqua_ss and ssx.sott_acqua(x)
 		if in_acqua_ss:
 			corpo.position.y = -0.12 if sotto_ss else -0.27
-		corpo.transparency = 0.55 if sotto_ss else 0.0
+		var sfuma := 0.0
+		if fig.has_meta("cambio_t"):
+			sfuma = 1.0 - clampf((t_ora - float(fig.get_meta("cambio_t"))) / 0.3, 0.0, 1.0)
+		corpo.transparency = maxf(0.55 if sotto_ss else 0.0, sfuma)
 		var base: MeshInstance3D = fig.get_node("base")
 		var sel: bool = mappa2d.vista == null and id in mappa2d.selezionati
 		var turno: bool = id in di_turno
