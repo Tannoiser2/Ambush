@@ -28,16 +28,58 @@ MEZZI = {
     "mg_tiratore": ("machine+gun+sld+var+4_stls/obj_1_Assembly_A_A.stl", [], "altezza", 0.7, 4000),
     "mg_treppiede": ("machine+gun+sld+var+4_stls/obj_2_Assembly_A_B.stl", [], "altezza", 0.42, 2500),
     "sacchetti": ("sandbagspart2_3_stls/obj_1_sandbagspart2_3.stl", [], "lunghezza", 1.1, 4000),
+    # dai 3MF (file#oggetto; "#*" = tutti gli oggetti, "#max" = il più grande)
+    "opel_blitz": ("vintage+truck+ww2+toy.3mf#*", [("x", 90), ("z", 90)], "lunghezza", 1.5, 7000),
+    "pak40": ("Pak 40.3mf#*", [("z", 180)], "lunghezza", 1.25, 7000),
+    "sdkfz251": ("SdKfz251_2cm.3mf#*", [("z", -90)], "lunghezza", 1.45, 9000),
+    "mortaio": ("81+MM+Mortar+Model+Set.3mf#11", [("z", 180)], "altezza", 0.36, 4000),
+    "cane": ("Cane.3mf#*", [("z", 90)], "altezza", 0.24, 4000),
+    "faro": ("Faro.3mf#*", [], "altezza", 1.95, 6000),
+    "locomotiva": ("ww2+steam+locomotive+bambus.3mf#*", [], "lunghezza", 1.5, 8000),
+    "vagone": ("VagoneLetto.3mf#max", [], "lunghezza", 1.42, 6000),
+    # kit montati da tools/montaggi3d.py ("@nome")
+    "moto": ("@moto", [], "lunghezza", 0.62, 6000),
+    "aliante_relitto": ("@aliante_relitto", [], "lunghezza", 1.25, 6000),
 }
 
 
-LIVELLA = {"jeep"}
+LIVELLA = {"jeep", "opel_blitz"}
+
+
+def carica(cartella, f):
+    if f.startswith("@"):
+        from montaggi3d import monta
+        return monta(f[1:], cartella)
+    if "#" in f:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from leggi_3mf import leggi
+        nome, chi = f.split("#")
+        ogg = leggi(os.path.join(cartella, nome))
+        if chi == "*":
+            return trimesh.util.concatenate(list(ogg.values()))
+        if chi == "max":
+            return max(ogg.values(), key=lambda m: len(m.faces))
+        return ogg[chi]
+    if f.endswith("/*"):
+        import glob
+        parti = [trimesh.load(x, force="mesh") for x in sorted(glob.glob(os.path.join(cartella, f[:-2], "*.stl")))]
+        return trimesh.util.concatenate(parti)
+    return trimesh.load(os.path.join(cartella, f), force="mesh")
 
 
 def costruisci(cartella, nome):
     f, rot, misura, valore, tri = MEZZI[nome]
-    m = trimesh.load(os.path.join(cartella, f), force="mesh")
+    m = carica(cartella, f)
     v, fa = riduci(m.vertices, m.faces, tri)
+    if len(fa) > tri * 1.5:
+        # pezzi sottili (cingoli, tralicci): la riduzione prudente si ferma presto; qui si forza
+        import pymeshlab
+        ms = pymeshlab.MeshSet()
+        ms.add_mesh(pymeshlab.Mesh(np.asarray(v, np.float64), np.asarray(fa, np.int32)))
+        ms.meshing_merge_close_vertices()
+        ms.meshing_decimation_quadric_edge_collapse(targetfacenum=int(tri), preservenormal=True, planarquadric=True)
+        mm = ms.current_mesh()
+        v, fa = mm.vertex_matrix(), mm.face_matrix()
     m = trimesh.Trimesh(v, fa, process=True)
     if nome in LIVELLA:
         # pezzi stampati inclinati: prima si allineano al loro riquadro orientato

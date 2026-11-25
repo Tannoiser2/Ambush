@@ -593,7 +593,7 @@ func _aggiorna_oggetti() -> void:
 		return
 	var firma := str([p.s.get("radio_hex", ""), p.s.get("modifiche", {}), p.s.get("bunker", {}).keys(), p.s.get("bunker", {}).values().map(func(b): return b.get("distrutto", false)),
 		p.s.get("blocchi", []), p.s.get("ponti", {}).values().map(func(b): return b.get("distrutto", false)), lettera,
-		p.s.get("punti", {}), _oggetti_ph(p)])
+		p.s.get("punti", {}), _oggetti_ph(p), _mortaio_hex(p), p.s.get("installazioni", {}), p.s.get("mine_at", []), p.s.get("filo", [])])
 	if firma == _firma_oggetti:
 		return
 	_firma_oggetti = firma
@@ -718,6 +718,198 @@ func _aggiorna_oggetti() -> void:
 			mt.position = punto3d(centro_px(dep) + Vector2((i % 5) * 13 - 26, (i / 5) * 18 - 30 + rng_t.randf() * 4))
 			mt.rotation.y = rng_t.randf_range(-0.2, 0.2)
 			_dinamici.add_child(mt)
+	_costruisci_scenario(p, cemento)
+
+## Esagono del mortaio tedesco di Silver Star (20, 22, 24), finché è in mappa.
+func _mortaio_hex(p) -> String:
+	var st: Dictionary = p.s.get("ss", {})
+	var m: Dictionary = st.get("mortaio", {})
+	if m.is_empty() or bool(st.get("mortaio_via", false)):
+		return ""
+	return str(m.get("hex", ""))
+
+## Mortaio, installazioni della Missione 5 (rampa a traliccio, antenna, radar, V-2), relitti d’aereo,
+## mine anticarro e filo spinato.
+func _costruisci_scenario(p, cemento: Material) -> void:
+	var ferro := _materiale(Color("4a4d4a"), 0.55)
+	var mor := _mortaio_hex(p)
+	if mor != "":
+		var mm := _oggetto("mortaio", Color("4d5048"))
+		mm.position = punto3d(centro_px(mor) + Vector2(-34, 24))
+		mm.rotation.y = 2.4
+		_dinamici.add_child(mm)
+	for h in p.s.get("installazioni", {}):
+		var ins: Dictionary = p.s.installazioni[h]
+		var c := centro_px(str(h))
+		if bool(ins.get("distrutta", false)):
+			_macerie(_dinamici, c, 12, ferro)
+			continue
+		match str(ins.get("nome", "")):
+			"rampa":
+				_traliccio(c, cemento, ferro)
+			"antenna":
+				var asta := CylinderMesh.new()
+				asta.top_radius = 0.012
+				asta.bottom_radius = 0.035
+				asta.height = 2.0
+				asta.radial_segments = 6
+				var ma := MeshInstance3D.new()
+				ma.mesh = asta
+				ma.material_override = ferro
+				ma.position = punto3d(c, 1.0)
+				_dinamici.add_child(ma)
+				for k in 3:
+					_scatola(_dinamici, punto3d(c, 0.55 + k * 0.5), Vector3(0.34 - k * 0.08, 0.015, 0.015), k * 1.0, ferro)
+			"radar":
+				# stazione radar: piedistallo e grande parabola inclinata (tipo Würzburg)
+				_scatola(_dinamici, punto3d(c, 0.08), Vector3(0.36, 0.16, 0.36), 0.3, cemento)
+				var pilone := CylinderMesh.new()
+				pilone.top_radius = 0.04
+				pilone.bottom_radius = 0.06
+				pilone.height = 0.4
+				var mp := MeshInstance3D.new()
+				mp.mesh = pilone
+				mp.material_override = ferro
+				mp.position = punto3d(c, 0.36)
+				_dinamici.add_child(mp)
+				var piatto := SphereMesh.new()
+				piatto.radius = 0.34
+				piatto.height = 0.24
+				piatto.is_hemisphere = true
+				var md := MeshInstance3D.new()
+				md.mesh = piatto
+				var mat_d := _materiale(Color("8d918a"), 0.6)
+				mat_d.cull_mode = BaseMaterial3D.CULL_DISABLED
+				md.material_override = mat_d
+				md.position = punto3d(c, 0.62)
+				md.rotation = Vector3(1.9, 0.6, 0)
+				_dinamici.add_child(md)
+			"v2":
+				# razzo V-2 in piedi sul suo carrello di lancio (nascosto nella chiesa: si vede dalle aperture)
+				var corpo := CylinderMesh.new()
+				corpo.top_radius = 0.07
+				corpo.bottom_radius = 0.085
+				corpo.height = 0.8
+				var mc := MeshInstance3D.new()
+				mc.mesh = corpo
+				var mat_v := _materiale(Color("6f7356"), 0.6)
+				mc.material_override = mat_v
+				mc.position = punto3d(c + Vector2(20, 10), 0.5)
+				_dinamici.add_child(mc)
+				var ogiva := CylinderMesh.new()
+				ogiva.top_radius = 0.0
+				ogiva.bottom_radius = 0.07
+				ogiva.height = 0.26
+				var mo := MeshInstance3D.new()
+				mo.mesh = ogiva
+				mo.material_override = mat_v
+				mo.position = punto3d(c + Vector2(20, 10), 1.03)
+				_dinamici.add_child(mo)
+				for k in 4:
+					var ang := k * PI / 2.0
+					var mf := MeshInstance3D.new()
+					var pinna := BoxMesh.new()
+					pinna.size = Vector3(0.2, 0.22, 0.012)
+					mf.mesh = pinna
+					mf.material_override = _materiale(Color("2f312b"), 0.6)
+					mf.position = punto3d(c + Vector2(20, 10) + Vector2(cos(ang), sin(ang)) * 11.0, 0.2)
+					mf.rotation.y = -ang
+					_dinamici.add_child(mf)
+	# Relitti d’aereo: Typhoon in R15 (regolamento base) e il relitto in K10 di Silver Star 20
+	var relitti: Array = []
+	for h in p.s.get("punti", {}):
+		if str(p.s.punti[h]).to_lower() == "typhoon":
+			relitti.append(str(h))
+	if int(p.numero) == 20:
+		relitti.append("K10")
+	for h in relitti:
+		var mr := _oggetto("aliante_relitto", Color("4b4f45"))
+		mr.position = punto3d(centro_px(h))
+		mr.rotation.y = 0.9 + float(hash(h) % 100) * 0.01
+		_dinamici.add_child(mr)
+	# Mine anticarro: dischi appena affioranti sulla strada
+	for h in p.s.get("mine_at", []):
+		var c := centro_px(str(h))
+		for k in 3:
+			var disco := CylinderMesh.new()
+			disco.top_radius = 0.06
+			disco.bottom_radius = 0.07
+			disco.height = 0.03
+			var mi := MeshInstance3D.new()
+			mi.mesh = disco
+			mi.material_override = _materiale(Color("50553f"), 0.7)
+			mi.position = punto3d(c + Vector2(-26 + k * 26, (k % 2) * 14 - 7), 0.01)
+			_dinamici.add_child(mi)
+	# Filo spinato (Move Out): paletti e matasse lungo l’esagono
+	for h in p.s.get("filo", []):
+		var c := centro_px(str(h))
+		for k in 5:
+			var q := c + Vector2(-60 + k * 30, sin(k * 1.7) * 8.0)
+			_scatola(_dinamici, punto3d(q, 0.1), Vector3(0.02, 0.2, 0.02), 0.0, _materiale(Color("5a4630"), 0.9))
+			if k < 4:
+				var mat_f := _materiale(Color("6d6a62"), 0.4)
+				var spira := TorusMesh.new()
+				spira.inner_radius = 0.075
+				spira.outer_radius = 0.085
+				for j in 3:
+					var ms := MeshInstance3D.new()
+					ms.mesh = spira
+					ms.material_override = mat_f
+					ms.position = punto3d(q + Vector2(8 + j * 8, 0), 0.08)
+					ms.rotation = Vector3(0, 0, PI / 2.0)
+					_dinamici.add_child(ms)
+
+## Rampa di lancio della Missione 5: torre a traliccio di metallo su una piattaforma di cemento.
+func _traliccio(c: Vector2, cemento: Material, ferro: Material) -> void:
+	_scatola(_dinamici, punto3d(c, 0.05), Vector3(0.9, 0.1, 0.9), 0.0, cemento)
+	var base := 0.26
+	var alto := 1.9
+	var piani := 6
+	for k in 4:
+		var ang := PI / 4.0 + k * PI / 2.0
+		var dx := cos(ang)
+		var dz := sin(ang)
+		# montante inclinato dalla base larga alla cima stretta
+		var p0 := punto3d(c, 0.1) + Vector3(dx, 0, dz) * base
+		var p1 := punto3d(c, 0.1 + alto) + Vector3(dx, 0, dz) * base * 0.35
+		_trave(p0, p1, 0.022, ferro)
+	for i in piani + 1:
+		var t := float(i) / piani
+		var y := 0.1 + alto * t
+		var r := base * (1.0 - 0.65 * t)
+		var spigoli: Array = []
+		for k in 4:
+			var ang := PI / 4.0 + k * PI / 2.0
+			spigoli.append(punto3d(c, y) + Vector3(cos(ang), 0, sin(ang)) * r)
+		for k in 4:
+			_trave(spigoli[k], spigoli[(k + 1) % 4], 0.012, ferro)
+			if i < piani:
+				# diagonali a croce su ogni faccia
+				var t2 := float(i + 1) / piani
+				var y2 := 0.1 + alto * t2
+				var r2 := base * (1.0 - 0.65 * t2)
+				var a1 := PI / 4.0 + ((k + 1) % 4) * PI / 2.0
+				var sopra := punto3d(c, y2) + Vector3(cos(a1), 0, sin(a1)) * r2
+				_trave(spigoli[k], sopra, 0.008, ferro)
+	# guida di lancio inclinata accanto alla torre
+	_trave(punto3d(c + Vector2(40, 30), 0.12), punto3d(c + Vector2(8, 6), 0.1 + alto * 0.8), 0.03, ferro)
+
+## Trave cilindrica tra due punti.
+func _trave(a: Vector3, b: Vector3, r: float, mat: Material) -> void:
+	var cil := CylinderMesh.new()
+	cil.top_radius = r
+	cil.bottom_radius = r
+	cil.height = a.distance_to(b)
+	cil.radial_segments = 5
+	cil.rings = 1
+	var mi := MeshInstance3D.new()
+	mi.mesh = cil
+	mi.material_override = mat
+	mi.position = (a + b) * 0.5
+	var d := (b - a).normalized()
+	if absf(d.dot(Vector3.UP)) < 0.999:
+		mi.basis = Basis(Quaternion(Vector3.UP, d))
+	_dinamici.add_child(mi)
 
 ## Firma degli oggetti di Purple Heart che cambiano durante la partita.
 func _oggetti_ph(p) -> Array:
@@ -730,7 +922,8 @@ func _oggetti_ph(p) -> Array:
 	out.append([st.get("faro", {}).get("attivo", true), st.get("cannone_W12", false), st.get("cannone_X12", false), st.get("antenna_distrutta", false)])
 	return out
 
-const MEZZI_RELITTO := {"jagdpanther": "jagdpanther", "sherman": "sherman", "panzer": "panzer4", "jeep": "jeep"}
+const MEZZI_RELITTO := {"jagdpanther": "jagdpanther", "sherman": "sherman", "panzer": "panzer4", "jeep": "jeep",
+	"semicingolato": "sdkfz251", "camion": "opel_blitz"}
 
 ## Purple Heart: diga, faro, antenna, cannoni costieri e relitti dei mezzi.
 func _costruisci_ph(p, cemento: Material) -> void:
@@ -753,26 +946,9 @@ func _costruisci_ph(p, cemento: Material) -> void:
 			match tipo:
 				"faro":
 					if bool(st.get("faro", {}).get("attivo", true)):
-						var torre := CylinderMesh.new()
-						torre.top_radius = 0.12
-						torre.bottom_radius = 0.2
-						torre.height = 1.6
-						torre.radial_segments = 14
-						var mt := MeshInstance3D.new()
-						mt.mesh = torre
-						mt.material_override = _materiale(Color("e4e0d6"), 0.7)
-						mt.position = punto3d(c, 0.8)
+						var mt := _oggetto("faro", Color("bdb6a8"))  # tinta smorzata: niente bianchi bruciati
+						mt.position = punto3d(c)
 						_dinamici.add_child(mt)
-						var cima := CylinderMesh.new()
-						cima.top_radius = 0.0
-						cima.bottom_radius = 0.16
-						cima.height = 0.26
-						cima.radial_segments = 14
-						var mc := MeshInstance3D.new()
-						mc.mesh = cima
-						mc.material_override = _materiale(Color("8e2b22"), 0.6)
-						mc.position = punto3d(c, 1.73)
-						_dinamici.add_child(mc)
 						var luce := OmniLight3D.new()
 						luce.light_color = Color(1.0, 0.92, 0.7)
 						luce.light_energy = 0.8
@@ -855,17 +1031,12 @@ func _costruisci_ph(p, cemento: Material) -> void:
 			nodo.add_child(mc)
 			_scatola(nodo, Vector3(0, 0.06, 0), Vector3(RAGGIO_PX * 1.55 * K, 0.08, 0.3), 0.0, mat_t)
 		else:
-			_scatola(nodo, Vector3(0, 0.25, 0), Vector3(RAGGIO_PX * 1.55 * K, 0.42 if nome_t == "locomotiva" else 0.38, 0.32), 0.0, mat_t)
-			if nome_t == "locomotiva":
-				var cam := CylinderMesh.new()
-				cam.top_radius = 0.05
-				cam.bottom_radius = 0.06
-				cam.height = 0.2
-				var mcm := MeshInstance3D.new()
-				mcm.mesh = cam
-				mcm.material_override = mat_t
-				mcm.position = Vector3(RAGGIO_PX * 0.5 * K, 0.55, 0)
-				nodo.add_child(mcm)
+			# modelli della locomotiva e del vagone (lunghi lungo +Z): girati sul binario, che qui corre lungo X
+			var mt3 := MeshInstance3D.new()
+			mt3.mesh = _mesh_mezzo("locomotiva" if nome_t == "locomotiva" else "vagone")
+			mt3.material_override = _materiale_dipinto("treno", col_t.darkened(0.35) if rovesciato else col_t)
+			mt3.rotation.y = PI / 2.0
+			nodo.add_child(mt3)
 	# Relitti dei mezzi (Missione 15): mesh del mezzo, scuro e di traverso
 	var rng := RandomNumberGenerator.new()
 	for h in p.s.get("punti", {}):
@@ -1583,6 +1754,9 @@ static func modello_per(x: Dictionary) -> String:
 	var post := str(x.get("postura", "standing"))
 	var stato := str(x.get("stato", "attivo"))
 	var lato := "us" if us else "de"
+	# cani da guardia (Purple Heart 13 e carte GE 91–92): modello del pastore tedesco
+	if not us and (bool(x.get("cane", false)) or str(x.get("nome", "")).to_lower().begins_with("cane")):
+		return "mz:cane"
 	if stato == "morto":
 		return lato + "_morto"
 	if stato == "incapacitato":
@@ -1747,8 +1921,12 @@ func _aggiorna_pedine() -> void:
 			var loc := Vector3(0, 0.1, (float(posto) - (vm.occupanti.size() - 1) / 2.0) * lung / maxf(1.0, vm.occupanti.size() - 1.0) * -1.0)
 			if str(vm.modello) in ["chiatta", "scialuppa", "motovedetta"]:
 				loc.x = -0.08 if posto % 2 == 0 else 0.08
+			elif str(vm.modello) == "moto":
+				# pilota in sella, passeggero nel carrozzino (a destra), poi sul sellino dietro
+				loc = [Vector3(0, 0.13, -0.03), Vector3(-0.27, 0.08, -0.02), Vector3(0, 0.13, -0.17)][mini(posto, 2)]
 			elif str(vm.modello) != "canoa":
-				loc = Vector3(-0.1 if posto % 2 == 0 else 0.1, 0.12, 0.1 - 0.25 * (posto / 2))
+				var quota_cassone: float = {"camion": 0.3, "halftrack": 0.24}.get(str(vm.modello), 0.12)
+				loc = Vector3(-0.1 if posto % 2 == 0 else 0.1, quota_cassone if posto >= 2 else 0.16, 0.1 - 0.25 * (posto / 2))
 			fig.position = nm.position + nm.basis * loc
 			ang_mezzo = nm.rotation.y
 			if not str(x.stato) in ["morto", "incapacitato"]:
@@ -1772,7 +1950,10 @@ func _aggiorna_pedine() -> void:
 		if tre != null:
 			tre.visible = serve_mg
 		var morto := str(x.stato) == "morto"
-		corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto else str(x.lato)))
+		if nome == "mz:cane":
+			corpo.material_override = _materiale_dipinto("cane", Color("4a3b2c") if morto else Color("6e5638"))
+		else:
+			corpo.material_override = _materiale_soldato("pzf" if nome == "de_pzf" else (str(x.lato) + "_morto" if morto else str(x.lato)))
 		# verso: gli americani guardano il tedesco visibile più vicino, i tedeschi l'americano più vicino
 		var yaw := _verso(x, pos2) if ang_mezzo == INF else ang_mezzo
 		corpo.rotation = Vector3(0, yaw + _verso_modello(nome), deg_to_rad(80.0) if morto else 0.0)
@@ -1882,18 +2063,30 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 	var n := Node3D.new()
 	var corpo := MeshInstance3D.new()
 	corpo.name = "corpo"
-	var nome_mesh := "kubelwagen" if modello in ["auto_comando", "moto", "camion", "atg", "halftrack"] else ("canoa" if modello in ["chiatta", "scialuppa", "motovedetta"] else modello)
+	# modelli veri (tools/costruisci_mezzi3d.py); l'auto comando resta una Kübelwagen allungata col tettuccio
+	var nome_mesh: String = {"moto": "moto", "camion": "opel_blitz", "halftrack": "sdkfz251", "atg": "pak40",
+		"auto_comando": "kubelwagen"}.get(modello, "canoa" if modello in ["chiatta", "scialuppa", "motovedetta"] else modello)
 	corpo.mesh = _mesh_mezzo(nome_mesh)
-	corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.75, 0.75, 0.78) if modello == "auto_comando" else (Color(0.62, 0.52, 0.42) if modello == "chiatta" else (Color(0.78, 0.76, 0.7) if modello in ["scialuppa", "motovedetta"] else Color.WHITE)))
+	var tinte := {
+		"auto_comando": Color(0.75, 0.75, 0.78),
+		"moto": Color("5d6150"),
+		"camion": Color("56593a") if lato == "us" else Color("5f6357"),  # Opel Blitz: verde oliva se americano
+		"halftrack": Color("8a7a52"),
+		"atg": Color("6b6a55"),
+	}
+	corpo.material_override = _materiale_dipinto(nome_mesh, tinte.get(modello, Color.WHITE))
 	if modello == "auto_comando":
 		corpo.scale = Vector3(1.08, 1.05, 1.12)
-	if modello == "moto":
-		corpo.scale = Vector3(0.55, 0.8, 0.6)
-	if modello in ["camion", "halftrack"]:
-		corpo.scale = Vector3(1.45, 1.55, 1.8)  # camion americano: carrozzeria più grande e alta
-		corpo.material_override = _materiale_dipinto(nome_mesh, Color(0.55, 0.6, 0.42))
-		# cassone telonato dietro la cabina
-		_scatola(n, Vector3(0, 0.3, 0.22), Vector3(0.34, 0.26, 0.5), 0.0, _materiale(Color("6b6a4a"), 0.85))
+		_scatola(n, Vector3(0, 0.3, -0.08), Vector3(0.36, 0.05, 0.42), 0.0, _materiale(Color("3d3b36"), 0.9))
+	if modello in ["chiatta", "scialuppa"]:
+		corpo.mesh = _scafo(1.6 if modello == "chiatta" else 1.4, 0.62 if modello == "chiatta" else 0.44,
+			0.2 if modello == "chiatta" else 0.16, modello == "chiatta")
+		corpo.material_override = _materiale(Color("6e5a43") if modello == "chiatta" else Color("c9c4b4"), 0.85)
+		corpo.material_override.cull_mode = BaseMaterial3D.CULL_DISABLED
+		var banchi := 4 if modello == "chiatta" else 5
+		for i in banchi:
+			var zz := -0.5 + i * (1.0 / float(banchi - 1))
+			_scatola(corpo, Vector3(0, 0.12, zz * (0.6 if modello == "chiatta" else 0.5)), Vector3(0.5 if modello == "chiatta" else 0.3, 0.02, 0.06), 0.0, _materiale(Color("8a6c4c"), 0.9))
 	if modello == "eboat":
 		# Motosilurante (Purple Heart 13): scafo affusolato, plancia e due tubi lanciasiluri, costruiti qui.
 		corpo.mesh = null
@@ -1956,8 +2149,6 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 		mc.position = Vector3(0, 0.3, -0.3)
 		corpo.add_child(mc)
 		_scatola(corpo, Vector3(0, 0.26, -0.22), Vector3(0.06, 0.08, 0.06), 0.0, _materiale(Color("2b2d2e"), 0.4))
-	elif modello in ["chiatta", "scialuppa"]:
-		corpo.scale = Vector3(1.9, 1.2, 1.6)  # chiatta e scialuppa: grosse barche da dieci posti
 	n.add_child(corpo)
 	var et := Label3D.new()
 	et.name = "etichetta"
@@ -1976,6 +2167,38 @@ func _nodo_mezzo(modello: String, lato: String) -> Node3D:
 		mondo.add_child(_mezzi_nodo)
 	_mezzi_nodo.add_child(n)
 	return n
+
+## Scafo aperto per chiatta (fondo piatto, prua squadrata) e scialuppa (affusolata alle due estremità).
+func _scafo(lung: float, larg: float, alto: float, chiatta: bool) -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var n := 16
+	var sezioni: Array = []
+	for i in n + 1:
+		var t := float(i) / n
+		var z := (t - 0.5) * lung
+		var w: float
+		if chiatta:
+			w = larg * 0.5 * minf(1.0, minf(t, 1.0 - t) * 10.0 + 0.55)
+		else:
+			w = larg * 0.5 * pow(sin(PI * clampf(t * 0.94 + 0.03, 0.0, 1.0)), 0.6)
+		var fondo := 0.0 if chiatta else alto * 0.08 * (1.0 - sin(PI * t))
+		var bordo := alto * (1.0 + (0.0 if chiatta else 0.25 * pow(absf(t - 0.5) * 2.0, 3.0)))
+		var chiglia := 0.85 if chiatta else 0.55
+		sezioni.append([Vector3(-w, bordo, z), Vector3(-w * chiglia, alto * 0.22 + fondo, z), Vector3(0, fondo, z),
+			Vector3(w * chiglia, alto * 0.22 + fondo, z), Vector3(w, bordo, z)])
+	for i in n:
+		var a: Array = sezioni[i]
+		var b: Array = sezioni[i + 1]
+		for k in 4:
+			st.add_vertex(a[k]); st.add_vertex(b[k]); st.add_vertex(b[k + 1])
+			st.add_vertex(a[k]); st.add_vertex(b[k + 1]); st.add_vertex(a[k + 1])
+	# specchi di poppa e di prua
+	for estremo in [sezioni[0], sezioni[n]]:
+		for k in range(1, 4):
+			st.add_vertex(estremo[0]); st.add_vertex(estremo[k]); st.add_vertex(estremo[k + 1])
+	st.generate_normals()
+	return st.commit()
 
 var _quota_grande_ponte := -1.0
 

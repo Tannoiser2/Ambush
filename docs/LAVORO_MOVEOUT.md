@@ -404,3 +404,24 @@ Ordine scelto: M11, M10, M12, M9.
 ## Armi senza gittata
 - `T.base_per_distanza` e `T.nome_gittata` danno «fuori gittata» per carica da demolizione e tanica (prima la simulazione
   poteva fermarsi con un errore se una routine di tiro le considerava).
+
+## Nuovi modelli 3D (cartella 3D dell’utente)
+- `tools/leggi_3mf.py`: legge i 3MF, anche quelli di Bambu Studio con gli oggetti in file separati.
+- `tools/montaggi3d.py`: monta i kit di stampa (pezzi stesi sul piatto) posizionando ogni pezzo:
+  sidecar Ural M72 (`moto`), aliante da modellismo e la sua versione schiantata (`aliante_relitto`).
+- `tools/costruisci_mezzi3d.py` accetta `file.3mf#oggetto` (`#*` tutti, `#max` il più grande) e `@montaggio`;
+  per i pezzi sottili forza la riduzione con pymeshlab (serve `libopengl0`).
+- Modelli nuovi in `assets/mezzi3d/`: `opel_blitz` (camion: grigio se tedesco, verde oliva se americano),
+  `sdkfz251` (semicingolato), `pak40` (cannone anticarro), `mortaio`, `cane`, `faro`, `locomotiva`, `vagone`,
+  `moto`, `aliante_relitto`. Tutti con il davanti verso +Z.
+- Costruiti nel codice (`mappa3d.gd`): scafi di chiatta e scialuppa (`_scafo`), rampa a traliccio della Missione 5
+  (`_traliccio`), stazione radar, antenna, razzo V-2, mine anticarro, filo spinato; l’auto comando è la Kübelwagen
+  allungata col tettuccio.
+- Dove compaiono: mortaio tedesco di Silver Star 20/22/24 (`ss.mortaio`), cani da guardia (`cane` o carta «Cane…»),
+  treno della Missione 17, faro di Purple Heart, installazioni della Missione 5, Typhoon in R15 e relitto in K10
+  (Silver Star 20), relitti di semicingolato e camion, `mine_at`, `filo`.
+- Scatti: `tests/visivi/mezzi_nuovi.gd`, `tests/visivi/treno_faro.gd`.
+
+## Volti di riserva per la campagna
+- `assets/volti/rimpiazzi/r01…r48.jpg`: 48 ritratti nello stesso stile (generati a gruppi di quattro).
+  Un soldato americano senza `us_<id>.jpg` riceve sempre lo stesso volto di riserva (hash dell’id).

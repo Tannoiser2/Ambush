@@ -600,11 +600,15 @@ func _aggiorna_squadra() -> void:
 
 var _volti: Dictionary = {}
 
-## Ritratto del soldato (assets/volti/us_<id>.jpg), se c’è.
+## Ritratto del soldato (assets/volti/us_<id>.jpg) o, se manca, uno dei volti di riserva per i rimpiazzi.
 func _volto(a: Dictionary) -> Texture2D:
 	var k := str(a.get("id", a.get("lettera", "")))
 	if not _volti.has(k):
 		var perc := "res://assets/volti/us_%s.jpg" % k
+		if k != "" and not ResourceLoader.exists(perc) and str(a.get("lato", "us")) == "us":
+			# soldati senza ritratto proprio (rimpiazzi, pilota, sopravvissuti): uno dei 48 volti di riserva,
+			# sempre lo stesso per lo stesso soldato
+			perc = "res://assets/volti/rimpiazzi/r%02d.jpg" % (absi(hash(k)) % 48 + 1)
 		_volti[k] = load(perc) if k != "" and ResourceLoader.exists(perc) else null
 	return _volti[k]
 
