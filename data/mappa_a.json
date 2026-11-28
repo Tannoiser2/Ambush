@@ -2018,5 +2018,32 @@
   "X19|Y19": "crest"
  },
  "mappa": "A",
- "note": "Terreno e lati dall'ultima revisione manuale; quote presunte ricavate dai vicini; livello 3 a sud-est della linea Q19–Y13; ponte in M12."
+ "note": "Terreno e lati dall'ultima revisione manuale; quote presunte ricavate dai vicini; livello 3 a sud-est della linea Q19–Y13; ponte in M12.",
+ "gallerie": [
+  {
+   "nome": "Galleria della Missione 12",
+   "esagoni": [
+    "G13",
+    "H12",
+    "I12",
+    "J11",
+    "K11",
+    "L10",
+    "M10",
+    "N9",
+    "O9",
+    "P8",
+    "Q8",
+    "R7"
+   ],
+   "ingressi": [
+    "G13",
+    "N9",
+    "R7"
+   ],
+   "missioni": [
+    12
+   ]
+  }
+ ]
 }

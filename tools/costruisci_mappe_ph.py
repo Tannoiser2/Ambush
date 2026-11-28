@@ -60,8 +60,7 @@ def unisci(base, mezza, lettera, nota):
     finestre(es, lati, range(10, 20))
     lati.update(lati_extra(mezza))
     dati = {"mappa": lettera, "esagoni": es, "lati": lati, "alture_obiettivo": [], "note": nota}
-    if b.get("campanile") and int(b["campanile"][1:]) <= 9:
-        dati["campanile"] = b["campanile"]
+    # i piani superiori stanno negli esagoni («piani»): quelli delle righe 1–9 passano con «es»
     (R / "data" / f"mappa_{lettera.lower()}.json").write_text(json.dumps(dati, ensure_ascii=False, indent=0))
     print("scritta", lettera, len(es), len(lati))
 

@@ -824,27 +824,37 @@ func in_galleria(ids: Array) -> bool:
 func paragrafi_galleria() -> Array:
 	return p.regola("paragrafi_t", []) if attiva() else []
 
-## Esagoni della galleria: da G13 (sotto il ponte) lungo la linea H12–R7.
+## Esagoni della galleria: quelli scritti nella mappa (editor, modo «Piani e gallerie»);
+## se la mappa non ne ha, da G13 (sotto il ponte) lungo la linea H12–R7.
 func esagoni_galleria() -> Array:
+	var dati: Array = p.terreno.esagoni_galleria(12)
+	if not dati.is_empty():
+		return dati
 	var out: Array = ["G13"]
 	for h in E.linea("H12", "R7"):
 		if not (h in out):
 			out.append(h)
 	return out
 
+## Ingresso principale della galleria (G13, sotto il ponte): il primo ingresso scritto nella mappa.
+func ingresso_galleria() -> String:
+	var ing: Array = p.terreno.galleria(12).get("ingressi", [])
+	return str(ing[0]) if not ing.is_empty() else str(esagoni_galleria()[0])
+
 func verifica_passo(a: Dictionary, verso: String) -> String:
 	if not attiva():
 		return ""
 	if a.get("galleria", false) and not (verso in esagoni_galleria()):
-		return "Nella galleria si va solo lungo il tunnel (G13–R7)."
+		var gl := esagoni_galleria()
+		return "Nella galleria si va solo lungo il tunnel (%s–%s)." % [gl[0], gl[-1]]
 	return ""
 
 func puo_entrare_galleria(a: Dictionary) -> bool:
-	return attiva() and p.s.get("mo_galleria", false) and p.attivo(a) and a.hex == "G13" and not a.get("galleria", false) \
+	return attiva() and p.s.get("mo_galleria", false) and p.attivo(a) and a.hex == ingresso_galleria() and not a.get("galleria", false) \
 		and not p.veicoli.attivo(p.veicoli.di(a))
 
 func puo_uscire_galleria(a: Dictionary) -> bool:
-	return a.get("galleria", false) and (a.hex == "G13" or a.hex in p.s.get("mo_botole", []))
+	return a.get("galleria", false) and (a.hex == ingresso_galleria() or a.hex in p.s.get("mo_botole", []))
 
 ## Entra o esce dalla galleria (un punto movimento: nelle Operazioni è libero, nei Round costa l’azione).
 func galleria(id: String, entra: bool) -> Dictionary:
@@ -854,9 +864,9 @@ func galleria(id: String, entra: bool) -> Dictionary:
 	if e != "":
 		return p._errore(e)
 	if entra and not puo_entrare_galleria(a):
-		return p._errore("Nella galleria si entra solo da sotto il ponte in G13, dopo il paragrafo 487.")
+		return p._errore("Nella galleria si entra solo da sotto il ponte in %s, dopo il paragrafo 487." % ingresso_galleria())
 	if not entra and not puo_uscire_galleria(a):
-		return p._errore("Si esce solo da G13 o da una botola scoperta.")
+		return p._errore("Si esce solo da %s o da una botola scoperta." % ingresso_galleria())
 	a.galleria = entra
 	a.postura = "crouching"
 	p._log("azione", "%s %s in %s." % [p.nome(a), "entra nella galleria" if entra else "sale dalla galleria", a.hex])

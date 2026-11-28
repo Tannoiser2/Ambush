@@ -449,3 +449,21 @@ Ordine scelto: M11, M10, M12, M9.
 - Le regole non cambiano. Il giocatore può spegnere tutto in Grafica, voce «METEO» (preferenza `meteo`).
 - Le particelle seguono l'inquadratura e il riquadro da cui cadono si allarga con la distanza della camera. In CPUParticles3D non c'è `amount_ratio`, quindi l'intensità passa per la trasparenza delle gocce.
 - Test visivo: `tests/visivi/meteo3d.gd`.
+
+## Editor delle mappe (rifatto il 28/11)
+- Tre strati in `scripts/ui/editor_mappe.gd`: mappa stampata (`tela`), dati del motore (`strato_dati`), strumenti
+  (`strato_attrezzi`); due cursori in basso («MAPPA STAMPATA», «DATI DEL MOTORE») per l'opacità di ciascuno.
+- Terreno e Quote: strumenti Seleziona (tocco o trascinamento), Riquadro e Pennello; Nuova/Aggiungi/Togli (col mouse anche
+  Maiuscole e Ctrl); Tutti, Nessuno, Inverti, Uguali. Toccando un tipo o un livello lo si dà a tutta la selezione (un solo
+  passo di Annulla); «Alza/Abbassa di 1». Le quote sono solo il numero sull'esagono.
+- Muri curvi (`ter.curve`: {tipo, punti, lati}): Bézier a più tratti (ancora, controllo, controllo, ancora…); Disegna,
+  Modifica, Prolunga, Raddrizza, Elimina. I lati degli esagoni attraversati (`lati_attraversati`) vanno in `lati` con il tipo
+  del muro (muro, muretto di pietra, cresta, massicciata); spostando o eliminando il muro si tolgono quelli vecchi.
+  In 3D muro e muretto seguono la curva (`mappa3d._muri_curvi`).
+- Edifici: oltre a Sposta e pareti, Angolo +/−, Esagoni (mette o toglie un esagono dall'edificio del motore), Allinea esagoni
+  (la stanza e il terreno tornano d'accordo, anche dopo uno spostamento), Edificio dagli esagoni selezionati.
+- Piani e gallerie: campo `piani` dell'esagono (2 = piano superiore; il vecchio `campanile` della mappa B è convertito,
+  `Terreno.torri` lo legge). Gallerie nei dati della mappa (`gallerie`: nome, esagoni in ordine, ingressi, missioni):
+  mappa A (Missione 12, G13–R7) e mappe F/FG (W7–W9, Missioni 20, 22, 23). `missioni_mo.esagoni_galleria` e
+  `missione20_ss.galleria` leggono i dati e ripiegano sui valori di prima se mancano.
+- Test: `tests/editor_mappe.gd`; scatti `tests/visivi/editor_mappe.gd`.

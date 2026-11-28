@@ -1390,7 +1390,7 @@ func _azioni_missione() -> void:
 			if galleria_si:
 				_b("Entra nella galleria", func(): _esito(p.mo.galleria(a.id, true)), "Sotto il ponte: in galleria i tedeschi non ti vedono e si leggono solo i paragrafi T.")
 			if galleria_no:
-				_b("Sali dalla botola" if a.hex != "G13" else "Esci dalla galleria", func(): _esito(p.mo.galleria(a.id, false)))
+				_b("Sali dalla botola" if a.hex != p.mo.ingresso_galleria() else "Esci dalla galleria", func(): _esito(p.mo.galleria(a.id, false)))
 	_azioni_missione_18()
 	_azioni_berserk()
 	if p.s.fase == "operazioni" and p.condizioni_vittoria().ok:

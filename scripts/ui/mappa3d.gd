@@ -1330,6 +1330,7 @@ func _costruisci_case(padre: Node3D) -> void:
 	if d.is_empty():
 		return
 	var t: Terreno = mappa2d.partita.terreno
+	_muri_curvi(padre, t)
 	var indice := 0
 	for st in d.get("case", []):
 		indice += 1
@@ -1350,12 +1351,44 @@ func _costruisci_case(padre: Node3D) -> void:
 				if Geometry2D.is_point_in_polygon(Vector2(float(pm[0][0]), float(pm[0][1])), pol):
 					_muro(pm, str(m.tipo), padre)
 			continue
-		var campanile: bool = lettera == "b" and "S13" in st.hex
-		_stanza(padre, st, angoli, str(st.tipo) == "pietra", campanile, indice)
+		# piani dell'edificio (campo «piani» degli esagoni della mappa, modo «Piani e gallerie» dell'editor)
+		var piani := 1
+		for h in st.hex:
+			piani = maxi(piani, t.piani(str(h)))
+		_stanza(padre, st, angoli, str(st.tipo) == "pietra", piani, indice)
+
+## Muri curvi dell'editor (lati «wall» e «stonewall» lungo una curva di Bézier): un muretto che segue la curva.
+## Creste e massicciate restano disegnate sui lati degli esagoni.
+func _muri_curvi(padre: Node3D, t: Terreno) -> void:
+	for c in t.curve:
+		var tipo := str(c.get("tipo", ""))
+		if not tipo in ["wall", "stonewall"]:
+			continue
+		var pts := Terreno.punti_curva(c.get("punti", []), 14.0)
+		if pts.size() < 2:
+			continue
+		var alto := 0.55 if tipo == "wall" else 0.26
+		var spess := 0.09 if tipo == "wall" else 0.12
+		var st := SurfaceTool.new()
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		for i in pts.size() - 1:
+			var a := pts[i]
+			var b := pts[i + 1]
+			if a.distance_to(b) < 0.5:
+				continue
+			var perp := (b - a).normalized().orthogonal()
+			var base := minf(altezza_px(a), altezza_px(b)) - 0.03
+			# il muro sta a cavallo della linea: si parte da mezzo spessore fuori
+			_blocco_uv(st, a - perp * spess / K * 0.5, b - perp * spess / K * 0.5, perp, base, base + alto, spess, pts[0], 0.6)
+		var mi := MeshInstance3D.new()
+		mi.mesh = st.commit()
+		mi.material_override = _materiale(Color("9c968a") if tipo == "stonewall" else Color("a9a39a"), 0.95)
+		padre.add_child(mi)
 
 ## Una stanza come è stampata: la faccia esterna dei muri sta esattamente sul contorno disegnato;
 ## finestre con telaio, vetri, persiane e davanzale, porte di legno, tetto a padiglione con gronda e coppi.
-func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, campanile: bool, indice: int) -> void:
+## «piani» 2 o più: muri più alti; una stanza piccola (una torre, come il campanile) ha anche la merlatura.
+func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, piani: int, indice: int) -> void:
 	var nang := angoli.size()
 	var base := 1e9
 	var centro := Vector2.ZERO
@@ -1368,7 +1401,8 @@ func _stanza(padre: Node3D, st: Dictionary, angoli: Array, pietra: bool, campani
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(str(st.angoli))
 	var intonacata := pietra and rng.randf() < 0.55
-	var h_muri := 1.75 if campanile else ALTEZZA_CASA
+	var campanile: bool = piani > 1 and st.hex.size() <= 1
+	var h_muri := ALTEZZA_CASA + (piani - 1) * 0.8
 	var muri := SurfaceTool.new()
 	muri.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var zoccolo := SurfaceTool.new()

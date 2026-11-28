@@ -1904,5 +1904,24 @@
 },
 "lati": {},
 "alture_obiettivo": [],
-"note": "Mappa F con mezza mappa G (Silver Star)"
+"note": "Mappa F con mezza mappa G (Silver Star)",
+"gallerie": [
+{
+"nome": "Galleria stradale",
+"esagoni": [
+"W7",
+"W8",
+"W9"
+],
+"ingressi": [
+"W7",
+"W9"
+],
+"missioni": [
+20,
+22,
+23
+]
+}
+]
 }

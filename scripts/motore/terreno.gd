@@ -27,8 +27,13 @@ var modifiche: Dictionary = {}
 var _cache_los: Dictionary = {}
 
 var alture: Array = []
-## Edifici con un piano superiore (il campanile di S13 sulla mappa B): esagono → livelli in più.
+## Edifici con un piano superiore: esagono → livelli in più. Viene dai dati della mappa
+## (campo «piani» dell'esagono, 2 = piano terra e piano superiore); alcune missioni ne aggiungono altri.
 var torri: Dictionary = {}
+## Gallerie sotterranee: [{nome, esagoni (in ordine lungo il tratto), ingressi, missioni}].
+var gallerie: Array = []
+## Muri curvi disegnati nell'editor: per il motore contano solo i lati che attraversano (già in «lati»).
+var curve: Array = []
 
 func _init(percorso := "res://data/mappa_a.json") -> void:
 	# Le mappe corrette nell'editor (user://mappe) prendono il posto di quelle del gioco.
@@ -36,8 +41,61 @@ func _init(percorso := "res://data/mappa_a.json") -> void:
 	esagoni = dati.esagoni
 	lati = dati.lati
 	alture = dati.get("alture_obiettivo", [])
+	# vecchio formato: un solo campanile
 	if str(dati.get("campanile", "")) != "":
 		torri[str(dati.campanile)] = 1
+	for h in esagoni:
+		var np := int(esagoni[h].get("piani", 1))
+		if np > 1:
+			torri[str(h)] = np - 1
+	gallerie = dati.get("gallerie", [])
+	curve = dati.get("curve", [])
+
+## Punti di una curva di Bézier a più tratti (punti: ancora, controllo, controllo, ancora, controllo, …),
+## in pixel della mappa, con un punto circa ogni «passo» pixel.
+static func punti_curva(punti: Array, passo := 10.0) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	var pv: Array = []
+	for q in punti:
+		pv.append(Vector2(float(q[0]), float(q[1])))
+	if pv.size() < 4:
+		for q in pv:
+			out.append(q)
+		return out
+	var i := 0
+	while i + 3 < pv.size():
+		var a: Vector2 = pv[i]
+		var c1: Vector2 = pv[i + 1]
+		var c2: Vector2 = pv[i + 2]
+		var b: Vector2 = pv[i + 3]
+		var lung := a.distance_to(c1) + c1.distance_to(c2) + c2.distance_to(b)
+		var n := maxi(2, int(lung / passo))
+		for k in n + 1:
+			if k == 0 and i > 0:
+				continue
+			var tt := float(k) / float(n)
+			out.append(a.bezier_interpolate(c1, c2, b, tt))
+		i += 3
+	return out
+
+## Numero di piani dell'edificio nell'esagono (1 = solo piano terra).
+func piani(h: String) -> int:
+	return 1 + int(torri.get(h, 0)) if ha_piani(h) else 1
+
+## La galleria che vale per una missione (campo «missioni»), o la prima della mappa; {} se non ce ne sono.
+func galleria(missione := 0) -> Dictionary:
+	for g in gallerie:
+		if missione in (g.get("missioni", []) as Array).map(func(x): return int(x)):
+			return g
+	# una galleria senza missioni vale per tutte
+	for g in gallerie:
+		if (g.get("missioni", []) as Array).is_empty():
+			return g
+	return gallerie[0] if not gallerie.is_empty() else {}
+
+## Esagoni della galleria di una missione, in ordine; [] se la mappa non ne ha.
+func esagoni_galleria(missione := 0) -> Array:
+	return (galleria(missione).get("esagoni", []) as Array).map(func(x): return str(x))
 
 ## Vero se l’esagono ha un piano superiore.
 func ha_piani(h: String) -> bool:

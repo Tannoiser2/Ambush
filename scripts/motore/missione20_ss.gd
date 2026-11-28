@@ -8,6 +8,7 @@ const T = preload("res://scripts/motore/tabelle.gd")
 const MO = preload("res://scripts/motore/missioni_mo.gd")
 
 const ORDINE := ["vjeep", "vcamion1", "vcamion2", "vcamion3", "vht"]
+## Galleria di riserva, se la mappa non ne scrive una (editor, modo «Piani e gallerie»).
 const GALLERIA := ["W7", "W8", "W9"]
 const MORTAIO := [471, 472, 473]
 const MORTAIO_CASO := ["C18", "C18", "G16", "G16", "K14", "K14", "I18", "N18", "N15", "R16"]
@@ -41,14 +42,44 @@ func regole_terreno() -> void:
 			d[k] = mod[h][k]
 		p.terreno.esagoni[h] = d
 
+## Esagoni della galleria stradale: dai dati della mappa (campo «gallerie»), altrimenti W7–W9.
+func galleria() -> Array:
+	var g: Array = p.terreno.esagoni_galleria(int(p.missione.get("id", 0)))
+	return g if not g.is_empty() else GALLERIA
+
+## Imbocchi della galleria (W7 e W9): i suoi ingressi, o i due estremi.
+func imbocchi() -> Array:
+	var ing: Array = (p.terreno.galleria(int(p.missione.get("id", 0))).get("ingressi", []) as Array).map(func(x): return str(x))
+	var g := galleria()
+	return ing if not ing.is_empty() else [g[0], g[-1]]
+
+## Esagoni appena fuori dai due estremi, nel verso del tunnel (W6 e W10): da lì si vede un esagono dentro.
+func davanti_imbocchi() -> Array:
+	var g := galleria()
+	var out: Array = []
+	if g.size() < 2:
+		return E.vicini(str(g[0])) if not g.is_empty() else out
+	for coppia in [[g[0], g[1]], [g[-1], g[-2]]]:
+		var verso: Vector2 = E.centro(str(coppia[0])) - E.centro(str(coppia[1]))
+		var migliore := ""
+		var dmax := -1e9
+		for v in E.vicini(str(coppia[0])):
+			var d: float = (E.centro(v) - E.centro(str(coppia[0]))).dot(verso)
+			if d > dmax and not (v in g):
+				dmax = d
+				migliore = v
+		if migliore != "":
+			out.append(migliore)
+	return out
+
 func in_galleria(x: Dictionary) -> bool:
-	return galleria_attiva() and str(x.get("hex", "")) in GALLERIA
+	return galleria_attiva() and str(x.get("hex", "")) in galleria()
 
 ## Riferimenti «T» delle carte: valgono solo per chi si muove nella galleria.
 func riferimento_t(rif: String, ctx: Dictionary) -> bool:
 	if not rif.begins_with("T:"):
 		return false
-	var dentro: bool = str(ctx.get("hex", "")) in GALLERIA
+	var dentro: bool = str(ctx.get("hex", "")) in galleria()
 	if dentro:
 		p.leggi("T" + rif.substr(2), ctx)
 	else:
@@ -61,14 +92,15 @@ func vista(oss: Dictionary, ber: Dictionary) -> int:
 		return -1
 	var hb: String = str(ber.get("hex", ""))
 	var ho: String = str(oss.get("hex", ""))
-	if hb in GALLERIA and not (ho in GALLERIA):
-		if ho in ["W6", "W10"] and E.distanza(ho, hb) <= 1:
+	var gal := galleria()
+	if hb in gal and not (ho in gal):
+		if ho in davanti_imbocchi() and E.distanza(ho, hb) <= 1:
 			return 1
 		return 0
-	if hb in GALLERIA and ho in GALLERIA:
+	if hb in gal and ho in gal:
 		return 1
-	if ho in GALLERIA and not (hb in GALLERIA):
-		return 1 if (ho in ["W7", "W9"]) and p.terreno.vede(ho, hb, oss.postura, ber.postura) else 0
+	if ho in gal and not (hb in gal):
+		return 1 if (ho in imbocchi()) and p.terreno.vede(ho, hb, oss.postura, ber.postura) else 0
 	return -1
 
 # ------------------------------------------------------------------ convoglio

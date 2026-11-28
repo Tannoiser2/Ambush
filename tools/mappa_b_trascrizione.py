@@ -111,10 +111,11 @@ def costruisci():
         es[h] = rec
     for t, hs in EDIFICI.items():
         for h in hs: es[h]["t"] = t
+    es["S13"]["piani"] = 2  # campanile: piano terra e piano superiore
     lati = {}
     for k in CRESTE: a, b = sorted(k.split("|")); lati[f"{a}|{b}"] = "crest"
     for k in SCARPATE: a, b = sorted(k.split("|")); lati[f"{a}|{b}"] = "embankment"
     for tipo, lst in APERTURE.items():
         for k in lst: a, b = sorted(k.split("|")); lati[f"{a}|{b}"] = tipo
-    return {"mappa": "B", "esagoni": es, "lati": lati, "alture_obiettivo": [], "campanile": "S13",
-            "note": "Mappa B trascritta dalla scansione: terreno a vista per esagono; livelli dal colore di fondo (1 bianco, 2 giallo chiaro, 3 giallo carico sulle alture di nord, ovest ed est); creste e scarpate lette a vista (approssimate); ponte di pietra G14 (strada), ponte di legno G13 (ferrovia). Porte e finestre lette a vista (approssimate). Il campanile di S13 è alto due livelli."}
+    return {"mappa": "B", "esagoni": es, "lati": lati, "alture_obiettivo": [],
+            "note": "Mappa B trascritta dalla scansione: terreno a vista per esagono; livelli dal colore di fondo (1 bianco, 2 giallo chiaro, 3 giallo carico sulle alture di nord, ovest ed est); creste e scarpate lette a vista (approssimate); ponte di pietra G14 (strada), ponte di legno G13 (ferrovia). Porte e finestre lette a vista (approssimate). Il campanile di S13 ha due piani (campo «piani»)."}

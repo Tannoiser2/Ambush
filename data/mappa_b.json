@@ -1248,7 +1248,8 @@
 },
 "S13": {
 "t": "stone_building",
-"q": 1
+"q": 1,
+"piani": 2
 },
 "T13": {
 "t": "clear",
@@ -2032,6 +2033,5 @@
 "J13|J14": "door"
 },
 "alture_obiettivo": [],
-"campanile": "S13",
-"note": "Mappa B trascritta dalla scansione: terreno a vista per esagono; livelli dal colore di fondo (1 bianco, 2 giallo chiaro, 3 giallo carico sulle alture di nord, ovest ed est); creste e scarpate lette a vista (approssimate); ponte di pietra G14 (strada), ponte di legno G13 (ferrovia). Porte e finestre lette a vista (approssimate). Il campanile di S13 è alto due livelli."
+"note": "Mappa B trascritta dalla scansione: terreno a vista per esagono; livelli dal colore di fondo (1 bianco, 2 giallo chiaro, 3 giallo carico sulle alture di nord, ovest ed est); creste e scarpate lette a vista (approssimate); ponte di pietra G14 (strada), ponte di legno G13 (ferrovia). Porte e finestre lette a vista (approssimate). Il campanile di S13 ha due piani (campo «piani»)."
 }

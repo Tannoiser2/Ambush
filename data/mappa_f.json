@@ -1955,5 +1955,24 @@
 "U14|V14": "window"
 },
 "alture_obiettivo": [],
-"note": "Mappa F (Silver Star)"
+"note": "Mappa F (Silver Star)",
+"gallerie": [
+{
+"nome": "Galleria stradale",
+"esagoni": [
+"W7",
+"W8",
+"W9"
+],
+"ingressi": [
+"W7",
+"W9"
+],
+"missioni": [
+20,
+22,
+23
+]
+}
+]
 }
