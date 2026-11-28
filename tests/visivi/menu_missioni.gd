@@ -1,5 +1,5 @@
 extends SceneTree
-## Scatto della pagina iniziale con le 8 missioni illustrate.
+## Scatti della pagina iniziale: carosello dei moduli e missioni a sinistra, descrizione e opzioni a destra.
 ## Uso: xvfb-run godot --path . --script tests/visivi/menu_missioni.gd -- [larghezza] [altezza] [cartella]
 var ui
 
@@ -17,15 +17,25 @@ func aspetta(n := 20) -> void:
 	for i in n:
 		await process_frame
 
+func scatto(dir: String, nome: String) -> void:
+	await aspetta(15)
+	root.get_viewport().get_texture().get_image().save_png("%s/%s.png" % [dir, nome])
+
 func _scatti(dir: String, tag: String) -> void:
 	await aspetta(40)
-	var img := root.get_viewport().get_texture().get_image()
-	img.save_png("%s/menu_%s.png" % [dir, tag])
+	await scatto(dir, "menu_" + tag)
 	ui._mostra_missione_scelta(6)
-	await aspetta(20)
-	root.get_viewport().get_texture().get_image().save_png("%s/menu6_%s.png" % [dir, tag])
+	await scatto(dir, "menu6_" + tag)
+	ui._gira_carosello(1)
+	await scatto(dir, "menu_mo_" + tag)
+	ui._mostra_missione_scelta(15)
+	await scatto(dir, "menu15_" + tag)
+	ui._modulo_carosello = 4
+	ui._mostra_modulo(false)
+	await scatto(dir, "menu_campagna_" + tag)
+	ui._mostra_missione_scelta(6)
 	ui._avvia_missione(6, false, false)
 	await aspetta(30)
-	root.get_viewport().get_texture().get_image().save_png("%s/partita_%s.png" % [dir, tag])
+	await scatto(dir, "partita_" + tag)
 	print("scatto ", tag)
 	quit()

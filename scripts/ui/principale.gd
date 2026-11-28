@@ -2493,7 +2493,29 @@ const COLORI_MODULI := {"AMBUSH!": Color("7a2a20"), "MOVE OUT!": Color("4d5a2a")
 static func _modulo_di(n: int) -> String:
 	return "AMBUSH!" if n <= 8 else ("MOVE OUT!" if n <= 12 else ("PURPLE HEART" if n <= 18 else "SILVER STAR"))
 
-func _scegli_missione() -> void:
+## Moduli del carosello: nome, sottotitolo, missioni. La campagna (missioni in fila con la stessa squadra) non c'è ancora.
+const MODULI := [
+	["AMBUSH!", "Gioco base · missioni 1–8", "Francia, Belgio, Olanda e Germania, 1944–45: la squadra di fanteria contro un nemico che si muove da solo.", [1, 8]],
+	["MOVE OUT!", "Espansione · missioni 9–12", "Assalti, ricognizioni notturne e prigionieri da liberare, con i mezzi americani.", [9, 12]],
+	["PURPLE HEART", "Espansione · missioni 13–18", "Paracadutisti dispersi, basi navali, ponti da far saltare e treni in corsa.", [13, 18]],
+	["SILVER STAR", "Espansione · missioni 19–24", "Sicilia e Italia, 1943–44: sommozzatori, convogli, gallerie e muli.", [19, 24]],
+	["CAMPAGNA", "Le missioni in fila con la stessa squadra", "In preparazione: per ora ogni missione si gioca da sola.", []],
+]
+var _modulo_carosello := 0
+var _carosello_scheda: Control
+var _carosello_punti: HBoxContainer
+var _colonna_descrizione: VBoxContainer
+var _colonna_opzioni: VBoxContainer
+var _bottoni_missione: HBoxContainer
+var _carosello_premuto := -1.0
+
+func _indice_modulo(n: int) -> int:
+	return 0 if n <= 8 else (1 if n <= 12 else (2 if n <= 18 else 3))
+
+## Pagina iniziale. A sinistra: il carosello dei moduli (gioco base, espansioni, campagna) e sotto le missioni del
+## modulo. A destra: la descrizione della missione scelta con i pulsanti per partire, e sotto tutte le opzioni.
+## Su uno schermo in verticale le due colonne stanno una sopra l'altra.
+func _scegli_missione(scelta := -1) -> void:
 	_chiudi_finestra()
 	if pagina_missioni != null:
 		pagina_missioni.queue_free()
@@ -2510,30 +2532,17 @@ func _scegli_missione() -> void:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 8)
 	margine.add_child(vb)
+	# testata
 	var testa := HBoxContainer.new()
 	testa.add_theme_constant_override("separation", 14)
 	vb.add_child(testa)
 	testa.add_child(Tema.titolo("AMBUSH!", 32, Tema.CARTA))
-	var sotto := VBoxContainer.new()
+	var sotto := Tema.etichetta("Scegli il modulo, poi la missione: ognuna ha il suo salvataggio.", Tema.testo, 14, Tema.KAKI_SPENTO)
 	sotto.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sotto.add_child(Tema.titolo("LE MISSIONI", 18, Tema.OTTONE))
-	var spiega := Tema.etichetta("Tocca una missione per leggere l’ordine e partire. Ognuna ha il suo salvataggio.", Tema.testo, 14, Tema.KAKI_SPENTO)
-	spiega.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	spiega.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	spiega.custom_minimum_size = Vector2(160, 0)
-	sotto.add_child(spiega)
+	sotto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	sotto.clip_text = true
+	sotto.custom_minimum_size = Vector2(80, 0)
 	testa.add_child(sotto)
-	# legenda dei moduli
-	var leg := HBoxContainer.new()
-	leg.add_theme_constant_override("separation", 6)
-	leg.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	if size.x >= 900:
-		for nome in COLORI_MODULI:
-			var t := PanelContainer.new()
-			t.add_theme_stylebox_override("panel", Tema.scatola(COLORI_MODULI[nome], Color.TRANSPARENT, 0, 3, 4))
-			t.add_child(Tema.etichetta(nome, Tema.testo_bold, 12, Tema.CARTA))
-			leg.add_child(t)
-	testa.add_child(leg)
 	var ed := Tema.bottone("Editor delle mappe", _apri_editor_mappe, "Correggi terreno, quote, lati, alberi ed edifici delle mappe")
 	ed.custom_minimum_size = Vector2(150, 40)
 	ed.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -2547,66 +2556,328 @@ func _scegli_missione() -> void:
 	linea.color = Tema.BORDO
 	linea.custom_minimum_size = Vector2(0, 2)
 	vb.add_child(linea)
-	# griglia: 6 colonne × 4 righe sugli schermi larghi, 4 × 6 su quelli stretti o in verticale
+	if scelta > 0:
+		_missione_scelta = scelta
+	elif p != null and p.numero in Partita.disponibili() and p.s.has("fase"):
+		_missione_scelta = p.numero
+	else:
+		_missione_scelta = _ultima_missione()
+	_modulo_carosello = _indice_modulo(_missione_scelta)
+	# corpo: due colonne (o due fasce in verticale)
+	var orizzontale := size.x >= size.y * 1.05
+	var corpo: BoxContainer = HBoxContainer.new() if orizzontale else VBoxContainer.new()
+	corpo.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	corpo.add_theme_constant_override("separation", 12)
+	vb.add_child(corpo)
+	var sinistra := VBoxContainer.new()
+	sinistra.add_theme_constant_override("separation", 8)
+	sinistra.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sinistra.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sinistra.size_flags_stretch_ratio = 1.15 if orizzontale else 1.0
+	corpo.add_child(sinistra)
+	var destra := VBoxContainer.new()
+	destra.add_theme_constant_override("separation", 8)
+	destra.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	destra.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	destra.size_flags_stretch_ratio = 1.0 if orizzontale else 1.25
+	corpo.add_child(destra)
+	# carosello dei moduli
+	var car := HBoxContainer.new()
+	car.add_theme_constant_override("separation", 8)
+	sinistra.add_child(car)
+	var prec := Tema.bottone("<", func(): _gira_carosello(-1), "Modulo precedente")
+	var succ := Tema.bottone(">", func(): _gira_carosello(1), "Modulo successivo")
+	for b in [prec, succ]:
+		b.custom_minimum_size = Vector2(46, 0)
+		b.add_theme_font_size_override("font_size", 26)
+	car.add_child(prec)
+	_carosello_scheda = Control.new()
+	_carosello_scheda.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_carosello_scheda.custom_minimum_size = Vector2(200, clampf(size.y * (0.19 if orizzontale else 0.13), 110.0, 230.0))
+	_carosello_scheda.clip_contents = true
+	_carosello_scheda.mouse_filter = Control.MOUSE_FILTER_STOP
+	_carosello_scheda.gui_input.connect(_input_carosello)
+	car.add_child(_carosello_scheda)
+	car.add_child(succ)
+	_carosello_punti = HBoxContainer.new()
+	_carosello_punti.alignment = BoxContainer.ALIGNMENT_CENTER
+	_carosello_punti.add_theme_constant_override("separation", 6)
+	sinistra.add_child(_carosello_punti)
 	_griglia_missioni = GridContainer.new()
-	_griglia_missioni.columns = 6 if size.x >= size.y * 1.05 else 4
 	_griglia_missioni.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_griglia_missioni.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_griglia_missioni.add_theme_constant_override("h_separation", 10)
 	_griglia_missioni.add_theme_constant_override("v_separation", 10)
-	vb.add_child(_griglia_missioni)
-	if p != null and p.numero in Partita.disponibili() and p.s.has("fase"):
-		_missione_scelta = p.numero
-	else:
-		_missione_scelta = _ultima_missione()
-	var pronte := Partita.disponibili()
-	for i in NOMI_MISSIONI.size():
-		_griglia_missioni.add_child(_scheda_missione(i + 1, i + 1 in pronte, i + 1 == _missione_scelta))
-
-## Ordine di missione in una finestra, con i pulsanti per partire o riprendere.
-func _mostra_missione_scelta(n: int) -> void:
-	_missione_scelta = n
-	if is_instance_valid(_griglia_missioni):
-		for i in _griglia_missioni.get_child_count():
-			var c: Control = _griglia_missioni.get_child(i)
-			if c.has_meta("cornice"):
-				(c.get_meta("cornice") as Panel).visible = (i + 1 == n)
-	var pronte := Partita.disponibili()
-	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 8)
+	sinistra.add_child(_griglia_missioni)
+	# descrizione della missione (carta) con i pulsanti, sotto le opzioni
+	var carta := PanelContainer.new()
+	carta.add_theme_stylebox_override("panel", Tema.carta(12))
+	carta.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	carta.size_flags_stretch_ratio = 1.15
+	destra.add_child(carta)
+	var cv := VBoxContainer.new()
+	cv.add_theme_constant_override("separation", 8)
+	carta.add_child(cv)
 	var sc := ScrollContainer.new()
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	sc.custom_minimum_size = Vector2(0, clampf(size.y * 0.72, 300.0, 900.0))
-	vb.add_child(sc)
+	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	cv.add_child(sc)
+	_colonna_descrizione = VBoxContainer.new()
+	_colonna_descrizione.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_colonna_descrizione.add_theme_constant_override("separation", 8)
+	sc.add_child(_colonna_descrizione)
+	_bottoni_missione = HBoxContainer.new()
+	_bottoni_missione.alignment = BoxContainer.ALIGNMENT_END
+	_bottoni_missione.add_theme_constant_override("separation", 8)
+	cv.add_child(_bottoni_missione)
+	var opz := PanelContainer.new()
+	opz.add_theme_stylebox_override("panel", Tema.pannello_oliva(10))
+	opz.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	opz.size_flags_stretch_ratio = 1.0
+	destra.add_child(opz)
+	var so := ScrollContainer.new()
+	so.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	opz.add_child(so)
+	_colonna_opzioni = VBoxContainer.new()
+	_colonna_opzioni.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_colonna_opzioni.add_theme_constant_override("separation", 6)
+	so.add_child(_colonna_opzioni)
+	_mostra_modulo(false)
+	_mostra_missione_scelta(_missione_scelta)
+
+func _gira_carosello(d: int) -> void:
+	_modulo_carosello = posmod(_modulo_carosello + d, MODULI.size())
+	_mostra_modulo(true, d)
+
+## Trascinando la scheda del modulo a destra o a sinistra si passa al modulo vicino; un tocco non fa nulla.
+func _input_carosello(ev: InputEvent) -> void:
+	var premuto := false
+	var x := 0.0
+	if ev is InputEventMouseButton and (ev as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+		premuto = (ev as InputEventMouseButton).pressed
+		x = (ev as InputEventMouseButton).position.x
+	elif ev is InputEventScreenTouch:
+		premuto = (ev as InputEventScreenTouch).pressed
+		x = (ev as InputEventScreenTouch).position.x
+	else:
+		return
+	if premuto:
+		_carosello_premuto = x
+	elif _carosello_premuto >= 0.0:
+		var dx := x - _carosello_premuto
+		_carosello_premuto = -1.0
+		if absf(dx) > 50.0:
+			_gira_carosello(-1 if dx > 0 else 1)
+
+## Disegna la scheda del modulo nel carosello, i pallini e le missioni del modulo.
+func _mostra_modulo(anima := true, verso := 1) -> void:
+	var mod: Array = MODULI[_modulo_carosello]
+	for c in _carosello_scheda.get_children():
+		c.queue_free()
+	var scheda := PanelContainer.new()
+	var colore: Color = COLORI_MODULI.get(mod[0], Color("4a4a3a"))
+	scheda.add_theme_stylebox_override("panel", Tema.scatola(Color("2b2d22"), Tema.OTTONE, 2, 5, 0))
+	scheda.clip_contents = true
+	scheda.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_carosello_scheda.add_child(scheda)
+	scheda.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var img := TextureRect.new()
+	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var copertina: int = (mod[3] as Array)[0] if not (mod[3] as Array).is_empty() else 1
+	var percorso := "res://assets/missioni/missione%d.jpg" % copertina
+	if ResourceLoader.exists(percorso):
+		img.texture = load(percorso)
+	img.modulate = Color(0.55, 0.55, 0.5) if not (mod[3] as Array).is_empty() else Color(0.3, 0.3, 0.3)
+	scheda.add_child(img)
 	var testo := VBoxContainer.new()
-	testo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	testo.add_theme_constant_override("separation", 10)
-	sc.add_child(testo)
-	var bb := HBoxContainer.new()
-	bb.alignment = BoxContainer.ALIGNMENT_END
-	bb.add_theme_constant_override("separation", 8)
-	vb.add_child(bb)
+	testo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	testo.add_theme_constant_override("separation", 2)
+	testo.alignment = BoxContainer.ALIGNMENT_END
+	scheda.add_child(testo)
+	var fascia := PanelContainer.new()
+	fascia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fascia.add_theme_stylebox_override("panel", Tema.scatola(Color(colore, 0.9), Color.TRANSPARENT, 0, 0, 10))
+	testo.add_child(fascia)
+	var fv := VBoxContainer.new()
+	fv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fv.add_theme_constant_override("separation", 0)
+	fascia.add_child(fv)
+	var nome := Tema.titolo(str(mod[0]), 30, Tema.CARTA)
+	nome.clip_text = true
+	nome.custom_minimum_size = Vector2(60, 0)
+	fv.add_child(nome)
+	var sott := Tema.etichetta(str(mod[1]), Tema.testo_bold, 15, Tema.OTTONE)
+	sott.clip_text = true
+	sott.custom_minimum_size = Vector2(60, 0)
+	fv.add_child(sott)
+	var desc := Tema.etichetta(str(mod[2]), Tema.testo, 14, Tema.CARTA)
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.custom_minimum_size = Vector2(120, 0)
+	desc.max_lines_visible = 2
+	fv.add_child(desc)
+	if anima:
+		scheda.modulate.a = 0.0
+		scheda.position.x = 60.0 * verso
+		var tw := scheda.create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(scheda, "modulate:a", 1.0, 0.22)
+		tw.tween_property(scheda, "position:x", 0.0, 0.22)
+	# pallini: uno per modulo, si toccano per saltare
+	for c in _carosello_punti.get_children():
+		c.queue_free()
+	for i in MODULI.size():
+		var pt := Tema.bottone(str(MODULI[i][0]), func(): _modulo_carosello = i; _mostra_modulo(true, 1))
+		pt.add_theme_font_size_override("font_size", 12)
+		pt.custom_minimum_size = Vector2(0, 30)
+		pt.clip_text = true
+		pt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if i == _modulo_carosello:
+			pt.add_theme_color_override("font_color", Color("fff3c4"))
+			pt.add_theme_stylebox_override("normal", Tema.scatola(Color("6b5a22"), Tema.OTTONE, 2, 3, 6))
+		_carosello_punti.add_child(pt)
+	# missioni del modulo
+	for c in _griglia_missioni.get_children():
+		c.queue_free()
+	var intervallo: Array = mod[3]
+	if intervallo.is_empty():
+		_griglia_missioni.columns = 1
+		var vuoto := PanelContainer.new()
+		vuoto.add_theme_stylebox_override("panel", Tema.pannello_oliva(16))
+		vuoto.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		vuoto.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var l := Tema.etichetta("La campagna non c'è ancora: per ora ogni missione si gioca da sola, dal gioco base o dalle espansioni.", Tema.testo, 16, Tema.KAKI)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size = Vector2(160, 0)
+		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vuoto.add_child(l)
+		_griglia_missioni.add_child(vuoto)
+		return
+	var quante: int = int(intervallo[1]) - int(intervallo[0]) + 1
+	_griglia_missioni.columns = 4 if quante >= 8 else (3 if quante == 6 else 2)
+	var pronte := Partita.disponibili()
+	for n in range(int(intervallo[0]), int(intervallo[1]) + 1):
+		var sch := _scheda_missione(n, n in pronte, n == _missione_scelta)
+		sch.set_meta("numero", n)
+		_griglia_missioni.add_child(sch)
+
+## Una riga di opzione: nome e due scelte; quella in vigore è evidenziata.
+func _riga_opzione(nome: String, voci: Array, attuale: int, cb: Callable, tip := "") -> void:
+	var riga := HBoxContainer.new()
+	riga.add_theme_constant_override("separation", 6)
+	var l := Tema.etichetta(nome, Tema.stencil, 15, Tema.KAKI)
+	l.custom_minimum_size = Vector2(112, 0)
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.tooltip_text = tip
+	l.mouse_filter = Control.MOUSE_FILTER_PASS
+	riga.add_child(l)
+	for i in voci.size():
+		var b := Tema.bottone(str(voci[i]), cb.bind(i), tip)
+		b.custom_minimum_size = Vector2(96, 34)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.clip_text = true
+		b.add_theme_font_size_override("font_size", 14)
+		if i == attuale:
+			b.add_theme_color_override("font_color", Color("fff3c4"))
+			b.add_theme_stylebox_override("normal", Tema.scatola(Color("6b5a22"), Tema.OTTONE, 2, 3, 6))
+		riga.add_child(b)
+	_colonna_opzioni.add_child(riga)
+
+func _titolo_opzioni(t: String) -> void:
+	var l := Tema.titolo(t, 17, Tema.OTTONE)
+	_colonna_opzioni.add_child(l)
+
+## Tutte le opzioni di gioco nella colonna di destra: grafica, partita, salvataggi.
+func _mostra_opzioni() -> void:
+	if _colonna_opzioni == null or not is_instance_valid(_colonna_opzioni):
+		return
+	for c in _colonna_opzioni.get_children():
+		c.queue_free()
+	_titolo_opzioni("GRAFICA")
+	var g := _pref_grafica
+	_riga_opzione("MAPPA", ["Originale", "Realistica"], int(bool(g.mappa)), func(i): _opzione_grafica("mappa", i == 1), "La mappa realistica è un ridisegno moderno: stessi esagoni, stesso terreno")
+	_riga_opzione("VISTA", ["2D", "3D"], int(bool(g.get("3d", false))), func(i): _opzione_grafica("3d", i == 1), "Mappa piatta o tavolo in 3D")
+	_riga_opzione("PEDINE", ["Originali", "Ridisegnate"], int(bool(g.pedine)), func(i): _opzione_grafica("pedine", i == 1), "Le ridisegnate mostrano il soldato in piedi o accovacciato")
+	_riga_opzione("CARTE", ["Originali", "Ridisegnate"], int(bool(g.get("carte", true))), func(i): _opzione_grafica("carte", i == 1), "Carte dei tedeschi; per le missioni 1–8 esistono solo ridisegnate")
+	_riga_opzione("METEO", ["Spento", "Acceso"], int(bool(g.get("meteo", true))), func(i): _opzione_grafica("meteo", i == 1), "Neve e pioggia nella vista 3D: solo un effetto")
+	_riga_opzione("COMANDO", ["Nascosto", "Mostrato"], int(bool(g.comando)), func(i): _opzione_grafica("comando", i == 1), "Chi è in comando e gli esagoni entro due dal comandante")
+	_titolo_opzioni("PARTITA")
+	_riga_opzione("MODO", ["Passo passo", "Automatico"], int(automatico), func(i): automatico = i == 1; _salva_preferenze(); _aggiorna_bottoni_scheda(); _mostra_opzioni(), "Passo passo: ogni azione aspetta «Continua»")
+	_riga_opzione("VELOCITÀ", ["Normale", "Doppia"], int(mappa != null and mappa.velocita > 1.5), func(i): mappa.velocita = 2.5 if i == 1 else 1.0; _salva_preferenze(); _aggiorna_bottoni_scheda(); _mostra_opzioni(), "Velocità delle animazioni")
+	_riga_opzione("LINEE", ["Nascoste", "Mostrate"], int(linee_vista), func(i): linee_vista = i == 1; _salva_preferenze(); _applica_linee(); _mostra_opzioni(), "Linee di vista verso i nemici visti")
+	_titolo_opzioni("SALVATAGGI")
+	var salvate: Array = []
+	for n in Partita.disponibili():
+		if FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty():
+			salvate.append(str(n))
+	var n_sc := _missione_scelta
+	var ha: bool = str(n_sc) in salvate
+	var info := Tema.etichetta("La partita si salva da sola sul dispositivo, una per missione. Missione %d: %s. Missioni con una partita salvata: %s." % [n_sc, "partita salvata" if ha else "nessuna partita salvata", ", ".join(salvate) if not salvate.is_empty() else "nessuna"], Tema.testo, 14, Tema.KAKI_SPENTO)
+	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info.custom_minimum_size = Vector2(160, 0)
+	_colonna_opzioni.add_child(info)
+	if ha:
+		var canc := Tema.bottone("Cancella il salvataggio della missione %d" % n_sc, func(): _conferma("Cancellare il salvataggio?", "La partita salvata della missione %d andrà persa." % n_sc, func(): _cancella_salvataggio(n_sc)))
+		canc.custom_minimum_size = Vector2(0, 36)
+		canc.clip_text = true
+		_colonna_opzioni.add_child(canc)
+
+func _opzione_grafica(chiave: String, valore: bool) -> void:
+	_pref_grafica[chiave] = valore
+	if chiave == "3d":
+		_applica_3d()
+	_applica_grafica()
+	_salva_preferenze()
+	if p != null and p.s.has("fase"):
+		_aggiorna_tutto()
+	_mostra_opzioni()
+
+func _cancella_salvataggio(n: int) -> void:
+	if FileAccess.file_exists(_file_salvataggio(n)):
+		DirAccess.remove_absolute(_file_salvataggio(n))
+	_mostra_missione_scelta(n)
+	_mostra_modulo(false)
+
+## Sceglie la missione n: cornice sulla sua scheda, la sua descrizione e i pulsanti a destra, le opzioni sotto.
+## Senza la pagina delle missioni aperta mostra l'ordine di missione in una finestra.
+func _mostra_missione_scelta(n: int) -> void:
+	_missione_scelta = n
+	if pagina_missioni == null or not is_instance_valid(_colonna_descrizione):
+		_scegli_missione(n)
+		return
+	if _indice_modulo(n) != _modulo_carosello:
+		_modulo_carosello = _indice_modulo(n)
+		_mostra_modulo(false)
+	if is_instance_valid(_griglia_missioni):
+		for c in _griglia_missioni.get_children():
+			if c.has_meta("cornice"):
+				(c.get_meta("cornice") as Panel).visible = int(c.get_meta("numero", 0)) == n
+	for c in _colonna_descrizione.get_children():
+		c.queue_free()
+	for c in _bottoni_missione.get_children():
+		c.queue_free()
+	var pronte := Partita.disponibili()
 	if not n in pronte:
-		_intestazione(testo, "MISSIONE %d" % n, "%s · %s" % [NOMI_MISSIONI[n - 1].to_upper(), DATE_MISSIONI[n - 1].to_upper()])
-		_paragrafo(testo, "Questa missione è ancora in preparazione.", 16)
+		_intestazione(_colonna_descrizione, "MISSIONE %d" % n, "%s · %s" % [NOMI_MISSIONI[n - 1].to_upper(), DATE_MISSIONI[n - 1].to_upper()])
+		_paragrafo(_colonna_descrizione, "Questa missione è ancora in preparazione.", 16)
 	else:
 		var m: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/missione%d.json" % n))
-		_ordine_missione(testo, m, n, clampf(size.y * 0.24, 110.0, 240.0))
+		_ordine_missione(_colonna_descrizione, m, n, 0.0)
 		var salvata := FileAccess.file_exists(_file_salvataggio(n)) and not _leggi_salvataggio(n).is_empty()
-		bb.add_child(Tema.bottone("Regole in breve", _mostra_regole))
+		_bottoni_missione.add_child(Tema.bottone("Regole in breve", _mostra_regole))
 		if salvata:
-			bb.add_child(Tema.bottone("Ricomincia da capo", func(): _conferma("Ricominciare la missione?", "La partita salvata della missione %d andrà persa." % n, func(): _chiudi_finestra(); _avvia_missione(n, false, false))))
+			_bottoni_missione.add_child(Tema.bottone("Ricomincia", func(): _conferma("Ricominciare la missione?", "La partita salvata della missione %d andrà persa." % n, func(): _chiudi_finestra(); _avvia_missione(n, false, false))))
 			var rip := Tema.bottone("Riprendi la partita", func(): _chiudi_finestra(); _avvia_missione(n, true, false))
 			rip.add_theme_color_override("font_color", Tema.OTTONE)
-			bb.add_child(rip)
+			_bottoni_missione.add_child(rip)
 		else:
 			var via := Tema.bottone("Agli ordini: inizia", func(): _chiudi_finestra(); _avvia_missione(n, false, false))
 			via.add_theme_color_override("font_color", Tema.OTTONE)
-			bb.add_child(via)
-	bb.add_child(Tema.bottone("Chiudi", _chiudi_finestra))
-	for b in bb.get_children():
+			_bottoni_missione.add_child(via)
+	for b in _bottoni_missione.get_children():
 		b.custom_minimum_size = Vector2(0, 42)
-	_apri_finestra(vb, clampf(size.x * 0.8, 340.0, 900.0))
+	_mostra_opzioni()
 
 const Effetti3DMeteo = preload("res://scripts/ui/effetti3d.gd")
 const EditorMappeScript = preload("res://scripts/ui/editor_mappe.gd")
